@@ -226,6 +226,32 @@ Updating beliefs with evidence.
   - Real-time Bayes' calculation.
   - Population grid showing true/false positives.
 
+### Probability Distributions Animation
+
+Modeling randomness with mathematics.
+
+- **3 Learning Modes:**
+  1. **🎲 Discrete Distributions**: Binomial (coin flips) and Poisson (events per interval).
+  2. **📊 Continuous Distributions**: Normal (bell curve) and Exponential (waiting times).
+  3. **⚖️ PMF vs PDF**: Understanding the critical difference between discrete and continuous.
+- **Features:**
+  - Interactive parameter sliders.
+  - Real-time distribution visualization.
+  - Area under curve calculation for continuous distributions.
+
+### Expected Value & Variance Animation
+
+Quantifying center and spread.
+
+- **3 Learning Modes:**
+  1. **⚖️ Expected Value**: Visualize E[X] as the "balance point" with interactive die probabilities.
+  2. **📏 Variance**: Compare narrow vs wide distributions with same mean.
+  3. **🎰 Decision Making**: Apply to investment choices (Safe vs Risky).
+- **Features:**
+  - Balance beam visualization for E[X].
+  - Deviation visualization for variance.
+  - Risk-adjusted decision making with risk tolerance slider.
+
 ## Getting Started
 
 ### Prerequisites
@@ -383,6 +409,22 @@ npm run dev
 
 ```bash
 cd conditional-probability-animation
+npm install
+npm run dev
+```
+
+#### Probability Distributions Animation
+
+```bash
+cd probability-distributions-animation
+npm install
+npm run dev
+```
+
+#### Expected Value & Variance Animation
+
+```bash
+cd expected-value-variance-animation
 npm install
 npm run dev
 ```
