@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useCallback, Suspense, lazy } from 'react';
 import { Play, LineChart, FlaskConical } from 'lucide-react';
 
 // Lazy load panels
@@ -24,17 +24,50 @@ function LoadingPanel() {
 
 export default function GradientDescentAnimation() {
     const [activeTab, setActiveTab] = useState('descent');
+    const [learningRate] = useState(0.1);
+    const [startWeight] = useState(4);
+    const [stepHistory, setStepHistory] = useState([]);
+
+    const handleStepChange = useCallback((iteration, weight, loss) => {
+        setStepHistory(prev => {
+            // Only add if it's a new iteration
+            if (prev.length === 0 || prev[prev.length - 1].iteration !== iteration) {
+                return [...prev, { iteration, weight, loss }];
+            }
+            return prev;
+        });
+    }, []);
 
     const renderPanel = () => {
         switch (activeTab) {
             case 'descent':
-                return <Suspense fallback={<LoadingPanel />}><GradientDescentPanel /></Suspense>;
+                return (
+                    <Suspense fallback={<LoadingPanel />}>
+                        <GradientDescentPanel 
+                            learningRate={learningRate} 
+                            startWeight={startWeight} 
+                            onStepChange={handleStepChange}
+                        />
+                    </Suspense>
+                );
             case 'history':
-                return <Suspense fallback={<LoadingPanel />}><LossHistoryPanel /></Suspense>;
+                return (
+                    <Suspense fallback={<LoadingPanel />}>
+                        <LossHistoryPanel stepHistory={stepHistory} />
+                    </Suspense>
+                );
             case 'practice':
                 return <Suspense fallback={<LoadingPanel />}><PracticePanel /></Suspense>;
             default:
-                return <Suspense fallback={<LoadingPanel />}><GradientDescentPanel /></Suspense>;
+                return (
+                    <Suspense fallback={<LoadingPanel />}>
+                        <GradientDescentPanel 
+                            learningRate={learningRate} 
+                            startWeight={startWeight} 
+                            onStepChange={handleStepChange}
+                        />
+                    </Suspense>
+                );
         }
     };
 
