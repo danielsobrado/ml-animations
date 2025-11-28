@@ -187,7 +187,29 @@ The math behind recommendations and search.
 - **Features:**
   - Interactive vector manipulation.
   - Radar charts for multi-dimensional comparison.
-  - Real-time similarity scoring.
+### Positional Encoding Animation
+
+How Transformers understand word order.
+
+- **3 Learning Modes:**
+  1. **🔀 The Problem**: Demonstrate why "Dog bites man" ≠ "Man bites dog" without position info.
+  2. **🌊 Sinusoidal Encoding**: Visualize the wave patterns that encode position.
+  3. **🎮 Encoding Playground**: Compare Sinusoidal vs. Learned vs. Integer encoding.
+- **Features:**
+  - Interactive sentence comparison.
+  - Waveform visualization with multiple frequencies.
+### Layer Normalization Animation
+
+Stabilizing deep network training.
+
+- **3 Learning Modes:**
+  1. **📊 The Problem**: Visualize activation drift and gradient instability without normalization.
+  2. **⚖️ Layer Norm vs Batch Norm**: Compare normalization across different axes.
+  3. **🔄 Residual Connections**: Demonstrate the "Add & Norm" pattern in Transformers.
+- **Features:**
+  - Activation distribution visualization.
+  - Interactive batch size adjustment.
+  - Gradient flow demonstration.
 
 ## Getting Started
 
@@ -322,6 +344,22 @@ npm run dev
 
 ```bash
 cd cosine-similarity-animation
+npm install
+npm run dev
+```
+
+#### Positional Encoding Animation
+
+```bash
+cd positional-encoding-animation
+npm install
+npm run dev
+```
+
+#### Layer Normalization Animation
+
+```bash
+cd layer-normalization-animation
 npm install
 npm run dev
 ```
