@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  @apply bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen;
+}
+
+.glass-panel {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl;
+}
+
+.neon-text {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+}
+
+.subword-highlight {
+  @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white px-1 rounded;
+}
+
+.ngram-box {
+  @apply bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-blue-400/50 rounded-lg px-2 py-1;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(168, 85, 247, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 30px rgba(168, 85, 247, 0.4); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
