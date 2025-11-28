@@ -128,9 +128,18 @@ An interactive exploration of Rank Correlation and Robustness.
   2. **🧮 Calculation Lab**: Step-by-step animated table showing sorting, ranking, and formula application.
   3. **⚖️ Robustness**: Interactive playground to test outlier sensitivity (Pearson vs. Spearman).
 - **Features:**
-  - Interactive scatter plots with toggleable rank views.
-  - Real-time correlation calculation.
-  - "Break the Correlation" challenge using outliers.
+### Bloom Filter Animation
+
+A probabilistic data structure explorer.
+
+- **3 Learning Modes:**
+  1. **🎮 Playground**: Interactive visualizer to Add and Check items, seeing bits flip in real-time.
+  2. **⚠️ False Positive Lab**: Deliberately create collisions to understand why "Probably Yes" exists.
+  3. **🎛️ Tuning Studio**: Interactive graph to find the optimal $k$ (hash functions) for your data.
+- **Features:**
+  - Real-time bit array visualization.
+  - False positive probability calculator.
+  - "Sweet spot" optimization guide.
 
 ## Getting Started
 
@@ -217,6 +226,14 @@ npm run dev
 
 ```bash
 cd spearman-correlation-animation
+npm install
+npm run dev
+```
+
+#### Bloom Filter Animation
+
+```bash
+cd bloom-filter-animation
 npm install
 npm run dev
 ```
