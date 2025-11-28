@@ -41,6 +41,19 @@ A visual explanation of the Leaky ReLU activation function.
   - α (alpha) parameter visualization (default: 0.01).
   - Built with Three.js for 3D rendering (orthographic view).
 
+### Multi-Input Neural Network (Conv + ReLU)
+
+A visual demonstration of a two-layer neural network with three inputs and ReLU activations.
+
+- **Visualizes:** X × W₁ → ReLU → A₁ × W₂ → ReLU → Output
+- **Features:**
+  - Two-layer feedforward network with matrix multiplication.
+  - Step-by-step animation showing forward propagation through both layers.
+  - Clear visualization of pre-activation (Z) and post-activation (A) values.
+  - Practice mode with randomly generated matrix problems.
+  - Shows how negative values become zero after ReLU.
+  - Color-coded matrices for easy tracking.
+
 ## Getting Started
 
 ### Prerequisites
@@ -70,6 +83,14 @@ npm run dev
 
 ```bash
 cd leaky-relu-animation
+npm install
+npm run dev
+```
+
+#### Multi-Input Neural Network (Conv + ReLU)
+
+```bash
+cd conv-relu-animation
 npm install
 npm run dev
 ```
