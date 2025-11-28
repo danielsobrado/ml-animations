@@ -266,6 +266,34 @@ The engine behind PageRank and Text Generation.
   - Real-time matrix updates.
   - Text training and generation playground.
 
+### Self-Attention Animation
+
+The heart of the Transformer architecture.
+
+- **3 Learning Modes:**
+  1. **🔑 The Concept**: Intuitive "Library" analogy for Query, Key, and Value.
+  2. **🧮 The Mechanism**: Step-by-step visualization of the math (`softmax(QK^T)V`).
+  3. **🕸️ Playground**: Interactive text attention visualization (Coreference Resolution).
+- **Features:**
+  - Interactive Q/K/V matching.
+  - Matrix multiplication visualization.
+  - Real-time attention heatmaps for text.
+
+## Reinforcement Learning Series
+
+### Part 1: RL Foundations
+
+The building blocks of Reinforcement Learning.
+
+- **3 Learning Modes:**
+  1. **🤖 The Agent**: Manual Gridworld to understand State-Action-Reward loops.
+  2. **💎 Rewards**: Design level rewards and analyze path returns.
+  3. **📉 Discounted Returns**: Visualize how Gamma affects long-term planning.
+- **Features:**
+  - Playable Gridworld.
+  - Level Editor.
+  - Interactive Discount Factor visualization.
+
 ## Getting Started
 
 ### Prerequisites
@@ -447,6 +475,22 @@ npm run dev
 
 ```bash
 cd markov-chains-animation
+npm install
+npm run dev
+```
+
+#### Self-Attention Animation
+
+```bash
+cd self-attention-animation
+npm install
+npm run dev
+```
+
+#### RL Foundations Animation (Part 1)
+
+```bash
+cd rl-foundations-animation
 npm install
 npm run dev
 ```
