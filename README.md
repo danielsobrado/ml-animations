@@ -33,6 +33,7 @@ npm run dev
 - [Algorithms & Data Structures](#algorithms--data-structures)
 - [Information Theory](#information-theory)
 - [Mini Diffusion (Rust)](#mini-diffusion-rust-implementation)
+- [Mini-Diffusion (Multi-Language)](#mini-diffusion-multi-language-implementation)
 - [Mini-NN (Multi-Language)](#mini-nn-multi-language-implementation)
 - [Mini Markov (Multi-Language)](#mini-markov-multi-language-implementation)
 - [Neural Network Animation](#neural-network-animation)
@@ -971,6 +972,91 @@ cargo test
 - **Type Safety**: Compile-time dimension checking
 
 See [mini-diffusion/README.md](mini-diffusion/README.md) for full documentation.
+
+---
+
+## Mini-Diffusion (Multi-Language Implementation)
+
+Diffusion model implementations from scratch in **Rust**, **Go**, **Java**, and **Python** - demonstrating DDPM/DDIM concepts across languages.
+
+### 🎯 Features
+
+All implementations provide:
+- ✅ 4D Tensor operations [batch, channels, height, width]
+- ✅ Noise schedulers (linear, cosine, quadratic beta schedules)
+- ✅ Neural network layers: Linear, Conv2d, GroupNorm
+- ✅ U-Net architecture with residual blocks and skip connections
+- ✅ Sinusoidal timestep embeddings
+- ✅ DDPM sampling (stochastic)
+- ✅ DDIM sampling (deterministic)
+
+### 📊 Verified Results
+
+#### Noise Schedule Comparison (1000 timesteps)
+
+| Schedule | α̅₀ | α̅₅₀₀ | α̅₉₉₉ |
+|----------|-----|-------|-------|
+| Linear | 0.9999 | 0.0078 | 0.00004 |
+| Cosine | 0.9999 | 0.4923 | 0.00000 |
+| Quadratic | 0.9999 | 0.3313 | 0.00073 |
+
+#### U-Net Architecture (model_channels=32)
+
+| Component | Parameters |
+|-----------|------------|
+| Input Conv | 896 |
+| Time MLP | 16,896 |
+| Encoder | ~100K |
+| Middle | ~50K |
+| Decoder | ~200K |
+| **Total** | **~450K** |
+
+### 🚀 Quick Start
+
+**Rust** (original):
+```bash
+cd mini-diffusion
+cargo build --release
+cargo run --bin generate --release   # Generate images (random weights)
+cargo run --bin demo_sd3 --release   # SD3 components demo
+```
+
+**Python** (verified working):
+```bash
+cd mini-diffusion-python
+pip install numpy
+python -m mini_diffusion.demo
+```
+
+**Go**:
+```bash
+cd mini-diffusion-go
+go mod download
+go run ./cmd/demo
+```
+
+**Java** (requires JDK 8+):
+```bash
+cd mini-diffusion-java
+mvn compile
+mvn exec:java -Dexec.mainClass="com.minidiffusion.Demo"
+```
+
+### 📁 Project Structure
+
+| Language | Directory | Matrix Lib | Core Files |
+|----------|-----------|------------|------------|
+| Rust | `mini-diffusion/` | ndarray | `tensor.rs`, `nn.rs`, `diffusion.rs`, `unet.rs` |
+| Go | `mini-diffusion-go/` | gonum | `diffusion/*.go` |
+| Java | `mini-diffusion-java/` | Custom | `com/minidiffusion/*.java` |
+| Python | `mini-diffusion-python/` | NumPy | `mini_diffusion/*.py` |
+
+### 📖 Documentation
+
+- [mini-diffusion/README.md](mini-diffusion/README.md) - Rust implementation (full SD3/Flux architecture)
+- [mini-diffusion-go/README.md](mini-diffusion-go/README.md) - Go implementation
+- [mini-diffusion-java/README.md](mini-diffusion-java/README.md) - Java implementation
+- [mini-diffusion-python/README.md](mini-diffusion-python/README.md) - Python implementation
 
 ---
 
