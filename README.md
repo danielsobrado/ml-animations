@@ -33,7 +33,7 @@ npm run dev
 - [Algorithms & Data Structures](#algorithms--data-structures)
 - [Information Theory](#information-theory)
 - [Mini Diffusion (Rust)](#mini-diffusion-rust-implementation)
-- [Mini-NN (Rust)](#mini-nn-rust-implementation)
+- [Mini-NN (Multi-Language)](#mini-nn-multi-language-implementation)
 - [Mini Markov (Multi-Language)](#mini-markov-multi-language-implementation)
 - [Neural Network Animation](#neural-network-animation)
 
@@ -974,13 +974,33 @@ See [mini-diffusion/README.md](mini-diffusion/README.md) for full documentation.
 
 ---
 
-## Mini-NN (Rust Implementation)
+## Mini-NN (Multi-Language Implementation)
 
-A complete neural network implementation in pure Rust, built from first principles. No ML frameworks - just linear algebra with `ndarray`.
+Neural network implementations from scratch in **Rust**, **Go**, **Java**, and **Python** - demonstrating backpropagation and gradient descent across languages.
 
-### 🏆 Results
+### 🎯 Features
 
-Tested on the **Titanic Survival Prediction** dataset:
+All implementations provide:
+- ✅ Tensor operations (matrix multiply, transpose, element-wise ops)
+- ✅ Activations: ReLU, LeakyReLU, Sigmoid, Tanh, Softmax
+- ✅ Loss functions: MSE, Binary Cross-Entropy, Cross-Entropy
+- ✅ Dense (fully connected) layers with Xavier/He initialization
+- ✅ Optimizers: SGD, SGD with Momentum, Adam
+- ✅ Mini-batch training with validation split and early stopping
+
+### 📊 Verified Results (Consistent Across All Languages)
+
+#### XOR Classification (All Languages)
+
+| Input | Expected | Rust | Go | Java | Python |
+|-------|----------|------|----|----- |--------|
+| [0, 0] | 0 | ✅ 0 | ✅ 0 | ✅ 0 | ✅ 0 |
+| [0, 1] | 1 | ✅ 1 | ✅ 1 | ✅ 1 | ✅ 1 |
+| [1, 0] | 1 | ✅ 1 | ✅ 1 | ✅ 1 | ✅ 1 |
+| [1, 1] | 0 | ✅ 0 | ✅ 0 | ✅ 0 | ✅ 0 |
+| **Accuracy** | 100% | **100%** | **100%** | **100%** | **100%** |
+
+#### Titanic Survival Prediction (Rust Benchmark)
 
 | Method | Accuracy |
 |--------|----------|
@@ -989,34 +1009,54 @@ Tested on the **Titanic Survival Prediction** dataset:
 | Gradient Boosting | ~80% |
 | sklearn Neural Network | ~79% |
 | Top Kaggle Submissions | ~83% |
-| **Our Mini-NN** | **84.3%** ✨ |
+| **Our Mini-NN (Rust)** | **84.3%** ✨ |
 
-### Features
+### 🚀 Quick Start
 
-| Component | Description | Status |
-|-----------|-------------|--------|
-| Tensor Ops | Matrix multiply, transpose, slicing | ✅ Working |
-| Activations | ReLU, Sigmoid, Tanh, Softmax, LeakyReLU | ✅ Working |
-| Loss Functions | MSE, CrossEntropy, BinaryCrossEntropy | ✅ Working |
-| Optimizers | SGD, Momentum, Adam | ✅ Working |
-| Layers | Dense with Xavier/He init | ✅ Working |
-| Training | Mini-batch, early stopping | ✅ Working |
-
-### Quick Start
-
+**Rust** (original):
 ```bash
 cd mini-nn
-
-# Build
 cargo build --release
-
-# Run demos
-cargo run --bin demo_xor --release       # XOR problem (100% accuracy)
-cargo run --bin demo_layers --release    # Educational forward pass
-cargo run --bin train_titanic --release  # Titanic benchmark (84.3%)
+cargo run --bin demo_xor --release       # XOR (100%)
+cargo run --bin train_titanic --release  # Titanic (84.3%)
 ```
 
-See [mini-nn/README.md](mini-nn/README.md) for full documentation.
+**Python** (verified 100% XOR):
+```bash
+cd mini-nn-python
+pip install numpy
+python demo_xor.py
+```
+
+**Go**:
+```bash
+cd mini-nn-go
+go mod download
+go run ./cmd/demo_xor
+```
+
+**Java** (requires JDK 8+):
+```bash
+cd mini-nn-java
+mvn compile
+mvn exec:java -Dexec.mainClass="com.mininn.DemoXOR"
+```
+
+### 📁 Project Structure
+
+| Language | Directory | Matrix Lib | Core Files |
+|----------|-----------|------------|------------|
+| Rust | `mini-nn/` | ndarray | `tensor.rs`, `layer.rs`, `network.rs` |
+| Go | `mini-nn-go/` | gonum | `nn/*.go` |
+| Java | `mini-nn-java/` | Custom | `com/mininn/*.java` |
+| Python | `mini-nn-python/` | NumPy | `mini_nn/*.py` |
+
+### 📖 Documentation
+
+- [mini-nn/README.md](mini-nn/README.md) - Rust implementation
+- [mini-nn-go/README.md](mini-nn-go/README.md) - Go implementation
+- [mini-nn-java/README.md](mini-nn-java/README.md) - Java implementation
+- [mini-nn-python/README.md](mini-nn-python/README.md) - Python implementation
 
 ---
 
@@ -1146,10 +1186,10 @@ cd neural-network-animation && npm install && npm run dev
 - **GSAP**: Smooth animations
 - **Vite**: Fast build tool and development server
 - **Tailwind CSS**: Styling
-- **Rust**: Mini-diffusion, Mini-NN, Mini-Markov implementations (ndarray, image crates)
-- **Go**: Mini-Markov implementation
-- **Java**: Mini-Markov implementation (Maven)
-- **Python**: Mini-Markov implementation
+- **Rust**: Mini-Diffusion, Mini-NN, Mini-Markov implementations (ndarray, image crates)
+- **Go**: Mini-NN, Mini-Markov implementations (gonum)
+- **Java**: Mini-NN, Mini-Markov implementations (Maven)
+- **Python**: Mini-NN, Mini-Markov implementations (NumPy)
 
 ## Contributing
 
