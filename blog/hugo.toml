@@ -1,0 +1,45 @@
+baseURL = 'https://danielsobrado.github.io/ml-animations/blog/'
+languageCode = 'en-us'
+title = 'ML Animations Blog'
+theme = 'hugo-paper'
+
+[params]
+  description = 'Interactive explanations of machine learning concepts'
+  twitter = 'your_twitter_handle'
+  github = 'danielsobrado'
+  
+[taxonomies]
+  tag = 'tags'
+  category = 'categories'
+
+[menu]
+  [[menu.main]]
+    identifier = 'animations'
+    name = 'Animations'
+    url = 'https://danielsobrado.github.io/ml-animations/'
+    weight = 1
+  [[menu.main]]
+    identifier = 'posts'
+    name = 'Articles'
+    url = '/posts/'
+    weight = 2
+  [[menu.main]]
+    identifier = 'categories'
+    name = 'Categories'
+    url = '/categories/'
+    weight = 3
+  [[menu.main]]
+    identifier = 'tags'
+    name = 'Tags'
+    url = '/tags/'
+    weight = 4
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    style = 'monokai'
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

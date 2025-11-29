@@ -5,3 +5,4 @@ conv-relu-animation/node_modules/
 conv2d-animation/node_modules/
 node_modules/
 .history/*
+mini-diffusion/target/

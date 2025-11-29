@@ -140,6 +140,22 @@ export const categories = [
       { id: 'pagerank', name: 'PageRank', icon: Network, description: 'Graph ranking algorithm' },
     ],
   },
+  {
+    id: 'diffusion-models',
+    name: 'Diffusion Models (SD3)',
+    icon: Sparkles,
+    color: 'from-fuchsia-500 to-purple-600',
+    items: [
+      { id: 'sd3-overview', name: 'SD3 Architecture Overview', icon: Cpu, description: 'Complete Stable Diffusion 3 pipeline' },
+      { id: 'flow-matching', name: 'Flow Matching', icon: Workflow, description: 'Flow-based generative modeling' },
+      { id: 'diffusion-vae', name: 'VAE for Diffusion', icon: Shuffle, description: 'Latent space encoding for images' },
+      { id: 'tokenizer-bpe', name: 'BPE & Unigram Tokenizers', icon: Hash, description: 'Text tokenization methods' },
+      { id: 'clip-encoder', name: 'CLIP Text Encoder', icon: Target, description: 'Contrastive language-image pretraining' },
+      { id: 't5-encoder', name: 'T5 Text Encoder', icon: FileText, description: 'Text-to-text transfer transformer' },
+      { id: 'joint-attention', name: 'Joint Attention', icon: CircleDot, description: 'Multi-modal attention mechanism' },
+      { id: 'dit', name: 'DiT (Diffusion Transformer)', icon: Brain, description: 'Transformer-based diffusion backbone' },
+    ],
+  },
 ];
 
 // Flatten all items for easy lookup

@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px currentColor; }
+  50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+@keyframes flow-right {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes diffusion-noise {
+  0% { filter: blur(0px); }
+  50% { filter: blur(4px); }
+  100% { filter: blur(0px); }
+}
+
+@keyframes data-flow {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.flow-right {
+  animation: flow-right 2s ease-in-out infinite;
+}
+
+.diffusion-noise {
+  animation: diffusion-noise 3s ease-in-out infinite;
+}
+
+.data-flow {
+  stroke-dasharray: 10 5;
+  animation: data-flow 1s linear infinite;
+}
