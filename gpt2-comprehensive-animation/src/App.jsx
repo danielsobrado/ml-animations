@@ -7,6 +7,9 @@ import Step3Attention from './steps/Step3Attention';
 import Step4FFN from './steps/Step4FFN';
 import Step5Norm from './steps/Step5Norm';
 import Step6Architecture from './steps/Step6Architecture';
+import Step7WeightTying from './steps/Step7WeightTying';
+import Step8Training from './steps/Step8Training';
+import Step9Inference from './steps/Step9Inference';
 
 export default function App() {
     const [completedSteps, setCompletedSteps] = useState(new Set());
@@ -90,6 +93,9 @@ export default function App() {
                             <Route path="/step4" element={<Step4FFN onComplete={() => markComplete(4)} onNext={goToNext} onPrev={goToPrev} />} />
                             <Route path="/step5" element={<Step5Norm onComplete={() => markComplete(5)} onNext={goToNext} onPrev={goToPrev} />} />
                             <Route path="/step6" element={<Step6Architecture onComplete={() => markComplete(6)} onNext={goToNext} onPrev={goToPrev} />} />
+                            <Route path="/step7" element={<Step7WeightTying onComplete={() => markComplete(7)} onNext={goToNext} onPrev={goToPrev} />} />
+                            <Route path="/step8" element={<Step8Training onComplete={() => markComplete(8)} onNext={goToNext} onPrev={goToPrev} />} />
+                            <Route path="/step9" element={<Step9Inference onComplete={() => markComplete(9)} onPrev={goToPrev} />} />
                         </Routes>
                     </div>
                 </main>
