@@ -12,3 +12,68 @@ body {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   min-height: 100vh;
 }
+
+/* Animation for content fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Prism.js overrides for better dark theme */
+pre[class*="language-"] {
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+code[class*="language-"] {
+  text-shadow: none !important;
+}
+
+/* Token colors for Rust syntax */
+.token.keyword {
+  color: #c678dd !important;
+}
+
+.token.function {
+  color: #61afef !important;
+}
+
+.token.string {
+  color: #98c379 !important;
+}
+
+.token.comment {
+  color: #5c6370 !important;
+  font-style: italic;
+}
+
+.token.number {
+  color: #d19a66 !important;
+}
+
+.token.operator {
+  color: #56b6c2 !important;
+}
+
+.token.punctuation {
+  color: #abb2bf !important;
+}
+
+.token.class-name,
+.token.type {
+  color: #e5c07b !important;
+}
+
+.token.macro {
+  color: #e06c75 !important;
+}
