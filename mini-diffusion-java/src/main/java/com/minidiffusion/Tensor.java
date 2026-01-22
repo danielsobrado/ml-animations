@@ -9,15 +9,16 @@ import java.util.function.DoubleUnaryOperator;
  * Optimized for image data: [batch, channels, height, width]
  */
 public class Tensor {
-    private final double[] data;
-    private final int[] shape;
+    public final double[] data;
+    public final int[] shape;
     private final int[] strides;
 
     public Tensor(int... shape) {
         this.shape = shape.clone();
         this.strides = computeStrides(shape);
         int size = 1;
-        for (int s : shape) size *= s;
+        for (int s : shape)
+            size *= s;
         this.data = new double[size];
     }
 
@@ -25,7 +26,8 @@ public class Tensor {
         this.shape = shape.clone();
         this.strides = computeStrides(shape);
         int size = 1;
-        for (int s : shape) size *= s;
+        for (int s : shape)
+            size *= s;
         if (data.length != size) {
             throw new IllegalArgumentException("Data length doesn't match shape");
         }
@@ -79,9 +81,25 @@ public class Tensor {
     }
 
     // Getters
-    public int[] getShape() { return shape.clone(); }
-    public int dim(int i) { return shape[i]; }
-    public int size() { return data.length; }
+    public int[] getShape() {
+        return shape.clone();
+    }
+
+    public int[] shape() {
+        return shape.clone();
+    }
+
+    public double[] getData() {
+        return data;
+    }
+
+    public int dim(int i) {
+        return shape[i];
+    }
+
+    public int size() {
+        return data.length;
+    }
 
     // Element access
     private int index(int... indices) {
@@ -129,6 +147,10 @@ public class Tensor {
         return result;
     }
 
+    public Tensor mul(double s) {
+        return scale(s);
+    }
+
     public Tensor scale(double s) {
         Tensor result = new Tensor(shape);
         for (int i = 0; i < data.length; i++) {
@@ -164,7 +186,7 @@ public class Tensor {
         if (k != other.shape[0]) {
             throw new IllegalArgumentException("Incompatible shapes for matmul");
         }
-        
+
         Tensor result = new Tensor(m, n);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -198,7 +220,8 @@ public class Tensor {
     // Statistics
     public double sum() {
         double s = 0;
-        for (double v : data) s += v;
+        for (double v : data)
+            s += v;
         return s;
     }
 
@@ -214,6 +237,10 @@ public class Tensor {
             v += diff * diff;
         }
         return v / data.length;
+    }
+
+    public double std() {
+        return Math.sqrt(variance());
     }
 
     @Override

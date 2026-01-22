@@ -107,7 +107,8 @@ public class NoiseScheduler {
 
     /**
      * Add noise to a sample at a given timestep.
-     * q(x_t | x_0) = sqrt(alpha_cumprod_t) * x_0 + sqrt(1 - alpha_cumprod_t) * noise
+     * q(x_t | x_0) = sqrt(alpha_cumprod_t) * x_0 + sqrt(1 - alpha_cumprod_t) *
+     * noise
      */
     public Tensor addNoise(Tensor sample, Tensor noise, int timestep) {
         double sqrtAlpha = sqrtAlphasCumprod[timestep];
@@ -132,7 +133,8 @@ public class NoiseScheduler {
         Tensor x0Pred = sample.sub(noisePredict.mul(sqrtOneMinusAlphaCumprod)).mul(1.0 / sqrtAlphasCumprod[timestep]);
 
         // Compute mean for x_{t-1}
-        double coeff1 = beta * Math.sqrt(alphaCumprod > 0 ? alphasCumprod[Math.max(0, timestep - 1)] : 1.0) / (1.0 - alphaCumprod);
+        double coeff1 = beta * Math.sqrt(alphaCumprod > 0 ? alphasCumprod[Math.max(0, timestep - 1)] : 1.0)
+                / (1.0 - alphaCumprod);
         double coeff2 = (1.0 - (timestep > 0 ? alphasCumprod[timestep - 1] : 1.0)) * sqrtAlpha / (1.0 - alphaCumprod);
 
         Tensor mean = x0Pred.mul(coeff1).add(sample.mul(coeff2));
@@ -140,7 +142,7 @@ public class NoiseScheduler {
         // Add noise if not the last step
         if (timestep > 0) {
             double stdDev = Math.sqrt(posteriorVariance[timestep]);
-            Tensor noise = Tensor.randn(rng, sample.shape());
+            Tensor noise = Tensor.randn(rng, sample.getShape());
             mean = mean.add(noise.mul(stdDev));
         }
 

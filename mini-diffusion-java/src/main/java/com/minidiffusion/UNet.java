@@ -60,11 +60,10 @@ public class UNet {
         }
 
         private Tensor silu(Tensor x) {
-            int[] shape = x.shape();
             Tensor result = x.clone();
             for (int i = 0; i < x.size(); i++) {
-                double val = x.getData()[i];
-                result.getData()[i] = val / (1.0 + Math.exp(-val));
+                double val = x.data[i];
+                result.data[i] = val / (1.0 + Math.exp(-val));
             }
             return result;
         }
@@ -240,23 +239,23 @@ public class UNet {
         Tensor h = inputConv.forward(x);
 
         // Encoder with skip connections
-        Tensor h1 = encoderRes1.forward(h, t);      // [batch, modelChannels, H, W]
-        Tensor h2 = down1.forward(h1);               // [batch, modelChannels, H/2, W/2]
-        Tensor h3 = encoderRes2.forward(h2, t);     // [batch, modelChannels*2, H/2, W/2]
-        Tensor h4 = down2.forward(h3);               // [batch, modelChannels*2, H/4, W/4]
+        Tensor h1 = encoderRes1.forward(h, t); // [batch, modelChannels, H, W]
+        Tensor h2 = down1.forward(h1); // [batch, modelChannels, H/2, W/2]
+        Tensor h3 = encoderRes2.forward(h2, t); // [batch, modelChannels*2, H/2, W/2]
+        Tensor h4 = down2.forward(h3); // [batch, modelChannels*2, H/4, W/4]
 
         // Middle
         Tensor mid = midRes1.forward(h4, t);
         mid = midRes2.forward(mid, t);
 
         // Decoder with skip connections
-        Tensor up = up1.forward(mid);                // [batch, modelChannels*2, H/2, W/2]
-        up = concat(up, h3);                         // [batch, modelChannels*4, H/2, W/2]
-        up = decoderRes1.forward(up, t);             // [batch, modelChannels, H/2, W/2]
+        Tensor up = up1.forward(mid); // [batch, modelChannels*2, H/2, W/2]
+        up = concat(up, h3); // [batch, modelChannels*4, H/2, W/2]
+        up = decoderRes1.forward(up, t); // [batch, modelChannels, H/2, W/2]
 
-        up = up2.forward(up);                        // [batch, modelChannels, H, W]
-        up = concat(up, h1);                         // [batch, modelChannels*2, H, W]
-        up = decoderRes2.forward(up, t);             // [batch, modelChannels, H, W]
+        up = up2.forward(up); // [batch, modelChannels, H, W]
+        up = concat(up, h1); // [batch, modelChannels*2, H, W]
+        up = decoderRes2.forward(up, t); // [batch, modelChannels, H, W]
 
         // Output
         Tensor out = outNorm.forward(up);
@@ -288,8 +287,8 @@ public class UNet {
     private Tensor silu(Tensor x) {
         Tensor result = x.clone();
         for (int i = 0; i < x.size(); i++) {
-            double val = x.getData()[i];
-            result.getData()[i] = val / (1.0 + Math.exp(-val));
+            double val = x.data[i];
+            result.data[i] = val / (1.0 + Math.exp(-val));
         }
         return result;
     }
