@@ -31,8 +31,8 @@ export default function ReturnPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-teal-400 mb-4">Discounted Return (G<sub>t</sub>)</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <h2 className="text-3xl font-bold text-teal-600 dark:text-teal-400 mb-4">Discounted Return (G<sub>t</sub>)</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     Rewards in the future are worth less than rewards now.
                     <br />
                     <span className="font-mono bg-slate-800 px-2 py-1 rounded text-teal-300">
@@ -45,7 +45,7 @@ export default function ReturnPanel() {
             <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 w-full max-w-4xl mb-8">
                 <div className="flex justify-between items-end mb-4">
                     <label className="font-bold text-white">Discount Factor (γ)</label>
-                    <span className="text-3xl font-mono font-bold text-teal-400">{gamma}</span>
+                    <span className="text-3xl font-mono font-bold text-teal-600 dark:text-teal-400">{gamma}</span>
                 </div>
                 <input
                     type="range" min="0" max="1" step="0.05"
@@ -53,7 +53,7 @@ export default function ReturnPanel() {
                     onChange={(e) => setGamma(parseFloat(e.target.value))}
                     className="w-full accent-teal-400"
                 />
-                <div className="flex justify-between text-xs text-slate-500 mt-2">
+                <div className="flex justify-between text-xs text-slate-700 dark:text-slate-500 mt-2">
                     <span>0.0 (Myopic / Short-sighted)</span>
                     <span>1.0 (Far-sighted)</span>
                 </div>
@@ -79,7 +79,7 @@ export default function ReturnPanel() {
                             </Bar>
                         </BarChart>
                     </ResponsiveContainer>
-                    <p className="text-center text-xs text-slate-500 mt-2">
+                    <p className="text-center text-xs text-slate-700 dark:text-slate-500 mt-2">
                         Goal (+100) is 4 steps away.
                     </p>
                 </div>
@@ -91,21 +91,21 @@ export default function ReturnPanel() {
                     <div className="space-y-4 font-mono text-sm">
                         {data.map((d, i) => (
                             <div key={i} className="flex justify-between items-center border-b border-slate-700 pb-2">
-                                <span className="text-slate-400">Step {i + 1} (Reward {d.reward}):</span>
+                                <span className="text-slate-800 dark:text-slate-400">Step {i + 1} (Reward {d.reward}):</span>
                                 <span>
-                                    {d.reward} × {gamma}^{i} = <span className="text-teal-400 font-bold">{d.presentValue.toFixed(1)}</span>
+                                    {d.reward} × {gamma}^{i} = <span className="text-teal-600 dark:text-teal-400 font-bold">{d.presentValue.toFixed(1)}</span>
                                 </span>
                             </div>
                         ))}
 
                         <div className="pt-4 text-center">
-                            <div className="text-slate-400 text-sm mb-1">Total Discounted Return</div>
+                            <div className="text-slate-800 dark:text-sm mb-1">Total Discounted Return</div>
                             <div className="text-4xl font-bold text-white">{totalReturn.toFixed(1)}</div>
                         </div>
                     </div>
 
                     <div className="mt-6 bg-teal-900/20 border border-teal-500/50 p-4 rounded-xl">
-                        <p className="text-sm text-slate-300">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
                             {gamma < 0.5 ? (
                                 "With low Gamma, the agent barely cares about the goal because it's too far away! It focuses only on immediate rewards."
                             ) : (

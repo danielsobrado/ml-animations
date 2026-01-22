@@ -44,7 +44,7 @@ export default function EntropyPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-rose-400 mb-4">Entropy (Average Surprise)</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Entropy measures how <strong>unpredictable</strong> a system is.
                     <br />
                     Maximum Entropy happens when everything is equally likely (Uniform).
@@ -60,7 +60,7 @@ export default function EntropyPanel() {
                         {probs.map((p, i) => (
                             <div key={i}>
                                 <div className="flex justify-between items-end mb-1">
-                                    <label className="text-sm text-slate-400">P({String.fromCharCode(65 + i)})</label>
+                                    <label className="text-sm text-slate-800 dark:text-slate-400">P({String.fromCharCode(65 + i)})</label>
                                     <span className="font-mono font-bold text-rose-400">{(p * 100).toFixed(0)}%</span>
                                 </div>
                                 <input
@@ -110,11 +110,11 @@ export default function EntropyPanel() {
                     </div>
 
                     <div className="w-full bg-slate-900 p-6 rounded-xl border border-rose-500/30 text-center">
-                        <div className="text-sm text-slate-400 uppercase tracking-wider mb-2">System Entropy</div>
+                        <div className="text-sm text-slate-800 dark:text-slate-400 uppercase tracking-wider mb-2">System Entropy</div>
                         <div className="text-5xl font-mono font-bold text-white mb-2">
-                            {entropy.toFixed(2)} <span className="text-lg text-slate-500">bits</span>
+                            {entropy.toFixed(2)} <span className="text-lg text-slate-700 dark:text-slate-500">bits</span>
                         </div>
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-700 dark:text-slate-500">
                             H(X) = - Σ p(x) log<sub>2</sub> p(x)
                         </div>
                     </div>

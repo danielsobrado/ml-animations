@@ -64,9 +64,9 @@ export default function TuningPanel() {
                     </div>
 
                     <div className="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                        <h4 className="font-bold text-slate-500 uppercase text-xs mb-2">Optimal k for current m, n</h4>
+                        <h4 className="font-bold text-slate-700 dark:text-slate-500 uppercase text-xs mb-2">Optimal k for current m, n</h4>
                         <p className="text-2xl font-mono font-bold text-slate-800">{optimalK.toFixed(1)}</p>
-                        <p className="text-xs text-slate-400 mt-1">Formula: k = (m/n) * ln(2)</p>
+                        <p className="text-xs text-slate-800 dark:text-slate-400 mt-1">Formula: k = (m/n) * ln(2)</p>
                     </div>
                 </div>
 

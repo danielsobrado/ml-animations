@@ -87,7 +87,7 @@ export default function PlaygroundPanel() {
 
             {/* Bit Array Visualization */}
             <div className="w-full max-w-5xl bg-slate-100 p-8 rounded-2xl border border-slate-200 mb-8 relative">
-                <div className="flex justify-between mb-2 text-xs font-mono text-slate-400 px-1">
+                <div className="flex justify-between mb-2 text-xs font-mono text-slate-800 dark:text-slate-400 px-1">
                     {bits.map((_, i) => <span key={i}>{i}</span>)}
                 </div>
                 <div className="flex gap-1 h-16">
@@ -138,13 +138,13 @@ export default function PlaygroundPanel() {
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
                 <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                     <h3 className="font-bold text-indigo-900 mb-2">Why "Probably"?</h3>
-                    <p className="text-slate-600 text-sm">
+                    <p className="text-slate-800 dark:text-sm">
                         If all bits are 1, it <em>might</em> be because we added this word... or it might be a coincidence from other words flipping those same bits! This is a <strong>False Positive</strong>.
                     </p>
                 </div>
                 <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                     <h3 className="font-bold text-indigo-900 mb-2">Why "Definitely Not"?</h3>
-                    <p className="text-slate-600 text-sm">
+                    <p className="text-slate-800 dark:text-sm">
                         If even a single bit is 0, we know for sure we never added this word. Because if we had, that bit would have been flipped to 1! No <strong>False Negatives</strong> allowed.
                     </p>
                 </div>

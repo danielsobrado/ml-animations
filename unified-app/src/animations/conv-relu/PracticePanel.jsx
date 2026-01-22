@@ -145,7 +145,7 @@ export default function PracticePanel() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           {renderInputMatrix(X, 'X (2×3)', 'blue')}
-          <span className="text-xl font-bold text-gray-400">×</span>
+          <span className="text-xl font-bold text-gray-800 dark:text-gray-400">×</span>
           {renderInputMatrix(W, 'W (3×3)', 'green')}
         </div>
       </div>
@@ -163,7 +163,7 @@ export default function PracticePanel() {
         </div>
 
         {showHint && (
-          <div className="mb-3 p-2 bg-purple-50 rounded text-sm text-gray-600">
+          <div className="mb-3 p-2 bg-purple-50 rounded text-sm text-gray-800 dark:text-gray-600">
             <p>Z[i][j] = sum of X[i][k] × W[k][j] for all k</p>
             <p className="mt-1">
               Example: Z[0][0] = {X[0][0]}×{W[0][0]} + {X[0][1]}×{W[1][0]} + {X[0][2]}×{W[2][0]} = {Z[0][0]}
@@ -195,7 +195,7 @@ export default function PracticePanel() {
       {/* Step 2: Apply ReLU */}
       <div className={`p-4 rounded-lg border mb-3 ${currentStep >= 2 ? 'bg-white border-orange-300' : 'bg-gray-100 border-gray-200'}`}>
         <p className="font-semibold text-orange-700 mb-2">Step 2: Apply ReLU(Z)</p>
-        <p className="text-sm text-gray-600 mb-3">ReLU(z) = max(0, z) — Replace negatives with 0</p>
+        <p className="text-sm text-gray-800 dark:text-gray-600 mb-3">ReLU(z) = max(0, z) — Replace negatives with 0</p>
 
         {currentStep >= 2 && (
           <>

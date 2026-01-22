@@ -9,8 +9,8 @@ export default function SurprisePanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-pink-400 mb-4">What is a "Bit"?</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-4">What is a "Bit"?</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Information is measured in <strong>Surprise</strong>.
                     <br />
                     Rare events give us more information than common ones.
@@ -24,8 +24,8 @@ export default function SurprisePanel() {
 
                     <div className="mb-8">
                         <div className="flex justify-between items-end mb-2">
-                            <label className="text-sm text-slate-400">Probability (p)</label>
-                            <span className="text-3xl font-mono font-bold text-pink-400">{(prob * 100).toFixed(0)}%</span>
+                            <label className="text-sm text-slate-800 dark:text-slate-400">Probability (p)</label>
+                            <span className="text-3xl font-mono font-bold text-pink-600 dark:text-pink-400">{(prob * 100).toFixed(0)}%</span>
                         </div>
                         <input
                             type="range" min="0.01" max="1" step="0.01"
@@ -33,13 +33,13 @@ export default function SurprisePanel() {
                             onChange={(e) => setProb(parseFloat(e.target.value))}
                             className="w-full accent-pink-400"
                         />
-                        <div className="flex justify-between text-xs text-slate-500 mt-2">
+                        <div className="flex justify-between text-xs text-slate-700 dark:text-slate-500 mt-2">
                             <span>Rare (1%)</span>
                             <span>Certain (100%)</span>
                         </div>
                     </div>
 
-                    <div className="bg-slate-900 p-4 rounded-lg text-sm text-slate-300">
+                    <div className="bg-slate-900 p-4 rounded-lg text-sm text-slate-700 dark:text-slate-300">
                         <p className="mb-2"><strong>Examples:</strong></p>
                         <ul className="list-disc list-inside space-y-1">
                             <li>p = 0.5 (Coin Flip): <strong>1 bit</strong></li>
@@ -62,12 +62,12 @@ export default function SurprisePanel() {
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <div className="text-center">
                                 <div className="text-4xl font-bold text-white drop-shadow-md">{info.toFixed(2)}</div>
-                                <div className="text-sm text-slate-400">Bits</div>
+                                <div className="text-sm text-slate-800 dark:text-slate-400">Bits</div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="mt-6 font-mono text-lg text-slate-300">
+                    <div className="mt-6 font-mono text-lg text-slate-700 dark:text-slate-300">
                         I(x) = -log<sub>2</sub>({prob.toFixed(2)})
                     </div>
                 </div>

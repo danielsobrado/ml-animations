@@ -136,7 +136,7 @@ export default function BPEPanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Byte Pair Encoding (BPE)</h2>
-                    <p className="text-slate-600">
+                    <p className="text-slate-800 dark:text-slate-600">
                         Watch how BPE iteratively merges the most frequent pairs of tokens
                     </p>
                 </div>
@@ -197,14 +197,14 @@ export default function BPEPanel() {
                     >
                         <ChevronRight size={20} />
                     </button>
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm text-slate-800 dark:text-slate-600">
                         Step {currentStep + 1} / {steps.length}
                     </span>
                 </div>
 
                 {/* Current Step Info */}
                 <div className="bg-indigo-50 rounded-xl p-4 mb-6 border border-indigo-200">
-                    <h3 className="font-bold text-indigo-900 text-lg">{currentStepData.title}</h3>
+                    <h3 className="font-bold text-lg">{currentStepData.title}</h3>
                     <p className="text-indigo-800">{currentStepData.description}</p>
                     {currentStepData.merge && (
                         <div className="mt-2 flex items-center gap-2">
@@ -226,7 +226,7 @@ export default function BPEPanel() {
                         <div ref={tokensRef} className="space-y-3">
                             {inputText.split(/\s+/).map((word, wordIdx) => (
                                 <div key={wordIdx} className="flex items-center gap-2">
-                                    <span className="font-mono text-slate-600 w-20">{word}:</span>
+                                    <span className="font-mono text-slate-800 dark:text-slate-600 w-20">{word}:</span>
                                     <div className="flex flex-wrap gap-1">
                                         {(currentStepData.wordTokens[wordIdx] || []).map((token, tokenIdx) => (
                                             <span
@@ -272,7 +272,7 @@ export default function BPEPanel() {
                         <Lightbulb className="text-amber-600 flex-shrink-0 mt-1" size={24} />
                         <div>
                             <h4 className="font-bold text-amber-900 mb-2">BPE Algorithm</h4>
-                            <ol className="text-amber-800 text-sm space-y-1 list-decimal list-inside">
+                            <ol className="text-sm space-y-1 list-decimal list-inside">
                                 <li>Start with character-level tokens (add end-of-word marker)</li>
                                 <li>Count all adjacent token pairs across the corpus</li>
                                 <li>Merge the most frequent pair into a new token</li>

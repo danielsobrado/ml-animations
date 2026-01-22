@@ -9,7 +9,7 @@ export default function IntroPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="gradient-text">GloVe:</span> Global Vectors for Word Representation
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto">
+        <p className="text-gray-800 dark:text-gray-400 max-w-2xl mx-auto">
           Learning word vectors from global word-word co-occurrence statistics
         </p>
       </div>
@@ -24,9 +24,9 @@ export default function IntroPanel() {
           <p className="text-xl text-gray-200 italic mb-2">
             "The meaning of a word is captured by the ratio of its co-occurrence probabilities"
           </p>
-          <p className="text-sm text-gray-400">— Pennington, Socher, Manning (2014)</p>
+          <p className="text-sm text-gray-800 dark:text-gray-400">— Pennington, Socher, Manning (2014)</p>
         </div>
-        <p className="text-gray-300 mt-4 text-center">
+        <p className="text-gray-700 dark:text-gray-300 mt-4 text-center">
           GloVe combines the best of both worlds: global matrix factorization (like LSA) and local context window methods (like Word2Vec).
         </p>
       </div>
@@ -45,7 +45,7 @@ export default function IntroPanel() {
               'Captures semantic relationships through vector arithmetic',
               'Released by Stanford NLP Group in 2014'
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-gray-300">
+              <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-gray-300">
                 <CheckCircle size={16} className="text-green-400 mt-1 flex-shrink-0" />
                 {item}
               </li>
@@ -54,7 +54,7 @@ export default function IntroPanel() {
         </div>
 
         <div className="bg-black/30 rounded-xl p-6 border border-white/10">
-          <h3 className="flex items-center gap-2 text-lg font-bold text-cyan-400 mb-4">
+          <h3 className="flex items-center gap-2 text-lg font-bold text-cyan-600 dark:text-cyan-400 mb-4">
             <Zap size={20} />
             Why GloVe?
           </h3>
@@ -65,8 +65,8 @@ export default function IntroPanel() {
               'Pre-trained vectors available for immediate use',
               'State-of-the-art on word analogy tasks'
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-gray-300">
-                <CheckCircle size={16} className="text-cyan-400 mt-1 flex-shrink-0" />
+              <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-gray-300">
+                <CheckCircle size={16} className="text-cyan-600 dark:text-cyan-400 mt-1 flex-shrink-0" />
                 {item}
               </li>
             ))}
@@ -82,8 +82,8 @@ export default function IntroPanel() {
         </h3>
         
         <div className="bg-gradient-to-r from-violet-900/20 to-cyan-900/20 rounded-lg p-4 mb-4">
-          <p className="text-gray-300 text-center">
-            Consider words <span className="text-violet-400 font-mono">"ice"</span> and <span className="text-cyan-400 font-mono">"steam"</span>. 
+          <p className="text-gray-700 dark:text-center">
+            Consider words <span className="text-violet-400 font-mono">"ice"</span> and <span className="text-cyan-600 dark:text-cyan-400 font-mono">"steam"</span>. 
             Their relationship to other words reveals their meaning:
           </p>
         </div>
@@ -92,8 +92,8 @@ export default function IntroPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="text-left py-2 px-3 text-gray-400">Probability Ratio</th>
-                <th className="py-2 px-3 text-cyan-400 font-mono">k = solid</th>
+                <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Probability Ratio</th>
+                <th className="py-2 px-3 text-cyan-600 dark:text-cyan-400 font-mono">k = solid</th>
                 <th className="py-2 px-3 text-violet-400 font-mono">k = gas</th>
                 <th className="py-2 px-3 text-yellow-400 font-mono">k = water</th>
                 <th className="py-2 px-3 text-green-400 font-mono">k = fashion</th>
@@ -101,22 +101,22 @@ export default function IntroPanel() {
             </thead>
             <tbody>
               <tr className="border-b border-white/10">
-                <td className="py-2 px-3 text-gray-300 font-mono">P(k | ice)</td>
-                <td className="py-2 px-3 text-gray-400 text-center">1.9 × 10⁻⁴</td>
-                <td className="py-2 px-3 text-gray-400 text-center">6.6 × 10⁻⁵</td>
-                <td className="py-2 px-3 text-gray-400 text-center">3.0 × 10⁻³</td>
-                <td className="py-2 px-3 text-gray-400 text-center">1.7 × 10⁻⁵</td>
+                <td className="py-2 px-3 text-gray-700 dark:text-gray-300 font-mono">P(k | ice)</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">1.9 × 10⁻⁴</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">6.6 × 10⁻⁵</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">3.0 × 10⁻³</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">1.7 × 10⁻⁵</td>
               </tr>
               <tr className="border-b border-white/10">
-                <td className="py-2 px-3 text-gray-300 font-mono">P(k | steam)</td>
-                <td className="py-2 px-3 text-gray-400 text-center">2.2 × 10⁻⁵</td>
-                <td className="py-2 px-3 text-gray-400 text-center">7.8 × 10⁻⁴</td>
-                <td className="py-2 px-3 text-gray-400 text-center">2.2 × 10⁻³</td>
-                <td className="py-2 px-3 text-gray-400 text-center">1.8 × 10⁻⁵</td>
+                <td className="py-2 px-3 text-gray-700 dark:text-gray-300 font-mono">P(k | steam)</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">2.2 × 10⁻⁵</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">7.8 × 10⁻⁴</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">2.2 × 10⁻³</td>
+                <td className="py-2 px-3 text-gray-800 dark:text-center">1.8 × 10⁻⁵</td>
               </tr>
               <tr className="bg-violet-900/20">
                 <td className="py-2 px-3 text-white font-bold">P(k|ice) / P(k|steam)</td>
-                <td className="py-2 px-3 text-cyan-400 font-bold text-center">8.9</td>
+                <td className="py-2 px-3 text-cyan-600 dark:text-cyan-400 font-bold text-center">8.9</td>
                 <td className="py-2 px-3 text-violet-400 font-bold text-center">0.085</td>
                 <td className="py-2 px-3 text-yellow-400 font-bold text-center">1.36</td>
                 <td className="py-2 px-3 text-green-400 font-bold text-center">0.96</td>
@@ -127,20 +127,20 @@ export default function IntroPanel() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">
           <div className="bg-cyan-900/20 rounded-lg p-2 text-center">
-            <p className="text-cyan-400 font-bold">≫ 1</p>
-            <p className="text-xs text-gray-400">Related to ice</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-bold">≫ 1</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400">Related to ice</p>
           </div>
           <div className="bg-violet-900/20 rounded-lg p-2 text-center">
             <p className="text-violet-400 font-bold">≪ 1</p>
-            <p className="text-xs text-gray-400">Related to steam</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400">Related to steam</p>
           </div>
           <div className="bg-yellow-900/20 rounded-lg p-2 text-center">
             <p className="text-yellow-400 font-bold">≈ 1</p>
-            <p className="text-xs text-gray-400">Related to both</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400">Related to both</p>
           </div>
           <div className="bg-green-900/20 rounded-lg p-2 text-center">
             <p className="text-green-400 font-bold">≈ 1</p>
-            <p className="text-xs text-gray-400">Related to neither</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400">Related to neither</p>
           </div>
         </div>
       </div>
@@ -165,10 +165,10 @@ export default function IntroPanel() {
                   {item.step}
                 </div>
                 <h4 className="font-medium text-white">{item.title}</h4>
-                <p className="text-xs text-gray-400 max-w-[120px]">{item.desc}</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400 max-w-[120px]">{item.desc}</p>
               </div>
               {i < arr.length - 1 && (
-                <ArrowRight className="text-gray-600 hidden md:block" size={24} />
+                <ArrowRight className="text-gray-800 dark:text-gray-600 hidden md:block" size={24} />
               )}
             </React.Fragment>
           ))}
@@ -181,24 +181,24 @@ export default function IntroPanel() {
         
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-4">
-            <p className="text-cyan-400 font-medium mb-1">Wikipedia + Gigaword</p>
-            <p className="text-sm text-gray-400">6B tokens, 400K vocab</p>
-            <p className="text-xs text-gray-500">50d, 100d, 200d, 300d vectors</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium mb-1">Wikipedia + Gigaword</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400">6B tokens, 400K vocab</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500">50d, 100d, 200d, 300d vectors</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <p className="text-cyan-400 font-medium mb-1">Common Crawl (42B)</p>
-            <p className="text-sm text-gray-400">42B tokens, 1.9M vocab</p>
-            <p className="text-xs text-gray-500">300d vectors</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium mb-1">Common Crawl (42B)</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400">42B tokens, 1.9M vocab</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500">300d vectors</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <p className="text-cyan-400 font-medium mb-1">Common Crawl (840B)</p>
-            <p className="text-sm text-gray-400">840B tokens, 2.2M vocab</p>
-            <p className="text-xs text-gray-500">300d vectors</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium mb-1">Common Crawl (840B)</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400">840B tokens, 2.2M vocab</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500">300d vectors</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <p className="text-cyan-400 font-medium mb-1">Twitter (27B)</p>
-            <p className="text-sm text-gray-400">27B tokens, 1.2M vocab</p>
-            <p className="text-xs text-gray-500">25d, 50d, 100d, 200d vectors</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium mb-1">Twitter (27B)</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400">27B tokens, 1.2M vocab</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500">25d, 50d, 100d, 200d vectors</p>
           </div>
         </div>
       </div>
@@ -218,7 +218,7 @@ export default function IntroPanel() {
             'Loading and using pre-trained GloVe',
             'Word analogies with GloVe vectors'
           ].map((item, i) => (
-            <div key={i} className="flex items-center gap-2 text-gray-300">
+            <div key={i} className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
               <CheckCircle size={16} className="text-green-400 flex-shrink-0" />
               {item}
             </div>

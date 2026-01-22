@@ -89,7 +89,7 @@ export default function CliffPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-red-400 mb-4">The Cliff Walking Problem</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The shortest path is right along the edge of the cliff.
                     <br />
                     But if you explore randomly (High ε), you might fall off!
@@ -115,7 +115,7 @@ export default function CliffPanel() {
                                 >
                                     {isCliff && <span className="text-2xl">💀</span>}
                                     {isGoal && <span className="text-2xl">🏆</span>}
-                                    {isStart && <span className="text-xs text-slate-400">START</span>}
+                                    {isStart && <span className="text-xs text-slate-800 dark:text-slate-400">START</span>}
 
                                     {/* Agent */}
                                     {agentPos.r === r && agentPos.c === c && (
@@ -141,7 +141,7 @@ export default function CliffPanel() {
 
                         <div className="mb-6">
                             <div className="flex justify-between items-end mb-2">
-                                <label className="text-sm text-slate-400">Exploration (ε)</label>
+                                <label className="text-sm text-slate-800 dark:text-slate-400">Exploration (ε)</label>
                                 <span className="text-2xl font-mono font-bold text-red-400">{epsilon.toFixed(2)}</span>
                             </div>
                             <input
@@ -150,7 +150,7 @@ export default function CliffPanel() {
                                 onChange={(e) => setEpsilon(parseFloat(e.target.value))}
                                 className="w-full accent-red-400"
                             />
-                            <p className="text-xs text-slate-500 mt-2">
+                            <p className="text-xs text-slate-700 dark:text-slate-500 mt-2">
                                 High ε = Safer Path (Far from cliff) | Low ε = Optimal Path (Edge)
                             </p>
                         </div>
@@ -168,14 +168,14 @@ export default function CliffPanel() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-slate-900 p-4 rounded text-center">
                                 <div className="text-3xl font-bold text-red-500">{falls}</div>
-                                <div className="text-xs text-slate-400">Falls (Deaths)</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-400">Falls (Deaths)</div>
                             </div>
                             <div className="bg-slate-900 p-4 rounded text-center">
                                 <div className="text-3xl font-bold text-yellow-500">{wins}</div>
-                                <div className="text-xs text-slate-400">Wins (Goals)</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-400">Wins (Goals)</div>
                             </div>
                         </div>
-                        <div className="mt-4 p-3 bg-red-900/20 border border-red-500/30 rounded text-sm text-slate-300">
+                        <div className="mt-4 p-3 bg-red-900/20 border border-red-500/30 rounded text-sm text-slate-700 dark:text-slate-300">
                             {epsilon > 0.2 ? (
                                 "With high noise, the optimal path is too dangerous. The agent prefers the 'safe' route."
                             ) : (

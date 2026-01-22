@@ -54,8 +54,8 @@ export default function VariantsPanel() {
 
     const current = variants[selectedVariant];
     const colorClasses = {
-        blue: 'bg-blue-500/20 border-blue-500/50 text-blue-400',
-        purple: 'bg-purple-500/20 border-purple-500/50 text-purple-400',
+        blue: 'bg-blue-500/20 border-blue-500/50 text-blue-600 dark:text-blue-400',
+        purple: 'bg-purple-500/20 border-purple-500/50 text-purple-600 dark:text-purple-400',
         green: 'bg-green-500/20 border-green-500/50 text-green-400'
     };
 
@@ -67,7 +67,7 @@ export default function VariantsPanel() {
                     <h2 className="text-3xl font-bold text-white mb-2">
                         Transformer Variants: <span className="gradient-text">The Family Tree</span>
                     </h2>
-                    <p className="text-slate-400">
+                    <p className="text-slate-800 dark:text-slate-400">
                         Three architectural patterns that dominate modern NLP
                     </p>
                 </div>
@@ -81,7 +81,7 @@ export default function VariantsPanel() {
                             className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                                 selectedVariant === key
                                     ? `${colorClasses[variant.color]} border-2`
-                                    : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700 border-2 border-transparent'
+                                    : 'bg-slate-700/50 text-slate-800 dark:text-slate-400 hover:bg-slate-700 border-2 border-transparent'
                             }`}
                         >
                             <variant.icon size={20} />
@@ -107,18 +107,18 @@ export default function VariantsPanel() {
                                     </div>
                                 ) : (
                                     <div className="w-24 h-40 bg-slate-700/30 rounded-lg flex flex-col items-center justify-center p-2 border-2 border-dashed border-slate-600">
-                                        <X className="text-slate-500" size={32} />
-                                        <div className="text-slate-500 text-xs mt-2">Not Used</div>
+                                        <X className="text-slate-700 dark:text-slate-500" size={32} />
+                                        <div className="text-slate-700 dark:text-xs mt-2">Not Used</div>
                                     </div>
                                 )}
-                                <div className="text-slate-400 text-xs mt-2">Encoder</div>
+                                <div className="text-slate-800 dark:text-xs mt-2">Encoder</div>
                             </div>
 
                             {/* Arrow */}
                             {current.diagram.encoder && current.diagram.decoder && (
                                 <div className="flex flex-col items-center justify-center h-40">
                                     <ArrowRight className="text-yellow-400" size={32} />
-                                    <div className="text-yellow-400 text-xs mt-1">K, V</div>
+                                    <div className="text-xs mt-1">K, V</div>
                                 </div>
                             )}
 
@@ -131,24 +131,24 @@ export default function VariantsPanel() {
                                             Causal Attention
                                         </div>
                                         {current.diagram.encoder && (
-                                            <div className="text-yellow-300 text-xs mt-1 text-center">
+                                            <div className="text-xs mt-1 text-center">
                                                 + Cross-Attn
                                             </div>
                                         )}
                                     </div>
                                 ) : (
                                     <div className="w-24 h-48 bg-slate-700/30 rounded-lg flex flex-col items-center justify-center p-2 border-2 border-dashed border-slate-600">
-                                        <X className="text-slate-500" size={32} />
-                                        <div className="text-slate-500 text-xs mt-2">Not Used</div>
+                                        <X className="text-slate-700 dark:text-slate-500" size={32} />
+                                        <div className="text-slate-700 dark:text-xs mt-2">Not Used</div>
                                     </div>
                                 )}
-                                <div className="text-slate-400 text-xs mt-2">Decoder</div>
+                                <div className="text-slate-800 dark:text-xs mt-2">Decoder</div>
                             </div>
                         </div>
 
                         {/* Description */}
                         <div className="mt-6 p-4 bg-slate-700/30 rounded-lg">
-                            <p className="text-slate-300 text-sm">{current.description}</p>
+                            <p className="text-slate-700 dark:text-sm">{current.description}</p>
                         </div>
                     </div>
 
@@ -163,13 +163,13 @@ export default function VariantsPanel() {
                         {/* Attention Type */}
                         <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
                             <h4 className="text-white font-bold mb-2">Attention Pattern</h4>
-                            <p className="text-slate-300">{current.attention}</p>
+                            <p className="text-slate-700 dark:text-slate-300">{current.attention}</p>
                         </div>
 
                         {/* Training Objective */}
                         <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
                             <h4 className="text-white font-bold mb-2">Training Objective</h4>
-                            <p className="text-slate-300">{current.training}</p>
+                            <p className="text-slate-700 dark:text-slate-300">{current.training}</p>
                         </div>
 
                         {/* Tasks */}
@@ -177,7 +177,7 @@ export default function VariantsPanel() {
                             <h4 className="text-white font-bold mb-2">Common Tasks</h4>
                             <div className="flex flex-wrap gap-2">
                                 {current.tasks.map((task, i) => (
-                                    <span key={i} className="bg-slate-700 px-3 py-1 rounded-full text-sm text-slate-300">
+                                    <span key={i} className="bg-slate-700 px-3 py-1 rounded-full text-sm text-slate-700 dark:text-slate-300">
                                         {task}
                                     </span>
                                 ))}
@@ -209,39 +209,39 @@ export default function VariantsPanel() {
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="border-b border-slate-700">
-                                    <th className="text-left text-slate-400 py-3 px-4">Feature</th>
-                                    <th className="text-center text-blue-400 py-3 px-4">Encoder-Only</th>
-                                    <th className="text-center text-purple-400 py-3 px-4">Decoder-Only</th>
+                                    <th className="text-left text-slate-800 dark:text-slate-400 py-3 px-4">Feature</th>
+                                    <th className="text-center text-blue-600 dark:text-blue-400 py-3 px-4">Encoder-Only</th>
+                                    <th className="text-center text-purple-600 dark:text-purple-400 py-3 px-4">Decoder-Only</th>
                                     <th className="text-center text-green-400 py-3 px-4">Encoder-Decoder</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-slate-300">
+                            <tbody className="text-slate-700 dark:text-slate-300">
                                 <tr className="border-b border-slate-700/50">
-                                    <td className="py-3 px-4 text-slate-400">Bidirectional?</td>
+                                    <td className="py-3 px-4 text-slate-800 dark:text-slate-400">Bidirectional?</td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><X className="inline text-red-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><span className="text-yellow-400">Partial</span></td>
                                 </tr>
                                 <tr className="border-b border-slate-700/50">
-                                    <td className="py-3 px-4 text-slate-400">Autoregressive?</td>
+                                    <td className="py-3 px-4 text-slate-800 dark:text-slate-400">Autoregressive?</td>
                                     <td className="py-3 px-4 text-center"><X className="inline text-red-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                 </tr>
                                 <tr className="border-b border-slate-700/50">
-                                    <td className="py-3 px-4 text-slate-400">Best for Generation?</td>
+                                    <td className="py-3 px-4 text-slate-800 dark:text-slate-400">Best for Generation?</td>
                                     <td className="py-3 px-4 text-center"><X className="inline text-red-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                 </tr>
                                 <tr className="border-b border-slate-700/50">
-                                    <td className="py-3 px-4 text-slate-400">Best for Understanding?</td>
+                                    <td className="py-3 px-4 text-slate-800 dark:text-slate-400">Best for Understanding?</td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><span className="text-yellow-400">OK</span></td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
                                 </tr>
                                 <tr>
-                                    <td className="py-3 px-4 text-slate-400">Cross-Attention?</td>
+                                    <td className="py-3 px-4 text-slate-800 dark:text-slate-400">Cross-Attention?</td>
                                     <td className="py-3 px-4 text-center"><X className="inline text-red-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><X className="inline text-red-400" size={18} /></td>
                                     <td className="py-3 px-4 text-center"><Check className="inline text-green-400" size={18} /></td>
@@ -253,7 +253,7 @@ export default function VariantsPanel() {
 
                 {/* Modern Trends */}
                 <div className="mt-8 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl p-6 border border-indigo-500/30">
-                    <h3 className="text-indigo-400 font-bold mb-4 flex items-center gap-2">
+                    <h3 className="text-indigo-600 dark:text-indigo-400 font-bold mb-4 flex items-center gap-2">
                         <Zap size={20} />
                         Modern Trends (2023-2024)
                     </h3>
@@ -261,28 +261,28 @@ export default function VariantsPanel() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">🦙 Decoder-Only Dominance</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 GPT, LLaMA, Mistral - decoder-only models dominate due to simplicity and scaling properties. 
                                 They can be prompted to do encoder tasks too!
                             </p>
                         </div>
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">🔀 Mixture of Experts (MoE)</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 Models like Mixtral use sparse MoE layers - only some "experts" activate per token. 
                                 More parameters, same compute!
                             </p>
                         </div>
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">📏 Longer Context</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 Techniques like RoPE, ALiBi, and sparse attention enable 100K+ token contexts. 
                                 Original transformer: only 512 tokens!
                             </p>
                         </div>
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">🖼️ Multimodal</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 GPT-4V, Gemini, LLaVA - transformers now process images, audio, and text together. 
                                 Same architecture, different encoders!
                             </p>

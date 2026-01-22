@@ -106,8 +106,8 @@ export default function TrainingPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-blue-400 mb-4">Training Loop</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">Training Loop</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Watch the agent explore and learn from its mistakes in real-time.
                 </p>
             </div>
@@ -169,7 +169,7 @@ export default function TrainingPanel() {
                     </div>
 
                     <div className="mt-4 w-full max-w-xs">
-                        <label className="text-xs text-slate-400">Speed: {speed}ms</label>
+                        <label className="text-xs text-slate-800 dark:text-slate-400">Speed: {speed}ms</label>
                         <input
                             type="range" min="10" max="500" step="10"
                             value={speed}
@@ -185,11 +185,11 @@ export default function TrainingPanel() {
                         <h3 className="font-bold text-white mb-4">Learning Progress</h3>
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div className="bg-slate-900 p-3 rounded">
-                                <div className="text-xs text-slate-500">Episodes</div>
+                                <div className="text-xs text-slate-700 dark:text-slate-500">Episodes</div>
                                 <div className="text-2xl font-bold text-white">{episode}</div>
                             </div>
                             <div className="bg-slate-900 p-3 rounded">
-                                <div className="text-xs text-slate-500">Last Reward</div>
+                                <div className="text-xs text-slate-700 dark:text-slate-500">Last Reward</div>
                                 <div className={`text-2xl font-bold ${stats[stats.length - 1]?.reward > 0 ? 'text-green-400' : 'text-red-400'}`}>
                                     {stats[stats.length - 1]?.reward || 0}
                                 </div>
@@ -210,7 +210,7 @@ export default function TrainingPanel() {
                     </div>
 
                     <div className="bg-blue-900/20 border border-blue-500/50 p-4 rounded-xl">
-                        <p className="text-sm text-slate-300">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
                             <strong>Observation:</strong> Initially, the agent falls into holes often (Red spikes).
                             As Q-values propagate from the goal, it learns the safe path, and rewards stabilize at +10 (Green line).
                         </p>

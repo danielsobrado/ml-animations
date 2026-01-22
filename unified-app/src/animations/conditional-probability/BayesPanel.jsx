@@ -20,13 +20,13 @@ export default function BayesPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-emerald-400 mb-4">Bayes' Theorem</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <h2 className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">Bayes' Theorem</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     Flip conditional probabilities: go from <strong>P(B|A)</strong> to <strong>P(A|B)</strong>.
                 </p>
                 <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm">
-                    <p className="text-cyan-300 text-lg">P(A|B) = P(B|A) × P(A) / P(B)</p>
-                    <p className="text-slate-400 mt-2 text-xs">
+                    <p className="text-lg">P(A|B) = P(B|A) × P(A) / P(B)</p>
+                    <p className="text-slate-800 dark:text-slate-400 mt-2 text-xs">
                         Posterior = Likelihood × Prior / Evidence
                     </p>
                 </div>
@@ -45,7 +45,7 @@ export default function BayesPanel() {
                         onChange={(e) => setPriorA(Number(e.target.value))}
                         className="w-full accent-green-400"
                     />
-                    <p className="text-xs text-slate-400 mt-2 text-center">
+                    <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                         Initial belief before seeing evidence B
                     </p>
                 </div>
@@ -70,20 +70,20 @@ export default function BayesPanel() {
                         onChange={(e) => setLikelihoodBNotA(Number(e.target.value))}
                         className="w-full accent-yellow-400"
                     />
-                    <p className="text-xs text-slate-400 mt-2 text-center">
+                    <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                         How likely is evidence B given A (or ¬A)?
                     </p>
                 </div>
 
                 <div className="bg-slate-800 p-6 rounded-xl border border-cyan-500/50">
-                    <h3 className="font-bold text-cyan-400 mb-3 text-center">Posterior</h3>
+                    <h3 className="font-bold text-cyan-600 dark:text-cyan-400 mb-3 text-center">Posterior</h3>
                     <div className="text-center">
-                        <div className="text-5xl font-mono font-bold text-cyan-400 mb-2">
+                        <div className="text-5xl font-mono font-bold text-cyan-600 dark:text-cyan-400 mb-2">
                             {(posteriorAB * 100).toFixed(1)}%
                         </div>
-                        <p className="text-sm text-slate-300">P(A|B)</p>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">P(A|B)</p>
                     </div>
-                    <p className="text-xs text-slate-400 mt-4 text-center">
+                    <p className="text-xs text-slate-800 dark:text-slate-400 mt-4 text-center">
                         Updated belief after seeing evidence B
                     </p>
                 </div>
@@ -115,22 +115,22 @@ export default function BayesPanel() {
                 <h3 className="font-bold text-white mb-4 text-center">Step-by-Step Calculation</h3>
                 <div className="space-y-3 font-mono text-sm">
                     <div className="flex justify-between items-center p-3 bg-slate-900 rounded">
-                        <span className="text-slate-400">1. Prior:</span>
+                        <span className="text-slate-800 dark:text-slate-400">1. Prior:</span>
                         <span className="text-green-400">P(A) = {priorA.toFixed(3)}</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-slate-900 rounded">
-                        <span className="text-slate-400">2. Likelihood:</span>
+                        <span className="text-slate-800 dark:text-slate-400">2. Likelihood:</span>
                         <span className="text-yellow-400">P(B|A) = {likelihoodBA.toFixed(3)}</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-slate-900 rounded">
-                        <span className="text-slate-400">3. Evidence (Total Prob):</span>
-                        <span className="text-purple-400">
+                        <span className="text-slate-800 dark:text-slate-400">3. Evidence (Total Prob):</span>
+                        <span className="text-purple-600 dark:text-purple-400">
                             P(B) = {likelihoodBA.toFixed(3)} × {priorA.toFixed(3)} + {likelihoodBNotA.toFixed(3)} × {(1 - priorA).toFixed(3)} = {probB.toFixed(3)}
                         </span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-emerald-900/30 rounded border-2 border-emerald-500">
                         <span className="text-slate-200 font-bold">4. Posterior (Bayes):</span>
-                        <span className="text-cyan-400 font-bold">
+                        <span className="text-cyan-600 dark:text-cyan-400 font-bold">
                             P(A|B) = {likelihoodBA.toFixed(3)} × {priorA.toFixed(3)} / {probB.toFixed(3)} = {posteriorAB.toFixed(3)}
                         </span>
                     </div>

@@ -41,7 +41,7 @@ export default function RetrievalPanel() {
     const getRelevanceColor = (relevance) => {
         if (relevance >= 0.8) return 'bg-green-100 border-green-300 text-green-800';
         if (relevance >= 0.5) return 'bg-yellow-100 border-yellow-300 text-yellow-800';
-        return 'bg-slate-100 border-slate-200 text-slate-600';
+        return 'bg-slate-100 border-slate-200 text-slate-800 dark:text-slate-600';
     };
 
     const getRelevanceBarColor = (relevance) => {
@@ -56,7 +56,7 @@ export default function RetrievalPanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-indigo-900 mb-2">Retrieval in Action</h2>
-                    <p className="text-slate-600">See how RAG retrieves relevant context and generates responses</p>
+                    <p className="text-slate-800 dark:text-slate-600">See how RAG retrieves relevant context and generates responses</p>
                 </div>
 
                 {/* Query Input */}
@@ -108,7 +108,7 @@ export default function RetrievalPanel() {
                                 }`}>
                                     {s.icon}
                                 </div>
-                                <span className="text-xs font-medium text-slate-600">{s.label}</span>
+                                <span className="text-xs font-medium text-slate-800 dark:text-slate-600">{s.label}</span>
                             </div>
                             {i < 3 && (
                                 <ArrowRight className={`${searchStep > s.step ? 'text-indigo-500' : 'text-slate-300'}`} size={20} />
@@ -138,7 +138,7 @@ export default function RetrievalPanel() {
                                         }`}
                                     >
                                         <div className="flex justify-between items-start mb-1">
-                                            <span className="text-xs font-medium text-slate-500">{chunk.source}</span>
+                                            <span className="text-xs font-medium text-slate-700 dark:text-slate-500">{chunk.source}</span>
                                             {searchStep >= 2 && (
                                                 <span className={`text-xs font-bold ${
                                                     chunk.relevance >= 0.8 ? 'text-green-600' :
@@ -192,7 +192,7 @@ export default function RetrievalPanel() {
                                                 <span className="font-medium text-green-700">#{i + 1} {result.source}</span>
                                                 <span className="text-green-600">{(result.relevance * 100).toFixed(0)}%</span>
                                             </div>
-                                            <p className="text-slate-700 text-xs mt-1">{result.text}</p>
+                                            <p className="text-xs mt-1">{result.text}</p>
                                         </div>
                                     ))}
                                 </div>

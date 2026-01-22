@@ -119,7 +119,7 @@ export default function SurferPanel({ nodes, links }) {
                                 <text dy="5" textAnchor="middle" className="font-bold text-indigo-900 pointer-events-none text-sm">
                                     {node.id}
                                 </text>
-                                <text dy="25" textAnchor="middle" className="text-xs font-mono text-slate-500">
+                                <text dy="25" textAnchor="middle" className="text-xs font-mono text-slate-700 dark:text-slate-500">
                                     {percentage.toFixed(1)}%
                                 </text>
                             </g>
@@ -128,7 +128,7 @@ export default function SurferPanel({ nodes, links }) {
                 </svg>
 
                 <div className="absolute top-4 right-4 bg-white/90 p-4 rounded-lg shadow border border-slate-200">
-                    <p className="font-bold text-slate-500 text-xs uppercase mb-2">Total Steps: {totalSteps}</p>
+                    <p className="font-bold text-slate-700 dark:text-xs uppercase mb-2">Total Steps: {totalSteps}</p>
                     {nodes.map(n => (
                         <div key={n.id} className="flex justify-between gap-4 text-sm">
                             <span className="font-bold">{n.id}:</span>

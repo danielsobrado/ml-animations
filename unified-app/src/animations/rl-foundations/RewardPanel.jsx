@@ -44,8 +44,8 @@ export default function RewardPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-amber-400 mb-4">Designing Rewards</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-amber-600 dark:text-amber-400 mb-4">Designing Rewards</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The <strong>Reward Function</strong> defines the goal.
                     <br />
                     The agent will do <em>anything</em> to maximize the total reward. Be careful what you wish for!
@@ -69,7 +69,7 @@ export default function RewardPanel() {
                                     }`}
                             >
                                 <span className="text-2xl">{tool.icon}</span>
-                                <span className="text-xs text-slate-300 mt-1">{tool.label}</span>
+                                <span className="text-xs text-slate-700 dark:text-slate-300 mt-1">{tool.label}</span>
                             </button>
                         ))}
                     </div>
@@ -95,7 +95,7 @@ export default function RewardPanel() {
                             ))}
                         </div>
                     </div>
-                    <p className="text-center text-xs text-slate-500 mt-2">Click grid to place items</p>
+                    <p className="text-center text-xs text-slate-700 dark:text-slate-500 mt-2">Click grid to place items</p>
                 </div>
 
                 {/* Analysis */}
@@ -103,7 +103,7 @@ export default function RewardPanel() {
                     <h3 className="font-bold text-white mb-4">Reward Analysis</h3>
 
                     <div className="mb-6">
-                        <h4 className="text-sm text-slate-400 mb-2">Hypothetical Path (White Dots)</h4>
+                        <h4 className="text-sm text-slate-800 dark:text-slate-400 mb-2">Hypothetical Path (White Dots)</h4>
                         <div className="bg-slate-900 p-4 rounded-lg font-mono text-sm">
                             {path.map((pos, i) => {
                                 if (i === 0) return null;
@@ -128,8 +128,8 @@ export default function RewardPanel() {
                     </div>
 
                     <div className="bg-amber-900/20 border border-amber-500/50 p-4 rounded-xl">
-                        <h4 className="font-bold text-amber-400 mb-2">Reward Hacking ⚠️</h4>
-                        <p className="text-sm text-slate-300">
+                        <h4 className="font-bold text-amber-600 dark:text-amber-400 mb-2">Reward Hacking ⚠️</h4>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
                             If you put too much <strong>Gold 💰</strong> everywhere, the agent might just run around collecting gold forever instead of reaching the <strong>Goal 🏆</strong>!
                             <br /><br />
                             This is called <em>Reward Hacking</em>. The agent optimizes for the number, not your intent.

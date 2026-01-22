@@ -46,7 +46,7 @@ export default function Header({ onMenuClick, onCollapseClick, sidebarCollapsed 
               <h1 className="text-lg font-bold text-slate-900 dark:text-white">
                 ML Animations
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-700 dark:text-slate-400">
                 Interactive Machine Learning
               </p>
             </div>
@@ -64,7 +64,7 @@ export default function Header({ onMenuClick, onCollapseClick, sidebarCollapsed 
             {isDark ? (
               <Sun size={20} className="text-amber-500" />
             ) : (
-              <Moon size={20} className="text-slate-600" />
+              <Moon size={20} className="text-slate-800 dark:text-slate-600" />
             )}
           </button>
 

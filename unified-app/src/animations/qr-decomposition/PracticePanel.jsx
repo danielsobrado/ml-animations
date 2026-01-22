@@ -103,12 +103,12 @@ export default function PracticePanel() {
                             )))}
                         </div>
                     </div>
-                    <div className="text-sm text-gray-700 text-center">Find: A = QR</div>
+                    <div className="text-sm text-center">Find: A = QR</div>
                     <div className="flex items-center gap-2">
-                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[0] !== null ? 'bg-green-400 text-black' : 'bg-gray-200 text-gray-500'}`}>
+                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[0] !== null ? 'bg-green-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'}`}>
                             R[1,1] = {completedAnswers[0] ?? '?'}
                         </div>
-                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[1] !== null ? 'bg-green-400 text-black' : 'bg-gray-200 text-gray-500'}`}>
+                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[1] !== null ? 'bg-green-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'}`}>
                             R[2,2] = {completedAnswers[1] ?? '?'}
                         </div>
                     </div>
@@ -118,7 +118,7 @@ export default function PracticePanel() {
                 </div>
             </div>
             <div className="mt-2 p-2 bg-blue-100 rounded-lg w-full text-center border border-blue-300">
-                <p className="text-blue-800 text-xs font-medium">For diagonal A: Q = I, R = A</p>
+                <p className="text-xs font-medium">For diagonal A: Q = I, R = A</p>
             </div>
             {!isComplete ? (
                 <div className="mt-3 w-full max-w-sm">
@@ -129,7 +129,7 @@ export default function PracticePanel() {
                     <button onClick={handleHint} className="mt-2 w-full px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-lg transition-colors">💡 Show Hint</button>
                     {showHint && (
                         <div className="mt-2 p-3 bg-yellow-100 rounded-lg border border-yellow-300">
-                            <p className="text-yellow-800 text-sm">{getHint()}</p>
+                            <p className="text-sm">{getHint()}</p>
                         </div>
                     )}
                     {feedback && (
@@ -141,18 +141,18 @@ export default function PracticePanel() {
                     <div className="p-4 bg-green-100 rounded-lg border border-green-300">
                         <p className="text-green-700 font-bold text-lg">🎉 Congratulations!</p>
                         <p className="text-green-600 mt-2">Score: {score} / {PRACTICE_STEPS.length} correct</p>
-                        <p className="text-green-600 text-sm">Total attempts: {attempts}</p>
+                        <p className="text-sm">Total attempts: {attempts}</p>
                     </div>
                     <button onClick={handleNewProblem} className="mt-3 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg transition-colors">🎲 New Problem</button>
                 </div>
             )}
             <div className="mt-3 flex items-center gap-4">
-                <div className="text-sm text-gray-600">Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}</div>
+                <div className="text-sm text-gray-800 dark:text-gray-600">Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}</div>
                 <button onClick={handleReset} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg transition-colors text-sm">↺ Reset</button>
                 {!isComplete && <button onClick={handleNewProblem} className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-lg transition-colors text-sm">🎲 New</button>}
             </div>
             <div className="mt-3 p-3 bg-green-50 rounded-lg w-full border border-green-200">
-                <p className="text-xs text-green-800 text-center"><strong>ML Uses:</strong> Least Squares, Linear Regression, Eigenvalue Finding</p>
+                <p className="text-xs text-center"><strong>ML Uses:</strong> Least Squares, Linear Regression, Eigenvalue Finding</p>
             </div>
         </div>
     );

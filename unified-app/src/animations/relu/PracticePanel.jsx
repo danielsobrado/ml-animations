@@ -179,7 +179,7 @@ export default function PracticePanel({ onStepChange }) {
         {/* Calculation Flow */}
         <div className="mt-4 flex items-center justify-center gap-2 text-sm flex-wrap">
           <div className={`px-3 py-2 rounded font-bold ${
-            completedAnswers[0] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-500'
+            completedAnswers[0] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
           }`}>
             W·X = {completedAnswers[0] ?? '?'}
           </div>
@@ -189,13 +189,13 @@ export default function PracticePanel({ onStepChange }) {
           </div>
           <span className="text-xl">=</span>
           <div className={`px-3 py-2 rounded font-bold ${
-            completedAnswers[1] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-500'
+            completedAnswers[1] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
           }`}>
             z = {completedAnswers[1] ?? '?'}
           </div>
           <span className="text-xl">→</span>
           <div className={`px-3 py-2 rounded font-bold ${
-            completedAnswers[2] !== null ? 'bg-yellow-400 text-black' : 'bg-gray-200 text-gray-500'
+            completedAnswers[2] !== null ? 'bg-yellow-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
           }`}>
             ReLU = {completedAnswers[2] ?? '?'}
           </div>
@@ -211,7 +211,7 @@ export default function PracticePanel({ onStepChange }) {
 
       {/* ReLU Formula Reference */}
       <div className="mt-2 p-2 bg-yellow-100 rounded-lg w-full text-center border border-yellow-300">
-        <p className="text-yellow-800 text-sm font-medium">
+        <p className="text-sm font-medium">
           ReLU(x) = max(0, x) = { '{' } x if x {'>'} 0, else 0 { '}' }
         </p>
       </div>
@@ -246,7 +246,7 @@ export default function PracticePanel({ onStepChange }) {
 
           {showHint && (
             <div className="mt-2 p-3 bg-yellow-100 rounded-lg border border-yellow-300">
-              <p className="text-yellow-800 text-sm font-mono">{getHint()}</p>
+              <p className="text-sm font-mono">{getHint()}</p>
             </div>
           )}
 
@@ -265,7 +265,7 @@ export default function PracticePanel({ onStepChange }) {
             <p className="text-green-600 mt-2">
               Score: {score} / {PRACTICE_STEPS.length} correct
             </p>
-            <p className="text-green-600 text-sm">
+            <p className="text-sm">
               Total attempts: {attempts}
             </p>
           </div>
@@ -280,7 +280,7 @@ export default function PracticePanel({ onStepChange }) {
 
       {/* Progress & Reset */}
       <div className="mt-3 flex items-center gap-4">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-800 dark:text-gray-600">
           Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}
         </div>
         <button

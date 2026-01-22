@@ -31,6 +31,8 @@ import {
   ArrowRightLeft,
   Image,
   MessageSquare,
+  TrendingDown,
+  Maximize,
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -60,6 +62,8 @@ export const categories = [
       { id: 'positional-encoding', name: 'Positional Encoding', icon: Workflow, description: 'Adding position information' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
       { id: 'bert', name: 'BERT', icon: BookOpen, description: 'Bidirectional encoder representations' },
+      { id: 'gpt2-comprehensive', name: 'GPT-2 Comprehensive', icon: MessageSquare, description: 'Detailed look at GPT-2 architecture' },
+      { id: 'moe', name: 'Mixture of Experts', icon: GitBranch, description: 'Scaling models with conditional computation' },
       { id: 'fine-tuning', name: 'Fine-Tuning', icon: Settings, description: 'Adapting pretrained models' },
     ],
   },
@@ -75,7 +79,10 @@ export const categories = [
       { id: 'layer-normalization', name: 'Layer Normalization', icon: Layers, description: 'Normalizing layer activations' },
       { id: 'lstm', name: 'LSTM', icon: GitBranch, description: 'Long short-term memory networks' },
       { id: 'conv2d', name: 'Conv2D', icon: Grid3X3, description: '2D convolutional layers' },
+      { id: 'max-pooling', name: 'Max Pooling', icon: Maximize, description: 'Downsampling in convolutional networks' },
       { id: 'conv-relu', name: 'Conv + ReLU', icon: Box, description: 'Convolution with activation' },
+      { id: 'neural-network', name: 'Neural Network Overview', icon: Network, description: 'How artificial neural networks function' },
+      { id: 'gradient-problems', name: 'Gradient Problems', icon: TrendingDown, description: 'Vanishing and exploding gradients' },
     ],
   },
   {
@@ -100,6 +107,7 @@ export const categories = [
       { id: 'svd', name: 'SVD', icon: ArrowRightLeft, description: 'Singular value decomposition' },
       { id: 'qr-decomposition', name: 'QR Decomposition', icon: Boxes, description: 'Orthogonal matrix factorization' },
       { id: 'gradient-descent', name: 'Gradient Descent', icon: TrendingUp, description: 'Optimization algorithm' },
+      { id: 'optimization', name: 'Optimization Landscape', icon: Target, description: 'Exploring loss surfaces and minima' },
       { id: 'linear-regression', name: 'Linear Regression', icon: LineChart, description: 'Fitting linear models' },
     ],
   },
@@ -159,7 +167,7 @@ export const categories = [
 ];
 
 // Flatten all items for easy lookup
-export const allAnimations = categories.flatMap(category => 
+export const allAnimations = categories.flatMap(category =>
   category.items.map(item => ({
     ...item,
     categoryId: category.id,

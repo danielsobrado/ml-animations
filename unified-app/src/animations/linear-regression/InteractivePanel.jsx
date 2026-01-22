@@ -85,15 +85,15 @@ export default function InteractivePanel() {
 
                 {/* Stats Overlay */}
                 <div className="absolute top-4 right-4 bg-white/90 p-4 rounded-lg shadow border border-slate-200 pointer-events-none z-20">
-                    <h4 className="font-bold text-slate-500 text-xs uppercase mb-2">Equation</h4>
+                    <h4 className="font-bold text-slate-700 dark:text-xs uppercase mb-2">Equation</h4>
                     {model ? (
                         <div className="font-mono text-lg font-bold text-indigo-700">
                             y = {model.slope.toFixed(2)}x + {model.intercept.toFixed(2)}
                         </div>
                     ) : (
-                        <div className="text-slate-400 italic">Add at least 2 points</div>
+                        <div className="text-slate-800 dark:text-slate-400 italic">Add at least 2 points</div>
                     )}
-                    <div className="mt-2 text-xs text-slate-500">n = {points.length}</div>
+                    <div className="mt-2 text-xs text-slate-700 dark:text-slate-500">n = {points.length}</div>
                 </div>
 
                 <button

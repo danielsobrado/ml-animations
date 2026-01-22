@@ -56,10 +56,10 @@ export default function StationaryPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-violet-400 mb-4">Stationary Distribution</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Where does the system end up in the long run?
                     <br />
-                    <span className="text-sm text-slate-400">Convergence to Steady State: π = πP</span>
+                    <span className="text-sm text-slate-800 dark:text-slate-400">Convergence to Steady State: π = πP</span>
                 </p>
             </div>
 
@@ -87,7 +87,7 @@ export default function StationaryPanel() {
                 </div>
             </div>
 
-            <div className="text-center mb-4 font-mono text-slate-400">
+            <div className="text-center mb-4 font-mono text-slate-800 dark:text-slate-400">
                 Time Step: <span className="text-white font-bold text-xl">{step}</span>
             </div>
 
@@ -114,12 +114,12 @@ export default function StationaryPanel() {
             {/* Insight */}
             <div className="bg-gradient-to-r from-violet-900/50 to-indigo-900/50 p-6 rounded-xl border border-violet-500 w-full max-w-4xl">
                 <h3 className="font-bold text-violet-300 mb-2">Key Insight</h3>
-                <p className="text-slate-300 text-sm">
+                <p className="text-slate-700 dark:text-sm">
           Notice that after many steps (t &gt; 10), the distribution settles to roughly:
                     <br />
                     <strong className="text-yellow-400">Sunny: ~47%</strong>,
-                    <strong className="text-slate-400"> Cloudy: ~29%</strong>,
-                    <strong className="text-blue-400"> Rainy: ~24%</strong>.
+                    <strong className="text-slate-800 dark:text-slate-400"> Cloudy: ~29%</strong>,
+                    <strong className="text-blue-600 dark:text-blue-400"> Rainy: ~24%</strong>.
                     <br />
                     This happens <strong>regardless</strong> of where you started! This is the "Stationary Distribution".
                 </p>

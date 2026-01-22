@@ -456,9 +456,9 @@ print(sim.round(3))`
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-purple-400">Python</span> Code Examples
+          <span className="text-purple-600 dark:text-purple-400">Python</span> Code Examples
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Implement BoW and TF-IDF with popular libraries
         </p>
       </div>
@@ -472,7 +472,7 @@ print(sim.round(3))`
             className={`px-4 py-2 rounded-lg transition-all ${
               activeTab === key
                 ? 'bg-purple-600 text-white'
-                : 'bg-white/10 text-gray-400 hover:text-white'
+                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:text-white'
             }`}
           >
             {lib.title}
@@ -481,7 +481,7 @@ print(sim.round(3))`
       </div>
 
       {/* Library Description */}
-      <div className="text-center text-gray-400 text-sm">
+      <div className="text-center text-gray-800 dark:text-sm">
         {codeExamples[activeTab].description}
       </div>
 
@@ -491,12 +491,12 @@ print(sim.round(3))`
           <div key={index} className="bg-black/40 rounded-xl border border-white/10 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Code size={16} className="text-purple-400" />
+                <Code size={16} className="text-purple-600 dark:text-purple-400" />
                 <span className="font-medium text-white">{example.title}</span>
               </div>
               <button
                 onClick={() => copyToClipboard(example.code, index)}
-                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-400 hover:text-white transition-colors"
+                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-800 dark:text-gray-400 hover:text-white transition-colors"
               >
                 {copiedIndex === index ? (
                   <>
@@ -520,23 +520,23 @@ print(sim.round(3))`
 
       {/* Quick Reference */}
       <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-xl p-6 border border-purple-500/30">
-        <h4 className="font-bold text-purple-400 mb-4">📦 Quick Install Commands</h4>
+        <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-4">📦 Quick Install Commands</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">scikit-learn</p>
-            <code className="text-green-300 text-sm">pip install scikit-learn</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">scikit-learn</p>
+            <code className="text-sm">pip install scikit-learn</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">NLTK</p>
-            <code className="text-green-300 text-sm">pip install nltk</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">NLTK</p>
+            <code className="text-sm">pip install nltk</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">spaCy</p>
-            <code className="text-green-300 text-sm">pip install spacy && python -m spacy download en_core_web_sm</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">spaCy</p>
+            <code className="text-sm">pip install spacy && python -m spacy download en_core_web_sm</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">All dependencies</p>
-            <code className="text-green-300 text-sm">pip install numpy pandas scikit-learn nltk spacy</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">All dependencies</p>
+            <code className="text-sm">pip install numpy pandas scikit-learn nltk spacy</code>
           </div>
         </div>
       </div>

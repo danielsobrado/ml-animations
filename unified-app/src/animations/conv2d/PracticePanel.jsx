@@ -140,7 +140,7 @@ export default function PracticePanel() {
         <div className="flex flex-wrap items-start justify-center gap-4">
           {/* Input with kernel highlight */}
           <div>
-            <p className="text-sm font-bold text-blue-700 text-center mb-1">Input (4×4)</p>
+            <p className="text-sm font-bold text-center mb-1">Input (4×4)</p>
             <div className="relative">
               <div className="grid gap-0.5" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
                 {input.flat().map((val, idx) => {
@@ -176,8 +176,8 @@ export default function PracticePanel() {
 
           {/* Kernel */}
           <div>
-            <p className="text-sm font-bold text-green-700 text-center mb-1">Kernel (3×3)</p>
-            <p className="text-xs text-gray-500 text-center mb-1">{kernelName}</p>
+            <p className="text-sm font-bold text-center mb-1">Kernel (3×3)</p>
+            <p className="text-xs text-gray-700 dark:text-center mb-1">{kernelName}</p>
             <div className="grid gap-0.5" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
               {kernel.flat().map((val, idx) => (
                 <div
@@ -195,7 +195,7 @@ export default function PracticePanel() {
 
           {/* Output */}
           <div>
-            <p className="text-sm font-bold text-purple-700 text-center mb-1">Output (2×2)</p>
+            <p className="text-sm font-bold text-center mb-1">Output (2×2)</p>
             <div className="grid gap-0.5" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
               {output.flat().map((_, idx) => {
                 const row = Math.floor(idx / 2);
@@ -217,10 +217,10 @@ export default function PracticePanel() {
                       onFocus={() => setCurrentCell({ row, col })}
                     />
                     {isCorrect === true && (
-                      <span className="absolute -top-1 -right-1 text-green-600 text-xs">✓</span>
+                      <span className="absolute -top-1 -right-1 text-xs">✓</span>
                     )}
                     {isCorrect === false && (
-                      <span className="absolute -top-1 -right-1 text-red-600 text-xs">✗</span>
+                      <span className="absolute -top-1 -right-1 text-xs">✗</span>
                     )}
                   </div>
                 );
@@ -245,7 +245,7 @@ export default function PracticePanel() {
         </div>
 
         {showHint && (
-          <div className="text-sm text-gray-600 bg-white p-2 rounded border">
+          <div className="text-sm text-gray-800 dark:text-gray-600 bg-white p-2 rounded border">
             <p className="mb-1">Element-wise multiply and sum:</p>
             <div className="flex flex-wrap gap-1 font-mono text-xs">
               {computeHint(currentCell.row, currentCell.col).products.map((p, i) => (
@@ -304,7 +304,7 @@ export default function PracticePanel() {
         <p className="text-sm text-gray-700">
           <strong>Common Kernels:</strong>
         </p>
-        <ul className="text-xs text-gray-600 mt-1 space-y-1">
+        <ul className="text-xs text-gray-800 dark:text-gray-600 mt-1 space-y-1">
           <li><strong>Edge Detection:</strong> Highlights boundaries (positive on one side, negative on other)</li>
           <li><strong>Sharpen:</strong> Enhances edges while keeping center (large positive center, negative surroundings)</li>
           <li><strong>Blur:</strong> Averages neighboring pixels (all same values)</li>

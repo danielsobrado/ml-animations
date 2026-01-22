@@ -93,7 +93,7 @@ export default function IntuitionPanel() {
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
                         What is Attention? <span className="text-gradient">The Core Intuition</span>
                     </h2>
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-lg text-slate-800 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
                         Attention is like a <strong className="text-amber-500">spotlight</strong> that helps the model 
                         focus on the most relevant parts of the input when producing each part of the output.
                     </p>
@@ -124,7 +124,7 @@ export default function IntuitionPanel() {
                                     <span>The actual content to retrieve</span>
                                 </li>
                             </ul>
-                            <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm italic">
+                            <p className="mt-3 text-slate-700 dark:text-sm italic">
                                 Unlike a hard lookup that returns one exact match, attention returns a <strong className="text-slate-900 dark:text-white">weighted combination</strong> of all values!
                             </p>
                         </div>
@@ -158,7 +158,7 @@ export default function IntuitionPanel() {
                     <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
                         <div>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white">{currentScenario.title}</h3>
-                            <p className="text-slate-600 dark:text-slate-400">{currentScenario.description}</p>
+                            <p className="text-slate-800 dark:text-slate-400">{currentScenario.description}</p>
                         </div>
                         <button
                             onClick={startAnimation}
@@ -178,7 +178,7 @@ export default function IntuitionPanel() {
                                 <span className="font-bold">Query: "{currentScenario.query}"</span>
                             </div>
                             <div className="bg-blue-500/10 dark:bg-blue-500/20 p-4 rounded-xl border border-blue-500/30">
-                                <p className="text-blue-700 dark:text-blue-300 text-sm">
+                                <p className="text-blue-700 dark:text-sm">
                                     The query determines what we're looking for. 
                                     It will be compared against all keys to compute attention scores.
                                 </p>
@@ -224,7 +224,7 @@ export default function IntuitionPanel() {
                                 </div>
                                 <div>
                                     <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-1">Result: Weighted Combination</h4>
-                                    <p className="text-slate-700 dark:text-slate-300 text-sm">
+                                    <p className="text-slate-700 dark:text-sm">
                                         {currentScenario.analogy}
                                     </p>
                                 </div>
@@ -238,17 +238,17 @@ export default function IntuitionPanel() {
                     <div className="card p-4 text-center">
                         <div className="text-3xl mb-2">🎯</div>
                         <h4 className="font-bold text-slate-900 dark:text-white mb-1">Step 1</h4>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">Compute Q·K similarity scores</p>
+                        <p className="text-slate-800 dark:text-sm">Compute Q·K similarity scores</p>
                     </div>
                     <div className="card p-4 text-center">
                         <div className="text-3xl mb-2">📊</div>
                         <h4 className="font-bold text-slate-900 dark:text-white mb-1">Step 2</h4>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">Apply softmax for weights</p>
+                        <p className="text-slate-800 dark:text-sm">Apply softmax for weights</p>
                     </div>
                     <div className="card p-4 text-center">
                         <div className="text-3xl mb-2">✨</div>
                         <h4 className="font-bold text-slate-900 dark:text-white mb-1">Step 3</h4>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">Weighted sum of Values</p>
+                        <p className="text-slate-800 dark:text-sm">Weighted sum of Values</p>
                     </div>
                 </div>
 
@@ -258,7 +258,7 @@ export default function IntuitionPanel() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <h4 className="font-medium text-slate-900 dark:text-white">Before Attention (RNNs):</h4>
-                            <ul className="text-slate-600 dark:text-slate-400 text-sm space-y-1">
+                            <ul className="text-slate-800 dark:text-sm space-y-1">
                                 <li>• Information flows sequentially</li>
                                 <li>• Long-range dependencies get "forgotten"</li>
                                 <li>• Fixed-size hidden state bottleneck</li>
@@ -267,7 +267,7 @@ export default function IntuitionPanel() {
                         </div>
                         <div className="space-y-2">
                             <h4 className="font-medium text-slate-900 dark:text-white">With Attention:</h4>
-                            <ul className="text-green-600 dark:text-green-400 text-sm space-y-1">
+                            <ul className="text-green-600 dark:text-sm space-y-1">
                                 <li>✓ Direct access to any position</li>
                                 <li>✓ No distance limit for dependencies</li>
                                 <li>✓ Dynamic, input-dependent connections</li>

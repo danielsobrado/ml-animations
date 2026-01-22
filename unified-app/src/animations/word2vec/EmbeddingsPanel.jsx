@@ -60,9 +60,9 @@ export default function EmbeddingsPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-purple-400">Word Embeddings</span>: Semantic Space
+          <span className="text-purple-600 dark:text-purple-400">Word Embeddings</span>: Semantic Space
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Exploring what Word2Vec learns about language
         </p>
       </div>
@@ -97,18 +97,18 @@ export default function EmbeddingsPanel() {
         <div className="space-y-6">
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-lg font-bold text-white mb-4">Similar Words</h3>
-            <p className="text-gray-400 text-sm mb-4">
+            <p className="text-gray-800 dark:text-sm mb-4">
               Words with similar meaning have vectors that point in similar directions.
             </p>
             
             <div className="grid md:grid-cols-2 gap-6">
               {['king', 'cat', 'paris', 'man'].map((word) => (
                 <div key={word} className="bg-white/5 rounded-xl p-4">
-                  <h4 className="text-purple-400 font-mono mb-3">Similar to "{word}":</h4>
+                  <h4 className="text-purple-600 dark:text-purple-400 font-mono mb-3">Similar to "{word}":</h4>
                   <div className="space-y-2">
                     {findSimilar(word).map((item, i) => (
                       <div key={i} className="flex items-center justify-between">
-                        <span className="font-mono text-gray-300">{item.word}</span>
+                        <span className="font-mono text-gray-700 dark:text-gray-300">{item.word}</span>
                         <div className="flex items-center gap-2">
                           <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
                             <div 
@@ -116,7 +116,7 @@ export default function EmbeddingsPanel() {
                               style={{ width: `${(item.similarity + 1) * 50}%` }}
                             />
                           </div>
-                          <span className="text-xs text-gray-500 w-12">
+                          <span className="text-xs text-gray-700 dark:text-gray-500 w-12">
                             {item.similarity.toFixed(2)}
                           </span>
                         </div>
@@ -138,16 +138,16 @@ export default function EmbeddingsPanel() {
             </div>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-green-900/20 rounded-lg p-3">
-                <p className="text-green-400 text-xl font-bold">1.0</p>
-                <p className="text-xs text-gray-400">Identical direction</p>
+                <p className="text-xl font-bold">1.0</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Identical direction</p>
               </div>
               <div className="bg-gray-800/50 rounded-lg p-3">
-                <p className="text-gray-400 text-xl font-bold">0.0</p>
-                <p className="text-xs text-gray-400">Perpendicular</p>
+                <p className="text-gray-800 dark:text-xl font-bold">0.0</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Perpendicular</p>
               </div>
               <div className="bg-red-900/20 rounded-lg p-3">
-                <p className="text-red-400 text-xl font-bold">-1.0</p>
-                <p className="text-xs text-gray-400">Opposite direction</p>
+                <p className="text-xl font-bold">-1.0</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Opposite direction</p>
               </div>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function EmbeddingsPanel() {
         <div className="space-y-6">
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-lg font-bold text-white mb-4">Word Arithmetic</h3>
-            <p className="text-gray-400 text-sm mb-6">
+            <p className="text-gray-800 dark:text-sm mb-6">
               The famous "king - man + woman = queen" and more!
             </p>
             
@@ -171,14 +171,14 @@ export default function EmbeddingsPanel() {
                 >
                   <div className="flex flex-wrap items-center justify-center gap-3 text-xl font-mono mb-4">
                     <span className="px-3 py-2 bg-blue-500/30 rounded-lg text-blue-300">{analogy.a}</span>
-                    <span className="text-gray-500">-</span>
+                    <span className="text-gray-700 dark:text-gray-500">-</span>
                     <span className="px-3 py-2 bg-red-500/30 rounded-lg text-red-300">{analogy.b}</span>
-                    <span className="text-gray-500">+</span>
+                    <span className="text-gray-700 dark:text-gray-500">+</span>
                     <span className="px-3 py-2 bg-red-500/30 rounded-lg text-red-300">{analogy.d}</span>
-                    <span className="text-gray-500">≈</span>
+                    <span className="text-gray-700 dark:text-gray-500">≈</span>
                     <span className="px-3 py-2 bg-green-500/30 rounded-lg text-green-300">{analogy.c}</span>
                   </div>
-                  <p className="text-center text-gray-400 text-sm">{analogy.explanation}</p>
+                  <p className="text-center text-gray-800 dark:text-sm">{analogy.explanation}</p>
                 </div>
               ))}
             </div>
@@ -189,22 +189,22 @@ export default function EmbeddingsPanel() {
             <h4 className="font-bold text-white mb-4">🎯 How Word Arithmetic Works</h4>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-purple-400 font-bold">1.</span>
-                <p className="text-gray-300">
+                <span className="text-purple-600 dark:text-purple-400 font-bold">1.</span>
+                <p className="text-gray-700 dark:text-gray-300">
                   <strong className="text-purple-300">Capture relationships:</strong> The vector 
                   difference "king - man" captures the concept of "royalty" or "ruling".
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-purple-400 font-bold">2.</span>
-                <p className="text-gray-300">
+                <span className="text-purple-600 dark:text-purple-400 font-bold">2.</span>
+                <p className="text-gray-700 dark:text-gray-300">
                   <strong className="text-purple-300">Transfer relationships:</strong> Adding this 
                   difference to "woman" gives us the female equivalent of "king".
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-purple-400 font-bold">3.</span>
-                <p className="text-gray-300">
+                <span className="text-purple-600 dark:text-purple-400 font-bold">3.</span>
+                <p className="text-gray-700 dark:text-gray-300">
                   <strong className="text-purple-300">Find nearest:</strong> We find the word whose 
                   vector is closest to the result: "queen".
                 </p>
@@ -219,7 +219,7 @@ export default function EmbeddingsPanel() {
         <div className="space-y-6">
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-lg font-bold text-white mb-4">2D Embedding Space</h3>
-            <p className="text-gray-400 text-sm mb-4">
+            <p className="text-gray-800 dark:text-sm mb-4">
               Real embeddings have 100-300 dimensions. This is a 2D projection for visualization.
             </p>
             
@@ -249,7 +249,7 @@ export default function EmbeddingsPanel() {
                     style={{ left, top }}
                   >
                     <div className={`w-3 h-3 rounded-full ${colors[word] || 'bg-gray-400'} cursor-pointer hover:scale-150 transition-transform`} />
-                    <span className="absolute left-4 text-xs text-gray-300 whitespace-nowrap opacity-70 group-hover:opacity-100">
+                    <span className="absolute left-4 text-xs text-gray-700 dark:text-gray-300 whitespace-nowrap opacity-70 group-hover:opacity-100">
                       {word}
                     </span>
                   </div>
@@ -267,7 +267,7 @@ export default function EmbeddingsPanel() {
           </div>
 
           <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
-            <p className="text-purple-300 text-sm">
+            <p className="text-sm">
               💡 Notice how related words cluster together: royalty words in one area, 
               animals in another, places in another. Gender differences are captured as 
               parallel directions!
@@ -288,43 +288,43 @@ export default function EmbeddingsPanel() {
                 <h4 className="text-green-400 font-bold mb-3">Syntactic Relationships</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Plural:</span>
-                    <span className="font-mono text-gray-300">car → cars</span>
+                    <span className="text-gray-800 dark:text-gray-400">Plural:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">car → cars</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Tense:</span>
-                    <span className="font-mono text-gray-300">walk → walked</span>
+                    <span className="text-gray-800 dark:text-gray-400">Tense:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">walk → walked</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Comparative:</span>
-                    <span className="font-mono text-gray-300">big → bigger</span>
+                    <span className="text-gray-800 dark:text-gray-400">Comparative:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">big → bigger</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Superlative:</span>
-                    <span className="font-mono text-gray-300">big → biggest</span>
+                    <span className="text-gray-800 dark:text-gray-400">Superlative:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">big → biggest</span>
                   </div>
                 </div>
               </div>
 
               {/* Semantic */}
               <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
-                <h4 className="text-purple-400 font-bold mb-3">Semantic Relationships</h4>
+                <h4 className="text-purple-600 dark:text-purple-400 font-bold mb-3">Semantic Relationships</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Capital-Country:</span>
-                    <span className="font-mono text-gray-300">Paris → France</span>
+                    <span className="text-gray-800 dark:text-gray-400">Capital-Country:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">Paris → France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Gender:</span>
-                    <span className="font-mono text-gray-300">king → queen</span>
+                    <span className="text-gray-800 dark:text-gray-400">Gender:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">king → queen</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Opposites:</span>
-                    <span className="font-mono text-gray-300">good ↔ bad</span>
+                    <span className="text-gray-800 dark:text-gray-400">Opposites:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">good ↔ bad</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Hypernym:</span>
-                    <span className="font-mono text-gray-300">dog → animal</span>
+                    <span className="text-gray-800 dark:text-gray-400">Hypernym:</span>
+                    <span className="font-mono text-gray-700 dark:text-gray-300">dog → animal</span>
                   </div>
                 </div>
               </div>
@@ -337,25 +337,25 @@ export default function EmbeddingsPanel() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-black/30 rounded-lg p-3">
                 <h5 className="text-white font-medium mb-1">No Context Awareness</h5>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-800 dark:text-gray-400">
                   "bank" has the same vector whether it means riverbank or financial bank
                 </p>
               </div>
               <div className="bg-black/30 rounded-lg p-3">
                 <h5 className="text-white font-medium mb-1">OOV Problem</h5>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-800 dark:text-gray-400">
                   Can't handle words not seen during training (out-of-vocabulary)
                 </p>
               </div>
               <div className="bg-black/30 rounded-lg p-3">
                 <h5 className="text-white font-medium mb-1">Bias</h5>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-800 dark:text-gray-400">
                   Learns biases present in training data (gender, racial, etc.)
                 </p>
               </div>
               <div className="bg-black/30 rounded-lg p-3">
                 <h5 className="text-white font-medium mb-1">Static Vectors</h5>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-800 dark:text-gray-400">
                   Word meaning doesn't change based on surrounding context
                 </p>
               </div>
@@ -364,26 +364,26 @@ export default function EmbeddingsPanel() {
 
           {/* Evolution */}
           <div className="bg-blue-900/20 rounded-xl p-6 border border-blue-500/30">
-            <h4 className="text-blue-400 font-bold mb-4">📈 What Came Next</h4>
+            <h4 className="text-blue-600 dark:text-blue-400 font-bold mb-4">📈 What Came Next</h4>
             <div className="flex flex-wrap gap-3">
               <div className="px-4 py-2 bg-black/30 rounded-lg">
                 <p className="text-white font-medium">GloVe (2014)</p>
-                <p className="text-xs text-gray-400">Global co-occurrence statistics</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Global co-occurrence statistics</p>
               </div>
-              <ArrowRight className="text-gray-500 self-center" />
+              <ArrowRight className="text-gray-700 dark:text-gray-500 self-center" />
               <div className="px-4 py-2 bg-black/30 rounded-lg">
                 <p className="text-white font-medium">FastText (2016)</p>
-                <p className="text-xs text-gray-400">Subword embeddings</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Subword embeddings</p>
               </div>
-              <ArrowRight className="text-gray-500 self-center" />
+              <ArrowRight className="text-gray-700 dark:text-gray-500 self-center" />
               <div className="px-4 py-2 bg-black/30 rounded-lg">
                 <p className="text-white font-medium">ELMo (2018)</p>
-                <p className="text-xs text-gray-400">Contextualized embeddings</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Contextualized embeddings</p>
               </div>
-              <ArrowRight className="text-gray-500 self-center" />
+              <ArrowRight className="text-gray-700 dark:text-gray-500 self-center" />
               <div className="px-4 py-2 bg-purple-900/50 rounded-lg border border-purple-500">
                 <p className="text-purple-300 font-medium">BERT (2018+)</p>
-                <p className="text-xs text-gray-400">Transformer-based</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">Transformer-based</p>
               </div>
             </div>
           </div>

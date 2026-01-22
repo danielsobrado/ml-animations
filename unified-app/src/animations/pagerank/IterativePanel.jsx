@@ -133,7 +133,7 @@ export default function IterativePanel({ nodes, links }) {
                 </svg>
 
                 <div className="absolute top-4 right-4 bg-white/90 p-4 rounded-lg shadow border border-slate-200">
-                    <p className="font-bold text-slate-500 text-xs uppercase mb-2">Iteration: {iteration}</p>
+                    <p className="font-bold text-slate-700 dark:text-xs uppercase mb-2">Iteration: {iteration}</p>
                 </div>
             </div>
         </div>

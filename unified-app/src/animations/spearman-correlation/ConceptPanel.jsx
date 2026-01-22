@@ -34,13 +34,13 @@ export default function ConceptPanel() {
             <div className="flex gap-4 mb-8">
                 <button
                     onClick={() => setMode('raw')}
-                    className={`px-6 py-3 rounded-lg font-bold transition-colors ${mode === 'raw' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+                    className={`px-6 py-3 rounded-lg font-bold transition-colors ${mode === 'raw' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-800 dark:text-slate-600'}`}
                 >
                     Show Raw Values
                 </button>
                 <button
                     onClick={() => setMode('rank')}
-                    className={`px-6 py-3 rounded-lg font-bold transition-colors ${mode === 'rank' ? 'bg-green-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+                    className={`px-6 py-3 rounded-lg font-bold transition-colors ${mode === 'rank' ? 'bg-green-600 text-white' : 'bg-slate-200 text-slate-800 dark:text-slate-600'}`}
                 >
                     Show Ranks
                 </button>

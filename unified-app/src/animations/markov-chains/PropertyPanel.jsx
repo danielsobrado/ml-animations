@@ -49,11 +49,11 @@ export default function PropertyPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-emerald-400 mb-4">The Markov Property</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <h2 className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">The Markov Property</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     "The future depends <strong>only</strong> on the present, not the past."
                     <br />
-                    <span className="text-sm text-slate-400">Memorylessness: P(X<sub>t+1</sub> | X<sub>t</sub>, X<sub>t-1</sub>...) = P(X<sub>t+1</sub> | X<sub>t</sub>)</span>
+                    <span className="text-sm text-slate-800 dark:text-slate-400">Memorylessness: P(X<sub>t+1</sub> | X<sub>t</sub>, X<sub>t-1</sub>...) = P(X<sub>t+1</sub> | X<sub>t</sub>)</span>
                 </p>
             </div>
 
@@ -74,7 +74,7 @@ export default function PropertyPanel() {
 
                         {/* Probabilities from current */}
                         {pad.id === currentPad && (
-                            <div className="absolute -bottom-16 w-48 text-center text-xs text-slate-300 bg-slate-900/80 p-2 rounded">
+                            <div className="absolute -bottom-16 w-48 text-center text-xs text-slate-700 dark:text-slate-300 bg-slate-900/80 p-2 rounded">
                                 Next Jump Probs:
                                 <br />
                                 A: {(transitions[pad.id][0] * 100).toFixed(0)}% |
@@ -120,7 +120,7 @@ export default function PropertyPanel() {
 
             {/* History Log */}
             <div className="w-full max-w-4xl bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <h3 className="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">Jump History (Last 10)</h3>
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-400 mb-2 uppercase tracking-wider">Jump History (Last 10)</h3>
                 <div className="flex gap-2 justify-center">
                     <AnimatePresence>
                         {history.map((padId, i) => (
@@ -135,7 +135,7 @@ export default function PropertyPanel() {
                         ))}
                     </AnimatePresence>
                 </div>
-                <p className="text-center text-xs text-slate-500 mt-3">
+                <p className="text-center text-xs text-slate-700 dark:text-slate-500 mt-3">
                     Notice: To decide the <em>next</em> jump, the frog only looks at the <strong>current</strong> pad.
                     <br />
                     It doesn't care where it was 5 jumps ago!

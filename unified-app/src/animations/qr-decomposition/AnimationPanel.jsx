@@ -279,7 +279,7 @@ export default function AnimationPanel() {
                 <button onClick={reset} disabled={isPlaying} className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors text-sm">↺ Reset</button>
             </div>
             <div className="mt-2 p-2 bg-green-100 rounded-lg w-full text-center border border-green-300">
-                <p className="text-green-800 text-xs font-medium">A = QR | Q^T Q = I | R upper triangular</p>
+                <p className="text-xs font-medium">A = QR | Q^T Q = I | R upper triangular</p>
             </div>
         </div>
     );

@@ -123,7 +123,7 @@ export default function ConceptPanel() {
                             <div className="space-y-3">
                                 <div className="p-3 bg-green-50 rounded-lg border border-green-200">
                                     <div className="text-sm text-green-600 mb-1">📚 Retrieved Context:</div>
-                                    <p className="text-green-800 text-sm">
+                                    <p className="text-sm">
                                         "Acme Corp Q3 2024 Earnings Report: Revenue of $4.2B, up 15% YoY. 
                                         Operating margin improved to 23%..." [Source: earnings_q3_2024.pdf]
                                     </p>
@@ -160,7 +160,7 @@ export default function ConceptPanel() {
                         <div key={i} className="bg-white rounded-lg p-4 border text-center hover:shadow-md transition-shadow">
                             <div className="text-3xl mb-2">{use.icon}</div>
                             <div className="font-bold text-slate-800">{use.title}</div>
-                            <div className="text-xs text-slate-600">{use.desc}</div>
+                            <div className="text-xs text-slate-800 dark:text-slate-600">{use.desc}</div>
                         </div>
                     ))}
                 </div>
@@ -170,7 +170,7 @@ export default function ConceptPanel() {
                     <Lightbulb className="text-amber-600 flex-shrink-0 mt-1" size={24} />
                     <div>
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
-                        <p className="text-amber-800 text-sm">
+                        <p className="text-sm">
                             RAG doesn't require retraining the LLM! It works by providing relevant context 
                             at inference time. This makes it much more cost-effective than fine-tuning and 
                             allows easy updates to the knowledge base.

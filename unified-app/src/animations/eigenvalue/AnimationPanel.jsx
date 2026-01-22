@@ -392,7 +392,7 @@ export default function AnimationPanel() {
             </div>
 
             <div className="mt-2 p-2 bg-green-100 rounded-lg w-full text-center border border-green-300">
-                <p className="text-green-800 text-xs font-medium">
+                <p className="text-xs font-medium">
                     A v = λ v | A = Q Λ Q^T | Q^T Q = I (orthogonal eigenvectors)
                 </p>
             </div>

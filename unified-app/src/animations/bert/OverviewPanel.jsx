@@ -44,10 +44,10 @@ export default function OverviewPanel() {
             BERT: The Complete Guide
           </span>
         </h2>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+        <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
           <strong>B</strong>idirectional <strong>E</strong>ncoder <strong>R</strong>epresentations from <strong>T</strong>ransformers
         </p>
-        <p className="text-gray-400 mt-2">
+        <p className="text-gray-800 dark:text-gray-400 mt-2">
           The model that revolutionized NLP and became the foundation for modern language understanding
         </p>
       </div>
@@ -59,13 +59,13 @@ export default function OverviewPanel() {
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <p className="text-gray-300 leading-relaxed">
-              BERT is a <strong className="text-blue-400">pre-trained language model</strong> developed by Google in 2018. 
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              BERT is a <strong className="text-blue-600 dark:text-blue-400">pre-trained language model</strong> developed by Google in 2018. 
               It learns deep bidirectional representations by jointly conditioning on both left and right context in all layers.
             </p>
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
               Unlike previous models that read text sequentially (left-to-right or right-to-left), 
-              BERT considers the <strong className="text-purple-400">full context</strong> of a word by looking at 
+              BERT considers the <strong className="text-purple-600 dark:text-purple-400">full context</strong> of a word by looking at 
               all surrounding words simultaneously.
             </p>
           </div>
@@ -73,14 +73,14 @@ export default function OverviewPanel() {
             <h4 className="font-bold text-blue-300 mb-3">Example: "Bank" disambiguation</h4>
             <div className="space-y-2 text-sm">
               <div className="p-2 bg-black/30 rounded">
-                <p className="text-gray-400">Sentence 1:</p>
+                <p className="text-gray-800 dark:text-gray-400">Sentence 1:</p>
                 <p>"I went to the <span className="text-yellow-400 font-bold">bank</span> to deposit money"</p>
-                <p className="text-green-400 text-xs mt-1">→ BERT understands: financial institution 🏦</p>
+                <p className="text-xs mt-1">→ BERT understands: financial institution 🏦</p>
               </div>
               <div className="p-2 bg-black/30 rounded">
-                <p className="text-gray-400">Sentence 2:</p>
+                <p className="text-gray-800 dark:text-gray-400">Sentence 2:</p>
                 <p>"I sat by the river <span className="text-yellow-400 font-bold">bank</span> and relaxed"</p>
-                <p className="text-green-400 text-xs mt-1">→ BERT understands: riverside 🏞️</p>
+                <p className="text-xs mt-1">→ BERT understands: riverside 🏞️</p>
               </div>
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function OverviewPanel() {
                 <Icon size={24} />
               </div>
               <h4 className="font-bold text-lg mb-2">{feature.title}</h4>
-              <p className="text-sm text-gray-400">{feature.description}</p>
+              <p className="text-sm text-gray-800 dark:text-gray-400">{feature.description}</p>
             </div>
           );
         })}
@@ -115,20 +115,20 @@ export default function OverviewPanel() {
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
           {/* Input */}
           <div className="bg-blue-900/30 border border-blue-500/30 rounded-xl p-4 text-center">
-            <p className="text-blue-400 font-bold mb-2">Input</p>
+            <p className="text-blue-600 dark:text-blue-400 font-bold mb-2">Input</p>
             <div className="flex gap-1 justify-center">
               {['[CLS]', 'The', 'cat', 'sat', '[SEP]'].map((token, i) => (
                 <span key={i} className="bg-blue-600/30 px-2 py-1 rounded text-xs">{token}</span>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">Token + Segment + Position</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">Token + Segment + Position</p>
           </div>
 
-          <ArrowRight className="text-gray-500 rotate-90 md:rotate-0" />
+          <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90 md:rotate-0" />
 
           {/* Encoder Stack */}
           <div className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4 text-center">
-            <p className="text-purple-400 font-bold mb-2">Transformer Encoders</p>
+            <p className="text-purple-600 dark:text-purple-400 font-bold mb-2">Transformer Encoders</p>
             <div className="flex flex-col gap-1">
               {[12, 11, 10, '...', 2, 1].map((layer, i) => (
                 <div key={i} className="bg-purple-600/30 px-4 py-1 rounded text-xs">
@@ -136,10 +136,10 @@ export default function OverviewPanel() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">Self-Attention + FFN</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">Self-Attention + FFN</p>
           </div>
 
-          <ArrowRight className="text-gray-500 rotate-90 md:rotate-0" />
+          <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90 md:rotate-0" />
 
           {/* Output */}
           <div className="bg-green-900/30 border border-green-500/30 rounded-xl p-4 text-center">
@@ -149,7 +149,7 @@ export default function OverviewPanel() {
                 <span key={i} className="bg-green-600/30 px-2 py-1 rounded text-xs">{token}</span>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">Contextual embeddings</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">Contextual embeddings</p>
           </div>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function OverviewPanel() {
       {/* Timeline */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <Calendar size={24} className="text-purple-400" />
+          <Calendar size={24} className="text-purple-600 dark:text-purple-400" />
           BERT in History
         </h3>
         <div className="flex flex-wrap gap-4 justify-center">
@@ -167,9 +167,9 @@ export default function OverviewPanel() {
                 <span className="font-bold text-sm">{item.year}</span>
               </div>
               <div className="max-w-[150px]">
-                <p className="text-sm text-gray-300">{item.event}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{item.event}</p>
               </div>
-              {i < timeline.length - 1 && <ArrowRight className="text-gray-600 hidden md:block" />}
+              {i < timeline.length - 1 && <ArrowRight className="text-gray-800 dark:text-gray-600 hidden md:block" />}
             </div>
           ))}
         </div>
@@ -191,14 +191,14 @@ export default function OverviewPanel() {
             </thead>
             <tbody>
               <tr className="border-b border-white/5">
-                <td className="py-2 px-4 text-blue-400 font-medium">BERT-Base</td>
+                <td className="py-2 px-4 text-blue-600 dark:text-blue-400 font-medium">BERT-Base</td>
                 <td className="text-center py-2 px-4">12</td>
                 <td className="text-center py-2 px-4">768</td>
                 <td className="text-center py-2 px-4">12</td>
                 <td className="text-center py-2 px-4 text-yellow-400">110M</td>
               </tr>
               <tr className="border-b border-white/5">
-                <td className="py-2 px-4 text-purple-400 font-medium">BERT-Large</td>
+                <td className="py-2 px-4 text-purple-600 dark:text-purple-400 font-medium">BERT-Large</td>
                 <td className="text-center py-2 px-4">24</td>
                 <td className="text-center py-2 px-4">1024</td>
                 <td className="text-center py-2 px-4">16</td>
@@ -237,7 +237,7 @@ export default function OverviewPanel() {
               </div>
               <div>
                 <p className="font-medium">{item.title}</p>
-                <p className="text-xs text-gray-400">{item.desc}</p>
+                <p className="text-xs text-gray-800 dark:text-gray-400">{item.desc}</p>
               </div>
             </div>
           ))}

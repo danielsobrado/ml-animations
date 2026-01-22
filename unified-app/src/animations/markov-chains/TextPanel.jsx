@@ -57,8 +57,8 @@ export default function TextPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-pink-400 mb-4">Text Generation (Mini-LLM)</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-4">Text Generation (Mini-LLM)</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Large Language Models are essentially giant Markov Chains.
                     <br />
                     They predict the <strong>next word</strong> based on the current context.
@@ -72,10 +72,10 @@ export default function TextPanel() {
                     <textarea
                         value={inputText}
                         onChange={(e) => setInputText(e.target.value)}
-                        className="w-full h-40 bg-slate-900 border border-slate-600 rounded-lg p-4 text-slate-300 focus:border-pink-500 outline-none resize-none"
+                        className="w-full h-40 bg-slate-900 border border-slate-600 rounded-lg p-4 text-slate-700 dark:text-slate-300 focus:border-pink-500 outline-none resize-none"
                         placeholder="Enter some text here to train the model..."
                     />
-                    <p className="text-xs text-slate-500 mt-2">
+                    <p className="text-xs text-slate-700 dark:text-slate-500 mt-2">
                         The model learns which words follow which. Try adding more sentences!
                     </p>
                 </div>
@@ -86,9 +86,9 @@ export default function TextPanel() {
                     <div className="flex-1 overflow-y-auto font-mono text-sm space-y-2 pr-2">
                         {Object.entries(chain).map(([word, nextWords]) => (
                             <div key={word} className="bg-slate-900 p-2 rounded border border-slate-700">
-                                <span className="text-pink-400 font-bold">{word}</span>
-                                <span className="text-slate-500"> ➔ </span>
-                                <span className="text-slate-300">[{nextWords.join(', ')}]</span>
+                                <span className="text-pink-600 dark:text-pink-400 font-bold">{word}</span>
+                                <span className="text-slate-700 dark:text-slate-500"> ➔ </span>
+                                <span className="text-slate-700 dark:text-slate-300">[{nextWords.join(', ')}]</span>
                             </div>
                         ))}
                     </div>
@@ -101,7 +101,7 @@ export default function TextPanel() {
                     onClick={generate}
                     disabled={isGenerating}
                     className={`w-full py-4 rounded-xl font-bold text-xl transition-all shadow-lg ${isGenerating
-                            ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                            ? 'bg-slate-700 text-slate-700 dark:text-slate-500 cursor-not-allowed'
                             : 'bg-gradient-to-r from-pink-600 to-purple-600 text-white hover:scale-[1.02]'
                         }`}
                 >
@@ -110,7 +110,7 @@ export default function TextPanel() {
 
                 {generatedText && (
                     <div className="mt-8 p-8 bg-slate-900 rounded-2xl border-2 border-pink-500/50 text-center">
-                        <h3 className="text-slate-500 text-sm uppercase tracking-wider mb-4">Output</h3>
+                        <h3 className="text-slate-700 dark:text-sm uppercase tracking-wider mb-4">Output</h3>
                         <p className="text-2xl text-white font-serif leading-relaxed">
                             "{generatedText}"
                         </p>

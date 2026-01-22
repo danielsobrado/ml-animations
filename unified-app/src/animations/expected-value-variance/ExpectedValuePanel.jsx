@@ -29,8 +29,8 @@ export default function ExpectedValuePanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-amber-400 mb-4">Expected Value</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <h2 className="text-3xl font-bold text-amber-600 dark:text-amber-400 mb-4">Expected Value</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     E[X] is the <strong>"balance point"</strong> or weighted average of a distribution.
                 </p>
                 <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm">
@@ -65,7 +65,7 @@ export default function ExpectedValuePanel() {
                         transition={{ type: 'spring', stiffness: 100 }}
                         style={{ transform: 'translateX(-50%)' }}
                     />
-                    <div className="absolute top-12 left-1/2 transform -translate-x-1/2 text-xs text-slate-400">
+                    <div className="absolute top-12 left-1/2 transform -translate-x-1/2 text-xs text-slate-800 dark:text-slate-400">
                         Balance Point (Fulcrum)
                     </div>
                 </div>
@@ -79,7 +79,7 @@ export default function ExpectedValuePanel() {
                             <div className="text-3xl mb-2">🎲</div>
                             <div className="font-bold text-white">{i + 1}</div>
                         </div>
-                        <div className="text-center text-sm text-amber-400 font-mono mb-2">
+                        <div className="text-center text-sm text-amber-600 dark:text-amber-400 font-mono mb-2">
                             {(p * 100).toFixed(1)}%
                         </div>
                         <div className="flex gap-1">
@@ -111,10 +111,10 @@ export default function ExpectedValuePanel() {
             <div className="bg-gradient-to-r from-amber-900/50 to-orange-900/50 p-6 rounded-xl border-2 border-amber-500 w-full max-w-5xl mt-8">
                 <div className="text-center">
                     <h3 className="text-sm uppercase tracking-wider text-amber-300 mb-3">Expected Value</h3>
-                    <div className="text-6xl font-mono font-bold text-amber-400 mb-2">
+                    <div className="text-6xl font-mono font-bold text-amber-600 dark:text-amber-400 mb-2">
                         {expectedValue.toFixed(3)}
                     </div>
-                    <p className="text-slate-300 text-sm">
+                    <p className="text-slate-700 dark:text-sm">
                         {Math.abs(expectedValue - 3.5) < 0.01
                             ? '✅ Fair die: E[X] = 3.5'
                             : '⚠️ Loaded die: E[X] ≠ 3.5'}

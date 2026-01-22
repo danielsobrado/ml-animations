@@ -100,7 +100,7 @@ export default function TfIdfPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-yellow-400">TF-IDF</span>: Term Frequency × Inverse Document Frequency
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Weight words by importance: frequent in document, rare across corpus
         </p>
       </div>
@@ -134,7 +134,7 @@ export default function TfIdfPanel() {
                 ? 'bg-yellow-500 text-black scale-110' 
                 : i < currentStep 
                 ? 'bg-yellow-900 text-yellow-300' 
-                : 'bg-white/10 text-gray-500'
+                : 'bg-white/10 text-gray-700 dark:text-gray-500'
             }`}
           >
             {i + 1}. {step.title}
@@ -145,7 +145,7 @@ export default function TfIdfPanel() {
       {/* Current Step */}
       <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-4">
         <h3 className="font-bold text-yellow-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Main Visualization */}
@@ -153,14 +153,14 @@ export default function TfIdfPanel() {
         {/* Step 0: Documents */}
         {currentStep === 0 && (
           <div className="space-y-4">
-            <h4 className="text-lg font-bold text-gray-300">Document Corpus (N = {data.N})</h4>
+            <h4 className="text-lg font-bold text-gray-700 dark:text-gray-300">Document Corpus (N = {data.N})</h4>
             {documents.map((doc, i) => (
               <div 
                 key={i}
                 className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/30 animate-fadeIn"
                 style={{ animationDelay: `${i * 200}ms` }}
               >
-                <span className="text-blue-400 font-mono text-sm">Doc {i + 1}:</span>
+                <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">Doc {i + 1}:</span>
                 <p className="text-white mt-1">"{doc}"</p>
               </div>
             ))}
@@ -171,7 +171,7 @@ export default function TfIdfPanel() {
         {currentStep === 1 && (
           <div className="space-y-4">
             <div className="flex items-center gap-4 mb-4">
-              <h4 className="text-lg font-bold text-gray-300">Term Frequency (TF)</h4>
+              <h4 className="text-lg font-bold text-gray-700 dark:text-gray-300">Term Frequency (TF)</h4>
               <select
                 value={selectedDoc}
                 onChange={(e) => setSelectedDoc(parseInt(e.target.value))}
@@ -184,11 +184,11 @@ export default function TfIdfPanel() {
             </div>
             
             <div className="bg-blue-900/20 rounded-lg p-3 mb-4">
-              <p className="text-sm text-blue-400">Formula: TF(t, d) = count(t in d) / |d|</p>
-              <p className="text-xs text-gray-400 mt-1">Word count divided by total words in document</p>
+              <p className="text-sm text-blue-600 dark:text-blue-400">Formula: TF(t, d) = count(t in d) / |d|</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Word count divided by total words in document</p>
             </div>
 
-            <p className="text-sm text-gray-400 mb-2">"{documents[selectedDoc]}"</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">"{documents[selectedDoc]}"</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {data.vocab.map((word, i) => {
                 const tfValue = data.tf[selectedDoc][word];
@@ -214,9 +214,9 @@ export default function TfIdfPanel() {
         {/* Step 2: DF */}
         {currentStep === 2 && (
           <div className="space-y-4">
-            <h4 className="text-lg font-bold text-gray-300">Document Frequency (DF)</h4>
+            <h4 className="text-lg font-bold text-gray-700 dark:text-gray-300">Document Frequency (DF)</h4>
             <div className="bg-purple-900/20 rounded-lg p-3 mb-4">
-              <p className="text-sm text-purple-400">DF(t) = number of documents containing term t</p>
+              <p className="text-sm text-purple-600 dark:text-purple-400">DF(t) = number of documents containing term t</p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -227,10 +227,10 @@ export default function TfIdfPanel() {
                   style={{ animationDelay: `${i * 50}ms` }}
                 >
                   <p className="font-mono text-sm">{word}</p>
-                  <p className="text-xl font-bold text-purple-400">
+                  <p className="text-xl font-bold text-purple-600 dark:text-purple-400">
                     {data.df[word]} / {data.N}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-700 dark:text-gray-500">
                     in {data.df[word]} doc{data.df[word] > 1 ? 's' : ''}
                   </p>
                 </div>
@@ -242,10 +242,10 @@ export default function TfIdfPanel() {
         {/* Step 3: IDF */}
         {currentStep === 3 && (
           <div className="space-y-4">
-            <h4 className="text-lg font-bold text-gray-300">Inverse Document Frequency (IDF)</h4>
+            <h4 className="text-lg font-bold text-gray-700 dark:text-gray-300">Inverse Document Frequency (IDF)</h4>
             <div className="bg-orange-900/20 rounded-lg p-3 mb-4">
-              <p className="text-sm text-orange-400">IDF(t) = log(N / DF(t))</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-sm text-orange-600 dark:text-orange-400">IDF(t) = log(N / DF(t))</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">
                 Rare words → high IDF, Common words → low IDF
               </p>
             </div>
@@ -265,7 +265,7 @@ export default function TfIdfPanel() {
                     }`}>
                       {formatNum(idfValue)}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-700 dark:text-gray-500">
                       log({data.N}/{data.df[word]})
                     </p>
                   </div>
@@ -274,7 +274,7 @@ export default function TfIdfPanel() {
             </div>
 
             <div className="bg-gray-800 rounded-lg p-4 mt-4">
-              <p className="text-sm text-gray-400 mb-2">Notice:</p>
+              <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Notice:</p>
               <ul className="text-sm space-y-1">
                 <li className="text-red-400">• "the" appears in all docs → IDF = 0 (least important)</li>
                 <li className="text-green-400">• Unique words → IDF {">"} 0 (more important)</li>
@@ -287,7 +287,7 @@ export default function TfIdfPanel() {
         {currentStep === 4 && (
           <div className="space-y-4">
             <div className="flex items-center gap-4 mb-4">
-              <h4 className="text-lg font-bold text-gray-300">TF-IDF Scores</h4>
+              <h4 className="text-lg font-bold text-gray-700 dark:text-gray-300">TF-IDF Scores</h4>
               <select
                 value={selectedDoc}
                 onChange={(e) => setSelectedDoc(parseInt(e.target.value))}
@@ -301,12 +301,12 @@ export default function TfIdfPanel() {
 
             <div className="bg-yellow-900/20 rounded-lg p-3 mb-4">
               <p className="text-sm text-yellow-400">TF-IDF(t, d) = TF(t, d) × IDF(t)</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">
                 High score = word is important to this specific document
               </p>
             </div>
 
-            <p className="text-sm text-gray-400 mb-2">"{documents[selectedDoc]}"</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">"{documents[selectedDoc]}"</p>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {data.vocab
@@ -325,7 +325,7 @@ export default function TfIdfPanel() {
                       {formatNum(score)}
                     </p>
                     {score > 0 && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-700 dark:text-gray-500">
                         {formatNum(data.tf[selectedDoc][word])} × {formatNum(data.idf[word])}
                       </p>
                     )}
@@ -335,11 +335,11 @@ export default function TfIdfPanel() {
 
             {/* TF-IDF Matrix */}
             <div className="mt-6 overflow-x-auto">
-              <h5 className="text-sm text-gray-400 mb-2">Complete TF-IDF Matrix:</h5>
+              <h5 className="text-sm text-gray-800 dark:text-gray-400 mb-2">Complete TF-IDF Matrix:</h5>
               <table className="w-full text-sm">
                 <thead>
                   <tr>
-                    <th className="px-2 py-1 text-left text-gray-400">Doc</th>
+                    <th className="px-2 py-1 text-left text-gray-800 dark:text-gray-400">Doc</th>
                     {data.vocab.map((word, i) => (
                       <th key={i} className="px-2 py-1 text-center text-yellow-400 font-mono">{word}</th>
                     ))}
@@ -348,7 +348,7 @@ export default function TfIdfPanel() {
                 <tbody>
                   {documents.map((_, docIdx) => (
                     <tr key={docIdx} className={docIdx === selectedDoc ? 'bg-yellow-900/20' : ''}>
-                      <td className="px-2 py-1 text-gray-400">Doc {docIdx + 1}</td>
+                      <td className="px-2 py-1 text-gray-800 dark:text-gray-400">Doc {docIdx + 1}</td>
                       {data.vocab.map((word, i) => (
                         <td key={i} className="px-2 py-1 text-center font-mono">
                           <span className={data.tfidf[docIdx][word] > 0 ? 'text-green-400' : 'text-gray-600'}>
@@ -374,28 +374,28 @@ export default function TfIdfPanel() {
             <div className="bg-black/50 rounded p-2 font-mono text-sm text-center">
               TF(t,d) = count(t,d) / |d|
             </div>
-            <p className="text-xs text-gray-400 mt-2">Normalized word count in document</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400 mt-2">Normalized word count in document</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <h5 className="text-purple-400 font-medium mb-2">Inverse Doc Frequency</h5>
+            <h5 className="text-purple-600 dark:text-purple-400 font-medium mb-2">Inverse Doc Frequency</h5>
             <div className="bg-black/50 rounded p-2 font-mono text-sm text-center">
               IDF(t) = log(N / DF(t))
             </div>
-            <p className="text-xs text-gray-400 mt-2">Penalizes common words</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400 mt-2">Penalizes common words</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <h5 className="text-yellow-400 font-medium mb-2">TF-IDF</h5>
             <div className="bg-black/50 rounded p-2 font-mono text-sm text-center">
               TF-IDF = TF × IDF
             </div>
-            <p className="text-xs text-gray-400 mt-2">Final importance weight</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400 mt-2">Final importance weight</p>
           </div>
         </div>
       </div>
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-400 mb-3">🐍 Python with scikit-learn:</p>
+        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 Python with scikit-learn:</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-yellow-300">{`from sklearn.feature_extraction.text import TfidfVectorizer
 

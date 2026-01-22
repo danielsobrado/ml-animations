@@ -164,7 +164,7 @@ export default function AnimationPanel() {
       <div className="bg-white rounded-lg border border-gray-200 p-4 min-h-[450px]">
         {step === 0 && (
           <div className="flex items-center justify-center h-full">
-            <p className="text-xl text-gray-500">Click Play to start</p>
+            <p className="text-xl text-gray-700 dark:text-gray-500">Click Play to start</p>
           </div>
         )}
 
@@ -179,7 +179,7 @@ export default function AnimationPanel() {
 
               {step >= 2 && (
                 <>
-                  <span className="text-2xl font-bold text-gray-400">×</span>
+                  <span className="text-2xl font-bold text-gray-800 dark:text-gray-400">×</span>
                   <div className={step === 2 ? 'animate-pulse' : ''}>
                     {renderMatrix(W, 'W₁ (Weights)', 'green', step === 2)}
                   </div>
@@ -188,7 +188,7 @@ export default function AnimationPanel() {
 
               {step >= 3 && (
                 <>
-                  <span className="text-2xl font-bold text-gray-400">=</span>
+                  <span className="text-2xl font-bold text-gray-800 dark:text-gray-400">=</span>
                   <div className={step === 3 ? 'animate-pulse' : ''}>
                     {renderMatrix(Z1, 'Z₁ (Pre-ReLU)', 'purple', step === 3)}
                   </div>
@@ -214,7 +214,7 @@ export default function AnimationPanel() {
 
                 {step >= 5 && (
                   <>
-                    <span className="text-2xl font-bold text-gray-400">×</span>
+                    <span className="text-2xl font-bold text-gray-800 dark:text-gray-400">×</span>
                     <div className={step === 5 ? 'animate-pulse' : ''}>
                       {renderMatrix(W2, 'W₂ (Weights)', 'green', step === 5)}
                     </div>
@@ -223,7 +223,7 @@ export default function AnimationPanel() {
 
                 {step >= 6 && (
                   <>
-                    <span className="text-2xl font-bold text-gray-400">=</span>
+                    <span className="text-2xl font-bold text-gray-800 dark:text-gray-400">=</span>
                     <div className={step === 6 ? 'animate-pulse' : ''}>
                       {renderMatrix(Z2, 'Z₂ (Pre-ReLU)', 'red', step === 6)}
                     </div>
@@ -280,7 +280,7 @@ export default function AnimationPanel() {
         <p className="text-lg font-semibold text-gray-700">
           Step {step}/{steps.length - 1}: {steps[step].title}
         </p>
-        <p className="text-sm text-gray-500">{steps[step].desc}</p>
+        <p className="text-sm text-gray-700 dark:text-gray-500">{steps[step].desc}</p>
         <div className="mt-2 flex justify-center gap-1">
           {steps.map((_, i) => (
             <div
@@ -296,13 +296,13 @@ export default function AnimationPanel() {
         <p className="text-sm text-gray-700">
           <strong>Two-Layer Network:</strong>
         </p>
-        <p className="text-sm font-mono text-gray-600 mt-1">
+        <p className="text-sm font-mono text-gray-800 dark:text-gray-600 mt-1">
           Layer 1: A₁ = ReLU(X × W₁ᵀ + b₁)
         </p>
-        <p className="text-sm font-mono text-gray-600">
+        <p className="text-sm font-mono text-gray-800 dark:text-gray-600">
           Layer 2: A₂ = ReLU(A₁ × W₂ᵀ + b₂)
         </p>
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-gray-700 dark:text-gray-500 mt-2">
           φ (ReLU): max(0, z) — negative values become 0
         </p>
       </div>

@@ -127,18 +127,18 @@ export default function SpacePanel() {
     return (
         <div className="p-4 h-full flex flex-col">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-cyan-400">3D Semantic Galaxy</h2>
+                <h2 className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">3D Semantic Galaxy</h2>
                 <div className="flex gap-2">
                     {Object.entries(clusters).map(([key, data]) => (
                         <div key={key} className="flex items-center gap-2 px-3 py-1 bg-slate-700 rounded-full text-xs">
                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#' + data.color.toString(16) }}></div>
-                            <span className="capitalize text-slate-300">{key}</span>
+                            <span className="capitalize text-slate-700 dark:text-slate-300">{key}</span>
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className="bg-slate-700/50 rounded-xl border border-slate-600 p-2 text-center text-sm text-slate-400 mb-2">
+            <div className="bg-slate-700/50 rounded-xl border border-slate-600 p-2 text-center text-sm text-slate-800 dark:text-slate-400 mb-2">
                 Drag to rotate • Scroll to zoom • Words with similar meanings cluster together
             </div>
 

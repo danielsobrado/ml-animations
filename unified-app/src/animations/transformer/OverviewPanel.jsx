@@ -52,7 +52,7 @@ export default function OverviewPanel() {
                     <h2 className="text-3xl font-bold text-white mb-2">
                         The Transformer: <span className="gradient-text">Complete Architecture</span>
                     </h2>
-                    <p className="text-slate-400">
+                    <p className="text-slate-800 dark:text-slate-400">
                         A sequence-to-sequence model built entirely on attention mechanisms
                     </p>
                 </div>
@@ -62,12 +62,12 @@ export default function OverviewPanel() {
                     {/* Interactive Diagram */}
                     <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
                         <h3 className="text-white font-bold mb-4 text-center">Interactive Architecture</h3>
-                        <p className="text-slate-400 text-sm text-center mb-4">Hover over each component to learn more</p>
+                        <p className="text-slate-800 dark:text-sm text-center mb-4">Hover over each component to learn more</p>
                         
                         <div className="relative flex justify-center gap-8">
                             {/* Encoder Side */}
                             <div className="flex flex-col items-center gap-3">
-                                <div className="text-slate-400 text-sm font-medium mb-2">ENCODER</div>
+                                <div className="text-slate-800 dark:text-sm font-medium mb-2">ENCODER</div>
                                 
                                 {/* Encoder Stack */}
                                 <div 
@@ -86,7 +86,7 @@ export default function OverviewPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" size={20} />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" size={20} />
 
                                 {/* Positional Encoding */}
                                 <div 
@@ -104,7 +104,7 @@ export default function OverviewPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" size={20} />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" size={20} />
 
                                 {/* Input Embedding */}
                                 <div 
@@ -119,21 +119,21 @@ export default function OverviewPanel() {
                                     <div className="text-xs text-white text-center font-medium">Input Embedding</div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" size={20} />
-                                <div className="text-slate-400 text-xs">Inputs</div>
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" size={20} />
+                                <div className="text-slate-800 dark:text-xs">Inputs</div>
                             </div>
 
                             {/* Cross Attention Arrow */}
                             <div className="flex items-center">
                                 <div className="flex flex-col items-center">
                                     <ArrowRight className="text-yellow-400" size={32} />
-                                    <span className="text-yellow-400 text-xs">K, V</span>
+                                    <span className="text-xs">K, V</span>
                                 </div>
                             </div>
 
                             {/* Decoder Side */}
                             <div className="flex flex-col items-center gap-3">
-                                <div className="text-slate-400 text-sm font-medium mb-2">DECODER</div>
+                                <div className="text-slate-800 dark:text-sm font-medium mb-2">DECODER</div>
                                 
                                 {/* Output */}
                                 <div 
@@ -148,7 +148,7 @@ export default function OverviewPanel() {
                                     <div className="text-xs text-white text-center font-medium">Linear + Softmax</div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500 rotate-180" size={20} />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500 rotate-180" size={20} />
 
                                 {/* Decoder Stack */}
                                 <div 
@@ -168,7 +168,7 @@ export default function OverviewPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" size={20} />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" size={20} />
 
                                 {/* Output Positional */}
                                 <div 
@@ -186,7 +186,7 @@ export default function OverviewPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" size={20} />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" size={20} />
 
                                 {/* Output Embedding */}
                                 <div 
@@ -201,8 +201,8 @@ export default function OverviewPanel() {
                                     <div className="text-xs text-white text-center font-medium">Output Embedding</div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" size={20} />
-                                <div className="text-slate-400 text-xs">Outputs (shifted)</div>
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" size={20} />
+                                <div className="text-slate-800 dark:text-xs">Outputs (shifted)</div>
                             </div>
                         </div>
                     </div>
@@ -216,17 +216,17 @@ export default function OverviewPanel() {
                                 <div className={`${components[hoveredComponent].color} text-white px-4 py-2 rounded-lg font-bold`}>
                                     {components[hoveredComponent].name}
                                 </div>
-                                <p className="text-slate-300">
+                                <p className="text-slate-700 dark:text-slate-300">
                                     {components[hoveredComponent].description}
                                 </p>
                                 <div className="bg-slate-700/50 p-4 rounded-lg">
-                                    <p className="text-slate-400 text-sm font-mono">
+                                    <p className="text-slate-800 dark:text-sm font-mono">
                                         {components[hoveredComponent].details}
                                     </p>
                                 </div>
                             </div>
                         ) : (
-                            <div className="text-slate-500 text-center py-8">
+                            <div className="text-slate-700 dark:text-center py-8">
                                 <Eye size={48} className="mx-auto mb-4 opacity-50" />
                                 <p>Hover over a component to see details</p>
                             </div>
@@ -235,20 +235,20 @@ export default function OverviewPanel() {
                         {/* Key Numbers */}
                         <div className="mt-6 grid grid-cols-2 gap-3">
                             <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-blue-400">512</div>
-                                <div className="text-xs text-slate-400">d_model</div>
+                                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">512</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-400">d_model</div>
                             </div>
                             <div className="bg-slate-700/50 p-3 rounded-lg text-center">
                                 <div className="text-2xl font-bold text-green-400">8</div>
-                                <div className="text-xs text-slate-400">Attention Heads</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-400">Attention Heads</div>
                             </div>
                             <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-purple-400">6</div>
-                                <div className="text-xs text-slate-400">Encoder/Decoder Layers</div>
+                                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">6</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-400">Encoder/Decoder Layers</div>
                             </div>
                             <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-pink-400">2048</div>
-                                <div className="text-xs text-slate-400">FFN Hidden Dim</div>
+                                <div className="text-2xl font-bold text-pink-600 dark:text-pink-400">2048</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-400">FFN Hidden Dim</div>
                             </div>
                         </div>
                     </div>
@@ -256,7 +256,7 @@ export default function OverviewPanel() {
 
                 {/* Key Innovations */}
                 <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-2xl p-6 border border-amber-500/30 mb-8">
-                    <h3 className="text-amber-400 font-bold mb-4 flex items-center gap-2">
+                    <h3 className="text-amber-600 dark:text-amber-400 font-bold mb-4 flex items-center gap-2">
                         <Lightbulb size={20} />
                         Why Transformers Changed Everything
                     </h3>
@@ -264,19 +264,19 @@ export default function OverviewPanel() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">🚀 Parallelization</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 Unlike RNNs, transformers process all positions simultaneously. Training on GPUs is massively faster.
                             </p>
                         </div>
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">🔗 Long-Range Dependencies</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 Any position can attend to any other position directly. No information bottleneck!
                             </p>
                         </div>
                         <div className="bg-slate-800/50 p-4 rounded-lg">
                             <h4 className="text-white font-medium mb-2">📈 Scalability</h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-800 dark:text-sm">
                                 The architecture scales beautifully - from BERT (110M) to GPT-4 (1.7T+ estimated).
                             </p>
                         </div>
@@ -288,32 +288,32 @@ export default function OverviewPanel() {
                     <h3 className="text-white font-bold mb-4">📜 The Original Paper (2017)</h3>
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
-                            <p className="text-slate-300 mb-4">
-                                <strong className="text-blue-400">"Attention Is All You Need"</strong> by Vaswani et al. 
+                            <p className="text-slate-700 dark:text-slate-300 mb-4">
+                                <strong className="text-blue-600 dark:text-blue-400">"Attention Is All You Need"</strong> by Vaswani et al. 
                                 introduced the Transformer architecture, eliminating recurrence entirely.
                             </p>
                             <div className="space-y-2 text-sm">
                                 <div className="flex items-center gap-2">
                                     <span className="text-green-400">✓</span>
-                                    <span className="text-slate-400">New SOTA on WMT translation tasks</span>
+                                    <span className="text-slate-800 dark:text-slate-400">New SOTA on WMT translation tasks</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <span className="text-green-400">✓</span>
-                                    <span className="text-slate-400">3.5 days training on 8 GPUs (vs. weeks for RNNs)</span>
+                                    <span className="text-slate-800 dark:text-slate-400">3.5 days training on 8 GPUs (vs. weeks for RNNs)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <span className="text-green-400">✓</span>
-                                    <span className="text-slate-400">Foundation for BERT, GPT, T5, and all modern LLMs</span>
+                                    <span className="text-slate-800 dark:text-slate-400">Foundation for BERT, GPT, T5, and all modern LLMs</span>
                                 </div>
                             </div>
                         </div>
                         <div className="bg-slate-700/50 p-4 rounded-lg font-mono text-xs">
-                            <div className="text-slate-500">// Original hyperparameters</div>
-                            <div className="text-slate-300">d_model = <span className="text-blue-400">512</span></div>
-                            <div className="text-slate-300">d_ff = <span className="text-green-400">2048</span></div>
-                            <div className="text-slate-300">h = <span className="text-purple-400">8</span> <span className="text-slate-500">// heads</span></div>
-                            <div className="text-slate-300">N = <span className="text-pink-400">6</span> <span className="text-slate-500">// layers</span></div>
-                            <div className="text-slate-300">d_k = d_v = <span className="text-yellow-400">64</span></div>
+                            <div className="text-slate-700 dark:text-slate-500">// Original hyperparameters</div>
+                            <div className="text-slate-700 dark:text-slate-300">d_model = <span className="text-blue-600 dark:text-blue-400">512</span></div>
+                            <div className="text-slate-700 dark:text-slate-300">d_ff = <span className="text-green-400">2048</span></div>
+                            <div className="text-slate-700 dark:text-slate-300">h = <span className="text-purple-600 dark:text-purple-400">8</span> <span className="text-slate-700 dark:text-slate-500">// heads</span></div>
+                            <div className="text-slate-700 dark:text-slate-300">N = <span className="text-pink-600 dark:text-pink-400">6</span> <span className="text-slate-700 dark:text-slate-500">// layers</span></div>
+                            <div className="text-slate-700 dark:text-slate-300">d_k = d_v = <span className="text-yellow-400">64</span></div>
                         </div>
                     </div>
                 </div>

@@ -106,7 +106,7 @@ export default function ConceptPanel() {
                                 <div className="text-4xl mb-2">🧠</div>
                                 <div className="font-bold text-slate-800">LLaMA-7B</div>
                             </div>
-                            <ArrowRight className="text-slate-400" size={32} />
+                            <ArrowRight className="text-slate-800 dark:text-slate-400" size={32} />
                             <div className="relative">
                                 <div className="grid grid-cols-8 gap-1">
                                     {Array.from({ length: 32 }).map((_, i) => (
@@ -184,7 +184,7 @@ export default function ConceptPanel() {
                         <div key={i} className="bg-white rounded-lg p-4 border text-center hover:shadow-md transition-shadow">
                             <div className="text-3xl mb-2">{use.icon}</div>
                             <div className="font-bold text-slate-800">{use.title}</div>
-                            <div className="text-xs text-slate-600">{use.desc}</div>
+                            <div className="text-xs text-slate-800 dark:text-slate-600">{use.desc}</div>
                         </div>
                     ))}
                 </div>
@@ -194,7 +194,7 @@ export default function ConceptPanel() {
                     <Lightbulb className="text-amber-600 flex-shrink-0 mt-1" size={24} />
                     <div>
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
-                        <p className="text-amber-800 text-sm">
+                        <p className="text-sm">
                             PEFT methods work because neural networks are <strong>over-parameterized</strong>. 
                             The adaptation needed for a new task often lies in a low-dimensional subspace, 
                             so we don't need to update ALL the weights!

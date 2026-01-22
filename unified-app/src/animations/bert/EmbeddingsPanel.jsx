@@ -51,7 +51,7 @@ export default function EmbeddingsPanel() {
               title={`dim ${i}: ${v.toFixed(2)}`}
             />
           ))}
-          <span className="text-gray-500 text-xs ml-1">...</span>
+          <span className="text-gray-700 dark:text-xs ml-1">...</span>
         </div>
       </div>
     </div>
@@ -73,7 +73,7 @@ export default function EmbeddingsPanel() {
         <h2 className="text-3xl font-bold mb-2">
           Input Embeddings: <span className="text-yellow-400">Three Components Combined</span>
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           BERT's input is the sum of token, segment, and position embeddings
         </p>
       </div>
@@ -114,7 +114,7 @@ export default function EmbeddingsPanel() {
                 ? 'bg-yellow-500 text-black scale-110' 
                 : i < currentStep 
                 ? 'bg-yellow-900 text-yellow-300' 
-                : 'bg-white/10 text-gray-500'
+                : 'bg-white/10 text-gray-700 dark:text-gray-500'
             }`}
           >
             {i + 1}
@@ -125,7 +125,7 @@ export default function EmbeddingsPanel() {
       {/* Current Step Description */}
       <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-4">
         <h3 className="font-bold text-yellow-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Main Visualization */}
@@ -133,7 +133,7 @@ export default function EmbeddingsPanel() {
         <div className="min-w-[700px]">
           {/* Token row */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-24 text-right text-sm text-gray-400">Tokens:</div>
+            <div className="w-24 text-right text-sm text-gray-800 dark:text-gray-400">Tokens:</div>
             <div className="flex gap-4">
               {tokens.map((token, i) => (
                 <div key={i} className="w-24 text-center">
@@ -149,7 +149,7 @@ export default function EmbeddingsPanel() {
 
           {/* Token Embeddings */}
           <div className={`flex items-center gap-4 mb-4 transition-all duration-500 ${currentStep >= 0 ? 'opacity-100' : 'opacity-30'}`}>
-            <div className="w-24 text-right text-sm text-blue-400">Token Emb:</div>
+            <div className="w-24 text-right text-sm text-blue-600 dark:text-blue-400">Token Emb:</div>
             <div className="flex gap-4">
               {tokens.map((token, i) => (
                 <div key={i} className="w-24">
@@ -163,12 +163,12 @@ export default function EmbeddingsPanel() {
                         />
                       ))}
                     </div>
-                    {showDimensions && <p className="text-xs text-center text-gray-500 mt-1">768-d</p>}
+                    {showDimensions && <p className="text-xs text-center text-gray-700 dark:text-gray-500 mt-1">768-d</p>}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-xs text-gray-500">E<sub>token</sub></div>
+            <div className="text-xs text-gray-700 dark:text-gray-500">E<sub>token</sub></div>
           </div>
 
           {/* Plus Sign */}
@@ -178,7 +178,7 @@ export default function EmbeddingsPanel() {
               <div className="flex gap-4">
                 {tokens.map((_, i) => (
                   <div key={i} className="w-24 text-center">
-                    <Plus size={16} className="mx-auto text-gray-500" />
+                    <Plus size={16} className="mx-auto text-gray-700 dark:text-gray-500" />
                   </div>
                 ))}
               </div>
@@ -206,7 +206,7 @@ export default function EmbeddingsPanel() {
                 </div>
               ))}
             </div>
-            <div className="text-xs text-gray-500">E<sub>segment</sub></div>
+            <div className="text-xs text-gray-700 dark:text-gray-500">E<sub>segment</sub></div>
           </div>
 
           {/* Plus Sign */}
@@ -216,7 +216,7 @@ export default function EmbeddingsPanel() {
               <div className="flex gap-4">
                 {tokens.map((_, i) => (
                   <div key={i} className="w-24 text-center">
-                    <Plus size={16} className="mx-auto text-gray-500" />
+                    <Plus size={16} className="mx-auto text-gray-700 dark:text-gray-500" />
                   </div>
                 ))}
               </div>
@@ -225,7 +225,7 @@ export default function EmbeddingsPanel() {
 
           {/* Position Embeddings */}
           <div className={`flex items-center gap-4 mb-4 transition-all duration-500 ${currentStep >= 2 ? 'opacity-100' : 'opacity-30'}`}>
-            <div className="w-24 text-right text-sm text-purple-400">Position Emb:</div>
+            <div className="w-24 text-right text-sm text-purple-600 dark:text-purple-400">Position Emb:</div>
             <div className="flex gap-4">
               {tokens.map((token, i) => (
                 <div key={i} className="w-24">
@@ -239,12 +239,12 @@ export default function EmbeddingsPanel() {
                         />
                       ))}
                     </div>
-                    <p className="text-xs text-center text-purple-400 mt-1">pos={i}</p>
+                    <p className="text-xs text-center text-purple-600 dark:text-purple-400 mt-1">pos={i}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-xs text-gray-500">E<sub>position</sub></div>
+            <div className="text-xs text-gray-700 dark:text-gray-500">E<sub>position</sub></div>
           </div>
 
           {/* Equals Sign */}
@@ -263,7 +263,7 @@ export default function EmbeddingsPanel() {
 
           {/* Final Embeddings */}
           <div className={`flex items-center gap-4 transition-all duration-500 ${currentStep >= 3 ? 'opacity-100' : 'opacity-30'}`}>
-            <div className="w-24 text-right text-sm text-orange-400 font-bold">Input Emb:</div>
+            <div className="w-24 text-right text-sm text-orange-600 dark:text-orange-400 font-bold">Input Emb:</div>
             <div className="flex gap-4">
               {tokens.map((token, i) => (
                 <div key={i} className="w-24">
@@ -277,12 +277,12 @@ export default function EmbeddingsPanel() {
                         />
                       ))}
                     </div>
-                    {showDimensions && <p className="text-xs text-center text-gray-500 mt-1">768-d</p>}
+                    {showDimensions && <p className="text-xs text-center text-gray-700 dark:text-gray-500 mt-1">768-d</p>}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-xs text-orange-400 font-bold">→ to Encoder</div>
+            <div className="text-xs text-orange-600 dark:text-orange-400 font-bold">→ to Encoder</div>
           </div>
         </div>
       </div>
@@ -290,19 +290,19 @@ export default function EmbeddingsPanel() {
       {/* Formula */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10 text-center">
         <p className="font-mono text-lg">
-          <span className="text-orange-400">E<sub>input</sub></span> = 
-          <span className="text-blue-400"> E<sub>token</sub></span> + 
+          <span className="text-orange-600 dark:text-orange-400">E<sub>input</sub></span> = 
+          <span className="text-blue-600 dark:text-blue-400"> E<sub>token</sub></span> + 
           <span className="text-green-400"> E<sub>segment</sub></span> + 
-          <span className="text-purple-400"> E<sub>position</sub></span>
+          <span className="text-purple-600 dark:text-purple-400"> E<sub>position</sub></span>
         </p>
-        <p className="text-sm text-gray-500 mt-2">All embeddings are 768-dimensional vectors (for BERT-Base)</p>
+        <p className="text-sm text-gray-700 dark:text-gray-500 mt-2">All embeddings are 768-dimensional vectors (for BERT-Base)</p>
       </div>
 
       {/* Detailed Explanations */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
-          <h4 className="font-bold text-blue-400 mb-2">🔤 Token Embeddings</h4>
-          <ul className="text-sm text-gray-300 space-y-2">
+          <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-2">🔤 Token Embeddings</h4>
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <li>• Lookup table: vocab_size × 768</li>
             <li>• ~30,522 tokens in BERT vocab</li>
             <li>• Each token has unique embedding</li>
@@ -311,7 +311,7 @@ export default function EmbeddingsPanel() {
         </div>
         <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
           <h4 className="font-bold text-green-400 mb-2">📑 Segment Embeddings</h4>
-          <ul className="text-sm text-gray-300 space-y-2">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <li>• Only 2 vectors: E<sub>A</sub> and E<sub>B</sub></li>
             <li>• E<sub>A</sub> for first sentence</li>
             <li>• E<sub>B</sub> for second sentence</li>
@@ -319,8 +319,8 @@ export default function EmbeddingsPanel() {
           </ul>
         </div>
         <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
-          <h4 className="font-bold text-purple-400 mb-2">📍 Position Embeddings</h4>
-          <ul className="text-sm text-gray-300 space-y-2">
+          <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-2">📍 Position Embeddings</h4>
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <li>• Learned (not sinusoidal)</li>
             <li>• Max 512 positions</li>
             <li>• Encodes word order</li>
@@ -332,7 +332,7 @@ export default function EmbeddingsPanel() {
       {/* Two-Sentence Example */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-          <Info size={20} className="text-blue-400" />
+          <Info size={20} className="text-blue-600 dark:text-blue-400" />
           Sentence Pair Example (for NSP, QA, etc.)
         </h3>
         <div className="overflow-x-auto">
@@ -348,7 +348,7 @@ export default function EmbeddingsPanel() {
                 <span className={`text-xs ${i <= 4 ? 'text-blue-400' : 'text-green-400'}`}>
                   {i <= 4 ? 'Seg A' : 'Seg B'}
                 </span>
-                <span className="text-xs text-purple-400">pos {i}</span>
+                <span className="text-xs text-purple-600 dark:text-purple-400">pos {i}</span>
               </div>
             ))}
           </div>
@@ -357,7 +357,7 @@ export default function EmbeddingsPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-400 mb-3">🐍 PyTorch Implementation:</p>
+        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 PyTorch Implementation:</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-yellow-300">{`class BertEmbeddings(nn.Module):
     def __init__(self, config):

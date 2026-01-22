@@ -44,8 +44,8 @@ export default function SinusoidalPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">Sinusoidal Encoding</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">Sinusoidal Encoding</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     The elegant wave-based solution that gives each position a unique fingerprint.
                 </p>
                 <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm text-left">
@@ -58,7 +58,7 @@ export default function SinusoidalPanel() {
             <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl mb-8">
                 <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
                     <label className="flex justify-between text-sm font-bold mb-3">
-                        Position: <span className="text-cyan-400">{position}</span>
+                        Position: <span className="text-cyan-600 dark:text-cyan-400">{position}</span>
                     </label>
                     <input
                         type="range" min="0" max="49" step="1"
@@ -70,7 +70,7 @@ export default function SinusoidalPanel() {
 
                 <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
                     <label className="flex justify-between text-sm font-bold mb-3">
-                        Model Dimension: <span className="text-purple-400">{dimension}</span>
+                        Model Dimension: <span className="text-purple-600 dark:text-purple-400">{dimension}</span>
                     </label>
                     <input
                         type="range" min="16" max="128" step="16"
@@ -136,7 +136,7 @@ export default function SinusoidalPanel() {
                         ))}
                     </LineChart>
                 </ResponsiveContainer>
-                <p className="text-xs text-slate-400 mt-4 text-center">
+                <p className="text-xs text-slate-800 dark:text-slate-400 mt-4 text-center">
                     Lower dimensions = slower waves (capture global position)
                     <br />
                     Higher dimensions = faster waves (capture local position)

@@ -84,14 +84,14 @@ export default function BowPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-green-400">Bag of Words</span>: Count-Based Representation
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           The simplest way to convert text into numbers
         </p>
       </div>
 
       {/* Input */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10">
-        <label className="text-sm text-gray-400 mb-2 block">Enter your text:</label>
+        <label className="text-sm text-gray-800 dark:text-gray-400 mb-2 block">Enter your text:</label>
         <textarea
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
@@ -139,7 +139,7 @@ export default function BowPanel() {
                 ? 'bg-green-500 text-black scale-110' 
                 : i < currentStep 
                 ? 'bg-green-900 text-green-300' 
-                : 'bg-white/10 text-gray-500'
+                : 'bg-white/10 text-gray-700 dark:text-gray-500'
             }`}
           >
             {i + 1}
@@ -150,7 +150,7 @@ export default function BowPanel() {
       {/* Current Step */}
       <div className="bg-green-900/20 border border-green-500/30 rounded-xl p-4">
         <h3 className="font-bold text-green-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Visualization */}
@@ -158,7 +158,7 @@ export default function BowPanel() {
         {/* Step 0-1: Original/Tokens */}
         {currentStep <= 1 && (
           <div className="space-y-4">
-            <h4 className="text-sm text-gray-400">
+            <h4 className="text-sm text-gray-800 dark:text-gray-400">
               {currentStep === 0 ? 'Original Text:' : 'Tokenized:'}
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -182,7 +182,7 @@ export default function BowPanel() {
         {/* Step 2: Lowercase */}
         {currentStep === 2 && (
           <div className="space-y-4">
-            <h4 className="text-sm text-gray-400">Lowercased Tokens:</h4>
+            <h4 className="text-sm text-gray-800 dark:text-gray-400">Lowercased Tokens:</h4>
             <div className="flex flex-wrap gap-2">
               {processed.lowercased.map((token, i) => (
                 <span 
@@ -200,7 +200,7 @@ export default function BowPanel() {
         {/* Step 3: Clean */}
         {currentStep === 3 && (
           <div className="space-y-4">
-            <h4 className="text-sm text-gray-400">Cleaned (no punctuation):</h4>
+            <h4 className="text-sm text-gray-800 dark:text-gray-400">Cleaned (no punctuation):</h4>
             <div className="flex flex-wrap gap-2">
               {processed.cleaned.map((token, i) => (
                 <span 
@@ -225,7 +225,7 @@ export default function BowPanel() {
         {/* Step 4: Vocabulary */}
         {currentStep === 4 && (
           <div className="space-y-4">
-            <h4 className="text-sm text-gray-400">Vocabulary ({processed.vocab.length} unique words):</h4>
+            <h4 className="text-sm text-gray-800 dark:text-gray-400">Vocabulary ({processed.vocab.length} unique words):</h4>
             <div className="flex flex-wrap gap-2">
               {processed.vocab.map((word, i) => (
                 <div 
@@ -233,7 +233,7 @@ export default function BowPanel() {
                   className="flex items-center gap-1 px-3 py-1 bg-yellow-600/30 rounded animate-fadeIn"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
-                  <span className="text-xs text-gray-400">{i}:</span>
+                  <span className="text-xs text-gray-800 dark:text-gray-400">{i}:</span>
                   <span className="text-yellow-300 font-mono">{word}</span>
                 </div>
               ))}
@@ -244,7 +244,7 @@ export default function BowPanel() {
         {/* Step 5: Counts */}
         {currentStep === 5 && (
           <div className="space-y-4">
-            <h4 className="text-sm text-gray-400">Word Frequencies:</h4>
+            <h4 className="text-sm text-gray-800 dark:text-gray-400">Word Frequencies:</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {Object.entries(processed.counts).sort((a, b) => b[1] - a[1]).map(([word, count], i) => (
                 <div 
@@ -263,7 +263,7 @@ export default function BowPanel() {
         {/* Step 6: Vector */}
         {currentStep === 6 && (
           <div className="space-y-4">
-            <h4 className="text-sm text-gray-400">Final BoW Vector:</h4>
+            <h4 className="text-sm text-gray-800 dark:text-gray-400">Final BoW Vector:</h4>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -284,7 +284,7 @@ export default function BowPanel() {
                         style={{ animationDelay: `${i * 100}ms` }}
                       >
                         <span className={`inline-block w-8 h-8 rounded-full flex items-center justify-center ${
-                          count > 0 ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-400'
+                          count > 0 ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-800 dark:text-gray-400'
                         }`}>
                           {count}
                         </span>
@@ -295,7 +295,7 @@ export default function BowPanel() {
               </table>
             </div>
             <div className="bg-gray-800 rounded-lg p-3 mt-4">
-              <p className="text-xs text-gray-400 mb-1">Vector representation:</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">Vector representation:</p>
               <p className="font-mono text-green-400 break-all">
                 [{processed.vector.join(', ')}]
               </p>
@@ -308,7 +308,7 @@ export default function BowPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
           <h4 className="font-bold text-green-400 mb-2">✅ Advantages</h4>
-          <ul className="text-sm text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
             <li>• Simple and fast to compute</li>
             <li>• Easy to understand and interpret</li>
             <li>• Works well for document classification</li>
@@ -317,7 +317,7 @@ export default function BowPanel() {
         </div>
         <div className="bg-red-900/20 rounded-xl p-4 border border-red-500/30">
           <h4 className="font-bold text-red-400 mb-2">❌ Limitations</h4>
-          <ul className="text-sm text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
             <li>• Ignores word order ("dog bites man" = "man bites dog")</li>
             <li>• No semantic meaning captured</li>
             <li>• Common words dominate (need TF-IDF)</li>
@@ -328,7 +328,7 @@ export default function BowPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-400 mb-3">🐍 Python with scikit-learn:</p>
+        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 Python with scikit-learn:</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-green-300">{`from sklearn.feature_extraction.text import CountVectorizer
 

@@ -43,7 +43,7 @@ export default function PracticePanel({ onStepChange }) {
                     </p>
                 </div>
 
-                <div className="text-sm text-gray-600 space-y-2">
+                <div className="text-sm text-gray-800 dark:text-gray-600 space-y-2">
                     <p>Try dragging the slider to the left (p → 0).</p>
                     <p>Notice how the Loss explodes? This is how the model is punished for being wrong!</p>
                 </div>

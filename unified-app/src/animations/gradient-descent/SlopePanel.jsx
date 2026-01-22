@@ -66,14 +66,14 @@ export default function SlopePanel() {
                 {/* Math Panel */}
                 <div className="flex-1 flex flex-col justify-center gap-6">
                     <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <h3 className="font-bold text-slate-500 uppercase text-xs mb-4">Current State</h3>
+                        <h3 className="font-bold text-slate-700 dark:text-slate-500 uppercase text-xs mb-4">Current State</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <p className="text-sm text-slate-500">Position (x)</p>
+                                <p className="text-sm text-slate-700 dark:text-slate-500">Position (x)</p>
                                 <p className="text-2xl font-mono font-bold text-slate-800">{x.toFixed(3)}</p>
                             </div>
                             <div>
-                                <p className="text-sm text-slate-500">Slope (dy/dx)</p>
+                                <p className="text-sm text-slate-700 dark:text-slate-500">Slope (dy/dx)</p>
                                 <p className={`text-2xl font-mono font-bold ${slope > 0 ? 'text-orange-600' : 'text-blue-600'}`}>
                                     {slope.toFixed(3)}
                                 </p>

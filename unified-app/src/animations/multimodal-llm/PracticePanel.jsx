@@ -127,7 +127,7 @@ export default function PracticePanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Practice Lab</h2>
-                    <p className="text-slate-600">Test your understanding of multimodal LLMs</p>
+                    <p className="text-slate-800 dark:text-slate-600">Test your understanding of multimodal LLMs</p>
                 </div>
 
                 {/* Section Tabs */}
@@ -137,7 +137,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'quiz'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                         📝 Quiz
@@ -147,7 +147,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'scenarios'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                         🎯 Scenarios
@@ -158,7 +158,7 @@ export default function PracticePanel() {
                     <div className="bg-slate-50 rounded-xl p-6">
                         {/* Progress */}
                         <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-slate-600">
+                            <span className="text-sm text-slate-800 dark:text-slate-600">
                                 Question {currentQuiz + 1} of {QUIZZES.length}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
@@ -226,7 +226,7 @@ export default function PracticePanel() {
                         <div className="flex justify-between">
                             <button
                                 onClick={resetQuiz}
-                                className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-800"
+                                className="flex items-center gap-2 px-4 py-2 text-slate-800 dark:text-slate-600 hover:text-slate-800"
                             >
                                 <RefreshCw size={16} /> Reset
                             </button>
@@ -250,7 +250,7 @@ export default function PracticePanel() {
                 ) : (
                     <div className="bg-slate-50 rounded-xl p-6">
                         <h3 className="text-xl font-bold text-slate-800 mb-4">Multimodal Reasoning Scenarios</h3>
-                        <p className="text-slate-600 mb-6">
+                        <p className="text-slate-800 dark:text-slate-600 mb-6">
                             Explore how a multimodal LLM would process these image + text combinations
                         </p>
 
@@ -282,18 +282,18 @@ export default function PracticePanel() {
                                     <div className="w-32 h-32 bg-slate-100 rounded-lg flex items-center justify-center text-6xl border-2 border-slate-200">
                                         {scenario.image}
                                     </div>
-                                    <div className="text-center text-sm text-slate-500 mt-2">{scenario.imageDesc}</div>
+                                    <div className="text-center text-sm text-slate-700 dark:text-slate-500 mt-2">{scenario.imageDesc}</div>
                                 </div>
 
                                 {/* Question */}
                                 <div className="flex-1">
-                                    <div className="text-sm text-slate-500 mb-1">User Question:</div>
+                                    <div className="text-sm text-slate-700 dark:text-slate-500 mb-1">User Question:</div>
                                     <div className="text-lg font-medium text-slate-800 mb-4">
                                         "{scenario.question}"
                                     </div>
 
-                                    <div className="text-sm text-slate-500 mb-1">Image Context:</div>
-                                    <div className="text-sm text-slate-600 bg-slate-50 p-2 rounded mb-4">
+                                    <div className="text-sm text-slate-700 dark:text-slate-500 mb-1">Image Context:</div>
+                                    <div className="text-sm text-slate-800 dark:text-slate-600 bg-slate-50 p-2 rounded mb-4">
                                         {scenario.context}
                                     </div>
 
@@ -317,7 +317,7 @@ export default function PracticePanel() {
                         {/* How it works */}
                         <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
                             <h4 className="font-bold text-indigo-900 mb-2">How the Model Processes This:</h4>
-                            <ol className="text-indigo-800 text-sm space-y-1 list-decimal list-inside">
+                            <ol className="text-sm space-y-1 list-decimal list-inside">
                                 <li>Vision encoder extracts features from the image ({scenario.image})</li>
                                 <li>Text tokenizer processes the question</li>
                                 <li>Visual and text tokens are combined</li>

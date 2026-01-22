@@ -89,7 +89,7 @@ export default function FineTuningPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-yellow-400">Fine-Tuning</span> BERT for Downstream Tasks
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Transfer learning: adapt pre-trained BERT to specific tasks with minimal training
         </p>
       </div>
@@ -123,7 +123,7 @@ export default function FineTuningPanel() {
                 ? 'bg-yellow-500 text-black' 
                 : i < currentStep 
                 ? 'bg-yellow-900 text-yellow-300' 
-                : 'bg-white/10 text-gray-500'
+                : 'bg-white/10 text-gray-700 dark:text-gray-500'
             }`}
           >
             {i + 1}. {step.title}
@@ -134,7 +134,7 @@ export default function FineTuningPanel() {
       {/* Current Step Description */}
       <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-4">
         <h3 className="font-bold text-yellow-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Fine-Tuning Pipeline Visualization */}
@@ -143,10 +143,10 @@ export default function FineTuningPanel() {
           {/* Pre-trained BERT */}
           <div className={`text-center transition-all duration-500 ${currentStep >= 0 ? 'opacity-100 scale-100' : 'opacity-30 scale-90'}`}>
             <div className="bg-blue-900/30 border-2 border-blue-500 rounded-xl p-4 w-48">
-              <Layers className="mx-auto mb-2 text-blue-400" size={32} />
+              <Layers className="mx-auto mb-2 text-blue-600 dark:text-blue-400" size={32} />
               <p className="font-bold text-blue-300">Pre-trained BERT</p>
-              <p className="text-xs text-gray-400 mt-1">12 Encoder Layers</p>
-              <p className="text-xs text-gray-400">110M Parameters</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">12 Encoder Layers</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">110M Parameters</p>
             </div>
           </div>
 
@@ -157,8 +157,8 @@ export default function FineTuningPanel() {
             <div className={`bg-${currentTask.color}-900/30 border-2 border-${currentTask.color}-500 rounded-xl p-4 w-48`}>
               <Settings className={`mx-auto mb-2 text-${currentTask.color}-400`} size={32} />
               <p className={`font-bold text-${currentTask.color}-300`}>+ Task Head</p>
-              <p className="text-xs text-gray-400 mt-1">{currentTask.head}</p>
-              <p className="text-xs text-gray-400">~Few K params</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">{currentTask.head}</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">~Few K params</p>
             </div>
           </div>
 
@@ -169,8 +169,8 @@ export default function FineTuningPanel() {
             <div className="bg-green-900/30 border-2 border-green-500 rounded-xl p-4 w-48">
               <div className="text-2xl mb-2">📊</div>
               <p className="font-bold text-green-300">Task Dataset</p>
-              <p className="text-xs text-gray-400 mt-1">Labeled examples</p>
-              <p className="text-xs text-gray-400">~1K - 100K samples</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Labeled examples</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">~1K - 100K samples</p>
             </div>
           </div>
 
@@ -181,8 +181,8 @@ export default function FineTuningPanel() {
             <div className="bg-yellow-900/30 border-2 border-yellow-500 rounded-xl p-4 w-48">
               <div className="text-2xl mb-2">🎯</div>
               <p className="font-bold text-yellow-300">Fine-tuned Model</p>
-              <p className="text-xs text-gray-400 mt-1">Task-specific</p>
-              <p className="text-xs text-gray-400">2-4 epochs</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Task-specific</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">2-4 epochs</p>
             </div>
           </div>
 
@@ -193,8 +193,8 @@ export default function FineTuningPanel() {
             <div className="bg-purple-900/30 border-2 border-purple-500 rounded-xl p-4 w-48">
               <div className="text-2xl mb-2">🚀</div>
               <p className="font-bold text-purple-300">Production</p>
-              <p className="text-xs text-gray-400 mt-1">Ready for inference</p>
-              <p className="text-xs text-gray-400">State-of-the-art!</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Ready for inference</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">State-of-the-art!</p>
             </div>
           </div>
         </div>
@@ -224,17 +224,17 @@ export default function FineTuningPanel() {
         {/* Selected Task Details */}
         <div className={`bg-${currentTask.color}-900/20 rounded-xl p-4 border border-${currentTask.color}-500/30`}>
           <h4 className={`font-bold text-${currentTask.color}-400 mb-3`}>{currentTask.name}</h4>
-          <p className="text-sm text-gray-300 mb-4">{currentTask.description}</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">{currentTask.description}</p>
           
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-gray-400 mb-1">Input Format:</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">Input Format:</p>
               <code className="text-xs bg-black/30 px-2 py-1 rounded text-green-300 block">
                 {currentTask.inputFormat}
               </code>
             </div>
             <div>
-              <p className="text-xs text-gray-400 mb-1">Output:</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">Output:</p>
               <code className="text-xs bg-black/30 px-2 py-1 rounded text-orange-300 block">
                 {currentTask.outputFormat}
               </code>
@@ -242,7 +242,7 @@ export default function FineTuningPanel() {
           </div>
 
           <div className="mt-4">
-            <p className="text-xs text-gray-400 mb-2">Example Tasks:</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400 mb-2">Example Tasks:</p>
             <div className="flex flex-wrap gap-2">
               {currentTask.examples.map((ex, i) => (
                 <span key={i} className="text-xs bg-white/10 px-2 py-1 rounded">
@@ -258,7 +258,7 @@ export default function FineTuningPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
           <h4 className="font-bold text-green-400 mb-3">✅ Best Practices</h4>
-          <ul className="text-sm text-gray-300 space-y-2">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <li>• <strong>Learning rate:</strong> 2e-5 to 5e-5 (small!)</li>
             <li>• <strong>Batch size:</strong> 16 or 32</li>
             <li>• <strong>Epochs:</strong> 2-4 (avoid overfitting)</li>
@@ -268,7 +268,7 @@ export default function FineTuningPanel() {
         </div>
         <div className="bg-red-900/20 rounded-xl p-4 border border-red-500/30">
           <h4 className="font-bold text-red-400 mb-3">⚠️ Common Mistakes</h4>
-          <ul className="text-sm text-gray-300 space-y-2">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <li>• Learning rate too high → catastrophic forgetting</li>
             <li>• Too many epochs → overfitting</li>
             <li>• Wrong tokenizer → vocabulary mismatch</li>
@@ -283,16 +283,16 @@ export default function FineTuningPanel() {
         <h4 className="font-bold text-white mb-3">🔄 What Gets Updated During Fine-Tuning?</h4>
         <div className="grid md:grid-cols-3 gap-4 text-sm">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-blue-400 font-medium mb-1">BERT Weights (All)</p>
-            <p className="text-gray-400 text-xs">All 110M parameters get updated with small gradients</p>
+            <p className="text-blue-600 dark:text-blue-400 font-medium mb-1">BERT Weights (All)</p>
+            <p className="text-gray-800 dark:text-xs">All 110M parameters get updated with small gradients</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-yellow-400 font-medium mb-1">Task Head (New)</p>
-            <p className="text-gray-400 text-xs">New layers trained from scratch</p>
+            <p className="text-gray-800 dark:text-xs">New layers trained from scratch</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-green-400 font-medium mb-1">Option: Freeze BERT</p>
-            <p className="text-gray-400 text-xs">Only train head (faster, less accurate)</p>
+            <p className="text-gray-800 dark:text-xs">Only train head (faster, less accurate)</p>
           </div>
         </div>
       </div>
@@ -304,34 +304,34 @@ export default function FineTuningPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="text-left py-2 text-gray-400">Task</th>
-                <th className="text-center py-2 text-gray-400">Dataset</th>
-                <th className="text-center py-2 text-gray-400">BERT-Base</th>
-                <th className="text-center py-2 text-gray-400">BERT-Large</th>
+                <th className="text-left py-2 text-gray-800 dark:text-gray-400">Task</th>
+                <th className="text-center py-2 text-gray-800 dark:text-gray-400">Dataset</th>
+                <th className="text-center py-2 text-gray-800 dark:text-gray-400">BERT-Base</th>
+                <th className="text-center py-2 text-gray-800 dark:text-gray-400">BERT-Large</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-white/10">
                 <td className="py-2">Sentiment</td>
-                <td className="text-center text-gray-400">SST-2</td>
+                <td className="text-center text-gray-800 dark:text-gray-400">SST-2</td>
                 <td className="text-center font-mono text-green-400">93.5%</td>
                 <td className="text-center font-mono text-green-400">94.9%</td>
               </tr>
               <tr className="border-b border-white/10">
                 <td className="py-2">NLI</td>
-                <td className="text-center text-gray-400">MNLI</td>
+                <td className="text-center text-gray-800 dark:text-gray-400">MNLI</td>
                 <td className="text-center font-mono text-green-400">84.6%</td>
                 <td className="text-center font-mono text-green-400">86.7%</td>
               </tr>
               <tr className="border-b border-white/10">
                 <td className="py-2">Paraphrase</td>
-                <td className="text-center text-gray-400">QQP</td>
+                <td className="text-center text-gray-800 dark:text-gray-400">QQP</td>
                 <td className="text-center font-mono text-green-400">71.2%</td>
                 <td className="text-center font-mono text-green-400">72.1%</td>
               </tr>
               <tr>
                 <td className="py-2">Question NLI</td>
-                <td className="text-center text-gray-400">QNLI</td>
+                <td className="text-center text-gray-800 dark:text-gray-400">QNLI</td>
                 <td className="text-center font-mono text-green-400">90.5%</td>
                 <td className="text-center font-mono text-green-400">92.7%</td>
               </tr>
@@ -342,7 +342,7 @@ export default function FineTuningPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-400 mb-3">🐍 PyTorch Fine-Tuning Example (Classification):</p>
+        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 PyTorch Fine-Tuning Example (Classification):</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-orange-300">{`from transformers import BertForSequenceClassification, BertTokenizer, AdamW
 

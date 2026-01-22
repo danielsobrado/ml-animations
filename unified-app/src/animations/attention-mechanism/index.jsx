@@ -32,7 +32,7 @@ function PlaceholderPanel({ tabId, tabLabel }) {
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                     {tabLabel} Panel
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
+                <p className="text-slate-800 dark:text-sm">
                     This panel is being integrated from the original animation.
                     Check back soon!
                 </p>

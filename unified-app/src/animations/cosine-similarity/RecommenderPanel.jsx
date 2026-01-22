@@ -32,7 +32,7 @@ export default function RecommenderPanel() {
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
                     Movie Matcher
                 </h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Netflix doesn't guess. It calculates similarity between your taste and millions of users.
                     <br />
                     Who are you most compatible with?
@@ -42,7 +42,7 @@ export default function RecommenderPanel() {
             <div className="grid lg:grid-cols-2 gap-8 w-full max-w-6xl">
                 {/* Radar Chart */}
                 <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <h3 className="text-center font-bold text-slate-300 mb-4">Genre Preference Profiles</h3>
+                    <h3 className="text-center font-bold text-slate-700 dark:text-slate-300 mb-4">Genre Preference Profiles</h3>
                     <ResponsiveContainer width="100%" height={400}>
                         <RadarChart data={radarData}>
                             <PolarGrid stroke="#475569" />
@@ -60,12 +60,12 @@ export default function RecommenderPanel() {
                 <div className="flex flex-col gap-6">
                     {/* Your Preferences */}
                     <div className="bg-slate-800 p-6 rounded-xl border border-cyan-500/50">
-                        <h3 className="font-bold text-cyan-400 mb-4 uppercase text-sm">Your Movie Taste (User A)</h3>
+                        <h3 className="font-bold text-cyan-600 dark:text-cyan-400 mb-4 uppercase text-sm">Your Movie Taste (User A)</h3>
                         <div className="space-y-3">
                             {Object.entries(userA).map(([genre, value]) => (
                                 <div key={genre}>
                                     <label className="flex justify-between text-sm mb-1 capitalize">
-                                        {genre}: <span className="text-cyan-400 font-mono">{value}</span>
+                                        {genre}: <span className="text-cyan-600 dark:text-cyan-400 font-mono">{value}</span>
                                     </label>
                                     <input
                                         type="range" min="0" max="10" step="1"
@@ -88,7 +88,7 @@ export default function RecommenderPanel() {
                             <div className="text-4xl font-mono font-bold text-purple-200">
                                 {(simB * 100).toFixed(1)}%
                             </div>
-                            <p className="text-xs text-slate-400 mt-2">Cosine Similarity: {simB.toFixed(3)}</p>
+                            <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">Cosine Similarity: {simB.toFixed(3)}</p>
                         </div>
 
                         <div className={`p-6 rounded-xl border-2 transition-all ${simC > simB ? 'bg-gradient-to-br from-pink-900/50 to-pink-800/30 border-pink-500' : 'bg-slate-800/50 border-slate-700'}`}>
@@ -99,7 +99,7 @@ export default function RecommenderPanel() {
                             <div className="text-4xl font-mono font-bold text-pink-200">
                                 {(simC * 100).toFixed(1)}%
                             </div>
-                            <p className="text-xs text-slate-400 mt-2">Cosine Similarity: {simC.toFixed(3)}</p>
+                            <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">Cosine Similarity: {simC.toFixed(3)}</p>
                         </div>
                     </div>
                 </div>

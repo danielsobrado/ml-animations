@@ -196,7 +196,7 @@ export default function VectorSpacePanel() {
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-4">
                     <h2 className="text-2xl font-bold text-indigo-900 mb-2">Vector Space Visualization</h2>
-                    <p className="text-slate-600">
+                    <p className="text-slate-800 dark:text-slate-600">
                         Words plotted in 2D space - similar words cluster together
                     </p>
                 </div>
@@ -215,7 +215,7 @@ export default function VectorSpacePanel() {
                                 >
                                     <ZoomOut size={16} />
                                 </button>
-                                <span className="text-sm text-slate-600">{(zoom * 100).toFixed(0)}%</span>
+                                <span className="text-sm text-slate-800 dark:text-slate-600">{(zoom * 100).toFixed(0)}%</span>
                                 <button
                                     onClick={() => setZoom(z => Math.min(2, z + 0.25))}
                                     className="p-2 rounded-lg bg-white border hover:bg-slate-100"
@@ -278,7 +278,7 @@ export default function VectorSpacePanel() {
                                     const w = WORDS.find(w => w.word === hoveredWord);
                                     return w && (
                                         <>
-                                            <div className="text-sm text-slate-600 mb-2">
+                                            <div className="text-sm text-slate-800 dark:text-slate-600 mb-2">
                                                 Category: <span className="font-medium">{w.category}</span>
                                             </div>
                                             <div className="font-mono text-xs bg-slate-100 p-2 rounded">
@@ -311,7 +311,7 @@ export default function VectorSpacePanel() {
                         <Lightbulb className="text-amber-600 flex-shrink-0 mt-1" size={20} />
                         <div>
                             <h4 className="font-bold text-amber-900 mb-1">What to Notice</h4>
-                            <ul className="text-amber-800 text-sm space-y-1">
+                            <ul className="text-sm space-y-1">
                                 <li>• <strong>Clustering:</strong> Words from the same category naturally group together</li>
                                 <li>• <strong>Distance = Similarity:</strong> "King" and "Queen" are close; "King" and "Bicycle" are far</li>
                                 <li>• <strong>Directions have meaning:</strong> The gender direction (man→woman) is consistent across pairs</li>

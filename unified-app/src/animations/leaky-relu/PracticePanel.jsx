@@ -117,7 +117,7 @@ export default function PracticePanel({ onStepChange }) {
         </div>
         
         {showHints.dotProduct && (
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-800 dark:text-gray-600 mb-2">
             X · W = ({X[0]} × {W[0]}) + ({X[1]} × {W[1]}) + ({X[2]} × {W[2]})
             = {X[0] * W[0]} + {X[1] * W[1]} + {X[2] * W[2]} = ?
           </p>
@@ -162,7 +162,7 @@ export default function PracticePanel({ onStepChange }) {
         </div>
         
         {showHints.z && currentStep >= 2 && (
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-800 dark:text-gray-600 mb-2">
             z = {dotProduct} + ({b}) = ?
           </p>
         )}
@@ -206,7 +206,7 @@ export default function PracticePanel({ onStepChange }) {
         </div>
         
         {showHints.leakyRelu && currentStep >= 3 && (
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-800 dark:text-gray-600 mb-2">
             {z > 0 
               ? `z = ${z} > 0, so Leaky ReLU(${z}) = ${z}` 
               : `z = ${z} ≤ 0, so Leaky ReLU(${z}) = α × ${z} = ${ALPHA} × ${z} = ?`}

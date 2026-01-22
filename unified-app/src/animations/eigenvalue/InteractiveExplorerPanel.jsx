@@ -240,7 +240,7 @@ export default function InteractiveExplorerPanel() {
             </div>
 
             <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200 w-full">
-                <p className="text-xs text-green-800 text-center">
+                <p className="text-xs text-center">
                     <strong>💡 Try this:</strong> Drag the blue vector (v). When it aligns with the faint lines
                     (eigenvector directions), both v and Av point the same way—only the length changes!
                 </p>

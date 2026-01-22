@@ -25,8 +25,8 @@ export default function SimilarityPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">Similarity Lab</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">Similarity Lab</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     How do we know if "Cat" is close to "Dog"?
                     <br />
                     We measure the <strong>Cosine of the Angle</strong> between their vectors.
@@ -69,7 +69,7 @@ export default function SimilarityPanel() {
                 {/* Controls & Stats */}
                 <div className="flex-1 w-full max-w-md bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl">
                     <div className="mb-8">
-                        <label className="flex justify-between text-sm font-bold text-slate-400 mb-4">
+                        <label className="flex justify-between text-sm font-bold text-slate-800 dark:text-slate-400 mb-4">
                             Angle: <span className="text-white">{angle}°</span>
                         </label>
                         <input
@@ -81,7 +81,7 @@ export default function SimilarityPanel() {
                     </div>
 
                     <div className="text-center">
-                        <h3 className="text-sm uppercase tracking-widest text-slate-500 mb-2">Cosine Similarity</h3>
+                        <h3 className="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-500 mb-2">Cosine Similarity</h3>
                         <div className={`text-5xl font-mono font-bold mb-4 ${cosineSim > 0.5 ? 'text-green-400' : cosineSim < -0.5 ? 'text-red-400' : 'text-slate-200'}`}>
                             {cosineSim.toFixed(3)}
                         </div>
@@ -90,7 +90,7 @@ export default function SimilarityPanel() {
                         </div>
                     </div>
 
-                    <div className="mt-8 pt-8 border-t border-slate-700 text-sm text-slate-400 space-y-2">
+                    <div className="mt-8 pt-8 border-t border-slate-700 text-sm text-slate-800 dark:text-slate-400 space-y-2">
                         <p><strong>1.0</strong> = Same Direction (0°)</p>
                         <p><strong>0.0</strong> = Unrelated (90°)</p>
                         <p><strong>-1.0</strong> = Opposite Direction (180°)</p>

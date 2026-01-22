@@ -54,7 +54,7 @@ export default function ProblemPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-violet-400 mb-4">The Problem</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Deep networks suffer from <strong>Internal Covariate Shift</strong>.
                     <br />
                     Without normalization, activations drift and gradients become unstable.
@@ -67,7 +67,7 @@ export default function ProblemPanel() {
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h3 className="font-bold text-white text-lg">Normalization</h3>
-                            <p className="text-sm text-slate-400">Toggle to see the difference</p>
+                            <p className="text-sm text-slate-800 dark:text-slate-400">Toggle to see the difference</p>
                         </div>
                         <button
                             onClick={() => setUseNormalization(!useNormalization)}
@@ -171,11 +171,11 @@ export default function ProblemPanel() {
                 <div className="grid grid-cols-5 gap-2 mt-6">
                     {layers.map((layer, idx) => (
                         <div key={idx} className="bg-slate-900 p-3 rounded-lg border border-slate-600 text-center">
-                            <div className="text-xs text-slate-400 mb-1">Layer {idx + 1}</div>
+                            <div className="text-xs text-slate-800 dark:text-slate-400 mb-1">Layer {idx + 1}</div>
                             <div className="text-sm font-mono">
                                 <span className="text-white">μ: {layer.mean}</span>
                                 <br />
-                                <span className="text-slate-300">σ: {layer.std}</span>
+                                <span className="text-slate-700 dark:text-slate-300">σ: {layer.std}</span>
                             </div>
                         </div>
                     ))}

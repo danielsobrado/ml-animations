@@ -507,9 +507,9 @@ def cluster_words(model, words, n_clusters=5):
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-cyan-400">Python</span> Code Examples
+          <span className="text-cyan-600 dark:text-cyan-400">Python</span> Code Examples
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Implement and use Word2Vec with popular libraries
         </p>
       </div>
@@ -523,7 +523,7 @@ def cluster_words(model, words, n_clusters=5):
             className={`px-4 py-2 rounded-lg transition-all ${
               activeTab === key
                 ? 'bg-cyan-600 text-white'
-                : 'bg-white/10 text-gray-400 hover:text-white'
+                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:text-white'
             }`}
           >
             {lib.title}
@@ -532,7 +532,7 @@ def cluster_words(model, words, n_clusters=5):
       </div>
 
       {/* Library Description */}
-      <div className="text-center text-gray-400 text-sm">
+      <div className="text-center text-gray-800 dark:text-sm">
         {codeExamples[activeTab].description}
       </div>
 
@@ -542,12 +542,12 @@ def cluster_words(model, words, n_clusters=5):
           <div key={index} className="bg-black/40 rounded-xl border border-white/10 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Code size={16} className="text-cyan-400" />
+                <Code size={16} className="text-cyan-600 dark:text-cyan-400" />
                 <span className="font-medium text-white">{example.title}</span>
               </div>
               <button
                 onClick={() => copyToClipboard(example.code, index)}
-                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-400 hover:text-white transition-colors"
+                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-800 dark:text-gray-400 hover:text-white transition-colors"
               >
                 {copiedIndex === index ? (
                   <>
@@ -571,23 +571,23 @@ def cluster_words(model, words, n_clusters=5):
 
       {/* Quick Reference */}
       <div className="bg-gradient-to-r from-cyan-900/20 to-blue-900/20 rounded-xl p-6 border border-cyan-500/30">
-        <h4 className="font-bold text-cyan-400 mb-4">📦 Quick Install Commands</h4>
+        <h4 className="font-bold text-cyan-600 dark:text-cyan-400 mb-4">📦 Quick Install Commands</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">Gensim (recommended)</p>
-            <code className="text-green-300 text-sm">pip install gensim</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Gensim (recommended)</p>
+            <code className="text-sm">pip install gensim</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">TensorFlow</p>
-            <code className="text-green-300 text-sm">pip install tensorflow</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">TensorFlow</p>
+            <code className="text-sm">pip install tensorflow</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">PyTorch</p>
-            <code className="text-green-300 text-sm">pip install torch</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">PyTorch</p>
+            <code className="text-sm">pip install torch</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-400 mb-2">Visualization</p>
-            <code className="text-green-300 text-sm">pip install matplotlib scikit-learn</code>
+            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Visualization</p>
+            <code className="text-sm">pip install matplotlib scikit-learn</code>
           </div>
         </div>
       </div>

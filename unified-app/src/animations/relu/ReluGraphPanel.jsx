@@ -185,7 +185,7 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
         <p className="text-gray-700 font-medium">
           ReLU(x) = max(0, x)
         </p>
-        <p className="text-gray-500 text-sm mt-1">
+        <p className="text-gray-700 dark:text-sm mt-1">
           {isActive && zValue !== null ? (
             <>
               Input z = <span className="font-bold text-blue-600">{zValue}</span> → 

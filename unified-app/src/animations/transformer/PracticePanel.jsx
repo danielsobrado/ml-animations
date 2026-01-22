@@ -180,7 +180,7 @@ export default function PracticePanel() {
                         className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                             mode === 'quiz'
                                 ? 'bg-rose-500 text-white'
-                                : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
+                                : 'bg-slate-700 text-slate-800 dark:text-slate-400 hover:bg-slate-600'
                         }`}
                     >
                         <Trophy size={20} />
@@ -191,7 +191,7 @@ export default function PracticePanel() {
                         className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
                             mode === 'calculator'
                                 ? 'bg-indigo-500 text-white'
-                                : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
+                                : 'bg-slate-700 text-slate-800 dark:text-slate-400 hover:bg-slate-600'
                         }`}
                     >
                         <Calculator size={20} />
@@ -219,14 +219,14 @@ export default function PracticePanel() {
 
                         {/* Score */}
                         <div className="text-center mb-6">
-                            <span className="text-slate-400">Score: </span>
+                            <span className="text-slate-800 dark:text-slate-400">Score: </span>
                             <span className="text-white font-bold">{score}</span>
-                            <span className="text-slate-400"> / {answered.length}</span>
+                            <span className="text-slate-800 dark:text-slate-400"> / {answered.length}</span>
                         </div>
 
                         {/* Question Card */}
                         <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 mb-6">
-                            <div className="text-slate-400 text-sm mb-2">
+                            <div className="text-slate-800 dark:text-sm mb-2">
                                 Question {currentQuestion + 1} of {questions.length}
                             </div>
                             <h3 className="text-white text-xl font-bold mb-6">
@@ -245,10 +245,10 @@ export default function PracticePanel() {
                                                     ? 'bg-green-500/20 border-2 border-green-500 text-green-300'
                                                     : selectedAnswer === i
                                                         ? 'bg-red-500/20 border-2 border-red-500 text-red-300'
-                                                        : 'bg-slate-700/50 text-slate-400'
+                                                        : 'bg-slate-700/50 text-slate-800 dark:text-slate-400'
                                                 : selectedAnswer === i
                                                     ? 'bg-blue-500/20 border-2 border-blue-500 text-white'
-                                                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
+                                                    : 'bg-slate-700/50 text-slate-700 dark:text-slate-300 hover:bg-slate-700'
                                         }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -268,8 +268,8 @@ export default function PracticePanel() {
                             {showResult && (
                                 <div className="mt-6 p-4 bg-blue-500/10 rounded-xl border border-blue-500/30">
                                     <div className="flex items-start gap-2">
-                                        <Lightbulb className="text-blue-400 mt-1" size={18} />
-                                        <p className="text-slate-300 text-sm">
+                                        <Lightbulb className="text-blue-600 dark:text-blue-400 mt-1" size={18} />
+                                        <p className="text-slate-700 dark:text-sm">
                                             {questions[currentQuestion].explanation}
                                         </p>
                                     </div>
@@ -308,13 +308,13 @@ export default function PracticePanel() {
                         {/* Parameter Calculator */}
                         <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 mb-6">
                             <h3 className="text-white font-bold mb-6 flex items-center gap-2">
-                                <Calculator size={20} className="text-indigo-400" />
+                                <Calculator size={20} className="text-indigo-600 dark:text-indigo-400" />
                                 Transformer Parameter Calculator
                             </h3>
 
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                                 <div>
-                                    <label className="text-slate-400 text-sm">d_model</label>
+                                    <label className="text-slate-800 dark:text-sm">d_model</label>
                                     <input
                                         type="number"
                                         value={dModel}
@@ -323,7 +323,7 @@ export default function PracticePanel() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-slate-400 text-sm">Num Heads</label>
+                                    <label className="text-slate-800 dark:text-sm">Num Heads</label>
                                     <input
                                         type="number"
                                         value={numHeads}
@@ -332,7 +332,7 @@ export default function PracticePanel() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-slate-400 text-sm">Num Layers</label>
+                                    <label className="text-slate-800 dark:text-sm">Num Layers</label>
                                     <input
                                         type="number"
                                         value={numLayers}
@@ -341,7 +341,7 @@ export default function PracticePanel() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-slate-400 text-sm">d_ff</label>
+                                    <label className="text-slate-800 dark:text-sm">d_ff</label>
                                     <input
                                         type="number"
                                         value={dFF}
@@ -350,7 +350,7 @@ export default function PracticePanel() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-slate-400 text-sm">Vocab Size</label>
+                                    <label className="text-slate-800 dark:text-sm">Vocab Size</label>
                                     <input
                                         type="number"
                                         value={vocabSize}
@@ -359,7 +359,7 @@ export default function PracticePanel() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-slate-400 text-sm">Max Seq Len</label>
+                                    <label className="text-slate-800 dark:text-sm">Max Seq Len</label>
                                     <input
                                         type="number"
                                         value={seqLen}
@@ -371,15 +371,15 @@ export default function PracticePanel() {
 
                             {/* Derived Values */}
                             <div className="bg-slate-700/50 p-4 rounded-lg mb-6">
-                                <h4 className="text-slate-400 text-sm mb-2">Derived Values</h4>
+                                <h4 className="text-slate-800 dark:text-sm mb-2">Derived Values</h4>
                                 <div className="flex gap-6">
                                     <div>
-                                        <span className="text-slate-400">d_k = d_v = </span>
-                                        <span className="text-indigo-400 font-mono">{dK}</span>
+                                        <span className="text-slate-800 dark:text-slate-400">d_k = d_v = </span>
+                                        <span className="text-indigo-600 dark:text-indigo-400 font-mono">{dK}</span>
                                     </div>
                                     <div>
-                                        <span className="text-slate-400">d_model / h = </span>
-                                        <span className="text-indigo-400 font-mono">{dModel} / {numHeads}</span>
+                                        <span className="text-slate-800 dark:text-slate-400">d_model / h = </span>
+                                        <span className="text-indigo-600 dark:text-indigo-400 font-mono">{dModel} / {numHeads}</span>
                                     </div>
                                 </div>
                             </div>
@@ -387,16 +387,16 @@ export default function PracticePanel() {
                             {/* Parameter Breakdown */}
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center p-3 bg-purple-500/10 rounded-lg">
-                                    <span className="text-slate-300">Attention Parameters (per layer × N)</span>
-                                    <span className="text-purple-400 font-mono">{formatNumber(attentionParams)}</span>
+                                    <span className="text-slate-700 dark:text-slate-300">Attention Parameters (per layer × N)</span>
+                                    <span className="text-purple-600 dark:text-purple-400 font-mono">{formatNumber(attentionParams)}</span>
                                 </div>
                                 <div className="flex justify-between items-center p-3 bg-orange-500/10 rounded-lg">
-                                    <span className="text-slate-300">FFN Parameters (per layer × N)</span>
-                                    <span className="text-orange-400 font-mono">{formatNumber(ffnParams)}</span>
+                                    <span className="text-slate-700 dark:text-slate-300">FFN Parameters (per layer × N)</span>
+                                    <span className="text-orange-600 dark:text-orange-400 font-mono">{formatNumber(ffnParams)}</span>
                                 </div>
                                 <div className="flex justify-between items-center p-3 bg-blue-500/10 rounded-lg">
-                                    <span className="text-slate-300">Embedding Parameters</span>
-                                    <span className="text-blue-400 font-mono">{formatNumber(embeddingParams)}</span>
+                                    <span className="text-slate-700 dark:text-slate-300">Embedding Parameters</span>
+                                    <span className="text-blue-600 dark:text-blue-400 font-mono">{formatNumber(embeddingParams)}</span>
                                 </div>
                                 <div className="flex justify-between items-center p-4 bg-green-500/20 rounded-lg border border-green-500/50">
                                     <span className="text-white font-bold">Total Parameters (approx)</span>
@@ -440,33 +440,33 @@ export default function PracticePanel() {
 
                 {/* Key Takeaways */}
                 <div className="mt-8 bg-amber-500/10 rounded-2xl p-6 border border-amber-500/30">
-                    <h3 className="text-amber-400 font-bold mb-4 flex items-center gap-2">
+                    <h3 className="text-amber-600 dark:text-amber-400 font-bold mb-4 flex items-center gap-2">
                         🎓 Key Takeaways
                     </h3>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="flex items-start gap-2">
                             <span className="text-green-400">✓</span>
-                            <span className="text-slate-300">Encoder: bidirectional, understanding</span>
+                            <span className="text-slate-700 dark:text-slate-300">Encoder: bidirectional, understanding</span>
                         </div>
                         <div className="flex items-start gap-2">
                             <span className="text-green-400">✓</span>
-                            <span className="text-slate-300">Decoder: causal, generation</span>
+                            <span className="text-slate-700 dark:text-slate-300">Decoder: causal, generation</span>
                         </div>
                         <div className="flex items-start gap-2">
                             <span className="text-green-400">✓</span>
-                            <span className="text-slate-300">Multi-head = multiple perspectives</span>
+                            <span className="text-slate-700 dark:text-slate-300">Multi-head = multiple perspectives</span>
                         </div>
                         <div className="flex items-start gap-2">
                             <span className="text-green-400">✓</span>
-                            <span className="text-slate-300">Residuals enable deep networks</span>
+                            <span className="text-slate-700 dark:text-slate-300">Residuals enable deep networks</span>
                         </div>
                         <div className="flex items-start gap-2">
                             <span className="text-green-400">✓</span>
-                            <span className="text-slate-300">O(n²) attention complexity</span>
+                            <span className="text-slate-700 dark:text-slate-300">O(n²) attention complexity</span>
                         </div>
                         <div className="flex items-start gap-2">
                             <span className="text-green-400">✓</span>
-                            <span className="text-slate-300">Foundation of all modern LLMs!</span>
+                            <span className="text-slate-700 dark:text-slate-300">Foundation of all modern LLMs!</span>
                         </div>
                     </div>
                 </div>

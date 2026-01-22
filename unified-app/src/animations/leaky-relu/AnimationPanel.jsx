@@ -296,7 +296,7 @@ export default function AnimationPanel({ onStepChange }) {
         <p className="text-sm text-gray-700">
           <strong>Leaky ReLU Formula:</strong> f(x) = x if x &gt; 0, else α × x
         </p>
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-gray-800 dark:text-gray-600 mt-1">
           Where α is a small constant (typically 0.01). Unlike ReLU, Leaky ReLU allows a small gradient when the input is negative.
         </p>
       </div>

@@ -40,13 +40,13 @@ export default function VariancePanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-orange-400 mb-4">Variance</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <h2 className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-4">Variance</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     Variance measures the <strong>"spread"</strong> or uncertainty around the mean.
                 </p>
                 <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm">
                     <p className="text-orange-300">Var(X) = E[(X - μ)²]</p>
-                    <p className="text-slate-400 mt-2 text-xs">σ = √Var(X) (standard deviation)</p>
+                    <p className="text-slate-800 dark:text-slate-400 mt-2 text-xs">σ = √Var(X) (standard deviation)</p>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@ export default function VariancePanel() {
                     onClick={() => setDistType('narrow')}
                     className={`px-8 py-4 rounded-xl font-bold transition-all ${distType === 'narrow'
                             ? 'bg-green-600 text-white shadow-lg scale-105'
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                         }`}
                 >
                     Low Variance (Narrow)
@@ -65,7 +65,7 @@ export default function VariancePanel() {
                     onClick={() => setDistType('wide')}
                     className={`px-8 py-4 rounded-xl font-bold transition-all ${distType === 'wide'
                             ? 'bg-red-600 text-white shadow-lg scale-105'
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                         }`}
                 >
                     High Variance (Wide)
@@ -101,7 +101,7 @@ export default function VariancePanel() {
                 <div className="mt-6 space-y-2">
                     {dataWithDev.map((d, i) => (
                         <div key={i} className="flex items-center gap-3">
-                            <div className="w-16 text-sm text-slate-400">x = {d.x}</div>
+                            <div className="w-16 text-sm text-slate-800 dark:text-slate-400">x = {d.x}</div>
                             <div className="flex-1 bg-slate-900 rounded-full h-6 relative overflow-hidden">
                                 <div
                                     className={`h-full ${distType === 'narrow' ? 'bg-green-500' : 'bg-red-500'} transition-all`}
@@ -119,23 +119,23 @@ export default function VariancePanel() {
             {/* Stats Comparison */}
             <div className="grid md:grid-cols-3 gap-6 w-full max-w-5xl">
                 <div className="bg-slate-800 p-6 rounded-xl border border-amber-500/50 text-center">
-                    <div className="text-sm text-slate-400 mb-2">Mean (μ)</div>
-                    <div className="text-4xl font-mono font-bold text-amber-400">{stats.mean.toFixed(2)}</div>
-                    <div className="text-xs text-slate-500 mt-2">Same for both!</div>
+                    <div className="text-sm text-slate-800 dark:text-slate-400 mb-2">Mean (μ)</div>
+                    <div className="text-4xl font-mono font-bold text-amber-600 dark:text-amber-400">{stats.mean.toFixed(2)}</div>
+                    <div className="text-xs text-slate-700 dark:text-slate-500 mt-2">Same for both!</div>
                 </div>
 
                 <div className="bg-slate-800 p-6 rounded-xl border border-orange-500/50 text-center">
-                    <div className="text-sm text-slate-400 mb-2">Variance (σ²)</div>
-                    <div className="text-4xl font-mono font-bold text-orange-400">{stats.variance.toFixed(2)}</div>
-                    <div className="text-xs text-slate-500 mt-2">
+                    <div className="text-sm text-slate-800 dark:text-slate-400 mb-2">Variance (σ²)</div>
+                    <div className="text-4xl font-mono font-bold text-orange-600 dark:text-orange-400">{stats.variance.toFixed(2)}</div>
+                    <div className="text-xs text-slate-700 dark:text-slate-500 mt-2">
                         {distType === 'narrow' ? 'Low (predictable)' : 'High (uncertain)'}
                     </div>
                 </div>
 
                 <div className="bg-slate-800 p-6 rounded-xl border border-red-500/50 text-center">
-                    <div className="text-sm text-slate-400 mb-2">Std Dev (σ)</div>
+                    <div className="text-sm text-slate-800 dark:text-slate-400 mb-2">Std Dev (σ)</div>
                     <div className="text-4xl font-mono font-bold text-red-400">{stats.stdDev.toFixed(2)}</div>
-                    <div className="text-xs text-slate-500 mt-2">√Variance</div>
+                    <div className="text-xs text-slate-700 dark:text-slate-500 mt-2">√Variance</div>
                 </div>
             </div>
         </div>

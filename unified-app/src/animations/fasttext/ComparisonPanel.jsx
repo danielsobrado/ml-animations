@@ -71,7 +71,7 @@ function ComparisonPanel() {
   ];
 
   const getIcon = (model, feature) => {
-    if (feature.winner === 'tie') return <Minus className="w-4 h-4 text-gray-400" />;
+    if (feature.winner === 'tie') return <Minus className="w-4 h-4 text-gray-800 dark:text-gray-400" />;
     if (feature.winner === model) return <Check className="w-4 h-4 text-green-400" />;
     return null;
   };
@@ -94,7 +94,7 @@ function ComparisonPanel() {
               {models.map((model) => (
                 <th key={model.name} className="text-center p-3">
                   <div className={`text-${model.color}-400 font-semibold`}>{model.name}</div>
-                  <div className="text-xs text-gray-400">{model.year}</div>
+                  <div className="text-xs text-gray-800 dark:text-gray-400">{model.year}</div>
                 </th>
               ))}
             </tr>
@@ -191,7 +191,7 @@ function ComparisonPanel() {
         className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl p-6"
       >
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <GitCompare className="w-5 h-5 text-purple-400" />
+          <GitCompare className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           When to Choose FastText
         </h3>
         <ul className="space-y-2 text-purple-200/80">

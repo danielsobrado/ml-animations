@@ -66,7 +66,7 @@ export default function CollisionPanel() {
             {/* Bit Array */}
             <div className="flex gap-2 mb-8">
                 {bits.map((bit, i) => (
-                    <div key={i} className={`w-12 h-12 rounded border-2 flex items-center justify-center font-bold text-xl transition-colors ${bit === 1 ? 'bg-indigo-600 text-white border-indigo-700' : 'bg-slate-100 text-slate-300 border-slate-200'}`}>
+                    <div key={i} className={`w-12 h-12 rounded border-2 flex items-center justify-center font-bold text-xl transition-colors ${bit === 1 ? 'bg-indigo-600 text-white border-indigo-700' : 'bg-slate-100 text-slate-700 dark:text-slate-300 border-slate-200'}`}>
                         {bit}
                     </div>
                 ))}
@@ -90,7 +90,7 @@ export default function CollisionPanel() {
                 </div>
             )}
 
-            <div className="mt-8 text-sm text-slate-500">
+            <div className="mt-8 text-sm text-slate-700 dark:text-slate-500">
                 <p>Added Words: {addedWords.map(w => w.word).join(', ') || '(None)'}</p>
             </div>
         </div>

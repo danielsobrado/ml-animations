@@ -89,7 +89,7 @@ export default function ResidualsPanel() {
                 {/* Controls */}
                 <div className="w-full md:w-80 flex flex-col gap-6">
                     <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <h3 className="font-bold text-slate-500 uppercase text-xs mb-4">Model Parameters</h3>
+                        <h3 className="font-bold text-slate-700 dark:text-slate-500 uppercase text-xs mb-4">Model Parameters</h3>
 
                         <div className="mb-6">
                             <label className="flex justify-between text-sm font-bold text-slate-700 mb-2">
@@ -119,7 +119,7 @@ export default function ResidualsPanel() {
                     <div className={`p-6 rounded-xl border-2 transition-colors ${mse < 0.5 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
                         <h3 className="font-bold uppercase text-xs mb-2 opacity-70">Mean Squared Error</h3>
                         <p className="text-4xl font-mono font-bold text-slate-800">{mse.toFixed(3)}</p>
-                        <p className="text-xs mt-2 text-slate-500">Lower is better!</p>
+                        <p className="text-xs mt-2 text-slate-700 dark:text-slate-500">Lower is better!</p>
                     </div>
 
                     <button

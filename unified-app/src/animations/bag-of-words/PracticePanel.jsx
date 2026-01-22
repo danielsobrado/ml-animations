@@ -156,9 +156,9 @@ export default function PracticePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-cyan-400">Practice</span> Quiz
+          <span className="text-cyan-600 dark:text-cyan-400">Practice</span> Quiz
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Test your understanding of Bag of Words and TF-IDF
         </p>
       </div>
@@ -166,8 +166,8 @@ export default function PracticePanel() {
       {/* Progress */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-400">Progress</span>
-          <span className="text-sm text-cyan-400">{answered.length} / {questions.length}</span>
+          <span className="text-sm text-gray-800 dark:text-gray-400">Progress</span>
+          <span className="text-sm text-cyan-600 dark:text-cyan-400">{answered.length} / {questions.length}</span>
         </div>
         <div className="flex gap-1">
           {questions.map((_, i) => (
@@ -186,7 +186,7 @@ export default function PracticePanel() {
           ))}
         </div>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-sm text-gray-400">Score</span>
+          <span className="text-sm text-gray-800 dark:text-gray-400">Score</span>
           <span className="text-sm text-green-400">{score} correct</span>
         </div>
       </div>
@@ -196,10 +196,10 @@ export default function PracticePanel() {
         <div className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 rounded-2xl p-8 border border-cyan-500/30 text-center">
           <Trophy size={64} className="mx-auto text-yellow-400 mb-4" />
           <h3 className="text-2xl font-bold text-white mb-2">Quiz Complete!</h3>
-          <p className="text-4xl font-bold text-cyan-400 mb-4">
+          <p className="text-4xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">
             {score} / {questions.length}
           </p>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-800 dark:text-gray-400 mb-6">
             {score === questions.length 
               ? 'Perfect score! You\'ve mastered BoW and TF-IDF!' 
               : score >= questions.length * 0.7
@@ -245,7 +245,7 @@ export default function PracticePanel() {
                         ? 'bg-green-900/30 border-green-500 text-green-400'
                         : i === selectedAnswer
                         ? 'bg-red-900/30 border-red-500 text-red-400'
-                        : 'bg-white/5 border-white/10 text-gray-500'
+                        : 'bg-white/5 border-white/10 text-gray-700 dark:text-gray-500'
                       : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-white'
                   }`}
                 >
@@ -297,7 +297,7 @@ export default function PracticePanel() {
                       ? 'Correct!'
                       : 'Not quite right'}
                   </p>
-                  <p className="text-gray-300 mt-1 text-sm">
+                  <p className="text-gray-700 dark:text-gray-300 mt-1 text-sm">
                     {questions[currentQuestion].explanation}
                   </p>
                 </div>
@@ -322,26 +322,26 @@ export default function PracticePanel() {
 
       {/* Quick Reference */}
       <div className="bg-gradient-to-r from-cyan-900/20 to-blue-900/20 rounded-xl p-6 border border-cyan-500/30">
-        <h4 className="flex items-center gap-2 font-bold text-cyan-400 mb-4">
+        <h4 className="flex items-center gap-2 font-bold text-cyan-600 dark:text-cyan-400 mb-4">
           <HelpCircle size={18} />
           Quick Reference
         </h4>
         <div className="grid md:grid-cols-2 gap-4 text-sm">
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-green-400 font-medium mb-1">Term Frequency (TF)</p>
-            <p className="text-gray-400">count(word, doc) / |doc|</p>
+            <p className="text-gray-800 dark:text-gray-400">count(word, doc) / |doc|</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-yellow-400 font-medium mb-1">Inverse Document Frequency (IDF)</p>
-            <p className="text-gray-400">log(N / DF(word))</p>
+            <p className="text-gray-800 dark:text-gray-400">log(N / DF(word))</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-purple-400 font-medium mb-1">TF-IDF</p>
-            <p className="text-gray-400">TF × IDF</p>
+            <p className="text-purple-600 dark:text-purple-400 font-medium mb-1">TF-IDF</p>
+            <p className="text-gray-800 dark:text-gray-400">TF × IDF</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-blue-400 font-medium mb-1">Key Insight</p>
-            <p className="text-gray-400">High TF-IDF = common in doc, rare in corpus</p>
+            <p className="text-blue-600 dark:text-blue-400 font-medium mb-1">Key Insight</p>
+            <p className="text-gray-800 dark:text-gray-400">High TF-IDF = common in doc, rare in corpus</p>
           </div>
         </div>
       </div>

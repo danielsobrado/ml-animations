@@ -11,7 +11,7 @@ export default function SequencePanel() {
                 {/* Time Step t-1 */}
                 <div className={`transition-all duration-500 ${timeStep >= 0 ? 'opacity-100' : 'opacity-30'}`}>
                     <div className="w-32 h-48 bg-slate-200 rounded-xl border-4 border-slate-300 flex items-center justify-center relative">
-                        <span className="font-bold text-slate-400 text-xl">LSTM<br />t-1</span>
+                        <span className="font-bold text-slate-800 dark:text-xl">LSTM<br />t-1</span>
                         {/* Arrows */}
                         <div className="absolute -right-8 top-1/2 w-8 h-1 bg-slate-400"></div>
                     </div>
@@ -29,7 +29,7 @@ export default function SequencePanel() {
                 {/* Time Step t+1 */}
                 <div className={`transition-all duration-500 ${timeStep >= 2 ? 'opacity-100' : 'opacity-30'}`}>
                     <div className="w-32 h-48 bg-slate-200 rounded-xl border-4 border-slate-300 flex items-center justify-center">
-                        <span className="font-bold text-slate-400 text-xl">LSTM<br />t+1</span>
+                        <span className="font-bold text-slate-800 dark:text-xl">LSTM<br />t+1</span>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@ export default function SequencePanel() {
                 </button>
             </div>
 
-            <div className="mt-6 text-center text-slate-600 max-w-md">
+            <div className="mt-6 text-center text-slate-800 dark:text-slate-600 max-w-md">
                 <p>
                     The <strong>Hidden State (h)</strong> and <strong>Cell State (C)</strong> are passed from one time step to the next. This is how the network remembers context!
                 </p>

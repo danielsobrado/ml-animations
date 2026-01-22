@@ -41,8 +41,8 @@ export default function TablePanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">The Q-Table</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">The Q-Table</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The agent's brain is a table of values: <strong>Q(State, Action)</strong>.
                     <br />
                     "If I am in State S and take Action A, how much total reward do I expect?"
@@ -93,7 +93,7 @@ export default function TablePanel() {
                                     </div>
 
                                     {/* Center Label */}
-                                    <span className="z-10 font-mono text-xs text-slate-400 pointer-events-none">
+                                    <span className="z-10 font-mono text-xs text-slate-800 dark:text-slate-400 pointer-events-none">
                                         {r},{c}
                                     </span>
                                     {r === 2 && c === 2 && <span className="absolute text-2xl z-20">🏆</span>}
@@ -119,7 +119,7 @@ export default function TablePanel() {
                         <div className="space-y-4">
                             {['up', 'down', 'left', 'right'].map(action => (
                                 <div key={action} className="flex items-center gap-4">
-                                    <span className="w-16 font-bold text-slate-300 uppercase">{action}</span>
+                                    <span className="w-16 font-bold text-slate-700 dark:text-slate-300 uppercase">{action}</span>
                                     <input
                                         type="number"
                                         value={qTable[hoveredCell.r][hoveredCell.c][action]}
@@ -137,12 +137,12 @@ export default function TablePanel() {
                                     </div>
                                 </div>
                             ))}
-                            <p className="text-xs text-slate-500 mt-4">
+                            <p className="text-xs text-slate-700 dark:text-slate-500 mt-4">
                                 The agent chooses the action with the <strong>highest Q-value</strong> (Greedy Policy).
                             </p>
                         </div>
                     ) : (
-                        <div className="text-slate-500 italic text-center py-12">
+                        <div className="text-slate-700 dark:text-slate-500 italic text-center py-12">
                             Hover over a grid cell to inspect and edit Q-values.
                         </div>
                     )}

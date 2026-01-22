@@ -191,7 +191,7 @@ export default function PracticePanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-yellow-400">Practice</span> Lab
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Test your BERT knowledge and explore model parameters
         </p>
       </div>
@@ -208,7 +208,7 @@ export default function PracticePanel() {
             <>
               {/* Progress */}
               <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-400 mb-1">
+                <div className="flex justify-between text-sm text-gray-800 dark:text-gray-400 mb-1">
                   <span>Question {currentQuestion + 1} of {questions.length}</span>
                   <span>Score: {score}/{currentQuestion + (showResult ? 1 : 0)}</span>
                 </div>
@@ -238,7 +238,7 @@ export default function PracticePanel() {
                           ? 'bg-green-900/30 border-green-500 text-green-300'
                           : i === selectedAnswer
                           ? 'bg-red-900/30 border-red-500 text-red-300'
-                          : 'bg-gray-800/30 border-gray-600 text-gray-500'
+                          : 'bg-gray-800/30 border-gray-600 text-gray-700 dark:text-gray-500'
                         : selectedAnswer === i
                         ? 'bg-yellow-900/30 border-yellow-500'
                         : 'bg-gray-800/30 border-gray-600 hover:border-gray-400'
@@ -260,8 +260,8 @@ export default function PracticePanel() {
               {showResult && (
                 <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30 mb-4">
                   <div className="flex items-start gap-2">
-                    <Lightbulb className="text-blue-400 shrink-0 mt-0.5" size={18} />
-                    <p className="text-sm text-gray-300">{questions[currentQuestion].explanation}</p>
+                    <Lightbulb className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" size={18} />
+                    <p className="text-sm text-gray-700 dark:text-gray-300">{questions[currentQuestion].explanation}</p>
                   </div>
                 </div>
               )}
@@ -294,7 +294,7 @@ export default function PracticePanel() {
               <p className="text-4xl font-bold text-yellow-400 mb-2">
                 {score} / {questions.length}
               </p>
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-800 dark:text-gray-400 mb-4">
                 {score === questions.length ? "Perfect score! You're a BERT expert! 🎉" :
                  score >= questions.length * 0.8 ? "Great job! You know BERT well! 👏" :
                  score >= questions.length * 0.6 ? "Good effort! Keep learning! 📚" :
@@ -314,14 +314,14 @@ export default function PracticePanel() {
         {/* Parameter Calculator */}
         <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
           <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <Calculator className="text-purple-400" />
+            <Calculator className="text-purple-600 dark:text-purple-400" />
             BERT Parameter Calculator
           </h3>
 
           {/* Config Inputs */}
           <div className="grid grid-cols-2 gap-3 mb-6">
             <div>
-              <label className="text-xs text-gray-400">Layers (L)</label>
+              <label className="text-xs text-gray-800 dark:text-gray-400">Layers (L)</label>
               <input
                 type="number"
                 value={calcConfig.layers}
@@ -330,7 +330,7 @@ export default function PracticePanel() {
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400">Hidden Size (H)</label>
+              <label className="text-xs text-gray-800 dark:text-gray-400">Hidden Size (H)</label>
               <input
                 type="number"
                 value={calcConfig.hidden}
@@ -339,7 +339,7 @@ export default function PracticePanel() {
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400">Attention Heads</label>
+              <label className="text-xs text-gray-800 dark:text-gray-400">Attention Heads</label>
               <input
                 type="number"
                 value={calcConfig.heads}
@@ -348,7 +348,7 @@ export default function PracticePanel() {
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400">FFN Intermediate</label>
+              <label className="text-xs text-gray-800 dark:text-gray-400">FFN Intermediate</label>
               <input
                 type="number"
                 value={calcConfig.intermediate}
@@ -357,7 +357,7 @@ export default function PracticePanel() {
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400">Vocab Size</label>
+              <label className="text-xs text-gray-800 dark:text-gray-400">Vocab Size</label>
               <input
                 type="number"
                 value={calcConfig.vocab}
@@ -366,7 +366,7 @@ export default function PracticePanel() {
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400">Max Positions</label>
+              <label className="text-xs text-gray-800 dark:text-gray-400">Max Positions</label>
               <input
                 type="number"
                 value={calcConfig.maxPos}
@@ -401,20 +401,20 @@ export default function PracticePanel() {
           {/* Results */}
           <div className="space-y-2">
             <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-              <span className="text-sm text-gray-400">Embedding Parameters</span>
-              <span className="font-mono text-blue-400">{formatNumber(params.embeddings)}</span>
+              <span className="text-sm text-gray-800 dark:text-gray-400">Embedding Parameters</span>
+              <span className="font-mono text-blue-600 dark:text-blue-400">{formatNumber(params.embeddings)}</span>
             </div>
             <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-              <span className="text-sm text-gray-400">Per Layer</span>
+              <span className="text-sm text-gray-800 dark:text-gray-400">Per Layer</span>
               <span className="font-mono text-green-400">{formatNumber(params.perLayer)}</span>
             </div>
             <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-              <span className="text-sm text-gray-400">All {calcConfig.layers} Layers</span>
-              <span className="font-mono text-purple-400">{formatNumber(params.allLayers)}</span>
+              <span className="text-sm text-gray-800 dark:text-gray-400">All {calcConfig.layers} Layers</span>
+              <span className="font-mono text-purple-600 dark:text-purple-400">{formatNumber(params.allLayers)}</span>
             </div>
             <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-              <span className="text-sm text-gray-400">Pooler</span>
-              <span className="font-mono text-orange-400">{formatNumber(params.pooler)}</span>
+              <span className="text-sm text-gray-800 dark:text-gray-400">Pooler</span>
+              <span className="font-mono text-orange-600 dark:text-orange-400">{formatNumber(params.pooler)}</span>
             </div>
             <div className="flex justify-between items-center p-3 bg-yellow-900/30 rounded-lg border border-yellow-500/30">
               <span className="font-bold text-yellow-400">Total Parameters</span>
@@ -423,12 +423,12 @@ export default function PracticePanel() {
           </div>
 
           {/* Breakdown Formula */}
-          <div className="mt-4 p-3 bg-black/30 rounded-lg text-xs text-gray-400">
-            <p className="font-medium text-gray-300 mb-1">Parameter Breakdown:</p>
+          <div className="mt-4 p-3 bg-black/30 rounded-lg text-xs text-gray-800 dark:text-gray-400">
+            <p className="font-medium text-gray-700 dark:text-gray-300 mb-1">Parameter Breakdown:</p>
             <p>Embeddings: V×H + P×H + 2×H + 2×H</p>
             <p>Attention: 4×H² + 4×H + 2×H</p>
             <p>FFN: H×I + I + I×H + H + 2×H</p>
-            <p className="mt-1 text-gray-500">V=vocab, H=hidden, P=positions, I=intermediate</p>
+            <p className="mt-1 text-gray-700 dark:text-gray-500">V=vocab, H=hidden, P=positions, I=intermediate</p>
           </div>
         </div>
       </div>
@@ -442,27 +442,27 @@ export default function PracticePanel() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-yellow-400 font-bold mb-1">🔄 Bidirectional</p>
-            <p className="text-sm text-gray-300">Unlike GPT, BERT sees both left and right context for each token.</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Unlike GPT, BERT sees both left and right context for each token.</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-yellow-400 font-bold mb-1">🎭 Masked LM</p>
-            <p className="text-sm text-gray-300">Pre-training by predicting randomly masked tokens (15%).</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Pre-training by predicting randomly masked tokens (15%).</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-yellow-400 font-bold mb-1">📑 NSP Task</p>
-            <p className="text-sm text-gray-300">Learns sentence relationships via Next Sentence Prediction.</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Learns sentence relationships via Next Sentence Prediction.</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-yellow-400 font-bold mb-1">🎯 [CLS] Token</p>
-            <p className="text-sm text-gray-300">Special token for sequence-level classification tasks.</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Special token for sequence-level classification tasks.</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-yellow-400 font-bold mb-1">🔧 Fine-Tuning</p>
-            <p className="text-sm text-gray-300">Add task head + train entire model on downstream tasks.</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Add task head + train entire model on downstream tasks.</p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-yellow-400 font-bold mb-1">📊 GLUE Champion</p>
-            <p className="text-sm text-gray-300">Achieved SOTA on 11 NLP tasks when released in 2018.</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Achieved SOTA on 11 NLP tasks when released in 2018.</p>
           </div>
         </div>
       </div>

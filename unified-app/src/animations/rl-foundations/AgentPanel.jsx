@@ -67,8 +67,8 @@ export default function AgentPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-emerald-400 mb-4">The Agent-Environment Loop</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">The Agent-Environment Loop</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The Agent observes the <strong>State (S<sub>t</sub>)</strong>, takes an <strong>Action (A<sub>t</sub>)</strong>,
                     and receives a <strong>Reward (R<sub>t+1</sub>)</strong> and <strong>Next State (S<sub>t+1</sub>)</strong>.
                 </p>
@@ -90,7 +90,7 @@ export default function AgentPanel() {
                                         {cell === 2 && '🏆'}
 
                                         {/* Coordinates */}
-                                        <span className="absolute top-1 left-1 text-[10px] text-slate-500 font-mono">
+                                        <span className="absolute top-1 left-1 text-[10px] text-slate-700 dark:text-slate-500 font-mono">
                                             {r},{c}
                                         </span>
 
@@ -130,7 +130,7 @@ export default function AgentPanel() {
                         <button onClick={() => move(1, 0, 'DOWN')} className="p-3 bg-slate-700 rounded hover:bg-slate-600 text-white"><ArrowDown /></button>
                         <button onClick={() => move(0, 1, 'RIGHT')} className="p-3 bg-slate-700 rounded hover:bg-slate-600 text-white"><ArrowRight /></button>
                     </div>
-                    <p className="text-xs text-slate-500 mt-2">Use Arrow Keys or Buttons</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-500 mt-2">Use Arrow Keys or Buttons</p>
                 </div>
 
                 {/* Interaction Log */}
@@ -138,7 +138,7 @@ export default function AgentPanel() {
                     <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 h-[400px] flex flex-col">
                         <h3 className="font-bold text-white mb-4 border-b border-slate-700 pb-2">Interaction Log</h3>
                         <div className="flex-1 overflow-y-auto space-y-3 font-mono text-sm">
-                            {log.length === 0 && <div className="text-slate-500 italic">Waiting for action...</div>}
+                            {log.length === 0 && <div className="text-slate-700 dark:text-slate-500 italic">Waiting for action...</div>}
                             {log.map((entry, i) => (
                                 <div key={i} className="bg-slate-900 p-3 rounded border-l-4 border-emerald-500">
                                     {entry}
@@ -148,8 +148,8 @@ export default function AgentPanel() {
                     </div>
 
                     <div className="mt-6 bg-emerald-900/20 border border-emerald-500/50 p-4 rounded-xl">
-                        <h4 className="font-bold text-emerald-400 mb-2">Key Concepts</h4>
-                        <ul className="list-disc list-inside text-sm text-slate-300 space-y-1">
+                        <h4 className="font-bold text-emerald-600 dark:text-emerald-400 mb-2">Key Concepts</h4>
+                        <ul className="list-disc list-inside text-sm text-slate-700 dark:text-slate-300 space-y-1">
                             <li><strong>State (S)</strong>: Where you are (e.g., 0,0).</li>
                             <li><strong>Action (A)</strong>: What you do (e.g., UP).</li>
                             <li><strong>Reward (R)</strong>: Feedback (e.g., -1 per step, +10 for goal).</li>

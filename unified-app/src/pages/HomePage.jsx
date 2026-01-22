@@ -14,7 +14,7 @@ export default function HomePage() {
             <br />
             <span className="text-slate-900 dark:text-white">Visualizations</span>
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 mb-6 max-w-2xl">
+          <p className="text-lg text-slate-800 dark:text-slate-400 mb-6 max-w-2xl">
             Explore machine learning concepts through beautiful, interactive animations. 
             From basic math fundamentals to advanced transformer architectures.
           </p>
@@ -47,7 +47,7 @@ export default function HomePage() {
         ].map((stat, i) => (
           <div key={i} className="card p-4 text-center">
             <div className="text-2xl font-bold text-gradient">{stat.value}</div>
-            <div className="text-sm text-slate-600 dark:text-slate-400">{stat.label}</div>
+            <div className="text-sm text-slate-800 dark:text-slate-400">{stat.label}</div>
           </div>
         ))}
       </div>
@@ -65,7 +65,7 @@ export default function HomePage() {
                 <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                   {category.name}
                 </h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-700 dark:text-slate-400">
                   {category.items.length} animations
                 </p>
               </div>
@@ -87,13 +87,13 @@ export default function HomePage() {
                       <h3 className="font-semibold text-slate-900 dark:text-white mb-1 truncate">
                         {item.name}
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
+                      <p className="text-sm text-slate-800 dark:text-slate-400 line-clamp-2">
                         {item.description}
                       </p>
                     </div>
                     <ArrowRight 
                       size={18} 
-                      className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all flex-shrink-0" 
+                      className="text-slate-700 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all flex-shrink-0" 
                     />
                   </div>
                 </Link>
@@ -105,7 +105,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
-        <div className="text-center text-sm text-slate-500 dark:text-slate-400">
+        <div className="text-center text-sm text-slate-700 dark:text-slate-400">
           <p className="mb-2">
             Built with React, Tailwind CSS, and ❤️
           </p>

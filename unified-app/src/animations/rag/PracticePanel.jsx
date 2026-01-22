@@ -182,7 +182,7 @@ export default function PracticePanel() {
                             <>
                                 {/* Progress */}
                                 <div className="flex justify-between items-center mb-6">
-                                    <span className="text-sm text-slate-500">
+                                    <span className="text-sm text-slate-700 dark:text-slate-500">
                                         Question {currentQuestion + 1} of {quizQuestions.length}
                                     </span>
                                     <div className="flex gap-1">
@@ -268,7 +268,7 @@ export default function PracticePanel() {
                                 <h3 className="text-2xl font-bold text-slate-800 mb-2">
                                     Quiz Complete!
                                 </h3>
-                                <p className="text-xl text-slate-600 mb-6">
+                                <p className="text-xl text-slate-800 dark:text-slate-600 mb-6">
                                     You scored <span className="font-bold text-indigo-600">{getScore()}</span> out of {quizQuestions.length}
                                 </p>
                                 <button

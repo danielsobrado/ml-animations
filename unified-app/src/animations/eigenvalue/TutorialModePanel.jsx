@@ -160,7 +160,7 @@ export default function TutorialModePanel() {
             <div className="w-full max-w-2xl">
                 {/* Progress bar */}
                 <div className="mb-4">
-                    <div className="flex justify-between text-xs text-gray-600 mb-1">
+                    <div className="flex justify-between text-xs text-gray-800 dark:text-gray-600 mb-1">
                         <span>Step {currentStep + 1} of {TUTORIAL_STEPS.length}</span>
                         <span>{Math.round(((currentStep + 1) / TUTORIAL_STEPS.length) * 100)}% Complete</span>
                     </div>

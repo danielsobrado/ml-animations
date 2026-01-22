@@ -35,8 +35,8 @@ export default function ConceptPanel() {
                     <div className="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto text-red-600">
                         <Trash2 size={24} />
                     </div>
-                    <h3 className="text-xl font-bold text-red-900 text-center mb-2">1. Forget</h3>
-                    <p className="text-red-800 text-center text-sm">
+                    <h3 className="text-xl font-bold text-center mb-2">1. Forget</h3>
+                    <p className="text-center text-sm">
                         "This package is old/irrelevant." <br />
                         <strong>The Forget Gate</strong> removes info from the cell state.
                     </p>
@@ -46,8 +46,8 @@ export default function ConceptPanel() {
                     <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto text-green-600">
                         <PlusSquare size={24} />
                     </div>
-                    <h3 className="text-xl font-bold text-green-900 text-center mb-2">2. Add</h3>
-                    <p className="text-green-800 text-center text-sm">
+                    <h3 className="text-xl font-bold text-center mb-2">2. Add</h3>
+                    <p className="text-center text-sm">
                         "Here's something new to remember." <br />
                         <strong>The Input Gate</strong> adds new info to the cell state.
                     </p>
@@ -57,8 +57,8 @@ export default function ConceptPanel() {
                     <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto text-blue-600">
                         <Camera size={24} />
                     </div>
-                    <h3 className="text-xl font-bold text-blue-900 text-center mb-2">3. Output</h3>
-                    <p className="text-blue-800 text-center text-sm">
+                    <h3 className="text-xl font-bold text-center mb-2">3. Output</h3>
+                    <p className="text-center text-sm">
                         "Report current status." <br />
                         <strong>The Output Gate</strong> reads the state without changing it.
                     </p>
@@ -88,22 +88,22 @@ export default function ConceptPanel() {
                 {/* Worker Stations */}
                 <div className="absolute top-1/2 -translate-y-1/2 left-[30%] flex flex-col items-center">
                     <div className="w-1 h-16 bg-red-400 mb-2"></div>
-                    <span className="bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded">Forget Gate</span>
+                    <span className="bg-red-100 text-xs font-bold px-2 py-1 rounded">Forget Gate</span>
                 </div>
 
                 <div className="absolute top-1/2 -translate-y-1/2 left-[50%] flex flex-col items-center">
                     <div className="w-1 h-16 bg-green-400 mb-2"></div>
-                    <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">Input Gate</span>
+                    <span className="bg-green-100 text-xs font-bold px-2 py-1 rounded">Input Gate</span>
                 </div>
 
                 <div className="absolute top-1/2 -translate-y-1/2 left-[70%] flex flex-col items-center">
                     <div className="w-1 h-16 bg-blue-400 mb-2"></div>
-                    <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Output Gate</span>
+                    <span className="bg-blue-100 text-xs font-bold px-2 py-1 rounded">Output Gate</span>
                 </div>
             </div>
 
             <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200 max-w-2xl">
-                <p className="text-yellow-900 text-center font-medium">
+                <p className="text-center font-medium">
                     <strong>Key Insight:</strong> The conveyor belt (Cell State) runs straight through the entire chain with only minor linear interactions. This allows information to flow unchanged for a long time!
                 </p>
             </div>

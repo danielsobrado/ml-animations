@@ -161,12 +161,12 @@ export default function PracticePanel() {
 
                     {/* Singular Values Display */}
                     <div className="flex items-center gap-2 flex-wrap justify-center">
-                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[0] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-500'
+                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[0] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
                             }`}>
                             σ₁ = {completedAnswers[0] ?? '?'}
                         </div>
                         <span className="text-xl">≥</span>
-                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[1] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-500'
+                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[1] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
                             }`}>
                             σ₂ = {completedAnswers[1] ?? '?'}
                         </div>
@@ -179,7 +179,7 @@ export default function PracticePanel() {
                     {/* Verification */}
                     {currentStep === 2 && (
                         <div className="text-center">
-                            <p className="text-sm text-gray-600">Is the ordering correct?</p>
+                            <p className="text-sm text-gray-800 dark:text-gray-600">Is the ordering correct?</p>
                         </div>
                     )}
 
@@ -194,7 +194,7 @@ export default function PracticePanel() {
 
             {/* SVD Formula Reference */}
             <div className="mt-2 p-2 bg-purple-100 rounded-lg w-full text-center border border-purple-300">
-                <p className="text-purple-800 text-xs font-medium">
+                <p className="text-xs font-medium">
                     Hint: For diagonal A, σᵢ are the absolute values of diagonal elements
                 </p>
             </div>
@@ -230,7 +230,7 @@ export default function PracticePanel() {
 
                     {showHint && (
                         <div className="mt-2 p-3 bg-yellow-100 rounded-lg border border-yellow-300">
-                            <p className="text-yellow-800 text-sm font-mono">{getHint()}</p>
+                            <p className="text-sm font-mono">{getHint()}</p>
                         </div>
                     )}
 
@@ -248,7 +248,7 @@ export default function PracticePanel() {
                         <p className="text-green-600 mt-2">
                             Score: {score} / {PRACTICE_STEPS.length} correct
                         </p>
-                        <p className="text-green-600 text-sm">
+                        <p className="text-sm">
                             Total attempts: {attempts}
                         </p>
                     </div>
@@ -263,7 +263,7 @@ export default function PracticePanel() {
 
             {/* Progress & Reset */}
             <div className="mt-3 flex items-center gap-4">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-800 dark:text-gray-600">
                     Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}
                 </div>
                 <button
@@ -284,7 +284,7 @@ export default function PracticePanel() {
 
             {/* Educational Info */}
             <div className="mt-3 p-3 bg-blue-50 rounded-lg w-full border border-blue-200">
-                <p className="text-xs text-blue-800 text-center">
+                <p className="text-xs text-center">
                     <strong>SVD Applications in ML:</strong> PCA, Image Compression, Recommender Systems, LSA
                 </p>
             </div>

@@ -40,15 +40,15 @@ export default function PlaygroundPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">Encoding Playground</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">Encoding Playground</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Compare different positional encoding strategies.
                 </p>
             </div>
 
             {/* Input */}
             <div className="w-full max-w-4xl mb-8">
-                <label className="block text-sm font-bold text-slate-300 mb-2">Your Sentence:</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Your Sentence:</label>
                 <input
                     type="text"
                     value={sentence}
@@ -70,7 +70,7 @@ export default function PlaygroundPanel() {
                         onClick={() => setEncodingType(type.id)}
                         className={`px-6 py-3 rounded-xl font-bold transition-all ${encodingType === type.id
                                 ? `bg-${type.color}-600 text-white shadow-lg scale-105`
-                                : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                                : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                             }`}
                     >
                         {type.label}
@@ -125,15 +125,15 @@ export default function PlaygroundPanel() {
                     <div className="flex items-center justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2">
                             <div className="w-6 h-6 rounded" style={{ backgroundColor: getColor(-1) }}></div>
-                            <span className="text-slate-400">-1.0</span>
+                            <span className="text-slate-800 dark:text-slate-400">-1.0</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="w-6 h-6 rounded" style={{ backgroundColor: getColor(0) }}></div>
-                            <span className="text-slate-400">0.0</span>
+                            <span className="text-slate-800 dark:text-slate-400">0.0</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="w-6 h-6 rounded" style={{ backgroundColor: getColor(1) }}></div>
-                            <span className="text-slate-400">+1.0</span>
+                            <span className="text-slate-800 dark:text-slate-400">+1.0</span>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@ export default function PlaygroundPanel() {
             <div className="grid md:grid-cols-3 gap-4 w-full max-w-5xl mt-8">
                 <div className="bg-cyan-900/30 border-2 border-cyan-500 p-4 rounded-lg">
                     <h4 className="font-bold text-cyan-300 mb-2">✅ Sinusoidal</h4>
-                    <p className="text-sm text-slate-300">
+                    <p className="text-sm text-slate-700 dark:text-slate-300">
                         • Fixed (no training needed)
                         <br />• Generalizes to any length
                         <br />• Unique pattern per position
@@ -151,15 +151,15 @@ export default function PlaygroundPanel() {
                 </div>
                 <div className="bg-purple-900/30 border-2 border-purple-500 p-4 rounded-lg">
                     <h4 className="font-bold text-purple-300 mb-2">⚠️ Learned</h4>
-                    <p className="text-sm text-slate-300">
+                    <p className="text-sm text-slate-700 dark:text-slate-300">
                         • Requires training
                         <br />• Limited to max length
                         <br />• Can be more flexible
                     </p>
                 </div>
                 <div className="bg-slate-700/50 border-2 border-slate-500 p-4 rounded-lg">
-                    <h4 className="font-bold text-slate-300 mb-2">❌ Integer</h4>
-                    <p className="text-sm text-slate-300">
+                    <h4 className="font-bold text-slate-700 dark:text-slate-300 mb-2">❌ Integer</h4>
+                    <p className="text-sm text-slate-700 dark:text-slate-300">
                         • Too simple
                         <br />• Doesn't capture patterns
                         <br />• Poor for learning

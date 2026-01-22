@@ -211,7 +211,7 @@ function PracticePanel() {
           className="bg-white/5 rounded-xl p-6"
         >
           <div className="flex items-start gap-3 mb-6">
-            <Brain className="w-6 h-6 text-purple-400 mt-1 flex-shrink-0" />
+            <Brain className="w-6 h-6 text-purple-600 dark:text-purple-400 mt-1 flex-shrink-0" />
             <h3 className="text-xl font-medium text-white">{question.question}</h3>
           </div>
 

@@ -40,11 +40,11 @@ export default function PlaygroundPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-indigo-400 mb-4">Attention Playground</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">Attention Playground</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Hover over a word to see what it "pays attention" to.
                     <br />
-                    <span className="text-sm text-slate-400">Simulated weights for coreference resolution.</span>
+                    <span className="text-sm text-slate-800 dark:text-slate-400">Simulated weights for coreference resolution.</span>
                 </p>
             </div>
 
@@ -72,7 +72,7 @@ export default function PlaygroundPanel() {
                                 onMouseLeave={() => setHoveredIndex(null)}
                                 className={`relative px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 ${isFocus
                                         ? 'bg-indigo-600 text-white scale-110 shadow-lg ring-2 ring-indigo-400'
-                                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                        : 'bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-700'
                                     }`}
                                 style={{
                                     // Visualize attention weight as opacity/border when hovering another word
@@ -85,7 +85,7 @@ export default function PlaygroundPanel() {
 
                                 {/* Attention Score Tooltip */}
                                 {hoveredIndex !== null && !isFocus && weight > 0.1 && (
-                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-indigo-900 text-indigo-200 text-xs px-2 py-1 rounded opacity-100 whitespace-nowrap">
+                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-indigo-900 text-xs px-2 py-1 rounded opacity-100 whitespace-nowrap">
                                         {(weight * 100).toFixed(0)}%
                                     </div>
                                 )}
@@ -118,9 +118,9 @@ export default function PlaygroundPanel() {
             {hoveredIndex !== null && (
                 <div className="mt-8 p-6 bg-slate-800 rounded-xl border border-indigo-500/50 max-w-2xl animate-fade-in">
                     <h3 className="font-bold text-white mb-2">
-                        Focusing on: <span className="text-indigo-400">"{words[hoveredIndex]}"</span>
+                        Focusing on: <span className="text-indigo-600 dark:text-indigo-400">"{words[hoveredIndex]}"</span>
                     </h3>
-                    <p className="text-slate-300 text-sm">
+                    <p className="text-slate-700 dark:text-sm">
                         {words[hoveredIndex].toLowerCase() === 'it' && sentence.includes('animal') ? (
                             <span>
                                 The model attends strongly to <strong>"animal"</strong> to resolve what "it" refers to.

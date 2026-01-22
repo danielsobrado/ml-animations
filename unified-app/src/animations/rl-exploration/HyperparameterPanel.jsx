@@ -35,8 +35,8 @@ export default function HyperparameterPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-fuchsia-400 mb-4">Hyperparameter Tuning</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-fuchsia-600 dark:text-fuchsia-400 mb-4">Hyperparameter Tuning</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The "Dark Art" of RL. Finding the right numbers to make it work.
                 </p>
             </div>
@@ -47,7 +47,7 @@ export default function HyperparameterPanel() {
                     <div>
                         <div className="flex justify-between items-end mb-2">
                             <label className="font-bold text-white">Learning Rate (α)</label>
-                            <span className="text-2xl font-mono font-bold text-fuchsia-400">{alpha}</span>
+                            <span className="text-2xl font-mono font-bold text-fuchsia-600 dark:text-fuchsia-400">{alpha}</span>
                         </div>
                         <input
                             type="range" min="0.01" max="1.0" step="0.01"
@@ -55,7 +55,7 @@ export default function HyperparameterPanel() {
                             onChange={(e) => setAlpha(parseFloat(e.target.value))}
                             className="w-full accent-fuchsia-400"
                         />
-                        <p className="text-xs text-slate-400 mt-2">
+                        <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">
                             How fast we update values. Too high = Unstable. Too low = Slow.
                         </p>
                     </div>
@@ -63,7 +63,7 @@ export default function HyperparameterPanel() {
                     <div>
                         <div className="flex justify-between items-end mb-2">
                             <label className="font-bold text-white">Discount Factor (γ)</label>
-                            <span className="text-2xl font-mono font-bold text-indigo-400">{gamma}</span>
+                            <span className="text-2xl font-mono font-bold text-indigo-600 dark:text-indigo-400">{gamma}</span>
                         </div>
                         <input
                             type="range" min="0.1" max="0.99" step="0.01"
@@ -71,7 +71,7 @@ export default function HyperparameterPanel() {
                             onChange={(e) => setGamma(parseFloat(e.target.value))}
                             className="w-full accent-indigo-400"
                         />
-                        <p className="text-xs text-slate-400 mt-2">
+                        <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">
                             How much we care about the future.
                         </p>
                     </div>
@@ -91,7 +91,7 @@ export default function HyperparameterPanel() {
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="mt-4 p-3 bg-slate-900 rounded text-sm text-slate-300">
+                    <div className="mt-4 p-3 bg-slate-900 rounded text-sm text-slate-700 dark:text-slate-300">
                         {alpha > 0.8 ? (
                             <span className="text-red-400">⚠️ Unstable! The curve is jittery because the agent overreacts to every new experience.</span>
                         ) : alpha < 0.05 ? (

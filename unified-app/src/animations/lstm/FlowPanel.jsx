@@ -147,7 +147,7 @@ export default function FlowPanel() {
 
             <div className="mt-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm min-h-[100px]">
                 <h3 className="font-bold text-lg text-indigo-900">{STEPS[step > 0 ? step - 1 : 0].title}</h3>
-                <p className="text-slate-600">{STEPS[step > 0 ? step - 1 : 0].desc}</p>
+                <p className="text-slate-800 dark:text-slate-600">{STEPS[step > 0 ? step - 1 : 0].desc}</p>
             </div>
         </div>
     );

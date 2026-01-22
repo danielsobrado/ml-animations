@@ -220,13 +220,13 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
             </span>
           </p>
         ) : (
-          <p className="text-gray-500">
+          <p className="text-gray-700 dark:text-gray-500">
             Complete steps in the animation or practice to see the point on the graph
           </p>
         )}
       </div>
       <div className="mt-2 p-3 bg-orange-50 rounded-lg border border-orange-200 max-w-md">
-        <p className="text-sm text-gray-700 text-center">
+        <p className="text-sm text-center">
           <strong>Leaky ReLU</strong> allows a small gradient (α = {ALPHA}) when z ≤ 0,
           helping to avoid the "dying ReLU" problem where neurons stop learning.
         </p>

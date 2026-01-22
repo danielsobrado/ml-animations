@@ -456,7 +456,7 @@ export default function AnimationPanel() {
 
             {/* Formula Reference */}
             <div className="mt-2 p-2 bg-blue-100 rounded-lg w-full text-center border border-blue-300">
-                <p className="text-blue-800 text-xs font-medium">
+                <p className="text-xs font-medium">
                     A = UΣV^T | U^TU = I, V^TV = I | Σ diagonal: σ₁ ≥ σ₂ ≥ ... ≥ 0
                 </p>
             </div>

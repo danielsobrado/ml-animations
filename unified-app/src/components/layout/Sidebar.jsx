@@ -95,9 +95,9 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
                         {category.name}
                       </span>
                       {expandedCategories[category.id] ? (
-                        <ChevronDown size={16} className="text-slate-400" />
+                        <ChevronDown size={16} className="text-slate-700 dark:text-slate-400" />
                       ) : (
-                        <ChevronRight size={16} className="text-slate-400" />
+                        <ChevronRight size={16} className="text-slate-700 dark:text-slate-400" />
                       )}
                     </>
                   )}
@@ -127,7 +127,7 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
           {/* Footer */}
           {!isCollapsed && (
             <div className="p-4 border-t border-slate-200 dark:border-slate-800">
-              <p className="text-xs text-slate-500 dark:text-slate-500 text-center">
+              <p className="text-xs text-slate-700 dark:text-center">
                 ML Animations v1.0
               </p>
             </div>

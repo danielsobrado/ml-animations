@@ -158,7 +158,7 @@ export default function PracticePanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="gradient-text">Practice</span> Quiz
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Test your understanding of GloVe
         </p>
       </div>
@@ -166,7 +166,7 @@ export default function PracticePanel() {
       {/* Progress */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-400">Progress</span>
+          <span className="text-sm text-gray-800 dark:text-gray-400">Progress</span>
           <span className="text-sm text-violet-400">{answered.length} / {questions.length}</span>
         </div>
         <div className="flex gap-1">
@@ -186,7 +186,7 @@ export default function PracticePanel() {
           ))}
         </div>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-sm text-gray-400">Score</span>
+          <span className="text-sm text-gray-800 dark:text-gray-400">Score</span>
           <span className="text-sm text-green-400">{score} correct</span>
         </div>
       </div>
@@ -199,7 +199,7 @@ export default function PracticePanel() {
           <p className="text-4xl font-bold text-violet-400 mb-4">
             {score} / {questions.length}
           </p>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-800 dark:text-gray-400 mb-6">
             {score === questions.length 
               ? 'Perfect score! You\'ve mastered GloVe!' 
               : score >= questions.length * 0.7
@@ -240,7 +240,7 @@ export default function PracticePanel() {
                         ? 'bg-green-900/30 border-green-500 text-green-400'
                         : i === selectedAnswer
                         ? 'bg-red-900/30 border-red-500 text-red-400'
-                        : 'bg-white/5 border-white/10 text-gray-500'
+                        : 'bg-white/5 border-white/10 text-gray-700 dark:text-gray-500'
                       : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-white'
                   }`}
                 >
@@ -292,7 +292,7 @@ export default function PracticePanel() {
                       ? 'Correct!'
                       : 'Not quite right'}
                   </p>
-                  <p className="text-gray-300 mt-1 text-sm">
+                  <p className="text-gray-700 dark:text-gray-300 mt-1 text-sm">
                     {questions[currentQuestion].explanation}
                   </p>
                 </div>
@@ -324,19 +324,19 @@ export default function PracticePanel() {
         <div className="grid md:grid-cols-2 gap-4 text-sm">
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-violet-400 font-medium mb-1">GloVe Objective</p>
-            <p className="text-gray-400 font-mono text-xs">J = Σ f(X)(w·w̃ + b - log X)²</p>
+            <p className="text-gray-800 dark:text-gray-400 font-mono text-xs">J = Σ f(X)(w·w̃ + b - log X)²</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium mb-1">Weighting Function</p>
-            <p className="text-gray-400 font-mono text-xs">f(x) = (x/x_max)^0.75 if x &lt; 100</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium mb-1">Weighting Function</p>
+            <p className="text-gray-800 dark:text-gray-400 font-mono text-xs">f(x) = (x/x_max)^0.75 if x &lt; 100</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-green-400 font-medium mb-1">Final Embedding</p>
-            <p className="text-gray-400">W + W̃ (word + context)</p>
+            <p className="text-gray-800 dark:text-gray-400">W + W̃ (word + context)</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-yellow-400 font-medium mb-1">Key Insight</p>
-            <p className="text-gray-400">P(k|i) / P(k|j) encodes meaning</p>
+            <p className="text-gray-800 dark:text-gray-400">P(k|i) / P(k|j) encodes meaning</p>
           </div>
         </div>
       </div>

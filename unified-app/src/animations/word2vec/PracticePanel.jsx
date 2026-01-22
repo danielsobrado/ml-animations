@@ -166,9 +166,9 @@ export default function PracticePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-pink-400">Practice</span> Quiz
+          <span className="text-pink-600 dark:text-pink-400">Practice</span> Quiz
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Test your understanding of Word2Vec
         </p>
       </div>
@@ -176,8 +176,8 @@ export default function PracticePanel() {
       {/* Progress */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-400">Progress</span>
-          <span className="text-sm text-pink-400">{answered.length} / {questions.length}</span>
+          <span className="text-sm text-gray-800 dark:text-gray-400">Progress</span>
+          <span className="text-sm text-pink-600 dark:text-pink-400">{answered.length} / {questions.length}</span>
         </div>
         <div className="flex gap-1">
           {questions.map((_, i) => (
@@ -196,7 +196,7 @@ export default function PracticePanel() {
           ))}
         </div>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-sm text-gray-400">Score</span>
+          <span className="text-sm text-gray-800 dark:text-gray-400">Score</span>
           <span className="text-sm text-green-400">{score} correct</span>
         </div>
       </div>
@@ -206,10 +206,10 @@ export default function PracticePanel() {
         <div className="bg-gradient-to-r from-pink-900/30 to-purple-900/30 rounded-2xl p-8 border border-pink-500/30 text-center">
           <Trophy size={64} className="mx-auto text-yellow-400 mb-4" />
           <h3 className="text-2xl font-bold text-white mb-2">Quiz Complete!</h3>
-          <p className="text-4xl font-bold text-pink-400 mb-4">
+          <p className="text-4xl font-bold text-pink-600 dark:text-pink-400 mb-4">
             {score} / {questions.length}
           </p>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-800 dark:text-gray-400 mb-6">
             {score === questions.length 
               ? 'Perfect score! You\'ve mastered Word2Vec!' 
               : score >= questions.length * 0.7
@@ -250,7 +250,7 @@ export default function PracticePanel() {
                         ? 'bg-green-900/30 border-green-500 text-green-400'
                         : i === selectedAnswer
                         ? 'bg-red-900/30 border-red-500 text-red-400'
-                        : 'bg-white/5 border-white/10 text-gray-500'
+                        : 'bg-white/5 border-white/10 text-gray-700 dark:text-gray-500'
                       : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-white'
                   }`}
                 >
@@ -302,7 +302,7 @@ export default function PracticePanel() {
                       ? 'Correct!'
                       : 'Not quite right'}
                   </p>
-                  <p className="text-gray-300 mt-1 text-sm">
+                  <p className="text-gray-700 dark:text-gray-300 mt-1 text-sm">
                     {questions[currentQuestion].explanation}
                   </p>
                 </div>
@@ -327,26 +327,26 @@ export default function PracticePanel() {
 
       {/* Quick Reference */}
       <div className="bg-gradient-to-r from-pink-900/20 to-purple-900/20 rounded-xl p-6 border border-pink-500/30">
-        <h4 className="flex items-center gap-2 font-bold text-pink-400 mb-4">
+        <h4 className="flex items-center gap-2 font-bold text-pink-600 dark:text-pink-400 mb-4">
           <HelpCircle size={18} />
           Quick Reference
         </h4>
         <div className="grid md:grid-cols-2 gap-4 text-sm">
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-green-400 font-medium mb-1">Skip-gram</p>
-            <p className="text-gray-400">Center word → Context words</p>
+            <p className="text-gray-800 dark:text-gray-400">Center word → Context words</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
             <p className="text-yellow-400 font-medium mb-1">CBOW</p>
-            <p className="text-gray-400">Context words → Center word</p>
+            <p className="text-gray-800 dark:text-gray-400">Context words → Center word</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-orange-400 font-medium mb-1">Negative Sampling</p>
-            <p className="text-gray-400">Binary classification instead of softmax</p>
+            <p className="text-orange-600 dark:text-orange-400 font-medium mb-1">Negative Sampling</p>
+            <p className="text-gray-800 dark:text-gray-400">Binary classification instead of softmax</p>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-purple-400 font-medium mb-1">Embedding Dimension</p>
-            <p className="text-gray-400">Typically 100-300</p>
+            <p className="text-purple-600 dark:text-purple-400 font-medium mb-1">Embedding Dimension</p>
+            <p className="text-gray-800 dark:text-gray-400">Typically 100-300</p>
           </div>
         </div>
       </div>

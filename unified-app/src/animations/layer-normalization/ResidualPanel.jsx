@@ -13,7 +13,7 @@ export default function ResidualPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-violet-400 mb-4">Residual Connections</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The <strong>"Add & Norm"</strong> pattern used in every Transformer layer.
                     <br />
                     Residuals allow gradients to flow directly through the network.
@@ -26,7 +26,7 @@ export default function ResidualPanel() {
                     <div className="flex items-center justify-between mb-2">
                         <div>
                             <h3 className="font-bold text-white">Residual Connection</h3>
-                            <p className="text-xs text-slate-400">Skip connection (Add)</p>
+                            <p className="text-xs text-slate-800 dark:text-slate-400">Skip connection (Add)</p>
                         </div>
                         <button
                             onClick={() => setUseResidual(!useResidual)}
@@ -46,7 +46,7 @@ export default function ResidualPanel() {
                     <div className="flex items-center justify-between mb-2">
                         <div>
                             <h3 className="font-bold text-white">Layer Normalization</h3>
-                            <p className="text-xs text-slate-400">Normalize (Norm)</p>
+                            <p className="text-xs text-slate-800 dark:text-slate-400">Normalize (Norm)</p>
                         </div>
                         <button
                             onClick={() => setUseNorm(!useNorm)}
@@ -73,14 +73,14 @@ export default function ResidualPanel() {
                         Input (x)
                     </div>
 
-                    <ArrowRight className="rotate-90 text-slate-400" size={32} />
+                    <ArrowRight className="rotate-90 text-slate-800 dark:text-slate-400" size={32} />
 
                     {/* Sublayer (e.g., Attention or FFN) */}
                     <div className="bg-purple-600 px-8 py-4 rounded-xl text-white font-bold text-lg shadow-lg">
                         Sublayer (Attention / FFN)
                     </div>
 
-                    <ArrowRight className="rotate-90 text-slate-400" size={32} />
+                    <ArrowRight className="rotate-90 text-slate-800 dark:text-slate-400" size={32} />
 
                     {/* Add (Residual) */}
                     {useResidual ? (
@@ -97,18 +97,18 @@ export default function ResidualPanel() {
                                 className="absolute -left-32 top-1/2 transform -translate-y-1/2"
                             >
                                 <div className="flex items-center gap-2">
-                                    <div className="text-green-400 text-sm font-bold">Skip</div>
+                                    <div className="text-sm font-bold">Skip</div>
                                     <ArrowRight className="text-green-400" size={24} />
                                 </div>
                             </motion.div>
                         </div>
                     ) : (
-                        <div className="bg-slate-600 px-8 py-4 rounded-xl text-slate-300 font-bold text-lg opacity-50">
+                        <div className="bg-slate-600 px-8 py-4 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-lg opacity-50">
                             (No Residual)
                         </div>
                     )}
 
-                    <ArrowRight className="rotate-90 text-slate-400" size={32} />
+                    <ArrowRight className="rotate-90 text-slate-800 dark:text-slate-400" size={32} />
 
                     {/* Norm */}
                     {useNorm ? (
@@ -116,12 +116,12 @@ export default function ResidualPanel() {
                             Layer Norm
                         </div>
                     ) : (
-                        <div className="bg-slate-600 px-8 py-4 rounded-xl text-slate-300 font-bold text-lg opacity-50">
+                        <div className="bg-slate-600 px-8 py-4 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-lg opacity-50">
                             (No Normalization)
                         </div>
                     )}
 
-                    <ArrowRight className="rotate-90 text-slate-400" size={32} />
+                    <ArrowRight className="rotate-90 text-slate-800 dark:text-slate-400" size={32} />
 
                     {/* Output */}
                     <div className="bg-cyan-600 px-8 py-4 rounded-xl text-white font-bold text-lg shadow-lg">
@@ -133,7 +133,7 @@ export default function ResidualPanel() {
                 <div className="mt-8 pt-6 border-t border-slate-700">
                     <h4 className="font-bold text-white mb-4 text-center">Gradient Flow (Backward Pass)</h4>
                     <div className="flex items-center justify-center gap-4">
-                        <div className="text-slate-400">Weak</div>
+                        <div className="text-slate-800 dark:text-slate-400">Weak</div>
                         <div className="flex-1 h-8 bg-slate-700 rounded-full overflow-hidden">
                             <motion.div
                                 className="h-full bg-gradient-to-r from-red-500 to-green-500"
@@ -142,9 +142,9 @@ export default function ResidualPanel() {
                                 transition={{ duration: 0.5 }}
                             />
                         </div>
-                        <div className="text-slate-400">Strong</div>
+                        <div className="text-slate-800 dark:text-slate-400">Strong</div>
                     </div>
-                    <p className="text-sm text-slate-400 mt-4 text-center">
+                    <p className="text-sm text-slate-800 dark:text-slate-400 mt-4 text-center">
                         {useResidual
                             ? '✅ Residual connections allow gradients to flow directly!'
                             : '⚠️ Without residuals, gradients vanish in deep networks.'}
@@ -162,7 +162,7 @@ export default function ResidualPanel() {
                     <span className="text-purple-300">Sublayer(x)</span>
                     <span className="text-violet-300">)</span>
                 </div>
-                <p className="text-xs text-slate-400 mt-3 text-center">
+                <p className="text-xs text-slate-800 dark:text-slate-400 mt-3 text-center">
                     This pattern appears twice in every Transformer layer: once for attention, once for FFN.
                 </p>
             </div>

@@ -93,7 +93,7 @@ export default function DecoderPanel() {
                     <h2 className="text-3xl font-bold text-white mb-2">
                         The Decoder: <span className="gradient-text">Generating Output</span>
                     </h2>
-                    <p className="text-slate-400">
+                    <p className="text-slate-800 dark:text-slate-400">
                         The decoder generates output one token at a time, autoregressively
                     </p>
                 </div>
@@ -127,7 +127,7 @@ export default function DecoderPanel() {
                                     ? 'bg-purple-500 text-white'
                                     : currentStep > i
                                         ? 'bg-green-500 text-white'
-                                        : 'bg-slate-700 text-slate-400'
+                                        : 'bg-slate-700 text-slate-800 dark:text-slate-400'
                             }`}
                         >
                             {i + 1}
@@ -143,9 +143,9 @@ export default function DecoderPanel() {
                         <div className="flex gap-8">
                             {/* Encoder Output (for reference) */}
                             <div className="flex flex-col items-center">
-                                <div className="text-slate-400 text-xs mb-2">From Encoder</div>
+                                <div className="text-slate-800 dark:text-xs mb-2">From Encoder</div>
                                 <div className="w-16 h-32 bg-green-500/30 rounded-lg border border-green-500/50 flex items-center justify-center">
-                                    <span className="text-green-400 text-xs writing-mode-vertical transform -rotate-90 whitespace-nowrap">K, V</span>
+                                    <span className="text-xs writing-mode-vertical transform -rotate-90 whitespace-nowrap">K, V</span>
                                 </div>
                             </div>
 
@@ -156,7 +156,7 @@ export default function DecoderPanel() {
                                     Linear + Softmax
                                 </div>
                                 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* Add & Norm 3 */}
                                 <div className="w-40 p-2 rounded-lg bg-emerald-500 text-white text-center text-xs">
@@ -165,14 +165,14 @@ export default function DecoderPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* FFN */}
                                 <div className={`w-40 p-3 rounded-lg bg-orange-500 text-white text-center transition-all ${getHighlightClass('ffn')}`}>
                                     <div className="text-sm font-medium">Feed Forward</div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* Add & Norm 2 */}
                                 <div className={`w-40 p-2 rounded-lg bg-emerald-500 text-white text-center text-xs transition-all ${getHighlightClass('residual2')}`}>
@@ -181,10 +181,10 @@ export default function DecoderPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* Cross-Attention */}
-                                <div className={`w-40 p-3 rounded-lg bg-yellow-500 text-slate-900 text-center transition-all ${getHighlightClass('cross_attention')}`}>
+                                <div className={`w-40 p-3 rounded-lg bg-yellow-500 text-center transition-all ${getHighlightClass('cross_attention')}`}>
                                     <div className="flex items-center justify-center gap-2">
                                         <Eye size={16} />
                                         <span className="text-sm font-medium">Cross-Attention</span>
@@ -192,7 +192,7 @@ export default function DecoderPanel() {
                                     <div className="text-xs mt-1">Q from dec, K,V from enc</div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* Add & Norm 1 */}
                                 <div className={`w-40 p-2 rounded-lg bg-emerald-500 text-white text-center text-xs transition-all ${getHighlightClass('residual1')}`}>
@@ -201,7 +201,7 @@ export default function DecoderPanel() {
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* Masked Self-Attention */}
                                 <div className={`w-40 p-3 rounded-lg bg-purple-500 text-white text-center transition-all ${getHighlightClass('masked_attention')}`}>
@@ -212,7 +212,7 @@ export default function DecoderPanel() {
                                     <div className="text-xs mt-1 opacity-80">Can't see future!</div>
                                 </div>
 
-                                <ArrowDown className="text-slate-500" />
+                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
 
                                 {/* Input */}
                                 <div className={`w-40 p-3 rounded-lg bg-pink-500 text-white text-center transition-all ${getHighlightClass('output_input')}`}>
@@ -228,16 +228,16 @@ export default function DecoderPanel() {
                         {/* Current Step */}
                         <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
                             <div className="bg-purple-500/20 rounded-xl p-4 mb-4">
-                                <h3 className="text-purple-400 font-bold text-lg mb-2">
+                                <h3 className="text-purple-600 dark:text-purple-400 font-bold text-lg mb-2">
                                     Step {currentStep + 1}: {steps[currentStep].title}
                                 </h3>
-                                <p className="text-slate-300">
+                                <p className="text-slate-700 dark:text-slate-300">
                                     {steps[currentStep].description}
                                 </p>
                             </div>
 
                             <div className="bg-slate-700/50 p-3 rounded-lg">
-                                <div className="text-slate-400 text-sm mb-1">Formula:</div>
+                                <div className="text-slate-800 dark:text-sm mb-1">Formula:</div>
                                 <div className="text-white font-mono text-center">
                                     {steps[currentStep].formula}
                                 </div>
@@ -248,12 +248,12 @@ export default function DecoderPanel() {
                         <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-white font-bold flex items-center gap-2">
-                                    <Lock size={18} className="text-purple-400" />
+                                    <Lock size={18} className="text-purple-600 dark:text-purple-400" />
                                     Causal (Look-Ahead) Mask
                                 </h3>
                                 <button
                                     onClick={() => setShowMasking(!showMasking)}
-                                    className="text-sm text-slate-400 hover:text-white"
+                                    className="text-sm text-slate-800 dark:text-slate-400 hover:text-white"
                                 >
                                     {showMasking ? 'Hide' : 'Show'} Details
                                 </button>
@@ -261,7 +261,7 @@ export default function DecoderPanel() {
 
                             {showMasking && (
                                 <>
-                                    <p className="text-slate-400 text-sm mb-4">
+                                    <p className="text-slate-800 dark:text-sm mb-4">
                                         Prevents positions from attending to subsequent positions. 
                                         Position i can only attend to positions 0...i.
                                     </p>
@@ -275,7 +275,7 @@ export default function DecoderPanel() {
                                             <div className="grid gap-1">
                                                 {maskMatrix.map((row, i) => (
                                                     <div key={i} className="flex items-center gap-1">
-                                                        <div className="w-8 text-xs text-slate-400 text-right pr-2">
+                                                        <div className="w-8 text-xs text-slate-800 dark:text-right pr-2">
                                                             {['I', 'am', 'a', 'cat', '.'][i]}
                                                         </div>
                                                         {row.map((val, j) => (
@@ -299,11 +299,11 @@ export default function DecoderPanel() {
                                     <div className="flex items-center justify-center gap-4 text-sm">
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded bg-green-500/50"></div>
-                                            <span className="text-slate-400">Can attend</span>
+                                            <span className="text-slate-800 dark:text-slate-400">Can attend</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded bg-red-500/30"></div>
-                                            <span className="text-slate-400">Masked (-∞)</span>
+                                            <span className="text-slate-800 dark:text-slate-400">Masked (-∞)</span>
                                         </div>
                                     </div>
                                 </>
@@ -312,25 +312,25 @@ export default function DecoderPanel() {
 
                         {/* Cross-Attention Info */}
                         <div className="bg-amber-500/10 rounded-2xl p-4 border border-amber-500/30">
-                            <h4 className="text-amber-400 font-bold mb-2 flex items-center gap-2">
+                            <h4 className="text-amber-600 dark:text-amber-400 font-bold mb-2 flex items-center gap-2">
                                 <AlertTriangle size={16} />
                                 Key Difference: Cross-Attention
                             </h4>
                             <div className="grid grid-cols-3 gap-2 mb-2">
                                 <div className="bg-purple-500/20 p-2 rounded text-center">
-                                    <div className="text-purple-400 font-bold text-sm">Q</div>
-                                    <div className="text-slate-400 text-xs">From Decoder</div>
+                                    <div className="text-purple-600 dark:text-purple-400 font-bold text-sm">Q</div>
+                                    <div className="text-slate-800 dark:text-xs">From Decoder</div>
                                 </div>
                                 <div className="bg-green-500/20 p-2 rounded text-center">
                                     <div className="text-green-400 font-bold text-sm">K</div>
-                                    <div className="text-slate-400 text-xs">From Encoder</div>
+                                    <div className="text-slate-800 dark:text-xs">From Encoder</div>
                                 </div>
                                 <div className="bg-green-500/20 p-2 rounded text-center">
                                     <div className="text-green-400 font-bold text-sm">V</div>
-                                    <div className="text-slate-400 text-xs">From Encoder</div>
+                                    <div className="text-slate-800 dark:text-xs">From Encoder</div>
                                 </div>
                             </div>
-                            <p className="text-slate-400 text-xs">
+                            <p className="text-slate-800 dark:text-xs">
                                 This is how the decoder "reads" the encoder's understanding of the input!
                             </p>
                         </div>
@@ -342,25 +342,25 @@ export default function DecoderPanel() {
                     <h3 className="text-white font-bold mb-4">🔄 Autoregressive Generation</h3>
                     
                     <div className="space-y-4">
-                        <p className="text-slate-400">
+                        <p className="text-slate-800 dark:text-slate-400">
                             During inference, the decoder generates one token at a time, feeding each output back as input:
                         </p>
 
                         <div className="flex flex-wrap items-center justify-center gap-2">
-                            <div className="bg-slate-700 px-3 py-2 rounded text-slate-300 text-sm">&lt;BOS&gt;</div>
-                            <ChevronRight className="text-slate-500" size={16} />
-                            <div className="bg-blue-500/30 px-3 py-2 rounded text-blue-300 text-sm">The</div>
-                            <ChevronRight className="text-slate-500" size={16} />
-                            <div className="bg-blue-500/30 px-3 py-2 rounded text-blue-300 text-sm">cat</div>
-                            <ChevronRight className="text-slate-500" size={16} />
-                            <div className="bg-blue-500/30 px-3 py-2 rounded text-blue-300 text-sm">sat</div>
-                            <ChevronRight className="text-slate-500" size={16} />
-                            <div className="bg-green-500/30 px-3 py-2 rounded text-green-300 text-sm border border-green-500">on</div>
-                            <ChevronRight className="text-slate-500" size={16} />
-                            <div className="bg-slate-700/50 px-3 py-2 rounded text-slate-500 text-sm">?</div>
+                            <div className="bg-slate-700 px-3 py-2 rounded text-slate-700 dark:text-sm">&lt;BOS&gt;</div>
+                            <ChevronRight className="text-slate-700 dark:text-slate-500" size={16} />
+                            <div className="bg-blue-500/30 px-3 py-2 rounded text-sm">The</div>
+                            <ChevronRight className="text-slate-700 dark:text-slate-500" size={16} />
+                            <div className="bg-blue-500/30 px-3 py-2 rounded text-sm">cat</div>
+                            <ChevronRight className="text-slate-700 dark:text-slate-500" size={16} />
+                            <div className="bg-blue-500/30 px-3 py-2 rounded text-sm">sat</div>
+                            <ChevronRight className="text-slate-700 dark:text-slate-500" size={16} />
+                            <div className="bg-green-500/30 px-3 py-2 rounded text-sm border border-green-500">on</div>
+                            <ChevronRight className="text-slate-700 dark:text-slate-500" size={16} />
+                            <div className="bg-slate-700/50 px-3 py-2 rounded text-slate-700 dark:text-sm">?</div>
                         </div>
 
-                        <p className="text-slate-500 text-sm text-center">
+                        <p className="text-slate-700 dark:text-sm text-center">
                             At each step, the model predicts the probability distribution for the next token
                         </p>
                     </div>

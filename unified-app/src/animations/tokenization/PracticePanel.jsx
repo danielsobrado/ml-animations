@@ -157,7 +157,7 @@ export default function PracticePanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Practice Lab</h2>
-                    <p className="text-slate-600">Test your understanding of tokenization</p>
+                    <p className="text-slate-800 dark:text-slate-600">Test your understanding of tokenization</p>
                 </div>
 
                 {/* Section Tabs */}
@@ -167,7 +167,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'quiz'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                         📝 Quiz
@@ -177,7 +177,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'sandbox'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                         🧪 Sandbox
@@ -188,7 +188,7 @@ export default function PracticePanel() {
                     <div className="bg-slate-50 rounded-xl p-6">
                         {/* Progress */}
                         <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-slate-600">
+                            <span className="text-sm text-slate-800 dark:text-slate-600">
                                 Question {currentQuiz + 1} of {QUIZZES.length}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
@@ -260,7 +260,7 @@ export default function PracticePanel() {
                         <div className="flex justify-between">
                             <button
                                 onClick={resetQuiz}
-                                className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-800"
+                                className="flex items-center gap-2 px-4 py-2 text-slate-800 dark:text-slate-600 hover:text-slate-800"
                             >
                                 <RefreshCw size={16} /> Reset
                             </button>
@@ -321,7 +321,7 @@ export default function PracticePanel() {
                         <div className="bg-white rounded-lg p-4 border">
                             <div className="flex justify-between items-center mb-3">
                                 <h4 className="font-bold text-slate-700">Tokens ({tokens.length})</h4>
-                                <span className="text-xs text-slate-500">
+                                <span className="text-xs text-slate-700 dark:text-slate-500">
                                     ~{(practiceText.length / 4).toFixed(0)} GPT tokens estimate
                                 </span>
                             </div>
@@ -338,7 +338,7 @@ export default function PracticePanel() {
                                             'bg-green-100 border-2 border-green-300'
                                         }`}
                                     >
-                                        <span className="text-xs text-slate-500">{i}</span>
+                                        <span className="text-xs text-slate-700 dark:text-slate-500">{i}</span>
                                         {t.token}
                                     </div>
                                 ))}

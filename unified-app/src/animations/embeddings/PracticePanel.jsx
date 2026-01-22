@@ -155,7 +155,7 @@ export default function PracticePanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Practice Lab</h2>
-                    <p className="text-slate-600">Test your understanding of embeddings</p>
+                    <p className="text-slate-800 dark:text-slate-600">Test your understanding of embeddings</p>
                 </div>
 
                 {/* Section Tabs */}
@@ -165,7 +165,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'quiz'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                         📝 Quiz
@@ -175,7 +175,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'analogy'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                         🧮 Analogy Calculator
@@ -186,7 +186,7 @@ export default function PracticePanel() {
                     <div className="bg-slate-50 rounded-xl p-6">
                         {/* Progress */}
                         <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-slate-600">
+                            <span className="text-sm text-slate-800 dark:text-slate-600">
                                 Question {currentQuiz + 1} of {QUIZZES.length}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
@@ -258,7 +258,7 @@ export default function PracticePanel() {
                         <div className="flex justify-between">
                             <button
                                 onClick={resetQuiz}
-                                className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-800"
+                                className="flex items-center gap-2 px-4 py-2 text-slate-800 dark:text-slate-600 hover:text-slate-800"
                             >
                                 <RefreshCw size={16} /> Reset
                             </button>
@@ -282,7 +282,7 @@ export default function PracticePanel() {
                 ) : (
                     <div className="bg-slate-50 rounded-xl p-6">
                         <h3 className="text-xl font-bold text-slate-800 mb-4">Word Analogy Calculator</h3>
-                        <p className="text-slate-600 mb-6">
+                        <p className="text-slate-800 dark:text-slate-600 mb-6">
                             Try the famous word analogy: A is to B as C is to ?
                         </p>
 
@@ -296,7 +296,7 @@ export default function PracticePanel() {
                                 >
                                     {words.map(w => <option key={w} value={w}>{w}</option>)}
                                 </select>
-                                <span className="text-slate-500">−</span>
+                                <span className="text-slate-700 dark:text-slate-500">−</span>
                                 <select
                                     value={analogyWord1}
                                     onChange={(e) => setAnalogyWord1(e.target.value)}
@@ -304,7 +304,7 @@ export default function PracticePanel() {
                                 >
                                     {words.map(w => <option key={w} value={w}>{w}</option>)}
                                 </select>
-                                <span className="text-slate-500">+</span>
+                                <span className="text-slate-700 dark:text-slate-500">+</span>
                                 <select
                                     value={analogyWord2}
                                     onChange={(e) => setAnalogyWord2(e.target.value)}
@@ -312,12 +312,12 @@ export default function PracticePanel() {
                                 >
                                     {words.map(w => <option key={w} value={w}>{w}</option>)}
                                 </select>
-                                <span className="text-slate-500">=</span>
+                                <span className="text-slate-700 dark:text-slate-500">=</span>
                                 <span className="px-3 py-2 border-2 border-green-300 rounded-lg bg-green-50 font-bold min-w-[80px] text-center">
                                     {analogyResult?.closestWord || '?'}
                                 </span>
                             </div>
-                            <p className="text-center text-sm text-slate-500 mt-2">
+                            <p className="text-center text-sm text-slate-700 dark:text-slate-500 mt-2">
                                 "{analogyWord1}" is to "{analogyWord2}" as "{analogyWord3}" is to "?"
                             </p>
                         </div>

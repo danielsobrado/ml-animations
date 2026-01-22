@@ -25,8 +25,8 @@ export default function ComparisonPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-pink-400 mb-4">PMF vs PDF</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-4">PMF vs PDF</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The critical difference between discrete and continuous distributions.
                 </p>
             </div>
@@ -34,10 +34,10 @@ export default function ComparisonPanel() {
             <div className="grid lg:grid-cols-2 gap-8 w-full max-w-6xl">
                 {/* Discrete (PMF) */}
                 <div className="bg-slate-800 p-6 rounded-xl border-2 border-indigo-500/50">
-                    <h3 className="font-bold text-indigo-400 mb-4 text-center text-xl">
+                    <h3 className="font-bold text-indigo-600 dark:text-indigo-400 mb-4 text-center text-xl">
                         Discrete: PMF (Probability Mass Function)
                     </h3>
-                    <p className="text-sm text-slate-300 mb-4 text-center">
+                    <p className="text-sm text-slate-700 dark:text-slate-300 mb-4 text-center">
                         Click on a bar to see its exact probability!
                     </p>
 
@@ -56,10 +56,10 @@ export default function ComparisonPanel() {
 
                     {clickedDiscrete && (
                         <div className="mt-4 p-4 bg-indigo-900/30 rounded-lg border border-indigo-700">
-                            <p className="text-indigo-300 text-center font-bold">
+                            <p className="text-center font-bold">
                                 P(X = {clickedDiscrete.k}) = {(clickedDiscrete.prob * 100).toFixed(2)}%
                             </p>
-                            <p className="text-xs text-slate-400 mt-2 text-center">
+                            <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                                 ✅ For discrete: P(X = k) is the <strong>bar height</strong>
                             </p>
                         </div>
@@ -67,7 +67,7 @@ export default function ComparisonPanel() {
 
                     <div className="mt-6 p-4 bg-slate-900 rounded-lg border border-slate-700">
                         <h4 className="font-bold text-white mb-2 text-sm">Key Properties:</h4>
-                        <ul className="text-xs text-slate-300 space-y-1">
+                        <ul className="text-xs text-slate-700 dark:text-slate-300 space-y-1">
                             <li>✓ P(X = k) is a valid probability (0 to 1)</li>
                             <li>✓ Sum of all bars = 1</li>
                             <li>✓ Can ask: "What's P(X = 3)?"</li>
@@ -77,10 +77,10 @@ export default function ComparisonPanel() {
 
                 {/* Continuous (PDF) */}
                 <div className="bg-slate-800 p-6 rounded-xl border-2 border-purple-500/50">
-                    <h3 className="font-bold text-purple-400 mb-4 text-center text-xl">
+                    <h3 className="font-bold text-purple-600 dark:text-purple-400 mb-4 text-center text-xl">
                         Continuous: PDF (Probability Density Function)
                     </h3>
-                    <p className="text-sm text-slate-300 mb-4 text-center">
+                    <p className="text-sm text-slate-700 dark:text-slate-300 mb-4 text-center">
                         Click on the curve to see why P(X = x) = 0!
                     </p>
 
@@ -105,10 +105,10 @@ export default function ComparisonPanel() {
 
                     {clickedContinuous && (
                         <div className="mt-4 p-4 bg-red-900/30 rounded-lg border border-red-700">
-                            <p className="text-red-300 text-center font-bold">
+                            <p className="text-center font-bold">
                                 P(X = {clickedContinuous.x}) = 0
                             </p>
-                            <p className="text-xs text-slate-400 mt-2 text-center">
+                            <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                                 ⚠️ For continuous: P(X = exact value) is always ZERO!
                                 <br />
                                 Must use intervals: P(a &lt; X &lt; b) = area under curve
@@ -118,7 +118,7 @@ export default function ComparisonPanel() {
 
                     <div className="mt-6 p-4 bg-slate-900 rounded-lg border border-slate-700">
                         <h4 className="font-bold text-white mb-2 text-sm">Key Properties:</h4>
-                        <ul className="text-xs text-slate-300 space-y-1">
+                        <ul className="text-xs text-slate-700 dark:text-slate-300 space-y-1">
                             <li>✓ f(x) is NOT a probability (can be &gt; 1!)</li>
                             <li>✓ Total area under curve = 1</li>
                             <li>✓ Must ask: "What's P(a &lt; X &lt; b)?" (area)</li>
@@ -133,20 +133,20 @@ export default function ComparisonPanel() {
                 <div className="grid md:grid-cols-2 gap-6">
                     <div className="text-center">
                         <div className="text-6xl mb-4">📊</div>
-                        <h4 className="font-bold text-indigo-400 mb-2">Discrete (PMF)</h4>
-                        <p className="text-sm text-slate-300">
+                        <h4 className="font-bold text-indigo-600 dark:text-indigo-400 mb-2">Discrete (PMF)</h4>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
                             "What's the probability of <strong>exactly</strong> k?"
                             <br />
-                            <span className="text-indigo-400 font-mono">P(X = k)</span> = bar height
+                            <span className="text-indigo-600 dark:text-indigo-400 font-mono">P(X = k)</span> = bar height
                         </p>
                     </div>
                     <div className="text-center">
                         <div className="text-6xl mb-4">📈</div>
-                        <h4 className="font-bold text-purple-400 mb-2">Continuous (PDF)</h4>
-                        <p className="text-sm text-slate-300">
+                        <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-2">Continuous (PDF)</h4>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
                             "What's the probability <strong>between</strong> a and b?"
                             <br />
-                            <span className="text-purple-400 font-mono">P(a &lt; X &lt; b)</span> = area under curve
+                            <span className="text-purple-600 dark:text-purple-400 font-mono">P(a &lt; X &lt; b)</span> = area under curve
                         </p>
                     </div>
                 </div>

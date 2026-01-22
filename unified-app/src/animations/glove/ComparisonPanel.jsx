@@ -99,7 +99,7 @@ export default function ComparisonPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="gradient-text">GloVe vs Word2Vec:</span> A Comparison
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Understanding the differences between two influential embedding methods
         </p>
       </div>
@@ -111,15 +111,15 @@ export default function ComparisonPanel() {
             <span className="text-3xl">🔮</span>
             <div>
               <h3 className="text-xl font-bold text-violet-400">GloVe</h3>
-              <p className="text-sm text-gray-400">Global Vectors</p>
+              <p className="text-sm text-gray-800 dark:text-gray-400">Global Vectors</p>
             </div>
           </div>
-          <p className="text-gray-300 text-sm">
+          <p className="text-gray-700 dark:text-sm">
             <strong className="text-violet-400">Count-based method</strong> that learns from the 
             global word-word co-occurrence matrix. Combines the benefits of global matrix 
             factorization and local context window methods.
           </p>
-          <div className="mt-4 text-xs text-gray-500">
+          <div className="mt-4 text-xs text-gray-700 dark:text-gray-500">
             Stanford NLP Group, 2014
           </div>
         </div>
@@ -128,16 +128,16 @@ export default function ComparisonPanel() {
           <div className="flex items-center gap-3 mb-4">
             <span className="text-3xl">🎯</span>
             <div>
-              <h3 className="text-xl font-bold text-cyan-400">Word2Vec</h3>
-              <p className="text-sm text-gray-400">Skip-gram / CBOW</p>
+              <h3 className="text-xl font-bold text-cyan-600 dark:text-cyan-400">Word2Vec</h3>
+              <p className="text-sm text-gray-800 dark:text-gray-400">Skip-gram / CBOW</p>
             </div>
           </div>
-          <p className="text-gray-300 text-sm">
-            <strong className="text-cyan-400">Prediction-based method</strong> that learns word 
+          <p className="text-gray-700 dark:text-sm">
+            <strong className="text-cyan-600 dark:text-cyan-400">Prediction-based method</strong> that learns word 
             embeddings by predicting context words (Skip-gram) or center words (CBOW) using 
             a neural network trained with SGD.
           </p>
-          <div className="mt-4 text-xs text-gray-500">
+          <div className="mt-4 text-xs text-gray-700 dark:text-gray-500">
             Google, Mikolov et al., 2013
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function ComparisonPanel() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               selectedAspect === key
                 ? 'bg-violet-600 text-white'
-                : 'bg-white/10 text-gray-400 hover:bg-white/20'
+                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
             }`}
           >
             {aspects[key].title}
@@ -173,7 +173,7 @@ export default function ComparisonPanel() {
             </h5>
             <ul className="space-y-3">
               {aspects[selectedAspect].glove.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-gray-300 text-sm">
+                <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-sm">
                   <CheckCircle size={16} className="text-violet-400 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
@@ -182,13 +182,13 @@ export default function ComparisonPanel() {
           </div>
           
           <div className="bg-cyan-900/20 rounded-lg p-4 border border-cyan-500/30">
-            <h5 className="text-cyan-400 font-bold mb-4 flex items-center gap-2">
+            <h5 className="text-cyan-600 dark:text-cyan-400 font-bold mb-4 flex items-center gap-2">
               🎯 Word2Vec
             </h5>
             <ul className="space-y-3">
               {aspects[selectedAspect].word2vec.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-gray-300 text-sm">
-                  <CheckCircle size={16} className="text-cyan-400 mt-0.5 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-sm">
+                  <CheckCircle size={16} className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
               ))}
@@ -203,44 +203,44 @@ export default function ComparisonPanel() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/20">
-              <th className="text-left py-2 px-3 text-gray-400">Aspect</th>
+              <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Aspect</th>
               <th className="py-2 px-3 text-violet-400">GloVe</th>
-              <th className="py-2 px-3 text-cyan-400">Word2Vec</th>
+              <th className="py-2 px-3 text-cyan-600 dark:text-cyan-400">Word2Vec</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/10">
             <tr>
-              <td className="py-3 px-3 text-gray-300">Approach</td>
-              <td className="py-3 px-3 text-center text-gray-400">Count-based</td>
-              <td className="py-3 px-3 text-center text-gray-400">Prediction-based</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Approach</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Count-based</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Prediction-based</td>
             </tr>
             <tr>
-              <td className="py-3 px-3 text-gray-300">Statistics</td>
-              <td className="py-3 px-3 text-center text-gray-400">Global</td>
-              <td className="py-3 px-3 text-center text-gray-400">Local</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Statistics</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Global</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Local</td>
             </tr>
             <tr>
-              <td className="py-3 px-3 text-gray-300">Optimization</td>
-              <td className="py-3 px-3 text-center text-gray-400">Weighted Least Squares</td>
-              <td className="py-3 px-3 text-center text-gray-400">SGD + Negative Sampling</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Optimization</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Weighted Least Squares</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">SGD + Negative Sampling</td>
             </tr>
             <tr>
-              <td className="py-3 px-3 text-gray-300">Pre-processing</td>
-              <td className="py-3 px-3 text-center text-gray-400">Build co-occurrence matrix</td>
-              <td className="py-3 px-3 text-center text-gray-400">None (online)</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Pre-processing</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Build co-occurrence matrix</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">None (online)</td>
             </tr>
             <tr>
-              <td className="py-3 px-3 text-gray-300">Memory Usage</td>
-              <td className="py-3 px-3 text-center text-gray-400">Higher (stores matrix)</td>
-              <td className="py-3 px-3 text-center text-gray-400">Lower</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Memory Usage</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Higher (stores matrix)</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Lower</td>
             </tr>
             <tr>
-              <td className="py-3 px-3 text-gray-300">Training Speed</td>
-              <td className="py-3 px-3 text-center text-gray-400">Faster on large corpora</td>
-              <td className="py-3 px-3 text-center text-gray-400">Good for medium corpora</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Training Speed</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Faster on large corpora</td>
+              <td className="py-3 px-3 text-center text-gray-800 dark:text-gray-400">Good for medium corpora</td>
             </tr>
             <tr>
-              <td className="py-3 px-3 text-gray-300">Incremental Learning</td>
+              <td className="py-3 px-3 text-gray-700 dark:text-gray-300">Incremental Learning</td>
               <td className="py-3 px-3 text-center text-red-400">❌ No</td>
               <td className="py-3 px-3 text-center text-green-400">✅ Yes</td>
             </tr>
@@ -256,7 +256,7 @@ export default function ComparisonPanel() {
         </h4>
         <div className="grid md:grid-cols-2 gap-3">
           {similarities.map((item, i) => (
-            <div key={i} className="flex items-start gap-2 text-gray-300 text-sm">
+            <div key={i} className="flex items-start gap-2 text-gray-700 dark:text-sm">
               <CheckCircle size={16} className="text-green-400 mt-0.5 flex-shrink-0" />
               {item}
             </div>
@@ -279,7 +279,7 @@ export default function ComparisonPanel() {
               'Global statistics matter for your task',
               'Using pre-trained embeddings'
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-gray-300 text-sm">
+              <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-sm">
                 <CheckCircle size={16} className="text-violet-400 mt-0.5 flex-shrink-0" />
                 {item}
               </li>
@@ -288,7 +288,7 @@ export default function ComparisonPanel() {
         </div>
         
         <div className="bg-cyan-900/20 rounded-xl p-6 border border-cyan-500/30">
-          <h4 className="flex items-center gap-2 text-lg font-bold text-cyan-400 mb-4">
+          <h4 className="flex items-center gap-2 text-lg font-bold text-cyan-600 dark:text-cyan-400 mb-4">
             <Target size={20} />
             Use Word2Vec When:
           </h4>
@@ -300,8 +300,8 @@ export default function ComparisonPanel() {
               'Word similarity is the main task',
               'You want more control over training'
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-gray-300 text-sm">
-                <CheckCircle size={16} className="text-cyan-400 mt-0.5 flex-shrink-0" />
+              <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-sm">
+                <CheckCircle size={16} className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0" />
                 {item}
               </li>
             ))}
@@ -312,10 +312,10 @@ export default function ComparisonPanel() {
       {/* The Truth */}
       <div className="bg-black/30 rounded-xl p-6 border border-white/10 text-center">
         <h4 className="text-lg font-bold text-white mb-3">🎓 The Practical Truth</h4>
-        <p className="text-gray-300 max-w-2xl mx-auto">
+        <p className="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
           In practice, both methods produce comparable results on most tasks. 
           The choice often comes down to <strong className="text-violet-400">availability of pre-trained vectors</strong> or 
-          <strong className="text-cyan-400"> specific task requirements</strong>. 
+          <strong className="text-cyan-600 dark:text-cyan-400"> specific task requirements</strong>. 
           Today, both are often superseded by contextual embeddings (BERT, GPT) for state-of-the-art results.
         </p>
       </div>

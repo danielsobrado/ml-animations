@@ -33,7 +33,7 @@ export default function EpsilonPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-violet-400 mb-4">Epsilon-Greedy Strategy</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     <strong>Exploration</strong>: Trying new things to find better rewards.
                     <br />
                     <strong>Exploitation</strong>: Using what you know to get the best reward.
@@ -47,7 +47,7 @@ export default function EpsilonPanel() {
 
                     <div className="mb-8">
                         <div className="flex justify-between items-end mb-2">
-                            <label className="text-sm text-slate-400">Exploration Rate</label>
+                            <label className="text-sm text-slate-800 dark:text-slate-400">Exploration Rate</label>
                             <span className="text-3xl font-mono font-bold text-violet-400">{epsilon.toFixed(2)}</span>
                         </div>
                         <input
@@ -56,7 +56,7 @@ export default function EpsilonPanel() {
                             onChange={(e) => setEpsilon(parseFloat(e.target.value))}
                             className="w-full accent-violet-400"
                         />
-                        <div className="flex justify-between text-xs text-slate-500 mt-2">
+                        <div className="flex justify-between text-xs text-slate-700 dark:text-slate-500 mt-2">
                             <span>0.0 (Pure Greedy)</span>
                             <span>1.0 (Pure Random)</span>
                         </div>
@@ -78,7 +78,7 @@ export default function EpsilonPanel() {
                     </div>
 
                     <div className="mt-4 text-center">
-                        <button onClick={() => setHistory([])} className="text-xs text-slate-500 hover:text-white underline">
+                        <button onClick={() => setHistory([])} className="text-xs text-slate-700 dark:text-slate-500 hover:text-white underline">
                             Reset Stats
                         </button>
                     </div>
@@ -111,17 +111,17 @@ export default function EpsilonPanel() {
                         {/* Center Text */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                             <div className="text-2xl font-bold text-white">{history.length}</div>
-                            <div className="text-xs text-slate-500">Total Steps</div>
+                            <div className="text-xs text-slate-700 dark:text-slate-500">Total Steps</div>
                         </div>
                     </div>
 
                     <div className="w-full mt-6 space-y-2">
                         <div className="flex justify-between items-center bg-slate-900 p-3 rounded border-l-4 border-violet-400">
-                            <span className="text-slate-300">Exploration (Random)</span>
+                            <span className="text-slate-700 dark:text-slate-300">Exploration (Random)</span>
                             <span className="font-mono font-bold text-white">{exploreCount}</span>
                         </div>
                         <div className="flex justify-between items-center bg-slate-900 p-3 rounded border-l-4 border-emerald-400">
-                            <span className="text-slate-300">Exploitation (Greedy)</span>
+                            <span className="text-slate-700 dark:text-slate-300">Exploitation (Greedy)</span>
                             <span className="font-mono font-bold text-white">{exploitCount}</span>
                         </div>
                     </div>

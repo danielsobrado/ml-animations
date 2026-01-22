@@ -43,7 +43,7 @@ function IntroPanel() {
             animate={{ rotate: [0, 360] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
-            <Sparkles className="w-8 h-8 text-purple-400" />
+            <Sparkles className="w-8 h-8 text-purple-600 dark:text-purple-400" />
           </motion.div>
           <h2 className="text-3xl font-bold text-white">What is FastText?</h2>
         </div>
@@ -124,22 +124,22 @@ function IntroPanel() {
       >
         <div className="flex items-center gap-4 justify-center flex-wrap">
           <div className="text-center">
-            <div className="text-purple-400 font-semibold">2013</div>
+            <div className="text-purple-600 dark:text-purple-400 font-semibold">2013</div>
             <div className="text-sm text-purple-200/70">Word2Vec</div>
           </div>
-          <div className="text-purple-400">→</div>
+          <div className="text-purple-600 dark:text-purple-400">→</div>
           <div className="text-center">
-            <div className="text-purple-400 font-semibold">2014</div>
+            <div className="text-purple-600 dark:text-purple-400 font-semibold">2014</div>
             <div className="text-sm text-purple-200/70">GloVe</div>
           </div>
-          <div className="text-purple-400">→</div>
+          <div className="text-purple-600 dark:text-purple-400">→</div>
           <div className="text-center px-4 py-2 bg-purple-500/30 rounded-lg border border-purple-400/50">
-            <div className="text-pink-400 font-semibold">2016</div>
+            <div className="text-pink-600 dark:text-pink-400 font-semibold">2016</div>
             <div className="text-sm text-white">FastText</div>
           </div>
-          <div className="text-purple-400">→</div>
+          <div className="text-purple-600 dark:text-purple-400">→</div>
           <div className="text-center">
-            <div className="text-purple-400 font-semibold">2018</div>
+            <div className="text-purple-600 dark:text-purple-400 font-semibold">2018</div>
             <div className="text-sm text-purple-200/70">BERT</div>
           </div>
         </div>

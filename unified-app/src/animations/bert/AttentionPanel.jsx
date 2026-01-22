@@ -52,19 +52,19 @@ export default function AttentionPanel() {
     
     return (
       <div className="inline-block">
-        {title && <p className="text-xs text-gray-400 mb-1 text-center">{title}</p>}
+        {title && <p className="text-xs text-gray-800 dark:text-gray-400 mb-1 text-center">{title}</p>}
         <div className="flex flex-col">
           <div className="flex">
             <div className={`${cellSize}`} />
             {tokens.map((t, i) => (
-              <div key={i} className={`${cellSize} ${textSize} flex items-center justify-center text-gray-500 font-mono`}>
+              <div key={i} className={`${cellSize} ${textSize} flex items-center justify-center text-gray-700 dark:text-gray-500 font-mono`}>
                 {t.slice(0, 3)}
               </div>
             ))}
           </div>
           {tokens.map((rowToken, i) => (
             <div key={i} className="flex">
-              <div className={`${cellSize} ${textSize} flex items-center justify-center text-gray-500 font-mono`}>
+              <div className={`${cellSize} ${textSize} flex items-center justify-center text-gray-700 dark:text-gray-500 font-mono`}>
                 {rowToken.slice(0, 3)}
               </div>
               {tokens.map((_, j) => {
@@ -96,7 +96,7 @@ export default function AttentionPanel() {
         <h2 className="text-3xl font-bold mb-2">
           Multi-Head Self-Attention in <span className="text-yellow-400">BERT</span>
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           12 attention heads (BERT-Base) learn different types of relationships
         </p>
       </div>
@@ -137,7 +137,7 @@ export default function AttentionPanel() {
                 ? 'bg-yellow-500 text-black' 
                 : i < currentStep 
                 ? 'bg-yellow-900 text-yellow-300' 
-                : 'bg-white/10 text-gray-500'
+                : 'bg-white/10 text-gray-700 dark:text-gray-500'
             }`}
           >
             {i + 1}. {step.title}
@@ -148,7 +148,7 @@ export default function AttentionPanel() {
       {/* Current Step Description */}
       <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-4">
         <h3 className="font-bold text-yellow-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Main Visualization */}
@@ -159,10 +159,10 @@ export default function AttentionPanel() {
           <div className={`text-center transition-all duration-500 ${currentStep >= 0 ? 'opacity-100' : 'opacity-30'}`}>
             <div className="bg-blue-600/30 border border-blue-500 rounded-lg p-3">
               <p className="text-sm font-medium text-blue-300">Input</p>
-              <p className="text-xs text-gray-400">[6, 768]</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">[6, 768]</p>
             </div>
           </div>
-          <span className="text-gray-500">→</span>
+          <span className="text-gray-700 dark:text-gray-500">→</span>
           
           {/* Q, K, V Projections */}
           <div className={`text-center transition-all duration-500 ${currentStep >= 1 ? 'opacity-100' : 'opacity-30'}`}>
@@ -177,42 +177,42 @@ export default function AttentionPanel() {
                 <p className="text-xs text-purple-300">V</p>
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-1">[6, 12, 64]</p>
+            <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">[6, 12, 64]</p>
           </div>
-          <span className="text-gray-500">→</span>
+          <span className="text-gray-700 dark:text-gray-500">→</span>
           
           {/* Attention Scores */}
           <div className={`text-center transition-all duration-500 ${currentStep >= 2 ? 'opacity-100' : 'opacity-30'}`}>
             <div className="bg-orange-600/30 border border-orange-500 rounded-lg p-3">
               <p className="text-sm font-medium text-orange-300">Q×Kᵀ/√64</p>
-              <p className="text-xs text-gray-400">[6, 6]</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">[6, 6]</p>
             </div>
           </div>
-          <span className="text-gray-500">→</span>
+          <span className="text-gray-700 dark:text-gray-500">→</span>
           
           {/* Softmax */}
           <div className={`text-center transition-all duration-500 ${currentStep >= 3 ? 'opacity-100' : 'opacity-30'}`}>
             <div className="bg-yellow-600/30 border border-yellow-500 rounded-lg p-3">
               <p className="text-sm font-medium text-yellow-300">Softmax</p>
-              <p className="text-xs text-gray-400">weights</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">weights</p>
             </div>
           </div>
-          <span className="text-gray-500">→</span>
+          <span className="text-gray-700 dark:text-gray-500">→</span>
           
           {/* Weighted Sum */}
           <div className={`text-center transition-all duration-500 ${currentStep >= 4 ? 'opacity-100' : 'opacity-30'}`}>
             <div className="bg-teal-600/30 border border-teal-500 rounded-lg p-3">
               <p className="text-sm font-medium text-teal-300">Attn × V</p>
-              <p className="text-xs text-gray-400">[6, 64]</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">[6, 64]</p>
             </div>
           </div>
-          <span className="text-gray-500">→</span>
+          <span className="text-gray-700 dark:text-gray-500">→</span>
           
           {/* Concat & Project */}
           <div className={`text-center transition-all duration-500 ${currentStep >= 5 ? 'opacity-100' : 'opacity-30'}`}>
             <div className="bg-pink-600/30 border border-pink-500 rounded-lg p-3">
               <p className="text-sm font-medium text-pink-300">Concat + Wᴼ</p>
-              <p className="text-xs text-gray-400">[6, 768]</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400">[6, 768]</p>
             </div>
           </div>
         </div>
@@ -222,13 +222,13 @@ export default function AttentionPanel() {
           <div className="mt-6">
             {showAllHeads ? (
               <div>
-                <h4 className="text-center text-gray-400 mb-4">All 12 Attention Heads (showing 4 representative patterns)</h4>
+                <h4 className="text-center text-gray-800 dark:text-gray-400 mb-4">All 12 Attention Heads (showing 4 representative patterns)</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
                   {headPatterns.map((head, i) => (
                     <div key={i} className="text-center">
                       <p className="text-sm text-yellow-400 mb-1">Head {i + 1}: {head.name}</p>
                       <AttentionMatrix pattern={head.pattern} size="small" />
-                      <p className="text-xs text-gray-500 mt-1">{head.description}</p>
+                      <p className="text-xs text-gray-700 dark:text-gray-500 mt-1">{head.description}</p>
                     </div>
                   ))}
                 </div>
@@ -262,7 +262,7 @@ export default function AttentionPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-black/30 rounded-xl p-4 border border-white/10">
           <h4 className="font-bold text-yellow-400 mb-3">🧠 Why Multiple Heads?</h4>
-          <ul className="text-sm text-gray-300 space-y-2">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
             <li className="flex gap-2">
               <span className="text-green-400">✓</span>
               <span>Different heads learn different patterns (syntax, semantics, position)</span>
@@ -283,23 +283,23 @@ export default function AttentionPanel() {
         </div>
         
         <div className="bg-black/30 rounded-xl p-4 border border-white/10">
-          <h4 className="font-bold text-purple-400 mb-3">📊 BERT Attention Stats</h4>
+          <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-3">📊 BERT Attention Stats</h4>
           <table className="w-full text-sm">
             <tbody>
               <tr className="border-b border-white/10">
-                <td className="py-2 text-gray-400">Number of heads</td>
+                <td className="py-2 text-gray-800 dark:text-gray-400">Number of heads</td>
                 <td className="py-2 text-right font-mono">12 (Base) / 16 (Large)</td>
               </tr>
               <tr className="border-b border-white/10">
-                <td className="py-2 text-gray-400">Head dimension (dₖ)</td>
+                <td className="py-2 text-gray-800 dark:text-gray-400">Head dimension (dₖ)</td>
                 <td className="py-2 text-right font-mono">64</td>
               </tr>
               <tr className="border-b border-white/10">
-                <td className="py-2 text-gray-400">Total dimension</td>
+                <td className="py-2 text-gray-800 dark:text-gray-400">Total dimension</td>
                 <td className="py-2 text-right font-mono">768 (Base) / 1024 (Large)</td>
               </tr>
               <tr>
-                <td className="py-2 text-gray-400">Attention layers</td>
+                <td className="py-2 text-gray-800 dark:text-gray-400">Attention layers</td>
                 <td className="py-2 text-right font-mono">12 (Base) / 24 (Large)</td>
               </tr>
             </tbody>
@@ -309,24 +309,24 @@ export default function AttentionPanel() {
 
       {/* Bidirectional Attention */}
       <div className="bg-gradient-to-r from-blue-900/30 to-green-900/30 rounded-xl p-4 border border-blue-500/30">
-        <h4 className="font-bold text-blue-400 mb-3">🔄 Bidirectional Attention (BERT's Key Innovation)</h4>
+        <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-3">🔄 Bidirectional Attention (BERT's Key Innovation)</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="text-sm font-medium text-gray-300 mb-2">GPT (Unidirectional):</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">GPT (Unidirectional):</p>
             <div className="flex gap-1">
               {['The', 'cat', 'sat', 'on'].map((t, i) => (
                 <div key={i} className="relative">
                   <span className="px-2 py-1 bg-gray-700 rounded text-xs">{t}</span>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-gray-700 dark:text-gray-500 mt-1">
                     sees: {['The', 'cat', 'sat', 'on'].slice(0, i + 1).join(', ')}
                   </div>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">Each token only sees tokens to its left</p>
+            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">Each token only sees tokens to its left</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-300 mb-2">BERT (Bidirectional):</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">BERT (Bidirectional):</p>
             <div className="flex gap-1">
               {['The', 'cat', 'sat', 'on'].map((t, i) => (
                 <div key={i} className="relative">
@@ -344,7 +344,7 @@ export default function AttentionPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-400 mb-3">🐍 PyTorch Multi-Head Attention:</p>
+        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 PyTorch Multi-Head Attention:</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-green-300">{`class MultiHeadAttention(nn.Module):
     def __init__(self, hidden_size=768, num_heads=12):

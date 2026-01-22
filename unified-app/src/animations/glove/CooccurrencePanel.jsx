@@ -118,7 +118,7 @@ export default function CooccurrencePanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="gradient-text">Co-occurrence Matrix:</span> Counting Word Neighbors
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Building the foundation for GloVe word vectors
         </p>
       </div>
@@ -141,7 +141,7 @@ export default function CooccurrencePanel() {
           Reset
         </button>
         <div className="flex items-center gap-2">
-          <span className="text-gray-400 text-sm">Window Size:</span>
+          <span className="text-gray-800 dark:text-sm">Window Size:</span>
           <select
             value={windowSize}
             onChange={(e) => setWindowSize(parseInt(e.target.value))}
@@ -163,7 +163,7 @@ export default function CooccurrencePanel() {
             className={`px-3 py-1 rounded-full text-sm transition-all ${
               step === i + 1
                 ? 'bg-violet-600 text-white'
-                : 'bg-white/10 text-gray-400 hover:bg-white/20'
+                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
             }`}
           >
             {i + 1}
@@ -174,7 +174,7 @@ export default function CooccurrencePanel() {
       {/* Current Step Info */}
       <div className="bg-gradient-to-r from-violet-900/30 to-cyan-900/30 rounded-xl p-4 border border-violet-500/30">
         <h3 className="text-lg font-bold text-violet-400 mb-1">{steps[step - 1].title}</h3>
-        <p className="text-gray-300">{steps[step - 1].description}</p>
+        <p className="text-gray-700 dark:text-gray-300">{steps[step - 1].description}</p>
       </div>
 
       {/* Visualization */}
@@ -188,7 +188,7 @@ export default function CooccurrencePanel() {
           <div className="space-y-3">
             {corpus.map((sentence, i) => (
               <div key={i} className="bg-black/30 rounded-lg p-3">
-                <span className="text-gray-500 text-sm">Sentence {i + 1}:</span>
+                <span className="text-gray-700 dark:text-sm">Sentence {i + 1}:</span>
                 <p className="text-gray-200 font-mono">{sentence}</p>
               </div>
             ))}
@@ -196,10 +196,10 @@ export default function CooccurrencePanel() {
           
           {step >= 2 && (
             <div className="mt-4 p-3 bg-cyan-900/20 rounded-lg border border-cyan-500/30">
-              <p className="text-sm text-cyan-400">
+              <p className="text-sm text-cyan-600 dark:text-cyan-400">
                 <strong>Context Window = {windowSize}</strong>
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">
                 For each word, consider {windowSize} word(s) on each side
               </p>
             </div>
@@ -208,7 +208,7 @@ export default function CooccurrencePanel() {
 
         {/* Co-occurrence Matrix */}
         <div className={`bg-black/30 rounded-xl p-6 border border-white/10 transition-opacity ${step >= 4 ? 'opacity-100' : 'opacity-30'}`}>
-          <h4 className="text-lg font-bold text-cyan-400 mb-4">
+          <h4 className="text-lg font-bold text-cyan-600 dark:text-cyan-400 mb-4">
             Co-occurrence Matrix X
           </h4>
           <div className="overflow-x-auto">
@@ -224,7 +224,7 @@ export default function CooccurrencePanel() {
               <tbody>
                 {words.map(w1 => (
                   <tr key={w1}>
-                    <td className="p-1 text-cyan-400 font-mono">{w1}</td>
+                    <td className="p-1 text-cyan-600 dark:text-cyan-400 font-mono">{w1}</td>
                     {words.map(w2 => (
                       <td 
                         key={w2}
@@ -242,14 +242,14 @@ export default function CooccurrencePanel() {
           </div>
           
           <div className="mt-4 flex items-center gap-2 text-xs">
-            <span className="text-gray-400">Intensity:</span>
+            <span className="text-gray-800 dark:text-gray-400">Intensity:</span>
             <div className="flex gap-1">
               <div className="w-4 h-4 rounded bg-gray-800"></div>
               <div className="w-4 h-4 rounded bg-violet-900/50"></div>
               <div className="w-4 h-4 rounded bg-violet-700/60"></div>
               <div className="w-4 h-4 rounded bg-violet-500/70"></div>
             </div>
-            <span className="text-gray-400">0 → High</span>
+            <span className="text-gray-800 dark:text-gray-400">0 → High</span>
           </div>
         </div>
       </div>
@@ -268,8 +268,8 @@ export default function CooccurrencePanel() {
                   i === 2 
                     ? 'bg-violet-600 text-white ring-2 ring-violet-400' 
                     : i >= 2 - windowSize && i <= 2 + windowSize && i !== 2
-                    ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-500/50'
-                    : 'bg-white/10 text-gray-400'
+                    ? 'bg-cyan-900/50 text-cyan-600 dark:text-cyan-400 border border-cyan-500/50'
+                    : 'bg-white/10 text-gray-800 dark:text-gray-400'
                 }`}
               >
                 {word}
@@ -277,9 +277,9 @@ export default function CooccurrencePanel() {
             ))}
           </div>
           <div className="text-center mt-4">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-800 dark:text-gray-400">
               Center word: <span className="text-violet-400 font-mono">"deep"</span> | 
-              Context words: <span className="text-cyan-400 font-mono">{windowSize === 1 ? '"like", "learning"' : windowSize === 2 ? '"I", "like", "learning"' : '"I", "like", "learning"'}</span>
+              Context words: <span className="text-cyan-600 dark:text-cyan-400 font-mono">{windowSize === 1 ? '"like", "learning"' : windowSize === 2 ? '"I", "like", "learning"' : '"I", "like", "learning"'}</span>
             </p>
           </div>
         </div>
@@ -293,23 +293,23 @@ export default function CooccurrencePanel() {
           </h4>
           <div className="bg-black/30 rounded-lg p-4 font-mono text-center">
             <p className="text-xl text-gray-200">
-              P(j | i) = X<sub className="text-violet-400">ij</sub> / X<sub className="text-cyan-400">i</sub>
+              P(j | i) = X<sub className="text-violet-400">ij</sub> / X<sub className="text-cyan-600 dark:text-cyan-400">i</sub>
             </p>
-            <p className="text-sm text-gray-400 mt-2">
-              where X<sub className="text-cyan-400">i</sub> = Σ<sub>k</sub> X<sub>ik</sub> (row sum)
+            <p className="text-sm text-gray-800 dark:text-gray-400 mt-2">
+              where X<sub className="text-cyan-600 dark:text-cyan-400">i</sub> = Σ<sub>k</sub> X<sub>ik</sub> (row sum)
             </p>
           </div>
           
           <div className="mt-4 grid md:grid-cols-2 gap-4">
             <div className="bg-black/30 rounded-lg p-3">
               <p className="text-sm text-violet-400 font-medium">Example: P(deep | like)</p>
-              <p className="text-xs text-gray-400 font-mono mt-1">
+              <p className="text-xs text-gray-800 dark:text-gray-400 font-mono mt-1">
                 = X<sub>like,deep</sub> / X<sub>like</sub> = count(like,deep) / Σ count(like,*)
               </p>
             </div>
             <div className="bg-black/30 rounded-lg p-3">
-              <p className="text-sm text-cyan-400 font-medium">Why Probabilities?</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-sm text-cyan-600 dark:text-cyan-400 font-medium">Why Probabilities?</p>
+              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">
                 Ratios P(k|i)/P(k|j) encode semantic relationships
               </p>
             </div>
@@ -323,25 +323,25 @@ export default function CooccurrencePanel() {
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-violet-900/20 rounded-lg p-3">
             <p className="text-violet-400 font-medium mb-1">Symmetric Counting</p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-800 dark:text-gray-400">
               If "dog" appears near "cat", then "cat" also appears near "dog" (X_ij = X_ji for symmetric windows)
             </p>
           </div>
           <div className="bg-cyan-900/20 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium mb-1">Window Size Matters</p>
-            <p className="text-sm text-gray-400">
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium mb-1">Window Size Matters</p>
+            <p className="text-sm text-gray-800 dark:text-gray-400">
               Smaller windows capture syntactic info, larger windows capture semantic/topical info
             </p>
           </div>
           <div className="bg-green-900/20 rounded-lg p-3">
             <p className="text-green-400 font-medium mb-1">Sparse Matrix</p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-800 dark:text-gray-400">
               Most word pairs never co-occur, so the matrix is very sparse (lots of zeros)
             </p>
           </div>
           <div className="bg-yellow-900/20 rounded-lg p-3">
             <p className="text-yellow-400 font-medium mb-1">One-time Computation</p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-800 dark:text-gray-400">
               Unlike Word2Vec, we build the matrix once before training (not during)
             </p>
           </div>

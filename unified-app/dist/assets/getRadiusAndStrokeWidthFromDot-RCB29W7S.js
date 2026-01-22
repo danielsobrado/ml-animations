@@ -1,1 +1,0 @@
-import{U as e}from"./CategoricalChart-B3gtutcW.js";function v(i){var o=e(i),s=3,u=2;if(o!=null){var{r:n,strokeWidth:N}=o,r=Number(n),t=Number(N);return(Number.isNaN(r)||r<0)&&(r=s),(Number.isNaN(t)||t<0)&&(t=u),{r,strokeWidth:t}}return{r:s,strokeWidth:u}}export{v as g};

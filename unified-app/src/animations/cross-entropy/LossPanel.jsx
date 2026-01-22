@@ -41,8 +41,8 @@ export default function LossPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-orange-400 mb-4">Cross-Entropy Loss</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-4">Cross-Entropy Loss</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     How much "surprise" is there when we use our model Q to predict the true labels P?
                     <br />
                     <strong>Goal:</strong> Minimize Cross-Entropy by making Q match P.
@@ -58,10 +58,10 @@ export default function LossPanel() {
                         {q.map((val, i) => (
                             <div key={i}>
                                 <div className="flex justify-between items-end mb-1">
-                                    <label className="text-sm text-slate-400">
+                                    <label className="text-sm text-slate-800 dark:text-slate-400">
                                         P({data[i].name}) {p[i] === 1 && <span className="text-green-400 font-bold">(TRUE LABEL)</span>}
                                     </label>
-                                    <span className="font-mono font-bold text-orange-400">{(val * 100).toFixed(0)}%</span>
+                                    <span className="font-mono font-bold text-orange-600 dark:text-orange-400">{(val * 100).toFixed(0)}%</span>
                                 </div>
                                 <input
                                     type="range" min="0.01" max="0.99" step="0.01"
@@ -73,7 +73,7 @@ export default function LossPanel() {
                         ))}
                     </div>
 
-                    <div className="mt-8 p-4 bg-slate-900 rounded-lg text-sm text-slate-300">
+                    <div className="mt-8 p-4 bg-slate-900 rounded-lg text-sm text-slate-700 dark:text-slate-300">
                         <p className="mb-2"><strong>Formula:</strong> H(P, Q) = - Σ P(x) log Q(x)</p>
                         <p>Since the True Label is "Cat" (P=1), the loss depends ONLY on your confidence in "Cat".</p>
                     </div>
@@ -97,11 +97,11 @@ export default function LossPanel() {
                     </div>
 
                     <div className="w-full bg-slate-900 p-6 rounded-xl border border-orange-500/30 text-center">
-                        <div className="text-sm text-slate-400 uppercase tracking-wider mb-2">Cross-Entropy Loss</div>
+                        <div className="text-sm text-slate-800 dark:text-slate-400 uppercase tracking-wider mb-2">Cross-Entropy Loss</div>
                         <div className={`text-5xl font-mono font-bold mb-2 transition-colors ${crossEntropy < 0.1 ? 'text-green-400' : 'text-red-400'}`}>
-                            {crossEntropy.toFixed(3)} <span className="text-lg text-slate-500">bits</span>
+                            {crossEntropy.toFixed(3)} <span className="text-lg text-slate-700 dark:text-slate-500">bits</span>
                         </div>
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-700 dark:text-slate-500">
                             Lower is Better. 0 is Perfect.
                         </div>
                     </div>

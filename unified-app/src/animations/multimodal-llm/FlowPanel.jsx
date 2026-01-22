@@ -98,7 +98,7 @@ export default function FlowPanel() {
                             </div>
                             <div className="mt-2 text-sm text-green-700 font-medium">Image Input</div>
                         </div>
-                        <div className="text-3xl text-slate-300">+</div>
+                        <div className="text-3xl text-slate-700 dark:text-slate-300">+</div>
                         <div className="text-center">
                             <div className="bg-blue-100 rounded-lg border-2 border-blue-400 p-4 shadow-lg">
                                 <div className="text-blue-800 font-medium">"What animal is in this image?"</div>
@@ -251,7 +251,7 @@ export default function FlowPanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Data Flow Animation</h2>
-                    <p className="text-slate-600">
+                    <p className="text-slate-800 dark:text-slate-600">
                         Watch how data flows through a multimodal LLM step by step
                     </p>
                 </div>
@@ -268,7 +268,7 @@ export default function FlowPanel() {
                                         ? 'bg-indigo-600 text-white scale-125' 
                                         : i < currentStep
                                             ? 'bg-indigo-200 text-indigo-700'
-                                            : 'bg-slate-200 text-slate-500'
+                                            : 'bg-slate-200 text-slate-700 dark:text-slate-500'
                                 }`}
                             >
                                 {i + 1}
@@ -317,7 +317,7 @@ export default function FlowPanel() {
 
                 {/* Current Step Info */}
                 <div className="bg-indigo-50 rounded-xl p-4 mb-6 border border-indigo-200">
-                    <h3 className="font-bold text-indigo-900 text-xl">{step.title}</h3>
+                    <h3 className="font-bold text-xl">{step.title}</h3>
                     <p className="text-indigo-800 mt-1">{step.description}</p>
                     <p className="text-sm text-indigo-600 mt-2 font-mono">{step.details}</p>
                 </div>
@@ -336,7 +336,7 @@ export default function FlowPanel() {
                         <Lightbulb className="text-amber-600 flex-shrink-0 mt-1" size={20} />
                         <div>
                             <h4 className="font-bold text-amber-900 mb-1">Key Concept</h4>
-                            <p className="text-amber-800 text-sm">
+                            <p className="text-sm">
                                 The magic happens at the <strong>attention layer</strong> - text tokens can "look at" 
                                 relevant visual patches. When processing "animal", the model attends strongly to the 
                                 patches containing the cat, enabling accurate visual understanding.

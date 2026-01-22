@@ -9,8 +9,10 @@
     --color-surface-hover: 241 245 249;
     --color-border: 226 232 240;
     --color-text-primary: 15 23 42;
-    --color-text-secondary: 100 116 139;
-    --color-text-muted: 148 163 184;
+    --color-text-secondary: 51 65 85;
+    /* Darker slate for better visibility */
+    --color-text-muted: 71 85 105;
+    /* Darker slate for better visibility */
   }
 
   .dark {
@@ -119,19 +121,41 @@
 
 /* Custom animations */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px currentColor; }
-  50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px currentColor;
+  }
+
+  50% {
+    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
 }
 
 @keyframes flow-line {
-  0% { stroke-dashoffset: 100; }
-  100% { stroke-dashoffset: 0; }
+  0% {
+    stroke-dashoffset: 100;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes attention-beam {
-  0% { opacity: 0; transform: scaleX(0); }
-  50% { opacity: 1; }
-  100% { opacity: 0.3; transform: scaleX(1); }
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scaleX(1);
+  }
 }
 
 .attention-beam {
@@ -146,4 +170,176 @@
 .matrix-cell:hover {
   transform: scale(1.1);
   z-index: 10;
+}
+
+/* Custom animations from integrated projects */
+@keyframes flow-right {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes diffusion-noise {
+  0% {
+    filter: blur(0px);
+  }
+
+  50% {
+    filter: blur(4px);
+  }
+
+  100% {
+    filter: blur(0px);
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes flow-particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(var(--flow-x), var(--flow-y)) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes noise-to-data {
+  0% {
+    filter: blur(8px);
+    opacity: 0.3;
+  }
+
+  50% {
+    filter: blur(4px);
+    opacity: 0.6;
+  }
+
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes flow-path {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes euler-step {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+@keyframes sample-bounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes latent-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(2px, -2px);
+  }
+
+  50% {
+    transform: translate(-1px, 2px);
+  }
+
+  75% {
+    transform: translate(2px, 1px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.flow-right {
+  animation: flow-right 2s ease-in-out infinite;
+}
+
+.diffusion-noise {
+  animation: diffusion-noise 3s ease-in-out infinite;
+}
+
+.data-flow {
+  stroke-dasharray: 10 5;
+  animation: data-flow 1s linear infinite;
+}
+
+.flow-particle {
+  animation: flow-particle 2s ease-out forwards;
+}
+
+.noise-to-data {
+  animation: noise-to-data 3s ease-in-out infinite alternate;
+}
+
+.flow-path {
+  stroke-dasharray: 1000;
+  animation: flow-path 3s ease-in-out forwards;
+}
+
+.euler-step {
+  animation: euler-step 0.5s ease-in-out;
+}
+
+.sample-bounce {
+  animation: sample-bounce 1s ease-in-out infinite;
+}
+
+.latent-drift {
+  animation: latent-drift 3s ease-in-out infinite;
+}
+
+.gaussian-gradient {
+  background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.6) 0%, rgba(139, 92, 246, 0.2) 50%, transparent 70%);
+}
+
+.flow-gradient {
+  background: linear-gradient(90deg, rgba(236, 72, 153, 0.6) 0%, rgba(139, 92, 246, 0.6) 50%, rgba(59, 130, 246, 0.6) 100%);
 }

@@ -26,8 +26,8 @@ export default function DotProductPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">The Dot Product</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">The Dot Product</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Cosine Similarity is just the Dot Product, normalized by magnitude.
                     <br />
                     <span className="font-mono bg-slate-800 px-3 py-1 rounded text-purple-300">
@@ -111,7 +111,7 @@ export default function DotProductPanel() {
                     </svg>
 
                     {/* Instructions */}
-                    <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-4 py-2 rounded-lg text-xs text-slate-400">
+                    <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-4 py-2 rounded-lg text-xs text-slate-800 dark:text-slate-400">
                         Drag the sliders to change the vectors →
                     </div>
                 </div>
@@ -120,11 +120,11 @@ export default function DotProductPanel() {
                 <div className="w-full lg:w-96 flex flex-col gap-6">
                     {/* Vector Controls */}
                     <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 className="font-bold text-slate-400 uppercase text-xs mb-4">Vector A (Cyan)</h3>
+                        <h3 className="font-bold text-slate-800 dark:text-slate-400 uppercase text-xs mb-4">Vector A (Cyan)</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="flex justify-between text-sm mb-2">
-                                    X: <span className="text-cyan-400 font-mono">{v1.x}</span>
+                                    X: <span className="text-cyan-600 dark:text-cyan-400 font-mono">{v1.x}</span>
                                 </label>
                                 <input
                                     type="range" min="-200" max="200" step="10"
@@ -135,7 +135,7 @@ export default function DotProductPanel() {
                             </div>
                             <div>
                                 <label className="flex justify-between text-sm mb-2">
-                                    Y: <span className="text-cyan-400 font-mono">{v1.y}</span>
+                                    Y: <span className="text-cyan-600 dark:text-cyan-400 font-mono">{v1.y}</span>
                                 </label>
                                 <input
                                     type="range" min="-200" max="200" step="10"
@@ -148,11 +148,11 @@ export default function DotProductPanel() {
                     </div>
 
                     <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 className="font-bold text-slate-400 uppercase text-xs mb-4">Vector B (Pink)</h3>
+                        <h3 className="font-bold text-slate-800 dark:text-slate-400 uppercase text-xs mb-4">Vector B (Pink)</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="flex justify-between text-sm mb-2">
-                                    X: <span className="text-pink-400 font-mono">{v2.x}</span>
+                                    X: <span className="text-pink-600 dark:text-pink-400 font-mono">{v2.x}</span>
                                 </label>
                                 <input
                                     type="range" min="-200" max="200" step="10"
@@ -163,7 +163,7 @@ export default function DotProductPanel() {
                             </div>
                             <div>
                                 <label className="flex justify-between text-sm mb-2">
-                                    Y: <span className="text-pink-400 font-mono">{v2.y}</span>
+                                    Y: <span className="text-pink-600 dark:text-pink-400 font-mono">{v2.y}</span>
                                 </label>
                                 <input
                                     type="range" min="-200" max="200" step="10"
@@ -182,7 +182,7 @@ export default function DotProductPanel() {
                             <div className="text-5xl font-mono font-bold text-purple-200 mb-2">
                                 {cosineSim.toFixed(3)}
                             </div>
-                            <div className="text-xs text-slate-400 space-y-1">
+                            <div className="text-xs text-slate-800 dark:text-slate-400 space-y-1">
                                 <p>Dot Product: <span className="text-white font-mono">{dotProduct.toFixed(0)}</span></p>
                                 <p>|A| × |B|: <span className="text-white font-mono">{(mag1 * mag2).toFixed(0)}</span></p>
                             </div>

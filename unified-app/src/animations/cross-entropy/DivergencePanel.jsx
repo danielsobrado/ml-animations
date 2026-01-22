@@ -38,8 +38,8 @@ export default function DivergencePanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-amber-400 mb-4">KL Divergence (Relative Entropy)</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-amber-600 dark:text-amber-400 mb-4">KL Divergence (Relative Entropy)</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Measures the "distance" between two probability distributions.
                     <br />
                     <strong>D<sub>KL</sub>(P || Q)</strong>: How many <em>extra</em> bits do we need if we use Q to encode P?
@@ -55,7 +55,7 @@ export default function DivergencePanel() {
                         <div>
                             <div className="flex justify-between items-end mb-2">
                                 <label className="font-bold text-white">Mean (μ)</label>
-                                <span className="font-mono font-bold text-amber-400">{meanQ.toFixed(1)}</span>
+                                <span className="font-mono font-bold text-amber-600 dark:text-amber-400">{meanQ.toFixed(1)}</span>
                             </div>
                             <input
                                 type="range" min="-3" max="3" step="0.1"
@@ -63,13 +63,13 @@ export default function DivergencePanel() {
                                 onChange={(e) => setMeanQ(parseFloat(e.target.value))}
                                 className="w-full accent-amber-400"
                             />
-                            <p className="text-xs text-slate-400 mt-1">Shift the center</p>
+                            <p className="text-xs text-slate-800 dark:text-slate-400 mt-1">Shift the center</p>
                         </div>
 
                         <div>
                             <div className="flex justify-between items-end mb-2">
                                 <label className="font-bold text-white">Std Dev (σ)</label>
-                                <span className="font-mono font-bold text-amber-400">{stdQ.toFixed(1)}</span>
+                                <span className="font-mono font-bold text-amber-600 dark:text-amber-400">{stdQ.toFixed(1)}</span>
                             </div>
                             <input
                                 type="range" min="0.5" max="3" step="0.1"
@@ -77,7 +77,7 @@ export default function DivergencePanel() {
                                 onChange={(e) => setStdQ(parseFloat(e.target.value))}
                                 className="w-full accent-amber-400"
                             />
-                            <p className="text-xs text-slate-400 mt-1">Change the width</p>
+                            <p className="text-xs text-slate-800 dark:text-slate-400 mt-1">Change the width</p>
                         </div>
                     </div>
 
@@ -109,11 +109,11 @@ export default function DivergencePanel() {
                     </div>
 
                     <div className="w-full bg-slate-900 p-6 rounded-xl border border-amber-500/30 text-center">
-                        <div className="text-sm text-slate-400 uppercase tracking-wider mb-2">KL Divergence</div>
+                        <div className="text-sm text-slate-800 dark:text-slate-400 uppercase tracking-wider mb-2">KL Divergence</div>
                         <div className={`text-5xl font-mono font-bold mb-2 transition-colors ${kl < 0.1 ? 'text-green-400' : 'text-amber-400'}`}>
-                            {kl.toFixed(3)} <span className="text-lg text-slate-500">bits</span>
+                            {kl.toFixed(3)} <span className="text-lg text-slate-700 dark:text-slate-500">bits</span>
                         </div>
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-slate-700 dark:text-slate-500">
                             D<sub>KL</sub> = 0 only when P = Q.
                         </div>
                     </div>

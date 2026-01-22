@@ -84,7 +84,7 @@ export default function CalculationPanel() {
 
             <div className="w-full max-w-4xl overflow-hidden rounded-xl shadow-lg border border-slate-200 bg-white">
                 <table className="w-full text-left border-collapse">
-                    <thead className="bg-slate-100 text-slate-600 uppercase text-sm font-bold">
+                    <thead className="bg-slate-100 text-slate-800 dark:text-slate-600 uppercase text-sm font-bold">
                         <tr>
                             <th className="p-4">ID</th>
                             <th className="p-4">X</th>
@@ -107,8 +107,8 @@ export default function CalculationPanel() {
                                     className="border-b border-slate-100 hover:bg-slate-50"
                                 >
                                     <td className="p-4 font-bold text-slate-700">{row.id}</td>
-                                    <td className="p-4 text-slate-600">{row.x}</td>
-                                    <td className="p-4 text-slate-600">{row.y}</td>
+                                    <td className="p-4 text-slate-800 dark:text-slate-600">{row.x}</td>
+                                    <td className="p-4 text-slate-800 dark:text-slate-600">{row.y}</td>
                                     <td className="p-4 font-mono font-bold text-blue-600">
                                         {step >= 1 ? row.rankX : '-'}
                                     </td>
@@ -128,8 +128,8 @@ export default function CalculationPanel() {
                     {step >= 5 && (
                         <tfoot className="bg-slate-50 font-bold">
                             <tr>
-                                <td colSpan="6" className="p-4 text-right text-slate-600">Sum (Σd²):</td>
-                                <td className="p-4 text-red-600 text-xl">{sumD2}</td>
+                                <td colSpan="6" className="p-4 text-right text-slate-800 dark:text-slate-600">Sum (Σd²):</td>
+                                <td className="p-4 text-xl">{sumD2}</td>
                             </tr>
                         </tfoot>
                     )}
@@ -138,7 +138,7 @@ export default function CalculationPanel() {
 
             {step >= 6 && (
                 <div className="mt-8 p-6 bg-white rounded-xl shadow-lg border-2 border-indigo-100 text-center animate-fade-in">
-                    <p className="text-slate-500 text-sm mb-2">Formula Application</p>
+                    <p className="text-slate-700 dark:text-sm mb-2">Formula Application</p>
                     <div className="text-2xl font-mono text-slate-800">
                         ρ = 1 - <span className="text-red-600">6({sumD2})</span> / <span className="text-blue-600">{n}({n}² - 1)</span>
                     </div>

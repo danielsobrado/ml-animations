@@ -59,12 +59,12 @@ export default function ComparisonPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-violet-400 mb-4">Layer Norm vs Batch Norm</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     The key difference: <strong>which axis to normalize</strong>.
                 </p>
                 <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm text-left">
                     <p className="text-cyan-300">y = γ * (x - μ) / σ + β</p>
-                    <p className="text-slate-400 mt-2">
+                    <p className="text-slate-800 dark:text-slate-400 mt-2">
                         • Batch Norm: μ, σ computed across <strong>batch</strong> (per feature)
                         <br />
                         • Layer Norm: μ, σ computed across <strong>features</strong> (per sample)
@@ -83,7 +83,7 @@ export default function ComparisonPanel() {
                     onChange={(e) => setBatchSize(Number(e.target.value))}
                     className="w-full accent-violet-400"
                 />
-                <p className="text-xs text-slate-400 mt-2 text-center">
+                <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                     {batchSize === 1 && '⚠️ Batch Norm fails with batch size = 1 (no variance!)'}
                     {batchSize < 8 && batchSize > 1 && '⚠️ Batch Norm unstable with small batches'}
                     {batchSize >= 8 && '✅ Batch Norm works well with larger batches'}
@@ -94,8 +94,8 @@ export default function ComparisonPanel() {
             <div className="grid lg:grid-cols-2 gap-8 w-full max-w-6xl">
                 {/* Batch Norm */}
                 <div className="bg-slate-800 p-6 rounded-xl border-2 border-cyan-500/50">
-                    <h3 className="font-bold text-cyan-400 mb-4 text-center text-xl">Batch Normalization</h3>
-                    <p className="text-sm text-slate-400 mb-4 text-center">
+                    <h3 className="font-bold text-cyan-600 dark:text-cyan-400 mb-4 text-center text-xl">Batch Normalization</h3>
+                    <p className="text-sm text-slate-800 dark:text-slate-400 mb-4 text-center">
                         Normalize across <strong>batch dimension</strong> (↓)
                     </p>
 
@@ -104,7 +104,7 @@ export default function ComparisonPanel() {
                             <div key={idx} className="bg-slate-900 p-4 rounded-lg border border-slate-600">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="font-bold text-white">Feature {idx}</span>
-                                    <div className="text-xs font-mono text-slate-400">
+                                    <div className="text-xs font-mono text-slate-800 dark:text-slate-400">
                                         μ: {feat.mean}, σ: {feat.std}
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@ export default function ComparisonPanel() {
                                         </div>
                                     ))}
                                     {feat.normalized.length > 8 && (
-                                        <div className="flex items-center text-xs text-slate-500">
+                                        <div className="flex items-center text-xs text-slate-700 dark:text-slate-500">
                                             +{feat.normalized.length - 8}
                                         </div>
                                     )}
@@ -142,7 +142,7 @@ export default function ComparisonPanel() {
                 {/* Layer Norm */}
                 <div className="bg-slate-800 p-6 rounded-xl border-2 border-violet-500/50">
                     <h3 className="font-bold text-violet-400 mb-4 text-center text-xl">Layer Normalization</h3>
-                    <p className="text-sm text-slate-400 mb-4 text-center">
+                    <p className="text-sm text-slate-800 dark:text-slate-400 mb-4 text-center">
                         Normalize across <strong>feature dimension</strong> (→)
                     </p>
 
@@ -151,7 +151,7 @@ export default function ComparisonPanel() {
                             <div key={idx} className="bg-slate-900 p-4 rounded-lg border border-slate-600">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="font-bold text-white">Sample {idx}</span>
-                                    <div className="text-xs font-mono text-slate-400">
+                                    <div className="text-xs font-mono text-slate-800 dark:text-slate-400">
                                         μ: {sample.mean}, σ: {sample.std}
                                     </div>
                                 </div>
@@ -173,7 +173,7 @@ export default function ComparisonPanel() {
                             </div>
                         ))}
                         {layerNormResult.length > 8 && (
-                            <div className="text-center text-xs text-slate-500">
+                            <div className="text-center text-xs text-slate-700 dark:text-slate-500">
                                 +{layerNormResult.length - 8} more samples
                             </div>
                         )}

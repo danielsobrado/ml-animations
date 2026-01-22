@@ -118,7 +118,7 @@ export default function ComparisonPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-green-400">BoW</span> vs <span className="text-yellow-400">TF-IDF</span>
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           When to use each approach for text vectorization
         </p>
       </div>
@@ -152,9 +152,9 @@ export default function ComparisonPanel() {
         <div className="space-y-6">
           {/* Documents */}
           <div className="bg-black/30 rounded-xl p-4 border border-white/10">
-            <h4 className="text-sm text-gray-400 mb-3">Sample Documents:</h4>
+            <h4 className="text-sm text-gray-800 dark:text-gray-400 mb-3">Sample Documents:</h4>
             {documents.map((doc, i) => (
-              <p key={i} className="text-gray-300 font-mono text-sm">
+              <p key={i} className="text-gray-700 dark:text-gray-300 font-mono text-sm">
                 Doc {i + 1}: "{doc}"
               </p>
             ))}
@@ -169,7 +169,7 @@ export default function ComparisonPanel() {
                 <table className="w-full text-xs">
                   <thead>
                     <tr>
-                      <th className="px-1 py-1 text-left text-gray-400">Doc</th>
+                      <th className="px-1 py-1 text-left text-gray-800 dark:text-gray-400">Doc</th>
                       {data.vocab.map((word, i) => (
                         <th key={i} className="px-1 py-1 text-center text-green-300">{word}</th>
                       ))}
@@ -178,7 +178,7 @@ export default function ComparisonPanel() {
                   <tbody>
                     {data.bow.map((row, i) => (
                       <tr key={i}>
-                        <td className="px-1 py-1 text-gray-400">{i + 1}</td>
+                        <td className="px-1 py-1 text-gray-800 dark:text-gray-400">{i + 1}</td>
                         {row.map((val, j) => (
                           <td key={j} className="px-1 py-1 text-center">
                             <span className={val > 0 ? 'text-green-400 font-bold' : 'text-gray-600'}>
@@ -200,7 +200,7 @@ export default function ComparisonPanel() {
                 <table className="w-full text-xs">
                   <thead>
                     <tr>
-                      <th className="px-1 py-1 text-left text-gray-400">Doc</th>
+                      <th className="px-1 py-1 text-left text-gray-800 dark:text-gray-400">Doc</th>
                       {data.vocab.map((word, i) => (
                         <th key={i} className="px-1 py-1 text-center text-yellow-300">{word}</th>
                       ))}
@@ -209,7 +209,7 @@ export default function ComparisonPanel() {
                   <tbody>
                     {data.tfidf.map((row, i) => (
                       <tr key={i}>
-                        <td className="px-1 py-1 text-gray-400">{i + 1}</td>
+                        <td className="px-1 py-1 text-gray-800 dark:text-gray-400">{i + 1}</td>
                         {row.map((val, j) => (
                           <td key={j} className="px-1 py-1 text-center">
                             <span className={val > 0 ? 'text-yellow-400 font-bold' : 'text-gray-600'}>
@@ -227,8 +227,8 @@ export default function ComparisonPanel() {
 
           {/* Key Insight */}
           <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
-            <h4 className="font-bold text-blue-400 mb-2">💡 Key Insight</h4>
-            <p className="text-gray-300 text-sm">
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-2">💡 Key Insight</h4>
+            <p className="text-gray-700 dark:text-sm">
               Notice how "the" has <span className="text-green-400">high counts in BoW</span> but 
               <span className="text-yellow-400"> zero weight in TF-IDF</span>. This is because "the" 
               appears in all documents, making it non-discriminative. TF-IDF automatically down-weights 
@@ -244,7 +244,7 @@ export default function ComparisonPanel() {
           <table className="w-full">
             <thead>
               <tr>
-                <th className="text-left p-3 text-gray-400">Aspect</th>
+                <th className="text-left p-3 text-gray-800 dark:text-gray-400">Aspect</th>
                 <th className="text-left p-3 text-green-400">Bag of Words</th>
                 <th className="text-left p-3 text-yellow-400">TF-IDF</th>
               </tr>
@@ -252,9 +252,9 @@ export default function ComparisonPanel() {
             <tbody>
               {comparisons.map((row, i) => (
                 <tr key={i} className="border-t border-white/10">
-                  <td className="p-3 text-gray-300 font-medium">{row.aspect}</td>
-                  <td className="p-3 text-sm text-gray-400">{row.bow}</td>
-                  <td className="p-3 text-sm text-gray-400">{row.tfidf}</td>
+                  <td className="p-3 text-gray-700 dark:text-gray-300 font-medium">{row.aspect}</td>
+                  <td className="p-3 text-sm text-gray-800 dark:text-gray-400">{row.bow}</td>
+                  <td className="p-3 text-sm text-gray-800 dark:text-gray-400">{row.tfidf}</td>
                 </tr>
               ))}
             </tbody>
@@ -267,7 +267,7 @@ export default function ComparisonPanel() {
         <div className="grid md:grid-cols-2 gap-6">
           {/* BoW */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-green-400 text-center">Bag of Words</h3>
+            <h3 className="text-xl font-bold text-center">Bag of Words</h3>
             
             <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
               <h4 className="flex items-center gap-2 text-green-400 font-medium mb-3">
@@ -275,7 +275,7 @@ export default function ComparisonPanel() {
               </h4>
               <ul className="space-y-2">
                 {pros.bow.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <span className="text-green-400 mt-1">✓</span>
                     {item}
                   </li>
@@ -289,7 +289,7 @@ export default function ComparisonPanel() {
               </h4>
               <ul className="space-y-2">
                 {cons.bow.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <span className="text-red-400 mt-1">✗</span>
                     {item}
                   </li>
@@ -300,7 +300,7 @@ export default function ComparisonPanel() {
 
           {/* TF-IDF */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-yellow-400 text-center">TF-IDF</h3>
+            <h3 className="text-xl font-bold text-center">TF-IDF</h3>
             
             <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
               <h4 className="flex items-center gap-2 text-green-400 font-medium mb-3">
@@ -308,7 +308,7 @@ export default function ComparisonPanel() {
               </h4>
               <ul className="space-y-2">
                 {pros.tfidf.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <span className="text-green-400 mt-1">✓</span>
                     {item}
                   </li>
@@ -322,7 +322,7 @@ export default function ComparisonPanel() {
               </h4>
               <ul className="space-y-2">
                 {cons.tfidf.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <span className="text-red-400 mt-1">✗</span>
                     {item}
                   </li>
@@ -350,7 +350,7 @@ export default function ComparisonPanel() {
                 ].map((item, i) => (
                   <div key={i} className="bg-black/30 rounded-lg p-3">
                     <p className="text-green-400 font-medium">{item.title}</p>
-                    <p className="text-xs text-gray-400">{item.desc}</p>
+                    <p className="text-xs text-gray-800 dark:text-gray-400">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -369,7 +369,7 @@ export default function ComparisonPanel() {
                 ].map((item, i) => (
                   <div key={i} className="bg-black/30 rounded-lg p-3">
                     <p className="text-yellow-400 font-medium">{item.title}</p>
-                    <p className="text-xs text-gray-400">{item.desc}</p>
+                    <p className="text-xs text-gray-800 dark:text-gray-400">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -378,7 +378,7 @@ export default function ComparisonPanel() {
 
           {/* Decision Flowchart */}
           <div className="bg-blue-900/20 rounded-xl p-6 border border-blue-500/30">
-            <h4 className="font-bold text-blue-400 mb-4 text-center">Quick Decision Guide</h4>
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-4 text-center">Quick Decision Guide</h4>
             <div className="flex flex-col items-center gap-4">
               <div className="bg-blue-900/40 rounded-lg p-4 text-center">
                 <p className="text-blue-300">Do you need to distinguish document-specific terms?</p>
@@ -386,14 +386,14 @@ export default function ComparisonPanel() {
               <div className="flex gap-8">
                 <div className="flex flex-col items-center gap-2">
                   <ArrowRight className="rotate-90 text-green-400" />
-                  <span className="text-green-400 text-sm">No</span>
+                  <span className="text-sm">No</span>
                   <div className="bg-green-900/40 rounded-lg p-3 text-center">
                     <p className="text-green-400 font-bold">Use BoW</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <ArrowRight className="rotate-90 text-yellow-400" />
-                  <span className="text-yellow-400 text-sm">Yes</span>
+                  <span className="text-sm">Yes</span>
                   <div className="bg-yellow-900/40 rounded-lg p-3 text-center">
                     <p className="text-yellow-400 font-bold">Use TF-IDF</p>
                   </div>
@@ -404,17 +404,17 @@ export default function ComparisonPanel() {
 
           {/* Neither is Perfect */}
           <div className="bg-purple-900/20 rounded-xl p-6 border border-purple-500/30">
-            <h4 className="font-bold text-purple-400 mb-3">🤔 Neither is Perfect</h4>
-            <p className="text-gray-300 text-sm mb-3">
+            <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-3">🤔 Neither is Perfect</h4>
+            <p className="text-gray-700 dark:text-sm mb-3">
               Both BoW and TF-IDF have fundamental limitations:
             </p>
-            <ul className="text-sm text-gray-400 space-y-2">
+            <ul className="text-sm text-gray-800 dark:text-gray-400 space-y-2">
               <li>• <span className="text-red-400">No word order:</span> "dog bites man" = "man bites dog"</li>
               <li>• <span className="text-red-400">No semantics:</span> "happy" and "joyful" are completely different vectors</li>
               <li>• <span className="text-red-400">High dimensionality:</span> Vocabulary size can be huge</li>
             </ul>
             <div className="mt-4 bg-black/30 rounded-lg p-3">
-              <p className="text-purple-300 text-sm">
+              <p className="text-sm">
                 <strong>Modern alternatives:</strong> Word2Vec, GloVe, FastText, BERT embeddings capture semantic meaning
               </p>
             </div>

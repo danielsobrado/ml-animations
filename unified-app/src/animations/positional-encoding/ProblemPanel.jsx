@@ -37,8 +37,8 @@ export default function ProblemPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">The Problem</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">The Problem</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Transformers process all words in parallel. Without position information, they can't tell the difference between:
                 </p>
             </div>
@@ -54,7 +54,7 @@ export default function ProblemPanel() {
                             <p className="text-2xl font-bold text-cyan-300">
                                 "{sentence.join(' ')}"
                             </p>
-                            <p className="text-sm text-slate-400 mt-2">
+                            <p className="text-sm text-slate-800 dark:text-slate-400 mt-2">
                                 {sentenceIdx === 0 ? 'Normal event' : 'Very unusual!'}
                             </p>
                         </div>
@@ -77,7 +77,7 @@ export default function ProblemPanel() {
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="text-xs font-mono text-slate-400">
+                                        <div className="text-xs font-mono text-slate-800 dark:text-slate-400">
                                             [{finalEmb.map(v => v.toFixed(2)).join(', ')}]
                                         </div>
                                     </motion.div>
@@ -93,7 +93,7 @@ export default function ProblemPanel() {
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h3 className="font-bold text-white text-lg">Positional Encoding</h3>
-                        <p className="text-sm text-slate-400">Toggle to see the difference</p>
+                        <p className="text-sm text-slate-800 dark:text-slate-400">Toggle to see the difference</p>
                     </div>
                     <button
                         onClick={() => setUsePositions(!usePositions)}

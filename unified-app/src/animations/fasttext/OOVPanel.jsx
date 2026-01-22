@@ -47,7 +47,7 @@ function OOVPanel() {
             <span className="text-white">[</span>
             <span className="text-red-400">"kingship"</span>
             <span className="text-white">]</span>
-            <span className="text-gray-400"> → </span>
+            <span className="text-gray-800 dark:text-gray-400"> → </span>
             <span className="text-red-400">KeyError!</span>
           </div>
         </motion.div>
@@ -69,7 +69,7 @@ function OOVPanel() {
             <span className="text-white">[</span>
             <span className="text-green-400">"kingship"</span>
             <span className="text-white">]</span>
-            <span className="text-gray-400"> → </span>
+            <span className="text-gray-800 dark:text-gray-400"> → </span>
             <span className="text-green-400">[0.3, -0.2, ...]</span>
           </div>
         </motion.div>
@@ -78,13 +78,13 @@ function OOVPanel() {
       {/* Interactive OOV Demo */}
       <div className="bg-white/5 rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-purple-400" />
+          <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           OOV Word Resolution
         </h3>
 
         {/* Known Vocabulary */}
         <div className="mb-6">
-          <p className="text-purple-300 text-sm mb-2">Training Vocabulary:</p>
+          <p className="text-sm mb-2">Training Vocabulary:</p>
           <div className="flex flex-wrap gap-2">
             {vocabulary.map((word) => (
               <span
@@ -99,7 +99,7 @@ function OOVPanel() {
 
         {/* OOV Examples */}
         <div className="mb-6">
-          <p className="text-purple-300 text-sm mb-2">Try an OOV word:</p>
+          <p className="text-sm mb-2">Try an OOV word:</p>
           <div className="flex flex-wrap gap-2">
             {oovExamples.map((example) => (
               <motion.button
@@ -132,7 +132,7 @@ function OOVPanel() {
             <div className="text-center mb-4">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <AlertTriangle className="w-4 h-4 text-yellow-400" />
-                <span className="text-yellow-300 text-sm">Word not in vocabulary!</span>
+                <span className="text-sm">Word not in vocabulary!</span>
               </div>
               <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
                 "{selectedExample.word}"
@@ -150,7 +150,7 @@ function OOVPanel() {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
-                  className="ngram-box font-mono text-purple-100 text-sm"
+                  className="ngram-box font-mono text-sm"
                 >
                   {ngram}
                 </motion.span>

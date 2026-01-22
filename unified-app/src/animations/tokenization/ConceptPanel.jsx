@@ -114,7 +114,7 @@ export default function ConceptPanel() {
                             <Type size={20} />
                         </div>
                         <h3 className="font-bold text-blue-900 mb-2">Text → Numbers</h3>
-                        <p className="text-blue-800 text-sm">
+                        <p className="text-sm">
                             Computers can't read text directly. Tokens are mapped to numerical IDs that models can process.
                         </p>
                     </div>
@@ -124,7 +124,7 @@ export default function ConceptPanel() {
                             <Hash size={20} />
                         </div>
                         <h3 className="font-bold text-green-900 mb-2">Vocabulary Size</h3>
-                        <p className="text-green-800 text-sm">
+                        <p className="text-sm">
                             A fixed vocabulary of tokens (e.g., 50,000) can represent any text, balancing coverage and efficiency.
                         </p>
                     </div>
@@ -134,7 +134,7 @@ export default function ConceptPanel() {
                             <Layers size={20} />
                         </div>
                         <h3 className="font-bold text-purple-900 mb-2">Subword Magic</h3>
-                        <p className="text-purple-800 text-sm">
+                        <p className="text-sm">
                             Subword tokenization handles rare words by breaking them into known pieces: "unhappy" → "un" + "happy"
                         </p>
                     </div>
@@ -194,7 +194,7 @@ export default function ConceptPanel() {
                                     className="sr-only"
                                 />
                                 <div className="font-bold text-slate-800">{method.label}</div>
-                                <div className="text-xs text-slate-600">{method.desc}</div>
+                                <div className="text-xs text-slate-800 dark:text-slate-600">{method.desc}</div>
                             </label>
                         ))}
                     </div>
@@ -202,13 +202,13 @@ export default function ConceptPanel() {
                     {/* Visualization */}
                     <div className="bg-white rounded-lg p-4 border border-slate-200">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="text-sm font-medium text-slate-600">Original:</span>
+                            <span className="text-sm font-medium text-slate-800 dark:text-slate-600">Original:</span>
                             <span className="font-mono bg-slate-100 px-2 py-1 rounded">{inputText}</span>
                         </div>
                         
                         <div className="flex items-center gap-2 mb-3">
-                            <ArrowRight className="text-slate-400" size={20} />
-                            <span className="text-sm font-medium text-slate-600">Tokens ({tokens.length}):</span>
+                            <ArrowRight className="text-slate-800 dark:text-slate-400" size={20} />
+                            <span className="text-sm font-medium text-slate-800 dark:text-slate-600">Tokens ({tokens.length}):</span>
                         </div>
 
                         <div className="flex flex-wrap gap-2">
@@ -232,7 +232,7 @@ export default function ConceptPanel() {
                     <Lightbulb className="text-amber-600 flex-shrink-0 mt-1" size={24} />
                     <div>
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
-                        <p className="text-amber-800 text-sm">
+                        <p className="text-sm">
                             Different tokenization methods produce different numbers of tokens for the same text.
                             <strong> Subword tokenization</strong> (like BPE) is the most common in modern LLMs because it 
                             balances vocabulary size with the ability to handle rare or novel words.

@@ -40,7 +40,7 @@ export default function AnatomyPanel() {
         <div className="p-8 h-full flex flex-col lg:flex-row gap-8">
             {/* Interactive Diagram Side */}
             <div className="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center relative min-h-[400px]">
-                <h3 className="absolute top-4 left-4 text-sm font-bold text-slate-400 uppercase tracking-wider">Interactive Schematic</h3>
+                <h3 className="absolute top-4 left-4 text-sm font-bold text-slate-800 dark:text-slate-400 uppercase tracking-wider">Interactive Schematic</h3>
 
                 {/* Simplified LSTM Diagram */}
                 <div className="relative w-[400px] h-[300px] bg-slate-50 rounded-lg border-2 border-slate-200 p-4">
@@ -100,7 +100,7 @@ export default function AnatomyPanel() {
                         +
                     </button>
 
-                    <p className="absolute bottom-2 right-2 text-xs text-slate-400">Click components to inspect</p>
+                    <p className="absolute bottom-2 right-2 text-xs text-slate-800 dark:text-slate-400">Click components to inspect</p>
                 </div>
             </div>
 
@@ -135,7 +135,7 @@ export default function AnatomyPanel() {
                         )}
                     </div>
                 ) : (
-                    <div className="text-center text-slate-400 p-8 border-2 border-dashed border-slate-200 rounded-xl">
+                    <div className="text-center text-slate-800 dark:text-slate-400 p-8 border-2 border-dashed border-slate-200 rounded-xl">
                         <p className="text-xl font-medium">Select a component on the diagram</p>
                         <p className="text-sm mt-2">Explore the building blocks of the LSTM cell</p>
                     </div>

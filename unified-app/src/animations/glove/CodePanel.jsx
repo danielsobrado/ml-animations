@@ -383,7 +383,7 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
         <h2 className="text-3xl font-bold mb-2">
           <span className="gradient-text">Python</span> Code Examples
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-800 dark:text-gray-400">
           Load, use, and train GloVe embeddings
         </p>
       </div>
@@ -399,7 +399,7 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-violet-600 text-white'
-                  : 'bg-white/10 text-gray-400 hover:bg-white/20'
+                  : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
               }`}
             >
               <Icon size={16} />
@@ -436,7 +436,7 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
               </button>
             </div>
             <pre className="p-4 overflow-x-auto text-sm">
-              <code className="text-gray-300 mono">{example.code}</code>
+              <code className="text-gray-700 dark:text-gray-300 mono">{example.code}</code>
             </pre>
           </div>
         ))}
@@ -447,20 +447,20 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
         <h4 className="text-lg font-bold text-violet-400 mb-4">📦 Quick Install Commands</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium text-sm mb-1">Core Libraries</p>
-            <code className="text-xs text-gray-400">pip install numpy gensim scikit-learn</code>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">Core Libraries</p>
+            <code className="text-xs text-gray-800 dark:text-gray-400">pip install numpy gensim scikit-learn</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium text-sm mb-1">Visualization</p>
-            <code className="text-xs text-gray-400">pip install matplotlib seaborn</code>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">Visualization</p>
+            <code className="text-xs text-gray-800 dark:text-gray-400">pip install matplotlib seaborn</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium text-sm mb-1">Training GloVe</p>
-            <code className="text-xs text-gray-400">pip install mittens</code>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">Training GloVe</p>
+            <code className="text-xs text-gray-800 dark:text-gray-400">pip install mittens</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium text-sm mb-1">PyTorch Integration</p>
-            <code className="text-xs text-gray-400">pip install torch torchtext</code>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">PyTorch Integration</p>
+            <code className="text-xs text-gray-800 dark:text-gray-400">pip install torch torchtext</code>
           </div>
         </div>
       </div>
@@ -468,29 +468,29 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
       {/* Download Links */}
       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
         <h4 className="text-lg font-bold text-violet-400 mb-4">🔗 Download Pre-trained GloVe</h4>
-        <p className="text-gray-300 mb-4 text-sm">
+        <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">
           Download from Stanford NLP: <a href="https://nlp.stanford.edu/projects/glove/" target="_blank" rel="noopener noreferrer" className="text-violet-400 hover:underline">nlp.stanford.edu/projects/glove/</a>
         </p>
         <div className="grid md:grid-cols-2 gap-3 text-sm">
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium">glove.6B.zip (822 MB)</p>
-            <p className="text-gray-500">Wikipedia 2014 + Gigaword 5</p>
-            <p className="text-gray-500">50d, 100d, 200d, 300d</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.6B.zip (822 MB)</p>
+            <p className="text-gray-700 dark:text-gray-500">Wikipedia 2014 + Gigaword 5</p>
+            <p className="text-gray-700 dark:text-gray-500">50d, 100d, 200d, 300d</p>
           </div>
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium">glove.42B.300d.zip (1.9 GB)</p>
-            <p className="text-gray-500">Common Crawl (42B tokens)</p>
-            <p className="text-gray-500">300d vectors only</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.42B.300d.zip (1.9 GB)</p>
+            <p className="text-gray-700 dark:text-gray-500">Common Crawl (42B tokens)</p>
+            <p className="text-gray-700 dark:text-gray-500">300d vectors only</p>
           </div>
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium">glove.840B.300d.zip (2.0 GB)</p>
-            <p className="text-gray-500">Common Crawl (840B tokens)</p>
-            <p className="text-gray-500">300d vectors only</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.840B.300d.zip (2.0 GB)</p>
+            <p className="text-gray-700 dark:text-gray-500">Common Crawl (840B tokens)</p>
+            <p className="text-gray-700 dark:text-gray-500">300d vectors only</p>
           </div>
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-400 font-medium">glove.twitter.27B.zip (1.4 GB)</p>
-            <p className="text-gray-500">Twitter (27B tokens)</p>
-            <p className="text-gray-500">25d, 50d, 100d, 200d</p>
+            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.twitter.27B.zip (1.4 GB)</p>
+            <p className="text-gray-700 dark:text-gray-500">Twitter (27B tokens)</p>
+            <p className="text-gray-700 dark:text-gray-500">25d, 50d, 100d, 200d</p>
           </div>
         </div>
       </div>

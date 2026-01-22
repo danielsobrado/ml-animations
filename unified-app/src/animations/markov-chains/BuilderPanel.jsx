@@ -28,8 +28,8 @@ export default function BuilderPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-blue-400 mb-4">Transition Matrix</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">Transition Matrix</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     The <strong>Transition Matrix (P)</strong> defines the rules of the world.
                     <br />
                     Row <em>i</em>, Column <em>j</em> = Probability of going from State <em>i</em> to State <em>j</em>.
@@ -70,7 +70,7 @@ export default function BuilderPanel() {
                     </div>
 
                     {!isValid && (
-                        <div className="mt-4 p-3 bg-red-900/30 rounded-lg border border-red-700 text-center text-red-300 text-sm">
+                        <div className="mt-4 p-3 bg-red-900/30 rounded-lg border border-red-700 text-center text-sm">
                             ⚠️ Warning: Probabilities in each row must sum to 1.0!
                             <br />
                             Current sums: {rowSums.map(s => s.toFixed(2)).join(', ')}
@@ -90,12 +90,12 @@ export default function BuilderPanel() {
 
                     <div className="absolute bottom-10 left-10 text-center">
                         <div className={`w-24 h-24 rounded-full border-4 border-slate-500 flex items-center justify-center text-4xl bg-slate-900 z-10 relative`}>☁️</div>
-                        <div className="text-slate-400 font-bold mt-2">Cloudy</div>
+                        <div className="text-slate-800 dark:text-slate-400 font-bold mt-2">Cloudy</div>
                     </div>
 
                     <div className="absolute bottom-10 right-10 text-center">
                         <div className={`w-24 h-24 rounded-full border-4 border-blue-500 flex items-center justify-center text-4xl bg-slate-900 z-10 relative`}>🌧️</div>
-                        <div className="text-blue-400 font-bold mt-2">Rainy</div>
+                        <div className="text-blue-600 dark:text-blue-400 font-bold mt-2">Rainy</div>
                     </div>
 
                     {/* Arrows (SVG Overlay) */}
@@ -120,7 +120,7 @@ export default function BuilderPanel() {
                         <text x="300" y="50" fill="#cbd5e1" fontSize="12" textAnchor="middle">{matrix[0][0]}</text>
                     </svg>
 
-                    <div className="absolute bottom-2 right-2 text-xs text-slate-500">
+                    <div className="absolute bottom-2 right-2 text-xs text-slate-700 dark:text-slate-500">
                         * Simplified graph view (showing main cycle)
                     </div>
                 </div>

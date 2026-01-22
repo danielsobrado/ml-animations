@@ -83,7 +83,7 @@ function NGramPanel() {
           {/* N-grams List */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-purple-400" />
+              <Layers className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               N-gram Vectors for "{word}"
             </h3>
             <div className="space-y-2">
@@ -99,7 +99,7 @@ function NGramPanel() {
                   className="flex items-center gap-3 p-2 rounded-lg"
                 >
                   <span className="font-mono text-purple-300 w-12">{ngram}</span>
-                  <ArrowRight className="w-4 h-4 text-purple-400" />
+                  <ArrowRight className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   <div className="flex gap-1">
                     {ngramVectors[ngram].map((val, j) => (
                       <motion.div
@@ -120,7 +120,7 @@ function NGramPanel() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                     >
-                      <Plus className="w-4 h-4 text-pink-400" />
+                      <Plus className="w-4 h-4 text-pink-600 dark:text-pink-400" />
                     </motion.div>
                   )}
                 </motion.div>

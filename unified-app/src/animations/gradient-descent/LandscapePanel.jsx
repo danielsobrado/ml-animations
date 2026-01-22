@@ -137,7 +137,7 @@ export default function LandscapePanel() {
                     🎲 Drop Ball & Descend
                 </button>
             </div>
-            <div className="bg-slate-100 rounded-xl border border-slate-300 p-2 text-center text-sm text-slate-500 mb-2">
+            <div className="bg-slate-100 rounded-xl border border-slate-300 p-2 text-center text-sm text-slate-700 dark:text-slate-500 mb-2">
                 Drag to rotate • Scroll to zoom • Watch the ball find the local minimum
             </div>
             <div ref={containerRef} className="flex-1 rounded-xl overflow-hidden shadow-inner border border-slate-300" />

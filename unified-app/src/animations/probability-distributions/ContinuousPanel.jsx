@@ -63,8 +63,8 @@ export default function ContinuousPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-purple-400 mb-4">Continuous Distributions</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4">Continuous Distributions</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Distributions for <strong>continuous</strong> outcomes (any real number).
                     <br />
                     PDF (Probability Density Function): P(a &lt; X &lt; b) is the <strong>area under curve</strong>.
@@ -77,7 +77,7 @@ export default function ContinuousPanel() {
                     onClick={() => setDistType('normal')}
                     className={`px-8 py-4 rounded-xl font-bold transition-all ${distType === 'normal'
                             ? 'bg-purple-600 text-white shadow-lg scale-105'
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                         }`}
                 >
                     Normal (Gaussian)
@@ -86,7 +86,7 @@ export default function ContinuousPanel() {
                     onClick={() => setDistType('exponential')}
                     className={`px-8 py-4 rounded-xl font-bold transition-all ${distType === 'exponential'
                             ? 'bg-pink-600 text-white shadow-lg scale-105'
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                         }`}
                 >
                     Exponential
@@ -98,7 +98,7 @@ export default function ContinuousPanel() {
                 <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl mb-8">
                     <div className="bg-slate-800 p-6 rounded-xl border border-purple-500/50">
                         <label className="flex justify-between text-sm font-bold mb-3">
-                            μ (mean): <span className="text-purple-400">{mu.toFixed(1)}</span>
+                            μ (mean): <span className="text-purple-600 dark:text-purple-400">{mu.toFixed(1)}</span>
                         </label>
                         <input
                             type="range" min="-5" max="5" step="0.5"
@@ -110,7 +110,7 @@ export default function ContinuousPanel() {
 
                     <div className="bg-slate-800 p-6 rounded-xl border border-purple-500/50">
                         <label className="flex justify-between text-sm font-bold mb-3">
-                            σ (std dev): <span className="text-purple-400">{sigma.toFixed(1)}</span>
+                            σ (std dev): <span className="text-purple-600 dark:text-purple-400">{sigma.toFixed(1)}</span>
                         </label>
                         <input
                             type="range" min="0.5" max="3" step="0.1"
@@ -125,7 +125,7 @@ export default function ContinuousPanel() {
             {distType === 'exponential' && (
                 <div className="bg-slate-800 p-6 rounded-xl border border-pink-500/50 w-full max-w-2xl mb-8">
                     <label className="flex justify-between text-sm font-bold mb-3">
-                        λ (rate): <span className="text-pink-400">{lambdaExp.toFixed(1)}</span>
+                        λ (rate): <span className="text-pink-600 dark:text-pink-400">{lambdaExp.toFixed(1)}</span>
                     </label>
                     <input
                         type="range" min="0.2" max="3" step="0.1"
@@ -133,7 +133,7 @@ export default function ContinuousPanel() {
                         onChange={(e) => setLambdaExp(Number(e.target.value))}
                         className="w-full accent-pink-400"
                     />
-                    <p className="text-xs text-slate-400 mt-2">Average wait time = 1/λ = {(1 / lambdaExp).toFixed(2)} units</p>
+                    <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">Average wait time = 1/λ = {(1 / lambdaExp).toFixed(2)} units</p>
                 </div>
             )}
 
@@ -141,7 +141,7 @@ export default function ContinuousPanel() {
             <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl mb-8">
                 <div className="bg-slate-800 p-6 rounded-xl border border-cyan-500/50">
                     <label className="flex justify-between text-sm font-bold mb-3">
-                        a (lower bound): <span className="text-cyan-400">{rangeA.toFixed(1)}</span>
+                        a (lower bound): <span className="text-cyan-600 dark:text-cyan-400">{rangeA.toFixed(1)}</span>
                     </label>
                     <input
                         type="range"
@@ -156,7 +156,7 @@ export default function ContinuousPanel() {
 
                 <div className="bg-slate-800 p-6 rounded-xl border border-cyan-500/50">
                     <label className="flex justify-between text-sm font-bold mb-3">
-                        b (upper bound): <span className="text-cyan-400">{rangeB.toFixed(1)}</span>
+                        b (upper bound): <span className="text-cyan-600 dark:text-cyan-400">{rangeB.toFixed(1)}</span>
                     </label>
                     <input
                         type="range"
@@ -199,10 +199,10 @@ export default function ContinuousPanel() {
 
                 {/* Result */}
                 <div className="mt-6 p-4 bg-cyan-900/30 rounded-lg border border-cyan-700">
-                    <p className="text-cyan-300 text-center font-bold text-lg">
+                    <p className="text-center font-bold text-lg">
                         P({rangeA.toFixed(1)} &lt; X &lt; {rangeB.toFixed(1)}) ≈ {(areaUnderCurve * 100).toFixed(1)}%
                     </p>
-                    <p className="text-xs text-slate-400 mt-2 text-center">
+                    <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                         This is the <strong>area under the curve</strong> between the blue lines.
                     </p>
                 </div>

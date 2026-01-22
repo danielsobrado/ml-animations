@@ -171,7 +171,7 @@ export default function PracticePanel() {
           <p className="text-gray-700 font-medium">
             Step {currentStep + 1} of {PRACTICE_STEPS.length}: Calculate C[{currentPractice.row + 1}][{currentPractice.col + 1}]
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-700 dark:text-gray-500 mt-1">
             Row {currentPractice.row + 1} of A × Column {currentPractice.col + 1} of B
           </p>
         </div>
@@ -207,7 +207,7 @@ export default function PracticePanel() {
 
           {showHint && (
             <div className="mt-2 p-3 bg-yellow-100 rounded-lg border border-yellow-300">
-              <p className="text-yellow-800 text-sm">{currentPractice.hint}</p>
+              <p className="text-sm">{currentPractice.hint}</p>
             </div>
           )}
 
@@ -226,7 +226,7 @@ export default function PracticePanel() {
             <p className="text-green-600 mt-2">
               Score: {score} / {PRACTICE_STEPS.length} correct
             </p>
-            <p className="text-green-600 text-sm">
+            <p className="text-sm">
               Total attempts: {attempts}
             </p>
           </div>
@@ -235,7 +235,7 @@ export default function PracticePanel() {
 
       {/* Progress & Reset */}
       <div className="mt-4 flex items-center gap-4">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-800 dark:text-gray-600">
           Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}
         </div>
         <button

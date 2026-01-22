@@ -34,8 +34,8 @@ export default function AlgebraPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-400 mb-4">Word Algebra</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">Word Algebra</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Embeddings capture meaning as direction.
                     <br />
                     <span className="font-mono bg-slate-700 px-2 py-1 rounded text-cyan-300">King - Man + Woman ≈ Queen</span>
@@ -45,19 +45,19 @@ export default function AlgebraPanel() {
             <div className="flex gap-4 mb-8">
                 <button
                     onClick={() => setStep(0)}
-                    className={`px-6 py-2 rounded-lg font-bold transition-all ${step === 0 ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-400'}`}
+                    className={`px-6 py-2 rounded-lg font-bold transition-all ${step === 0 ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-800 dark:text-slate-400'}`}
                 >
                     1. Start: King
                 </button>
                 <button
                     onClick={() => setStep(1)}
-                    className={`px-6 py-2 rounded-lg font-bold transition-all ${step === 1 ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-400'}`}
+                    className={`px-6 py-2 rounded-lg font-bold transition-all ${step === 1 ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-800 dark:text-slate-400'}`}
                 >
                     2. Subtract: Man
                 </button>
                 <button
                     onClick={() => setStep(2)}
-                    className={`px-6 py-2 rounded-lg font-bold transition-all ${step === 2 ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-400'}`}
+                    className={`px-6 py-2 rounded-lg font-bold transition-all ${step === 2 ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-800 dark:text-slate-400'}`}
                 >
                     3. Add: Woman
                 </button>

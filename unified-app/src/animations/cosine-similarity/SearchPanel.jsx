@@ -71,7 +71,7 @@ export default function SearchPanel() {
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent mb-4">
                     Search Engine
                 </h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     How does Google rank pages? It calculates similarity between your query and billions of documents.
                 </p>
             </div>
@@ -79,7 +79,7 @@ export default function SearchPanel() {
             {/* Search Bar */}
             <div className="w-full max-w-2xl mb-8">
                 <div className="relative">
-                    <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
+                    <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-800 dark:text-slate-400" size={20} />
                     <input
                         type="text"
                         value={query}
@@ -88,7 +88,7 @@ export default function SearchPanel() {
                         className="w-full pl-12 pr-4 py-4 bg-slate-800 border-2 border-slate-700 rounded-xl text-white text-lg focus:border-cyan-500 focus:outline-none transition-colors"
                     />
                 </div>
-                <p className="text-xs text-slate-400 mt-2 text-center">
+                <p className="text-xs text-slate-800 dark:text-slate-400 mt-2 text-center">
                     Try: "apple pie recipe", "apple computer", "tech phone", "bake"
                 </p>
             </div>
@@ -96,7 +96,7 @@ export default function SearchPanel() {
             <div className="grid lg:grid-cols-2 gap-8 w-full max-w-6xl">
                 {/* Results Ranking */}
                 <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <h3 className="font-bold text-slate-300 mb-4 text-center">Search Results (Ranked by Similarity)</h3>
+                    <h3 className="font-bold text-slate-700 dark:text-slate-300 mb-4 text-center">Search Results (Ranked by Similarity)</h3>
                     <ResponsiveContainer width="100%" height={350}>
                         <BarChart data={chartData} layout="horizontal">
                             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -118,7 +118,7 @@ export default function SearchPanel() {
 
                 {/* Document List */}
                 <div className="space-y-4">
-                    <h3 className="font-bold text-slate-300 text-center mb-4">Document Previews</h3>
+                    <h3 className="font-bold text-slate-700 dark:text-center mb-4">Document Previews</h3>
                     {results.map((doc, idx) => (
                         <div
                             key={doc.id}
@@ -138,12 +138,12 @@ export default function SearchPanel() {
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">
-                                <span className="text-xs text-slate-400">Document {doc.id}</span>
+                                <span className="text-xs text-slate-800 dark:text-slate-400">Document {doc.id}</span>
                                 <div className="text-right">
                                     <div className={`text-2xl font-mono font-bold ${idx === 0 ? 'text-cyan-400' : idx === 1 ? 'text-purple-400' : 'text-slate-400'}`}>
                                         {(doc.score * 100).toFixed(1)}%
                                     </div>
-                                    <div className="text-xs text-slate-500">Relevance</div>
+                                    <div className="text-xs text-slate-700 dark:text-slate-500">Relevance</div>
                                 </div>
                             </div>
                         </div>

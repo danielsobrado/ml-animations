@@ -147,7 +147,7 @@ export default function WordPiecePanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">WordPiece Tokenization</h2>
-                    <p className="text-slate-600">
+                    <p className="text-slate-800 dark:text-slate-600">
                         Used by BERT - greedy longest-match-first algorithm
                     </p>
                 </div>
@@ -207,7 +207,7 @@ export default function WordPiecePanel() {
                     >
                         <ChevronRight size={20} />
                     </button>
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm text-slate-800 dark:text-slate-600">
                         Step {currentStep + 1} / {steps.length}
                     </span>
                 </div>
@@ -228,7 +228,7 @@ export default function WordPiecePanel() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Original Word */}
                         <div className="bg-white p-4 rounded-lg border">
-                            <h4 className="text-sm font-medium text-slate-600 mb-2">Current Word</h4>
+                            <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Current Word</h4>
                             <div className="text-2xl font-mono font-bold text-slate-800">
                                 {currentStepData.word || '-'}
                             </div>
@@ -236,7 +236,7 @@ export default function WordPiecePanel() {
 
                         {/* Remaining */}
                         <div className="bg-white p-4 rounded-lg border">
-                            <h4 className="text-sm font-medium text-slate-600 mb-2">Remaining</h4>
+                            <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Remaining</h4>
                             <div className="text-2xl font-mono">
                                 {currentStepData.remaining !== undefined ? (
                                     currentStepData.remaining || <span className="text-green-600">✓ Done</span>
@@ -246,7 +246,7 @@ export default function WordPiecePanel() {
 
                         {/* Current Match */}
                         <div className="bg-white p-4 rounded-lg border">
-                            <h4 className="text-sm font-medium text-slate-600 mb-2">Trying to Match</h4>
+                            <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Trying to Match</h4>
                             <div className="text-2xl font-mono text-indigo-600">
                                 {currentStepData.tried || '-'}
                             </div>
@@ -255,7 +255,7 @@ export default function WordPiecePanel() {
 
                     {/* Tokens So Far */}
                     <div className="mt-4 p-4 bg-white rounded-lg border">
-                        <h4 className="text-sm font-medium text-slate-600 mb-2">Tokens Generated</h4>
+                        <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Tokens Generated</h4>
                         <div className="flex flex-wrap gap-2">
                             {currentStepData.tokens?.length > 0 ? (
                                 currentStepData.tokens.map((token, i) => (
@@ -273,7 +273,7 @@ export default function WordPiecePanel() {
                                     </span>
                                 ))
                             ) : (
-                                <span className="text-slate-400">No tokens yet</span>
+                                <span className="text-slate-800 dark:text-slate-400">No tokens yet</span>
                             )}
                         </div>
                     </div>
@@ -295,7 +295,7 @@ export default function WordPiecePanel() {
                                 {token}
                             </span>
                         ))}
-                        <span className="text-slate-500 text-xs">...and more</span>
+                        <span className="text-slate-700 dark:text-xs">...and more</span>
                     </div>
                 </div>
 

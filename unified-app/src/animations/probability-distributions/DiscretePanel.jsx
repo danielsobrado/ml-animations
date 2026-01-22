@@ -52,8 +52,8 @@ export default function DiscretePanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-indigo-400 mb-4">Discrete Distributions</h2>
-                <p className="text-lg text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">Discrete Distributions</h2>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                     Distributions for <strong>countable</strong> outcomes (0, 1, 2, 3, ...).
                     <br />
                     PMF (Probability Mass Function): P(X = k) is the bar height.
@@ -66,7 +66,7 @@ export default function DiscretePanel() {
                     onClick={() => setDistType('binomial')}
                     className={`px-8 py-4 rounded-xl font-bold transition-all ${distType === 'binomial'
                             ? 'bg-indigo-600 text-white shadow-lg scale-105'
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                         }`}
                 >
                     Binomial
@@ -75,7 +75,7 @@ export default function DiscretePanel() {
                     onClick={() => setDistType('poisson')}
                     className={`px-8 py-4 rounded-xl font-bold transition-all ${distType === 'poisson'
                             ? 'bg-purple-600 text-white shadow-lg scale-105'
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            : 'bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-600'
                         }`}
                 >
                     Poisson
@@ -87,7 +87,7 @@ export default function DiscretePanel() {
                 <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl mb-8">
                     <div className="bg-slate-800 p-6 rounded-xl border border-indigo-500/50">
                         <label className="flex justify-between text-sm font-bold mb-3">
-                            n (trials): <span className="text-indigo-400">{n}</span>
+                            n (trials): <span className="text-indigo-600 dark:text-indigo-400">{n}</span>
                         </label>
                         <input
                             type="range" min="1" max="20" step="1"
@@ -95,12 +95,12 @@ export default function DiscretePanel() {
                             onChange={(e) => setN(Number(e.target.value))}
                             className="w-full accent-indigo-400"
                         />
-                        <p className="text-xs text-slate-400 mt-2">Number of coin flips</p>
+                        <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">Number of coin flips</p>
                     </div>
 
                     <div className="bg-slate-800 p-6 rounded-xl border border-indigo-500/50">
                         <label className="flex justify-between text-sm font-bold mb-3">
-                            p (success prob): <span className="text-indigo-400">{p.toFixed(2)}</span>
+                            p (success prob): <span className="text-indigo-600 dark:text-indigo-400">{p.toFixed(2)}</span>
                         </label>
                         <input
                             type="range" min="0" max="1" step="0.05"
@@ -108,7 +108,7 @@ export default function DiscretePanel() {
                             onChange={(e) => setP(Number(e.target.value))}
                             className="w-full accent-indigo-400"
                         />
-                        <p className="text-xs text-slate-400 mt-2">Probability of heads</p>
+                        <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">Probability of heads</p>
                     </div>
                 </div>
             )}
@@ -116,7 +116,7 @@ export default function DiscretePanel() {
             {distType === 'poisson' && (
                 <div className="bg-slate-800 p-6 rounded-xl border border-purple-500/50 w-full max-w-2xl mb-8">
                     <label className="flex justify-between text-sm font-bold mb-3">
-                        λ (lambda - rate): <span className="text-purple-400">{lambda.toFixed(1)}</span>
+                        λ (lambda - rate): <span className="text-purple-600 dark:text-purple-400">{lambda.toFixed(1)}</span>
                     </label>
                     <input
                         type="range" min="0.5" max="15" step="0.5"
@@ -124,7 +124,7 @@ export default function DiscretePanel() {
                         onChange={(e) => setLambda(Number(e.target.value))}
                         className="w-full accent-purple-400"
                     />
-                    <p className="text-xs text-slate-400 mt-2">Average events per interval (e.g., emails per hour)</p>
+                    <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">Average events per interval (e.g., emails per hour)</p>
                 </div>
             )}
 
@@ -154,7 +154,7 @@ export default function DiscretePanel() {
 
                 {/* Example */}
                 <div className="mt-6 p-4 bg-slate-900 rounded-lg border border-slate-700">
-                    <p className="text-slate-300 text-sm text-center">
+                    <p className="text-slate-700 dark:text-sm text-center">
                         {distType === 'binomial' && (
                             <>
                                 <strong>Example:</strong> Flip {n} coins with P(Heads) = {p.toFixed(2)}.

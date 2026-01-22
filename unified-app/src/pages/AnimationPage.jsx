@@ -14,7 +14,7 @@ export default function AnimationPage() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
           Animation Not Found
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 mb-6">
+        <p className="text-slate-800 dark:text-slate-400 mb-6">
           The animation "{id}" could not be found.
         </p>
         <Link to="/" className="btn-primary">
@@ -36,12 +36,12 @@ export default function AnimationPage() {
       {/* Breadcrumb */}
       <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-sm">
-          <Link to="/" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+          <Link to="/" className="text-slate-700 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
             Home
           </Link>
-          <span className="text-slate-400">/</span>
-          <span className="text-slate-500">{animation.categoryName}</span>
-          <span className="text-slate-400">/</span>
+          <span className="text-slate-700 dark:text-slate-400">/</span>
+          <span className="text-slate-700 dark:text-slate-500">{animation.categoryName}</span>
+          <span className="text-slate-700 dark:text-slate-400">/</span>
           <span className="font-medium text-slate-900 dark:text-white">{animation.name}</span>
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function AnimationPage() {
             <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2">
               {animation.name}
             </h1>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-slate-800 dark:text-slate-400">
               {animation.description}
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function AnimationPage() {
           {prevAnimation ? (
             <Link 
               to={`/animation/${prevAnimation.id}`}
-              className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="flex items-center gap-2 text-sm text-slate-800 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               <ArrowLeft size={16} />
               <span className="hidden sm:inline">{prevAnimation.name}</span>
@@ -89,7 +89,7 @@ export default function AnimationPage() {
           {nextAnimation ? (
             <Link 
               to={`/animation/${nextAnimation.id}`}
-              className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="flex items-center gap-2 text-sm text-slate-800 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               <span className="hidden sm:inline">{nextAnimation.name}</span>
               <span className="sm:hidden">Next</span>
@@ -108,7 +108,7 @@ function LoadingAnimation() {
     <div className="flex items-center justify-center p-12">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p className="text-slate-600 dark:text-slate-400">Loading animation...</p>
+        <p className="text-slate-800 dark:text-slate-400">Loading animation...</p>
       </div>
     </div>
   );
@@ -138,7 +138,7 @@ function AnimationContent({ animationId, animation }) {
         {animation.name} Animation
       </h2>
       
-      <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-lg mx-auto">
+      <p className="text-slate-800 dark:text-slate-400 mb-6 max-w-lg mx-auto">
         This animation is ready to be integrated. Copy the components from the 
         <code className="mx-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-sm">
           {animationId}-animation/src/
@@ -163,7 +163,7 @@ function AnimationContent({ animationId, animation }) {
         <h3 className="font-semibold text-slate-900 dark:text-white mb-3">
           Integration Steps:
         </h3>
-        <ol className="text-sm text-slate-600 dark:text-slate-400 space-y-2 list-decimal list-inside">
+        <ol className="text-sm text-slate-800 dark:text-slate-400 space-y-2 list-decimal list-inside">
           <li>Copy panel components from <code className="px-1 bg-slate-200 dark:bg-slate-700 rounded">{animationId}-animation/src/</code></li>
           <li>Place them in <code className="px-1 bg-slate-200 dark:bg-slate-700 rounded">unified-app/src/animations/{animationId}/</code></li>
           <li>Register the animation in <code className="px-1 bg-slate-200 dark:bg-slate-700 rounded">src/animations/index.js</code></li>

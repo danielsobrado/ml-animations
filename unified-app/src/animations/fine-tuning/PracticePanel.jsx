@@ -187,7 +187,7 @@ export default function PracticePanel() {
                             <>
                                 {/* Progress */}
                                 <div className="flex justify-between items-center mb-6">
-                                    <span className="text-sm text-slate-500">
+                                    <span className="text-sm text-slate-700 dark:text-slate-500">
                                         Question {currentQuestion + 1} of {quizQuestions.length}
                                     </span>
                                     <div className="flex gap-1">
@@ -273,7 +273,7 @@ export default function PracticePanel() {
                                 <h3 className="text-2xl font-bold text-slate-800 mb-2">
                                     Quiz Complete!
                                 </h3>
-                                <p className="text-xl text-slate-600 mb-6">
+                                <p className="text-xl text-slate-800 dark:text-slate-600 mb-6">
                                     You scored <span className="font-bold text-purple-600">{getScore()}</span> out of {quizQuestions.length}
                                 </p>
                                 <button
@@ -413,9 +413,9 @@ export default function PracticePanel() {
                             </div>
 
                             <div className="mt-4 p-4 bg-slate-800 rounded-lg">
-                                <div className="text-slate-400 text-sm mb-1">Estimated Training Memory</div>
+                                <div className="text-slate-800 dark:text-sm mb-1">Estimated Training Memory</div>
                                 <div className="text-3xl font-bold text-white">{memCalc.totalTraining} GB</div>
-                                <div className="text-slate-400 text-sm mt-1">
+                                <div className="text-slate-800 dark:text-sm mt-1">
                                     (includes model + LoRA + optimizer + activations)
                                 </div>
                             </div>

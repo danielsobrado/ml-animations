@@ -98,7 +98,7 @@ export default function PipelinePanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-indigo-900 mb-2">RAG Indexing Pipeline</h2>
-                    <p className="text-slate-600">Watch how documents are prepared for retrieval</p>
+                    <p className="text-slate-800 dark:text-slate-600">Watch how documents are prepared for retrieval</p>
                 </div>
 
                 {/* Controls */}
@@ -163,7 +163,7 @@ export default function PipelinePanel() {
                                     }`}
                                 >
                                     <div className="font-bold text-sm text-slate-800">{doc.title}</div>
-                                    <div className="text-xs text-slate-600 mt-1">{doc.content}</div>
+                                    <div className="text-xs text-slate-800 dark:text-slate-600 mt-1">{doc.content}</div>
                                 </div>
                             ))}
                         </div>
@@ -183,11 +183,11 @@ export default function PipelinePanel() {
                                     style={{ animationDelay: `${i * 100}ms` }}
                                 >
                                     <div className="font-semibold text-slate-700">{chunk.title} - Chunk {i + 1}</div>
-                                    <div className="text-slate-600 mt-1">{chunk.text}</div>
+                                    <div className="text-slate-800 dark:text-slate-600 mt-1">{chunk.text}</div>
                                 </div>
                             ))}
                             {currentStep < 1 && (
-                                <div className="text-slate-400 text-sm italic p-4 text-center">
+                                <div className="text-slate-800 dark:text-sm italic p-4 text-center">
                                     Documents will be split into chunks...
                                 </div>
                             )}
@@ -222,7 +222,7 @@ export default function PipelinePanel() {
                                 </div>
                             ))}
                             {currentStep < 2 && (
-                                <div className="text-slate-400 text-sm italic p-4 text-center">
+                                <div className="text-slate-800 dark:text-sm italic p-4 text-center">
                                     Embeddings will appear here...
                                 </div>
                             )}
@@ -236,15 +236,15 @@ export default function PipelinePanel() {
                     <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                             <span className="font-medium text-amber-800">Fixed Size:</span>
-                            <p className="text-amber-700 text-xs">Split every N tokens (simple but may break sentences)</p>
+                            <p className="text-xs">Split every N tokens (simple but may break sentences)</p>
                         </div>
                         <div>
                             <span className="font-medium text-amber-800">Sentence-Based:</span>
-                            <p className="text-amber-700 text-xs">Split at sentence boundaries (preserves meaning)</p>
+                            <p className="text-xs">Split at sentence boundaries (preserves meaning)</p>
                         </div>
                         <div>
                             <span className="font-medium text-amber-800">Semantic:</span>
-                            <p className="text-amber-700 text-xs">Use embeddings to find natural breakpoints</p>
+                            <p className="text-xs">Use embeddings to find natural breakpoints</p>
                         </div>
                     </div>
                 </div>
