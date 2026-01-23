@@ -33,6 +33,7 @@ import {
   MessageSquare,
   TrendingDown,
   Maximize,
+  Users
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -61,6 +62,7 @@ export const categories = [
       { id: 'self-attention', name: 'Self-Attention', icon: CircleDot, description: 'Relating positions in a sequence' },
       { id: 'positional-encoding', name: 'Positional Encoding', icon: Workflow, description: 'Adding position information' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
+      { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'bert', name: 'BERT', icon: BookOpen, description: 'Bidirectional encoder representations' },
       { id: 'gpt2-comprehensive', name: 'GPT-2 Comprehensive', icon: MessageSquare, description: 'Detailed look at GPT-2 architecture' },
       { id: 'moe', name: 'Mixture of Experts', icon: GitBranch, description: 'Scaling models with conditional computation' },
