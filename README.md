@@ -199,6 +199,30 @@ How Transformers understand word order.
 cd positional-encoding-animation && npm install && npm run dev
 ```
 
+### Residual Stream Animation
+
+Understanding how information flows and accumulates through transformer layers.
+
+![Residual Stream](screenshots/residual-stream.png)
+
+- **Visualizes:** Token vectors flowing through layers with residual connections
+- **3 Learning Modes:**
+  1. **🛤️ The Highway**: Why residual connections prevent information loss
+  2. **📊 Vector Flow**: Step-by-step animation of residual additions and LayerNorm
+  3. **🎮 Interactive Playground**: Manipulate layer outputs and watch accumulation
+- **Features:**
+  - Animated vector addition visualization
+  - LayerNorm rescaling demonstration
+  - Interactive multi-layer residual stream
+- **Explains:**
+  - Why transformers don't "overwrite" representations
+  - Why depth works in neural networks
+  - How gradients flow back through residual connections
+
+```bash
+cd unified-app && npm install && npm run dev
+```
+
 ---
 
 ## Neural Networks

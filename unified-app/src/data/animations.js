@@ -34,7 +34,8 @@ import {
   TrendingDown,
   Maximize,
   Users,
-  RotateCcw
+  RotateCcw,
+  GitMerge
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -67,6 +68,7 @@ export const categories = [
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
       { id: 'flash-attention', name: 'Flash Attention', icon: Zap, description: 'Hardware-aware tiled attention for efficiency' },
+      { id: 'residual-stream', name: 'Residual Stream', icon: GitMerge, description: 'How information flows and accumulates through layers' },
       { id: 'bert', name: 'BERT', icon: BookOpen, description: 'Bidirectional encoder representations' },
       { id: 'gpt2-comprehensive', name: 'GPT-2 Comprehensive', icon: MessageSquare, description: 'Detailed look at GPT-2 architecture' },
       { id: 'moe', name: 'Mixture of Experts', icon: GitBranch, description: 'Scaling models with conditional computation' },
