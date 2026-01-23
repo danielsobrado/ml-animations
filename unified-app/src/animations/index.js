@@ -20,6 +20,7 @@ const animationRegistry = {
   'bert': lazy(() => import('./bert')),
   'gpt2-comprehensive': lazy(() => import('./gpt2-comprehensive')),
   'positional-encoding': lazy(() => import('./positional-encoding')),
+  'rope': lazy(() => import('./rope')),
 
   // Neural Network Components
   'relu': lazy(() => import('./relu')),

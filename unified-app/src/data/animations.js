@@ -33,7 +33,8 @@ import {
   MessageSquare,
   TrendingDown,
   Maximize,
-  Users
+  Users,
+  RotateCcw
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -61,6 +62,7 @@ export const categories = [
       { id: 'attention-mechanism', name: 'Attention Mechanism', icon: Target, description: 'The foundation of modern NLP' },
       { id: 'self-attention', name: 'Self-Attention', icon: CircleDot, description: 'Relating positions in a sequence' },
       { id: 'positional-encoding', name: 'Positional Encoding', icon: Workflow, description: 'Adding position information' },
+      { id: 'rope', name: 'RoPE (Rotary Embeddings)', icon: RotateCcw, description: 'Modern position encoding via rotation' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
