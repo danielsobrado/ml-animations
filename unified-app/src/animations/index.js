@@ -15,6 +15,7 @@ const animationRegistry = {
   'attention-mechanism': lazy(() => import('./attention-mechanism')),
   'self-attention': lazy(() => import('./self-attention')),
   'grouped-query-attention': lazy(() => import('./grouped-query-attention')),
+  'kv-cache': lazy(() => import('./kv-cache')),
   'transformer': lazy(() => import('./transformer')),
   'bert': lazy(() => import('./bert')),
   'gpt2-comprehensive': lazy(() => import('./gpt2-comprehensive')),
