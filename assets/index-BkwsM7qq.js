@@ -1,0 +1,1 @@
+import{E as o}from"./index-B6Xo-yhU.js";import{C as s}from"./CoreMlLesson-CkJysgjM.js";import"./check-circle-2-BKbumvCA.js";function e(){return o.jsx(s,{lessonId:"logistic-regression"})}export{e as default};
