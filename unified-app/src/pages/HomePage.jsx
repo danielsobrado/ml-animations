@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { categories } from '../data/animations';
 
+const totalLabs = 41;
+const totalQuizQuestions = 161;
+
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
 
@@ -33,12 +36,12 @@ export default function HomePage() {
           <span>Animations</span>
         </div>
         <div>
-          <strong>React</strong>
-          <span>Vite apps</span>
+          <strong>{totalLabs}</strong>
+          <span>Practice labs</span>
         </div>
         <div>
-          <strong>KaTeX</strong>
-          <span>Math notes</span>
+          <strong>{totalQuizQuestions}</strong>
+          <span>Quiz questions</span>
         </div>
       </section>
 
