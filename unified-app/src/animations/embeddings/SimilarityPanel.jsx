@@ -58,7 +58,9 @@ export default function SimilarityPanel() {
               strokeWidth="4"
               markerEnd="url(#similarity-arrow-a)"
             />
-            <text x={v1.x + 18} y={v1.y + 5} fill="var(--ds-mute)" fontWeight="700">Word A</text>
+            <text x={v1.x - 18} y={v1.y - 16} fill="var(--ds-mute)" fontWeight="700" textAnchor="middle">
+              Word A
+            </text>
 
             <line
               x1="0"

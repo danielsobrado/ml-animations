@@ -94,14 +94,11 @@ export default function ConceptPanel() {
                                 </motion.g>
 
                                 {/* Angle arc */}
-                                <motion.path
+                                <path
                                     d={`M 30 0 A 30 30 0 ${position * baseAngle > 180 ? 1 : 0} 0 ${30 * Math.cos(-position * baseAngle * Math.PI / 180)} ${30 * Math.sin(-position * baseAngle * Math.PI / 180)}`}
                                     fill="none"
                                     stroke="#8b5cf6"
                                     strokeWidth="2"
-                                    animate={{
-                                        d: `M 30 0 A 30 30 0 ${position * baseAngle > 180 ? 1 : 0} 0 ${30 * Math.cos(-position * baseAngle * Math.PI / 180)} ${30 * Math.sin(-position * baseAngle * Math.PI / 180)}`
-                                    }}
                                 />
 
                                 <defs>

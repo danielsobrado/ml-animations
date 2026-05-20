@@ -122,21 +122,23 @@ export default function AlgebraPanel() {
             )}
           </motion.g>
 
-          <motion.circle
-            animate={{ cx: result.x, cy: 400 - result.y }}
+          <circle
+            cx={result.x}
+            cy={400 - result.y}
             r="8"
             fill="#b7791f"
             stroke="var(--ds-paper)"
             strokeWidth="2"
           />
-          <motion.text
-            animate={{ x: result.x, y: 400 - result.y + 25 }}
+          <text
+            x={result.x}
+            y={400 - result.y + 25}
             fill="#8a4d12"
             textAnchor="middle"
             fontWeight="700"
           >
             Result
-          </motion.text>
+          </text>
         </svg>
       </div>
     </div>

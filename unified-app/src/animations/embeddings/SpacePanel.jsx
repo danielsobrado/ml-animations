@@ -9,10 +9,10 @@ export default function SpacePanel() {
 
     // Mock Embeddings Data
     const clusters = {
-        animals: { color: 0xf87171, words: ['Dog', 'Cat', 'Lion', 'Tiger', 'Wolf', 'Puppy', 'Kitten'] },
-        tech: { color: 0x60a5fa, words: ['Computer', 'Laptop', 'Phone', 'Code', 'Algorithm', 'AI', 'Robot'] },
-        food: { color: 0xfacc15, words: ['Pizza', 'Burger', 'Sushi', 'Pasta', 'Bread', 'Cheese', 'Apple'] },
-        cities: { color: 0x4ade80, words: ['Paris', 'London', 'Tokyo', 'New York', 'Berlin', 'Rome', 'Dubai'] }
+        animals: { color: 0x8a1d1d, words: ['Dog', 'Cat', 'Lion', 'Tiger', 'Wolf', 'Puppy', 'Kitten'] },
+        tech: { color: 0x264273, words: ['Computer', 'Laptop', 'Phone', 'Code', 'Algorithm', 'AI', 'Robot'] },
+        food: { color: 0xa85a3a, words: ['Pizza', 'Burger', 'Sushi', 'Pasta', 'Bread', 'Cheese', 'Apple'] },
+        cities: { color: 0x3a6a3a, words: ['Paris', 'London', 'Tokyo', 'New York', 'Berlin', 'Rome', 'Dubai'] }
     };
 
     useEffect(() => {
@@ -23,8 +23,8 @@ export default function SpacePanel() {
 
         // Scene
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0f172a); // Slate-900
-        scene.fog = new THREE.FogExp2(0x0f172a, 0.05);
+        scene.background = new THREE.Color(0xfefcf7);
+        scene.fog = new THREE.FogExp2(0xfefcf7, 0.04);
 
         // Camera
         const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
@@ -72,7 +72,13 @@ export default function SpacePanel() {
 
                 // Text Label
                 const div = document.createElement('div');
-                div.className = 'text-xs font-bold text-white bg-black/50 px-2 py-1 rounded backdrop-blur-sm';
+                div.className = 'text-xs font-bold';
+                div.style.padding = '2px 6px';
+                div.style.border = '1px solid var(--ds-rule)';
+                div.style.background = 'var(--ds-panel)';
+                div.style.color = 'var(--ds-ink)';
+                div.style.fontFamily = 'var(--ds-font-mono)';
+                div.style.fontSize = '10px';
                 div.textContent = word;
                 const label = new CSS2DObject(div);
                 label.position.set(0, 0.4, 0);
@@ -90,7 +96,7 @@ export default function SpacePanel() {
             posArray[i] = (Math.random() - 0.5) * 100;
         }
         starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const starsMat = new THREE.PointsMaterial({ size: 0.1, color: 0xffffff, transparent: true, opacity: 0.5 });
+        const starsMat = new THREE.PointsMaterial({ size: 0.08, color: 0xd9d2c0, transparent: true, opacity: 0.45 });
         const starsMesh = new THREE.Points(starsGeo, starsMat);
         scene.add(starsMesh);
 
@@ -127,22 +133,22 @@ export default function SpacePanel() {
     return (
         <div className="p-4 h-full flex flex-col">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-cyan-600">3D Semantic Galaxy</h2>
+                <h2 className="text-2xl font-bold text-cyan-600">3D Semantic Space</h2>
                 <div className="flex gap-2">
                     {Object.entries(clusters).map(([key, data]) => (
-                        <div key={key} className="flex items-center gap-2 px-3 py-1 bg-slate-700 rounded-full text-xs">
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#' + data.color.toString(16) }}></div>
+                        <div key={key} className="flex items-center gap-2 px-3 py-1 border border-[var(--ds-rule)] text-xs">
+                            <div className="w-3 h-3" style={{ backgroundColor: '#' + data.color.toString(16).padStart(6, '0') }}></div>
                             <span className="capitalize text-slate-700">{key}</span>
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className="bg-slate-700/50 rounded-xl border border-slate-600 p-2 text-center text-sm text-slate-800 mb-2">
+            <div className="border border-[var(--ds-rule)] bg-[var(--ds-panel)] p-2 text-center text-sm text-slate-800 mb-2">
                 Drag to rotate • Scroll to zoom • Words with similar meanings cluster together
             </div>
 
-            <div ref={containerRef} className="flex-1 rounded-xl overflow-hidden shadow-inner border border-slate-700 relative min-h-[400px]" />
+            <div ref={containerRef} className="flex-1 overflow-hidden border border-[var(--ds-rule)] relative min-h-[400px]" />
         </div>
     );
 }

@@ -256,18 +256,42 @@ body {
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn) {
-  border: 1px solid var(--ds-ink);
-  border-radius: 0;
-  background: var(--ds-ink);
-  color: var(--ds-paper);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border: 1px solid var(--ds-rule);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ds-ink);
   box-shadow: none;
   font-family: var(--ds-font-sans);
   letter-spacing: 0.01em;
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn):hover:not(:disabled) {
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-blue"],
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-green"] {
+  border-color: var(--ds-accent);
   background: var(--ds-accent);
   color: var(--ds-paper);
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-blue"]:hover:not(:disabled),
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-green"]:hover:not(:disabled) {
+  border-color: var(--ds-ink);
+  background: var(--ds-ink);
+  color: var(--ds-paper);
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-red"] {
+  border-color: var(--ds-rule);
+  background: var(--ds-muted);
+  color: var(--ds-ink);
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn):disabled {
@@ -731,6 +755,46 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+#root .ua-animation-page > div > nav:not(.ds-tabs) {
+  position: static !important;
+  display: flex !important;
+  flex-wrap: nowrap;
+  gap: 0 !important;
+  padding: 0 !important;
+  margin-bottom: var(--ds-gap-3) !important;
+  overflow-x: auto;
+  background: transparent !important;
+  border-bottom: var(--ds-border) !important;
+}
+
+#root .ua-animation-page > div > nav:not(.ds-tabs) button:not(.ds-tab) {
+  flex: 0 0 auto;
+  padding: 12px 22px 14px !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  background: transparent !important;
+  color: var(--ds-faint) !important;
+  font-family: var(--ds-font-sans) !important;
+  font-size: var(--ds-text-sm) !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+#root .ua-animation-page > div > nav:not(.ds-tabs) button:not(.ds-tab):hover {
+  background: transparent !important;
+  color: var(--ds-ink) !important;
+}
+
+#root .ua-animation-page > div > nav:not(.ds-tabs) button:not(.ds-tab)[class*="bg-black"],
+#root .ua-animation-page > div > nav:not(.ds-tabs) button:not(.ds-tab)[class*="bg-gradient-to-"],
+#root .ua-animation-page > div > nav:not(.ds-tabs) button:not(.ds-tab)[class*="text-white"],
+#root .ua-animation-page > div > nav:not(.ds-tabs) button:not(.ds-tab)[class*="scale-105"] {
+  background: transparent !important;
+  color: var(--ds-ink) !important;
+  border-bottom-color: var(--ds-accent) !important;
 }
 
 @media (max-width: 767px) {

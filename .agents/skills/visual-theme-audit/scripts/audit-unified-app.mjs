@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { execFile } from 'node:child_process';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -14,7 +14,7 @@ const { chromium } = appRequire('playwright');
 const screenshotRoot = path.join(repoRoot, 'screenshots', 'theme-audit');
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 const outDir = path.join(screenshotRoot, timestamp);
-const port = Number(process.env.THEME_AUDIT_PORT || 5199);
+const port = Number(process.env.THEME_AUDIT_PORT || 5317);
 const serverUrl = `http://127.0.0.1:${port}`;
 const baseUrl = `${serverUrl}/ml-animations`;
 const channel = process.env.THEME_AUDIT_CHANNEL || 'chrome';
@@ -75,7 +75,7 @@ async function waitForServer(url, timeoutMs = 60000) {
 }
 
 function startServer() {
-  const child = spawn('npm', ['run', 'dev', '--', '--host', '127.0.0.1', '--port', String(port)], {
+  const child = spawn('npm', ['run', 'dev', '--', '--host', '127.0.0.1', '--port', String(port), '--strictPort'], {
     cwd: appRoot,
     shell: true,
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -108,6 +108,29 @@ async function waitForPage(page) {
 async function capture(page, filePath) {
   await mkdir(path.dirname(filePath), { recursive: true });
   await page.screenshot({ path: filePath, fullPage: true });
+  return (await stat(filePath)).size;
+}
+
+function drainRuntimeIssues(page) {
+  const issues = page.__themeAuditRuntimeIssues || [];
+  page.__themeAuditRuntimeIssues = [];
+  return issues;
+}
+
+async function healthFindings(page, screenshotBytes) {
+  const rootTextLength = await page.locator('#root').innerText()
+    .then((text) => text.trim().length)
+    .catch(() => 0);
+  const findings = [];
+
+  if (rootTextLength === 0) {
+    findings.push({ type: 'blank-root', message: 'The React root rendered no visible text.' });
+  }
+  if (screenshotBytes < 10000) {
+    findings.push({ type: 'tiny-screenshot', screenshotBytes, message: 'Screenshot is likely an empty or crashed page.' });
+  }
+
+  return findings;
 }
 
 async function themeFindings(page) {
@@ -147,7 +170,7 @@ async function themeFindings(page) {
         .trim()
         .slice(0, 100);
 
-      if (style.backgroundImage && style.backgroundImage !== 'none') {
+      if (style.backgroundImage && /gradient\(/.test(style.backgroundImage)) {
         findings.push({ type: 'gradient-background', label, className: el.className.toString().slice(0, 160) });
       }
 
@@ -176,13 +199,18 @@ async function captureRoute(page, route, manifest) {
   await waitForPage(page);
 
   const defaultFile = path.join(routeDir, '00-default.png');
-  await capture(page, defaultFile);
+  const defaultBytes = await capture(page, defaultFile);
   manifest.screens.push({
     route: route.id,
     title: route.name,
     state: 'default',
     file: path.relative(repoRoot, defaultFile).replaceAll('\\', '/'),
-    findings: await themeFindings(page),
+    screenshotBytes: defaultBytes,
+    runtimeIssues: drainRuntimeIssues(page),
+    findings: [
+      ...(await themeFindings(page)),
+      ...(await healthFindings(page, defaultBytes)),
+    ],
   });
 
   const tabLocator = page.locator('.ua-animation-page > div > nav button, .ua-animation-page .ds-tabs button');
@@ -192,15 +220,41 @@ async function captureRoute(page, route, manifest) {
     await tabLocator.nth(index).click({ timeout: 5000 }).catch(() => {});
     await waitForPage(page);
     const file = path.join(routeDir, `${String(index + 1).padStart(2, '0')}-${slug(label)}.png`);
-    await capture(page, file);
+    const bytes = await capture(page, file);
     manifest.screens.push({
       route: route.id,
       title: route.name,
       state: label.replace(/\s+/g, ' ').trim(),
       file: path.relative(repoRoot, file).replaceAll('\\', '/'),
-      findings: await themeFindings(page),
+      screenshotBytes: bytes,
+    runtimeIssues: drainRuntimeIssues(page),
+    findings: [
+        ...(await themeFindings(page)),
+        ...(await healthFindings(page, bytes)),
+      ],
     });
   }
+}
+
+async function newAuditPage(browser, viewport = { width: 1365, height: 900 }) {
+  const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+  page.__themeAuditRuntimeIssues = [];
+  page.on('pageerror', (error) => {
+    page.__themeAuditRuntimeIssues.push({
+      type: 'pageerror',
+      message: error.message,
+      stack: error.stack?.split('\n').slice(0, 5).join('\n') || '',
+    });
+  });
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      page.__themeAuditRuntimeIssues.push({
+        type: 'console-error',
+        message: message.text().slice(0, 500),
+      });
+    }
+  });
+  return page;
 }
 
 async function main() {
@@ -220,38 +274,72 @@ async function main() {
   try {
     await waitForServer(`${baseUrl}/`);
     const browser = await chromium.launch(channel === 'chromium' ? {} : { channel });
-    const page = await browser.newPage({ viewport: { width: 1365, height: 900 }, deviceScaleFactor: 1 });
+    const page = await newAuditPage(browser);
 
     await page.goto(`${baseUrl}/`);
     await waitForPage(page);
     const homeFile = path.join(outDir, 'home', 'desktop.png');
-    await capture(page, homeFile);
+    const homeBytes = await capture(page, homeFile);
     manifest.screens.push({
       route: 'home',
       state: 'desktop',
       file: path.relative(repoRoot, homeFile).replaceAll('\\', '/'),
-      findings: await themeFindings(page),
+      screenshotBytes: homeBytes,
+      runtimeIssues: drainRuntimeIssues(page),
+      findings: [
+        ...(await themeFindings(page)),
+        ...(await healthFindings(page, homeBytes)),
+      ],
     });
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${baseUrl}/`);
     await waitForPage(page);
     const mobileFile = path.join(outDir, 'home', 'mobile.png');
-    await capture(page, mobileFile);
+    const mobileBytes = await capture(page, mobileFile);
     manifest.screens.push({
       route: 'home',
       state: 'mobile',
       file: path.relative(repoRoot, mobileFile).replaceAll('\\', '/'),
-      findings: await themeFindings(page),
+      screenshotBytes: mobileBytes,
+      runtimeIssues: drainRuntimeIssues(page),
+      findings: [
+        ...(await themeFindings(page)),
+        ...(await healthFindings(page, mobileBytes)),
+      ],
+    });
+
+    await page.locator('button[aria-label="Toggle menu"]').click({ timeout: 5000 });
+    await page.waitForTimeout(250);
+    const mobileMenuFile = path.join(outDir, 'home', 'mobile-menu-open.png');
+    const mobileMenuBytes = await capture(page, mobileMenuFile);
+    const mobileMenuOpen = await page.locator('.ua-sidebar:not(.closed)').isVisible().catch(() => false);
+    manifest.screens.push({
+      route: 'home',
+      state: 'mobile-menu-open',
+      file: path.relative(repoRoot, mobileMenuFile).replaceAll('\\', '/'),
+      screenshotBytes: mobileMenuBytes,
+      runtimeIssues: drainRuntimeIssues(page),
+      findings: [
+        ...(mobileMenuOpen ? [] : [{ type: 'menu-toggle', message: 'Mobile menu button did not open the sidebar.' }]),
+        ...(await themeFindings(page)),
+        ...(await healthFindings(page, mobileMenuBytes)),
+      ],
     });
 
     await page.setViewportSize({ width: 1365, height: 900 });
     const routes = await readCatalog();
     for (const route of routes) {
       console.log(`Capturing ${route.id}`);
-      await captureRoute(page, route, manifest);
+      const routePage = await newAuditPage(browser);
+      try {
+        await captureRoute(routePage, route, manifest);
+      } finally {
+        await routePage.close();
+      }
     }
 
+    await page.close();
     await browser.close();
   } finally {
     await writeFile(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
@@ -261,8 +349,10 @@ async function main() {
   }
 
   const findingCount = manifest.screens.reduce((sum, screen) => sum + screen.findings.length, 0);
+  const runtimeIssueCount = manifest.screens.reduce((sum, screen) => sum + screen.runtimeIssues.length, 0);
   console.log(`Captured ${manifest.screens.length} screens in ${path.relative(repoRoot, outDir)}`);
   console.log(`Automated theme findings: ${findingCount}`);
+  console.log(`Runtime issues: ${runtimeIssueCount}`);
 }
 
 main().catch((error) => {

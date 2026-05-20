@@ -17,7 +17,7 @@ Use this skill for repo-local visual QA of the `unified-app` Distill restyle.
 
 2. Inspect the generated output under `screenshots/theme-audit/<timestamp>/`:
    - `manifest.json` lists every captured screen and any automated theme findings.
-   - `home/` contains home page desktop/mobile captures.
+   - `home/` contains home page desktop/mobile captures plus a mobile menu-open capture.
    - `animations/<animation-id>/` contains one capture for the default screen and one per visible tab.
 
 3. Review screenshots in batches. Prioritize:
