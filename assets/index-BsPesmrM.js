@@ -1,1 +1,0 @@
-import{E as o}from"./index-B6Xo-yhU.js";import{C as r}from"./CoreMlLesson-CkJysgjM.js";import"./check-circle-2-BKbumvCA.js";function s(){return o.jsx(r,{lessonId:"regularization"})}export{s as default};
