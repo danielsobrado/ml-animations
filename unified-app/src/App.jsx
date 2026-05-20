@@ -86,14 +86,25 @@ export default function App() {
   const currentLessonId = location.pathname.match(/^\/animation\/([^/]+)/)?.[1];
   const currentLesson = currentLessonId ? getAnimationById(currentLessonId) : null;
 
+  const handleSidebarControlClick = () => {
+    if (!sidebarOpen) {
+      setSidebarOpen(true);
+      setSidebarCollapsed(false);
+      return;
+    }
+
+    setSidebarCollapsed((collapsed) => !collapsed);
+  };
+
   return (
     <div className="ua-app">
       <Header
         onMenuClick={() => setSidebarOpen((open) => !open)}
-        onCollapseClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+        onSidebarControlClick={handleSidebarControlClick}
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
         onOpenNotes={() => setNotesOpen(true)}
         progress={{ visited: visitedLessons.size, total: allAnimations.length }}
+        sidebarOpen={sidebarOpen}
         sidebarCollapsed={sidebarCollapsed}
       />
       <Sidebar

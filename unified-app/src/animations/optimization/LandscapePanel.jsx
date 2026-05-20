@@ -1,70 +1,117 @@
-import React, { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Text } from '@react-three/drei';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-function LossSurface() {
-    // Create a mesh for f(x,y) = 0.1x^2 + 0.1y^2 + sin(2x)*0.5
-    // A nice bumpy bowl
-    const geometry = useMemo(() => {
-        const geo = new THREE.PlaneGeometry(6, 6, 64, 64);
-        const pos = geo.attributes.position;
-        for (let i = 0; i < pos.count; i++) {
+export default function LandscapePanel() {
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const width = container.clientWidth || 900;
+        const height = 500;
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xfefcf7);
+
+        const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+        camera.position.set(5, 4, 5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(width, height);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.35;
+
+        const geometry = new THREE.PlaneGeometry(6, 6, 72, 72);
+        const pos = geometry.attributes.position;
+        for (let i = 0; i < pos.count; i += 1) {
             const x = pos.getX(i);
-            const y = pos.getY(i); // This is actually Z in 3D space usually, but Plane is XY
-            // Let's map plane XY to world XZ, and height to Y
+            const y = pos.getY(i);
             const z = 0.2 * (x * x + y * y) - 0.5 * Math.cos(2 * x) * Math.cos(2 * y);
-            pos.setZ(i, z); // Set Z (which we'll rotate to be Y)
+            pos.setZ(i, z);
         }
-        geo.computeVertexNormals();
-        return geo;
+        geometry.computeVertexNormals();
+
+        const surface = new THREE.Mesh(
+            geometry,
+            new THREE.MeshStandardMaterial({
+                color: 0x3a6a3a,
+                roughness: 0.58,
+                metalness: 0.02,
+                side: THREE.DoubleSide,
+            })
+        );
+        surface.rotation.x = -Math.PI / 2;
+        surface.receiveShadow = true;
+        scene.add(surface);
+
+        const grid = new THREE.GridHelper(10, 10, 0xb6ac93, 0xece6d3);
+        grid.position.y = -1;
+        scene.add(grid);
+
+        const marker = new THREE.Mesh(
+            new THREE.SphereGeometry(0.2, 32, 32),
+            new THREE.MeshStandardMaterial({ color: 0xa85a3a, emissive: 0x6b2f1c, emissiveIntensity: 0.2 })
+        );
+        marker.position.set(0, -0.5, 0);
+        marker.castShadow = true;
+        scene.add(marker);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+        const key = new THREE.DirectionalLight(0xffffff, 1);
+        key.position.set(5, 10, 5);
+        key.castShadow = true;
+        scene.add(key);
+        scene.add(new THREE.PointLight(0x264273, 0.4, 20));
+
+        let animationFrame = 0;
+        const animate = () => {
+            animationFrame = requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        const handleResize = () => {
+            if (!containerRef.current) return;
+            const nextWidth = containerRef.current.clientWidth || width;
+            camera.aspect = nextWidth / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(nextWidth, height);
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            cancelAnimationFrame(animationFrame);
+            window.removeEventListener('resize', handleResize);
+            controls.dispose();
+            geometry.dispose();
+            surface.material.dispose();
+            marker.geometry.dispose();
+            marker.material.dispose();
+            renderer.dispose();
+            if (container.contains(renderer.domElement)) {
+                container.removeChild(renderer.domElement);
+            }
+        };
     }, []);
 
     return (
-        <mesh geometry={geometry} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <meshStandardMaterial
-                color="#10b981"
-                roughness={0.4}
-                metalness={0.1}
-                side={THREE.DoubleSide}
-                wireframe={false}
-            />
-        </mesh>
-    );
-}
-
-function Grid() {
-    return <gridHelper args={[10, 10, 0xffffff, 0x333333]} position={[0, -1, 0]} />;
-}
-
-export default function LandscapePanel() {
-    return (
-        <div className="w-full h-full min-h-[500px] bg-slate-900 rounded-xl overflow-hidden relative">
-            <div className="absolute top-4 left-4 z-10 bg-slate-900/80 p-4 rounded-lg backdrop-blur text-slate-200 pointer-events-none">
-                <h3 className="font-bold text-lg text-emerald-600">The Loss Landscape</h3>
-                <p className="text-sm">Drag to rotate. Scroll to zoom.</p>
-                <p className="text-xs text-slate-800 mt-2">
-                    The goal of training is to find the lowest point (Global Minimum).
+        <div className="w-full min-h-[500px] overflow-hidden relative border border-[var(--ds-rule)] bg-[var(--ds-paper)]">
+            <div className="absolute top-4 left-4 z-10 border border-[var(--ds-rule)] bg-[var(--ds-paper)]/90 p-4 text-[var(--ds-ink)] pointer-events-none max-w-sm">
+                <h3 className="font-bold text-lg text-[var(--ds-accent)]">The Loss Landscape</h3>
+                <p className="text-sm">The surface rotates slowly to reveal the training objective.</p>
+                <p className="text-xs text-[var(--ds-mute)] mt-2">
+                    Training moves parameters toward the lowest visible region.
                 </p>
             </div>
-
-            <Canvas shadows>
-                <PerspectiveCamera makeDefault position={[5, 4, 5]} />
-                <OrbitControls enableDamping />
-
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[5, 10, 5]} intensity={1} castShadow />
-                <pointLight position={[-5, 5, -5]} intensity={0.5} color="#ec4899" />
-
-                <LossSurface />
-                <Grid />
-
-                {/* Ball at a local minimum */}
-                <mesh position={[0, -0.5, 0]}>
-                    <sphereGeometry args={[0.2, 32, 32]} />
-                    <meshStandardMaterial color="#fbbf24" emissive="#fbbf24" emissiveIntensity={0.5} />
-                </mesh>
-            </Canvas>
+            <div ref={containerRef} className="min-h-[500px]" />
         </div>
     );
 }

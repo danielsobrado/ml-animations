@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 
 export default function DotProductPanel() {
     const [v1, setV1] = useState({ x: 150, y: 100 });
@@ -57,46 +56,45 @@ export default function DotProductPanel() {
                         <line x1="0" y1="-250" x2="0" y2="250" stroke="#334155" strokeWidth="1" strokeDasharray="5 5" />
 
                         {/* Vector 2 (Pink) */}
-                        <motion.line
+                        <line
                             x1="0" y1="0"
-                            animate={{ x2: v2.x, y2: -v2.y }}
+                            x2={v2.x}
+                            y2={-v2.y}
                             stroke="#ec4899"
                             strokeWidth="4"
                             markerEnd="url(#arrowhead-pink)"
-                            transition={{ type: "spring", stiffness: 100 }}
                         />
                         <text x={v2.x + 15} y={-v2.y - 10} fill="#ec4899" fontWeight="bold">Vector B</text>
 
                         {/* Projection (Dashed) */}
-                        <motion.line
+                        <line
                             x1="0" y1="0"
-                            animate={{ x2: proj.x, y2: -proj.y }}
+                            x2={proj.x}
+                            y2={-proj.y}
                             stroke="#fbbf24"
                             strokeWidth="3"
                             strokeDasharray="5 5"
-                            transition={{ type: "spring", stiffness: 100 }}
                         />
 
                         {/* Projection Drop Line */}
-                        <motion.line
-                            animate={{
-                                x1: v1.x, y1: -v1.y,
-                                x2: proj.x, y2: -proj.y
-                            }}
+                        <line
+                            x1={v1.x}
+                            y1={-v1.y}
+                            x2={proj.x}
+                            y2={-proj.y}
                             stroke="#64748b"
                             strokeWidth="1"
                             strokeDasharray="2 2"
-                            transition={{ type: "spring", stiffness: 100 }}
                         />
 
                         {/* Vector 1 (Cyan) */}
-                        <motion.line
+                        <line
                             x1="0" y1="0"
-                            animate={{ x2: v1.x, y2: -v1.y }}
+                            x2={v1.x}
+                            y2={-v1.y}
                             stroke="#22d3ee"
                             strokeWidth="4"
                             markerEnd="url(#arrowhead-cyan)"
-                            transition={{ type: "spring", stiffness: 100 }}
                         />
                         <text x={v1.x + 15} y={-v1.y + 5} fill="#22d3ee" fontWeight="bold">Vector A</text>
 

@@ -16,7 +16,7 @@ export default function ChainPanel() {
         setGradient(grads);
     }, [layers, weight]);
 
-    const finalGrad = gradient[gradient.length - 1];
+    const finalGrad = gradient[gradient.length - 1] ?? 1;
     const isVanishing = Math.abs(finalGrad) < 0.001;
     const isExploding = Math.abs(finalGrad) > 1000;
 

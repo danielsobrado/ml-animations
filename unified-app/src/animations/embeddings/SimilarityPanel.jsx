@@ -1,102 +1,127 @@
 import React, { useState } from 'react';
 
 export default function SimilarityPanel() {
-    const [angle, setAngle] = useState(45); // Degrees
+  const [angle, setAngle] = useState(45);
+  const rad = (angle * Math.PI) / 180;
+  const cosineSim = Math.cos(rad);
+  const r = 150;
+  const v1 = { x: r, y: 0 };
+  const v2 = { x: r * Math.cos(rad), y: -r * Math.sin(rad) };
 
-    // Convert to radians
-    const rad = (angle * Math.PI) / 180;
+  const getLabel = (sim) => {
+    if (sim > 0.9) return 'Very similar';
+    if (sim > 0.5) return 'Related';
+    if (sim > -0.1 && sim < 0.1) return 'Unrelated';
+    if (sim < -0.5) return 'Opposite';
+    return 'Somewhat related';
+  };
 
-    // Calculate Cosine Similarity
-    const cosineSim = Math.cos(rad);
+  const similarityTone = cosineSim > 0.5 ? 'is-related' : cosineSim < -0.5 ? 'is-opposite' : 'is-neutral';
 
-    // Vector coordinates (radius 150)
-    const r = 150;
-    const v1 = { x: r, y: 0 }; // Fixed on X axis
-    const v2 = { x: r * Math.cos(rad), y: -r * Math.sin(rad) }; // Rotated (Y inverted for SVG)
+  return (
+    <div className="embeddings-similarity-panel">
+      <div className="embeddings-similarity-intro">
+        <h2>Similarity Lab</h2>
+        <p>
+          How do we know if "Cat" is close to "Dog"? We measure the cosine of the angle
+          between their embedding vectors.
+        </p>
+      </div>
 
-    const getLabel = (sim) => {
-        if (sim > 0.9) return "Very Similar (Synonyms)";
-        if (sim > 0.5) return "Related";
-        if (sim > -0.1 && sim < 0.1) return "Unrelated (Orthogonal)";
-        if (sim < -0.5) return "Opposites";
-        return "Somewhat Related";
-    };
+      <div className="embeddings-similarity-body">
+        <div className="embeddings-similarity-figure" aria-label="Two word vectors with adjustable angle">
+          <svg viewBox="-210 -210 420 420" role="img">
+            <defs>
+              <marker id="similarity-arrow-a" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="var(--ds-mute)" />
+              </marker>
+              <marker id="similarity-arrow-b" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="var(--ds-accent)" />
+              </marker>
+              <pattern id="similarity-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--ds-grid)" strokeWidth="0.8" />
+              </pattern>
+            </defs>
 
-    return (
-        <div className="p-8 h-full flex flex-col items-center">
-            <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-cyan-600 mb-4">Similarity Lab</h2>
-                <p className="text-lg text-slate-700 leading-relaxed">
-                    How do we know if "Cat" is close to "Dog"?
-                    <br />
-                    We measure the <strong>Cosine of the Angle</strong> between their vectors.
-                </p>
-            </div>
+            <rect x="-210" y="-210" width="420" height="420" fill="url(#similarity-grid)" />
+            <line x1="-190" y1="0" x2="190" y2="0" stroke="var(--ds-rule)" strokeWidth="1" />
+            <line x1="0" y1="-190" x2="0" y2="190" stroke="var(--ds-rule)" strokeWidth="1" />
 
-            <div className="flex flex-col md:flex-row gap-12 items-center w-full max-w-5xl">
-                {/* Visualization */}
-                <div className="w-[400px] h-[400px] bg-slate-900 rounded-full border-4 border-slate-700 relative flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.1)]">
-                    <svg className="w-full h-full overflow-visible" viewBox="-200 -200 400 400">
-                        <defs>
-                            <marker id="arrow-sim" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e1" />
-                            </marker>
-                        </defs>
+            <circle cx="0" cy="0" r="5" fill="var(--ds-ink)" />
 
-                        {/* Center */}
-                        <circle cx="0" cy="0" r="5" fill="white" />
+            <line
+              x1="0"
+              y1="0"
+              x2={v1.x}
+              y2={v1.y}
+              stroke="var(--ds-mute)"
+              strokeWidth="4"
+              markerEnd="url(#similarity-arrow-a)"
+            />
+            <text x={v1.x - 18} y={v1.y - 16} fill="var(--ds-mute)" fontWeight="700" textAnchor="middle">
+              Word A
+            </text>
 
-                        {/* Vector 1 (Fixed) */}
-                        <line x1="0" y1="0" x2={v1.x} y2={v1.y} stroke="#94a3b8" strokeWidth="4" markerEnd="url(#arrow-sim)" />
-                        <text x={v1.x + 20} y={v1.y + 5} fill="#94a3b8" fontWeight="bold">Word A</text>
+            <line
+              x1="0"
+              y1="0"
+              x2={v2.x}
+              y2={v2.y}
+              stroke="var(--ds-accent)"
+              strokeWidth="4"
+              markerEnd="url(#similarity-arrow-b)"
+            />
+            <text x={v2.x * 1.18} y={v2.y * 1.18} fill="var(--ds-accent)" fontWeight="700" textAnchor="middle">
+              Word B
+            </text>
 
-                        {/* Vector 2 (Rotatable) */}
-                        <line x1="0" y1="0" x2={v2.x} y2={v2.y} stroke="#22d3ee" strokeWidth="4" markerEnd="url(#arrow-sim)" />
-                        <text x={v2.x * 1.2} y={v2.y * 1.2} fill="#22d3ee" fontWeight="bold" textAnchor="middle">Word B</text>
-
-                        {/* Angle Arc */}
-                        <path
-                            d={`M 50 0 A 50 50 0 ${angle > 180 ? 1 : 0} 0 ${50 * Math.cos(-rad)} ${50 * Math.sin(-rad)}`}
-                            fill="none"
-                            stroke="#fbbf24"
-                            strokeWidth="2"
-                            strokeDasharray="4 4"
-                        />
-                        <text x="60" y="-20" fill="#fbbf24" fontSize="12">{angle}°</text>
-                    </svg>
-                </div>
-
-                {/* Controls & Stats */}
-                <div className="flex-1 w-full max-w-md bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl">
-                    <div className="mb-8">
-                        <label className="flex justify-between text-sm font-bold text-slate-800 mb-4">
-                            Angle: <span className="text-white">{angle}°</span>
-                        </label>
-                        <input
-                            type="range" min="0" max="180" step="1"
-                            value={angle}
-                            onChange={(e) => setAngle(Number(e.target.value))}
-                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-                        />
-                    </div>
-
-                    <div className="text-center">
-                        <h3 className="text-sm uppercase tracking-widest text-slate-700 mb-2">Cosine Similarity</h3>
-                        <div className={`text-5xl font-mono font-bold mb-4 ${cosineSim > 0.5 ? 'text-green-400' : cosineSim < -0.5 ? 'text-red-400' : 'text-slate-200'}`}>
-                            {cosineSim.toFixed(3)}
-                        </div>
-                        <div className="inline-block px-4 py-2 bg-slate-900 rounded-lg border border-slate-700 text-cyan-300 font-bold">
-                            {getLabel(cosineSim)}
-                        </div>
-                    </div>
-
-                    <div className="mt-8 pt-8 border-t border-slate-700 text-sm text-slate-800 space-y-2">
-                        <p><strong>1.0</strong> = Same Direction (0°)</p>
-                        <p><strong>0.0</strong> = Unrelated (90°)</p>
-                        <p><strong>-1.0</strong> = Opposite Direction (180°)</p>
-                    </div>
-                </div>
-            </div>
+            <path
+              d={`M 52 0 A 52 52 0 ${angle > 180 ? 1 : 0} 0 ${52 * Math.cos(-rad)} ${52 * Math.sin(-rad)}`}
+              fill="none"
+              stroke="var(--ds-warm)"
+              strokeWidth="2"
+              strokeDasharray="4 4"
+            />
+            <text x="62" y="-18" fill="var(--ds-warm)" fontSize="12" fontWeight="700">{angle} deg</text>
+          </svg>
         </div>
-    );
+
+        <aside className="embeddings-similarity-readout">
+          <label className="embeddings-similarity-control">
+            <span>Angle</span>
+            <strong>{angle} deg</strong>
+            <input
+              type="range"
+              min="0"
+              max="180"
+              step="1"
+              value={angle}
+              onChange={(event) => setAngle(Number(event.target.value))}
+            />
+          </label>
+
+          <div className={`embeddings-similarity-score ${similarityTone}`}>
+            <span>Cosine similarity</span>
+            <strong>{cosineSim.toFixed(3)}</strong>
+            <em>{getLabel(cosineSim)}</em>
+          </div>
+
+          <dl className="embeddings-similarity-scale">
+            <div>
+              <dt>1.0</dt>
+              <dd>Same direction, 0 deg</dd>
+            </div>
+            <div>
+              <dt>0.0</dt>
+              <dd>Unrelated, 90 deg</dd>
+            </div>
+            <div>
+              <dt>-1.0</dt>
+              <dd>Opposite direction, 180 deg</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  );
 }

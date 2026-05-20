@@ -194,7 +194,7 @@ export default function DiffusionProcessPanel() {
           <div className="bg-black/30 rounded-lg p-4">
             <p className="text-blue-600 font-bold mb-2">3. Update</p>
             <p className="text-sm text-gray-800">
-              Euler step: x_{t+dt} = x_t + v × dt
+              Euler step: x_(t+dt) = x_t + v * dt
             </p>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
@@ -257,7 +257,7 @@ export default function DiffusionProcessPanel() {
               <li>For t = 0 to 1 (N steps):</li>
               <li className="pl-4">a. Predict v = MMDiT(z_t, t, text_emb)</li>
               <li className="pl-4">b. Apply CFG: v = v_u + w(v_c - v_u)</li>
-              <li className="pl-4">c. Euler step: z_{t+dt} = z_t + v × dt</li>
+              <li className="pl-4">c. Euler step: z_(t+dt) = z_t + v * dt</li>
               <li>Decode: image = VAE.decode(z₁)</li>
             </ol>
           </div>

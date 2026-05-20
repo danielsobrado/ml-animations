@@ -1,0 +1,356 @@
+/* ============================================================================
+   ML Animations — Distill design system
+   Drop this file into src/_design-system/ and `import './_design-system/distill.css'`
+   from src/index.css (alongside the @tailwind directives).
+   ============================================================================ */
+
+/* --- Tokens ---------------------------------------------------------------- */
+:root {
+  /* Surfaces */
+  --ds-paper:    #fbf8f1;
+  --ds-paper-2:  #f4efe2;
+  --ds-panel:    #fefcf7;
+
+  /* Ink */
+  --ds-ink:      #1a1a1a;
+  --ds-ink-2:    #2a2a2a;
+  --ds-faint:    #4a4a4a;
+  --ds-mute:     #7a7a78;
+
+  /* Rules / structure */
+  --ds-rule:     #d9d2c0;
+  --ds-hair:     #b6ac93;
+  --ds-grid:     #ece6d3;
+
+  /* Accent — single ink-blue for emphasis */
+  --ds-accent:   #264273;
+  --ds-accent-2: #3a5a96;
+  --ds-accent-w: rgba(38, 66, 115, 0.04);
+
+  /* Warm — sparingly used: caret marks, tangents, annotations */
+  --ds-warm:     #a85a3a;
+  --ds-warm-w:   rgba(168, 90, 58, 0.08);
+
+  /* Status (used in tiny captions / margin notes only) */
+  --ds-ok:       #3a6a3a;
+  --ds-warn:     #a85a3a;
+  --ds-bad:      #8a1d1d;
+
+  /* Type */
+  --ds-font-serif: "Source Serif 4", "Source Serif Pro", Georgia, serif;
+  --ds-font-sans:  Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ds-font-mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Scale */
+  --ds-text-xs:  11px;
+  --ds-text-sm:  13px;
+  --ds-text-md:  15px;
+  --ds-text-lg:  19px;
+  --ds-text-xl:  26px;
+  --ds-text-2xl: 36px;
+  --ds-text-3xl: 48px;
+
+  /* Spacing rhythm */
+  --ds-gap-1: 8px;
+  --ds-gap-2: 14px;
+  --ds-gap-3: 22px;
+  --ds-gap-4: 36px;
+  --ds-gap-5: 56px;
+
+  --ds-page-pad-x: clamp(24px, 6vw, 96px);
+  --ds-page-pad-y: clamp(28px, 4vw, 44px);
+
+  /* Borders */
+  --ds-border:  1px solid var(--ds-rule);
+  --ds-border-strong: 1px solid var(--ds-ink);
+}
+
+/* --- Page --------------------------------------------------------------- */
+.ds-page {
+  min-height: 100vh;
+  background: var(--ds-paper);
+  color: var(--ds-ink);
+  font-family: var(--ds-font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+.ds-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--ds-page-pad-y) var(--ds-page-pad-x);
+}
+
+/* --- Header ------------------------------------------------------------- */
+.ds-header {
+  padding-bottom: var(--ds-gap-3);
+  border-bottom: var(--ds-border);
+  margin-bottom: var(--ds-gap-4);
+}
+.ds-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ds-faint);
+}
+.ds-eyebrow .sep { color: var(--ds-rule); }
+.ds-eyebrow .right { margin-left: auto; }
+
+.ds-title {
+  font-family: var(--ds-font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 4.4vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 12px 0 8px;
+  color: var(--ds-ink);
+}
+.ds-subtitle {
+  font-family: var(--ds-font-serif);
+  font-style: italic;
+  font-size: var(--ds-text-lg);
+  line-height: 1.4;
+  color: var(--ds-faint);
+  max-width: 72ch;
+  margin: 0;
+}
+
+/* --- Equation strip (display-mode formula at top of a section) ---------- */
+.ds-eq-strip {
+  background: var(--ds-accent-w);
+  border: var(--ds-border);
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: var(--ds-gap-3);
+}
+.ds-eq-strip .label {
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ds-accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ds-eq-strip .eq { font-size: 20px; }
+.ds-eq-strip .meta {
+  font-family: var(--ds-font-serif);
+  font-style: italic;
+  font-size: var(--ds-text-sm);
+  color: var(--ds-faint);
+  white-space: nowrap;
+}
+
+/* --- Figure / panel ----------------------------------------------------- */
+.ds-figure {
+  margin: 0 0 var(--ds-gap-3);
+}
+.ds-panel {
+  background: var(--ds-panel);
+  border: var(--ds-border);
+}
+.ds-panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: var(--ds-border);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ds-faint);
+}
+.ds-panel-body { padding: 18px; }
+
+.ds-figcaption {
+  font-family: var(--ds-font-serif);
+  font-style: italic;
+  font-size: var(--ds-text-sm);
+  line-height: 1.5;
+  color: var(--ds-faint);
+  border-top: var(--ds-border);
+  padding-top: 10px;
+  margin-top: 8px;
+  max-width: 72ch;
+}
+.ds-figcaption .lead {
+  font-style: normal;
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+
+/* --- Readouts (tabular metric stack) ------------------------------------ */
+.ds-readouts {
+  border-top: var(--ds-border-strong);
+  border-bottom: var(--ds-border);
+}
+.ds-readout-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 4px;
+  border-bottom: var(--ds-border);
+}
+.ds-readout-row:last-child { border-bottom: none; }
+.ds-readout-label {
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ds-faint);
+}
+.ds-readout-tex {
+  font-size: var(--ds-text-md);
+  color: var(--ds-faint);
+}
+.ds-readout-val {
+  font-family: var(--ds-font-serif);
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-ink);
+  text-align: right;
+  min-width: 5ch;
+}
+
+/* --- Margin / sidebar --------------------------------------------------- */
+.ds-aside {
+  font-family: var(--ds-font-serif);
+  font-size: var(--ds-text-sm);
+  line-height: 1.55;
+  color: var(--ds-faint);
+}
+.ds-aside-head {
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ds-accent);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.ds-aside p { margin: 12px 0 0; font-style: italic; }
+.ds-aside p:first-of-type { margin-top: 4px; }
+.ds-aside strong { font-style: normal; color: var(--ds-ink); font-weight: 600; }
+
+/* --- Slider (parameter dial) ------------------------------------------- */
+.ds-slider { margin-bottom: 22px; }
+.ds-slider-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.ds-slider-label {
+  font-family: var(--ds-font-sans);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-ink);
+}
+.ds-slider-label .tex {
+  font-size: var(--ds-text-md);
+  color: var(--ds-faint);
+  margin-left: 6px;
+}
+.ds-slider-value {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+
+/* Replace the browser slider with our hairline + diamond thumb */
+.ds-range {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  height: 18px;
+  margin: 0;
+  display: block;
+  cursor: pointer;
+}
+.ds-range:focus { outline: none; }
+.ds-range::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--ds-ink);
+  border: none;
+}
+.ds-range::-moz-range-track {
+  height: 1px;
+  background: var(--ds-ink);
+  border: none;
+}
+.ds-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px; height: 11px;
+  background: var(--ds-paper);
+  border: 1.5px solid var(--ds-ink);
+  transform: rotate(45deg);
+  margin-top: -5.5px;
+  cursor: grab;
+}
+.ds-range::-moz-range-thumb {
+  width: 11px; height: 11px;
+  background: var(--ds-paper);
+  border: 1.5px solid var(--ds-ink);
+  border-radius: 0;
+  transform: rotate(45deg);
+  cursor: grab;
+}
+.ds-range:active::-webkit-slider-thumb,
+.ds-range:active::-moz-range-thumb { cursor: grabbing; }
+
+.ds-slider-hint {
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+.ds-slider-hint.ok   { color: var(--ds-ok); }
+.ds-slider-hint.warn { color: var(--ds-warn); }
+.ds-slider-hint.bad  { color: var(--ds-bad); }
+
+/* --- Buttons ------------------------------------------------------------ */
+.ds-btn {
+  font-family: var(--ds-font-sans);
+  font-size: var(--ds-text-sm);
+  letter-spacing: 0.01em;
+  padding: 11px 18px;
+  border: none;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, transform 80ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ds-btn:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+.ds-btn:disabled { cursor: not-allowed; opacity: 0.45; }
+.ds-btn.primary {
+  background: var(--ds-ink);
+  color: var(--ds-paper);
+}
+.ds-btn.primary:hover:not(:disabled) { background: var(--ds-accent); }
+.ds-btn.ghost {
+  background: transparent;
+  color: var(--ds-ink);
+  border: 1px solid var(--ds-ink);
+}
+.ds-btn.ghost:hover:not(:disabled) { background: var(--ds-ink); color: var(--ds-paper); }
+.ds-btn-row { display: flex; gap: 10px; margin-top: 24px; }
+.ds-btn-row > .ds-btn.primary { flex: 1; }
+
+/* --- KaTeX --------------------------------------------------------------- */
+.katex { font-size: 1em; }
+.katex .mathdefault, .katex .mathit { font-family: KaTeX_Math, serif; }

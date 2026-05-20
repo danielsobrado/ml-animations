@@ -4,23 +4,34 @@ import { BookOpen, Github, Menu, PanelLeft, PanelLeftClose, PencilLine } from 'l
 
 export default function Header({
   onMenuClick,
-  onCollapseClick,
+  onSidebarControlClick,
   onOpenCommandPalette,
   onOpenNotes,
   progress,
+  sidebarOpen,
   sidebarCollapsed,
 }) {
   const progressLabel = `Σ ${progress.visited} / ${progress.total} lessons`;
   const progressPercent = progress.total > 0 ? (progress.visited / progress.total) * 100 : 0;
-
+  const DesktopIcon = !sidebarOpen || sidebarCollapsed ? PanelLeft : PanelLeftClose;
   return (
     <header className="ua-header">
       <div className="ua-header-left">
-        <button className="ua-icon-btn md:hidden" onClick={onMenuClick} aria-label="Toggle menu">
+        <button
+          className="ua-icon-btn md:hidden"
+          onClick={onMenuClick}
+          aria-label="Toggle menu"
+          aria-expanded={sidebarOpen}
+        >
           <Menu size={20} />
         </button>
-        <button className="ua-icon-btn hidden md:inline-flex" onClick={onCollapseClick} aria-label="Toggle sidebar">
-          {sidebarCollapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
+        <button
+          className="ua-icon-btn hidden md:inline-flex"
+          onClick={onSidebarControlClick}
+          aria-label="Toggle sidebar"
+          aria-expanded={sidebarOpen && !sidebarCollapsed}
+        >
+          <DesktopIcon size={20} />
         </button>
         <Link to="/" className="ua-brand">
           <span className="ua-brand-mark">ml</span>

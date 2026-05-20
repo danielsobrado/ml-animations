@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design system tokens + component classes */
+@import './_design-system/distill.css';
+
+/* ===== Page-level grid for the Gradient Descent app ===================== */
+.page-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--ds-gap-5);
+}
+@media (max-width: 900px) {
+  .page-body { grid-template-columns: 1fr; }
+}
+
+.main-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-gap-3);
+  min-width: 0;
+}
+
+.readouts-and-history {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--ds-gap-4);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .readouts-and-history { grid-template-columns: 1fr; }
+}
+
+.side-col {
+  position: sticky;
+  top: var(--ds-page-pad-y);
+  align-self: start;
+}
+
+/* ===== GradientDescentPanel-specific ================================== */
+.gd-landscape-wrap {
+  background: var(--ds-paper);
+  padding: 16px 8px 8px;
+}
+.gd-controls-strip {
+  display: flex;
+  gap: 10px;
+  padding: 16px 12px 8px;
+  border-top: var(--ds-border);
+  margin-top: 8px;
+}
+.gd-controls-strip > .ds-btn:first-child { flex: 1; }
+
+.gd-history-empty {
+  font-family: var(--ds-font-serif);
+  font-style: italic;
+  color: var(--ds-faint);
+  text-align: center;
+  padding: 60px 0;
+}

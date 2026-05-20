@@ -19,3 +19,13 @@ The script builds `unified-app` and publishes `unified-app/dist` to the `gh-page
 - Source: `Deploy from a branch`
 - Branch: `gh-pages`
 - Folder: `/ (root)`
+
+## Visual Theme Audit
+
+Use the repo skill at `.agents/skills/visual-theme-audit/SKILL.md` when the user asks to check every screen, capture Playwright screenshots, inspect visual theme consistency, or fix contrast/alignment/button/tab discrepancies.
+
+The audit command is:
+
+```bash
+rtk node .agents/skills/visual-theme-audit/scripts/audit-unified-app.mjs
+```

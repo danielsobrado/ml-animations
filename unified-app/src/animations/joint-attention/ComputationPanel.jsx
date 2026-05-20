@@ -181,7 +181,7 @@ export default function ComputationPanel() {
         </div>
 
         <div className="mt-6 p-4 bg-yellow-900/20 rounded-xl border border-yellow-500/30">
-          <p className="text-sm">
+          <div className="text-sm">
             <strong>⚠️ Why is joint attention worth the cost?</strong><br/>
             The quadratic scaling means joint attention is computationally expensive, but:
             <ul className="mt-2 text-gray-700 space-y-1">
@@ -190,7 +190,7 @@ export default function ComputationPanel() {
               <li>• The quality gains are significant</li>
               <li>• Text tokens are few compared to image tokens</li>
             </ul>
-          </p>
+          </div>
         </div>
       </div>
 
