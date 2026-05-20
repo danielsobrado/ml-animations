@@ -105,7 +105,7 @@ function LearningCards({ cards }) {
         <span>Learning Cards</span>
       </div>
       {cards.map((card) => (
-        <section key={card.type} className="ua-learning-card">
+        <section key={card.type} className={`ua-learning-card ${card.type}`}>
           <div className="ua-learning-card-head">
             <span>{card.label}</span>
             <h3>{card.title}</h3>

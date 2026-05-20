@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { allAnimations, categories, curriculumBacklog, curriculumTracks } from '../data/animations';
+import { HUB_LEARNING_PATHS } from '../data/learningPaths';
 
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
+  const [activePathId, setActivePathId] = React.useState(HUB_LEARNING_PATHS[0].id);
   const animationById = new Map(allAnimations.map((animation) => [animation.id, animation]));
+  const activePath = HUB_LEARNING_PATHS.find((path) => path.id === activePathId) || HUB_LEARNING_PATHS[0];
   const backlogByTrack = curriculumBacklog.reduce((acc, topic) => {
     acc[topic.trackId] = [...(acc[topic.trackId] || []), topic];
     return acc;
@@ -46,6 +49,43 @@ export default function HomePage() {
           <strong>KaTeX</strong>
           <span>Math notes</span>
         </div>
+      </section>
+
+      <section className="ua-hub-map" aria-labelledby="hub-map-title">
+        <div className="ua-section-head">
+          <span>Mindmap</span>
+          <h2 id="hub-map-title">Learning paths</h2>
+          <p>Pick a path and follow the amber chain. Each numbered badge is a lesson stop.</p>
+        </div>
+        <div className="ua-path-picker" role="tablist" aria-label="Learning path picker">
+          {HUB_LEARNING_PATHS.map((path) => (
+            <button
+              key={path.id}
+              type="button"
+              className={`ua-path-tab ${path.id === activePath.id ? 'active' : ''}`}
+              onClick={() => setActivePathId(path.id)}
+              role="tab"
+              aria-selected={path.id === activePath.id}
+            >
+              → {path.label}
+            </button>
+          ))}
+        </div>
+        <div className="ua-path-line" aria-label={`${activePath.label} lesson chain`}>
+          {activePath.nodes.map((animationId, index) => {
+            const animation = animationById.get(animationId);
+            if (!animation) return null;
+
+            return (
+              <Link className="ua-path-node" to={`/animation/${animation.id}`} key={animation.id}>
+                <span>{index + 1}</span>
+                <strong>{animation.name}</strong>
+                <small>{animation.categoryName}</small>
+              </Link>
+            );
+          })}
+        </div>
+        <p className="ua-path-caption">{activePath.description}</p>
       </section>
 
       <section className="ua-tracks" aria-labelledby="guided-tracks-title">

@@ -19,7 +19,7 @@ test('createLearningModel gives every animation the uniform learning shell contr
     assert.ok(model.chips.prereq);
 
     assert.deepEqual(
-      model.learningCards.map((card) => card.type),
+      model.learningCards.slice(0, CARD_TYPES.length).map((card) => card.type),
       CARD_TYPES.map((cardType) => cardType.id),
     );
 
@@ -59,6 +59,8 @@ test('central glossary repository exposes reusable image-backed term pages', () 
 
   assert.equal(getGlossaryTerm('attention').href, '/glossary/attention');
   assert.equal(getGlossaryTerm('query').category, 'Transformers');
+  assert.equal(getGlossaryTerm('logits').category, 'Neural Networks');
+  assert.equal(getGlossaryTerm('temperature').category, 'Neural Networks');
 });
 
 test('every active animation exposes curriculum metadata', () => {
@@ -115,6 +117,45 @@ test('curriculum tracks reference only active animations and backlog topics stay
   }
 });
 
+test('core ml gap topics are promoted from backlog into active guided lessons', () => {
+  const activeCoreMlIds = [
+    'train-validation-test-split',
+    'overfitting',
+    'logistic-regression',
+    'classification-metrics',
+    'regularization',
+  ];
+  const activeIds = new Set(allAnimations.map((animation) => animation.id));
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(coreMlTrack, 'core-ml track should exist');
+
+  for (const animationId of activeCoreMlIds) {
+    const animation = getAnimationById(animationId);
+
+    assert.ok(activeIds.has(animationId), `${animationId} should be an active route`);
+    assert.ok(animation, `${animationId} needs metadata`);
+    assert.equal(animation.categoryId, 'core-ml');
+    assert.ok(animation.trackIds.includes('core-ml'), `${animationId} should be in core-ml track`);
+    assert.ok(coreMlTrack.animationIds.includes(animationId), `${animationId} should appear in core-ml sequence`);
+    assert.ok(!backlogIds.has(animationId), `${animationId} should no longer be backlog`);
+    assert.ok(animation.learningObjectives.length >= 3, `${animationId} needs course-grade objectives`);
+    assert.match(animation.commonMisconception, /\S/);
+  }
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('train-validation-test-split') <
+      coreMlTrack.animationIds.indexOf('logistic-regression'),
+    'splitting should come before model-specific classification',
+  );
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('classification-metrics') <
+      coreMlTrack.animationIds.indexOf('regularization'),
+    'evaluation should come before regularization decisions',
+  );
+});
+
 test('createLearningModel uses curriculum metadata for one-click navigation context', () => {
   const animation = getAnimationById('self-attention');
   const model = createLearningModel(animation, allAnimations);
@@ -125,4 +166,24 @@ test('createLearningModel uses curriculum metadata for one-click navigation cont
   assert.ok(model.mindmap.next.some((node) => node.id === 'positional-encoding'));
   assert.equal(model.chips.difficulty, 'intermediate');
   assert.equal(model.chips.prereq, 'Matrix Multiplication, Softmax');
+});
+
+test('softmax adds formal theorem and marginalia learning card flavours', () => {
+  const animation = getAnimationById('softmax');
+  const model = createLearningModel(animation, allAnimations);
+
+  assert.deepEqual(
+    model.learningCards.map((card) => card.type),
+    [...CARD_TYPES.map((cardType) => cardType.id), 'theorem', 'marginalia'],
+  );
+
+  const theorem = model.learningCards.find((card) => card.type === 'theorem');
+  const marginalia = model.learningCards.find((card) => card.type === 'marginalia');
+
+  assert.match(theorem.title, /Theorem 3\.1/);
+  assert.match(theorem.body, /translation invariance/i);
+  assert.match(theorem.equation, /softmax/);
+  assert.match(marginalia.body, /overflow/i);
+  assert.ok(model.glossary.some((term) => term.id === 'logits'));
+  assert.ok(model.glossary.some((term) => term.id === 'temperature'));
 });

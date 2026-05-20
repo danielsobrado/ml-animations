@@ -35,7 +35,8 @@ import {
   Maximize,
   Users,
   RotateCcw,
-  GitMerge
+  GitMerge,
+  ShieldCheck
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -129,6 +130,19 @@ export const categories = [
     ],
   },
   {
+    id: 'core-ml',
+    name: 'Core ML',
+    icon: Target,
+    color: 'from-cyan-600 to-blue-600',
+    items: [
+      { id: 'train-validation-test-split', name: 'Train / Validation / Test Split', icon: Shuffle, description: 'Separating data for learning, tuning, and honest evaluation' },
+      { id: 'overfitting', name: 'Overfitting', icon: TrendingDown, description: 'When a model memorizes training quirks instead of learning the pattern' },
+      { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
+      { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
+      { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
+    ],
+  },
+  {
     id: 'probability-stats',
     name: 'Probability & Statistics',
     icon: Dice1,
@@ -217,6 +231,11 @@ export const curriculumTracks = [
     description: 'The supervised-learning loop: prediction, loss, optimization, and evaluation concepts.',
     animationIds: [
       'linear-regression',
+      'train-validation-test-split',
+      'logistic-regression',
+      'classification-metrics',
+      'overfitting',
+      'regularization',
       'cross-entropy',
       'softmax',
       'gradient-descent',
@@ -306,10 +325,6 @@ export const curriculumTracks = [
 ];
 
 export const curriculumBacklog = [
-  { id: 'train-validation-test-split', title: 'Train / Validation / Test Split', trackId: 'core-ml' },
-  { id: 'overfitting-regularization', title: 'Overfitting & Regularization', trackId: 'core-ml' },
-  { id: 'logistic-regression', title: 'Logistic Regression', trackId: 'core-ml' },
-  { id: 'classification-metrics', title: 'Confusion Matrix, Precision, Recall, F1, ROC-AUC', trackId: 'core-ml' },
   { id: 'cross-validation', title: 'Cross-Validation & Data Leakage', trackId: 'core-ml' },
   { id: 'computation-graph-backprop', title: 'Computation Graph & Backpropagation', trackId: 'neural-networks' },
   { id: 'pca', title: 'PCA', trackId: 'foundations' },
@@ -333,6 +348,7 @@ const CATEGORY_CURRICULUM_DEFAULTS = {
   'neural-networks': { difficulty: 'intermediate', estimatedMinutes: 16, prerequisites: ['linear-regression', 'gradient-descent'] },
   'advanced-models': { difficulty: 'advanced', estimatedMinutes: 24, prerequisites: ['embeddings', 'probability-distributions'] },
   'math-fundamentals': { difficulty: 'intermediate', estimatedMinutes: 15, prerequisites: [] },
+  'core-ml': { difficulty: 'beginner', estimatedMinutes: 16, prerequisites: ['linear-regression'] },
   'probability-stats': { difficulty: 'intermediate', estimatedMinutes: 14, prerequisites: ['probability-distributions'] },
   'reinforcement-learning': { difficulty: 'intermediate', estimatedMinutes: 18, prerequisites: ['expected-value-variance'] },
   algorithms: { difficulty: 'intermediate', estimatedMinutes: 14, prerequisites: ['matrix-multiplication'] },
@@ -374,6 +390,61 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'beginner',
     estimatedMinutes: 18,
     prerequisites: ['matrix-multiplication'],
+  },
+  'train-validation-test-split': {
+    difficulty: 'beginner',
+    estimatedMinutes: 15,
+    prerequisites: ['linear-regression'],
+    learningObjectives: [
+      'Explain why training, validation, and test data must stay separate',
+      'Choose split sizes that preserve enough examples for learning and evaluation',
+      'Identify how repeated test-set tuning creates data leakage',
+    ],
+    commonMisconception: 'A high test score is not trustworthy if the test set influenced model choices during development.',
+  },
+  'logistic-regression': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['linear-regression', 'softmax'],
+    learningObjectives: [
+      'Map a linear score through the sigmoid function to get a probability',
+      'Move a classification threshold and predict how labels change',
+      'Connect logistic regression to binary cross-entropy training',
+    ],
+    commonMisconception: 'Logistic regression is a classification model; despite the name, its output is a probability for a class.',
+  },
+  'classification-metrics': {
+    difficulty: 'beginner',
+    estimatedMinutes: 20,
+    prerequisites: ['logistic-regression'],
+    learningObjectives: [
+      'Read true positives, false positives, false negatives, and true negatives from a confusion matrix',
+      'Compare precision, recall, F1, accuracy, and ROC-style threshold behavior',
+      'Choose a metric that matches the cost of different mistakes',
+    ],
+    commonMisconception: 'Accuracy can look excellent on imbalanced data while the model misses the class you actually care about.',
+  },
+  overfitting: {
+    difficulty: 'beginner',
+    estimatedMinutes: 16,
+    prerequisites: ['train-validation-test-split'],
+    learningObjectives: [
+      'Recognize the gap between training error and validation error',
+      'Explain why too much model flexibility can memorize noise',
+      'Use validation behavior to decide when a model has become too complex',
+    ],
+    commonMisconception: 'Lower training loss is not always better; after a point it can signal memorization rather than generalization.',
+  },
+  regularization: {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['overfitting', 'classification-metrics'],
+    learningObjectives: [
+      'Describe how penalties discourage overly large parameters',
+      'Compare under-regularized, balanced, and over-regularized models',
+      'Use validation performance to tune the regularization strength',
+    ],
+    commonMisconception: 'Regularization is not a magic accuracy boost; too much penalty can underfit by making the model too simple.',
   },
   tokenization: {
     difficulty: 'beginner',

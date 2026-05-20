@@ -61,6 +61,13 @@ const animationRegistry = {
   'optimization': lazy(() => import('./optimization')),
   'gradient-problems': lazy(() => import('./gradient-problems')),
 
+  // Core ML
+  'train-validation-test-split': lazy(() => import('./train-validation-test-split')),
+  'overfitting': lazy(() => import('./overfitting')),
+  'logistic-regression': lazy(() => import('./logistic-regression')),
+  'classification-metrics': lazy(() => import('./classification-metrics')),
+  'regularization': lazy(() => import('./regularization')),
+
   // Probability & Statistics
   'probability-distributions': lazy(() => import('./probability-distributions')),
   'conditional-probability': lazy(() => import('./conditional-probability')),

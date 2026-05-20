@@ -1,8 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Menu, PanelLeft, PanelLeftClose } from 'lucide-react';
+import { BookOpen, Github, Menu, PanelLeft, PanelLeftClose, PencilLine } from 'lucide-react';
 
-export default function Header({ onMenuClick, onCollapseClick, sidebarCollapsed }) {
+export default function Header({
+  onMenuClick,
+  onCollapseClick,
+  onOpenCommandPalette,
+  onOpenNotes,
+  progress,
+  sidebarCollapsed,
+}) {
+  const progressLabel = `Σ ${progress.visited} / ${progress.total} lessons`;
+  const progressPercent = progress.total > 0 ? (progress.visited / progress.total) * 100 : 0;
+
   return (
     <header className="ua-header">
       <div className="ua-header-left">
@@ -22,6 +32,24 @@ export default function Header({ onMenuClick, onCollapseClick, sidebarCollapsed 
       </div>
 
       <div className="ua-header-right">
+        <div className="ua-progress-track" aria-label={progressLabel}>
+          <span>{progressLabel}</span>
+          <div>
+            <i style={{ width: `${progressPercent}%` }} />
+          </div>
+        </div>
+        <button
+          type="button"
+          className="ua-header-action"
+          onClick={onOpenCommandPalette}
+          aria-label="Open glossary search"
+        >
+          <BookOpen size={16} />
+          Glossary
+        </button>
+        <button type="button" className="ua-icon-btn" onClick={onOpenNotes} aria-label="Open notes">
+          <PencilLine size={18} />
+        </button>
         <a
           className="ua-icon-btn"
           href="https://github.com/danielsobrado/ml-animations"

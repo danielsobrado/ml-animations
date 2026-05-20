@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Play, LineChart, FlaskConical } from 'lucide-react';
+import { classifySoftmaxSharpness, computeSoftmax, softmaxMetrics } from '../../data/softmaxModel';
 
 // Lazy load panels
 const SoftmaxAnimationPanel = lazy(() => import('./SoftmaxAnimationPanel'));
@@ -24,46 +25,79 @@ function LoadingPanel() {
 
 export default function SoftmaxAnimation() {
     const [activeTab, setActiveTab] = useState('animation');
+    const [logits, setLogits] = useState([2.0, 1.0, 0.1]);
+    const [temperature, setTemperature] = useState(1);
+    const probabilities = computeSoftmax(logits, temperature);
+    const metrics = softmaxMetrics(probabilities);
+    const sharpness = classifySoftmaxSharpness(probabilities);
 
     const renderPanel = () => {
         switch (activeTab) {
             case 'animation':
                 return <Suspense fallback={<LoadingPanel />}><SoftmaxAnimationPanel /></Suspense>;
             case 'graph':
-                return <Suspense fallback={<LoadingPanel />}><SoftmaxGraphPanel /></Suspense>;
+                return (
+                    <Suspense fallback={<LoadingPanel />}>
+                        <SoftmaxGraphPanel logits={logits} probabilities={probabilities} isActive />
+                    </Suspense>
+                );
             case 'practice':
-                return <Suspense fallback={<LoadingPanel />}><PracticePanel /></Suspense>;
+                return (
+                    <Suspense fallback={<LoadingPanel />}>
+                        <PracticePanel
+                            logits={logits}
+                            probabilities={probabilities}
+                            temperature={temperature}
+                            onLogitsChange={setLogits}
+                            onTemperatureChange={setTemperature}
+                        />
+                    </Suspense>
+                );
             default:
                 return <Suspense fallback={<LoadingPanel />}><SoftmaxAnimationPanel /></Suspense>;
         }
     };
 
     return (
-        <div className="flex flex-col h-full">
-            {/* Navigation Tabs */}
-            <nav className="bg-white/50 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
-                <div className="px-4 overflow-x-auto">
-                    <div className="flex space-x-1 py-2">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                                    activeTab === tab.id
-                                        ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
-                                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                                }`}
-                            >
-                                <tab.icon size={18} />
-                                {tab.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+        <div className="ua-softmax-stage">
+            <nav className="ua-segmented-tabs" aria-label="Softmax views">
+                {tabs.map((tab) => (
+                    <button
+                        type="button"
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={activeTab === tab.id ? 'active' : ''}
+                    >
+                        <tab.icon size={16} />
+                        {tab.label}
+                    </button>
+                ))}
             </nav>
 
-            {/* Panel Content */}
-            <div className="flex-1 overflow-auto">
+            <div className="ua-metrics-row" aria-label="Softmax metrics">
+                <div>
+                    <span>τ</span>
+                    <strong>{temperature.toFixed(2)}</strong>
+                    <small>temperature</small>
+                </div>
+                <div>
+                    <span>max p</span>
+                    <strong>{(metrics.maxProbability * 100).toFixed(1)}%</strong>
+                    <small>{sharpness.label}</small>
+                </div>
+                <div>
+                    <span>H</span>
+                    <strong>{metrics.entropy.toFixed(2)}</strong>
+                    <small>entropy bits</small>
+                </div>
+                <div>
+                    <span>Δ</span>
+                    <strong>{metrics.margin.toFixed(2)}</strong>
+                    <small>margin</small>
+                </div>
+            </div>
+
+            <div className="ua-softmax-panel">
                 {renderPanel()}
             </div>
         </div>

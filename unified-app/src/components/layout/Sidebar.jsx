@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Search } from 'lucide-react';
 import { categories } from '../../data/animations';
 
-export default function Sidebar({ isOpen, isCollapsed, onClose }) {
+export default function Sidebar({ isOpen, isCollapsed, onClose, onOpenCommandPalette }) {
   const location = useLocation();
   const [expanded, setExpanded] = React.useState(() =>
     categories.reduce((acc, category) => ({ ...acc, [category.id]: true }), {}),
@@ -17,6 +18,13 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
         className={`ua-sidebar ${isCollapsed ? 'collapsed' : ''} ${isOpen ? '' : 'closed'}`}
       >
         <nav className="ua-sidebar-nav">
+          {!isCollapsed && (
+            <button type="button" className="ua-sidebar-search" onClick={onOpenCommandPalette}>
+              <Search size={14} />
+              <span>Search lessons</span>
+              <kbd>/</kbd>
+            </button>
+          )}
           <Link to="/" className={`ua-sidebar-home ${isActive('/') ? 'active' : ''}`}>
             <span className="num">00</span>
             <span>Index</span>

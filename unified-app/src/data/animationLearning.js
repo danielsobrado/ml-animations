@@ -24,6 +24,7 @@ const CATEGORY_EQUATIONS = {
   'neural-networks': 'h_{\\ell}=\\sigma(W_{\\ell}h_{\\ell-1}+b_{\\ell})',
   'advanced-models': 'p_\\theta(y\\mid x,c)=\\int p_\\theta(y,z\\mid x,c)\\,dz',
   'math-fundamentals': 'f(x;\\theta) \\rightarrow \\arg\\min_\\theta \\mathcal{L}(\\theta)',
+  'core-ml': '\\hat{f}=\\arg\\min_f \\mathcal{L}_{train}(f)\\quad then\\quad score(\\hat{f},D_{test})',
   'probability-stats': '\\mathbb{E}[X]=\\sum_x x\\,p(x)',
   'reinforcement-learning': "Q(s,a) \\leftarrow r+\\gamma\\max_{a'}Q(s',a')",
   algorithms: 'score(v)=\\sum_{u\\rightarrow v} w_{uv}\\,score(u)',
@@ -39,6 +40,11 @@ const EQUATION_OVERRIDES = {
   svd: 'A=U\\Sigma V^T',
   'qr-decomposition': 'A=QR',
   'linear-regression': '\\hat{y}=X\\beta+\\epsilon',
+  'train-validation-test-split': 'D=D_{train}\\cup D_{val}\\cup D_{test}',
+  overfitting: '\\mathcal{L}_{train}\\downarrow\\quad while\\quad \\mathcal{L}_{val}\\uparrow',
+  'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
+  'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
+  regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
@@ -156,7 +162,7 @@ function makeCards(animation, glossary, equation) {
   const category = animation.categoryName.toLowerCase();
   const terms = glossary.map((entry) => entry.id);
 
-  return CARD_TYPES.map((type) => {
+  const cards = CARD_TYPES.map((type) => {
     const common = {
       type: type.id,
       label: type.label,
@@ -210,6 +216,28 @@ function makeCards(animation, glossary, equation) {
       terms: termSet(glossary, ['input', 'iteration', 'gradient', 'output']),
     };
   });
+
+  if (animation.id === 'softmax') {
+    cards.push(
+      {
+        type: 'theorem',
+        label: 'thm.',
+        title: 'Theorem 3.1: translation invariance',
+        body: 'Translation invariance says adding the same constant to every logit leaves softmax unchanged, because the common exponential factor cancels from numerator and denominator.',
+        equation: '\\operatorname{softmax}(z+c\\mathbf{1})=\\operatorname{softmax}(z)',
+        terms: termSet(glossary, ['logits', 'temperature', 'probability', 'normalization']),
+      },
+      {
+        type: 'marginalia',
+        label: 'note.',
+        title: 'Overflow margin note',
+        body: 'Notebook aside: implementations subtract the largest logit before exponentiating. The probabilities are identical, but the numbers stay away from overflow.',
+        terms: termSet(glossary, ['logits', 'probability', 'normalization', 'temperature']),
+      },
+    );
+  }
+
+  return cards;
 }
 
 export function createLearningModel(animation, allAnimations) {

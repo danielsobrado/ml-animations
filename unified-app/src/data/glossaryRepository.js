@@ -36,11 +36,14 @@ const RAW_TERMS = [
   ['parameter', 'Optimization', 'A tunable value that controls how a model transforms inputs.'],
   ['gradient', 'Optimization', 'A direction and magnitude showing how a quantity changes.'],
   ['loss', 'Optimization', 'A score that measures mismatch between prediction and target.'],
+  ['regularization', 'Optimization', 'A penalty or constraint that discourages overly complex models.'],
   ['vector', 'Linear Algebra', 'An ordered list of numbers that represents magnitude and direction.'],
   ['matrix', 'Linear Algebra', 'A rectangular table of numbers used to transform vectors.'],
   ['probability', 'Probability', 'A number from 0 to 1 describing how likely an event is.'],
   ['representation', 'Modeling', 'A useful encoding of raw information for computation.'],
   ['normalization', 'Neural Networks', 'A rescaling step that makes values easier to compare or optimize.'],
+  ['logits', 'Neural Networks', 'Raw unnormalized scores before softmax converts them into probabilities.'],
+  ['temperature', 'Neural Networks', 'A positive scale value that makes softmax probabilities sharper or more diffuse.'],
   ['attention', 'Transformers', 'A weighted lookup that lets one item use information from other items.'],
   ['token', 'NLP', 'A text unit such as a word, subword, or character.'],
   ['embedding', 'NLP', 'A vector representation that places similar items near each other.'],
@@ -64,6 +67,11 @@ const RAW_TERMS = [
   ['hash', 'Algorithms', 'A deterministic mapping from data to a compact code.'],
   ['graph', 'Algorithms', 'A set of nodes connected by edges.'],
   ['iteration', 'Algorithms', 'One repeated pass of an update rule.'],
+  ['validation set', 'Core ML', 'Held-out data used to tune model choices before the final test evaluation.'],
+  ['test set', 'Core ML', 'Held-out data used once for an honest estimate of generalization.'],
+  ['overfitting', 'Core ML', 'A failure mode where a model learns training-specific noise instead of the reusable pattern.'],
+  ['threshold', 'Core ML', 'A cutoff that turns probabilities or scores into class decisions.'],
+  ['confusion matrix', 'Core ML', 'A table comparing predicted classes with true classes.'],
   ['latent', 'Diffusion', 'A compressed hidden representation used for generation.'],
   ['noise', 'Diffusion', 'Random variation added or removed during generation.'],
   ['scheduler', 'Diffusion', 'A rule that chooses the time or noise steps of a process.'],
@@ -76,12 +84,23 @@ const ACCENTS = {
   Probability: '#3a6a3a',
   Modeling: '#264273',
   'Neural Networks': '#3a6a3a',
+  'Core ML': '#1f6f8b',
   Transformers: '#264273',
   NLP: '#264273',
   Calculus: '#a85a3a',
   'Reinforcement Learning': '#a85a3a',
   Algorithms: '#a85a3a',
   Diffusion: '#264273',
+};
+
+const SYMBOLS = {
+  logits: 'z',
+  temperature: 'τ',
+  attention: 'α',
+  probability: 'p',
+  gradient: '∇',
+  matrix: 'A',
+  vector: 'v',
 };
 
 export const glossaryTerms = RAW_TERMS.map(([term, category, definition]) => {
@@ -94,6 +113,7 @@ export const glossaryTerms = RAW_TERMS.map(([term, category, definition]) => {
     category,
     definition,
     href: `/glossary/${slug}`,
+    symbol: SYMBOLS[slug] || term.slice(0, 1),
     image: makeTermImage(term, category, ACCENTS[category]),
   };
 });
@@ -104,9 +124,10 @@ const glossaryByTerm = new Map(glossaryTerms.map((term) => [term.term.toLowerCas
 export const GLOSSARY_IDS_BY_CATEGORY = {
   nlp: ['token', 'embedding', 'vocabulary', 'vector', 'representation', 'input', 'output', 'concept'],
   transformers: ['attention', 'query', 'key', 'value', 'head', 'vector', 'matrix', 'probability', 'normalization', 'representation'],
-  'neural-networks': ['activation', 'layer', 'backpropagation', 'gradient', 'loss', 'parameter', 'input', 'output', 'normalization'],
+  'neural-networks': ['activation', 'layer', 'backpropagation', 'gradient', 'loss', 'parameter', 'logits', 'temperature', 'input', 'output', 'normalization'],
   'advanced-models': ['embedding', 'latent', 'probability', 'representation', 'parameter', 'loss', 'input', 'output'],
   'math-fundamentals': ['matrix', 'vector', 'basis', 'objective', 'derivative', 'gradient', 'iteration', 'concept', 'parameter'],
+  'core-ml': ['loss', 'validation-set', 'test-set', 'overfitting', 'threshold', 'confusion-matrix', 'regularization', 'probability', 'parameter', 'objective', 'input', 'output'],
   'probability-stats': ['probability', 'random-variable', 'distribution', 'expectation', 'loss', 'output', 'concept', 'input'],
   'reinforcement-learning': ['state', 'action', 'reward', 'iteration', 'objective', 'probability', 'input', 'output'],
   algorithms: ['hash', 'graph', 'iteration', 'probability', 'input', 'output', 'concept', 'representation'],
