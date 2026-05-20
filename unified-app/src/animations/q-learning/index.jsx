@@ -47,10 +47,12 @@ export default function QLearningAnimation() {
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
+                                type="button"
+                                aria-selected={activeTab === tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                                     activeTab === tab.id
-                                        ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
+                                        ? 'is-active'
                                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                                 }`}
                             >
