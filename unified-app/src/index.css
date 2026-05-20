@@ -128,6 +128,7 @@ body {
   inset: 64px 0 0;
   z-index: 39;
   background: rgba(26, 26, 26, 0.32);
+  display: none;
 }
 
 .ua-sidebar-nav {
@@ -252,6 +253,30 @@ body {
 
 .ua-main.sidebar-closed {
   margin-left: 0;
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn) {
+  border: 1px solid var(--ds-ink);
+  border-radius: 0;
+  background: var(--ds-ink);
+  color: var(--ds-paper);
+  box-shadow: none;
+  font-family: var(--ds-font-sans);
+  letter-spacing: 0.01em;
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn):hover:not(:disabled) {
+  background: var(--ds-accent);
+  color: var(--ds-paper);
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn):disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn) svg {
+  color: currentColor;
 }
 
 .ua-home,
@@ -467,6 +492,10 @@ body {
 
   .ua-sidebar.closed {
     transform: translateX(-100%);
+  }
+
+  .ua-sidebar-overlay {
+    display: block;
   }
 
   .ua-home-stats {

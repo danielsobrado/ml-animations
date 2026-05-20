@@ -14,11 +14,22 @@ export default function App() {
     if (window.innerWidth < 768) setSidebarOpen(false);
   }, [location.pathname]);
 
+  const handleSidebarControlClick = () => {
+    if (!sidebarOpen) {
+      setSidebarOpen(true);
+      setSidebarCollapsed(false);
+      return;
+    }
+
+    setSidebarCollapsed((collapsed) => !collapsed);
+  };
+
   return (
     <div className="ua-app">
       <Header
         onMenuClick={() => setSidebarOpen((open) => !open)}
-        onCollapseClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+        onSidebarControlClick={handleSidebarControlClick}
+        sidebarOpen={sidebarOpen}
         sidebarCollapsed={sidebarCollapsed}
       />
       <Sidebar

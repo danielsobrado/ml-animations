@@ -2,15 +2,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Github, Menu, PanelLeft, PanelLeftClose } from 'lucide-react';
 
-export default function Header({ onMenuClick, onCollapseClick, sidebarCollapsed }) {
+export default function Header({ onMenuClick, onSidebarControlClick, sidebarOpen, sidebarCollapsed }) {
+  const DesktopIcon = !sidebarOpen || sidebarCollapsed ? PanelLeft : PanelLeftClose;
+
   return (
     <header className="ua-header">
       <div className="ua-header-left">
-        <button className="ua-icon-btn md:hidden" onClick={onMenuClick} aria-label="Toggle menu">
+        <button
+          className="ua-icon-btn md:hidden"
+          onClick={onMenuClick}
+          aria-label="Toggle menu"
+          aria-expanded={sidebarOpen}
+        >
           <Menu size={20} />
         </button>
-        <button className="ua-icon-btn hidden md:inline-flex" onClick={onCollapseClick} aria-label="Toggle sidebar">
-          {sidebarCollapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
+        <button
+          className="ua-icon-btn hidden md:inline-flex"
+          onClick={onSidebarControlClick}
+          aria-label="Toggle sidebar"
+          aria-expanded={sidebarOpen && !sidebarCollapsed}
+        >
+          <DesktopIcon size={20} />
         </button>
         <Link to="/" className="ua-brand">
           <span className="ua-brand-mark">ml</span>
