@@ -34,20 +34,20 @@ export default function PlaygroundPanel() {
             <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 h-full">
 
                 {/* Controls */}
-                <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div className="bg-slate-100 p-6 rounded-2xl border border-slate-200">
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <h2 className="text-xl font-bold dark:text-white">Configuration</h2>
+                            <h2 className="text-xl font-bold">Configuration</h2>
                             <p className="text-slate-500 text-sm">Adjust the number of heads to see how grouping changes.</p>
                         </div>
-                        <div className={`px-4 py-2 rounded-lg bg-white dark:bg-slate-800 shadow font-bold ${status.color}`}>
+                        <div className={`px-4 py-2 rounded-lg bg-white shadow font-bold ${status.color}`}>
                             {status.label}
                         </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-8">
                         <div>
-                            <label className="flex justify-between text-sm font-medium mb-2 dark:text-slate-300">
+                            <label className="flex justify-between text-sm font-medium mb-2">
                                 Query Heads (H_q)
                                 <span>{numQ}</span>
                             </label>
@@ -63,7 +63,7 @@ export default function PlaygroundPanel() {
                             />
                         </div>
                         <div>
-                            <label className="flex justify-between text-sm font-medium mb-2 dark:text-slate-300">
+                            <label className="flex justify-between text-sm font-medium mb-2">
                                 KV Heads (H_kv)
                                 <span>{numKV}</span>
                             </label>
@@ -88,7 +88,7 @@ export default function PlaygroundPanel() {
                 </div>
 
                 {/* Visualizer */}
-                <div className="flex-1 min-h-[300px] border border-slate-200 dark:border-slate-700 rounded-2xl p-8 relative overflow-hidden flex items-center justify-center">
+                <div className="flex-1 min-h-[300px] border border-slate-200 rounded-2xl p-8 relative overflow-hidden flex items-center justify-center">
 
                     <div className="flex justify-between w-full max-w-2xl px-8 z-10">
                         {/* Q Stack */}
@@ -137,7 +137,7 @@ export default function PlaygroundPanel() {
                     <svg className="absolute inset-0 w-full h-full pointer-events-none">
                         {/* We can't easily draw perfect lines in this flex layout without ref coordinates.
                              However, CSS-based connector lines or simple visual juxtaposition is often enough.
-                             For the purpose of this task, the color coding firmly establishes the relationship. 
+                             For the purpose of this task, the color coding firmly establishes the relationship.
                          */}
                     </svg>
 

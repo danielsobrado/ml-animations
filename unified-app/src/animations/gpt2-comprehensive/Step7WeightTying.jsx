@@ -21,29 +21,29 @@ export default function Step7WeightTying({ onComplete, onNext, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 7: Weight Tying</h2>
-                <p className="text-gray-800 dark:text-gray-400">A clever trick to save parameters</p>
+                <p className="text-gray-800">A clever trick to save parameters</p>
             </div>
 
             {/* Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">What is Weight Tying?</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">What is Weight Tying?</h3>
+                <p className="text-gray-700">
                     In GPT-2, the matrix used to convert tokens to embeddings (Input Embedding) is <strong>the same matrix</strong> used to convert the final output back to token probabilities (Unembedding / Output Projection).
                 </p>
-                <div className="bg-gray-900 p-4 rounded font-mono text-center text-emerald-600 dark:text-emerald-400">
+                <div className="bg-gray-900 p-4 rounded font-mono text-center text-emerald-600">
                     W<sub>input</sub> = W<sub>output</sub><sup>T</sup>
                 </div>
             </div>
 
             {/* Visualization */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-6">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Parameter Savings</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">Parameter Savings</h3>
 
                 <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
                     {/* Without Tying */}
                     <div className="bg-gray-900 p-6 rounded-lg border border-red-900/50 w-full md:w-1/2">
                         <h4 className="text-red-400 font-bold mb-4 text-center">Without Tying</h4>
-                        <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <div className="space-y-2 text-sm text-gray-700">
                             <div className="flex justify-between">
                                 <span>Input Embeddings:</span>
                                 <span>{params.toFixed(1)}M</span>
@@ -62,8 +62,8 @@ export default function Step7WeightTying({ onComplete, onNext, onPrev }) {
                     {/* With Tying */}
                     <div className="bg-gray-900 p-6 rounded-lg border border-emerald-900/50 w-full md:w-1/2 relative overflow-hidden">
                         <div className="absolute top-0 right-0 bg-emerald-600 text-white text-xs px-2 py-1">GPT-2</div>
-                        <h4 className="text-emerald-600 dark:text-emerald-400 font-bold mb-4 text-center">With Tying</h4>
-                        <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <h4 className="text-emerald-600 font-bold mb-4 text-center">With Tying</h4>
+                        <div className="space-y-2 text-sm text-gray-700">
                             <div className="flex justify-between">
                                 <span>Shared Matrix:</span>
                                 <span>{params.toFixed(1)}M</span>
@@ -80,15 +80,15 @@ export default function Step7WeightTying({ onComplete, onNext, onPrev }) {
                     </div>
                 </div>
 
-                <p className="text-center text-gray-800 dark:text-sm">
+                <p className="text-center text-gray-800">
                     For GPT-2 Small (124M params), the embedding matrix accounts for ~30% of all parameters!
                 </p>
             </div>
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     What is the primary benefit of weight tying in language models?
                 </p>
                 <textarea

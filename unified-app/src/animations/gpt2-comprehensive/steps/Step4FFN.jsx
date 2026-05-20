@@ -105,25 +105,25 @@ export default function Step4FFN({ onComplete, onNext, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 4: Feed-Forward Network</h2>
-                <p className="text-gray-800 dark:text-gray-400">Processing information position-wise</p>
+                <p className="text-gray-800">Processing information position-wise</p>
             </div>
 
             {/* Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">The "Brain" of the Block</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">The "Brain" of the Block</h3>
+                <p className="text-gray-700">
                     After attention gathers information from other tokens, the <strong>Feed-Forward Network (FFN)</strong> processes each token <em>independently</em>.
                 </p>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     It consists of two linear transformations with a non-linear activation function in between.
                 </p>
             </div>
 
             {/* Visualization */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Expansion & Contraction</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">Expansion & Contraction</h3>
                 <div ref={containerRef} className="border border-gray-700 rounded flex justify-center overflow-hidden" />
-                <div className="flex justify-between text-sm text-gray-800 dark:text-gray-400 px-10">
+                <div className="flex justify-between text-sm text-gray-800 px-10">
                     <span>Input (d_model)</span>
                     <span>Hidden (4 × d_model)</span>
                     <span>Output (d_model)</span>
@@ -132,11 +132,11 @@ export default function Step4FFN({ onComplete, onNext, onPrev }) {
 
             {/* Formula */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">The Math</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">The Math</h3>
                 <div className="bg-gray-900 p-4 rounded space-y-2 font-mono text-sm">
-                    <div className="text-gray-700 dark:text-gray-300">FFN(x) = GELU(xW<sub>1</sub> + b<sub>1</sub>)W<sub>2</sub> + b<sub>2</sub></div>
+                    <div className="text-gray-700">FFN(x) = GELU(xW<sub>1</sub> + b<sub>1</sub>)W<sub>2</sub> + b<sub>2</sub></div>
                 </div>
-                <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
                     <li><strong>Expansion</strong>: Project from 768 to 3072 dimensions</li>
                     <li><strong>Activation</strong>: Apply GELU (Gaussian Error Linear Unit)</li>
                     <li><strong>Contraction</strong>: Project back to 768 dimensions</li>
@@ -145,8 +145,8 @@ export default function Step4FFN({ onComplete, onNext, onPrev }) {
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     If the embedding dimension (d_model) is 768, what is the dimension of the hidden layer in the FFN?
                 </p>
                 <input

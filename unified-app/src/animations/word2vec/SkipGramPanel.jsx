@@ -65,7 +65,7 @@ export default function SkipGramPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-green-400">Skip-gram</span>: Predict Context from Center
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Given a word, predict the surrounding words
         </p>
       </div>
@@ -87,7 +87,7 @@ export default function SkipGramPanel() {
           Reset
         </button>
         <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-          <span className="text-sm text-gray-800 dark:text-gray-400">Window Size:</span>
+          <span className="text-sm text-gray-800">Window Size:</span>
           <select
             value={windowSize}
             onChange={(e) => setWindowSize(parseInt(e.target.value))}
@@ -107,11 +107,11 @@ export default function SkipGramPanel() {
             key={i}
             onClick={() => { setCurrentStep(i); setIsPlaying(false); }}
             className={`px-3 py-1 rounded-full text-sm transition-all ${
-              i === currentStep 
-                ? 'bg-green-500 text-black scale-110' 
-                : i < currentStep 
-                ? 'bg-green-900 text-green-300' 
-                : 'bg-white/10 text-gray-700 dark:text-gray-500'
+              i === currentStep
+                ? 'bg-green-500 text-black scale-110'
+                : i < currentStep
+                ? 'bg-green-900 text-green-300'
+                : 'bg-white/10 text-gray-700'
             }`}
           >
             {i + 1}. {step.title}
@@ -122,7 +122,7 @@ export default function SkipGramPanel() {
       {/* Current Step Info */}
       <div className="bg-green-900/20 border border-green-500/30 rounded-xl p-4">
         <h3 className="font-bold text-green-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Main Visualization */}
@@ -133,7 +133,7 @@ export default function SkipGramPanel() {
             const isCenter = i === centerIndex && currentStep >= 1;
             const isContext = contextIndices.includes(i) && currentStep >= 2;
             const isInWindow = Math.abs(i - centerIndex) <= windowSize && i !== centerIndex;
-            
+
             return (
               <div
                 key={i}
@@ -144,7 +144,7 @@ export default function SkipGramPanel() {
                     ? 'bg-blue-500 text-white scale-105 shadow-lg shadow-blue-500/50'
                     : currentStep >= 2 && isInWindow
                     ? 'bg-blue-900/50 border border-blue-500/50'
-                    : 'bg-white/10 text-gray-800 dark:text-gray-400'
+                    : 'bg-white/10 text-gray-800'
                 }`}
               >
                 {word}
@@ -157,10 +157,10 @@ export default function SkipGramPanel() {
         {currentStep >= 2 && (
           <div className="text-center mb-6 animate-fadeIn">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-              <span className="text-gray-800 dark:text-gray-400">Window size:</span>
+              <span className="text-gray-800">Window size:</span>
               <span className="text-green-400 font-bold">{windowSize}</span>
-              <span className="text-gray-800 dark:text-gray-400">→</span>
-              <span className="text-blue-600 dark:text-blue-400">{contextIndices.length} context words</span>
+              <span className="text-gray-800">→</span>
+              <span className="text-blue-600">{contextIndices.length} context words</span>
             </div>
           </div>
         )}
@@ -168,7 +168,7 @@ export default function SkipGramPanel() {
         {/* Training Pairs */}
         {currentStep >= 3 && (
           <div className="space-y-4 animate-fadeIn">
-            <h4 className="text-center text-gray-800 dark:text-gray-400 mb-2">Training Pairs (center → context):</h4>
+            <h4 className="text-center text-gray-800 mb-2">Training Pairs (center → context):</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {trainingPairs.map((pair, i) => (
                 <div
@@ -178,8 +178,8 @@ export default function SkipGramPanel() {
                 >
                   <div className="flex items-center justify-center gap-2 font-mono">
                     <span className="text-green-400">{pair.center}</span>
-                    <ArrowRight size={14} className="text-gray-700 dark:text-gray-500" />
-                    <span className="text-blue-600 dark:text-blue-400">{pair.context}</span>
+                    <ArrowRight size={14} className="text-gray-700" />
+                    <span className="text-blue-600">{pair.context}</span>
                   </div>
                 </div>
               ))}
@@ -190,38 +190,38 @@ export default function SkipGramPanel() {
         {/* Neural Network Visualization */}
         {currentStep >= 4 && (
           <div className="mt-8 animate-fadeIn">
-            <h4 className="text-center text-gray-800 dark:text-gray-400 mb-4">Skip-gram Neural Network:</h4>
+            <h4 className="text-center text-gray-800 mb-4">Skip-gram Neural Network:</h4>
             <div className="flex justify-center items-center gap-4">
               {/* Input */}
               <div className="text-center">
                 <div className="w-20 h-20 rounded-lg bg-green-900/50 border border-green-500 flex items-center justify-center">
                   <div className="font-mono text-green-400">jumps</div>
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-500 mt-2">Input<br/>(one-hot)</div>
+                <div className="text-xs text-gray-700 mt-2">Input<br/>(one-hot)</div>
               </div>
 
-              <ArrowRight className="text-gray-700 dark:text-gray-500" />
+              <ArrowRight className="text-gray-700" />
 
               {/* Hidden Layer */}
               <div className="text-center">
                 <div className="w-24 h-20 rounded-lg bg-purple-900/50 border border-purple-500 flex flex-col items-center justify-center px-2">
                   <div className="text-xs text-purple-300 mb-1">W (V×D)</div>
-                  <div className="text-xs text-gray-800 dark:text-gray-400">Embedding</div>
+                  <div className="text-xs text-gray-800">Embedding</div>
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-500 mt-2">Hidden Layer<br/>(D dims)</div>
+                <div className="text-xs text-gray-700 mt-2">Hidden Layer<br/>(D dims)</div>
               </div>
 
-              <ArrowRight className="text-gray-700 dark:text-gray-500" />
+              <ArrowRight className="text-gray-700" />
 
               {/* Output */}
               <div className="text-center">
                 <div className="w-20 h-20 rounded-lg bg-blue-900/50 border border-blue-500 flex flex-col items-center justify-center">
-                  <div className="font-mono text-xs text-blue-600 dark:text-blue-400">quick</div>
-                  <div className="font-mono text-xs text-blue-600 dark:text-blue-400">brown</div>
-                  <div className="font-mono text-xs text-blue-600 dark:text-blue-400">over</div>
-                  <div className="font-mono text-xs text-blue-600 dark:text-blue-400">the</div>
+                  <div className="font-mono text-xs text-blue-600">quick</div>
+                  <div className="font-mono text-xs text-blue-600">brown</div>
+                  <div className="font-mono text-xs text-blue-600">over</div>
+                  <div className="font-mono text-xs text-blue-600">the</div>
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-500 mt-2">Output<br/>(softmax)</div>
+                <div className="text-xs text-gray-700 mt-2">Output<br/>(softmax)</div>
               </div>
             </div>
           </div>
@@ -230,8 +230,8 @@ export default function SkipGramPanel() {
         {/* Embedding Extraction */}
         {currentStep >= 5 && (
           <div className="mt-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-500/30 animate-fadeIn">
-            <h4 className="text-purple-600 dark:text-purple-400 font-bold mb-3">🎯 The Word Embeddings</h4>
-            <p className="text-gray-700 dark:text-sm mb-4">
+            <h4 className="text-purple-600 font-bold mb-3">🎯 The Word Embeddings</h4>
+            <p className="text-gray-700 mb-4">
               After training, the weight matrix W becomes our word embedding matrix.
               Each row is the embedding vector for a word.
             </p>
@@ -239,8 +239,8 @@ export default function SkipGramPanel() {
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className="text-left text-gray-700 dark:text-gray-500 pr-4">Word</th>
-                    <th className="text-gray-700 dark:text-gray-500" colSpan="4">Embedding (D=4 for demo)</th>
+                    <th className="text-left text-gray-700 pr-4">Word</th>
+                    <th className="text-gray-700" colSpan="4">Embedding (D=4 for demo)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -267,11 +267,11 @@ export default function SkipGramPanel() {
           <p className="text-green-300">
             maximize Σ log P(context | center)
           </p>
-          <p className="text-sm text-gray-800 dark:text-gray-400 mt-2">
+          <p className="text-sm text-gray-800 mt-2">
             P(context | center) = softmax(W'<sub>context</sub> · W<sub>center</sub>)
           </p>
         </div>
-        <p className="text-gray-800 dark:text-sm mt-4">
+        <p className="text-gray-800 mt-4">
           We want to maximize the probability of seeing actual context words given the center word.
         </p>
       </div>
@@ -280,7 +280,7 @@ export default function SkipGramPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
           <h4 className="font-bold text-green-400 mb-2">✅ Skip-gram Strengths</h4>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Works well with small datasets</li>
             <li>• Better representation for rare words</li>
             <li>• Captures subtle semantic relationships</li>
@@ -288,7 +288,7 @@ export default function SkipGramPanel() {
         </div>
         <div className="bg-red-900/20 rounded-xl p-4 border border-red-500/30">
           <h4 className="font-bold text-red-400 mb-2">❌ Skip-gram Weaknesses</h4>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Slower to train (more predictions per word)</li>
             <li>• Original softmax is expensive (vocabulary size)</li>
             <li>• Requires negative sampling for efficiency</li>

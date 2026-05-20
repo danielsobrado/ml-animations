@@ -13,11 +13,11 @@ function TokenizationPanel() {
     // SentencePiece uses underscore for word boundaries
     const words = text.split(/\s+/);
     const tokens = [];
-    
+
     words.forEach((word, idx) => {
       // Add space marker (▁) before each word except first
       const prefix = idx > 0 ? '▁' : '';
-      
+
       // Simulate subword tokenization
       if (word.length > 6) {
         // Split longer words
@@ -27,10 +27,10 @@ function TokenizationPanel() {
         tokens.push({ text: prefix + word.toLowerCase(), type: 'word' });
       }
     });
-    
+
     // Add EOS token
     tokens.push({ text: '</s>', type: 'special' });
-    
+
     return tokens;
   };
 
@@ -77,7 +77,7 @@ function TokenizationPanel() {
 
   const resetAnimation = () => {
     if (timelineRef.current) timelineRef.current.kill();
-    
+
     const ctx = gsap.context(() => {
       gsap.set('.sp-token', { opacity: 0, y: 20 });
       gsap.set('.sp-id', { opacity: 0, scale: 0.5 });
@@ -89,8 +89,8 @@ function TokenizationPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">SentencePiece Tokenization</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">SentencePiece Tokenization</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
           T5 uses <strong>SentencePiece</strong> with a vocabulary of ~32,000 tokens.
           Unlike CLIP's BPE, SentencePiece treats text as raw bytes and learns subword units directly.
         </p>
@@ -98,7 +98,7 @@ function TokenizationPanel() {
 
       {/* Input */}
       <div className="bg-black/30 rounded-xl p-6">
-        <label className="block text-sm text-gray-800 dark:text-gray-400 mb-2">Enter a prompt to tokenize:</label>
+        <label className="block text-sm text-gray-800 mb-2">Enter a prompt to tokenize:</label>
         <input
           type="text"
           value={inputText}
@@ -131,20 +131,20 @@ function TokenizationPanel() {
       <div ref={animationRef} className="space-y-6">
         {/* SentencePiece Process */}
         <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-xl p-6 border border-emerald-500/30">
-          <h3 className="font-semibold text-emerald-600 dark:text-emerald-400 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-emerald-600 mb-4 flex items-center gap-2">
             <Scissors size={20} />
             SentencePiece Tokens
           </h3>
-          
+
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-black/40 rounded-lg px-4 py-3 flex-1">
-              <span className="text-sm text-gray-800 dark:text-gray-400">Input:</span>
+              <span className="text-sm text-gray-800">Input:</span>
               <div className="text-white font-mono mt-1">"{inputText}"</div>
             </div>
-            <ArrowRight className="text-emerald-600 dark:text-emerald-400 shrink-0" size={24} />
+            <ArrowRight className="text-emerald-600 shrink-0" size={24} />
             <div className="bg-black/40 rounded-lg px-4 py-3">
-              <span className="text-sm text-gray-800 dark:text-gray-400">Tokens:</span>
-              <div className="text-emerald-600 dark:text-emerald-400 font-mono mt-1">{tokens.length}</div>
+              <span className="text-sm text-gray-800">Tokens:</span>
+              <div className="text-emerald-600 font-mono mt-1">{tokens.length}</div>
             </div>
           </div>
 
@@ -164,14 +164,14 @@ function TokenizationPanel() {
               </div>
             ))}
             {tokens.length > 15 && (
-              <div className="px-3 py-2 text-gray-700 dark:text-gray-500">...+{tokens.length - 15} more</div>
+              <div className="px-3 py-2 text-gray-700">...+{tokens.length - 15} more</div>
             )}
           </div>
         </div>
 
         {/* Token IDs */}
         <div className="bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-xl p-6 border border-teal-500/30">
-          <h3 className="font-semibold text-teal-600 dark:text-teal-400 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-teal-600 mb-4 flex items-center gap-2">
             <Hash size={20} />
             Token IDs
           </h3>
@@ -188,7 +188,7 @@ function TokenizationPanel() {
                 }`}>
                   {token.text}
                 </div>
-                <div className="text-xs text-gray-800 dark:text-gray-400">↓</div>
+                <div className="text-xs text-gray-800">↓</div>
                 <div className="px-2 py-1 bg-black/40 rounded text-xs font-mono text-yellow-400">
                   {1000 + i * 127 + Math.floor(Math.random() * 100)}
                 </div>
@@ -200,17 +200,17 @@ function TokenizationPanel() {
 
       {/* SentencePiece vs BPE */}
       <div className="bg-black/40 rounded-xl p-6">
-        <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">📊 SentencePiece vs BPE (CLIP)</h3>
+        <h3 className="font-semibold text-gray-700 mb-4">📊 SentencePiece vs BPE (CLIP)</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Feature</th>
-                <th className="text-left py-2 px-3 text-emerald-600 dark:text-emerald-400">SentencePiece (T5)</th>
-                <th className="text-left py-2 px-3 text-blue-600 dark:text-blue-400">BPE (CLIP)</th>
+                <th className="text-left py-2 px-3 text-gray-800">Feature</th>
+                <th className="text-left py-2 px-3 text-emerald-600">SentencePiece (T5)</th>
+                <th className="text-left py-2 px-3 text-blue-600">BPE (CLIP)</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700 dark:text-gray-300">
+            <tbody className="text-gray-700">
               <tr className="border-b border-white/5">
                 <td className="py-2 px-3">Vocabulary</td>
                 <td className="py-2 px-3">32,000 tokens</td>
@@ -244,20 +244,20 @@ function TokenizationPanel() {
       {/* The Underscore Marker */}
       <div className="bg-yellow-500/10 rounded-xl p-6 border border-yellow-500/30">
         <h3 className="font-semibold text-yellow-400 mb-3">📝 The ▁ (Underscore) Marker</h3>
-        <div className="text-gray-700 dark:text-sm space-y-2">
+        <div className="text-gray-700 space-y-2">
           <p>
-            SentencePiece uses <code className="text-emerald-600 dark:text-emerald-400">▁</code> (U+2581, lower one eighth block) 
+            SentencePiece uses <code className="text-emerald-600">▁</code> (U+2581, lower one eighth block)
             to mark word boundaries:
           </p>
           <div className="bg-black/40 rounded p-4 font-mono text-sm">
-            <div className="text-gray-800 dark:text-gray-400"># Input: "hello world"</div>
-            <div className="text-emerald-600 dark:text-emerald-400"># Tokens: ["▁hello", "▁world"]</div>
+            <div className="text-gray-800"># Input: "hello world"</div>
+            <div className="text-emerald-600"># Tokens: ["▁hello", "▁world"]</div>
             <br />
-            <div className="text-gray-800 dark:text-gray-400"># Input: "unbelievable"</div>
-            <div className="text-emerald-600 dark:text-emerald-400"># Tokens: ["▁un", "believ", "able"]</div>
+            <div className="text-gray-800"># Input: "unbelievable"</div>
+            <div className="text-emerald-600"># Tokens: ["▁un", "believ", "able"]</div>
           </div>
           <p className="mt-2">
-            This allows reconstructing the original text perfectly, including spaces, 
+            This allows reconstructing the original text perfectly, including spaces,
             which is important for language models.
           </p>
         </div>
@@ -265,8 +265,8 @@ function TokenizationPanel() {
 
       {/* No Padding Needed Note */}
       <div className="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/30">
-        <div className="font-semibold text-emerald-600 dark:text-emerald-400 mb-2">💡 Dynamic Length in SD3</div>
-        <p className="text-sm text-gray-700 dark:text-gray-300">
+        <div className="font-semibold text-emerald-600 mb-2">💡 Dynamic Length in SD3</div>
+        <p className="text-sm text-gray-700">
           Unlike CLIP's fixed 77 tokens, T5 in SD3 can handle variable-length sequences.
           The embeddings are projected and padded as needed before entering the DiT.
           This flexibility is why T5 excels at long, detailed prompts.

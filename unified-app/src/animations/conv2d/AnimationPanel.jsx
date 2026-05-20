@@ -24,7 +24,7 @@ export default function AnimationPanel() {
 
   // Calculate output size: (input_size - kernel_size) / stride + 1 = (5-3)/1 + 1 = 3
   const outputSize = 3;
-  
+
   // Compute the full output matrix
   const computeOutput = () => {
     const output = [];
@@ -147,7 +147,7 @@ export default function AnimationPanel() {
                   const col = idx % 5;
                   const underKernel = isUnderKernel(row, col);
                   const relPos = getKernelRelativePos(row, col);
-                  
+
                   let bgColor = 'bg-blue-50';
                   if (underKernel) {
                     // Color based on kernel value at this position
@@ -187,8 +187,8 @@ export default function AnimationPanel() {
 
           {/* Convolution symbol */}
           <div className="flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold text-gray-800 dark:text-gray-400">∗</span>
-            <span className="text-xs text-gray-700 dark:text-gray-500">convolve</span>
+            <span className="text-3xl font-bold text-gray-800">∗</span>
+            <span className="text-xs text-gray-700">convolve</span>
           </div>
 
           {/* Kernel */}
@@ -207,12 +207,12 @@ export default function AnimationPanel() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-700 dark:text-center mt-1">Edge detection</p>
+            <p className="text-xs text-gray-700 mt-1">Edge detection</p>
           </div>
 
           {/* Equals */}
           <div className="flex items-center">
-            <span className="text-3xl font-bold text-gray-800 dark:text-gray-400">=</span>
+            <span className="text-3xl font-bold text-gray-800">=</span>
           </div>
 
           {/* Output Matrix */}
@@ -229,7 +229,7 @@ export default function AnimationPanel() {
                   <div
                     key={idx}
                     className={`w-10 h-10 flex items-center justify-center text-sm font-mono font-bold border-2 rounded transition-all
-                      ${isCurrent ? 'bg-purple-300 border-purple-600 ring-2 ring-purple-400 scale-110' : 
+                      ${isCurrent ? 'bg-purple-300 border-purple-600 ring-2 ring-purple-400 scale-110' :
                         isComputed ? 'bg-purple-100 border-purple-400' : 'bg-gray-100 border-gray-300'}
                       ${val < 0 ? 'text-red-700' : 'text-gray-800'}
                     `}
@@ -254,14 +254,14 @@ export default function AnimationPanel() {
                   <span className={`px-1 rounded ${p.kernel > 0 ? 'bg-green-100' : p.kernel < 0 ? 'bg-red-100' : 'bg-yellow-50'}`}>
                     {p.input}×{p.kernel}
                   </span>
-                  <span className="text-gray-800 dark:text-gray-400 mx-0.5">=</span>
+                  <span className="text-gray-800 mx-0.5">=</span>
                   <span className={`px-1 rounded ${p.product < 0 ? 'text-red-600' : ''}`}>
                     {p.product}
                   </span>
-                  {idx < 8 && <span className="text-gray-800 dark:text-gray-400 mx-1">+</span>}
+                  {idx < 8 && <span className="text-gray-800 mx-1">+</span>}
                 </span>
               ))}
-              <span className="text-gray-800 dark:text-gray-600 mx-2">=</span>
+              <span className="text-gray-800 mx-2">=</span>
               <span className="font-bold text-lg">{getCurrentValue()}</span>
             </div>
           </div>
@@ -301,7 +301,7 @@ export default function AnimationPanel() {
 
       {/* Speed control */}
       <div className="mt-3 flex justify-center items-center gap-2">
-        <span className="text-sm text-gray-800 dark:text-gray-600">Speed:</span>
+        <span className="text-sm text-gray-800">Speed:</span>
         <input
           type="range"
           min="200"
@@ -311,7 +311,7 @@ export default function AnimationPanel() {
           onChange={(e) => setSpeed(1700 - parseInt(e.target.value))}
           className="w-32"
         />
-        <span className="text-sm text-gray-800 dark:text-gray-600">{speed}ms</span>
+        <span className="text-sm text-gray-800">{speed}ms</span>
       </div>
 
       {/* Step indicator */}
@@ -325,8 +325,8 @@ export default function AnimationPanel() {
               key={i}
               onClick={() => !isPlaying && setStep(i)}
               className={`w-6 h-6 rounded flex items-center justify-center text-xs cursor-pointer transition-all
-                ${i === step ? 'bg-purple-600 text-white scale-110' : 
-                  i < step ? 'bg-purple-300 text-purple-800' : 'bg-gray-200 text-gray-700 dark:text-gray-500'}
+                ${i === step ? 'bg-purple-600 text-white scale-110' :
+                  i < step ? 'bg-purple-300 text-purple-800' : 'bg-gray-200 text-gray-700'}
               `}
             >
               {i + 1}
@@ -340,10 +340,10 @@ export default function AnimationPanel() {
         <p className="text-sm text-gray-700">
           <strong>2D Convolution Formula:</strong>
         </p>
-        <p className="text-sm font-mono text-gray-800 dark:text-gray-600 mt-1">
+        <p className="text-sm font-mono text-gray-800 mt-1">
           Output[i,j] = Σₘ Σₙ Input[i+m, j+n] × Kernel[m, n]
         </p>
-        <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">
+        <p className="text-xs text-gray-700 mt-2">
           The kernel slides across the input, computing element-wise products and summing them at each position.
         </p>
       </div>

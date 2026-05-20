@@ -127,7 +127,7 @@ export default function PracticePanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Practice Lab</h2>
-                    <p className="text-slate-800 dark:text-slate-600">Test your understanding of multimodal LLMs</p>
+                    <p className="text-slate-800">Test your understanding of multimodal LLMs</p>
                 </div>
 
                 {/* Section Tabs */}
@@ -137,7 +137,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'quiz'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                         }`}
                     >
                         📝 Quiz
@@ -147,7 +147,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'scenarios'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                         }`}
                     >
                         🎯 Scenarios
@@ -158,7 +158,7 @@ export default function PracticePanel() {
                     <div className="bg-slate-50 rounded-xl p-6">
                         {/* Progress */}
                         <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-slate-800 dark:text-slate-600">
+                            <span className="text-sm text-slate-800">
                                 Question {currentQuiz + 1} of {QUIZZES.length}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
@@ -175,7 +175,7 @@ export default function PracticePanel() {
 
                         <div className="bg-white rounded-lg p-6 mb-4 border">
                             <h3 className="text-lg font-bold text-slate-800 mb-4">{quiz.question}</h3>
-                            
+
                             <div className="space-y-3">
                                 {quiz.options.map((option, i) => (
                                     <button
@@ -226,11 +226,11 @@ export default function PracticePanel() {
                         <div className="flex justify-between">
                             <button
                                 onClick={resetQuiz}
-                                className="flex items-center gap-2 px-4 py-2 text-slate-800 dark:text-slate-600 hover:text-slate-800"
+                                className="flex items-center gap-2 px-4 py-2 text-slate-800 hover:text-slate-800"
                             >
                                 <RefreshCw size={16} /> Reset
                             </button>
-                            
+
                             {showResult && currentQuiz < QUIZZES.length - 1 && (
                                 <button
                                     onClick={nextQuestion}
@@ -239,7 +239,7 @@ export default function PracticePanel() {
                                     Next Question →
                                 </button>
                             )}
-                            
+
                             {showResult && currentQuiz === QUIZZES.length - 1 && (
                                 <div className="text-lg font-bold text-indigo-600">
                                     Final Score: {score}/{QUIZZES.length} 🎉
@@ -250,7 +250,7 @@ export default function PracticePanel() {
                 ) : (
                     <div className="bg-slate-50 rounded-xl p-6">
                         <h3 className="text-xl font-bold text-slate-800 mb-4">Multimodal Reasoning Scenarios</h3>
-                        <p className="text-slate-800 dark:text-slate-600 mb-6">
+                        <p className="text-slate-800 mb-6">
                             Explore how a multimodal LLM would process these image + text combinations
                         </p>
 
@@ -282,18 +282,18 @@ export default function PracticePanel() {
                                     <div className="w-32 h-32 bg-slate-100 rounded-lg flex items-center justify-center text-6xl border-2 border-slate-200">
                                         {scenario.image}
                                     </div>
-                                    <div className="text-center text-sm text-slate-700 dark:text-slate-500 mt-2">{scenario.imageDesc}</div>
+                                    <div className="text-center text-sm text-slate-700 mt-2">{scenario.imageDesc}</div>
                                 </div>
 
                                 {/* Question */}
                                 <div className="flex-1">
-                                    <div className="text-sm text-slate-700 dark:text-slate-500 mb-1">User Question:</div>
+                                    <div className="text-sm text-slate-700 mb-1">User Question:</div>
                                     <div className="text-lg font-medium text-slate-800 mb-4">
                                         "{scenario.question}"
                                     </div>
 
-                                    <div className="text-sm text-slate-700 dark:text-slate-500 mb-1">Image Context:</div>
-                                    <div className="text-sm text-slate-800 dark:text-slate-600 bg-slate-50 p-2 rounded mb-4">
+                                    <div className="text-sm text-slate-700 mb-1">Image Context:</div>
+                                    <div className="text-sm text-slate-800 bg-slate-50 p-2 rounded mb-4">
                                         {scenario.context}
                                     </div>
 

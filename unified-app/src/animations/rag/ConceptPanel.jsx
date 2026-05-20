@@ -19,8 +19,8 @@ export default function ConceptPanel() {
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-4">What is RAG?</h2>
                     <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
-                        <strong>Retrieval-Augmented Generation</strong> combines the power of LLMs with 
-                        external knowledge retrieval, allowing models to access up-to-date, accurate information 
+                        <strong>Retrieval-Augmented Generation</strong> combines the power of LLMs with
+                        external knowledge retrieval, allowing models to access up-to-date, accurate information
                         beyond their training data.
                     </p>
                 </div>
@@ -48,7 +48,7 @@ export default function ConceptPanel() {
                         <div>
                             <h3 className="text-xl font-bold text-green-900 mb-2">RAG to the Rescue!</h3>
                             <p className="text-green-800 mb-4">
-                                RAG augments the LLM with a retrieval system that fetches relevant documents 
+                                RAG augments the LLM with a retrieval system that fetches relevant documents
                                 from an external knowledge base before generating a response.
                             </p>
                             <div className="grid grid-cols-3 gap-3 text-center">
@@ -72,7 +72,7 @@ export default function ConceptPanel() {
                 {/* Interactive Comparison */}
                 <div className="bg-slate-50 rounded-xl p-6 mb-8">
                     <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">See the Difference</h3>
-                    
+
                     <div className="flex justify-center gap-4 mb-6">
                         <button
                             onClick={() => setShowComparison('without')}
@@ -109,8 +109,8 @@ export default function ConceptPanel() {
                                     <div>
                                         <div className="text-sm text-red-600 mb-1">Standard LLM Response:</div>
                                         <p className="text-red-800">
-                                            "I don't have specific information about Acme Corp's Q3 2024 revenue 
-                                            as my training data only goes up to April 2023. However, based on 
+                                            "I don't have specific information about Acme Corp's Q3 2024 revenue
+                                            as my training data only goes up to April 2023. However, based on
                                             general market trends, similar companies typically see..."
                                         </p>
                                         <div className="mt-2 text-xs text-red-600 italic">
@@ -124,7 +124,7 @@ export default function ConceptPanel() {
                                 <div className="p-3 bg-green-50 rounded-lg border border-green-200">
                                     <div className="text-sm text-green-600 mb-1">📚 Retrieved Context:</div>
                                     <p className="text-sm">
-                                        "Acme Corp Q3 2024 Earnings Report: Revenue of $4.2B, up 15% YoY. 
+                                        "Acme Corp Q3 2024 Earnings Report: Revenue of $4.2B, up 15% YoY.
                                         Operating margin improved to 23%..." [Source: earnings_q3_2024.pdf]
                                     </p>
                                 </div>
@@ -134,8 +134,8 @@ export default function ConceptPanel() {
                                         <div>
                                             <div className="text-sm text-green-600 mb-1">RAG-Enhanced Response:</div>
                                             <p className="text-green-800">
-                                                "According to the Q3 2024 earnings report, Acme Corp reported 
-                                                revenue of $4.2 billion, representing a 15% increase year-over-year. 
+                                                "According to the Q3 2024 earnings report, Acme Corp reported
+                                                revenue of $4.2 billion, representing a 15% increase year-over-year.
                                                 The operating margin also improved to 23%."
                                             </p>
                                             <div className="mt-2 text-xs text-green-600">
@@ -160,7 +160,7 @@ export default function ConceptPanel() {
                         <div key={i} className="bg-white rounded-lg p-4 border text-center hover:shadow-md transition-shadow">
                             <div className="text-3xl mb-2">{use.icon}</div>
                             <div className="font-bold text-slate-800">{use.title}</div>
-                            <div className="text-xs text-slate-800 dark:text-slate-600">{use.desc}</div>
+                            <div className="text-xs text-slate-800">{use.desc}</div>
                         </div>
                     ))}
                 </div>
@@ -171,8 +171,8 @@ export default function ConceptPanel() {
                     <div>
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
                         <p className="text-sm">
-                            RAG doesn't require retraining the LLM! It works by providing relevant context 
-                            at inference time. This makes it much more cost-effective than fine-tuning and 
+                            RAG doesn't require retraining the LLM! It works by providing relevant context
+                            at inference time. This makes it much more cost-effective than fine-tuning and
                             allows easy updates to the knowledge base.
                         </p>
                     </div>

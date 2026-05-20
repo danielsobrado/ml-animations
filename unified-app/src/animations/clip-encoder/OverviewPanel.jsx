@@ -70,7 +70,7 @@ function OverviewPanel() {
 
   const handlePlayPause = () => {
     if (!timelineRef.current) return;
-    
+
     if (isPlaying) {
       timelineRef.current.pause();
     } else {
@@ -93,9 +93,9 @@ function OverviewPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">What is CLIP?</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          <strong>CLIP (Contrastive Language-Image Pre-training)</strong> was trained by OpenAI to understand 
+        <h2 className="text-2xl font-bold text-blue-600 mb-2">What is CLIP?</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          <strong>CLIP (Contrastive Language-Image Pre-training)</strong> was trained by OpenAI to understand
           the relationship between text and images. SD3 uses CLIP's text encoder (specifically CLIP-L/14 and CLIP-G/14)
           to convert your text prompt into embeddings the diffusion model can understand.
         </p>
@@ -103,14 +103,14 @@ function OverviewPanel() {
 
       {/* Why Two CLIPs? */}
       <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl p-6 border border-blue-500/30">
-        <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-blue-600 mb-3 flex items-center gap-2">
           <Link2 size={20} />
           Why Does SD3 Use Two CLIP Models?
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-4">
-            <div className="font-semibold text-purple-600 dark:text-purple-400 mb-2">CLIP-L/14 (Large)</div>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <div className="font-semibold text-purple-600 mb-2">CLIP-L/14 (Large)</div>
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• 77 max tokens</li>
               <li>• 768-dim embeddings</li>
               <li>• 12 transformer layers</li>
@@ -118,8 +118,8 @@ function OverviewPanel() {
             </ul>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <div className="font-semibold text-pink-600 dark:text-pink-400 mb-2">CLIP-G/14 (Giant)</div>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <div className="font-semibold text-pink-600 mb-2">CLIP-G/14 (Giant)</div>
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• 77 max tokens</li>
               <li>• 1280-dim embeddings</li>
               <li>• 32 transformer layers</li>
@@ -127,7 +127,7 @@ function OverviewPanel() {
             </ul>
           </div>
         </div>
-        <p className="text-sm text-gray-800 dark:text-gray-400 mt-3">
+        <p className="text-sm text-gray-800 mt-3">
           By combining both, SD3 gets complementary representations for better prompt understanding.
         </p>
       </div>
@@ -153,10 +153,10 @@ function OverviewPanel() {
       {/* Step Indicator */}
       <div className="bg-black/30 rounded-lg p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-800 dark:text-gray-400">Step {step + 1} of {steps.length}</span>
-          <span className="text-blue-600 dark:text-blue-400 font-semibold">{steps[step].title}</span>
+          <span className="text-sm text-gray-800">Step {step + 1} of {steps.length}</span>
+          <span className="text-blue-600 font-semibold">{steps[step].title}</span>
         </div>
-        <p className="text-gray-700 dark:text-gray-300">{steps[step].description}</p>
+        <p className="text-gray-700">{steps[step].description}</p>
       </div>
 
       {/* Architecture Animation */}
@@ -231,23 +231,23 @@ function OverviewPanel() {
       {/* Key Concepts */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30">
-          <Type className="text-blue-600 dark:text-blue-400 mb-2" size={24} />
-          <h4 className="font-semibold text-blue-600 dark:text-blue-400 mb-1">Text Only</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <Type className="text-blue-600 mb-2" size={24} />
+          <h4 className="font-semibold text-blue-600 mb-1">Text Only</h4>
+          <p className="text-sm text-gray-700">
             CLIP's text encoder is separate from the vision encoder. SD3 only uses the text side.
           </p>
         </div>
         <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30">
-          <Image className="text-purple-600 dark:text-purple-400 mb-2" size={24} />
-          <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-1">Contrastive Training</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <Image className="text-purple-600 mb-2" size={24} />
+          <h4 className="font-semibold text-purple-600 mb-1">Contrastive Training</h4>
+          <p className="text-sm text-gray-700">
             Trained on 400M image-text pairs to align text and image representations.
           </p>
         </div>
         <div className="bg-pink-500/10 rounded-lg p-4 border border-pink-500/30">
-          <Link2 className="text-pink-600 dark:text-pink-400 mb-2" size={24} />
-          <h4 className="font-semibold text-pink-600 dark:text-pink-400 mb-1">Pooled + Sequence</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <Link2 className="text-pink-600 mb-2" size={24} />
+          <h4 className="font-semibold text-pink-600 mb-1">Pooled + Sequence</h4>
+          <p className="text-sm text-gray-700">
             Outputs both token sequence (for joint attention) and pooled embedding (for conditioning).
           </p>
         </div>

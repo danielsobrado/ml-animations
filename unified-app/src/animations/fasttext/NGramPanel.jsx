@@ -8,7 +8,7 @@ function NGramPanel() {
 
   const word = "unhappy";
   const ngrams = ['<un', 'unh', 'nha', 'hap', 'app', 'ppy', 'py>'];
-  
+
   // Simulated vector values (normalized for visualization)
   const ngramVectors = {
     '<un': [0.3, -0.2, 0.5, 0.1],
@@ -83,7 +83,7 @@ function NGramPanel() {
           {/* N-grams List */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Layers className="w-5 h-5 text-purple-600" />
               N-gram Vectors for "{word}"
             </h3>
             <div className="space-y-2">
@@ -99,13 +99,13 @@ function NGramPanel() {
                   className="flex items-center gap-3 p-2 rounded-lg"
                 >
                   <span className="font-mono text-purple-300 w-12">{ngram}</span>
-                  <ArrowRight className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <ArrowRight className="w-4 h-4 text-purple-600" />
                   <div className="flex gap-1">
                     {ngramVectors[ngram].map((val, j) => (
                       <motion.div
                         key={j}
                         animate={{
-                          backgroundColor: step > i 
+                          backgroundColor: step > i
                             ? val > 0 ? `rgba(34, 197, 94, ${Math.abs(val)})` : `rgba(239, 68, 68, ${Math.abs(val)})`
                             : 'rgba(255, 255, 255, 0.1)'
                         }}
@@ -120,7 +120,7 @@ function NGramPanel() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                     >
-                      <Plus className="w-4 h-4 text-pink-600 dark:text-pink-400" />
+                      <Plus className="w-4 h-4 text-pink-600" />
                     </motion.div>
                   )}
                 </motion.div>
@@ -131,7 +131,7 @@ function NGramPanel() {
           {/* Result Vector */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Resulting Word Vector</h3>
-            
+
             <motion.div
               animate={{
                 opacity: step > ngrams.length ? 1 : 0.3,
@@ -150,8 +150,8 @@ function NGramPanel() {
                   <motion.div
                     key={i}
                     initial={{ height: 0 }}
-                    animate={{ 
-                      height: step > ngrams.length ? Math.abs(val) * 60 : 0 
+                    animate={{
+                      height: step > ngrams.length ? Math.abs(val) * 60 : 0
                     }}
                     transition={{ delay: i * 0.1, duration: 0.5 }}
                     className={`w-12 rounded-t-lg flex items-end justify-center pb-1 text-xs text-white font-mono ${
@@ -165,7 +165,7 @@ function NGramPanel() {
               </div>
 
               <div className="text-center text-purple-300/70 text-sm">
-                {step > ngrams.length 
+                {step > ngrams.length
                   ? 'Sum of all n-gram vectors'
                   : 'Waiting for n-gram sum...'}
               </div>
@@ -195,8 +195,8 @@ function NGramPanel() {
         className="bg-white/5 rounded-xl p-4"
       >
         <p className="text-purple-200/80 text-sm">
-          <strong className="text-purple-300">Key Insight:</strong> By summing n-gram vectors, 
-          FastText captures morphological patterns. Words like "unhappy", "unhelpful", and "unfortunate" 
+          <strong className="text-purple-300">Key Insight:</strong> By summing n-gram vectors,
+          FastText captures morphological patterns. Words like "unhappy", "unhelpful", and "unfortunate"
           share the "&lt;un" n-gram, making their vectors similar in the "negation" dimension.
         </p>
       </motion.div>

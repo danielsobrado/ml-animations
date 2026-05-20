@@ -20,7 +20,7 @@ const subwordTokenize = (text) => {
     // Simplified subword simulation
     const result = [];
     const words = text.split(/(\s+)/);
-    
+
     words.forEach(word => {
         if (word.match(/^\s+$/)) {
             result.push(word);
@@ -31,7 +31,7 @@ const subwordTokenize = (text) => {
             const common = ['ing', 'tion', 'ed', 'er', 'est', 'ly', 'ment', 'ness', 'ize', 'ful'];
             let remaining = word;
             let found = false;
-            
+
             for (const suffix of common) {
                 if (remaining.toLowerCase().endsWith(suffix) && remaining.length > suffix.length + 2) {
                     result.push(remaining.slice(0, -suffix.length));
@@ -40,7 +40,7 @@ const subwordTokenize = (text) => {
                     break;
                 }
             }
-            
+
             if (!found) {
                 if (word.length > 6) {
                     result.push(word.slice(0, Math.ceil(word.length / 2)));
@@ -51,7 +51,7 @@ const subwordTokenize = (text) => {
             }
         }
     });
-    
+
     return result.filter(t => t);
 };
 
@@ -87,7 +87,7 @@ export default function ConceptPanel() {
                 break;
         }
         setTokens(result);
-        
+
         // Animate tokens appearing
         setAnimatingIdx(-1);
         result.forEach((_, i) => {
@@ -102,7 +102,7 @@ export default function ConceptPanel() {
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-4">What is Tokenization?</h2>
                     <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
-                        Tokenization is the process of breaking text into smaller pieces called <strong>tokens</strong>. 
+                        Tokenization is the process of breaking text into smaller pieces called <strong>tokens</strong>.
                         These tokens are the fundamental units that language models understand and process.
                     </p>
                 </div>
@@ -143,7 +143,7 @@ export default function ConceptPanel() {
                 {/* Interactive Demo */}
                 <div className="bg-slate-50 rounded-xl p-6 mb-8">
                     <h3 className="text-xl font-bold text-slate-800 mb-4">Try It Yourself</h3>
-                    
+
                     {/* Input */}
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-slate-700 mb-2">Enter text:</label>
@@ -194,7 +194,7 @@ export default function ConceptPanel() {
                                     className="sr-only"
                                 />
                                 <div className="font-bold text-slate-800">{method.label}</div>
-                                <div className="text-xs text-slate-800 dark:text-slate-600">{method.desc}</div>
+                                <div className="text-xs text-slate-800">{method.desc}</div>
                             </label>
                         ))}
                     </div>
@@ -202,13 +202,13 @@ export default function ConceptPanel() {
                     {/* Visualization */}
                     <div className="bg-white rounded-lg p-4 border border-slate-200">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="text-sm font-medium text-slate-800 dark:text-slate-600">Original:</span>
+                            <span className="text-sm font-medium text-slate-800">Original:</span>
                             <span className="font-mono bg-slate-100 px-2 py-1 rounded">{inputText}</span>
                         </div>
-                        
+
                         <div className="flex items-center gap-2 mb-3">
-                            <ArrowRight className="text-slate-800 dark:text-slate-400" size={20} />
-                            <span className="text-sm font-medium text-slate-800 dark:text-slate-600">Tokens ({tokens.length}):</span>
+                            <ArrowRight className="text-slate-800" size={20} />
+                            <span className="text-sm font-medium text-slate-800">Tokens ({tokens.length}):</span>
                         </div>
 
                         <div className="flex flex-wrap gap-2">
@@ -234,7 +234,7 @@ export default function ConceptPanel() {
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
                         <p className="text-sm">
                             Different tokenization methods produce different numbers of tokens for the same text.
-                            <strong> Subword tokenization</strong> (like BPE) is the most common in modern LLMs because it 
+                            <strong> Subword tokenization</strong> (like BPE) is the most common in modern LLMs because it
                             balances vocabulary size with the ability to handle rare or novel words.
                         </p>
                     </div>

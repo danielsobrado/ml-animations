@@ -74,7 +74,7 @@ export default function RobustnessPanel() {
                     onChange={(e) => setOutlierVal(Number(e.target.value))}
                     className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                 />
-                <div className="flex justify-between text-xs text-slate-800 dark:text-slate-400 mt-1">
+                <div className="flex justify-between text-xs text-slate-800 mt-1">
                     <span>0</span>
                     <span>500</span>
                     <span>1000 (Extreme!)</span>

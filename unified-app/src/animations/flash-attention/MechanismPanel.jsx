@@ -56,10 +56,10 @@ export default function MechanismPanel() {
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-amber-600 dark:text-amber-400 mb-4">
+                    <h2 className="text-3xl font-bold text-amber-600 mb-4">
                         How Tiling Works
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                    <p className="text-slate-600 max-w-2xl mx-auto">
                         Flash Attention processes the attention matrix in <strong>small tiles</strong> that fit in SRAM.
                         Each tile is computed, combined with running statistics, and the results are accumulated
                         without ever materializing the full attention matrix.
@@ -79,7 +79,7 @@ export default function MechanismPanel() {
                     </button>
                     <button
                         onClick={reset}
-                        className="px-6 py-3 bg-slate-200 dark:bg-slate-700 rounded-xl font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors flex items-center gap-2"
+                        className="px-6 py-3 bg-slate-200 rounded-xl font-medium hover:bg-slate-300 transition-colors flex items-center gap-2"
                     >
                         <RefreshCw size={18} />
                         Reset
@@ -88,8 +88,8 @@ export default function MechanismPanel() {
 
                 <div className="grid lg:grid-cols-2 gap-8">
                     {/* Left: Matrix with Tiles */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-4 text-center">
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                        <h3 className="font-bold text-slate-700 mb-4 text-center">
                             Attention Matrix ({seqLen}×{seqLen}) with Tiles
                         </h3>
 
@@ -97,13 +97,13 @@ export default function MechanismPanel() {
                         <div className="flex justify-center mb-4">
                             <div className="relative">
                                 {/* K label */}
-                                <div className="absolute -top-6 left-0 right-0 text-center text-sm font-medium text-blue-600 dark:text-blue-400">
+                                <div className="absolute -top-6 left-0 right-0 text-center text-sm font-medium text-blue-600">
                                     K (Keys) →
                                 </div>
 
                                 {/* Q label */}
                                 <div className="absolute -left-8 top-0 bottom-0 flex items-center">
-                                    <span className="text-sm font-medium text-purple-600 dark:text-purple-400 transform -rotate-90">
+                                    <span className="text-sm font-medium text-purple-600 transform -rotate-90">
                                         Q (Queries)
                                     </span>
                                 </div>
@@ -129,10 +129,10 @@ export default function MechanismPanel() {
                                                         w-16 h-16 rounded-lg border-2 p-1
                                                         flex items-center justify-center
                                                         ${active
-                                                            ? 'border-amber-500 bg-amber-100 dark:bg-amber-900/40'
+                                                            ? 'border-amber-500 bg-amber-100'
                                                             : processed
-                                                                ? 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20'
-                                                                : 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50'
+                                                                ? 'border-emerald-400 bg-emerald-50'
+                                                                : 'border-slate-300 bg-slate-50'
                                                         }
                                                     `}
                                                 >
@@ -145,7 +145,7 @@ export default function MechanismPanel() {
                                                                         ? 'bg-amber-500'
                                                                         : processed
                                                                             ? 'bg-emerald-400'
-                                                                            : 'bg-slate-300 dark:bg-slate-500'
+                                                                            : 'bg-slate-300'
                                                                     }`}
                                                             />
                                                         ))}
@@ -162,15 +162,15 @@ export default function MechanismPanel() {
                         <div className="flex justify-center gap-6 mt-4 text-sm">
                             <div className="flex items-center gap-2">
                                 <div className="w-4 h-4 bg-amber-500 rounded"></div>
-                                <span className="text-slate-600 dark:text-slate-400">Current Tile</span>
+                                <span className="text-slate-600">Current Tile</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-4 h-4 bg-emerald-400 rounded"></div>
-                                <span className="text-slate-600 dark:text-slate-400">Processed</span>
+                                <span className="text-slate-600">Processed</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 bg-slate-300 dark:bg-slate-500 rounded"></div>
-                                <span className="text-slate-600 dark:text-slate-400">Pending</span>
+                                <div className="w-4 h-4 bg-slate-300 rounded"></div>
+                                <span className="text-slate-600">Pending</span>
                             </div>
                         </div>
                     </div>
@@ -178,8 +178,8 @@ export default function MechanismPanel() {
                     {/* Right: Memory Flow */}
                     <div className="space-y-6">
                         {/* Current Operation */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                            <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-4">Current Operation</h3>
+                        <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                            <h3 className="font-bold text-slate-700 mb-4">Current Operation</h3>
 
                             <AnimatePresence mode="wait">
                                 <motion.div
@@ -190,11 +190,11 @@ export default function MechanismPanel() {
                                     className="space-y-3"
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded font-mono text-sm">
+                                        <div className="px-3 py-1 bg-purple-100 text-purple-600 rounded font-mono text-sm">
                                             Q[{currentBlockRow * blockSize}:{(currentBlockRow + 1) * blockSize}]
                                         </div>
                                         <span className="text-slate-400">×</span>
-                                        <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded font-mono text-sm">
+                                        <div className="px-3 py-1 bg-blue-100 text-blue-600 rounded font-mono text-sm">
                                             K[{currentBlockCol * blockSize}:{(currentBlockCol + 1) * blockSize}]
                                         </div>
                                     </div>
@@ -257,11 +257,11 @@ export default function MechanismPanel() {
                         </div>
 
                         {/* Online Softmax Info */}
-                        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-6">
-                            <h3 className="font-bold text-amber-700 dark:text-amber-400 mb-2">
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                            <h3 className="font-bold text-amber-700 mb-2">
                                 🔑 The "Online Softmax" Trick
                             </h3>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
+                            <p className="text-sm text-slate-600">
                                 Flash Attention uses <strong>running statistics</strong> (max and sum) to compute
                                 the correct softmax across tiles without seeing all values at once.
                                 Each tile updates these accumulators, producing the exact same result as
@@ -272,14 +272,14 @@ export default function MechanismPanel() {
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mt-8 bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+                <div className="mt-8 bg-white rounded-xl p-4 border border-slate-200">
                     <div className="flex justify-between text-sm mb-2">
-                        <span className="text-slate-600 dark:text-slate-400">Tiles Processed</span>
+                        <span className="text-slate-600">Tiles Processed</span>
                         <span className="font-mono text-amber-600">
                             {processedBlocks.size} / {numBlocks * numBlocks}
                         </span>
                     </div>
-                    <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-amber-500 to-orange-500"
                             animate={{ width: `${(processedBlocks.size / (numBlocks * numBlocks)) * 100}%` }}

@@ -41,7 +41,7 @@ export default function App() {
           </div>
           <div>
             <h1 className="text-xl font-bold">Variational Autoencoder (VAE)</h1>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Learning to Generate: Probabilistic Latent Representations</p>
+            <p className="text-sm text-gray-800">Learning to Generate: Probabilistic Latent Representations</p>
           </div>
         </div>
       </header>
@@ -53,7 +53,7 @@ export default function App() {
           const isActive = activeTab === tab.id;
           const tabIndex = tabs.findIndex(t => t.id === activeTab);
           const isCompleted = index < tabIndex;
-          
+
           return (
             <button
               key={tab.id}
@@ -63,7 +63,7 @@ export default function App() {
                   ? 'bg-purple-600 text-white'
                   : isCompleted
                   ? 'bg-purple-900/50 text-purple-300 hover:bg-purple-800/50'
-                  : 'bg-white/5 text-gray-800 dark:text-gray-400 hover:bg-white/10 hover:text-white'
+                  : 'bg-white/5 text-gray-800 hover:bg-white/10 hover:text-white'
               }`}
             >
               <Icon size={18} />
@@ -96,7 +96,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="text-center py-4 text-gray-700 dark:text-sm">
+      <footer className="text-center py-4 text-gray-700">
         💡 Tip: Progress through each tab in order for the best learning experience
       </footer>
     </div>

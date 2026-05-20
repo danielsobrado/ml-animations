@@ -112,14 +112,14 @@ export default function SigmaSchedulePanel() {
     // Draw all schedules (faded for non-selected)
     Object.entries(schedules).forEach(([key, schedule]) => {
       const isSelected = key === selectedSchedule;
-      
+
       ctx.beginPath();
       for (let i = 0; i <= 100; i++) {
         const t = i / 100;
         const sigma = schedule.fn(t);
         const x = padding.left + t * plotWidth;
         const y = height - padding.bottom - sigma * plotHeight;
-        
+
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
@@ -136,7 +136,7 @@ export default function SigmaSchedulePanel() {
       const sigma = schedule.fn(t);
       const x = padding.left + t * plotWidth;
       const y = height - padding.bottom - sigma * plotHeight;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fill();
@@ -161,9 +161,9 @@ export default function SigmaSchedulePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Sigma Schedules: <span className="text-fuchsia-600 dark:text-fuchsia-400">Noise Level Control</span>
+          Sigma Schedules: <span className="text-fuchsia-600">Noise Level Control</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           How noise decreases during the generation process
         </p>
       </div>
@@ -171,14 +171,14 @@ export default function SigmaSchedulePanel() {
       {/* Key Concept */}
       <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 rounded-2xl p-6 border border-fuchsia-500/30">
         <div className="flex items-start gap-4">
-          <Info className="text-fuchsia-600 dark:text-fuchsia-400 mt-1" size={24} />
+          <Info className="text-fuchsia-600 mt-1" size={24} />
           <div>
             <h3 className="font-bold text-lg text-fuchsia-300 mb-2">What is a Sigma Schedule?</h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              The sigma schedule σ(t) defines how much noise is present at each timestep. 
+            <p className="text-gray-700">
+              The sigma schedule σ(t) defines how much noise is present at each timestep.
               At t=0, we have maximum noise (σ ≈ 1). At t=1, we have minimum noise (σ ≈ 0).
-              The <strong className="text-fuchsia-600 dark:text-fuchsia-400">shape of this curve</strong> affects 
-              image quality and generation speed. Different schedules work better for 
+              The <strong className="text-fuchsia-600">shape of this curve</strong> affects
+              image quality and generation speed. Different schedules work better for
               different scenarios.
             </p>
           </div>
@@ -196,7 +196,7 @@ export default function SigmaSchedulePanel() {
 
         {/* Steps Control */}
         <div className="flex items-center gap-4 px-4">
-          <span className="text-sm text-gray-800 dark:text-gray-400 w-32">Sampling Steps: {numSteps}</span>
+          <span className="text-sm text-gray-800 w-32">Sampling Steps: {numSteps}</span>
           <input
             type="range"
             min="5"
@@ -225,8 +225,8 @@ export default function SigmaSchedulePanel() {
               <div className="w-4 h-4 rounded-full" style={{ backgroundColor: schedule.color }} />
               <span className="font-bold">{schedule.name}</span>
             </div>
-            <code className="text-xs text-gray-800 dark:text-gray-400 block mb-2">{schedule.formula}</code>
-            <p className="text-sm text-gray-700 dark:text-gray-500">{schedule.description}</p>
+            <code className="text-xs text-gray-800 block mb-2">{schedule.formula}</code>
+            <p className="text-sm text-gray-700">{schedule.description}</p>
           </button>
         ))}
       </div>
@@ -238,27 +238,27 @@ export default function SigmaSchedulePanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Schedule</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Pros</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Cons</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Best For</th>
+                <th className="py-3 px-4 text-left text-gray-800">Schedule</th>
+                <th className="py-3 px-4 text-left text-gray-800">Pros</th>
+                <th className="py-3 px-4 text-left text-gray-800">Cons</th>
+                <th className="py-3 px-4 text-left text-gray-800">Best For</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               <tr>
-                <td className="py-3 px-4 text-fuchsia-600 dark:text-fuchsia-400">Linear</td>
+                <td className="py-3 px-4 text-fuchsia-600">Linear</td>
                 <td className="py-3 px-4">Simple, predictable</td>
                 <td className="py-3 px-4">May miss details</td>
                 <td className="py-3 px-4">Basic testing</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-purple-600 dark:text-purple-400">Cosine</td>
+                <td className="py-3 px-4 text-purple-600">Cosine</td>
                 <td className="py-3 px-4">Smooth transitions</td>
                 <td className="py-3 px-4">Slower at extremes</td>
                 <td className="py-3 px-4">High-res images</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-blue-600 dark:text-blue-400">Karras</td>
+                <td className="py-3 px-4 text-blue-600">Karras</td>
                 <td className="py-3 px-4">Optimized spacing</td>
                 <td className="py-3 px-4">More complex</td>
                 <td className="py-3 px-4">Production quality</td>
@@ -280,27 +280,27 @@ export default function SigmaSchedulePanel() {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-bold text-purple-300 mb-3">The Connection</h4>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+            <p className="text-sm text-gray-700 mb-3">
               The sigma schedule directly determines the SNR at each timestep:
             </p>
             <div className="bg-black/30 rounded-lg p-4 font-mono text-center">
               <p className="text-lg text-purple-300">SNR(t) = α²(t) / σ²(t)</p>
-              <p className="text-sm text-gray-800 dark:text-gray-400 mt-2">where α(t) = √(1 - σ²(t))</p>
+              <p className="text-sm text-gray-800 mt-2">where α(t) = √(1 - σ²(t))</p>
             </div>
           </div>
           <div>
             <h4 className="font-bold text-blue-300 mb-3">Why It Matters</h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            <ul className="text-sm text-gray-700 space-y-2">
               <li className="flex items-start gap-2">
-                <span className="text-blue-600 dark:text-blue-400">•</span>
+                <span className="text-blue-600">•</span>
                 <span><strong>High SNR</strong> (low σ): Image is mostly visible, fine details</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-600 dark:text-blue-400">•</span>
+                <span className="text-blue-600">•</span>
                 <span><strong>Low SNR</strong> (high σ): Image is mostly noise, global structure</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-600 dark:text-blue-400">•</span>
+                <span className="text-blue-600">•</span>
                 <span><strong>Karras insight:</strong> Equal log-SNR steps work best</span>
               </li>
             </ul>
@@ -314,15 +314,15 @@ export default function SigmaSchedulePanel() {
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-white/5 rounded-lg p-4">
             <h4 className="font-bold text-fuchsia-300 mb-2">Schedule</h4>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Linear or Karras (configurable)</p>
+            <p className="text-sm text-gray-800">Linear or Karras (configurable)</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4">
             <h4 className="font-bold text-purple-300 mb-2">Steps</h4>
-            <p className="text-sm text-gray-800 dark:text-gray-400">28-50 typical (quality/speed tradeoff)</p>
+            <p className="text-sm text-gray-800">28-50 typical (quality/speed tradeoff)</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4">
             <h4 className="font-bold text-blue-300 mb-2">Sigma Range</h4>
-            <p className="text-sm text-gray-800 dark:text-gray-400">σ_max=14.6, σ_min=0.0292</p>
+            <p className="text-sm text-gray-800">σ_max=14.6, σ_min=0.0292</p>
           </div>
         </div>
       </div>

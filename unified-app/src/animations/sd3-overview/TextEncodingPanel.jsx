@@ -42,9 +42,9 @@ export default function TextEncodingPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Text Encoding: <span className="text-fuchsia-600 dark:text-fuchsia-400">Triple Encoder Power</span>
+          Text Encoding: <span className="text-fuchsia-600">Triple Encoder Power</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           How SD3 understands your prompts using three specialized encoders
         </p>
       </div>
@@ -52,13 +52,13 @@ export default function TextEncodingPanel() {
       {/* Why Three Encoders */}
       <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 rounded-2xl p-6 border border-fuchsia-500/30">
         <div className="flex items-start gap-4">
-          <Info className="text-fuchsia-600 dark:text-fuchsia-400 mt-1" size={24} />
+          <Info className="text-fuchsia-600 mt-1" size={24} />
           <div>
             <h3 className="font-bold text-lg text-fuchsia-300 mb-2">Why Three Encoders?</h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Each encoder brings unique strengths. <strong className="text-green-400">CLIP models</strong> understand 
-              how text relates to images (trained on image-text pairs). <strong className="text-purple-600 dark:text-purple-400">T5</strong> provides 
-              deep language understanding (trained on massive text corpora). Together, they give SD3 
+            <p className="text-gray-700">
+              Each encoder brings unique strengths. <strong className="text-green-400">CLIP models</strong> understand
+              how text relates to images (trained on image-text pairs). <strong className="text-purple-600">T5</strong> provides
+              deep language understanding (trained on massive text corpora). Together, they give SD3
               unparalleled prompt comprehension.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function TextEncodingPanel() {
               <Brain size={16} />
               <span className="font-bold text-sm">{enc.name}</span>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-400">{enc.role}</p>
+            <p className="text-sm text-gray-800">{enc.role}</p>
           </button>
         ))}
       </div>
@@ -94,28 +94,28 @@ export default function TextEncodingPanel() {
           </div>
           <div>
             <h3 className="text-xl font-bold">{encoders[selectedEncoder].fullName}</h3>
-            <p className="text-gray-800 dark:text-gray-400">{encoders[selectedEncoder].description}</p>
+            <p className="text-gray-800">{encoders[selectedEncoder].description}</p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-4 gap-4">
           <div className="bg-white/5 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-fuchsia-600 dark:text-fuchsia-400">{encoders[selectedEncoder].params}</p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Parameters</p>
+            <p className="text-2xl font-bold text-fuchsia-600">{encoders[selectedEncoder].params}</p>
+            <p className="text-sm text-gray-800">Parameters</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{encoders[selectedEncoder].dim}</p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Embedding Dim</p>
+            <p className="text-2xl font-bold text-purple-600">{encoders[selectedEncoder].dim}</p>
+            <p className="text-sm text-gray-800">Embedding Dim</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{encoders[selectedEncoder].maxTokens}</p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Max Tokens</p>
+            <p className="text-2xl font-bold text-blue-600">{encoders[selectedEncoder].maxTokens}</p>
+            <p className="text-sm text-gray-800">Max Tokens</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4 text-center">
             <p className="text-2xl font-bold text-green-400">
               {selectedEncoder.includes('clip') ? 'CLIP' : 'T2T'}
             </p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Training Type</p>
+            <p className="text-sm text-gray-800">Training Type</p>
           </div>
         </div>
       </div>
@@ -123,17 +123,17 @@ export default function TextEncodingPanel() {
       {/* Embedding Flow */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-6 text-center">How Embeddings Flow to MMDiT</h3>
-        
+
         <div className="flex flex-col md:flex-row items-center justify-center gap-6">
           {/* Input */}
           <div className="text-center">
             <div className="bg-white/10 rounded-lg px-4 py-3 mb-2">
               <p className="text-sm font-mono">"a cat wearing sunglasses"</p>
             </div>
-            <p className="text-xs text-gray-800 dark:text-gray-400">Input Prompt</p>
+            <p className="text-xs text-gray-800">Input Prompt</p>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90 md:rotate-0" />
+          <ArrowRight className="text-gray-700 rotate-90 md:rotate-0" />
 
           {/* Tokenization */}
           <div className="text-center">
@@ -144,10 +144,10 @@ export default function TextEncodingPanel() {
                 ))}
               </div>
             </div>
-            <p className="text-xs text-gray-800 dark:text-gray-400">Tokenized</p>
+            <p className="text-xs text-gray-800">Tokenized</p>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90 md:rotate-0" />
+          <ArrowRight className="text-gray-700 rotate-90 md:rotate-0" />
 
           {/* Encoders */}
           <div className="flex flex-col gap-2">
@@ -162,15 +162,15 @@ export default function TextEncodingPanel() {
             </div>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90 md:rotate-0" />
+          <ArrowRight className="text-gray-700 rotate-90 md:rotate-0" />
 
           {/* Combined */}
           <div className="text-center">
             <div className="bg-gradient-to-r from-fuchsia-500/30 to-purple-500/30 rounded-lg px-4 py-3 mb-2">
               <p className="text-sm font-mono">Concatenated</p>
-              <p className="text-xs text-gray-800 dark:text-gray-400">+ Pooled vectors</p>
+              <p className="text-xs text-gray-800">+ Pooled vectors</p>
             </div>
-            <p className="text-xs text-gray-800 dark:text-gray-400">→ MMDiT</p>
+            <p className="text-xs text-gray-800">→ MMDiT</p>
           </div>
         </div>
       </div>
@@ -182,34 +182,34 @@ export default function TextEncodingPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Aspect</th>
+                <th className="py-3 px-4 text-left text-gray-800">Aspect</th>
                 <th className="py-3 px-4 text-left text-green-400">CLIP (L + G)</th>
-                <th className="py-3 px-4 text-left text-purple-600 dark:text-purple-400">T5-XXL</th>
+                <th className="py-3 px-4 text-left text-purple-600">T5-XXL</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Training</td>
+                <td className="py-3 px-4 text-gray-700">Training</td>
                 <td className="py-3 px-4">Image-text pairs</td>
                 <td className="py-3 px-4">Text-only (C4 corpus)</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Strength</td>
+                <td className="py-3 px-4 text-gray-700">Strength</td>
                 <td className="py-3 px-4">Visual concepts, styles</td>
                 <td className="py-3 px-4">Language understanding</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Understands</td>
+                <td className="py-3 px-4 text-gray-700">Understands</td>
                 <td className="py-3 px-4">"cyberpunk style", "oil painting"</td>
                 <td className="py-3 px-4">"the cat to the left of the dog"</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Context Length</td>
+                <td className="py-3 px-4 text-gray-700">Context Length</td>
                 <td className="py-3 px-4">77 tokens</td>
                 <td className="py-3 px-4">512 tokens</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Used For</td>
+                <td className="py-3 px-4 text-gray-700">Used For</td>
                 <td className="py-3 px-4">Cross-attention + pooled conditioning</td>
                 <td className="py-3 px-4">Cross-attention only</td>
               </tr>
@@ -222,8 +222,8 @@ export default function TextEncodingPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-gradient-to-br from-green-900/30 to-green-800/20 rounded-xl p-5 border border-green-500/30">
           <h3 className="font-bold text-green-300 mb-2">Pooled Embeddings (CLIP)</h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-            A single vector representing the whole prompt. Used for global conditioning 
+          <p className="text-sm text-gray-700 mb-3">
+            A single vector representing the whole prompt. Used for global conditioning
             through AdaLN layers in MMDiT.
           </p>
           <div className="bg-black/30 rounded-lg p-3 font-mono text-xs">
@@ -233,8 +233,8 @@ export default function TextEncodingPanel() {
 
         <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 rounded-xl p-5 border border-purple-500/30">
           <h3 className="font-bold text-purple-300 mb-2">Sequence Embeddings (All)</h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-            Per-token embeddings preserving word-level info. Used for cross-attention 
+          <p className="text-sm text-gray-700 mb-3">
+            Per-token embeddings preserving word-level info. Used for cross-attention
             between image and text tokens.
           </p>
           <div className="bg-black/30 rounded-lg p-3 font-mono text-xs">

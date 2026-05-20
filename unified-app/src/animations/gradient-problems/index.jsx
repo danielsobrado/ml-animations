@@ -32,7 +32,7 @@ export default function App() {
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all transform hover:scale-105 ${activeTab === tab.id
                                     ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-lg scale-105'
-                                    : 'bg-slate-800/50 text-slate-700 dark:text-slate-300 hover:bg-slate-700/50 shadow-sm border border-slate-700'
+                                    : 'bg-slate-800/50 text-slate-700 hover:bg-slate-700/50 shadow-sm border border-slate-700'
                                     }`}
                             >
                                 <Icon size={20} />

@@ -6,13 +6,13 @@ import gsap from 'gsap';
 const simulateWordPiece = (text, vocabulary) => {
     const steps = [];
     const words = text.split(/\s+/);
-    
+
     words.forEach(word => {
         const wordSteps = [];
         let remaining = word;
         const tokens = [];
         let isFirst = true;
-        
+
         wordSteps.push({
             action: 'start',
             word,
@@ -20,19 +20,19 @@ const simulateWordPiece = (text, vocabulary) => {
             tokens: [],
             description: `Processing word: "${word}"`
         });
-        
+
         while (remaining.length > 0) {
             let found = false;
-            
+
             // Try longest match first
             for (let end = remaining.length; end > 0; end--) {
                 const substr = isFirst ? remaining.slice(0, end) : '##' + remaining.slice(0, end);
                 const checkStr = isFirst ? remaining.slice(0, end) : remaining.slice(0, end);
-                
+
                 if (vocabulary.includes(substr) || vocabulary.includes(checkStr)) {
                     const token = isFirst ? checkStr : '##' + checkStr;
                     tokens.push(token);
-                    
+
                     wordSteps.push({
                         action: 'match',
                         word,
@@ -42,19 +42,19 @@ const simulateWordPiece = (text, vocabulary) => {
                         tokens: [...tokens],
                         description: `Found "${token}" in vocabulary`
                     });
-                    
+
                     remaining = remaining.slice(end);
                     isFirst = false;
                     found = true;
                     break;
                 }
             }
-            
+
             if (!found) {
                 // Unknown token (single character)
                 const token = isFirst ? remaining[0] : '##' + remaining[0];
                 tokens.push('[UNK]');
-                
+
                 wordSteps.push({
                     action: 'unknown',
                     word,
@@ -63,12 +63,12 @@ const simulateWordPiece = (text, vocabulary) => {
                     tokens: [...tokens],
                     description: `No match found, using [UNK] for "${remaining[0]}"`
                 });
-                
+
                 remaining = remaining.slice(1);
                 isFirst = false;
             }
         }
-        
+
         wordSteps.push({
             action: 'complete',
             word,
@@ -76,10 +76,10 @@ const simulateWordPiece = (text, vocabulary) => {
             remaining: '',
             description: `Complete: "${word}" → [${tokens.join(', ')}]`
         });
-        
+
         steps.push(...wordSteps);
     });
-    
+
     return steps;
 };
 
@@ -115,7 +115,7 @@ export default function WordPiecePanel() {
 
     useEffect(() => {
         if (!isPlaying) return;
-        
+
         const timer = setInterval(() => {
             setCurrentStep(prev => {
                 if (prev >= steps.length - 1) {
@@ -125,7 +125,7 @@ export default function WordPiecePanel() {
                 return prev + 1;
             });
         }, 1500);
-        
+
         return () => clearInterval(timer);
     }, [isPlaying, steps.length]);
 
@@ -147,7 +147,7 @@ export default function WordPiecePanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">WordPiece Tokenization</h2>
-                    <p className="text-slate-800 dark:text-slate-600">
+                    <p className="text-slate-800">
                         Used by BERT - greedy longest-match-first algorithm
                     </p>
                 </div>
@@ -207,7 +207,7 @@ export default function WordPiecePanel() {
                     >
                         <ChevronRight size={20} />
                     </button>
-                    <span className="text-sm text-slate-800 dark:text-slate-600">
+                    <span className="text-sm text-slate-800">
                         Step {currentStep + 1} / {steps.length}
                     </span>
                 </div>
@@ -228,7 +228,7 @@ export default function WordPiecePanel() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Original Word */}
                         <div className="bg-white p-4 rounded-lg border">
-                            <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Current Word</h4>
+                            <h4 className="text-sm font-medium text-slate-800 mb-2">Current Word</h4>
                             <div className="text-2xl font-mono font-bold text-slate-800">
                                 {currentStepData.word || '-'}
                             </div>
@@ -236,7 +236,7 @@ export default function WordPiecePanel() {
 
                         {/* Remaining */}
                         <div className="bg-white p-4 rounded-lg border">
-                            <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Remaining</h4>
+                            <h4 className="text-sm font-medium text-slate-800 mb-2">Remaining</h4>
                             <div className="text-2xl font-mono">
                                 {currentStepData.remaining !== undefined ? (
                                     currentStepData.remaining || <span className="text-green-600">✓ Done</span>
@@ -246,7 +246,7 @@ export default function WordPiecePanel() {
 
                         {/* Current Match */}
                         <div className="bg-white p-4 rounded-lg border">
-                            <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Trying to Match</h4>
+                            <h4 className="text-sm font-medium text-slate-800 mb-2">Trying to Match</h4>
                             <div className="text-2xl font-mono text-indigo-600">
                                 {currentStepData.tried || '-'}
                             </div>
@@ -255,15 +255,15 @@ export default function WordPiecePanel() {
 
                     {/* Tokens So Far */}
                     <div className="mt-4 p-4 bg-white rounded-lg border">
-                        <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-2">Tokens Generated</h4>
+                        <h4 className="text-sm font-medium text-slate-800 mb-2">Tokens Generated</h4>
                         <div className="flex flex-wrap gap-2">
                             {currentStepData.tokens?.length > 0 ? (
                                 currentStepData.tokens.map((token, i) => (
                                     <span
                                         key={i}
                                         className={`px-3 py-1 rounded-lg font-mono ${
-                                            token.startsWith('##') 
-                                                ? 'bg-purple-100 border-2 border-purple-300' 
+                                            token.startsWith('##')
+                                                ? 'bg-purple-100 border-2 border-purple-300'
                                                 : token === '[UNK]'
                                                     ? 'bg-red-100 border-2 border-red-300'
                                                     : 'bg-blue-100 border-2 border-blue-300'
@@ -273,7 +273,7 @@ export default function WordPiecePanel() {
                                     </span>
                                 ))
                             ) : (
-                                <span className="text-slate-800 dark:text-slate-400">No tokens yet</span>
+                                <span className="text-slate-800">No tokens yet</span>
                             )}
                         </div>
                     </div>
@@ -295,7 +295,7 @@ export default function WordPiecePanel() {
                                 {token}
                             </span>
                         ))}
-                        <span className="text-slate-700 dark:text-xs">...and more</span>
+                        <span className="text-slate-700">...and more</span>
                     </div>
                 </div>
 

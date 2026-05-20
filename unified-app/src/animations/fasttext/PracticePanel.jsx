@@ -140,7 +140,7 @@ function PracticePanel() {
           <p className="text-purple-200/80 text-xl mb-6">
             You scored {score} out of {questions.length} ({percentage.toFixed(0)}%)
           </p>
-          
+
           <div className="max-w-md mx-auto mb-8">
             <div className="h-4 bg-white/10 rounded-full overflow-hidden">
               <motion.div
@@ -211,7 +211,7 @@ function PracticePanel() {
           className="bg-white/5 rounded-xl p-6"
         >
           <div className="flex items-start gap-3 mb-6">
-            <Brain className="w-6 h-6 text-purple-600 dark:text-purple-400 mt-1 flex-shrink-0" />
+            <Brain className="w-6 h-6 text-purple-600 mt-1 flex-shrink-0" />
             <h3 className="text-xl font-medium text-white">{question.question}</h3>
           </div>
 

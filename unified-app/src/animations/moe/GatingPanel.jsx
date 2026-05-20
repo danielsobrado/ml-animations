@@ -54,7 +54,7 @@ export default function GatingPanel({ numExperts, topK }) {
 
     return (
         <div className="bg-slate-900 p-4 rounded-lg border border-slate-800">
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-400 mb-2 uppercase">Gating Probabilities</h3>
+            <h3 className="text-sm font-bold text-slate-800 mb-2 uppercase">Gating Probabilities</h3>
             <canvas ref={canvasRef} width={300} height={100} className="w-full h-24" />
         </div>
     );

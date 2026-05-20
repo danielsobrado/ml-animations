@@ -69,7 +69,7 @@ const QUIZZES = [
 const tokenize = (text) => {
     const result = [];
     const words = text.split(/(\s+)/);
-    
+
     words.forEach(word => {
         if (word.match(/^\s+$/)) {
             result.push({ token: word === ' ' ? '▁' : '▁'.repeat(word.length), type: 'space' });
@@ -80,7 +80,7 @@ const tokenize = (text) => {
             const common = ['ing', 'tion', 'ment', 'ness', 'ful', 'less', 'able', 'ly', 'ed', 'er', 'est', 's', 'es'];
             let remaining = word;
             let isFirst = true;
-            
+
             // Check for common prefixes
             const prefixes = ['un', 're', 'pre', 'dis', 'mis', 'over', 'under'];
             for (const prefix of prefixes) {
@@ -91,7 +91,7 @@ const tokenize = (text) => {
                     break;
                 }
             }
-            
+
             // Check for common suffixes
             let suffixFound = null;
             for (const suffix of common) {
@@ -100,7 +100,7 @@ const tokenize = (text) => {
                     break;
                 }
             }
-            
+
             if (suffixFound) {
                 const stem = remaining.slice(0, -suffixFound.length);
                 result.push({ token: isFirst ? stem : '##' + stem, type: 'stem' });
@@ -110,7 +110,7 @@ const tokenize = (text) => {
             }
         }
     });
-    
+
     return result;
 };
 
@@ -157,7 +157,7 @@ export default function PracticePanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Practice Lab</h2>
-                    <p className="text-slate-800 dark:text-slate-600">Test your understanding of tokenization</p>
+                    <p className="text-slate-800">Test your understanding of tokenization</p>
                 </div>
 
                 {/* Section Tabs */}
@@ -167,7 +167,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'quiz'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                         }`}
                     >
                         📝 Quiz
@@ -177,7 +177,7 @@ export default function PracticePanel() {
                         className={`px-6 py-2 rounded-lg font-bold transition-all ${
                             activeSection === 'sandbox'
                                 ? 'bg-indigo-600 text-white'
-                                : 'bg-slate-100 text-slate-800 dark:text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                         }`}
                     >
                         🧪 Sandbox
@@ -188,7 +188,7 @@ export default function PracticePanel() {
                     <div className="bg-slate-50 rounded-xl p-6">
                         {/* Progress */}
                         <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-slate-800 dark:text-slate-600">
+                            <span className="text-sm text-slate-800">
                                 Question {currentQuiz + 1} of {QUIZZES.length}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
@@ -207,7 +207,7 @@ export default function PracticePanel() {
                         {/* Question */}
                         <div className="bg-white rounded-lg p-6 mb-4 border">
                             <h3 className="text-lg font-bold text-slate-800 mb-4">{quiz.question}</h3>
-                            
+
                             <div className="space-y-3">
                                 {quiz.options.map((option, i) => (
                                     <button
@@ -260,11 +260,11 @@ export default function PracticePanel() {
                         <div className="flex justify-between">
                             <button
                                 onClick={resetQuiz}
-                                className="flex items-center gap-2 px-4 py-2 text-slate-800 dark:text-slate-600 hover:text-slate-800"
+                                className="flex items-center gap-2 px-4 py-2 text-slate-800 hover:text-slate-800"
                             >
                                 <RefreshCw size={16} /> Reset
                             </button>
-                            
+
                             {showResult && currentQuiz < QUIZZES.length - 1 && (
                                 <button
                                     onClick={nextQuestion}
@@ -273,7 +273,7 @@ export default function PracticePanel() {
                                     Next Question →
                                 </button>
                             )}
-                            
+
                             {showResult && currentQuiz === QUIZZES.length - 1 && (
                                 <div className="text-lg font-bold text-indigo-600">
                                     Final Score: {score}/{QUIZZES.length} 🎉
@@ -284,7 +284,7 @@ export default function PracticePanel() {
                 ) : (
                     <div className="bg-slate-50 rounded-xl p-6">
                         <h3 className="text-xl font-bold text-slate-800 mb-4">Tokenization Sandbox</h3>
-                        
+
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-slate-700 mb-2">
                                 Enter text to tokenize:
@@ -321,11 +321,11 @@ export default function PracticePanel() {
                         <div className="bg-white rounded-lg p-4 border">
                             <div className="flex justify-between items-center mb-3">
                                 <h4 className="font-bold text-slate-700">Tokens ({tokens.length})</h4>
-                                <span className="text-xs text-slate-700 dark:text-slate-500">
+                                <span className="text-xs text-slate-700">
                                     ~{(practiceText.length / 4).toFixed(0)} GPT tokens estimate
                                 </span>
                             </div>
-                            
+
                             <div className="flex flex-wrap gap-2">
                                 {tokens.map((t, i) => (
                                     <div
@@ -338,7 +338,7 @@ export default function PracticePanel() {
                                             'bg-green-100 border-2 border-green-300'
                                         }`}
                                     >
-                                        <span className="text-xs text-slate-700 dark:text-slate-500">{i}</span>
+                                        <span className="text-xs text-slate-700">{i}</span>
                                         {t.token}
                                     </div>
                                 ))}

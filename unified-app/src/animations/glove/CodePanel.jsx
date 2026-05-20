@@ -102,15 +102,15 @@ def most_similar(word, embeddings, n=5):
     """Find most similar words."""
     if word not in embeddings:
         return []
-    
+
     target = embeddings[word]
     similarities = []
-    
+
     for w, vec in embeddings.items():
         if w != word:
             sim = np.dot(target, vec) / (np.linalg.norm(target) * np.linalg.norm(vec))
             similarities.append((w, sim))
-    
+
     return sorted(similarities, key=lambda x: x[1], reverse=True)[:n]
 
 # Usage
@@ -128,22 +128,22 @@ def analogy(a, b, c, embeddings, n=5):
     """
     Find word d such that a:b :: c:d
     (a is to b as c is to d)
-    
+
     Example: king:queen :: man:woman
     analogy('king', 'queen', 'man') → 'woman'
     """
     # d ≈ b - a + c
     vec = embeddings[b] - embeddings[a] + embeddings[c]
-    
+
     # Find closest words (excluding a, b, c)
     exclude = {a, b, c}
     similarities = []
-    
+
     for word, emb in embeddings.items():
         if word not in exclude:
             sim = np.dot(vec, emb) / (np.linalg.norm(vec) * np.linalg.norm(emb))
             similarities.append((word, sim))
-    
+
     return sorted(similarities, key=lambda x: x[1], reverse=True)[:n]
 
 # Classic analogies
@@ -161,21 +161,21 @@ def create_embedding_layer(embeddings, vocab, freeze=True):
     """Create PyTorch embedding layer from GloVe."""
     embedding_dim = len(list(embeddings.values())[0])
     vocab_size = len(vocab)
-    
+
     # Initialize with random vectors
     weights = np.random.randn(vocab_size, embedding_dim) * 0.01
-    
+
     # Fill in GloVe vectors for known words
     for i, word in enumerate(vocab):
         if word in embeddings:
             weights[i] = embeddings[word]
-    
+
     embedding = nn.Embedding(vocab_size, embedding_dim)
     embedding.weight = nn.Parameter(torch.FloatTensor(weights))
-    
+
     if freeze:
         embedding.weight.requires_grad = False
-    
+
     return embedding
 
 # Example usage in a text classifier
@@ -185,7 +185,7 @@ class TextClassifier(nn.Module):
         self.embedding = create_embedding_layer(glove_embeddings, vocab, freeze=True)
         self.lstm = nn.LSTM(100, 128, batch_first=True, bidirectional=True)
         self.fc = nn.Linear(256, num_classes)
-    
+
     def forward(self, x):
         x = self.embedding(x)  # (batch, seq_len, 100)
         _, (h, _) = self.lstm(x)
@@ -208,24 +208,24 @@ def build_cooccurrence(corpus, window_size=5):
     words = [w for doc in corpus for w in doc.lower().split()]
     vocab = list(set(words))
     word2idx = {w: i for i, w in enumerate(vocab)}
-    
+
     # Count co-occurrences
     cooc = np.zeros((len(vocab), len(vocab)))
-    
+
     for doc in corpus:
         tokens = doc.lower().split()
         for i, word in enumerate(tokens):
-            for j in range(max(0, i - window_size), 
+            for j in range(max(0, i - window_size),
                            min(len(tokens), i + window_size + 1)):
                 if i != j:
                     cooc[word2idx[word]][word2idx[tokens[j]]] += 1
-    
+
     return cooc, vocab
 
 # Sample corpus
 corpus = [
     "the cat sat on the mat",
-    "the dog sat on the log", 
+    "the dog sat on the log",
     "cats and dogs are pets",
     "the mat is on the floor"
 ]
@@ -293,18 +293,18 @@ def visualize_embeddings(words, embeddings, perplexity=5):
     # Get vectors for selected words
     vectors = np.array([embeddings[w] for w in words if w in embeddings])
     valid_words = [w for w in words if w in embeddings]
-    
+
     # Reduce to 2D
     tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
     reduced = tsne.fit_transform(vectors)
-    
+
     # Plot
     plt.figure(figsize=(12, 8))
     plt.scatter(reduced[:, 0], reduced[:, 1], alpha=0.6)
-    
+
     for i, word in enumerate(valid_words):
         plt.annotate(word, (reduced[i, 0], reduced[i, 1]), fontsize=9)
-    
+
     plt.title('GloVe Word Embeddings (t-SNE)')
     plt.xlabel('Dimension 1')
     plt.ylabel('Dimension 2')
@@ -336,34 +336,34 @@ def visualize_analogy(a, b, c, d, embeddings):
     # Get vectors
     words = [a, b, c, d]
     vecs = np.array([embeddings[w] for w in words])
-    
+
     # Use PCA for 2D
     from sklearn.decomposition import PCA
     pca = PCA(n_components=2)
     reduced = pca.fit_transform(vecs)
-    
+
     # Plot
     fig, ax = plt.subplots(figsize=(10, 8))
-    
+
     # Plot points
     colors = ['#8B5CF6', '#8B5CF6', '#06B6D4', '#06B6D4']
     for i, (word, color) in enumerate(zip(words, colors)):
         ax.scatter(reduced[i, 0], reduced[i, 1], c=color, s=200, zorder=5)
-        ax.annotate(word, (reduced[i, 0], reduced[i, 1]), fontsize=14, 
+        ax.annotate(word, (reduced[i, 0], reduced[i, 1]), fontsize=14,
                     ha='center', va='bottom', fontweight='bold')
-    
+
     # Draw relationship arrows
     ax.annotate('', xy=reduced[1], xytext=reduced[0],
                 arrowprops=dict(arrowstyle='->', color='#8B5CF6', lw=2))
     ax.annotate('', xy=reduced[3], xytext=reduced[2],
                 arrowprops=dict(arrowstyle='->', color='#06B6D4', lw=2))
-    
+
     # Draw parallel lines
-    ax.plot([reduced[0, 0], reduced[2, 0]], [reduced[0, 1], reduced[2, 1]], 
+    ax.plot([reduced[0, 0], reduced[2, 0]], [reduced[0, 1], reduced[2, 1]],
             '--', color='gray', alpha=0.5)
-    ax.plot([reduced[1, 0], reduced[3, 0]], [reduced[1, 1], reduced[3, 1]], 
+    ax.plot([reduced[1, 0], reduced[3, 0]], [reduced[1, 1], reduced[3, 1]],
             '--', color='gray', alpha=0.5)
-    
+
     ax.set_title(f'Analogy: {a} → {b} :: {c} → {d}', fontsize=14)
     ax.axis('off')
     plt.tight_layout()
@@ -383,7 +383,7 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
         <h2 className="text-3xl font-bold mb-2">
           <span className="gradient-text">Python</span> Code Examples
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Load, use, and train GloVe embeddings
         </p>
       </div>
@@ -399,7 +399,7 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-violet-600 text-white'
-                  : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+                  : 'bg-white/10 text-gray-800 hover:bg-white/20'
               }`}
             >
               <Icon size={16} />
@@ -436,7 +436,7 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
               </button>
             </div>
             <pre className="p-4 overflow-x-auto text-sm">
-              <code className="text-gray-700 dark:text-gray-300 mono">{example.code}</code>
+              <code className="text-gray-700 mono">{example.code}</code>
             </pre>
           </div>
         ))}
@@ -447,20 +447,20 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
         <h4 className="text-lg font-bold text-violet-400 mb-4">📦 Quick Install Commands</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">Core Libraries</p>
-            <code className="text-xs text-gray-800 dark:text-gray-400">pip install numpy gensim scikit-learn</code>
+            <p className="text-cyan-600 font-medium text-sm mb-1">Core Libraries</p>
+            <code className="text-xs text-gray-800">pip install numpy gensim scikit-learn</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">Visualization</p>
-            <code className="text-xs text-gray-800 dark:text-gray-400">pip install matplotlib seaborn</code>
+            <p className="text-cyan-600 font-medium text-sm mb-1">Visualization</p>
+            <code className="text-xs text-gray-800">pip install matplotlib seaborn</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">Training GloVe</p>
-            <code className="text-xs text-gray-800 dark:text-gray-400">pip install mittens</code>
+            <p className="text-cyan-600 font-medium text-sm mb-1">Training GloVe</p>
+            <code className="text-xs text-gray-800">pip install mittens</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium text-sm mb-1">PyTorch Integration</p>
-            <code className="text-xs text-gray-800 dark:text-gray-400">pip install torch torchtext</code>
+            <p className="text-cyan-600 font-medium text-sm mb-1">PyTorch Integration</p>
+            <code className="text-xs text-gray-800">pip install torch torchtext</code>
           </div>
         </div>
       </div>
@@ -468,29 +468,29 @@ visualize_analogy('king', 'queen', 'man', 'woman', glove)`
       {/* Download Links */}
       <div className="bg-black/30 rounded-xl p-6 border border-white/10">
         <h4 className="text-lg font-bold text-violet-400 mb-4">🔗 Download Pre-trained GloVe</h4>
-        <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">
+        <p className="text-gray-700 mb-4 text-sm">
           Download from Stanford NLP: <a href="https://nlp.stanford.edu/projects/glove/" target="_blank" rel="noopener noreferrer" className="text-violet-400 hover:underline">nlp.stanford.edu/projects/glove/</a>
         </p>
         <div className="grid md:grid-cols-2 gap-3 text-sm">
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.6B.zip (822 MB)</p>
-            <p className="text-gray-700 dark:text-gray-500">Wikipedia 2014 + Gigaword 5</p>
-            <p className="text-gray-700 dark:text-gray-500">50d, 100d, 200d, 300d</p>
+            <p className="text-cyan-600 font-medium">glove.6B.zip (822 MB)</p>
+            <p className="text-gray-700">Wikipedia 2014 + Gigaword 5</p>
+            <p className="text-gray-700">50d, 100d, 200d, 300d</p>
           </div>
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.42B.300d.zip (1.9 GB)</p>
-            <p className="text-gray-700 dark:text-gray-500">Common Crawl (42B tokens)</p>
-            <p className="text-gray-700 dark:text-gray-500">300d vectors only</p>
+            <p className="text-cyan-600 font-medium">glove.42B.300d.zip (1.9 GB)</p>
+            <p className="text-gray-700">Common Crawl (42B tokens)</p>
+            <p className="text-gray-700">300d vectors only</p>
           </div>
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.840B.300d.zip (2.0 GB)</p>
-            <p className="text-gray-700 dark:text-gray-500">Common Crawl (840B tokens)</p>
-            <p className="text-gray-700 dark:text-gray-500">300d vectors only</p>
+            <p className="text-cyan-600 font-medium">glove.840B.300d.zip (2.0 GB)</p>
+            <p className="text-gray-700">Common Crawl (840B tokens)</p>
+            <p className="text-gray-700">300d vectors only</p>
           </div>
           <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-cyan-600 dark:text-cyan-400 font-medium">glove.twitter.27B.zip (1.4 GB)</p>
-            <p className="text-gray-700 dark:text-gray-500">Twitter (27B tokens)</p>
-            <p className="text-gray-700 dark:text-gray-500">25d, 50d, 100d, 200d</p>
+            <p className="text-cyan-600 font-medium">glove.twitter.27B.zip (1.4 GB)</p>
+            <p className="text-gray-700">Twitter (27B tokens)</p>
+            <p className="text-gray-700">25d, 50d, 100d, 200d</p>
           </div>
         </div>
       </div>

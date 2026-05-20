@@ -12,7 +12,7 @@ const DECOMPOSITIONS = [
     use: 'linear systems, determinants, repeated solves',
     warning: 'unstable without pivoting when pivots are small',
     task: 'solve',
-    color: 'border-sky-300 bg-sky-50 text-sky-900 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-100',
+    color: 'border-sky-300 bg-sky-50 text-sky-900',
   },
   {
     id: 'qr',
@@ -24,7 +24,7 @@ const DECOMPOSITIONS = [
     use: 'least squares, orthogonal bases, numerical stability',
     warning: 'more expensive than normal equations but usually safer',
     task: 'basis',
-    color: 'border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100',
+    color: 'border-emerald-300 bg-emerald-50 text-emerald-900',
   },
   {
     id: 'eigen',
@@ -36,7 +36,7 @@ const DECOMPOSITIONS = [
     use: 'dynamics, spectral graph methods, covariance intuition',
     warning: 'not every square matrix has a stable eigenbasis',
     task: 'spectrum',
-    color: 'border-violet-300 bg-violet-50 text-violet-900 dark:border-violet-800 dark:bg-violet-950 dark:text-violet-100',
+    color: 'border-violet-300 bg-violet-50 text-violet-900',
   },
   {
     id: 'svd',
@@ -48,7 +48,7 @@ const DECOMPOSITIONS = [
     use: 'compression, rank, pseudoinverse, PCA foundation',
     warning: 'general and robust, but usually more costly',
     task: 'compress',
-    color: 'border-orange-300 bg-orange-50 text-orange-900 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-100',
+    color: 'border-orange-300 bg-orange-50 text-orange-900',
   },
   {
     id: 'cholesky',
@@ -60,7 +60,7 @@ const DECOMPOSITIONS = [
     use: 'Gaussian models, covariance matrices, fast SPD solves',
     warning: 'fails if A is not positive definite',
     task: 'solve',
-    color: 'border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100',
+    color: 'border-amber-300 bg-amber-50 text-amber-900',
   },
   {
     id: 'pca',
@@ -72,7 +72,7 @@ const DECOMPOSITIONS = [
     use: 'dimensionality reduction, denoising, visualization',
     warning: 'linear summary can hide small but important signals',
     task: 'compress',
-    color: 'border-pink-300 bg-pink-50 text-pink-900 dark:border-pink-800 dark:bg-pink-950 dark:text-pink-100',
+    color: 'border-pink-300 bg-pink-50 text-pink-900',
   },
   {
     id: 'nmf',
@@ -84,7 +84,7 @@ const DECOMPOSITIONS = [
     use: 'topic models, parts of images, interpretable factors',
     warning: 'non-convex objective, so initialization matters',
     task: 'interpret',
-    color: 'border-teal-300 bg-teal-50 text-teal-900 dark:border-teal-800 dark:bg-teal-950 dark:text-teal-100',
+    color: 'border-teal-300 bg-teal-50 text-teal-900',
   },
 ];
 
@@ -110,17 +110,17 @@ function DecompositionCard({ item, selected, onSelect }) {
     <button
       onClick={() => onSelect(item)}
       className={`rounded-lg border p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-        selected ? `${item.color} ring-2 ring-offset-2 ring-offset-white dark:ring-offset-slate-950` : 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900'
+        selected ? `${item.color} ring-2 ring-offset-2 ring-offset-white` : 'border-slate-200 bg-white'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-bold text-slate-950 dark:text-white">{item.name}</h3>
-          <p className="mt-1 font-mono text-sm text-slate-700 dark:text-slate-300">{item.formula}</p>
+          <h3 className="text-lg font-bold text-slate-950">{item.name}</h3>
+          <p className="mt-1 font-mono text-sm text-slate-700">{item.formula}</p>
         </div>
-        {selected && <CheckCircle2 className="shrink-0 text-cyan-600 dark:text-cyan-300" size={20} />}
+        {selected && <CheckCircle2 className="shrink-0 text-cyan-600" size={20} />}
       </div>
-      <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{item.use}</p>
+      <p className="mt-3 text-sm text-slate-600">{item.use}</p>
     </button>
   );
 }
@@ -136,23 +136,23 @@ export default function OneSheetPanel() {
   const selected = DECOMPOSITIONS.find((item) => item.id === selectedId) ?? DECOMPOSITIONS[0];
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-5 p-4 text-slate-900 dark:text-slate-100">
-      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div className="mx-auto flex max-w-7xl flex-col gap-5 p-4 text-slate-900">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-cyan-600 dark:text-cyan-300">Linear algebra</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-cyan-600">Linear algebra</p>
             <h2 className="mt-1 text-2xl font-bold">Matrix Decompositions One-Sheet</h2>
-            <p className="mt-2 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 max-w-3xl text-sm text-slate-600">
               A compact guide to what each factorization is for, when it works, and the fastest way to choose one.
             </p>
           </div>
 
-          <label className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold dark:bg-slate-800">
+          <label className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold">
             <Search size={16} />
             <select
               value={task}
               onChange={(event) => setTask(event.target.value)}
-              className="bg-transparent text-slate-900 outline-none dark:text-white"
+              className="bg-transparent text-slate-900 outline-none"
             >
               {TASKS.map((item) => (
                 <option key={item.id} value={item.id}>{item.label}</option>
@@ -174,54 +174,54 @@ export default function OneSheetPanel() {
           ))}
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-200">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700">
               <Layers size={20} />
             </div>
             <div>
               <h3 className="text-xl font-bold">{selected.name}</h3>
-              <p className="font-mono text-sm text-slate-600 dark:text-slate-400">{selected.formula}</p>
+              <p className="font-mono text-sm text-slate-600">{selected.formula}</p>
             </div>
           </div>
 
           <dl className="space-y-4 text-sm">
             <div>
-              <dt className="font-bold text-slate-950 dark:text-white">Factors</dt>
-              <dd className="mt-1 text-slate-600 dark:text-slate-400">{selected.factors}</dd>
+              <dt className="font-bold text-slate-950">Factors</dt>
+              <dd className="mt-1 text-slate-600">{selected.factors}</dd>
             </div>
             <div>
-              <dt className="font-bold text-slate-950 dark:text-white">Requirement</dt>
-              <dd className="mt-1 text-slate-600 dark:text-slate-400">{selected.requirement}</dd>
+              <dt className="font-bold text-slate-950">Requirement</dt>
+              <dd className="mt-1 text-slate-600">{selected.requirement}</dd>
             </div>
             <div>
-              <dt className="font-bold text-slate-950 dark:text-white">Preserves</dt>
-              <dd className="mt-1 text-slate-600 dark:text-slate-400">{selected.preserves}</dd>
+              <dt className="font-bold text-slate-950">Preserves</dt>
+              <dd className="mt-1 text-slate-600">{selected.preserves}</dd>
             </div>
             <div>
-              <dt className="font-bold text-slate-950 dark:text-white">Watch out</dt>
-              <dd className="mt-1 text-slate-600 dark:text-slate-400">{selected.warning}</dd>
+              <dt className="font-bold text-slate-950">Watch out</dt>
+              <dd className="mt-1 text-slate-600">{selected.warning}</dd>
             </div>
           </dl>
         </div>
       </div>
 
-      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-200">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-rose-700">
             <Target size={20} />
           </div>
           <div>
             <h3 className="text-lg font-bold">Choose by goal</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400">Start from the job, then pick the factorization.</p>
+            <p className="text-sm text-slate-600">Start from the job, then pick the factorization.</p>
           </div>
         </div>
 
         <div className="grid gap-3 md:grid-cols-5">
           {FLOW.map((item) => (
-            <div key={item.ask} className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800">
-              <p className="text-sm font-bold text-slate-950 dark:text-white">{item.ask}</p>
-              <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">{item.pick}</p>
+            <div key={item.ask} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-sm font-bold text-slate-950">{item.ask}</p>
+              <p className="mt-2 text-xs text-slate-600">{item.pick}</p>
             </div>
           ))}
         </div>

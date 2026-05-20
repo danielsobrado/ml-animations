@@ -133,9 +133,9 @@ export default function LatentSpacePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Latent Space: <span className="text-fuchsia-600 dark:text-fuchsia-400">Efficient Representation</span>
+          Latent Space: <span className="text-fuchsia-600">Efficient Representation</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Why SD3 operates in latent space, not pixel space
         </p>
       </div>
@@ -143,13 +143,13 @@ export default function LatentSpacePanel() {
       {/* Key Insight */}
       <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 rounded-2xl p-6 border border-fuchsia-500/30">
         <div className="flex items-start gap-4">
-          <Info className="text-fuchsia-600 dark:text-fuchsia-400 mt-1" size={24} />
+          <Info className="text-fuchsia-600 mt-1" size={24} />
           <div>
             <h3 className="font-bold text-lg text-fuchsia-300 mb-2">The Latent Trick</h3>
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               Diffusion in pixel space is computationally expensive (1024×1024×3 = 3.1M dimensions!).
-              SD3 uses a pretrained <strong className="text-purple-600 dark:text-purple-400">VAE</strong> to compress images to a 
-              much smaller <strong className="text-blue-600 dark:text-blue-400">latent space</strong>, performs diffusion there, 
+              SD3 uses a pretrained <strong className="text-purple-600">VAE</strong> to compress images to a
+              much smaller <strong className="text-blue-600">latent space</strong>, performs diffusion there,
               then decodes back to pixels. Same quality, ~64× less compute!
             </p>
           </div>
@@ -167,7 +167,7 @@ export default function LatentSpacePanel() {
 
         {/* Compression Control */}
         <div className="flex items-center gap-4 px-4">
-          <ZoomOut className="text-gray-800 dark:text-gray-400" size={20} />
+          <ZoomOut className="text-gray-800" size={20} />
           <input
             type="range"
             min="4"
@@ -177,8 +177,8 @@ export default function LatentSpacePanel() {
             onChange={(e) => setCompressionRatio(parseInt(e.target.value))}
             className="flex-1 h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
           />
-          <ZoomIn className="text-gray-800 dark:text-gray-400" size={20} />
-          <span className="text-sm text-gray-800 dark:text-gray-400 w-24">{compressionRatio}× compression</span>
+          <ZoomIn className="text-gray-800" size={20} />
+          <span className="text-sm text-gray-800 w-24">{compressionRatio}× compression</span>
         </div>
       </div>
 
@@ -186,13 +186,13 @@ export default function LatentSpacePanel() {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
           <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <span className="text-purple-600 dark:text-purple-400">↓</span> VAE Encoder
+            <span className="text-purple-600">↓</span> VAE Encoder
           </h3>
-          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+          <div className="space-y-3 text-sm text-gray-700">
             <p><strong>Input:</strong> RGB image [H, W, 3]</p>
             <p><strong>Output:</strong> Latent [H/8, W/8, 16]</p>
             <p><strong>Process:</strong></p>
-            <ol className="list-decimal list-inside pl-4 space-y-1 text-gray-800 dark:text-gray-400">
+            <ol className="list-decimal list-inside pl-4 space-y-1 text-gray-800">
               <li>Conv layers downsample spatially</li>
               <li>ResNet blocks extract features</li>
               <li>Attention layers capture global context</li>
@@ -205,11 +205,11 @@ export default function LatentSpacePanel() {
           <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
             <span className="text-rose-400">↑</span> VAE Decoder
           </h3>
-          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+          <div className="space-y-3 text-sm text-gray-700">
             <p><strong>Input:</strong> Latent [H/8, W/8, 16]</p>
             <p><strong>Output:</strong> RGB image [H, W, 3]</p>
             <p><strong>Process:</strong></p>
-            <ol className="list-decimal list-inside pl-4 space-y-1 text-gray-800 dark:text-gray-400">
+            <ol className="list-decimal list-inside pl-4 space-y-1 text-gray-800">
               <li>Initial conv expands channels</li>
               <li>ResNet blocks process features</li>
               <li>Upsampling layers increase resolution</li>
@@ -224,26 +224,26 @@ export default function LatentSpacePanel() {
         <h3 className="text-xl font-bold mb-4">SD3's 16-Channel VAE</h3>
         <div className="grid md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white/5 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-fuchsia-600 dark:text-fuchsia-400">16</p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Latent Channels</p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">(vs 4 in SD1/2)</p>
+            <p className="text-2xl font-bold text-fuchsia-600">16</p>
+            <p className="text-sm text-gray-800">Latent Channels</p>
+            <p className="text-xs text-gray-700">(vs 4 in SD1/2)</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">8×</p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Spatial Compression</p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">1024px → 128 tokens</p>
+            <p className="text-2xl font-bold text-purple-600">8×</p>
+            <p className="text-sm text-gray-800">Spatial Compression</p>
+            <p className="text-xs text-gray-700">1024px → 128 tokens</p>
           </div>
           <div className="bg-white/5 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">0.13</p>
-            <p className="text-sm text-gray-800 dark:text-gray-400">Scaling Factor</p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">Normalizes latents</p>
+            <p className="text-2xl font-bold text-blue-600">0.13</p>
+            <p className="text-sm text-gray-800">Scaling Factor</p>
+            <p className="text-xs text-gray-700">Normalizes latents</p>
           </div>
         </div>
 
         <div className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-xl p-4">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            <strong className="text-purple-300">Why 16 channels?</strong> More channels = more information 
-            preserved in latent space. SD3's VAE captures finer details than SD1/2's 4-channel VAE, 
+          <p className="text-sm text-gray-700">
+            <strong className="text-purple-300">Why 16 channels?</strong> More channels = more information
+            preserved in latent space. SD3's VAE captures finer details than SD1/2's 4-channel VAE,
             leading to sharper, more detailed outputs. The trade-off is slightly larger latent tensors.
           </p>
         </div>
@@ -256,11 +256,11 @@ export default function LatentSpacePanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Space</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Resolution</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Dimensions</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Size (FP16)</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Transformer Tokens</th>
+                <th className="py-3 px-4 text-left text-gray-800">Space</th>
+                <th className="py-3 px-4 text-left text-gray-800">Resolution</th>
+                <th className="py-3 px-4 text-left text-gray-800">Dimensions</th>
+                <th className="py-3 px-4 text-left text-gray-800">Size (FP16)</th>
+                <th className="py-3 px-4 text-left text-gray-800">Transformer Tokens</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
@@ -272,7 +272,7 @@ export default function LatentSpacePanel() {
                 <td className="py-3 px-4">1,048,576 😱</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-blue-600 dark:text-blue-400">Latent</td>
+                <td className="py-3 px-4 text-blue-600">Latent</td>
                 <td className="py-3 px-4">128×128</td>
                 <td className="py-3 px-4">128 × 128 × 16</td>
                 <td className="py-3 px-4">0.5 MB</td>
@@ -288,7 +288,7 @@ export default function LatentSpacePanel() {
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-gray-700 dark:text-gray-500 mt-4">
+        <p className="text-xs text-gray-700 mt-4">
           SD3 patches the 128×128 latent into 2×2 patches, yielding 64×64 = 4096 tokens for the transformer.
           This is manageable with modern attention mechanisms.
         </p>

@@ -19,7 +19,7 @@ export default function ConceptPanel() {
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-purple-900 mb-4">Why Fine-Tune?</h2>
                     <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
-                        Pre-trained LLMs are powerful but general. <strong>Fine-tuning</strong> adapts them 
+                        Pre-trained LLMs are powerful but general. <strong>Fine-tuning</strong> adapts them
                         to specific tasks, domains, or styles - making them experts at what YOU need.
                     </p>
                 </div>
@@ -47,7 +47,7 @@ export default function ConceptPanel() {
                         <div>
                             <h3 className="text-xl font-bold text-green-900 mb-2">PEFT to the Rescue!</h3>
                             <p className="text-green-800 mb-4">
-                                <strong>Parameter-Efficient Fine-Tuning</strong> updates only a tiny fraction of 
+                                <strong>Parameter-Efficient Fine-Tuning</strong> updates only a tiny fraction of
                                 parameters while keeping the rest frozen. Same results, fraction of the cost!
                             </p>
                             <div className="grid grid-cols-4 gap-3 text-center">
@@ -57,7 +57,7 @@ export default function ConceptPanel() {
                                     { name: 'Prefix', desc: 'Learned prompts' },
                                     { name: 'Adapter', desc: 'Bottleneck layers' },
                                 ].map((method, i) => (
-                                    <div 
+                                    <div
                                         key={method.name}
                                         className={`bg-white p-3 rounded-lg border transition-all ${
                                             animStep === i ? 'ring-2 ring-green-500 scale-105' : ''
@@ -75,7 +75,7 @@ export default function ConceptPanel() {
                 {/* Comparison */}
                 <div className="bg-slate-50 rounded-xl p-6 mb-8">
                     <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">Compare Approaches</h3>
-                    
+
                     <div className="flex justify-center gap-4 mb-6">
                         <button
                             onClick={() => setComparisonMode('full')}
@@ -106,7 +106,7 @@ export default function ConceptPanel() {
                                 <div className="text-4xl mb-2">🧠</div>
                                 <div className="font-bold text-slate-800">LLaMA-7B</div>
                             </div>
-                            <ArrowRight className="text-slate-800 dark:text-slate-400" size={32} />
+                            <ArrowRight className="text-slate-800" size={32} />
                             <div className="relative">
                                 <div className="grid grid-cols-8 gap-1">
                                     {Array.from({ length: 32 }).map((_, i) => (
@@ -184,7 +184,7 @@ export default function ConceptPanel() {
                         <div key={i} className="bg-white rounded-lg p-4 border text-center hover:shadow-md transition-shadow">
                             <div className="text-3xl mb-2">{use.icon}</div>
                             <div className="font-bold text-slate-800">{use.title}</div>
-                            <div className="text-xs text-slate-800 dark:text-slate-600">{use.desc}</div>
+                            <div className="text-xs text-slate-800">{use.desc}</div>
                         </div>
                     ))}
                 </div>
@@ -195,8 +195,8 @@ export default function ConceptPanel() {
                     <div>
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
                         <p className="text-sm">
-                            PEFT methods work because neural networks are <strong>over-parameterized</strong>. 
-                            The adaptation needed for a new task often lies in a low-dimensional subspace, 
+                            PEFT methods work because neural networks are <strong>over-parameterized</strong>.
+                            The adaptation needed for a new task often lies in a low-dimensional subspace,
                             so we don't need to update ALL the weights!
                         </p>
                     </div>

@@ -17,10 +17,10 @@ export default function MechanismPanel() {
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-violet-600 dark:text-violet-400 mb-4">
+                    <h2 className="text-3xl font-bold text-violet-600 mb-4">
                         RoPE Mathematics
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                    <p className="text-slate-600 max-w-2xl mx-auto">
                         RoPE applies rotation matrices to pairs of dimensions, each with a different frequency.
                         This creates a unique "fingerprint" for each position.
                     </p>
@@ -54,8 +54,8 @@ export default function MechanismPanel() {
                 </div>
 
                 {/* Multi-frequency Visualization */}
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 mb-8">
-                    <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-6">
+                <div className="bg-white rounded-2xl p-6 border border-slate-200 mb-8">
+                    <h3 className="font-bold text-slate-700 mb-6">
                         Different Frequencies for Different Dimension Pairs
                     </h3>
 
@@ -65,12 +65,12 @@ export default function MechanismPanel() {
                                 key={idx}
                                 onClick={() => setSelectedPair(idx)}
                                 className={`p-4 rounded-xl border-2 transition-all ${selectedPair === idx
-                                        ? 'border-violet-500 bg-violet-50 dark:bg-violet-900/20'
-                                        : 'border-slate-200 dark:border-slate-700 hover:border-violet-300'
+                                        ? 'border-violet-500 bg-violet-50'
+                                        : 'border-slate-200 hover:border-violet-300'
                                     }`}
                             >
                                 <div className="text-sm font-mono text-slate-500">Pair {idx}</div>
-                                <div className="text-lg font-bold text-violet-600 dark:text-violet-400">
+                                <div className="text-lg font-bold text-violet-600">
                                     d<sub>{2 * idx}</sub>, d<sub>{2 * idx + 1}</sub>
                                 </div>
                                 <div className="text-xs text-slate-400 mt-1">{pair.label}</div>
@@ -79,7 +79,7 @@ export default function MechanismPanel() {
                     </div>
 
                     {/* Wave visualization */}
-                    <div className="bg-slate-100 dark:bg-slate-900 rounded-xl p-4">
+                    <div className="bg-slate-100 rounded-xl p-4">
                         <svg viewBox="0 0 400 100" className="w-full h-24">
                             {/* Background grid */}
                             {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
@@ -136,12 +136,12 @@ export default function MechanismPanel() {
 
                 {/* Implementation insight */}
                 <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-6">
-                        <h4 className="font-bold text-slate-700 dark:text-slate-200 mb-3">Efficient Implementation</h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                    <div className="bg-slate-100 rounded-xl p-6">
+                        <h4 className="font-bold text-slate-700 mb-3">Efficient Implementation</h4>
+                        <p className="text-sm text-slate-600 mb-4">
                             Instead of matrix multiplication, RoPE can be computed element-wise:
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-3 rounded-lg font-mono text-xs overflow-x-auto">
+                        <div className="bg-white p-3 rounded-lg font-mono text-xs overflow-x-auto">
                             <div className="text-violet-600">x'[2i] = x[2i]·cos(mθ) - x[2i+1]·sin(mθ)</div>
                             <div className="text-fuchsia-600">x'[2i+1] = x[2i]·sin(mθ) + x[2i+1]·cos(mθ)</div>
                         </div>

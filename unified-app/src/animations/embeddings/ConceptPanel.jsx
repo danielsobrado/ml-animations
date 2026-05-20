@@ -43,7 +43,7 @@ export default function ConceptPanel() {
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-4">What are Embeddings?</h2>
                     <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
-                        Embeddings are <strong>dense numerical representations</strong> of data (words, sentences, images) 
+                        Embeddings are <strong>dense numerical representations</strong> of data (words, sentences, images)
                         where similar items are close together in a high-dimensional vector space.
                     </p>
                 </div>
@@ -55,14 +55,14 @@ export default function ConceptPanel() {
                             <div className="text-4xl mb-2">👑</div>
                             <div className="font-bold text-slate-800">"King"</div>
                         </div>
-                        <ArrowRight className="text-indigo-600 dark:text-indigo-400" size={32} />
+                        <ArrowRight className="text-indigo-600" size={32} />
                         <div className="text-center">
                             <div className="font-mono text-sm bg-white p-3 rounded-lg border shadow-sm">
                                 [0.23, -0.45, 0.78, ...]
-                                <div className="text-xs text-slate-700 dark:text-slate-500 mt-1">768 dimensions</div>
+                                <div className="text-xs text-slate-700 mt-1">768 dimensions</div>
                             </div>
                         </div>
-                        <ArrowRight className="text-indigo-600 dark:text-indigo-400" size={32} />
+                        <ArrowRight className="text-indigo-600" size={32} />
                         <div className="text-center">
                             <div className="text-4xl mb-2">📊</div>
                             <div className="font-bold text-slate-800">Vector Space</div>
@@ -78,7 +78,7 @@ export default function ConceptPanel() {
                         </div>
                         <h3 className="font-bold text-blue-900 mb-2">Numerical Representation</h3>
                         <p className="text-sm">
-                            Computers can't understand words directly. Embeddings convert meaning into numbers 
+                            Computers can't understand words directly. Embeddings convert meaning into numbers
                             that neural networks can process.
                         </p>
                     </div>
@@ -89,7 +89,7 @@ export default function ConceptPanel() {
                         </div>
                         <h3 className="font-bold text-green-900 mb-2">Semantic Meaning</h3>
                         <p className="text-sm">
-                            Similar words have similar embeddings. "King" and "Queen" are closer together 
+                            Similar words have similar embeddings. "King" and "Queen" are closer together
                             than "King" and "Car".
                         </p>
                     </div>
@@ -100,7 +100,7 @@ export default function ConceptPanel() {
                         </div>
                         <h3 className="font-bold text-purple-900 mb-2">Learned Features</h3>
                         <p className="text-sm">
-                            Embeddings capture relationships: King - Man + Woman ≈ Queen! 
+                            Embeddings capture relationships: King - Man + Woman ≈ Queen!
                             The model learns these patterns from data.
                         </p>
                     </div>
@@ -109,7 +109,7 @@ export default function ConceptPanel() {
                 {/* Interactive Word Explorer */}
                 <div className="bg-slate-50 rounded-xl p-6 mb-8">
                     <h3 className="text-xl font-bold text-slate-800 mb-4">Explore Word Embeddings</h3>
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                         {Object.entries(SAMPLE_WORDS).map(([word, data], i) => (
                             <button
@@ -130,17 +130,17 @@ export default function ConceptPanel() {
                     <div className="bg-white rounded-lg p-4 border">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-1">Word</h4>
+                                <h4 className="text-sm font-medium text-slate-800 mb-1">Word</h4>
                                 <div className="text-2xl font-bold text-slate-800">{selectedWord}</div>
                             </div>
                             <div>
-                                <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-1">Category</h4>
+                                <h4 className="text-sm font-medium text-slate-800 mb-1">Category</h4>
                                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${CATEGORY_COLORS[selectedData.category]}`}>
                                     {selectedData.category}
                                 </span>
                             </div>
                             <div>
-                                <h4 className="text-sm font-medium text-slate-800 dark:text-slate-600 mb-1">Embedding (2D simplified)</h4>
+                                <h4 className="text-sm font-medium text-slate-800 mb-1">Embedding (2D simplified)</h4>
                                 <div className="font-mono text-sm bg-slate-100 px-3 py-2 rounded">
                                     [{selectedData.embedding[0].toFixed(2)}, {selectedData.embedding[1].toFixed(2)}]
                                 </div>
@@ -162,7 +162,7 @@ export default function ConceptPanel() {
                         <span className="bg-purple-100 px-3 py-1 rounded">Queen</span>
                     </div>
                     <p className="text-center mt-4 text-sm">
-                        Embeddings capture semantic relationships! Subtracting "Man" and adding "Woman" 
+                        Embeddings capture semantic relationships! Subtracting "Man" and adding "Woman"
                         transforms the "King" vector to be close to "Queen".
                     </p>
                 </div>
@@ -173,7 +173,7 @@ export default function ConceptPanel() {
                     <div>
                         <h4 className="font-bold text-emerald-900 mb-1">Key Insight</h4>
                         <p className="text-sm">
-                            Real embeddings have hundreds or thousands of dimensions (e.g., BERT uses 768, GPT-3 uses 12,288). 
+                            Real embeddings have hundreds or thousands of dimensions (e.g., BERT uses 768, GPT-3 uses 12,288).
                             Each dimension captures some aspect of meaning. The examples here use 2D for visualization.
                         </p>
                     </div>

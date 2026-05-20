@@ -41,7 +41,7 @@ export default function RetrievalPanel() {
     const getRelevanceColor = (relevance) => {
         if (relevance >= 0.8) return 'bg-green-100 border-green-300 text-green-800';
         if (relevance >= 0.5) return 'bg-yellow-100 border-yellow-300 text-yellow-800';
-        return 'bg-slate-100 border-slate-200 text-slate-800 dark:text-slate-600';
+        return 'bg-slate-100 border-slate-200 text-slate-800';
     };
 
     const getRelevanceBarColor = (relevance) => {
@@ -56,7 +56,7 @@ export default function RetrievalPanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-indigo-900 mb-2">Retrieval in Action</h2>
-                    <p className="text-slate-800 dark:text-slate-600">See how RAG retrieves relevant context and generates responses</p>
+                    <p className="text-slate-800">See how RAG retrieves relevant context and generates responses</p>
                 </div>
 
                 {/* Query Input */}
@@ -108,7 +108,7 @@ export default function RetrievalPanel() {
                                 }`}>
                                     {s.icon}
                                 </div>
-                                <span className="text-xs font-medium text-slate-800 dark:text-slate-600">{s.label}</span>
+                                <span className="text-xs font-medium text-slate-800">{s.label}</span>
                             </div>
                             {i < 3 && (
                                 <ArrowRight className={`${searchStep > s.step ? 'text-indigo-500' : 'text-slate-300'}`} size={20} />
@@ -138,7 +138,7 @@ export default function RetrievalPanel() {
                                         }`}
                                     >
                                         <div className="flex justify-between items-start mb-1">
-                                            <span className="text-xs font-medium text-slate-700 dark:text-slate-500">{chunk.source}</span>
+                                            <span className="text-xs font-medium text-slate-700">{chunk.source}</span>
                                             {searchStep >= 2 && (
                                                 <span className={`text-xs font-bold ${
                                                     chunk.relevance >= 0.8 ? 'text-green-600' :
@@ -208,8 +208,8 @@ export default function RetrievalPanel() {
                                 </h4>
                                 <div className="bg-white p-3 rounded border border-purple-200">
                                     <p className="text-slate-800">
-                                        The XR-500 has a battery life of <strong>12 hours</strong> with normal usage. 
-                                        It features a 5000mAh battery capacity and supports fast charging, 
+                                        The XR-500 has a battery life of <strong>12 hours</strong> with normal usage.
+                                        It features a 5000mAh battery capacity and supports fast charging,
                                         reaching 80% charge in just 30 minutes.
                                     </p>
                                     <div className="mt-2 text-xs text-purple-600">
@@ -227,13 +227,13 @@ export default function RetrievalPanel() {
                     <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                             <p className="text-amber-800">
-                                <strong>Cosine Similarity:</strong> Measures the angle between vectors. 
+                                <strong>Cosine Similarity:</strong> Measures the angle between vectors.
                                 Closer vectors have higher similarity (closer to 1.0).
                             </p>
                         </div>
                         <div>
                             <p className="text-amber-800">
-                                <strong>Top-K Retrieval:</strong> Returns the K most similar chunks. 
+                                <strong>Top-K Retrieval:</strong> Returns the K most similar chunks.
                                 Higher K = more context but may include less relevant info.
                             </p>
                         </div>

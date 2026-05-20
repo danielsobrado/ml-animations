@@ -64,9 +64,9 @@ function ScalePanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">T5 Model Scaling</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          T5 comes in multiple sizes. SD3 uses <strong>T5-XXL</strong> (the largest) 
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">T5 Model Scaling</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          T5 comes in multiple sizes. SD3 uses <strong>T5-XXL</strong> (the largest)
           for maximum text understanding capability, though only the encoder portion.
         </p>
       </div>
@@ -80,7 +80,7 @@ function ScalePanel() {
             className={`px-4 py-2 rounded-lg transition-all ${
               selectedModel === key
                 ? 'bg-emerald-600 text-white'
-                : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+                : 'bg-white/10 text-gray-700 hover:bg-white/20'
             } ${model.sdUse ? 'ring-2 ring-yellow-500/50' : ''}`}
           >
             {model.name}
@@ -92,7 +92,7 @@ function ScalePanel() {
       {/* Selected Model Details */}
       <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-xl p-6 border border-emerald-500/30">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{selectedModelData.name}</h3>
+          <h3 className="text-xl font-bold text-emerald-600">{selectedModelData.name}</h3>
           {selectedModelData.sdUse && (
             <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm">
               Used in SD3
@@ -102,42 +102,42 @@ function ScalePanel() {
 
         <div className="grid md:grid-cols-4 gap-4 mb-6">
           <div className="bg-black/30 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{selectedModelData.params}</div>
-            <div className="text-sm text-gray-800 dark:text-gray-400">Parameters</div>
+            <div className="text-2xl font-bold text-emerald-600">{selectedModelData.params}</div>
+            <div className="text-sm text-gray-800">Parameters</div>
           </div>
           <div className="bg-black/30 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-teal-600 dark:text-teal-400">{selectedModelData.layers}</div>
-            <div className="text-sm text-gray-800 dark:text-gray-400">Encoder Layers</div>
+            <div className="text-2xl font-bold text-teal-600">{selectedModelData.layers}</div>
+            <div className="text-sm text-gray-800">Encoder Layers</div>
           </div>
           <div className="bg-black/30 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{selectedModelData.hidden}</div>
-            <div className="text-sm text-gray-800 dark:text-gray-400">Hidden Dim</div>
+            <div className="text-2xl font-bold text-cyan-600">{selectedModelData.hidden}</div>
+            <div className="text-sm text-gray-800">Hidden Dim</div>
           </div>
           <div className="bg-black/30 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{selectedModelData.heads}</div>
-            <div className="text-sm text-gray-800 dark:text-gray-400">Attention Heads</div>
+            <div className="text-2xl font-bold text-blue-600">{selectedModelData.heads}</div>
+            <div className="text-sm text-gray-800">Attention Heads</div>
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
           <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
-            <HardDrive className="text-purple-600 dark:text-purple-400" size={20} />
+            <HardDrive className="text-purple-600" size={20} />
             <div>
-              <div className="text-sm text-gray-800 dark:text-gray-400">VRAM</div>
+              <div className="text-sm text-gray-800">VRAM</div>
               <div className="text-white font-semibold">{selectedModelData.memory}</div>
             </div>
           </div>
           <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
-            <Clock className="text-orange-600 dark:text-orange-400" size={20} />
+            <Clock className="text-orange-600" size={20} />
             <div>
-              <div className="text-sm text-gray-800 dark:text-gray-400">Speed</div>
+              <div className="text-sm text-gray-800">Speed</div>
               <div className="text-white font-semibold">{selectedModelData.speed}</div>
             </div>
           </div>
           <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
             <TrendingUp className="text-green-400" size={20} />
             <div>
-              <div className="text-sm text-gray-800 dark:text-gray-400">Quality</div>
+              <div className="text-sm text-gray-800">Quality</div>
               <div className="text-white font-semibold">{selectedModelData.quality}</div>
             </div>
           </div>
@@ -146,14 +146,14 @@ function ScalePanel() {
 
       {/* Scale Visualization */}
       <div className="bg-black/40 rounded-xl p-6">
-        <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">📊 Parameter Scale Comparison</h3>
+        <h3 className="font-semibold text-gray-700 mb-4">📊 Parameter Scale Comparison</h3>
         <div className="space-y-3">
           {Object.entries(models).map(([key, model]) => {
             const width = (paramValues[key] / maxParams) * 100;
             const isSelected = key === selectedModel;
             return (
               <div key={key} className="flex items-center gap-4">
-                <div className="w-20 text-sm text-gray-800 dark:text-gray-400">{model.name}</div>
+                <div className="w-20 text-sm text-gray-800">{model.name}</div>
                 <div className="flex-1 bg-black/50 rounded-full h-6 overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2 ${
@@ -176,7 +176,7 @@ function ScalePanel() {
           <Scale size={20} />
           Why SD3 Uses T5-XXL
         </h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
           <div className="space-y-2">
             <p><strong className="text-yellow-400">4096-dim embeddings</strong></p>
             <p>Much richer representations than CLIP's 768/1280. Can capture subtle nuances in prompts.</p>
@@ -190,23 +190,23 @@ function ScalePanel() {
 
       {/* Scaling Laws */}
       <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/30">
-        <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-4">📈 Scaling Laws in Practice</h3>
-        <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <h3 className="font-semibold text-purple-600 mb-4">📈 Scaling Laws in Practice</h3>
+        <div className="space-y-4 text-sm text-gray-700">
           <div className="bg-black/30 rounded-lg p-4">
             <div className="font-mono text-xs mb-2">
               Quality ∝ log(Parameters) × log(Data) × log(Compute)
             </div>
-            <p className="text-gray-800 dark:text-gray-400">
-              T5-XXL follows the scaling laws - more parameters = better understanding, 
+            <p className="text-gray-800">
+              T5-XXL follows the scaling laws - more parameters = better understanding,
               but with diminishing returns and increasing costs.
             </p>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Metric</th>
+                  <th className="text-left py-2 px-3 text-gray-800">Metric</th>
                   <th className="text-left py-2 px-3">Base → Large</th>
                   <th className="text-left py-2 px-3">Large → XL</th>
                   <th className="text-left py-2 px-3">XL → XXL</th>
@@ -214,19 +214,19 @@ function ScalePanel() {
               </thead>
               <tbody>
                 <tr className="border-b border-white/5">
-                  <td className="py-2 px-3 text-gray-800 dark:text-gray-400">Params</td>
-                  <td className="py-2 px-3 text-emerald-600 dark:text-emerald-400">3.5×</td>
-                  <td className="py-2 px-3 text-emerald-600 dark:text-emerald-400">4×</td>
-                  <td className="py-2 px-3 text-emerald-600 dark:text-emerald-400">3.7×</td>
+                  <td className="py-2 px-3 text-gray-800">Params</td>
+                  <td className="py-2 px-3 text-emerald-600">3.5×</td>
+                  <td className="py-2 px-3 text-emerald-600">4×</td>
+                  <td className="py-2 px-3 text-emerald-600">3.7×</td>
                 </tr>
                 <tr className="border-b border-white/5">
-                  <td className="py-2 px-3 text-gray-800 dark:text-gray-400">Hidden Dim</td>
+                  <td className="py-2 px-3 text-gray-800">Hidden Dim</td>
                   <td className="py-2 px-3">768→1024</td>
                   <td className="py-2 px-3">1024→2048</td>
                   <td className="py-2 px-3">2048→4096</td>
                 </tr>
                 <tr className="border-b border-white/5">
-                  <td className="py-2 px-3 text-gray-800 dark:text-gray-400">Memory</td>
+                  <td className="py-2 px-3 text-gray-800">Memory</td>
                   <td className="py-2 px-3">3×</td>
                   <td className="py-2 px-3">2×</td>
                   <td className="py-2 px-3">1.5×</td>
@@ -239,11 +239,11 @@ function ScalePanel() {
 
       {/* Practical Tips */}
       <div className="bg-emerald-500/10 rounded-xl p-6 border border-emerald-500/30">
-        <h3 className="font-semibold text-emerald-600 dark:text-emerald-400 mb-3">💡 Practical Considerations</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
+        <h3 className="font-semibold text-emerald-600 mb-3">💡 Practical Considerations</h3>
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
           <div className="bg-black/30 rounded-lg p-4">
             <div className="font-semibold text-white mb-2">When to use T5</div>
-            <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-400">
+            <ul className="list-disc list-inside space-y-1 text-gray-800">
               <li>Complex, detailed prompts</li>
               <li>Spatial relationships</li>
               <li>Negations and qualifiers</li>
@@ -252,7 +252,7 @@ function ScalePanel() {
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <div className="font-semibold text-white mb-2">When to skip T5</div>
-            <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-400">
+            <ul className="list-disc list-inside space-y-1 text-gray-800">
               <li>Simple prompts</li>
               <li>Fast generation needed</li>
               <li>Limited VRAM (&lt;12GB)</li>

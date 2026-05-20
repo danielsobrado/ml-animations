@@ -73,7 +73,7 @@ export default function PipelinePanel() {
                 if (currentStep === 1) chunkDocument();
                 if (currentStep === 2) generateEmbeddings();
                 if (currentStep === 3) setIndexed(true);
-                
+
                 if (currentStep < 3) {
                     setCurrentStep(s => s + 1);
                 } else {
@@ -98,7 +98,7 @@ export default function PipelinePanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-indigo-900 mb-2">RAG Indexing Pipeline</h2>
-                    <p className="text-slate-800 dark:text-slate-600">Watch how documents are prepared for retrieval</p>
+                    <p className="text-slate-800">Watch how documents are prepared for retrieval</p>
                 </div>
 
                 {/* Controls */}
@@ -163,7 +163,7 @@ export default function PipelinePanel() {
                                     }`}
                                 >
                                     <div className="font-bold text-sm text-slate-800">{doc.title}</div>
-                                    <div className="text-xs text-slate-800 dark:text-slate-600 mt-1">{doc.content}</div>
+                                    <div className="text-xs text-slate-800 mt-1">{doc.content}</div>
                                 </div>
                             ))}
                         </div>
@@ -183,11 +183,11 @@ export default function PipelinePanel() {
                                     style={{ animationDelay: `${i * 100}ms` }}
                                 >
                                     <div className="font-semibold text-slate-700">{chunk.title} - Chunk {i + 1}</div>
-                                    <div className="text-slate-800 dark:text-slate-600 mt-1">{chunk.text}</div>
+                                    <div className="text-slate-800 mt-1">{chunk.text}</div>
                                 </div>
                             ))}
                             {currentStep < 1 && (
-                                <div className="text-slate-800 dark:text-sm italic p-4 text-center">
+                                <div className="text-slate-800 italic p-4 text-center">
                                     Documents will be split into chunks...
                                 </div>
                             )}
@@ -222,7 +222,7 @@ export default function PipelinePanel() {
                                 </div>
                             ))}
                             {currentStep < 2 && (
-                                <div className="text-slate-800 dark:text-sm italic p-4 text-center">
+                                <div className="text-slate-800 italic p-4 text-center">
                                     Embeddings will appear here...
                                 </div>
                             )}

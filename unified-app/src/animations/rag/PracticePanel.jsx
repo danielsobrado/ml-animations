@@ -118,7 +118,7 @@ export default function PracticePanel() {
     const performRetrieval = () => {
         const queryWords = sandboxQuery.toLowerCase().split(/\s+/);
         const enabledDocs = sandboxDocs.filter(d => d.enabled);
-        
+
         const scored = enabledDocs.map(doc => {
             const docWords = doc.text.toLowerCase();
             let score = 0;
@@ -182,7 +182,7 @@ export default function PracticePanel() {
                             <>
                                 {/* Progress */}
                                 <div className="flex justify-between items-center mb-6">
-                                    <span className="text-sm text-slate-700 dark:text-slate-500">
+                                    <span className="text-sm text-slate-700">
                                         Question {currentQuestion + 1} of {quizQuestions.length}
                                     </span>
                                     <div className="flex gap-1">
@@ -268,7 +268,7 @@ export default function PracticePanel() {
                                 <h3 className="text-2xl font-bold text-slate-800 mb-2">
                                     Quiz Complete!
                                 </h3>
-                                <p className="text-xl text-slate-800 dark:text-slate-600 mb-6">
+                                <p className="text-xl text-slate-800 mb-6">
                                     You scored <span className="font-bold text-indigo-600">{getScore()}</span> out of {quizQuestions.length}
                                 </p>
                                 <button
@@ -353,7 +353,7 @@ export default function PracticePanel() {
                                     <Brain size={20} className="text-green-500" />
                                     Result
                                 </h3>
-                                
+
                                 {sandboxResult.retrieved ? (
                                     <div className="space-y-3">
                                         <div className="bg-green-50 p-3 rounded-lg border border-green-200">

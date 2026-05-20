@@ -253,8 +253,8 @@ export default function VariationsPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
-                <h2 className="text-3xl font-bold text-teal-600 dark:text-teal-400 mb-4">Adam Variations</h2>
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-teal-600 mb-4">Adam Variations</h2>
+                <p className="text-lg text-slate-700 leading-relaxed">
                     Comparing <strong>SGD</strong>, <strong>RMSProp</strong>, <strong>Adam</strong>, and <strong>AdamW</strong> on the Rosenbrock function (Banana Valley).
                     <br />
                     Notice how AdamW (Green) handles weight decay differently than Adam (Pink).
@@ -269,8 +269,8 @@ export default function VariationsPanel() {
                     <div className="space-y-6 mb-8">
                         <div>
                             <div className="flex justify-between items-end mb-2">
-                                <label className="text-sm text-slate-800 dark:text-slate-400">Learning Rate</label>
-                                <span className="font-mono font-bold text-teal-600 dark:text-teal-400">{learningRate.toFixed(4)}</span>
+                                <label className="text-sm text-slate-800">Learning Rate</label>
+                                <span className="font-mono font-bold text-teal-600">{learningRate.toFixed(4)}</span>
                             </div>
                             <input
                                 type="range" min="0.0001" max="0.02" step="0.0001"
@@ -282,8 +282,8 @@ export default function VariationsPanel() {
 
                         <div>
                             <div className="flex justify-between items-end mb-2">
-                                <label className="text-sm text-slate-800 dark:text-slate-400">Weight Decay (L2)</label>
-                                <span className="font-mono font-bold text-teal-600 dark:text-teal-400">{weightDecay.toFixed(4)}</span>
+                                <label className="text-sm text-slate-800">Weight Decay (L2)</label>
+                                <span className="font-mono font-bold text-teal-600">{weightDecay.toFixed(4)}</span>
                             </div>
                             <input
                                 type="range" min="0" max="0.1" step="0.001"
@@ -298,7 +298,7 @@ export default function VariationsPanel() {
                         <button
                             onClick={() => setIsRunning(!isRunning)}
                             className={`flex-1 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 ${isRunning
-                                    ? 'bg-slate-700 text-slate-700 dark:text-slate-300'
+                                    ? 'bg-slate-700 text-slate-700'
                                     : 'bg-teal-600 hover:bg-teal-500 text-white'
                                 }`}
                         >
@@ -313,7 +313,7 @@ export default function VariationsPanel() {
                         </button>
                     </div>
 
-                    <div className="bg-slate-900 p-4 rounded-lg text-sm text-slate-700 dark:text-slate-300 space-y-3">
+                    <div className="bg-slate-900 p-4 rounded-lg text-sm text-slate-700 space-y-3">
                         <div className="flex items-center gap-2">
                             <div className="w-3 h-3 rounded-full bg-slate-400"></div>
                             <span><strong>SGD:</strong> Often gets stuck in the curve.</span>
@@ -341,7 +341,7 @@ export default function VariationsPanel() {
                         height={400}
                         className="bg-slate-900 rounded-lg border border-slate-600 w-full max-w-[400px]"
                     />
-                    <div className="mt-4 text-center text-slate-800 dark:text-sm">
+                    <div className="mt-4 text-center text-slate-800">
                         Target is at (1, 1). Start is at (-2.5, 2.0).
                         <br />
                         The "Banana Valley" is curved and narrow.

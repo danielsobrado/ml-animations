@@ -139,26 +139,26 @@ For DiT conditioning:
       solution: `def clip_tokenize(text, max_length=77):
     # Step 1: Clean and lowercase
     text = text.lower().strip()
-    
+
     # Step 2: BPE tokenization
     tokens = bpe_tokenizer.encode(text)
-    
+
     # Step 3: Add special tokens
     bos_token = 49406  # [BOS]
     eos_token = 49407  # [EOS]
     pad_token = 0      # [PAD]
-    
+
     # Step 4: Truncate if needed
     max_text_tokens = max_length - 2  # Reserve for BOS/EOS
     tokens = tokens[:max_text_tokens]
-    
+
     # Step 5: Construct sequence
     token_ids = [bos_token] + tokens + [eos_token]
-    
+
     # Step 6: Pad to max_length
     padding_length = max_length - len(token_ids)
     token_ids = token_ids + [pad_token] * padding_length
-    
+
     return token_ids  # Shape: [77]`
     },
     {
@@ -211,8 +211,8 @@ Key insight: In CLIP, only EOS sees all tokens!`
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">Practice Lab</h2>
-        <p className="text-gray-700 dark:text-gray-300">
+        <h2 className="text-2xl font-bold text-blue-600 mb-2">Practice Lab</h2>
+        <p className="text-gray-700">
           Test your understanding of CLIP text encoders with quizzes and exercises.
         </p>
       </div>
@@ -224,7 +224,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
             activeExercise === -1
               ? 'bg-blue-600 text-white'
-              : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+              : 'bg-white/10 text-gray-700 hover:bg-white/20'
           }`}
         >
           <BookOpen size={18} />
@@ -235,7 +235,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
             activeExercise >= 0
               ? 'bg-purple-600 text-white'
-              : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+              : 'bg-white/10 text-gray-700 hover:bg-white/20'
           }`}
         >
           <Code size={18} />
@@ -247,7 +247,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
         /* Quiz Section */
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            <h3 className="text-lg font-semibold text-gray-700">
               CLIP Text Encoder Quiz
             </h3>
             <button
@@ -291,11 +291,11 @@ Key insight: In CLIP, only EOS sees all tokens!`
                       } border`}
                     >
                       <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-sm ${
-                        isSelected ? 'border-blue-400 text-blue-600 dark:text-blue-400' : 'border-gray-500 text-gray-700 dark:text-gray-500'
+                        isSelected ? 'border-blue-400 text-blue-600' : 'border-gray-500 text-gray-700'
                       }`}>
                         {String.fromCharCode(65 + optIdx)}
                       </span>
-                      <span className="text-gray-700 dark:text-gray-300">{option}</span>
+                      <span className="text-gray-700">{option}</span>
                       {showCorrect && <CheckCircle className="ml-auto text-green-400" size={20} />}
                       {showWrong && <XCircle className="ml-auto text-red-400" size={20} />}
                     </button>
@@ -309,7 +309,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
                 }`}>
                   <div className="flex items-center gap-2 text-sm">
                     <Lightbulb size={16} className="text-yellow-400" />
-                    <span className="text-gray-700 dark:text-gray-300">{q.explanation}</span>
+                    <span className="text-gray-700">{q.explanation}</span>
                   </div>
                 </div>
               )}
@@ -331,7 +331,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
                 <div className="text-3xl font-bold text-white mb-2">
                   {calculateScore()} / {questions.length}
                 </div>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                   {calculateScore() === questions.length
                     ? "🎉 Perfect! You've mastered CLIP text encoders!"
                     : calculateScore() >= questions.length * 0.7
@@ -354,7 +354,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
                 className={`px-3 py-2 rounded-lg text-sm transition-colors ${
                   activeExercise === idx
                     ? 'bg-purple-600 text-white'
-                    : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+                    : 'bg-white/10 text-gray-700 hover:bg-white/20'
                 }`}
               >
                 Exercise {idx + 1}
@@ -364,15 +364,15 @@ Key insight: In CLIP, only EOS sees all tokens!`
 
           {/* Active Exercise */}
           <div className="bg-black/30 rounded-xl p-6 border border-purple-500/30">
-            <h3 className="text-xl font-semibold text-purple-600 dark:text-purple-400 mb-2">
+            <h3 className="text-xl font-semibold text-purple-600 mb-2">
               {exercises[activeExercise].title}
             </h3>
-            <p className="text-gray-700 dark:text-gray-300 mb-4">
+            <p className="text-gray-700 mb-4">
               {exercises[activeExercise].description}
             </p>
 
             <div className="bg-black/40 rounded-lg p-4 mb-4">
-              <div className="text-sm text-gray-800 dark:text-gray-400 mb-2">Task:</div>
+              <div className="text-sm text-gray-800 mb-2">Task:</div>
               <pre className="text-gray-200 whitespace-pre-wrap font-mono text-sm">
                 {exercises[activeExercise].task}
               </pre>
@@ -396,7 +396,7 @@ Key insight: In CLIP, only EOS sees all tokens!`
               <Lightbulb size={18} />
               Tips for Success
             </h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• Remember: CLIP-L = 768-d, CLIP-G = 1280-d</li>
               <li>• Max tokens is always 77 (including BOS and EOS)</li>
               <li>• Causal attention = lower triangular mask</li>

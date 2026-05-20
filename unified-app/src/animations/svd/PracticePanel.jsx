@@ -161,12 +161,12 @@ export default function PracticePanel() {
 
                     {/* Singular Values Display */}
                     <div className="flex items-center gap-2 flex-wrap justify-center">
-                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[0] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
+                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[0] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-700'
                             }`}>
                             σ₁ = {completedAnswers[0] ?? '?'}
                         </div>
                         <span className="text-xl">≥</span>
-                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[1] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
+                        <div className={`px-3 py-2 rounded font-bold ${completedAnswers[1] !== null ? 'bg-purple-400 text-black' : 'bg-gray-200 text-gray-700'
                             }`}>
                             σ₂ = {completedAnswers[1] ?? '?'}
                         </div>
@@ -179,7 +179,7 @@ export default function PracticePanel() {
                     {/* Verification */}
                     {currentStep === 2 && (
                         <div className="text-center">
-                            <p className="text-sm text-gray-800 dark:text-gray-600">Is the ordering correct?</p>
+                            <p className="text-sm text-gray-800">Is the ordering correct?</p>
                         </div>
                     )}
 
@@ -263,7 +263,7 @@ export default function PracticePanel() {
 
             {/* Progress & Reset */}
             <div className="mt-3 flex items-center gap-4">
-                <div className="text-sm text-gray-800 dark:text-gray-600">
+                <div className="text-sm text-gray-800">
                     Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}
                 </div>
                 <button

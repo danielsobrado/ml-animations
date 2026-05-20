@@ -96,19 +96,19 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 3: Multi-Head Self-Attention</h2>
-                <p className="text-gray-800 dark:text-gray-400">The core mechanism that makes transformers powerful</p>
+                <p className="text-gray-800">The core mechanism that makes transformers powerful</p>
             </div>
 
             {/* Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">What is Self-Attention?</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">What is Self-Attention?</h3>
+                <p className="text-gray-700">
                     Self-attention allows each token to <strong>look at all other tokens</strong> in the sequence and decide how much to "pay attention" to each one.
                 </p>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     For each token, we compute:
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
                     <li><strong>Query (Q)</strong>: What am I looking for?</li>
                     <li><strong>Key (K)</strong>: What do I contain?</li>
                     <li><strong>Value (V)</strong>: What information do I have?</li>
@@ -117,26 +117,26 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
 
             {/* Formula */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">The Math</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">The Math</h3>
                 <div className="bg-gray-900 p-4 rounded space-y-2 font-mono text-sm">
-                    <div className="text-gray-700 dark:text-gray-300">Attention(Q, K, V) = softmax(QK<sup>T</sup> / √d<sub>k</sub>) V</div>
-                    <div className="text-gray-800 dark:text-xs mt-2">where d<sub>k</sub> = 64 (dimension per head)</div>
+                    <div className="text-gray-700">Attention(Q, K, V) = softmax(QK<sup>T</sup> / √d<sub>k</sub>) V</div>
+                    <div className="text-gray-800 mt-2">where d<sub>k</sub> = 64 (dimension per head)</div>
                 </div>
-                <p className="text-gray-700 dark:text-sm">
+                <p className="text-gray-700">
                     Steps: (1) Compute attention scores (QK<sup>T</sup>), (2) Scale by √d<sub>k</sub>, (3) Apply softmax, (4) Multiply by values (V)
                 </p>
             </div>
 
             {/* Attention Matrix Visualization */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Attention Pattern (Simplified 5×5)</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">Attention Pattern (Simplified 5×5)</h3>
                 <div className="flex flex-col items-center gap-4">
                     <div
                         ref={containerRef}
                         className="border border-gray-700 rounded"
                     />
                     <div className="flex items-center gap-4">
-                        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                        <label className="flex items-center gap-2 text-gray-700">
                             <input
                                 type="checkbox"
                                 checked={showMask}
@@ -146,7 +146,7 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
                             Show Causal Mask
                         </label>
                     </div>
-                    <div className="text-sm text-gray-800 dark:text-center">
+                    <div className="text-sm text-gray-800">
                         Rows = Query positions, Columns = Key positions<br />
                         Brighter = Higher attention weight
                     </div>
@@ -155,36 +155,36 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
 
             {/* Multi-Head Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Multi-Head Attention</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">Multi-Head Attention</h3>
+                <p className="text-gray-700">
                     GPT-2 uses <strong>{numHeads} parallel attention heads</strong>. Each head:
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
                     <li>Has its own Q, K, V weight matrices</li>
                     <li>Learns different aspects (e.g., syntax, semantics, position)</li>
                     <li>Outputs are concatenated and projected</li>
                 </ul>
                 <div className="bg-gray-900 p-4 rounded">
-                    <div className="text-sm text-gray-800 dark:text-gray-400">Dimension per head: <span className="text-emerald-600 dark:text-emerald-400">64</span> (768 / 12)</div>
-                    <div className="text-sm text-gray-800 dark:text-gray-400">Total output: <span className="text-emerald-600 dark:text-emerald-400">768</span></div>
+                    <div className="text-sm text-gray-800">Dimension per head: <span className="text-emerald-600">64</span> (768 / 12)</div>
+                    <div className="text-sm text-gray-800">Total output: <span className="text-emerald-600">768</span></div>
                 </div>
             </div>
 
             {/* Causal Masking */}
             <div className="bg-yellow-900 bg-opacity-30 border border-yellow-700 rounded-lg p-6 space-y-4">
                 <h3 className="text-xl font-semibold text-yellow-400">⚠️ Causal Masking</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     GPT-2 is a <strong>decoder-only</strong> model. During training, we prevent it from looking at future tokens by applying a <strong>causal mask</strong> (upper triangle = -∞ before softmax).
                 </p>
-                <p className="text-gray-700 dark:text-sm">
+                <p className="text-gray-700">
                     This ensures the model learns to predict the next token using only past context, mimicking real autoregressive generation.
                 </p>
             </div>
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     Why does GPT-2 use causal masking? What would happen without it?
                 </p>
                 <textarea
@@ -214,7 +214,7 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
                 >
                     ← Previous
                 </button>
-                <div className="text-gray-800 dark:text-gray-400 flex items-center">
+                <div className="text-gray-800 flex items-center">
                     Steps 4-9 coming soon!
                 </div>
             </div>

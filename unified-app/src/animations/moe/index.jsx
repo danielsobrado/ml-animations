@@ -32,7 +32,7 @@ export default function App() {
             <header className="max-w-7xl mx-auto mb-8 flex justify-end items-end">
                 <div className="flex gap-4">
                     <div className="bg-slate-900 p-4 rounded-lg border border-slate-800">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-500 uppercase mb-1">Experts</label>
+                        <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Experts</label>
                         <div className="flex gap-2">
                             {[4, 8, 16].map(n => (
                                 <button
@@ -48,7 +48,7 @@ export default function App() {
                     </div>
 
                     <div className="bg-slate-900 p-4 rounded-lg border border-slate-800">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-500 uppercase mb-1">Top-K</label>
+                        <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Top-K</label>
                         <div className="flex gap-2">
                             {[1, 2].map(k => (
                                 <button
@@ -83,7 +83,7 @@ export default function App() {
                             <span className="w-2 h-8 bg-neon-green rounded-full"></span>
                             How it Works
                         </h2>
-                        <div className="space-y-4 text-sm text-slate-800 dark:text-slate-400">
+                        <div className="space-y-4 text-sm text-slate-800">
                             <p>
                                 <strong className="text-white">1. The Router:</strong> A learned gating network that predicts which experts are best suited for each token.
                             </p>

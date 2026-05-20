@@ -108,7 +108,7 @@ print(f"\\nking - man + woman = {result[0][0]}")
 
 # Other pre-trained models available:
 # - glove-wiki-gigaword-100
-# - glove-wiki-gigaword-200  
+# - glove-wiki-gigaword-200
 # - glove-twitter-100
 # - fasttext-wiki-news-subwords-300
 
@@ -179,7 +179,7 @@ class Word2Vec(tf.keras.Model):
         )
         self.dots = tf.keras.layers.Dot(axes=(3, 2))
         self.flatten = tf.keras.layers.Flatten()
-    
+
     def call(self, pair):
         target, context = pair
         # Get embeddings
@@ -205,14 +205,14 @@ word_embeddings = model.target_embedding.get_weights()[0]`
 
 def generate_training_data(sequences, window_size, num_ns, vocab_size, seed=42):
     """Generate skip-gram training pairs with negative sampling"""
-    
+
     targets, contexts, labels = [], [], []
-    
+
     # Build sampling table for negative sampling
     sampling_table = tf.keras.preprocessing.sequence.make_sampling_table(
         vocab_size
     )
-    
+
     for sequence in sequences:
         # Generate positive skip-gram pairs
         positive_pairs, _ = tf.keras.preprocessing.sequence.skipgrams(
@@ -222,12 +222,12 @@ def generate_training_data(sequences, window_size, num_ns, vocab_size, seed=42):
             window_size=window_size,
             negative_samples=0  # Handle separately
         )
-        
+
         for target_word, context_word in positive_pairs:
             context_class = tf.expand_dims(
                 tf.constant([context_word], dtype="int64"), 1
             )
-            
+
             # Negative sampling
             negative_samples, _, _ = tf.random.log_uniform_candidate_sampler(
                 true_classes=context_class,
@@ -237,19 +237,19 @@ def generate_training_data(sequences, window_size, num_ns, vocab_size, seed=42):
                 range_max=vocab_size,
                 seed=seed
             )
-            
+
             # Build context: 1 positive + num_ns negatives
             context = tf.concat([
                 tf.squeeze(context_class, 1), negative_samples
             ], 0)
-            
+
             # Labels: 1 for positive, 0 for negatives
             label = tf.constant([1] + [0] * num_ns, dtype="int64")
-            
+
             targets.append(target_word)
             contexts.append(context)
             labels.append(label)
-    
+
     return targets, contexts, labels`
         }
       ]
@@ -271,29 +271,29 @@ class SkipGram(nn.Module):
         super(SkipGram, self).__init__()
         # Target word embedding
         self.target_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        # Context word embedding  
+        # Context word embedding
         self.context_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        
+
         # Initialize weights
         self.target_embeddings.weight.data.uniform_(-0.5/embedding_dim, 0.5/embedding_dim)
         self.context_embeddings.weight.data.uniform_(-0.5/embedding_dim, 0.5/embedding_dim)
-    
+
     def forward(self, target_word, context_word, negative_words):
         # Get embeddings
         target_emb = self.target_embeddings(target_word)  # [batch, emb_dim]
         context_emb = self.context_embeddings(context_word)  # [batch, emb_dim]
         neg_emb = self.context_embeddings(negative_words)  # [batch, num_neg, emb_dim]
-        
+
         # Positive score: dot product
         pos_score = torch.sum(target_emb * context_emb, dim=1)  # [batch]
         pos_score = torch.clamp(pos_score, max=10, min=-10)
         pos_loss = -torch.log(torch.sigmoid(pos_score) + 1e-10)
-        
+
         # Negative score
         neg_score = torch.bmm(neg_emb, target_emb.unsqueeze(2)).squeeze()  # [batch, num_neg]
         neg_score = torch.clamp(neg_score, max=10, min=-10)
         neg_loss = -torch.sum(torch.log(torch.sigmoid(-neg_score) + 1e-10), dim=1)
-        
+
         return torch.mean(pos_loss + neg_loss)
 
 # Training loop
@@ -321,19 +321,19 @@ class CBOW(nn.Module):
         self.embeddings = nn.Embedding(vocab_size, embedding_dim)
         self.linear = nn.Linear(embedding_dim, vocab_size)
         self.context_size = context_size
-    
+
     def forward(self, context_words):
         # context_words: [batch, 2*context_size]
-        
+
         # Get embeddings for all context words
         embeds = self.embeddings(context_words)  # [batch, 2*ctx, emb_dim]
-        
+
         # Average the embeddings
         avg_embed = torch.mean(embeds, dim=1)  # [batch, emb_dim]
-        
+
         # Project to vocabulary
         out = self.linear(avg_embed)  # [batch, vocab_size]
-        
+
         return out
 
 # Training with CrossEntropyLoss
@@ -363,18 +363,18 @@ import numpy as np
 
 def visualize_embeddings(model, words, perplexity=30):
     """Visualize word embeddings in 2D using t-SNE"""
-    
+
     # Get vectors for selected words
     vectors = np.array([model.wv[word] for word in words])
-    
+
     # Reduce to 2D
     tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
     vectors_2d = tsne.fit_transform(vectors)
-    
+
     # Plot
     plt.figure(figsize=(12, 10))
     plt.scatter(vectors_2d[:, 0], vectors_2d[:, 1], alpha=0)
-    
+
     for i, word in enumerate(words):
         plt.annotate(
             word,
@@ -382,7 +382,7 @@ def visualize_embeddings(model, words, perplexity=30):
             fontsize=12,
             alpha=0.8
         )
-    
+
     plt.title('Word Embeddings Visualization (t-SNE)')
     plt.xlabel('Dimension 1')
     plt.ylabel('Dimension 2')
@@ -403,25 +403,25 @@ visualize_embeddings(model, words_to_plot)`
           title: 'Evaluate Analogies',
           code: `def evaluate_analogy(model, analogy_file):
     """Evaluate model on analogy tasks"""
-    
+
     correct = 0
     total = 0
-    
+
     with open(analogy_file, 'r') as f:
         for line in f:
             if line.startswith(':'):  # Section header
                 continue
-            
+
             words = line.strip().lower().split()
             if len(words) != 4:
                 continue
-            
+
             a, b, c, expected = words
-            
+
             # Skip if any word not in vocabulary
             if not all(w in model.wv for w in [a, b, c, expected]):
                 continue
-            
+
             # Predict: a - b + c = ?
             try:
                 predicted = model.wv.most_similar(
@@ -429,13 +429,13 @@ visualize_embeddings(model, words_to_plot)`
                     negative=[b],
                     topn=1
                 )[0][0]
-                
+
                 if predicted == expected:
                     correct += 1
                 total += 1
             except:
                 continue
-    
+
     accuracy = correct / total if total > 0 else 0
     print(f"Analogy accuracy: {accuracy:.2%} ({correct}/{total})")
     return accuracy
@@ -451,7 +451,7 @@ import numpy as np
 
 def analyze_similarity(model, word_pairs):
     """Compute cosine similarities for word pairs"""
-    
+
     results = []
     for w1, w2 in word_pairs:
         if w1 in model.wv and w2 in model.wv:
@@ -461,7 +461,7 @@ def analyze_similarity(model, word_pairs):
                 'word2': w2,
                 'similarity': sim
             })
-    
+
     return results
 
 # Example word pairs
@@ -485,17 +485,17 @@ def cluster_words(model, words, n_clusters=5):
     """Cluster words based on embedding similarity"""
     vectors = np.array([model.wv[w] for w in words if w in model.wv])
     valid_words = [w for w in words if w in model.wv]
-    
+
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
     clusters = kmeans.fit_predict(vectors)
-    
+
     # Group by cluster
     clustered = {}
     for word, cluster in zip(valid_words, clusters):
         if cluster not in clustered:
             clustered[cluster] = []
         clustered[cluster].append(word)
-    
+
     return clustered`
         }
       ]
@@ -507,9 +507,9 @@ def cluster_words(model, words, n_clusters=5):
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-cyan-600 dark:text-cyan-400">Python</span> Code Examples
+          <span className="text-cyan-600">Python</span> Code Examples
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Implement and use Word2Vec with popular libraries
         </p>
       </div>
@@ -523,7 +523,7 @@ def cluster_words(model, words, n_clusters=5):
             className={`px-4 py-2 rounded-lg transition-all ${
               activeTab === key
                 ? 'bg-cyan-600 text-white'
-                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:text-white'
+                : 'bg-white/10 text-gray-800 hover:text-white'
             }`}
           >
             {lib.title}
@@ -532,7 +532,7 @@ def cluster_words(model, words, n_clusters=5):
       </div>
 
       {/* Library Description */}
-      <div className="text-center text-gray-800 dark:text-sm">
+      <div className="text-center text-gray-800">
         {codeExamples[activeTab].description}
       </div>
 
@@ -542,12 +542,12 @@ def cluster_words(model, words, n_clusters=5):
           <div key={index} className="bg-black/40 rounded-xl border border-white/10 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Code size={16} className="text-cyan-600 dark:text-cyan-400" />
+                <Code size={16} className="text-cyan-600" />
                 <span className="font-medium text-white">{example.title}</span>
               </div>
               <button
                 onClick={() => copyToClipboard(example.code, index)}
-                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-800 dark:text-gray-400 hover:text-white transition-colors"
+                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-800 hover:text-white transition-colors"
               >
                 {copiedIndex === index ? (
                   <>
@@ -571,22 +571,22 @@ def cluster_words(model, words, n_clusters=5):
 
       {/* Quick Reference */}
       <div className="bg-gradient-to-r from-cyan-900/20 to-blue-900/20 rounded-xl p-6 border border-cyan-500/30">
-        <h4 className="font-bold text-cyan-600 dark:text-cyan-400 mb-4">📦 Quick Install Commands</h4>
+        <h4 className="font-bold text-cyan-600 mb-4">📦 Quick Install Commands</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Gensim (recommended)</p>
+            <p className="text-sm text-gray-800 mb-2">Gensim (recommended)</p>
             <code className="text-sm">pip install gensim</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">TensorFlow</p>
+            <p className="text-sm text-gray-800 mb-2">TensorFlow</p>
             <code className="text-sm">pip install tensorflow</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">PyTorch</p>
+            <p className="text-sm text-gray-800 mb-2">PyTorch</p>
             <code className="text-sm">pip install torch</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Visualization</p>
+            <p className="text-sm text-gray-800 mb-2">Visualization</p>
             <code className="text-sm">pip install matplotlib scikit-learn</code>
           </div>
         </div>

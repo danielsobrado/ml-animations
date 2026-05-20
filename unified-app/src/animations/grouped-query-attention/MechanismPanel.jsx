@@ -15,8 +15,8 @@ export default function MechanismPanel() {
         <div className="p-8 h-full overflow-y-auto">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-fuchsia-600 dark:text-fuchsia-400 mb-4">GQA Mechanism</h2>
-                    <p className="text-slate-600 dark:text-slate-300">
+                    <h2 className="text-3xl font-bold text-fuchsia-600 mb-4">GQA Mechanism</h2>
+                    <p className="text-slate-600">
                         In Grouped-Query Attention, we divide the Query heads into <strong>{numKVHeads} groups</strong>.
                         All {groupSize} queries in a group attend to the <strong>same Key/Value head</strong>.
                     </p>
@@ -25,9 +25,9 @@ export default function MechanismPanel() {
                 <div className="flex justify-between items-center gap-12 relative min-h-[400px]">
                     {/* Column: Query Heads */}
                     <div className="flex flex-col gap-2 w-1/3">
-                        <h3 className="text-center font-bold mb-4 text-purple-600 dark:text-purple-400 flex items-center justify-center gap-2">
+                        <h3 className="text-center font-bold mb-4 text-purple-600 flex items-center justify-center gap-2">
                             <span>Query Heads</span>
-                            <span className="text-xs bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded">Num = {numQueryHeads}</span>
+                            <span className="text-xs bg-purple-100 px-2 py-1 rounded">Num = {numQueryHeads}</span>
                         </h3>
                         {queryHeads.map((q, i) => {
                             const groupIndex = Math.floor(i / groupSize);
@@ -46,7 +46,7 @@ export default function MechanismPanel() {
                                     <ConnectorLine
                                         startX="100%"
                                         startY="50%"
-                                        endX="150%" // Relative to parent, will need calculation or SVG overlay for absolute precision. 
+                                        endX="150%" // Relative to parent, will need calculation or SVG overlay for absolute precision.
                                     // Simplified: SVG overlay is better for connections.
                                     // Using absolute positioning for visual simplicity in this demo structure.
                                     />
@@ -86,9 +86,9 @@ export default function MechanismPanel() {
 
                     {/* Column: KV Heads */}
                     <div className="flex flex-col gap-4 w-1/3 z-10">
-                        <h3 className="text-center font-bold mb-4 text-indigo-600 dark:text-indigo-400 flex items-center justify-center gap-2">
+                        <h3 className="text-center font-bold mb-4 text-indigo-600 flex items-center justify-center gap-2">
                             <span>KV Heads</span>
-                            <span className="text-xs bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 rounded">Num = {numKVHeads}</span>
+                            <span className="text-xs bg-indigo-100 px-2 py-1 rounded">Num = {numKVHeads}</span>
                         </h3>
                         {kvHeads.map((kv, i) => {
                             const color = i === 0 ? "bg-orange-600" : "bg-blue-600";
@@ -124,7 +124,7 @@ export default function MechanismPanel() {
 // Helper for metrics
 function MetricCard({ label, value, desc, color }) {
     return (
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <div className="text-sm text-slate-500 uppercase tracking-wider mb-1">{label}</div>
             <div className={`text-2xl font-bold ${color} mb-1`}>{value}</div>
             <div className="text-xs text-slate-400">{desc}</div>

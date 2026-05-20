@@ -35,19 +35,19 @@ export default function PlaygroundPanel() {
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-violet-600 dark:text-violet-400 mb-4">
+                    <h2 className="text-3xl font-bold text-violet-600 mb-4">
                         RoPE Rotation Explorer
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-300">
+                    <p className="text-slate-600">
                         See how query and key positions translate to rotations, and how relative position emerges.
                     </p>
                 </div>
 
                 {/* Controls */}
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 mb-8">
+                <div className="bg-white rounded-2xl p-6 border border-slate-200 mb-8">
                     <div className="grid md:grid-cols-3 gap-6">
                         <div>
-                            <label className="flex justify-between text-sm font-medium mb-2 dark:text-slate-300">
+                            <label className="flex justify-between text-sm font-medium mb-2">
                                 <span>Query Position (m)</span>
                                 <span className="font-mono text-violet-600">{queryPos}</span>
                             </label>
@@ -59,7 +59,7 @@ export default function PlaygroundPanel() {
                             />
                         </div>
                         <div>
-                            <label className="flex justify-between text-sm font-medium mb-2 dark:text-slate-300">
+                            <label className="flex justify-between text-sm font-medium mb-2">
                                 <span>Key Position (n)</span>
                                 <span className="font-mono text-fuchsia-600">{keyPos}</span>
                             </label>
@@ -71,7 +71,7 @@ export default function PlaygroundPanel() {
                             />
                         </div>
                         <div>
-                            <label className="flex justify-between text-sm font-medium mb-2 dark:text-slate-300">
+                            <label className="flex justify-between text-sm font-medium mb-2">
                                 <span>Embedding Dim</span>
                                 <span className="font-mono text-slate-600">{dimension}</span>
                             </label>
@@ -86,19 +86,19 @@ export default function PlaygroundPanel() {
 
                     {/* Relative Position Display */}
                     <div className="mt-6 flex items-center justify-center gap-4">
-                        <div className="bg-violet-100 dark:bg-violet-900/30 px-4 py-2 rounded-lg">
-                            <span className="text-sm text-violet-600 dark:text-violet-400">m = {queryPos}</span>
+                        <div className="bg-violet-100 px-4 py-2 rounded-lg">
+                            <span className="text-sm text-violet-600">m = {queryPos}</span>
                         </div>
                         <span className="text-slate-400">-</span>
-                        <div className="bg-fuchsia-100 dark:bg-fuchsia-900/30 px-4 py-2 rounded-lg">
-                            <span className="text-sm text-fuchsia-600 dark:text-fuchsia-400">n = {keyPos}</span>
+                        <div className="bg-fuchsia-100 px-4 py-2 rounded-lg">
+                            <span className="text-sm text-fuchsia-600">n = {keyPos}</span>
                         </div>
                         <span className="text-slate-400">=</span>
                         <div className={`px-4 py-2 rounded-lg font-bold ${relativePosition > 0
-                                ? 'bg-green-100 dark:bg-green-900/30 text-green-600'
+                                ? 'bg-green-100 text-green-600'
                                 : relativePosition < 0
-                                    ? 'bg-red-100 dark:bg-red-900/30 text-red-600'
-                                    : 'bg-slate-100 dark:bg-slate-700 text-slate-600'
+                                    ? 'bg-red-100 text-red-600'
+                                    : 'bg-slate-100 text-slate-600'
                             }`}>
                             Δ = {relativePosition}
                         </div>
@@ -111,7 +111,7 @@ export default function PlaygroundPanel() {
                         onClick={() => setShowRelative(!showRelative)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${showRelative
                                 ? 'bg-violet-500 text-white'
-                                : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                                : 'bg-slate-200 text-slate-700'
                             }`}
                     >
                         <Eye size={18} />
@@ -124,7 +124,7 @@ export default function PlaygroundPanel() {
                     {rotations.map((rot, idx) => (
                         <div
                             key={idx}
-                            className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700"
+                            className="bg-white rounded-xl p-4 border border-slate-200"
                         >
                             <div className="text-xs text-slate-500 mb-2 text-center">
                                 Pair {rot.pair}: d<sub>{rot.pair * 2}</sub>, d<sub>{rot.pair * 2 + 1}</sub>

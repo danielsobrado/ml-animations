@@ -66,7 +66,7 @@ export default function BidirectionalPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-violet-400">Bidirectional</span> Fusion
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           How image and text mutually refine each other through joint attention
         </p>
       </div>
@@ -116,7 +116,7 @@ export default function BidirectionalPanel() {
                 {[...Array(9)].map((_, i) => {
                   let opacity = step === 0 ? 0.3 : 0.3 + step * 0.1;
                   let highlight = false;
-                  
+
                   // Center cells for "cat"
                   if (steps[step].highlight === 'cat' && [1, 4, 7].includes(i)) {
                     highlight = true;
@@ -125,7 +125,7 @@ export default function BidirectionalPanel() {
                   if (steps[step].highlight === 'beach' && [0, 2, 3, 5, 6, 8].includes(i)) {
                     highlight = true;
                   }
-                  
+
                   return (
                     <div
                       key={i}
@@ -140,7 +140,7 @@ export default function BidirectionalPanel() {
                   );
                 })}
               </div>
-              <p className="text-center text-blue-600 dark:text-sm mt-2">
+              <p className="text-center text-blue-600 mt-2">
                 Image Tokens
               </p>
             </div>
@@ -151,20 +151,20 @@ export default function BidirectionalPanel() {
               <div className={`flex items-center transition-all duration-500 ${
                 steps[step].direction === 'txt-to-img' ? 'opacity-100 scale-110' : 'opacity-30'
               }`}>
-                <ArrowLeft size={32} className="text-orange-600 dark:text-orange-400" />
-                <span className="text-xs text-orange-600 dark:text-orange-400 mx-2">Text→Img</span>
+                <ArrowLeft size={32} className="text-orange-600" />
+                <span className="text-xs text-orange-600 mx-2">Text→Img</span>
               </div>
-              
+
               <RefreshCw className={`transition-all duration-500 ${
                 steps[step].final ? 'text-violet-400 animate-spin' : 'text-gray-600'
               }`} size={24} />
-              
+
               {/* Image to Text arrow */}
               <div className={`flex items-center transition-all duration-500 ${
                 steps[step].direction === 'img-to-txt' ? 'opacity-100 scale-110' : 'opacity-30'
               }`}>
-                <span className="text-xs text-blue-600 dark:text-blue-400 mx-2">Img→Text</span>
-                <ArrowRight size={32} className="text-blue-600 dark:text-blue-400" />
+                <span className="text-xs text-blue-600 mx-2">Img→Text</span>
+                <ArrowRight size={32} className="text-blue-600" />
               </div>
             </div>
 
@@ -179,7 +179,7 @@ export default function BidirectionalPanel() {
                 {['A', 'cat', 'on', 'beach'].map((word, i) => {
                   const isHighlighted = steps[step].highlight === word.toLowerCase();
                   const isUpdated = steps[step].txtUpdate;
-                  
+
                   return (
                     <div
                       key={i}
@@ -195,23 +195,23 @@ export default function BidirectionalPanel() {
                   );
                 })}
               </div>
-              <p className="text-center text-orange-600 dark:text-sm mt-2">
+              <p className="text-center text-orange-600 mt-2">
                 Text Tokens
               </p>
             </div>
           </div>
         </div>
 
-        <p className="text-center text-gray-800 dark:text-gray-400 mt-4">{steps[step].desc}</p>
+        <p className="text-center text-gray-800 mt-4">{steps[step].desc}</p>
       </div>
 
       {/* Mathematical View */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4">The Math Behind Bidirectional Flow</h3>
-        
+
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-blue-900/20 rounded-xl p-5 border border-blue-500/30">
-            <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-3">Image Updates from Text</h4>
+            <h4 className="font-bold text-blue-600 mb-3">Image Updates from Text</h4>
             <div className="font-mono text-sm space-y-2">
               <p>Q_img = W_q · X_img</p>
               <p>K_all = W_k · [X_img; X_txt]</p>
@@ -219,13 +219,13 @@ export default function BidirectionalPanel() {
               <p className="text-violet-400">A_img = softmax(Q_img · K_all^T / √d)</p>
               <p className="text-green-400">X_img' = A_img · V_all</p>
             </div>
-            <p className="text-xs text-gray-800 dark:text-gray-400 mt-3">
+            <p className="text-xs text-gray-800 mt-3">
               Image tokens query the joint sequence, receiving information from text
             </p>
           </div>
 
           <div className="bg-orange-900/20 rounded-xl p-5 border border-orange-500/30">
-            <h4 className="font-bold text-orange-600 dark:text-orange-400 mb-3">Text Updates from Image</h4>
+            <h4 className="font-bold text-orange-600 mb-3">Text Updates from Image</h4>
             <div className="font-mono text-sm space-y-2">
               <p>Q_txt = W_q · X_txt</p>
               <p>K_all = W_k · [X_img; X_txt]</p>
@@ -233,7 +233,7 @@ export default function BidirectionalPanel() {
               <p className="text-violet-400">A_txt = softmax(Q_txt · K_all^T / √d)</p>
               <p className="text-green-400">X_txt' = A_txt · V_all</p>
             </div>
-            <p className="text-xs text-gray-800 dark:text-gray-400 mt-3">
+            <p className="text-xs text-gray-800 mt-3">
               Text tokens query the joint sequence, seeing what's forming in the image
             </p>
           </div>
@@ -244,7 +244,7 @@ export default function BidirectionalPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-gradient-to-br from-green-900/30 to-emerald-800/20 rounded-xl p-5 border border-green-500/30">
           <h3 className="font-bold text-green-300 mb-3">✓ Benefits of Bidirectional</h3>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+          <ul className="text-sm text-gray-700 space-y-2">
             <li>• <strong>Text awareness:</strong> Text knows what's forming in image</li>
             <li>• <strong>Context adaptation:</strong> "cat" means different things in different contexts</li>
             <li>• <strong>Error correction:</strong> Text can guide if image drifts off-topic</li>
@@ -254,10 +254,10 @@ export default function BidirectionalPanel() {
 
         <div className="bg-gradient-to-br from-violet-900/30 to-purple-800/20 rounded-xl p-5 border border-violet-500/30">
           <h3 className="font-bold text-violet-300 mb-3">🔄 Per-Layer Refinement</h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+          <p className="text-sm text-gray-700 mb-3">
             This bidirectional exchange happens at <strong>every transformer layer</strong>:
           </p>
-          <div className="text-xs text-gray-800 dark:text-gray-400 space-y-1">
+          <div className="text-xs text-gray-800 space-y-1">
             <p>Layer 1: Basic shapes & text parsing</p>
             <p>Layer 12: Object-level understanding</p>
             <p>Layer 24: Fine details & consistency</p>
@@ -273,7 +273,7 @@ export default function BidirectionalPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Aspect</th>
+                <th className="py-3 px-4 text-left text-gray-800">Aspect</th>
                 <th className="py-3 px-4 text-left text-red-400">Cross-Attention</th>
                 <th className="py-3 px-4 text-left text-green-400">Joint Attention</th>
               </tr>

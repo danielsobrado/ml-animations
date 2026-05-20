@@ -19,7 +19,7 @@ export default function TokenizationPanel() {
     const text = inputText.toLowerCase();
     // Simulated WordPiece tokenization
     const basicTokens = text.match(/[\w]+|[^\s\w]/g) || [];
-    
+
     const wordPieceTokens = basicTokens.flatMap(token => {
       // Simulate breaking "playing" into "play" + "##ing"
       if (token === 'playing') return ['play', '##ing'];
@@ -30,7 +30,7 @@ export default function TokenizationPanel() {
     });
 
     const withSpecial = ['[CLS]', ...wordPieceTokens, '[SEP]'];
-    
+
     // Simulated token IDs
     const tokenIds = withSpecial.map((token, i) => {
       const vocab = {
@@ -74,14 +74,14 @@ export default function TokenizationPanel() {
         <h2 className="text-3xl font-bold mb-2">
           Tokenization: <span className="text-green-400">From Text to Tokens</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           How BERT breaks down text into processable units using WordPiece
         </p>
       </div>
 
       {/* Input Section */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10">
-        <label className="text-sm text-gray-800 dark:text-gray-400 mb-2 block">Try your own text:</label>
+        <label className="text-sm text-gray-800 mb-2 block">Try your own text:</label>
         <input
           type="text"
           value={inputText}
@@ -116,11 +116,11 @@ export default function TokenizationPanel() {
             key={i}
             onClick={() => { setCurrentStep(i); setIsPlaying(false); }}
             className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
-              i === currentStep 
-                ? 'bg-green-500 text-white scale-110' 
-                : i < currentStep 
-                ? 'bg-green-900 text-green-300' 
-                : 'bg-white/10 text-gray-700 dark:text-gray-500'
+              i === currentStep
+                ? 'bg-green-500 text-white scale-110'
+                : i < currentStep
+                ? 'bg-green-900 text-green-300'
+                : 'bg-white/10 text-gray-700'
             }`}
           >
             {i + 1}
@@ -131,7 +131,7 @@ export default function TokenizationPanel() {
       {/* Current Step Description */}
       <div className="bg-green-900/20 border border-green-500/30 rounded-xl p-4">
         <h3 className="font-bold text-green-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Visualization */}
@@ -139,7 +139,7 @@ export default function TokenizationPanel() {
         {/* Step 0: Original */}
         <div className={`transition-all duration-500 ${currentStep >= 0 ? 'opacity-100' : 'opacity-30'}`}>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-medium text-gray-800 dark:text-gray-400">Original Text:</span>
+            <span className="text-sm font-medium text-gray-800">Original Text:</span>
           </div>
           <div className="bg-blue-900/30 rounded-lg p-4 text-xl font-mono border border-blue-500/30">
             {inputText}
@@ -149,18 +149,18 @@ export default function TokenizationPanel() {
         {currentStep >= 1 && (
           <>
             <div className="flex justify-center my-4">
-              <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90" />
+              <ArrowRight className="text-gray-700 rotate-90" />
             </div>
-            
+
             {/* Step 1: Basic Tokens */}
             <div className={`transition-all duration-500 ${currentStep >= 1 ? 'opacity-100' : 'opacity-30'}`}>
               <div className="flex items-center gap-2 mb-2">
                 <Scissors size={16} className="text-yellow-400" />
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-400">Basic Tokens:</span>
+                <span className="text-sm font-medium text-gray-800">Basic Tokens:</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {basicTokens.map((token, i) => (
-                  <span 
+                  <span
                     key={i}
                     className="bg-yellow-600/30 border border-yellow-500/50 px-3 py-2 rounded-lg font-mono mask-reveal"
                     style={{ animationDelay: `${i * 100}ms` }}
@@ -176,22 +176,22 @@ export default function TokenizationPanel() {
         {currentStep >= 2 && (
           <>
             <div className="flex justify-center my-4">
-              <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90" />
+              <ArrowRight className="text-gray-700 rotate-90" />
             </div>
-            
+
             {/* Step 2: WordPiece */}
             <div className={`transition-all duration-500 ${currentStep >= 2 ? 'opacity-100' : 'opacity-30'}`}>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-400">WordPiece Tokens:</span>
-                <span className="text-xs text-purple-600 dark:text-purple-400">(## = continuation)</span>
+                <span className="text-sm font-medium text-gray-800">WordPiece Tokens:</span>
+                <span className="text-xs text-purple-600">(## = continuation)</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {wordPieceTokens.map((token, i) => (
-                  <span 
+                  <span
                     key={i}
                     className={`px-3 py-2 rounded-lg font-mono mask-reveal ${
-                      token.startsWith('##') 
-                        ? 'bg-purple-600/30 border border-purple-500/50 text-purple-300' 
+                      token.startsWith('##')
+                        ? 'bg-purple-600/30 border border-purple-500/50 text-purple-300'
                         : 'bg-green-600/30 border border-green-500/50 text-green-300'
                     }`}
                     style={{ animationDelay: `${i * 100}ms` }}
@@ -207,21 +207,21 @@ export default function TokenizationPanel() {
         {currentStep >= 3 && (
           <>
             <div className="flex justify-center my-4">
-              <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90" />
+              <ArrowRight className="text-gray-700 rotate-90" />
             </div>
-            
+
             {/* Step 3: With Special Tokens */}
             <div className={`transition-all duration-500 ${currentStep >= 3 ? 'opacity-100' : 'opacity-30'}`}>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-400">With Special Tokens:</span>
+                <span className="text-sm font-medium text-gray-800">With Special Tokens:</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {withSpecial.map((token, i) => (
-                  <span 
+                  <span
                     key={i}
                     className={`px-3 py-2 rounded-lg font-mono mask-reveal ${
-                      token.startsWith('[') 
-                        ? 'bg-red-600/30 border border-red-500/50 text-red-300 font-bold' 
+                      token.startsWith('[')
+                        ? 'bg-red-600/30 border border-red-500/50 text-red-300 font-bold'
                         : token.startsWith('##')
                         ? 'bg-purple-600/30 border border-purple-500/50 text-purple-300'
                         : 'bg-green-600/30 border border-green-500/50 text-green-300'
@@ -239,18 +239,18 @@ export default function TokenizationPanel() {
         {currentStep >= 4 && (
           <>
             <div className="flex justify-center my-4">
-              <ArrowRight className="text-gray-700 dark:text-gray-500 rotate-90" />
+              <ArrowRight className="text-gray-700 rotate-90" />
             </div>
-            
+
             {/* Step 4: Token IDs */}
             <div className={`transition-all duration-500 ${currentStep >= 4 ? 'opacity-100' : 'opacity-30'}`}>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-400">Token IDs (vocab indices):</span>
+                <span className="text-sm font-medium text-gray-800">Token IDs (vocab indices):</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {withSpecial.map((token, i) => (
                   <div key={i} className="flex flex-col items-center mask-reveal" style={{ animationDelay: `${i * 100}ms` }}>
-                    <span className="text-xs text-gray-700 dark:text-gray-500 mb-1">{token}</span>
+                    <span className="text-xs text-gray-700 mb-1">{token}</span>
                     <span className="bg-cyan-600/30 border border-cyan-500/50 px-3 py-2 rounded-lg font-mono text-cyan-300">
                       {tokenIds[i]}
                     </span>
@@ -265,7 +265,7 @@ export default function TokenizationPanel() {
       {/* Special Tokens Explanation */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-          <Info size={20} className="text-blue-600 dark:text-blue-400" />
+          <Info size={20} className="text-blue-600" />
           BERT Special Tokens
         </h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -278,9 +278,9 @@ export default function TokenizationPanel() {
             <div key={item.token} className={`bg-${item.color}-900/20 rounded-xl p-4 border border-${item.color}-500/30`}>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`font-mono font-bold text-${item.color}-400`}>{item.token}</span>
-                <span className="text-xs text-gray-700 dark:text-gray-500">ID: {item.id}</span>
+                <span className="text-xs text-gray-700">ID: {item.id}</span>
               </div>
-              <p className="text-xs text-gray-800 dark:text-gray-400">{item.desc}</p>
+              <p className="text-xs text-gray-800">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -290,23 +290,23 @@ export default function TokenizationPanel() {
       <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-2xl p-6 border border-purple-500/30">
         <h3 className="text-lg font-bold mb-4">🔤 WordPiece Tokenization Deep Dive</h3>
         <div className="space-y-4">
-          <p className="text-gray-700 dark:text-gray-300">
+          <p className="text-gray-700">
             WordPiece breaks words into subword units, handling unknown words by decomposing them:
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-black/30 rounded-lg p-4">
-              <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Example: "unbelievable"</p>
+              <p className="text-sm text-gray-800 mb-2">Example: "unbelievable"</p>
               <div className="flex flex-wrap gap-2">
                 <span className="bg-purple-600/30 px-2 py-1 rounded text-sm">un</span>
-                <span className="text-gray-700 dark:text-gray-500">+</span>
+                <span className="text-gray-700">+</span>
                 <span className="bg-purple-600/30 px-2 py-1 rounded text-sm">##believ</span>
-                <span className="text-gray-700 dark:text-gray-500">+</span>
+                <span className="text-gray-700">+</span>
                 <span className="bg-purple-600/30 px-2 py-1 rounded text-sm">##able</span>
               </div>
-              <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">## indicates continuation of previous token</p>
+              <p className="text-xs text-gray-700 mt-2">## indicates continuation of previous token</p>
             </div>
             <div className="bg-black/30 rounded-lg p-4">
-              <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Why WordPiece?</p>
+              <p className="text-sm text-gray-800 mb-2">Why WordPiece?</p>
               <ul className="text-sm space-y-1">
                 <li className="flex items-start gap-2">
                   <span className="text-green-400">✓</span>
@@ -328,7 +328,7 @@ export default function TokenizationPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 Python Code (using Transformers):</p>
+        <p className="text-sm text-gray-800 mb-3">🐍 Python Code (using Transformers):</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-green-300">{`from transformers import BertTokenizer
 

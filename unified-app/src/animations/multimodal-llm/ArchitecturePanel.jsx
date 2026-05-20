@@ -39,7 +39,7 @@ export default function ArchitecturePanel() {
             <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Multimodal Architecture</h2>
-                    <p className="text-slate-800 dark:text-slate-600">
+                    <p className="text-slate-800">
                         How different modalities are combined in modern LLMs
                     </p>
                 </div>
@@ -64,13 +64,13 @@ export default function ArchitecturePanel() {
                 {/* Main Diagram - Cross Attention (default) */}
                 <div className="bg-slate-50 rounded-xl p-6 mb-6">
                     <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">{arch.name} Architecture</h3>
-                    
+
                     {selectedArch === 'cross-attention' && (
                         <div className="flex flex-col items-center gap-4">
                             {/* Input Layer */}
                             <div className="flex gap-8 items-end">
                                 {/* Image Input */}
-                                <div 
+                                <div
                                     className={`flex flex-col items-center transition-all ${
                                         hoveredComponent === 'vision' ? 'scale-110' : ''
                                     }`}
@@ -82,9 +82,9 @@ export default function ArchitecturePanel() {
                                     </div>
                                     <span className="text-sm font-medium text-green-700">Image</span>
                                 </div>
-                                
+
                                 {/* Text Input */}
-                                <div 
+                                <div
                                     className={`flex flex-col items-center transition-all ${
                                         hoveredComponent === 'text' ? 'scale-110' : ''
                                     }`}
@@ -100,13 +100,13 @@ export default function ArchitecturePanel() {
 
                             {/* Arrows down */}
                             <div className="flex gap-8">
-                                <div className="text-slate-800 dark:text-slate-400">↓</div>
-                                <div className="text-slate-800 dark:text-slate-400">↓</div>
+                                <div className="text-slate-800">↓</div>
+                                <div className="text-slate-800">↓</div>
                             </div>
 
                             {/* Encoders */}
                             <div className="flex gap-8">
-                                <div 
+                                <div
                                     className={`bg-green-200 rounded-lg p-4 border-2 border-green-400 transition-all ${
                                         hoveredComponent === 'vision-encoder' ? 'scale-105 shadow-lg' : ''
                                     }`}
@@ -117,8 +117,8 @@ export default function ArchitecturePanel() {
                                     <div className="text-sm font-bold text-green-800">Vision Encoder</div>
                                     <div className="text-xs text-green-600">ViT / CLIP</div>
                                 </div>
-                                
-                                <div 
+
+                                <div
                                     className={`bg-blue-200 rounded-lg p-4 border-2 border-blue-400 transition-all ${
                                         hoveredComponent === 'text-encoder' ? 'scale-105 shadow-lg' : ''
                                     }`}
@@ -152,9 +152,9 @@ export default function ArchitecturePanel() {
                             </div>
 
                             {/* Projection & Combination */}
-                            <div className="text-slate-800 dark:text-slate-400">↓ Projection Layer ↓</div>
+                            <div className="text-slate-800">↓ Projection Layer ↓</div>
 
-                            <div 
+                            <div
                                 className={`bg-purple-100 rounded-xl p-4 border-2 border-purple-300 transition-all ${
                                     hoveredComponent === 'combined' ? 'scale-105 shadow-lg' : ''
                                 }`}
@@ -173,9 +173,9 @@ export default function ArchitecturePanel() {
                             </div>
 
                             {/* LLM */}
-                            <div className="text-slate-800 dark:text-slate-400">↓</div>
+                            <div className="text-slate-800">↓</div>
 
-                            <div 
+                            <div
                                 className={`bg-indigo-200 rounded-xl p-6 border-2 border-indigo-400 transition-all ${
                                     hoveredComponent === 'llm' ? 'scale-105 shadow-lg' : ''
                                 }`}
@@ -188,7 +188,7 @@ export default function ArchitecturePanel() {
                             </div>
 
                             {/* Output */}
-                            <div className="text-slate-800 dark:text-slate-400">↓</div>
+                            <div className="text-slate-800">↓</div>
 
                             <div className="bg-amber-100 rounded-lg p-3 border border-amber-300">
                                 <div className="text-sm font-medium text-amber-800">"A cat sitting on a windowsill"</div>
@@ -202,7 +202,7 @@ export default function ArchitecturePanel() {
                                 <div className="w-20 h-20 bg-green-100 rounded-lg border-2 border-green-300 flex items-center justify-center">🖼️</div>
                                 <div className="w-20 h-20 bg-blue-100 rounded-lg border-2 border-blue-300 flex items-center justify-center"><Type size={32} /></div>
                             </div>
-                            <div className="text-slate-800 dark:text-slate-400">↓ Concatenate at Input ↓</div>
+                            <div className="text-slate-800">↓ Concatenate at Input ↓</div>
                             <div className="bg-purple-200 rounded-xl p-4 border-2 border-purple-400 w-64">
                                 <div className="text-sm font-bold text-center">Fused Input</div>
                                 <div className="flex gap-1 justify-center mt-2">
@@ -212,12 +212,12 @@ export default function ArchitecturePanel() {
                                     <div className="w-8 h-8 bg-blue-400 rounded"></div>
                                 </div>
                             </div>
-                            <div className="text-slate-800 dark:text-slate-400">↓</div>
+                            <div className="text-slate-800">↓</div>
                             <div className="bg-indigo-200 rounded-xl p-4 border-2 border-indigo-400">
                                 <Brain className="mx-auto text-indigo-700" size={32} />
                                 <div className="font-bold text-indigo-800">Single Transformer</div>
                             </div>
-                            <div className="text-slate-800 dark:text-slate-400">↓</div>
+                            <div className="text-slate-800">↓</div>
                             <div className="bg-amber-100 rounded-lg p-3 border border-amber-300">
                                 <div className="text-sm font-medium text-amber-800">Output</div>
                             </div>
@@ -229,31 +229,31 @@ export default function ArchitecturePanel() {
                             <div className="flex gap-16">
                                 <div className="flex flex-col items-center">
                                     <div className="w-20 h-20 bg-green-100 rounded-lg border-2 border-green-300 flex items-center justify-center mb-2">🖼️</div>
-                                    <div className="text-slate-800 dark:text-slate-400">↓</div>
+                                    <div className="text-slate-800">↓</div>
                                     <div className="bg-green-200 rounded-lg p-3 border border-green-400">
                                         <Eye className="mx-auto text-green-700" size={24} />
                                         <div className="text-xs font-bold">Vision Model</div>
                                     </div>
-                                    <div className="text-slate-800 dark:text-slate-400">↓</div>
+                                    <div className="text-slate-800">↓</div>
                                     <div className="bg-green-100 rounded p-2 text-xs">Features</div>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <div className="w-20 h-20 bg-blue-100 rounded-lg border-2 border-blue-300 flex items-center justify-center mb-2"><Type size={32} /></div>
-                                    <div className="text-slate-800 dark:text-slate-400">↓</div>
+                                    <div className="text-slate-800">↓</div>
                                     <div className="bg-blue-200 rounded-lg p-3 border border-blue-400">
                                         <Brain className="mx-auto text-blue-700" size={24} />
                                         <div className="text-xs font-bold">Language Model</div>
                                     </div>
-                                    <div className="text-slate-800 dark:text-slate-400">↓</div>
+                                    <div className="text-slate-800">↓</div>
                                     <div className="bg-blue-100 rounded p-2 text-xs">Features</div>
                                 </div>
                             </div>
-                            <div className="text-slate-800 dark:text-slate-400">↘ ↙</div>
+                            <div className="text-slate-800">↘ ↙</div>
                             <div className="bg-purple-200 rounded-xl p-4 border-2 border-purple-400">
                                 <Layers className="mx-auto text-purple-700 mb-1" size={24} />
                                 <div className="font-bold text-purple-800">Fusion Layer</div>
                             </div>
-                            <div className="text-slate-800 dark:text-slate-400">↓</div>
+                            <div className="text-slate-800">↓</div>
                             <div className="bg-amber-100 rounded-lg p-3 border border-amber-300">
                                 <div className="text-sm font-medium text-amber-800">Final Output</div>
                             </div>

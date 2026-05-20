@@ -9,7 +9,7 @@ function VectorBar({ values, label, color, scale = 1, showNorm = false }) {
 
     return (
         <div className="flex items-center gap-3">
-            <div className="text-xs font-mono w-16 text-right text-slate-600 dark:text-slate-400">
+            <div className="text-xs font-mono w-16 text-right text-slate-600">
                 {label}
             </div>
             <div className="flex gap-1">
@@ -30,7 +30,7 @@ function VectorBar({ values, label, color, scale = 1, showNorm = false }) {
                 ))}
             </div>
             {showNorm && (
-                <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                <div className="text-xs text-slate-500 font-mono">
                     ||v|| = {norm.toFixed(2)}
                 </div>
             )}
@@ -140,10 +140,10 @@ export default function MechanismPanel() {
             <div className="max-w-5xl w-full">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">
+                    <h2 className="text-3xl font-bold text-blue-600 mb-4">
                         Vector Flow Through a Transformer Block
                     </h2>
-                    <p className="text-lg text-slate-700 dark:text-slate-300">
+                    <p className="text-lg text-slate-700">
                         Watch how vectors flow and accumulate through residual connections
                     </p>
                 </div>
@@ -159,7 +159,7 @@ export default function MechanismPanel() {
                     </button>
                     <button
                         onClick={reset}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors"
                     >
                         <RotateCcw size={18} />
                         Reset
@@ -185,8 +185,8 @@ export default function MechanismPanel() {
                                     i === step
                                         ? 'bg-blue-500 text-white scale-110'
                                         : i < step
-                                            ? 'bg-blue-200 dark:bg-blue-800 text-blue-700 dark:text-blue-300'
-                                            : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
+                                            ? 'bg-blue-200 text-blue-700'
+                                            : 'bg-slate-200 text-slate-500'
                                 }`}
                             >
                                 {i + 1}
@@ -196,15 +196,15 @@ export default function MechanismPanel() {
                 </div>
 
                 {/* Current Step Info */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mb-8">
-                    <h3 className="font-bold text-blue-700 dark:text-blue-300 text-lg mb-1">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8">
+                    <h3 className="font-bold text-blue-700 text-lg mb-1">
                         Step {step + 1}: {steps[step].title}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-400">{steps[step].description}</p>
+                    <p className="text-slate-600">{steps[step].description}</p>
                 </div>
 
                 {/* Main Visualization */}
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+                <div className="bg-white rounded-2xl p-6 border border-slate-200">
                     {/* Transformer Block Diagram */}
                     <div className="flex flex-col gap-6">
                         {/* Residual Stream */}
@@ -213,12 +213,12 @@ export default function MechanismPanel() {
                             <motion.div
                                 className={`p-4 rounded-xl border-2 ${
                                     step === 0
-                                        ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-900/20'
-                                        : 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50'
+                                        ? 'border-cyan-500 bg-cyan-50'
+                                        : 'border-slate-300 bg-slate-50'
                                 }`}
                                 animate={{ scale: step === 0 ? 1.02 : 1 }}
                             >
-                                <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300 mb-2">
+                                <div className="text-sm font-semibold text-cyan-700 mb-2">
                                     Residual Stream (Input)
                                 </div>
                                 <VectorBar
@@ -237,14 +237,14 @@ export default function MechanismPanel() {
                             <motion.div
                                 className={`p-4 rounded-xl border-2 ${
                                     step === 1 || step === 2
-                                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                                        : 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50'
+                                        ? 'border-purple-500 bg-purple-50'
+                                        : 'border-slate-300 bg-slate-50'
                                 }`}
                                 animate={{ scale: step === 1 || step === 2 ? 1.02 : 1 }}
                             >
                                 <div className="flex items-center gap-2 mb-3">
                                     <Layers className="text-purple-500" size={20} />
-                                    <div className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                                    <div className="text-sm font-semibold text-purple-700">
                                         Self-Attention
                                     </div>
                                 </div>
@@ -266,11 +266,11 @@ export default function MechanismPanel() {
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
-                                        className="mt-4 p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg"
+                                        className="mt-4 p-3 bg-emerald-100 rounded-lg"
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Plus className="text-emerald-500" size={16} />
-                                            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                                            <span className="text-sm font-medium text-emerald-700">
                                                 Residual Addition: x + Attn(x)
                                             </span>
                                         </div>
@@ -296,17 +296,17 @@ export default function MechanismPanel() {
                                         animate={{ opacity: 1, y: 0 }}
                                         className={`p-4 rounded-xl border-2 ${
                                             step === 3
-                                                ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20'
-                                                : 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50'
+                                                ? 'border-amber-500 bg-amber-50'
+                                                : 'border-slate-300 bg-slate-50'
                                         }`}
                                     >
                                         <div className="flex items-center gap-2 mb-3">
                                             <Scale className="text-amber-500" size={20} />
-                                            <div className="text-sm font-semibold text-amber-700 dark:text-amber-300">
+                                            <div className="text-sm font-semibold text-amber-700">
                                                 Layer Normalization
                                             </div>
                                         </div>
-                                        <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                                        <div className="text-xs text-slate-500 mb-2">
                                             Rescales to unit norm while preserving direction
                                         </div>
                                         <VectorBar
@@ -331,13 +331,13 @@ export default function MechanismPanel() {
                                         animate={{ opacity: 1, y: 0 }}
                                         className={`p-4 rounded-xl border-2 ${
                                             step === 4 || step === 5
-                                                ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                                                : 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50'
+                                                ? 'border-orange-500 bg-orange-50'
+                                                : 'border-slate-300 bg-slate-50'
                                         }`}
                                     >
                                         <div className="flex items-center gap-2 mb-3">
                                             <Layers className="text-orange-500" size={20} />
-                                            <div className="text-sm font-semibold text-orange-700 dark:text-orange-300">
+                                            <div className="text-sm font-semibold text-orange-700">
                                                 Feed-Forward Network (MLP)
                                             </div>
                                         </div>
@@ -352,11 +352,11 @@ export default function MechanismPanel() {
                                             <motion.div
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
-                                                className="mt-4 p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg"
+                                                className="mt-4 p-3 bg-emerald-100 rounded-lg"
                                             >
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <Plus className="text-emerald-500" size={16} />
-                                                    <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                                                    <span className="text-sm font-medium text-emerald-700">
                                                         Residual Addition: x + FFN(x)
                                                     </span>
                                                 </div>
@@ -382,11 +382,11 @@ export default function MechanismPanel() {
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="p-4 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20"
+                                        className="p-4 rounded-xl border-2 border-indigo-500 bg-indigo-50"
                                     >
                                         <div className="flex items-center gap-2 mb-3">
                                             <Scale className="text-indigo-500" size={20} />
-                                            <div className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+                                            <div className="text-sm font-semibold text-indigo-700">
                                                 Output (Ready for Next Block)
                                             </div>
                                         </div>

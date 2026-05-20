@@ -51,7 +51,7 @@ export default function T5TextEncoderAnimation() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${activeTab === tab.id
                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
-                    : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+                    : 'bg-white/10 text-gray-700 hover:bg-white/20'
                   }`}
               >
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold">

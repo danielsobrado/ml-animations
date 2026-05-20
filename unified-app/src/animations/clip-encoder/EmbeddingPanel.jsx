@@ -73,7 +73,7 @@ function EmbeddingPanel() {
     if (timelineRef.current) {
       timelineRef.current.kill();
     }
-    
+
     const ctx = gsap.context(() => {
       gsap.set('.token-embed', { opacity: 0, y: -20 });
       gsap.set('.pos-embed', { opacity: 0, scale: 0 });
@@ -90,9 +90,9 @@ function EmbeddingPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">CLIP Embeddings & Outputs</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          CLIP produces <strong>two types of outputs</strong>: sequence embeddings (one per token) 
+        <h2 className="text-2xl font-bold text-blue-600 mb-2">CLIP Embeddings & Outputs</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          CLIP produces <strong>two types of outputs</strong>: sequence embeddings (one per token)
           and a pooled embedding (single vector from [EOS] token). SD3 uses both!
         </p>
       </div>
@@ -163,7 +163,7 @@ function EmbeddingPanel() {
             <rect x="500" y="40" width="150" height="260" rx="8" fill="#ec4899" fillOpacity="0.1" stroke="#ec4899" strokeWidth="2" />
             <text x="575" y="65" textAnchor="middle" fill="#f472b6" fontSize="12" fontWeight="bold">Transformer</text>
             <text x="575" y="85" textAnchor="middle" fill="#f472b6" fontSize="10">12 Layers</text>
-            
+
             {[...Array(6)].map((_, i) => (
               <rect key={i} x="520" y={100 + i * 30} width="110" height="22" rx="2" fill="#ec4899" fillOpacity={0.2 + i * 0.1} />
             ))}
@@ -174,7 +174,7 @@ function EmbeddingPanel() {
 
           {/* Final Outputs */}
           <text x="750" y="100" textAnchor="middle" fill="#94a3b8" fontSize="12">Outputs</text>
-          
+
           {/* Sequence output */}
           <g className="final-embed" style={{ opacity: 0 }}>
             <rect x="680" y="120" width="140" height="50" rx="8" fill="#3b82f6" fillOpacity="0.2" stroke="#3b82f6" strokeWidth="2" />
@@ -207,20 +207,20 @@ function EmbeddingPanel() {
       {/* Output Explanation */}
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-blue-500/10 rounded-xl p-6 border border-blue-500/30">
-          <h3 className="font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-blue-600 mb-3 flex items-center gap-2">
             <Square size={18} />
             Sequence Embeddings
           </h3>
-          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+          <div className="space-y-3 text-sm text-gray-700">
             <p>
-              <strong>Shape:</strong> <code className="text-blue-600 dark:text-blue-400">[batch, 77, 768]</code>
+              <strong>Shape:</strong> <code className="text-blue-600">[batch, 77, 768]</code>
             </p>
             <p>
               One 768-dimensional vector for each of the 77 token positions.
               These capture the meaning of each token in context.
             </p>
             <div className="bg-black/40 rounded p-3 mt-2">
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">Used for:</span> Joint attention with image tokens.
+              <span className="text-blue-600 font-semibold">Used for:</span> Joint attention with image tokens.
               The text sequence gets concatenated with image patch tokens.
             </div>
           </div>
@@ -231,12 +231,12 @@ function EmbeddingPanel() {
             <Circle size={18} />
             Pooled Embedding
           </h3>
-          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+          <div className="space-y-3 text-sm text-gray-700">
             <p>
               <strong>Shape:</strong> <code className="text-yellow-400">[batch, 768]</code>
             </p>
             <p>
-              The hidden state at the [EOS] token position. This single vector 
+              The hidden state at the [EOS] token position. This single vector
               summarizes the entire text prompt.
             </p>
             <div className="bg-black/40 rounded p-3 mt-2">
@@ -249,25 +249,25 @@ function EmbeddingPanel() {
 
       {/* How SD3 Combines CLIP Outputs */}
       <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/30">
-        <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-4">How SD3 Combines Both CLIPs</h3>
-        
+        <h3 className="font-semibold text-purple-600 mb-4">How SD3 Combines Both CLIPs</h3>
+
         <div className="space-y-4">
           <div className="bg-black/30 rounded-lg p-4">
-            <h4 className="text-blue-600 dark:text-blue-400 font-semibold mb-2">Sequence Embeddings (for Joint Attention)</h4>
-            <div className="font-mono text-sm text-gray-700 dark:text-gray-300">
+            <h4 className="text-blue-600 font-semibold mb-2">Sequence Embeddings (for Joint Attention)</h4>
+            <div className="font-mono text-sm text-gray-700">
               CLIP-L: [1, 77, 768]<br />
               CLIP-G: [1, 77, 1280]<br />
-              <span className="text-purple-600 dark:text-purple-400">Concatenated → [1, 77, 2048]</span>
+              <span className="text-purple-600">Concatenated → [1, 77, 2048]</span>
             </div>
           </div>
 
           <div className="bg-black/30 rounded-lg p-4">
             <h4 className="text-yellow-400 font-semibold mb-2">Pooled Embeddings (for Conditioning)</h4>
-            <div className="font-mono text-sm text-gray-700 dark:text-gray-300">
+            <div className="font-mono text-sm text-gray-700">
               CLIP-L pooled: [1, 768]<br />
               CLIP-G pooled: [1, 1280]<br />
               <span className="text-yellow-400">Concatenated → [1, 2048]</span><br />
-              <span className="text-gray-700 dark:text-gray-500">Then projected to match DiT hidden size</span>
+              <span className="text-gray-700">Then projected to match DiT hidden size</span>
             </div>
           </div>
         </div>
@@ -275,30 +275,30 @@ function EmbeddingPanel() {
 
       {/* Dimension Summary */}
       <div className="bg-black/30 rounded-xl p-6">
-        <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">📊 Dimension Summary</h3>
+        <h3 className="font-semibold text-gray-700 mb-4">📊 Dimension Summary</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Stage</th>
-                <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Shape</th>
-                <th className="text-left py-2 px-3 text-gray-800 dark:text-gray-400">Description</th>
+                <th className="text-left py-2 px-3 text-gray-800">Stage</th>
+                <th className="text-left py-2 px-3 text-gray-800">Shape</th>
+                <th className="text-left py-2 px-3 text-gray-800">Description</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700 dark:text-gray-300">
+            <tbody className="text-gray-700">
               <tr className="border-b border-white/5">
                 <td className="py-2 px-3">Token IDs</td>
-                <td className="py-2 px-3 font-mono text-blue-600 dark:text-blue-400">[B, 77]</td>
+                <td className="py-2 px-3 font-mono text-blue-600">[B, 77]</td>
                 <td className="py-2 px-3">Integer token IDs (0-49407)</td>
               </tr>
               <tr className="border-b border-white/5">
                 <td className="py-2 px-3">Token + Pos Embed</td>
-                <td className="py-2 px-3 font-mono text-purple-600 dark:text-purple-400">[B, 77, 768]</td>
+                <td className="py-2 px-3 font-mono text-purple-600">[B, 77, 768]</td>
                 <td className="py-2 px-3">Combined embeddings</td>
               </tr>
               <tr className="border-b border-white/5">
                 <td className="py-2 px-3">After Transformer</td>
-                <td className="py-2 px-3 font-mono text-pink-600 dark:text-pink-400">[B, 77, 768]</td>
+                <td className="py-2 px-3 font-mono text-pink-600">[B, 77, 768]</td>
                 <td className="py-2 px-3">Contextualized embeddings</td>
               </tr>
               <tr className="border-b border-white/5">

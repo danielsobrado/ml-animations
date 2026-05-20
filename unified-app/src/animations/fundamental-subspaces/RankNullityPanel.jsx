@@ -32,10 +32,10 @@ function DimensionBar({ label, total, segments }) {
   return (
     <div>
       <div className="mb-2 flex items-center justify-between text-sm">
-        <span className="font-bold text-slate-900 dark:text-white">{label}</span>
-        <span className="font-mono text-slate-500 dark:text-slate-400">{total} dims</span>
+        <span className="font-bold text-slate-900">{label}</span>
+        <span className="font-mono text-slate-500">{total} dims</span>
       </div>
-      <div className="flex h-12 overflow-hidden rounded-lg border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800">
+      <div className="flex h-12 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
         {segments.map((segment) => (
           <div
             key={segment.label}
@@ -64,8 +64,8 @@ function VectorCloud({ count, active, color, label }) {
   ), [count]);
 
   return (
-    <div className="relative h-48 rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-950">
-      <p className="absolute left-3 top-3 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</p>
+    <div className="relative h-48 rounded-lg border border-slate-200 bg-white">
+      <p className="absolute left-3 top-3 text-xs font-bold uppercase tracking-wide text-slate-500">{label}</p>
       {points.map((point, index) => (
         <span
           key={`${label}-${index}`}
@@ -90,13 +90,13 @@ export default function RankNullityPanel() {
   };
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-5 p-4 text-slate-900 dark:text-slate-100">
-      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div className="mx-auto flex max-w-7xl flex-col gap-5 p-4 text-slate-900">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300">Rank-nullity</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">Rank-nullity</p>
             <h2 className="mt-1 text-2xl font-bold">Kernel and Image as a Dimension Budget</h2>
-            <p className="mt-2 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 max-w-3xl text-sm text-slate-600">
               A maps the row-space directions onto the image and sends kernel directions to zero. Rank-nullity is the accounting rule.
             </p>
           </div>
@@ -104,18 +104,18 @@ export default function RankNullityPanel() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => nextCase(-1)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition hover:bg-slate-200"
               title="Previous case"
             >
               <Minus size={18} />
             </button>
-            <div className="min-w-[210px] rounded-lg bg-slate-100 px-4 py-2 text-center dark:bg-slate-800">
-              <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Example</p>
-              <p className="text-sm font-bold text-slate-950 dark:text-white">{current.label}</p>
+            <div className="min-w-[210px] rounded-lg bg-slate-100 px-4 py-2 text-center">
+              <p className="text-xs uppercase tracking-wide text-slate-500">Example</p>
+              <p className="text-sm font-bold text-slate-950">{current.label}</p>
             </div>
             <button
               onClick={() => nextCase(1)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition hover:bg-slate-200"
               title="Next case"
             >
               <Plus size={18} />
@@ -125,9 +125,9 @@ export default function RankNullityPanel() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr]">
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-lg font-bold">Domain R^n</h3>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">Split into visible directions and erased directions.</p>
+          <p className="mt-1 text-sm text-slate-600">Split into visible directions and erased directions.</p>
           <div className="mt-5 space-y-5">
             <DimensionBar
               label="n = rank(A) + nullity(A)"
@@ -145,16 +145,16 @@ export default function RankNullityPanel() {
         </div>
 
         <div className="flex items-center justify-center">
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center shadow-sm dark:border-emerald-800 dark:bg-emerald-950">
-            <p className="font-mono text-xl font-bold text-emerald-900 dark:text-emerald-100">A</p>
-            <ArrowRight className="mx-auto my-2 text-emerald-700 dark:text-emerald-300" size={28} />
-            <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">kernel goes to 0</p>
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center shadow-sm">
+            <p className="font-mono text-xl font-bold text-emerald-900">A</p>
+            <ArrowRight className="mx-auto my-2 text-emerald-700" size={28} />
+            <p className="text-xs font-semibold text-emerald-700">kernel goes to 0</p>
           </div>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-lg font-bold">Codomain R^m</h3>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">The image occupies rank(A) dimensions; the left null space is the unused orthogonal part.</p>
+          <p className="mt-1 text-sm text-slate-600">The image occupies rank(A) dimensions; the left null space is the unused orthogonal part.</p>
           <div className="mt-5 space-y-5">
             <DimensionBar
               label="m = rank(A) + left nullity"
@@ -173,17 +173,17 @@ export default function RankNullityPanel() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-          <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Matrix shape</p>
+        <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <p className="text-xs uppercase tracking-wide text-slate-500">Matrix shape</p>
           <p className="mt-2 font-mono text-lg font-bold">{`A: R^${current.n} -> R^${current.m}`}</p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-          <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Rank-nullity</p>
+        <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <p className="text-xs uppercase tracking-wide text-slate-500">Rank-nullity</p>
           <p className="mt-2 font-mono text-lg font-bold">{current.r} + {nullity} = {current.n}</p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-          <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Interpretation</p>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{current.note}</p>
+        <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <p className="text-xs uppercase tracking-wide text-slate-500">Interpretation</p>
+          <p className="mt-2 text-sm text-slate-600">{current.note}</p>
         </div>
       </div>
     </div>

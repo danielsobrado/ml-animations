@@ -48,7 +48,7 @@ export default function FundamentalSubspacesAnimation() {
 
   return (
     <div className="flex h-full flex-col">
-      <nav className="sticky top-0 z-10 border-b border-slate-200 bg-white/50 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-800/50">
+      <nav className="sticky top-0 z-10 border-b border-slate-200 bg-white/50 backdrop-blur-sm">
         <div className="overflow-x-auto px-4">
           <div className="flex space-x-1 py-2">
             {tabs.map((tab) => (
@@ -58,7 +58,7 @@ export default function FundamentalSubspacesAnimation() {
                 className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
                   activeTab === tab.id
                     ? `bg-gradient-to-r ${tab.color} scale-105 text-white shadow-lg`
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700/50 dark:hover:text-white'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
                 <tab.icon size={18} />

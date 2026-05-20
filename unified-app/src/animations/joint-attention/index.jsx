@@ -49,7 +49,7 @@ export default function App() {
                   ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white'
                   : isCompleted
                     ? 'bg-violet-500/30 text-violet-300'
-                    : 'bg-white/5 text-gray-800 dark:text-gray-400 hover:bg-white/10'
+                    : 'bg-white/5 text-gray-800 hover:bg-white/10'
                 }`}
             >
               <Icon size={18} />

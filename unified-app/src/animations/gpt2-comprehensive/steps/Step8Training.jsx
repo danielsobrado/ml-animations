@@ -17,7 +17,7 @@ export default function Step8Training({ onComplete, onNext, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 8: Training Optimizations</h2>
-                <p className="text-gray-800 dark:text-gray-400">How to train massive models efficiently</p>
+                <p className="text-gray-800">How to train massive models efficiently</p>
             </div>
 
             {/* Optimization Grid */}
@@ -25,11 +25,11 @@ export default function Step8Training({ onComplete, onNext, onPrev }) {
 
                 {/* Gradient Accumulation */}
                 <div className="bg-gray-800 rounded-lg p-6 space-y-3 border border-gray-700">
-                    <h3 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">Gradient Accumulation</h3>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <h3 className="text-lg font-semibold text-emerald-600">Gradient Accumulation</h3>
+                    <p className="text-sm text-gray-700">
                         Simulates a larger batch size by running multiple small batches and summing their gradients before updating weights.
                     </p>
-                    <div className="bg-gray-900 p-3 rounded text-xs font-mono text-gray-800 dark:text-gray-400">
+                    <div className="bg-gray-900 p-3 rounded text-xs font-mono text-gray-800">
                         For i in range(accumulation_steps):<br />
                         &nbsp;&nbsp;loss = model(batch)<br />
                         &nbsp;&nbsp;loss.backward()<br />
@@ -40,8 +40,8 @@ export default function Step8Training({ onComplete, onNext, onPrev }) {
 
                 {/* Mixed Precision */}
                 <div className="bg-gray-800 rounded-lg p-6 space-y-3 border border-gray-700">
-                    <h3 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">Mixed Precision (FP16)</h3>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <h3 className="text-lg font-semibold text-emerald-600">Mixed Precision (FP16)</h3>
+                    <p className="text-sm text-gray-700">
                         Uses 16-bit floating point numbers for activations and gradients to save memory and speed up computation, while keeping a 32-bit copy of weights for stability.
                     </p>
                     <div className="flex gap-2 text-xs">
@@ -52,11 +52,11 @@ export default function Step8Training({ onComplete, onNext, onPrev }) {
 
                 {/* Gradient Clipping */}
                 <div className="bg-gray-800 rounded-lg p-6 space-y-3 border border-gray-700">
-                    <h3 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">Gradient Clipping</h3>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <h3 className="text-lg font-semibold text-emerald-600">Gradient Clipping</h3>
+                    <p className="text-sm text-gray-700">
                         Caps the norm of gradient vectors to prevent "exploding gradients" which can destabilize training.
                     </p>
-                    <div className="bg-gray-900 p-3 rounded text-xs font-mono text-gray-800 dark:text-gray-400">
+                    <div className="bg-gray-900 p-3 rounded text-xs font-mono text-gray-800">
                         torch.nn.utils.clip_grad_norm_(<br />
                         &nbsp;&nbsp;model.parameters(), max_norm=1.0<br />
                         )
@@ -65,8 +65,8 @@ export default function Step8Training({ onComplete, onNext, onPrev }) {
 
                 {/* Learning Rate Schedule */}
                 <div className="bg-gray-800 rounded-lg p-6 space-y-3 border border-gray-700">
-                    <h3 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">Cosine Decay with Warmup</h3>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <h3 className="text-lg font-semibold text-emerald-600">Cosine Decay with Warmup</h3>
+                    <p className="text-sm text-gray-700">
                         Linearly increases LR from 0 to max (warmup), then decreases it following a cosine curve. Helps stability at start and convergence at end.
                     </p>
                     {/* Simple SVG Chart */}
@@ -79,8 +79,8 @@ export default function Step8Training({ onComplete, onNext, onPrev }) {
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     If your GPU runs out of memory (OOM) with batch size 32, but you want the training stability of batch size 32, which technique should you use?
                 </p>
                 <textarea

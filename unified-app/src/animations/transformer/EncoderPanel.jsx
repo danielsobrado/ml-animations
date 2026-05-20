@@ -78,7 +78,7 @@ export default function EncoderPanel() {
                     <h2 className="text-3xl font-bold text-white mb-2">
                         The Encoder: <span className="gradient-text">Processing Input</span>
                     </h2>
-                    <p className="text-slate-800 dark:text-slate-400">
+                    <p className="text-slate-800">
                         The encoder reads and understands the input sequence
                     </p>
                 </div>
@@ -112,7 +112,7 @@ export default function EncoderPanel() {
                                     ? 'bg-blue-500 text-white'
                                     : currentStep > i
                                         ? 'bg-green-500 text-white'
-                                        : 'bg-slate-700 text-slate-800 dark:text-slate-400'
+                                        : 'bg-slate-700 text-slate-800'
                             }`}
                         >
                             {i + 1}
@@ -124,14 +124,14 @@ export default function EncoderPanel() {
                     {/* Encoder Visualization */}
                     <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
                         <h3 className="text-white font-bold mb-4 text-center">Single Encoder Layer</h3>
-                        
+
                         <div className="flex flex-col items-center gap-4">
                             {/* Output */}
                             <div className={`w-48 p-3 rounded-lg bg-green-500 text-white text-center text-sm font-medium transition-all ${getHighlightClass('stack')}`}>
                                 To Next Layer / Decoder
                             </div>
-                            
-                            <ArrowDown className="text-slate-700 dark:text-slate-500" />
+
+                            <ArrowDown className="text-slate-700" />
 
                             {/* Residual 2 */}
                             <div className={`w-48 p-2 rounded-lg bg-emerald-500 text-white text-center text-xs transition-all ${getHighlightClass('residual2')}`}>
@@ -140,7 +140,7 @@ export default function EncoderPanel() {
                                 </div>
                             </div>
 
-                            <ArrowDown className="text-slate-700 dark:text-slate-500" />
+                            <ArrowDown className="text-slate-700" />
 
                             {/* FFN */}
                             <div className={`w-48 p-4 rounded-lg bg-orange-500 text-white text-center transition-all ${getHighlightClass('ffn')}`}>
@@ -152,7 +152,7 @@ export default function EncoderPanel() {
 
                             {/* Residual Connection */}
                             <div className="relative w-full flex justify-center">
-                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
+                                <ArrowDown className="text-slate-700" />
                                 <div className="absolute left-4 top-0 h-full w-px bg-yellow-400/50"></div>
                                 <div className="absolute left-4 top-1/2 w-16 h-px bg-yellow-400/50"></div>
                             </div>
@@ -164,7 +164,7 @@ export default function EncoderPanel() {
                                 </div>
                             </div>
 
-                            <ArrowDown className="text-slate-700 dark:text-slate-500" />
+                            <ArrowDown className="text-slate-700" />
 
                             {/* Multi-Head Attention */}
                             <div className={`w-48 p-4 rounded-lg bg-purple-500 text-white text-center transition-all ${getHighlightClass('attention')}`}>
@@ -179,7 +179,7 @@ export default function EncoderPanel() {
 
                             {/* Residual Connection */}
                             <div className="relative w-full flex justify-center">
-                                <ArrowDown className="text-slate-700 dark:text-slate-500" />
+                                <ArrowDown className="text-slate-700" />
                                 <div className="absolute left-4 top-0 h-full w-px bg-yellow-400/50"></div>
                                 <div className="absolute left-4 top-1/2 w-16 h-px bg-yellow-400/50"></div>
                             </div>
@@ -193,7 +193,7 @@ export default function EncoderPanel() {
 
                         {/* Layer selector */}
                         <div className="mt-6 text-center">
-                            <div className="text-slate-800 dark:text-sm mb-2">Encoder Layers (click to select)</div>
+                            <div className="text-slate-800 mb-2">Encoder Layers (click to select)</div>
                             <div className="flex justify-center gap-2">
                                 {[0, 1, 2, 3, 4, 5].map(i => (
                                     <button
@@ -202,7 +202,7 @@ export default function EncoderPanel() {
                                         className={`w-8 h-8 rounded text-sm font-medium transition-all ${
                                             selectedLayer === i
                                                 ? 'bg-green-500 text-white'
-                                                : 'bg-slate-700 text-slate-800 dark:text-slate-400 hover:bg-slate-600'
+                                                : 'bg-slate-700 text-slate-800 hover:bg-slate-600'
                                         }`}
                                     >
                                         {i + 1}
@@ -215,17 +215,17 @@ export default function EncoderPanel() {
                     {/* Step Description */}
                     <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
                         <div className="bg-blue-500/20 rounded-xl p-4 mb-6">
-                            <h3 className="text-blue-600 dark:text-blue-400 font-bold text-lg mb-2">
+                            <h3 className="text-blue-600 font-bold text-lg mb-2">
                                 Step {currentStep + 1}: {steps[currentStep].title}
                             </h3>
-                            <p className="text-slate-700 dark:text-slate-300">
+                            <p className="text-slate-700">
                                 {steps[currentStep].description}
                             </p>
                         </div>
 
                         {/* Formula */}
                         <div className="bg-slate-700/50 p-4 rounded-lg mb-6">
-                            <div className="text-slate-800 dark:text-sm mb-2">Formula:</div>
+                            <div className="text-slate-800 mb-2">Formula:</div>
                             <div className="text-white font-mono text-center text-lg">
                                 {steps[currentStep].formula}
                             </div>
@@ -234,30 +234,30 @@ export default function EncoderPanel() {
                         {/* Self-Attention Deep Dive */}
                         <div className="space-y-4">
                             <h4 className="text-white font-bold">🔍 Encoder Self-Attention</h4>
-                            
+
                             <div className="grid grid-cols-3 gap-3">
                                 <div className="bg-blue-500/20 p-3 rounded-lg text-center">
-                                    <div className="text-blue-600 dark:text-blue-400 font-bold">Q</div>
-                                    <div className="text-slate-800 dark:text-xs">From input</div>
+                                    <div className="text-blue-600 font-bold">Q</div>
+                                    <div className="text-slate-800">From input</div>
                                 </div>
                                 <div className="bg-green-500/20 p-3 rounded-lg text-center">
                                     <div className="text-green-400 font-bold">K</div>
-                                    <div className="text-slate-800 dark:text-xs">From input</div>
+                                    <div className="text-slate-800">From input</div>
                                 </div>
                                 <div className="bg-purple-500/20 p-3 rounded-lg text-center">
-                                    <div className="text-purple-600 dark:text-purple-400 font-bold">V</div>
-                                    <div className="text-slate-800 dark:text-xs">From input</div>
+                                    <div className="text-purple-600 font-bold">V</div>
+                                    <div className="text-slate-800">From input</div>
                                 </div>
                             </div>
 
-                            <div className="text-slate-800 dark:text-sm">
-                                In encoder self-attention, all of Q, K, V come from the same input sequence. 
+                            <div className="text-slate-800">
+                                In encoder self-attention, all of Q, K, V come from the same input sequence.
                                 This allows every position to attend to every other position in the input.
                             </div>
 
                             <div className="bg-amber-500/10 p-4 rounded-lg border border-amber-500/30">
-                                <h5 className="text-amber-600 dark:text-amber-400 font-medium mb-2">💡 Why Residual Connections?</h5>
-                                <ul className="text-slate-800 dark:text-sm space-y-1">
+                                <h5 className="text-amber-600 font-medium mb-2">💡 Why Residual Connections?</h5>
+                                <ul className="text-slate-800 space-y-1">
                                     <li>• Enable training very deep networks</li>
                                     <li>• Gradients flow directly through skip connections</li>
                                     <li>• Model can learn identity mapping easily</li>
@@ -271,39 +271,39 @@ export default function EncoderPanel() {
                 {/* Dimension Flow */}
                 <div className="mt-8 bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
                     <h3 className="text-white font-bold mb-4">📐 Dimension Flow Through Encoder</h3>
-                    
+
                     <div className="flex items-center justify-around flex-wrap gap-4 text-center">
                         <div>
                             <div className="bg-blue-500/20 px-4 py-2 rounded-lg mb-2">
-                                <span className="text-blue-600 dark:text-blue-400 font-mono">[seq_len, d_model]</span>
+                                <span className="text-blue-600 font-mono">[seq_len, d_model]</span>
                             </div>
-                            <div className="text-slate-800 dark:text-xs">Input</div>
+                            <div className="text-slate-800">Input</div>
                         </div>
-                        <ChevronRight className="text-slate-700 dark:text-slate-500" />
+                        <ChevronRight className="text-slate-700" />
                         <div>
                             <div className="bg-purple-500/20 px-4 py-2 rounded-lg mb-2">
-                                <span className="text-purple-600 dark:text-purple-400 font-mono">[seq_len, d_model]</span>
+                                <span className="text-purple-600 font-mono">[seq_len, d_model]</span>
                             </div>
-                            <div className="text-slate-800 dark:text-xs">After Attention</div>
+                            <div className="text-slate-800">After Attention</div>
                         </div>
-                        <ChevronRight className="text-slate-700 dark:text-slate-500" />
+                        <ChevronRight className="text-slate-700" />
                         <div>
                             <div className="bg-orange-500/20 px-4 py-2 rounded-lg mb-2">
-                                <span className="text-orange-600 dark:text-orange-400 font-mono">[seq_len, d_ff]</span>
+                                <span className="text-orange-600 font-mono">[seq_len, d_ff]</span>
                             </div>
-                            <div className="text-slate-800 dark:text-xs">FFN Hidden</div>
+                            <div className="text-slate-800">FFN Hidden</div>
                         </div>
-                        <ChevronRight className="text-slate-700 dark:text-slate-500" />
+                        <ChevronRight className="text-slate-700" />
                         <div>
                             <div className="bg-green-500/20 px-4 py-2 rounded-lg mb-2">
                                 <span className="text-green-400 font-mono">[seq_len, d_model]</span>
                             </div>
-                            <div className="text-slate-800 dark:text-xs">Output</div>
+                            <div className="text-slate-800">Output</div>
                         </div>
                     </div>
 
-                    <div className="mt-4 text-center text-slate-800 dark:text-sm">
-                        d_model = <span className="text-blue-600 dark:text-blue-400">512</span>, d_ff = <span className="text-orange-600 dark:text-orange-400">2048</span> (4× d_model typically)
+                    <div className="mt-4 text-center text-slate-800">
+                        d_model = <span className="text-blue-600">512</span>, d_ff = <span className="text-orange-600">2048</span> (4× d_model typically)
                     </div>
                 </div>
             </div>

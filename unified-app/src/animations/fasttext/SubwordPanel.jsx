@@ -66,14 +66,14 @@ function SubwordPanel() {
           <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-4">
             "{word}"
           </div>
-          
+
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="text-purple-300">Padded:</span>
-            <span className="font-mono text-pink-600 dark:text-pink-400">&lt;{word}&gt;</span>
+            <span className="font-mono text-pink-600">&lt;{word}&gt;</span>
           </div>
 
           <div className="flex items-center justify-center mb-4">
-            <ChevronRight className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <ChevronRight className="w-6 h-6 text-purple-600" />
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 mb-4">
@@ -107,7 +107,7 @@ function SubwordPanel() {
         className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl p-6"
       >
         <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-          <Info className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <Info className="w-5 h-5 text-purple-600" />
           Word Vector Formula
         </h3>
         <div className="text-center font-mono text-xl text-purple-100 mb-3">

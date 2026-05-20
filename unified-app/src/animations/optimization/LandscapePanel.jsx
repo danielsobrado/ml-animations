@@ -41,9 +41,9 @@ export default function LandscapePanel() {
     return (
         <div className="w-full h-full min-h-[500px] bg-slate-900 rounded-xl overflow-hidden relative">
             <div className="absolute top-4 left-4 z-10 bg-slate-900/80 p-4 rounded-lg backdrop-blur text-slate-200 pointer-events-none">
-                <h3 className="font-bold text-lg text-emerald-600 dark:text-emerald-400">The Loss Landscape</h3>
+                <h3 className="font-bold text-lg text-emerald-600">The Loss Landscape</h3>
                 <p className="text-sm">Drag to rotate. Scroll to zoom.</p>
-                <p className="text-xs text-slate-800 dark:text-slate-400 mt-2">
+                <p className="text-xs text-slate-800 mt-2">
                     The goal of training is to find the lowest point (Global Minimum).
                 </p>
             </div>

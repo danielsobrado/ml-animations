@@ -57,9 +57,9 @@ export default function ConditioningPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-pink-600 dark:text-pink-400">Conditioning</span> in DiT
+          <span className="text-pink-600">Conditioning</span> in DiT
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           How different signals guide the generation process
         </p>
       </div>
@@ -75,7 +75,7 @@ export default function ConditioningPanel() {
               className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
                 activeCondition === key
                   ? `bg-gradient-to-r ${cond.color} text-white`
-                  : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+                  : 'bg-white/10 text-gray-800 hover:bg-white/20'
               }`}
             >
               <CondIcon size={18} />
@@ -93,21 +93,21 @@ export default function ConditioningPanel() {
           </div>
           <div>
             <h3 className="text-xl font-bold">{current.name}</h3>
-            <p className="text-sm text-gray-800 dark:text-gray-400">{current.description}</p>
+            <p className="text-sm text-gray-800">{current.description}</p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* How it works */}
           <div>
-            <h4 className="font-bold text-gray-700 dark:text-gray-300 mb-3">How It Works</h4>
+            <h4 className="font-bold text-gray-700 mb-3">How It Works</h4>
             <ol className="space-y-2">
               {current.howItWorks.map((step, i) => (
                 <li key={i} className="flex items-start gap-3 text-sm">
                   <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-xs">
                     {i + 1}
                   </span>
-                  <span className="text-gray-700 dark:text-gray-300">{step}</span>
+                  <span className="text-gray-700">{step}</span>
                 </li>
               ))}
             </ol>
@@ -116,14 +116,14 @@ export default function ConditioningPanel() {
           {/* Formula & Importance */}
           <div className="space-y-4">
             <div>
-              <h4 className="font-bold text-gray-700 dark:text-gray-300 mb-2">Formula</h4>
+              <h4 className="font-bold text-gray-700 mb-2">Formula</h4>
               <div className="bg-black/50 rounded-lg p-3 font-mono text-sm">
                 <pre className="text-pink-300 whitespace-pre-wrap">{current.formula}</pre>
               </div>
             </div>
             <div>
-              <h4 className="font-bold text-gray-700 dark:text-gray-300 mb-2">Why Important?</h4>
-              <p className="text-sm text-gray-800 dark:text-gray-400">{current.whyImportant}</p>
+              <h4 className="font-bold text-gray-700 mb-2">Why Important?</h4>
+              <p className="text-sm text-gray-800">{current.whyImportant}</p>
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function ConditioningPanel() {
       {/* Conditioning Flow Diagram */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-6 text-center">Conditioning Flow in SD3</h3>
-        
+
         <div className="flex flex-col items-center gap-4">
           {/* Inputs Row */}
           <div className="flex justify-center gap-8 flex-wrap">
@@ -140,32 +140,32 @@ export default function ConditioningPanel() {
               <div className="w-24 h-16 rounded-xl bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center mb-2">
                 <Clock size={24} />
               </div>
-              <p className="text-xs text-gray-800 dark:text-gray-400">Timestep t</p>
+              <p className="text-xs text-gray-800">Timestep t</p>
             </div>
             <div className="text-center">
               <div className="w-24 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center mb-2">
                 <MessageSquare size={24} />
               </div>
-              <p className="text-xs text-gray-800 dark:text-gray-400">CLIP Pooled</p>
+              <p className="text-xs text-gray-800">CLIP Pooled</p>
             </div>
           </div>
 
           {/* Merge */}
-          <div className="text-2xl text-gray-700 dark:text-gray-500">↓ +</div>
+          <div className="text-2xl text-gray-700">↓ +</div>
 
           {/* Combined */}
           <div className="w-48 h-12 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 flex items-center justify-center">
             <span className="font-bold">c = t_emb + pooled</span>
           </div>
 
-          <div className="text-2xl text-gray-700 dark:text-gray-500">↓</div>
+          <div className="text-2xl text-gray-700">↓</div>
 
           {/* MLP */}
           <div className="w-32 h-12 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 flex items-center justify-center">
             <span className="font-bold">MLP</span>
           </div>
 
-          <div className="text-2xl text-gray-700 dark:text-gray-500">↓</div>
+          <div className="text-2xl text-gray-700">↓</div>
 
           {/* Outputs */}
           <div className="flex gap-4">
@@ -173,23 +173,23 @@ export default function ConditioningPanel() {
               <div className="w-16 h-16 rounded-lg bg-pink-600 flex items-center justify-center">
                 <span className="font-bold">γ</span>
               </div>
-              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Scale</p>
+              <p className="text-xs text-gray-800 mt-1">Scale</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 rounded-lg bg-blue-600 flex items-center justify-center">
                 <span className="font-bold">β</span>
               </div>
-              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Shift</p>
+              <p className="text-xs text-gray-800 mt-1">Shift</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 rounded-lg bg-green-600 flex items-center justify-center">
                 <span className="font-bold">α</span>
               </div>
-              <p className="text-xs text-gray-800 dark:text-gray-400 mt-1">Gate</p>
+              <p className="text-xs text-gray-800 mt-1">Gate</p>
             </div>
           </div>
 
-          <div className="text-2xl text-gray-700 dark:text-gray-500">↓</div>
+          <div className="text-2xl text-gray-700">↓</div>
 
           {/* Application */}
           <div className="w-64 h-12 rounded-xl bg-gradient-to-r from-gray-700 to-gray-600 flex items-center justify-center">
@@ -201,28 +201,28 @@ export default function ConditioningPanel() {
       {/* CFG */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4">Classifier-Free Guidance (CFG)</h3>
-        <p className="text-gray-800 dark:text-gray-400 mb-4">
+        <p className="text-gray-800 mb-4">
           During inference, DiT uses CFG to strengthen conditioning:
         </p>
-        
+
         <div className="bg-black/50 rounded-lg p-4 font-mono text-sm mb-4">
-          <p className="text-gray-700 dark:text-gray-300">
-            ε_guided = ε_uncond + <span className="text-pink-600 dark:text-pink-400">scale</span> × (ε_cond - ε_uncond)
+          <p className="text-gray-700">
+            ε_guided = ε_uncond + <span className="text-pink-600">scale</span> × (ε_cond - ε_uncond)
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-gray-800/50 rounded-xl p-4">
-            <p className="font-bold text-gray-800 dark:text-gray-400 mb-2">scale = 1.0</p>
-            <p className="text-sm text-gray-700 dark:text-gray-500">Normal conditioning, no guidance</p>
+            <p className="font-bold text-gray-800 mb-2">scale = 1.0</p>
+            <p className="text-sm text-gray-700">Normal conditioning, no guidance</p>
           </div>
           <div className="bg-pink-800/30 rounded-xl p-4 border border-pink-500/30">
-            <p className="font-bold text-pink-600 dark:text-pink-400 mb-2">scale = 5-7</p>
-            <p className="text-sm text-gray-700 dark:text-gray-500">Recommended range for SD3</p>
+            <p className="font-bold text-pink-600 mb-2">scale = 5-7</p>
+            <p className="text-sm text-gray-700">Recommended range for SD3</p>
           </div>
           <div className="bg-red-800/30 rounded-xl p-4">
             <p className="font-bold text-red-400 mb-2">scale {'>'}  10</p>
-            <p className="text-sm text-gray-700 dark:text-gray-500">Over-saturation, artifacts</p>
+            <p className="text-sm text-gray-700">Over-saturation, artifacts</p>
           </div>
         </div>
       </div>
@@ -234,9 +234,9 @@ export default function ConditioningPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-2 px-4 text-left text-gray-800 dark:text-gray-400">Aspect</th>
-                <th className="py-2 px-4 text-left text-gray-800 dark:text-gray-400">U-Net (SD1.5/SDXL)</th>
-                <th className="py-2 px-4 text-left text-pink-600 dark:text-pink-400">DiT (SD3)</th>
+                <th className="py-2 px-4 text-left text-gray-800">Aspect</th>
+                <th className="py-2 px-4 text-left text-gray-800">U-Net (SD1.5/SDXL)</th>
+                <th className="py-2 px-4 text-left text-pink-600">DiT (SD3)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">

@@ -206,9 +206,9 @@ export default function FlowConceptPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          The Flow: <span className="text-fuchsia-600 dark:text-fuchsia-400">Probability Transport</span>
+          The Flow: <span className="text-fuchsia-600">Probability Transport</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Watch samples flow from noise to data along learned paths
         </p>
       </div>
@@ -242,7 +242,7 @@ export default function FlowConceptPanel() {
 
         {/* Time Slider */}
         <div className="flex items-center gap-4 px-4">
-          <span className="text-sm text-gray-800 dark:text-gray-400 w-12">t = 0</span>
+          <span className="text-sm text-gray-800 w-12">t = 0</span>
           <input
             type="range"
             min="0"
@@ -255,7 +255,7 @@ export default function FlowConceptPanel() {
             }}
             className="flex-1 h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
           />
-          <span className="text-sm text-gray-800 dark:text-gray-400 w-12">t = 1</span>
+          <span className="text-sm text-gray-800 w-12">t = 1</span>
         </div>
       </div>
 
@@ -280,8 +280,8 @@ export default function FlowConceptPanel() {
                 />
                 <span className="font-bold">{path.name}</span>
               </div>
-              <code className="text-sm text-gray-800 dark:text-gray-400 block mb-2">{path.formula}</code>
-              <p className="text-xs text-gray-700 dark:text-gray-500">{path.description}</p>
+              <code className="text-sm text-gray-800 block mb-2">{path.formula}</code>
+              <p className="text-xs text-gray-700">{path.description}</p>
             </button>
           ))}
         </div>
@@ -290,14 +290,14 @@ export default function FlowConceptPanel() {
       {/* Conditional Flow Matching */}
       <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 rounded-2xl p-6 border border-fuchsia-500/30">
         <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <Info size={20} className="text-fuchsia-600 dark:text-fuchsia-400" />
+          <Info size={20} className="text-fuchsia-600" />
           Conditional Flow Matching (CFM)
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-bold text-fuchsia-300 mb-2">The Training Trick</h4>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              We can't compute the true marginal velocity field v(x_t, t) directly. Instead, 
+            <p className="text-sm text-gray-700 mb-3">
+              We can't compute the true marginal velocity field v(x_t, t) directly. Instead,
               we condition on individual pairs (x₀, x₁) and learn the conditional velocity:
             </p>
             <div className="bg-black/30 rounded-lg p-3 font-mono text-center text-fuchsia-300">
@@ -306,7 +306,7 @@ export default function FlowConceptPanel() {
           </div>
           <div>
             <h4 className="font-bold text-purple-300 mb-2">Training Algorithm</h4>
-            <ol className="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-decimal list-inside">
+            <ol className="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>Sample x₀ ~ N(0, I) (noise)</li>
               <li>Sample x₁ ~ p_data (real data)</li>
               <li>Sample t ~ U(0, 1)</li>
@@ -327,7 +327,7 @@ export default function FlowConceptPanel() {
               <div className="w-8 h-8 bg-fuchsia-600 rounded-full flex items-center justify-center text-sm font-bold">1</div>
               <div>
                 <h4 className="font-bold">Straight Paths Are Simple</h4>
-                <p className="text-sm text-gray-800 dark:text-gray-400">
+                <p className="text-sm text-gray-800">
                   Linear interpolation x_t = (1-t)x₀ + tx₁ creates the simplest possible path.
                   The velocity is constant: v = x₁ - x₀.
                 </p>
@@ -337,8 +337,8 @@ export default function FlowConceptPanel() {
               <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-sm font-bold">2</div>
               <div>
                 <h4 className="font-bold">Network Learns Average</h4>
-                <p className="text-sm text-gray-800 dark:text-gray-400">
-                  At each (x_t, t), multiple flows pass through. The network learns the 
+                <p className="text-sm text-gray-800">
+                  At each (x_t, t), multiple flows pass through. The network learns the
                   average velocity direction, which transports probability mass correctly.
                 </p>
               </div>
@@ -349,8 +349,8 @@ export default function FlowConceptPanel() {
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-sm font-bold">3</div>
               <div>
                 <h4 className="font-bold">Consistent Velocity Field</h4>
-                <p className="text-sm text-gray-800 dark:text-gray-400">
-                  Even though we train on random pairs, the learned velocity field becomes 
+                <p className="text-sm text-gray-800">
+                  Even though we train on random pairs, the learned velocity field becomes
                   consistent - it always points "toward" the data distribution.
                 </p>
               </div>
@@ -359,8 +359,8 @@ export default function FlowConceptPanel() {
               <div className="w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center text-sm font-bold">4</div>
               <div>
                 <h4 className="font-bold">ODE Solver Follows</h4>
-                <p className="text-sm text-gray-800 dark:text-gray-400">
-                  At generation time, we start from noise and use an ODE solver (Euler, Heun) 
+                <p className="text-sm text-gray-800">
+                  At generation time, we start from noise and use an ODE solver (Euler, Heun)
                   to follow the learned velocity field until we reach the data.
                 </p>
               </div>

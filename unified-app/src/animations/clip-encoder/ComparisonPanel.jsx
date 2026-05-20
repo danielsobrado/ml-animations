@@ -59,9 +59,9 @@ function ComparisonPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">CLIP vs T5: Why Both?</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          SD3 uses <strong>both CLIP and T5</strong> text encoders. Each has different strengths - 
+        <h2 className="text-2xl font-bold text-blue-600 mb-2">CLIP vs T5: Why Both?</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          SD3 uses <strong>both CLIP and T5</strong> text encoders. Each has different strengths -
           together they provide rich, complementary text understanding.
         </p>
       </div>
@@ -75,36 +75,36 @@ function ComparisonPanel() {
               <span className="text-white font-bold text-lg">C</span>
             </div>
             <div>
-              <h3 className="font-bold text-blue-600 dark:text-xl">CLIP</h3>
-              <p className="text-sm text-gray-800 dark:text-gray-400">Contrastive Language-Image Pre-training</p>
+              <h3 className="font-bold text-blue-600">CLIP</h3>
+              <p className="text-sm text-gray-800">Contrastive Language-Image Pre-training</p>
             </div>
           </div>
-          
+
           <div className="space-y-3 text-sm">
             <div className="flex items-center gap-2">
               <Check className="text-green-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Visual-aligned embeddings</span>
+              <span className="text-gray-700">Visual-aligned embeddings</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="text-green-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Fast inference</span>
+              <span className="text-gray-700">Fast inference</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="text-green-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Good compositional understanding</span>
+              <span className="text-gray-700">Good compositional understanding</span>
             </div>
             <div className="flex items-center gap-2">
               <X className="text-red-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Limited to 77 tokens</span>
+              <span className="text-gray-700">Limited to 77 tokens</span>
             </div>
             <div className="flex items-center gap-2">
               <X className="text-red-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Causal attention only</span>
+              <span className="text-gray-700">Causal attention only</span>
             </div>
           </div>
 
           <div className="mt-4 p-3 bg-black/30 rounded-lg">
-            <div className="text-xs text-gray-800 dark:text-gray-400 mb-1">Best for:</div>
+            <div className="text-xs text-gray-800 mb-1">Best for:</div>
             <div className="text-blue-300">Visual concepts, objects, styles, artistic references</div>
           </div>
         </div>
@@ -117,35 +117,35 @@ function ComparisonPanel() {
             </div>
             <div>
               <h3 className="font-bold text-xl">T5-XXL</h3>
-              <p className="text-sm text-gray-800 dark:text-gray-400">Text-to-Text Transfer Transformer</p>
+              <p className="text-sm text-gray-800">Text-to-Text Transfer Transformer</p>
             </div>
           </div>
-          
+
           <div className="space-y-3 text-sm">
             <div className="flex items-center gap-2">
               <Check className="text-green-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Deep language understanding</span>
+              <span className="text-gray-700">Deep language understanding</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="text-green-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Bidirectional attention</span>
+              <span className="text-gray-700">Bidirectional attention</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="text-green-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Long context (256+ tokens)</span>
+              <span className="text-gray-700">Long context (256+ tokens)</span>
             </div>
             <div className="flex items-center gap-2">
               <X className="text-red-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">No visual training</span>
+              <span className="text-gray-700">No visual training</span>
             </div>
             <div className="flex items-center gap-2">
               <X className="text-red-400" size={16} />
-              <span className="text-gray-700 dark:text-gray-300">Very slow (4.7B params)</span>
+              <span className="text-gray-700">Very slow (4.7B params)</span>
             </div>
           </div>
 
           <div className="mt-4 p-3 bg-black/30 rounded-lg">
-            <div className="text-xs text-gray-800 dark:text-gray-400 mb-1">Best for:</div>
+            <div className="text-xs text-gray-800 mb-1">Best for:</div>
             <div className="text-green-300">Complex descriptions, spatial relations, abstract concepts</div>
           </div>
         </div>
@@ -154,7 +154,7 @@ function ComparisonPanel() {
       {/* Detailed Comparison Table */}
       <div className="bg-black/30 rounded-xl overflow-hidden">
         <div className="p-4 border-b border-white/10">
-          <h3 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h3 className="font-semibold text-gray-700 flex items-center gap-2">
             <GitCompare size={20} />
             Feature Comparison
           </h3>
@@ -163,35 +163,35 @@ function ComparisonPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10 bg-black/20">
-                <th className="text-left py-3 px-4 text-gray-800 dark:text-gray-400">Feature</th>
-                <th className="text-left py-3 px-4 text-blue-600 dark:text-blue-400">CLIP</th>
+                <th className="text-left py-3 px-4 text-gray-800">Feature</th>
+                <th className="text-left py-3 px-4 text-blue-600">CLIP</th>
                 <th className="text-left py-3 px-4 text-green-400">T5</th>
-                <th className="text-left py-3 px-4 text-gray-800 dark:text-gray-400">Better</th>
+                <th className="text-left py-3 px-4 text-gray-800">Better</th>
               </tr>
             </thead>
             <tbody>
               {comparisons.map((comp, i) => (
-                <tr 
-                  key={i} 
+                <tr
+                  key={i}
                   className={`border-b border-white/5 cursor-pointer transition-colors ${
                     selectedFeature === i ? 'bg-white/10' : 'hover:bg-white/5'
                   }`}
                   onClick={() => setSelectedFeature(selectedFeature === i ? null : i)}
                 >
-                  <td className="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium">{comp.feature}</td>
-                  <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{comp.clip}</td>
-                  <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{comp.t5}</td>
+                  <td className="py-3 px-4 text-gray-700 font-medium">{comp.feature}</td>
+                  <td className="py-3 px-4 text-gray-700">{comp.clip}</td>
+                  <td className="py-3 px-4 text-gray-700">{comp.t5}</td>
                   <td className="py-3 px-4">
-                    {comp.winner === 'clip' && <span className="text-blue-600 dark:text-blue-400 font-semibold">CLIP</span>}
+                    {comp.winner === 'clip' && <span className="text-blue-600 font-semibold">CLIP</span>}
                     {comp.winner === 't5' && <span className="text-green-400 font-semibold">T5</span>}
-                    {comp.winner === 'both' && <span className="text-purple-600 dark:text-purple-400 font-semibold">Both!</span>}
+                    {comp.winner === 'both' && <span className="text-purple-600 font-semibold">Both!</span>}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        
+
         {selectedFeature !== null && (
           <div className="p-4 bg-yellow-500/10 border-t border-yellow-500/30">
             <div className="text-sm">
@@ -203,18 +203,18 @@ function ComparisonPanel() {
 
       {/* Architecture Differences */}
       <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-green-500/10 rounded-xl p-6 border border-purple-500/30">
-        <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-4">🔍 Key Architecture Difference: Attention</h3>
-        
+        <h3 className="font-semibold text-purple-600 mb-4">🔍 Key Architecture Difference: Attention</h3>
+
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-black/30 rounded-lg p-4">
-            <h4 className="text-blue-600 dark:text-blue-400 font-semibold mb-3">CLIP: Causal Attention</h4>
+            <h4 className="text-blue-600 font-semibold mb-3">CLIP: Causal Attention</h4>
             <div className="font-mono text-xs bg-black/40 rounded p-3 mb-3">
               Token sees: [itself, previous tokens]<br/>
-              <span className="text-gray-700 dark:text-gray-500">├─ cat: sees [BOS, a, cat]</span><br/>
-              <span className="text-gray-700 dark:text-gray-500">├─ on: sees [BOS, a, cat, on]</span><br/>
-              <span className="text-gray-700 dark:text-gray-500">└─ EOS: sees [ALL tokens]</span>
+              <span className="text-gray-700">├─ cat: sees [BOS, a, cat]</span><br/>
+              <span className="text-gray-700">├─ on: sees [BOS, a, cat, on]</span><br/>
+              <span className="text-gray-700">└─ EOS: sees [ALL tokens]</span>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-400">
+            <p className="text-sm text-gray-800">
               Like GPT - designed for generation. [EOS] aggregates all info.
             </p>
           </div>
@@ -223,11 +223,11 @@ function ComparisonPanel() {
             <h4 className="text-green-400 font-semibold mb-3">T5: Bidirectional Attention</h4>
             <div className="font-mono text-xs bg-black/40 rounded p-3 mb-3">
               Token sees: [ALL other tokens]<br/>
-              <span className="text-gray-700 dark:text-gray-500">├─ cat: sees [a, cat, on, mat]</span><br/>
-              <span className="text-gray-700 dark:text-gray-500">├─ on: sees [a, cat, on, mat]</span><br/>
-              <span className="text-gray-700 dark:text-gray-500">└─ mat: sees [a, cat, on, mat]</span>
+              <span className="text-gray-700">├─ cat: sees [a, cat, on, mat]</span><br/>
+              <span className="text-gray-700">├─ on: sees [a, cat, on, mat]</span><br/>
+              <span className="text-gray-700">└─ mat: sees [a, cat, on, mat]</span>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-400">
+            <p className="text-sm text-gray-800">
               Like BERT - better for understanding context and relationships.
             </p>
           </div>
@@ -236,17 +236,17 @@ function ComparisonPanel() {
 
       {/* Why SD3 Uses Both */}
       <div className="bg-black/40 rounded-xl p-6">
-        <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">🎯 Why SD3 Uses Both Encoders</h3>
-        
+        <h3 className="font-semibold text-gray-700 mb-4">🎯 Why SD3 Uses Both Encoders</h3>
+
         <div className="space-y-4">
           <div className="flex items-start gap-4 p-4 bg-blue-500/10 rounded-lg">
             <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
               <span className="text-white font-bold">1</span>
             </div>
             <div>
-              <h4 className="text-blue-600 dark:text-blue-400 font-semibold">Visual Grounding (CLIP)</h4>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                CLIP was trained on images - it knows what "sunset", "cyberpunk", "oil painting" 
+              <h4 className="text-blue-600 font-semibold">Visual Grounding (CLIP)</h4>
+              <p className="text-sm text-gray-700">
+                CLIP was trained on images - it knows what "sunset", "cyberpunk", "oil painting"
                 look like. T5 only knows these as words.
               </p>
             </div>
@@ -258,8 +258,8 @@ function ComparisonPanel() {
             </div>
             <div>
               <h4 className="text-green-400 font-semibold">Language Understanding (T5)</h4>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                "A cat to the left of a dog" - T5 better understands spatial relations, 
+              <p className="text-sm text-gray-700">
+                "A cat to the left of a dog" - T5 better understands spatial relations,
                 counting, negations ("no people"), and complex descriptions.
               </p>
             </div>
@@ -270,9 +270,9 @@ function ComparisonPanel() {
               <span className="text-white font-bold">3</span>
             </div>
             <div>
-              <h4 className="text-purple-600 dark:text-purple-400 font-semibold">Complementary Strengths</h4>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Different training → different representations. The model can leverage both 
+              <h4 className="text-purple-600 font-semibold">Complementary Strengths</h4>
+              <p className="text-sm text-gray-700">
+                Different training → different representations. The model can leverage both
                 CLIP's visual knowledge and T5's linguistic depth.
               </p>
             </div>
@@ -286,9 +286,9 @@ function ComparisonPanel() {
           <Zap size={18} />
           T5 is Optional!
         </div>
-        <p className="text-sm text-gray-700 dark:text-gray-300">
-          SD3 can run with just CLIP encoders for faster inference. T5-XXL adds ~8GB VRAM 
-          and significant latency. For quick generations, many users skip it. For complex 
+        <p className="text-sm text-gray-700">
+          SD3 can run with just CLIP encoders for faster inference. T5-XXL adds ~8GB VRAM
+          and significant latency. For quick generations, many users skip it. For complex
           prompts requiring precise understanding, T5 significantly improves results.
         </p>
       </div>
