@@ -279,6 +279,97 @@ body {
   color: currentColor;
 }
 
+.embeddings-algebra-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-gap-3);
+  min-height: 100%;
+  padding: clamp(18px, 3vw, 32px) 0;
+}
+
+.embeddings-algebra-intro {
+  width: min(100%, 760px);
+  text-align: center;
+}
+
+.embeddings-algebra-intro h2 {
+  margin: 0 0 10px;
+  color: var(--ds-ink);
+  font-family: var(--ds-font-serif);
+  font-size: clamp(34px, 4vw, 48px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.embeddings-algebra-intro p {
+  margin: 0;
+  color: var(--ds-faint);
+  font-family: var(--ds-font-serif);
+  font-size: var(--ds-text-lg);
+  line-height: 1.45;
+}
+
+.embeddings-algebra-intro span {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 8px;
+  border: var(--ds-border);
+  background: var(--ds-panel);
+  color: var(--ds-accent);
+  font-family: var(--ds-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  vertical-align: 0.12em;
+}
+
+.ua-animation-page .embeddings-algebra-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ua-animation-page .embeddings-algebra-steps button {
+  min-width: 164px;
+  padding: 10px 14px;
+  border: 1px solid var(--ds-hair);
+  background: transparent;
+  color: var(--ds-faint);
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ua-animation-page .embeddings-algebra-steps button:hover,
+.ua-animation-page .embeddings-algebra-steps button:focus-visible {
+  border-color: var(--ds-ink);
+  background: var(--ds-accent-w);
+  color: var(--ds-ink);
+}
+
+.ua-animation-page .embeddings-algebra-steps button.is-active,
+.ua-animation-page .embeddings-algebra-steps button.is-active:hover {
+  border-color: var(--ds-ink);
+  background: var(--ds-ink);
+  color: var(--ds-paper);
+}
+
+.embeddings-algebra-figure {
+  width: min(100%, 900px);
+  height: clamp(360px, 56vw, 500px);
+  border: var(--ds-border);
+  background: var(--ds-panel);
+  overflow: hidden;
+}
+
+.embeddings-algebra-figure svg {
+  display: block;
+  font-family: var(--ds-font-sans);
+}
+
 .ua-home,
 .ua-animation-page {
   max-width: 1180px;
