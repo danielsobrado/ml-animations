@@ -67,6 +67,7 @@ const animationRegistry = {
   'logistic-regression': lazy(() => import('./logistic-regression')),
   'classification-metrics': lazy(() => import('./classification-metrics')),
   'regularization': lazy(() => import('./regularization')),
+  'computation-graph-backprop': lazy(() => import('./computation-graph-backprop')),
 
   // Probability & Statistics
   'probability-distributions': lazy(() => import('./probability-distributions')),

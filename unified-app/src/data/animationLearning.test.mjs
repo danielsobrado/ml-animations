@@ -8,6 +8,7 @@ import {
   createLearningModel,
 } from './animationLearning.js';
 import { getGlossaryTerm, glossaryTerms } from './glossaryRepository.js';
+import { isAnimationAvailable } from '../animations/index.js';
 
 test('createLearningModel gives every animation the uniform learning shell contract', () => {
   for (const animation of allAnimations) {
@@ -153,6 +154,33 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
     coreMlTrack.animationIds.indexOf('classification-metrics') <
       coreMlTrack.animationIds.indexOf('regularization'),
     'evaluation should come before regularization decisions',
+  );
+});
+
+test('computation graph and backpropagation is an active neural-network bridge lesson', () => {
+  const animation = getAnimationById('computation-graph-backprop');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const neuralTrack = curriculumTracks.find((track) => track.id === 'neural-networks');
+
+  assert.ok(animation, 'backprop lesson should be an active catalog item');
+  assert.equal(animation.categoryId, 'neural-networks');
+  assert.ok(animation.trackIds.includes('neural-networks'));
+  assert.ok(neuralTrack.animationIds.includes('computation-graph-backprop'));
+  assert.ok(!backlogIds.has('computation-graph-backprop'));
+  assert.ok(isAnimationAvailable('computation-graph-backprop'));
+  assert.deepEqual(animation.prerequisites, ['gradient-descent', 'cross-entropy', 'relu']);
+  assert.ok(animation.learningObjectives.length >= 4);
+  assert.match(animation.commonMisconception, /chain rule|local derivative/i);
+
+  assert.ok(
+    neuralTrack.animationIds.indexOf('cross-entropy') <
+      neuralTrack.animationIds.indexOf('computation-graph-backprop'),
+    'losses should come before backpropagation',
+  );
+  assert.ok(
+    neuralTrack.animationIds.indexOf('computation-graph-backprop') <
+      neuralTrack.animationIds.indexOf('gradient-problems'),
+    'backprop should unlock gradient stability topics',
   );
 });
 

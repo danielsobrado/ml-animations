@@ -55,6 +55,9 @@ const RAW_TERMS = [
   ['activation', 'Neural Networks', 'A nonlinear function that lets a network model curved relationships.'],
   ['layer', 'Neural Networks', 'A stage of learned computation inside a network.'],
   ['backpropagation', 'Neural Networks', 'The chain-rule procedure for sending gradients backward.'],
+  ['computation graph', 'Neural Networks', 'A directed graph that records how values are computed from inputs to loss.'],
+  ['chain rule', 'Calculus', 'A derivative rule that multiplies local rates of change along a composed path.'],
+  ['local derivative', 'Calculus', 'The derivative of one operation with respect to its immediate input.'],
   ['basis', 'Linear Algebra', 'A coordinate system for describing vectors.'],
   ['objective', 'Optimization', 'The quantity being optimized or analyzed.'],
   ['derivative', 'Calculus', 'The instantaneous rate of change of a function.'],
@@ -124,7 +127,7 @@ const glossaryByTerm = new Map(glossaryTerms.map((term) => [term.term.toLowerCas
 export const GLOSSARY_IDS_BY_CATEGORY = {
   nlp: ['token', 'embedding', 'vocabulary', 'vector', 'representation', 'input', 'output', 'concept'],
   transformers: ['attention', 'query', 'key', 'value', 'head', 'vector', 'matrix', 'probability', 'normalization', 'representation'],
-  'neural-networks': ['activation', 'layer', 'backpropagation', 'gradient', 'loss', 'parameter', 'logits', 'temperature', 'input', 'output', 'normalization'],
+  'neural-networks': ['activation', 'layer', 'backpropagation', 'computation-graph', 'chain-rule', 'local-derivative', 'gradient', 'loss', 'parameter', 'logits', 'temperature', 'input', 'output', 'normalization'],
   'advanced-models': ['embedding', 'latent', 'probability', 'representation', 'parameter', 'loss', 'input', 'output'],
   'math-fundamentals': ['matrix', 'vector', 'basis', 'objective', 'derivative', 'gradient', 'iteration', 'concept', 'parameter'],
   'core-ml': ['loss', 'validation-set', 'test-set', 'overfitting', 'threshold', 'confusion-matrix', 'regularization', 'probability', 'parameter', 'objective', 'input', 'output'],
