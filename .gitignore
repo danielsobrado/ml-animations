@@ -4,6 +4,7 @@ leaky-relu-animation/node_modules/
 conv-relu-animation/node_modules/
 conv2d-animation/node_modules/
 node_modules/
+.deploy/
 .history/*
 mini-diffusion/target/
 mini-nn/target/release/*
