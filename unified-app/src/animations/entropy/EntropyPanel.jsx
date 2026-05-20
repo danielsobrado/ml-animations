@@ -60,7 +60,7 @@ export default function EntropyPanel() {
                         {probs.map((p, i) => (
                             <div key={i}>
                                 <div className="flex justify-between items-end mb-1">
-                                    <label className="text-sm text-slate-800">P({String.fromCharCode(65 + i)})</label>
+                                    <label className="text-sm text-slate-300">P({String.fromCharCode(65 + i)})</label>
                                     <span className="font-mono font-bold text-rose-400">{(p * 100).toFixed(0)}%</span>
                                 </div>
                                 <input
@@ -110,11 +110,11 @@ export default function EntropyPanel() {
                     </div>
 
                     <div className="w-full bg-slate-900 p-6 rounded-xl border border-rose-500/30 text-center">
-                        <div className="text-sm text-slate-800 uppercase tracking-wider mb-2">System Entropy</div>
+                        <div className="text-sm text-slate-300 uppercase tracking-wider mb-2">System Entropy</div>
                         <div className="text-5xl font-mono font-bold text-white mb-2">
-                            {entropy.toFixed(2)} <span className="text-lg text-slate-700">bits</span>
+                            {entropy.toFixed(2)} <span className="text-lg text-slate-300">bits</span>
                         </div>
-                        <div className="text-xs text-slate-700">
+                        <div className="text-xs text-slate-300">
                             H(X) = - Σ p(x) log<sub>2</sub> p(x)
                         </div>
                     </div>

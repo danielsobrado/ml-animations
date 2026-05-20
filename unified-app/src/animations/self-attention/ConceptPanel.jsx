@@ -37,8 +37,8 @@ export default function ConceptPanel() {
                     <div className="bg-slate-800 p-6 rounded-xl border-2 border-fuchsia-500 mb-8 w-64 text-center">
                         <h3 className="text-fuchsia-600 font-bold mb-2">QUERY (Q)</h3>
                         <p className="text-white italic">"{query.text}"</p>
-                        <div className="mt-4 bg-slate-900 p-2 rounded text-xs font-mono text-slate-800">
-                            Looking for: <span className="text-blue-600 font-bold">{query.vector}</span>
+                        <div className="mt-4 bg-slate-900 p-2 rounded text-xs font-mono text-slate-300">
+                            Looking for: <span className="text-blue-300 font-bold">{query.vector}</span>
                         </div>
                     </div>
 
@@ -50,7 +50,7 @@ export default function ConceptPanel() {
                                 onClick={() => setQueryPos(i)}
                                 className={`w-12 h-12 rounded-full font-bold transition-all ${queryPos === i
                                         ? 'bg-fuchsia-600 text-white scale-110 ring-4 ring-fuchsia-500/30'
-                                        : 'bg-slate-700 text-slate-800 hover:bg-slate-600'
+                                        : 'bg-slate-700 text-slate-200 hover:bg-slate-600'
                                     }`}
                             >
                                 {i + 1}
@@ -82,14 +82,14 @@ export default function ConceptPanel() {
                                         </div>
                                         <div>
                                             <h4 className="font-bold text-white">{book.title}</h4>
-                                            <p className="text-xs text-slate-800">Key: {book.key}</p>
+                                            <p className="text-xs text-slate-300">Key: {book.key}</p>
                                         </div>
                                     </div>
 
                                     {/* Score */}
                                     {isHovered && (
                                         <div className="text-right">
-                                            <div className="text-xs text-slate-800">Match Score</div>
+                                            <div className="text-xs text-slate-300">Match Score</div>
                                             <div className={`text-2xl font-bold ${isMatch ? 'text-green-400' : 'text-slate-600'}`}>
                                                 {(score * 100).toFixed(0)}%
                                             </div>
@@ -104,7 +104,7 @@ export default function ConceptPanel() {
                                         animate={{ opacity: 1, height: 'auto' }}
                                         className="mt-4 p-3 bg-slate-900 rounded border border-slate-600"
                                     >
-                                        <div className="text-xs text-slate-700 mb-1 uppercase tracking-wider">Value (Content)</div>
+                                        <div className="text-xs text-slate-300 mb-1 uppercase tracking-wider">Value (Content)</div>
                                         <p className="text-sm">{book.content}</p>
                                     </motion.div>
                                 )}
@@ -117,7 +117,7 @@ export default function ConceptPanel() {
             {/* Summary */}
             <div className="mt-12 bg-slate-800 p-6 rounded-xl border border-slate-700 max-w-3xl text-center">
                 <h3 className="font-bold text-white mb-2">How Attention Works</h3>
-                <p className="text-slate-700">
+                <p className="text-slate-300">
                     1. Compute <strong>Dot Product</strong> between Query and all Keys (Similarity Score).
                     <br />
                     2. Apply <strong>Softmax</strong> to normalize scores (Probabilities).

@@ -10,11 +10,15 @@ export default function MechanismPanel() {
     const [k2, setK2] = useState([0.1, 1.0]); // Key for "River"
     const [v1, setV1] = useState([2.0, 0.5]); // Value for "Bank"
     const [v2, setV2] = useState([0.5, 2.0]); // Value for "River"
+    const headDim = q1.length;
+    const scale = Math.sqrt(headDim);
 
     // Step 1: Dot Products (Scores)
-    // Score = Q . K
-    const score1 = q1[0] * k1[0] + q1[1] * k1[1];
-    const score2 = q1[0] * k2[0] + q1[1] * k2[1];
+    // Score = (Q . K) / sqrt(d)
+    const rawScore1 = q1[0] * k1[0] + q1[1] * k1[1];
+    const rawScore2 = q1[0] * k2[0] + q1[1] * k2[1];
+    const score1 = rawScore1 / scale;
+    const score2 = rawScore2 / scale;
 
     // Step 2: Softmax
     const exp1 = Math.exp(score1);
@@ -33,12 +37,12 @@ export default function MechanismPanel() {
             <input
                 type="number" step="0.1" value={vec[0]}
                 onChange={e => setVec([parseFloat(e.target.value), vec[1]])}
-                className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-center"
+                className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-center text-white"
             />
             <input
                 type="number" step="0.1" value={vec[1]}
                 onChange={e => setVec([vec[0], parseFloat(e.target.value)])}
-                className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-center"
+                className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-center text-white"
             />
         </div>
     );
@@ -47,9 +51,9 @@ export default function MechanismPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-purple-600 mb-4">The Math Mechanism</h2>
-                <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm inline-block">
-                    <span className="text-fuchsia-600">Attention(Q, K, V)</span> =
-                    softmax(<span className="text-blue-600">Q</span> · <span className="text-green-400">Kᵀ</span> / √d) · <span className="text-orange-600">V</span>
+                <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm inline-block text-slate-100">
+                    <span className="text-fuchsia-300">Attention(Q, K, V)</span> =
+                    softmax(<span className="text-blue-300">Q</span> · <span className="text-green-300">Kᵀ</span> / √d) · <span className="text-orange-300">V</span>
                 </div>
             </div>
 
@@ -59,20 +63,20 @@ export default function MechanismPanel() {
                     <h3 className="font-bold text-white mb-4 border-b border-slate-700 pb-2">1. Inputs</h3>
 
                     <div className="mb-6">
-                        <h4 className="text-sm text-slate-800 mb-2">Query (What we focus on)</h4>
-                        <VectorInput label="Q1" vec={q1} setVec={setQ1} color="text-blue-600" />
+                        <h4 className="text-sm text-slate-300 mb-2">Query (What we focus on)</h4>
+                        <VectorInput label="Q1" vec={q1} setVec={setQ1} color="text-blue-300" />
                     </div>
 
                     <div className="mb-6">
-                        <h4 className="text-sm text-slate-800 mb-2">Keys (What we match against)</h4>
-                        <VectorInput label="K1" vec={k1} setVec={setK1} color="text-green-400" />
-                        <VectorInput label="K2" vec={k2} setVec={setK2} color="text-green-400" />
+                        <h4 className="text-sm text-slate-300 mb-2">Keys (What we match against)</h4>
+                        <VectorInput label="K1" vec={k1} setVec={setK1} color="text-green-300" />
+                        <VectorInput label="K2" vec={k2} setVec={setK2} color="text-green-300" />
                     </div>
 
                     <div>
-                        <h4 className="text-sm text-slate-800 mb-2">Values (Content to retrieve)</h4>
-                        <VectorInput label="V1" vec={v1} setVec={setV1} color="text-orange-600" />
-                        <VectorInput label="V2" vec={v2} setVec={setV2} color="text-orange-600" />
+                        <h4 className="text-sm text-slate-300 mb-2">Values (Content to retrieve)</h4>
+                        <VectorInput label="V1" vec={v1} setVec={setV1} color="text-orange-300" />
+                        <VectorInput label="V2" vec={v2} setVec={setV2} color="text-orange-300" />
                     </div>
                 </div>
 
@@ -81,17 +85,17 @@ export default function MechanismPanel() {
                     <h3 className="font-bold text-white mb-4 border-b border-slate-700 pb-2">2. Calculations</h3>
 
                     <div className="mb-6">
-                        <h4 className="text-sm text-slate-800 mb-2">Dot Products (Scores)</h4>
-                        <div className="font-mono text-sm bg-slate-900 p-2 rounded mb-1">
-                            Q1 · K1 = {(score1).toFixed(2)}
+                        <h4 className="text-sm text-slate-300 mb-2">Scaled Dot Products (Scores)</h4>
+                        <div className="font-mono text-sm bg-slate-900 p-2 rounded mb-1 text-slate-100">
+                            (Q1 · K1) / √{headDim} = {score1.toFixed(2)}
                         </div>
-                        <div className="font-mono text-sm bg-slate-900 p-2 rounded">
-                            Q1 · K2 = {(score2).toFixed(2)}
+                        <div className="font-mono text-sm bg-slate-900 p-2 rounded text-slate-100">
+                            (Q1 · K2) / √{headDim} = {score2.toFixed(2)}
                         </div>
                     </div>
 
                     <div className="mb-6">
-                        <h4 className="text-sm text-slate-800 mb-2">Softmax (Probabilities)</h4>
+                        <h4 className="text-sm text-slate-300 mb-2">Softmax (Probabilities)</h4>
                         <div className="relative h-8 bg-slate-900 rounded overflow-hidden flex">
                             <div style={{ width: `${attn1 * 100}%` }} className="bg-green-500/50 flex items-center justify-center text-xs text-white">
                                 {(attn1 * 100).toFixed(0)}%
@@ -100,7 +104,7 @@ export default function MechanismPanel() {
                                 {(attn2 * 100).toFixed(0)}%
                             </div>
                         </div>
-                        <div className="flex justify-between text-xs text-slate-700 mt-1">
+                        <div className="flex justify-between text-xs text-slate-300 mt-1">
                             <span>Attn to K1</span>
                             <span>Attn to K2</span>
                         </div>
@@ -112,19 +116,19 @@ export default function MechanismPanel() {
                     <h3 className="font-bold text-white mb-4 border-b border-slate-700 pb-2">3. Output</h3>
 
                     <div className="mb-6">
-                        <h4 className="text-sm text-slate-800 mb-2">Weighted Sum</h4>
-                        <div className="font-mono text-xs text-slate-700 mb-2">
+                        <h4 className="text-sm text-slate-300 mb-2">Weighted Sum</h4>
+                        <div className="font-mono text-xs text-slate-300 mb-2">
                             {attn1.toFixed(2)} * V1 + {attn2.toFixed(2)} * V2
                         </div>
                         <div className="bg-fuchsia-900/30 border border-fuchsia-500 p-4 rounded-xl text-center">
                             <div className="text-3xl font-mono font-bold text-fuchsia-600">
                                 [{out0.toFixed(2)}, {out1.toFixed(2)}]
                             </div>
-                            <p className="text-xs text-slate-800 mt-2">Context-Aware Embedding</p>
+                            <p className="text-xs text-slate-300 mt-2">Context-Aware Embedding</p>
                         </div>
                     </div>
 
-                    <div className="text-xs text-slate-800">
+                    <div className="text-xs text-slate-300">
                         Notice: If Q matches K1 closely, the Output looks very similar to V1.
                         <br />
                         If Q matches K2, Output looks like V2.

@@ -7,8 +7,8 @@ Interactive visualizations of Machine Learning and Linear Algebra concepts, buil
 ## 🚀 Unified Application
 
 All animations are now available in a single unified React application with:
-- 🎨 Consistent design system
-- 🌓 Dark/Light mode toggle
+- 🎨 Distill-style educational design system
+- 🧭 Guided curriculum tracks and learning metadata
 - 📱 Responsive sidebar navigation
 - ⚡ Lazy loading for performance
 
@@ -73,7 +73,7 @@ Understanding word embeddings through the Skip-gram and CBOW models.
 - **Features:**
   - Interactive training visualization
   - 2D/3D embedding space exploration
-  - Analogy demonstrations (King - Man + Woman = Queen)
+  - Analogy demonstrations presented as approximate patterns in some trained spaces
 
 ```bash
 cd word2vec-animation && npm install && npm run dev
@@ -121,22 +121,16 @@ Breaking text into tokens - the first step in NLP pipelines.
 
 - **Visualizes:** Text → Tokens → IDs
 - **3 Learning Modes:**
-- **Visualizes:** Query-Key-Value attention mechanism
-- **3 Learning Modes:**
-  1. **📚 Library Search**: Intuitive analogy for Q, K, V
-  2. **🌍 Translation**: Attention in sequence-to-sequence models
-  3. **💬 Conversation**: Context-aware attention
-
-  1. **🔑 The Concept**: Intuitive "Library" analogy for Query, Key, and Value
-  2. **🧮 The Mechanism**: Step-by-step visualization of the math
-  3. **🕸️ Playground**: Interactive text attention visualization (Coreference Resolution)
+  1. **Character vs Word**: Compare simple tokenization strategies
+  2. **BPE**: Watch byte-pair merges build subword tokens
+  3. **WordPiece**: See greedy longest-match tokenization
 - **Features:**
-  - Interactive Q/K/V matching
-  - Matrix multiplication visualization
-  - Real-time attention heatmaps for text
+  - Text-to-token and token-to-ID visualization
+  - Vocabulary and merge-rule inspection
+  - Practice questions and a tokenization sandbox
 
 ```bash
-cd self-attention-animation && npm install && npm run dev
+cd tokenization-animation && npm install && npm run dev
 ```
 
 ### BERT Animation
@@ -642,7 +636,7 @@ Where words become geometry.
 ![Embeddings](screenshots/embeddings.png)
 
 - **3 Learning Modes:**
-  1. **🧮 Word Algebra**: Visualizing "King - Man + Woman = Queen"
+  1. **🧮 Word Algebra**: Visualizing approximate analogy patterns like "King - Man + Woman ≈ Queen"
   2. **📐 Similarity Lab**: Interactive Cosine Similarity calculator
   3. **🌌 3D Semantic Space**: Fly through a galaxy of word clusters
 - **Features:**

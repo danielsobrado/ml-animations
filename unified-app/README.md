@@ -1,15 +1,16 @@
 # ML Animations - Unified Application
 
-A professional, unified React application that consolidates all ML animation visualizations into a single cohesive experience with a sidebar navigation, consistent theming, and dark/light mode toggle.
+A unified React application that consolidates the ML animation visualizations into a Distill-style educational experience with sidebar navigation, guided curriculum tracks, glossary-backed learning cards, and lazy-loaded animation modules.
 
 ## Features
 
-- 🎨 **Unified Design System** - Consistent styling across all animations
-- 🌓 **Dark/Light Mode** - Toggle between themes with system preference detection
+- 🎨 **Distill-Style Design System** - Calm typography, equation strips, and paper-like educational panels
+- 🧭 **Guided Curriculum Tracks** - Foundations, Core ML, Neural Networks, NLP to Transformers, Generative AI, and RL/Algorithms paths
+- 🧠 **Learning Shell** - Prerequisites, estimated time, objectives, misconceptions, next steps, and glossary terms around each animation
 - 📱 **Responsive Layout** - Works on desktop, tablet, and mobile
 - 🗂️ **Sidebar Navigation** - Easy navigation through all animation categories
 - ⚡ **Lazy Loading** - Animations load on demand for better performance
-- 🎯 **Progress Tracking** - Navigate through multi-step animations
+- 🎯 **Practice Panels** - Many modules include questions, sliders, and playground-style checks
 
 ## Project Structure
 
@@ -24,16 +25,19 @@ unified-app/
 │   │       ├── index.jsx    # Main animation component
 │   │       └── IntuitionPanel.jsx
 │   ├── components/
+│   │   ├── animation-shell/
+│   │   │   └── AnimationShell.jsx # Curriculum shell around each animation
 │   │   └── layout/
 │   │       ├── Header.jsx   # Top navigation bar
 │   │       └── Sidebar.jsx  # Side navigation
-│   ├── context/
-│   │   └── ThemeContext.jsx # Dark/light mode context
 │   ├── data/
-│   │   └── animations.js    # Animation metadata & categories
+│   │   ├── animations.js    # Animation metadata, categories, tracks, backlog
+│   │   ├── animationLearning.js # Learning-card and mindmap model
+│   │   └── glossaryRepository.js # Glossary terms and generated images
 │   ├── pages/
 │   │   ├── HomePage.jsx     # Landing page with all categories
-│   │   └── AnimationPage.jsx # Individual animation view
+│   │   ├── AnimationPage.jsx # Individual animation view
+│   │   └── GlossaryPage.jsx # Glossary term notes
 │   ├── App.jsx              # Main app with routing
 │   ├── main.jsx             # Entry point
 │   └── index.css            # Global styles with Tailwind
@@ -80,23 +84,26 @@ src/animations/your-animation/
 └── ...
 ```
 
-### Step 2: Adapt Components for Theme Support
+### Step 2: Adapt Components For The Distill Shell
 
-Replace hardcoded dark theme colors with theme-aware classes:
+Prefer the shared shell and readable panel colors over module-specific full-page chrome:
 
 ```jsx
-// Before (hardcoded dark)
-<div className="bg-slate-800 text-white">
-
-// After (theme-aware)
-<div className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+// Inside src/animations/your-animation/index.jsx
+export default function YourAnimation() {
+  return <YourPanel />;
+}
 ```
 
-Use the provided utility classes:
-- `card` - Theme-aware card container
-- `btn-primary` - Primary gradient button
-- `btn-secondary` - Secondary button
-- `text-gradient` - Gradient text effect
+When a panel uses a dark background, make labels and helper text high contrast:
+
+```jsx
+<div className="bg-slate-800 text-slate-100">
+  <p className="text-slate-300">Readable explanatory text</p>
+</div>
+```
+
+Avoid adding a second app header, sidebar, theme provider, or router inside an animation module. The unified app already supplies those.
 
 ### Step 3: Register the Animation
 
@@ -111,38 +118,29 @@ const animationRegistry = {
 
 ### Step 4: Update Animation Metadata
 
-The animation should already be listed in `src/data/animations.js`. If not, add it:
+The animation should already be listed in `src/data/animations.js`. If not, add it with curriculum metadata:
 
 ```javascript
 {
   id: 'your-animation',
   name: 'Your Animation',
   icon: YourIcon,
-  description: 'Brief description'
+  description: 'Brief description',
+  difficulty: 'intermediate',
+  prerequisites: ['matrix-multiplication'],
+  estimatedMinutes: 15,
+  learningObjectives: ['Explain the main idea', 'Predict the animation output'],
+  commonMisconception: 'One common simplification to watch for',
+  trackIds: ['foundations']
 }
 ```
 
-## Theme Classes Reference
+## Design Notes
 
-### Colors (Light / Dark)
-
-| Purpose | Light | Dark |
-|---------|-------|------|
-| Background | `bg-slate-50` | `dark:bg-slate-900` |
-| Surface | `bg-white` | `dark:bg-slate-800` |
-| Border | `border-slate-200` | `dark:border-slate-700` |
-| Text Primary | `text-slate-900` | `dark:text-white` |
-| Text Secondary | `text-slate-600` | `dark:text-slate-400` |
-
-### Component Classes
-
-```css
-.card          /* Themed card container with border and shadow */
-.btn-primary   /* Gradient primary button */
-.btn-secondary /* Neutral secondary button */
-.sidebar-item  /* Sidebar navigation item */
-.text-gradient /* Blue-to-purple gradient text */
-```
+- The app uses a static Distill-style paper theme, not a dark/light theme toggle.
+- Keep formulas aligned with the actual animation math.
+- Use `AnimationShell` metadata for prerequisites, estimated time, glossary terms, and next recommendations.
+- Keep category routes stable; guided tracks are an additional curriculum layer.
 
 ## Categories
 

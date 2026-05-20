@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { allAnimations, getAnimationById } from '../data/animations';
 import { getAnimationComponent, isAnimationAvailable } from '../animations';
+import AnimationShell from '../components/animation-shell/AnimationShell';
 
 export default function AnimationPage() {
   const { id } = useParams();
@@ -68,11 +69,19 @@ export default function AnimationPage() {
 
 function AnimationContent({ animationId, animation }) {
   if (!isAnimationAvailable(animationId)) {
-    return <Placeholder animation={animation} animationId={animationId} />;
+    return (
+      <AnimationShell animation={animation}>
+        <Placeholder animation={animation} animationId={animationId} />
+      </AnimationShell>
+    );
   }
 
   const AnimationComponent = getAnimationComponent(animationId);
-  return <AnimationComponent />;
+  return (
+    <AnimationShell animation={animation}>
+      <AnimationComponent />
+    </AnimationShell>
+  );
 }
 
 function LoadingPanel() {

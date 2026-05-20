@@ -183,6 +183,346 @@ export const categories = [
   },
 ];
 
+export const curriculumTracks = [
+  {
+    id: 'foundations',
+    title: 'Foundations',
+    description: 'Math and probability concepts learners need before model training feels concrete.',
+    animationIds: [
+      'matrix-multiplication',
+      'matrix-decompositions',
+      'fundamental-subspaces',
+      'least-squares-projection',
+      'pseudoinverse',
+      'change-of-basis',
+      'condition-number',
+      'determinant-volume',
+      'projection-matrices',
+      'low-rank-approximation',
+      'eigenvalue',
+      'svd',
+      'qr-decomposition',
+      'probability-distributions',
+      'conditional-probability',
+      'expected-value-variance',
+      'entropy',
+      'spearman-correlation',
+      'gradient-descent',
+      'linear-regression',
+    ],
+  },
+  {
+    id: 'core-ml',
+    title: 'Core ML',
+    description: 'The supervised-learning loop: prediction, loss, optimization, and evaluation concepts.',
+    animationIds: [
+      'linear-regression',
+      'cross-entropy',
+      'softmax',
+      'gradient-descent',
+      'optimization',
+      'expected-value-variance',
+      'entropy',
+    ],
+  },
+  {
+    id: 'neural-networks',
+    title: 'Neural Networks',
+    description: 'From neurons and activations to convolution, normalization, memory, and gradient stability.',
+    animationIds: [
+      'neural-network',
+      'relu',
+      'leaky-relu',
+      'softmax',
+      'cross-entropy',
+      'gradient-problems',
+      'layer-normalization',
+      'conv2d',
+      'conv-relu',
+      'max-pooling',
+      'lstm',
+    ],
+  },
+  {
+    id: 'nlp-transformers',
+    title: 'NLP To Transformers',
+    description: 'Represent text as vectors, then build up attention, transformer blocks, and inference tools.',
+    animationIds: [
+      'tokenization',
+      'bag-of-words',
+      'embeddings',
+      'cosine-similarity',
+      'word2vec',
+      'glove',
+      'fasttext',
+      'attention-mechanism',
+      'self-attention',
+      'positional-encoding',
+      'transformer',
+      'bert',
+      'gpt2-comprehensive',
+      'rope',
+      'residual-stream',
+      'grouped-query-attention',
+      'kv-cache',
+      'flash-attention',
+      'fine-tuning',
+      'moe',
+    ],
+  },
+  {
+    id: 'generative-ai',
+    title: 'Generative AI',
+    description: 'Latent-variable models, diffusion-era conditioning, multimodal attention, and RAG.',
+    animationIds: [
+      'vae',
+      'diffusion-vae',
+      'sd3-overview',
+      'flow-matching',
+      'tokenizer-bpe',
+      'clip-encoder',
+      't5-encoder',
+      'joint-attention',
+      'dit',
+      'rag',
+      'multimodal-llm',
+      'fine-tuning',
+      'moe',
+    ],
+  },
+  {
+    id: 'rl-algorithms',
+    title: 'RL And Algorithms',
+    description: 'State transitions, value learning, exploration, graph ranking, and probabilistic structures.',
+    animationIds: [
+      'markov-chains',
+      'rl-foundations',
+      'q-learning',
+      'rl-exploration',
+      'pagerank',
+      'bloom-filter',
+    ],
+  },
+];
+
+export const curriculumBacklog = [
+  { id: 'train-validation-test-split', title: 'Train / Validation / Test Split', trackId: 'core-ml' },
+  { id: 'overfitting-regularization', title: 'Overfitting & Regularization', trackId: 'core-ml' },
+  { id: 'logistic-regression', title: 'Logistic Regression', trackId: 'core-ml' },
+  { id: 'classification-metrics', title: 'Confusion Matrix, Precision, Recall, F1, ROC-AUC', trackId: 'core-ml' },
+  { id: 'cross-validation', title: 'Cross-Validation & Data Leakage', trackId: 'core-ml' },
+  { id: 'computation-graph-backprop', title: 'Computation Graph & Backpropagation', trackId: 'neural-networks' },
+  { id: 'pca', title: 'PCA', trackId: 'foundations' },
+  { id: 'k-means', title: 'K-Means Clustering', trackId: 'core-ml' },
+  { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
+  { id: 'tree-ensembles', title: 'Decision Trees, Random Forests, and Gradient Boosting', trackId: 'core-ml' },
+  { id: 'transformer-token-generation', title: 'Transformer Token Generation Loop', trackId: 'nlp-transformers' },
+  { id: 'rag-retrieval-evaluation', title: 'Chunking, Reranking, and Retrieval Evaluation', trackId: 'generative-ai' },
+];
+
+const trackIdsByAnimation = curriculumTracks.reduce((acc, track) => {
+  for (const animationId of track.animationIds) {
+    acc[animationId] = [...(acc[animationId] || []), track.id];
+  }
+  return acc;
+}, {});
+
+const CATEGORY_CURRICULUM_DEFAULTS = {
+  nlp: { difficulty: 'beginner', estimatedMinutes: 12, prerequisites: [] },
+  transformers: { difficulty: 'advanced', estimatedMinutes: 22, prerequisites: ['embeddings', 'softmax'] },
+  'neural-networks': { difficulty: 'intermediate', estimatedMinutes: 16, prerequisites: ['linear-regression', 'gradient-descent'] },
+  'advanced-models': { difficulty: 'advanced', estimatedMinutes: 24, prerequisites: ['embeddings', 'probability-distributions'] },
+  'math-fundamentals': { difficulty: 'intermediate', estimatedMinutes: 15, prerequisites: [] },
+  'probability-stats': { difficulty: 'intermediate', estimatedMinutes: 14, prerequisites: ['probability-distributions'] },
+  'reinforcement-learning': { difficulty: 'intermediate', estimatedMinutes: 18, prerequisites: ['expected-value-variance'] },
+  algorithms: { difficulty: 'intermediate', estimatedMinutes: 14, prerequisites: ['matrix-multiplication'] },
+  'diffusion-models': { difficulty: 'advanced', estimatedMinutes: 25, prerequisites: ['vae', 'self-attention'] },
+};
+
+const CURRICULUM_OVERRIDES = {
+  'matrix-multiplication': {
+    difficulty: 'beginner',
+    estimatedMinutes: 14,
+    prerequisites: [],
+    learningObjectives: [
+      'Compute one matrix product entry as a row-column dot product',
+      'Explain why matrix multiplication composes linear transformations',
+    ],
+    commonMisconception: 'Matrix multiplication is not elementwise multiplication; each output entry combines a row with a column.',
+  },
+  softmax: {
+    difficulty: 'beginner',
+    estimatedMinutes: 12,
+    prerequisites: ['expected-value-variance'],
+    learningObjectives: [
+      'Convert logits into a normalized probability distribution',
+      'Predict how changing one logit affects every output probability',
+    ],
+    commonMisconception: 'Softmax does not simply rescale scores independently; every probability depends on every logit.',
+  },
+  'cross-entropy': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 15,
+    prerequisites: ['softmax', 'entropy'],
+  },
+  'gradient-descent': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['linear-regression'],
+  },
+  'linear-regression': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['matrix-multiplication'],
+  },
+  tokenization: {
+    difficulty: 'beginner',
+    estimatedMinutes: 15,
+    prerequisites: [],
+  },
+  embeddings: {
+    difficulty: 'beginner',
+    estimatedMinutes: 14,
+    prerequisites: ['matrix-multiplication'],
+  },
+  'cosine-similarity': {
+    difficulty: 'beginner',
+    estimatedMinutes: 12,
+    prerequisites: ['matrix-multiplication'],
+  },
+  'attention-mechanism': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['embeddings', 'softmax'],
+  },
+  'self-attention': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['matrix-multiplication', 'softmax'],
+    learningObjectives: [
+      'Compute scaled attention scores from query and key vectors',
+      'Explain why softmax turns scores into attention weights',
+      'Describe how value vectors are mixed into a context-aware output',
+    ],
+    commonMisconception: 'Self-attention is not a lookup table; it recomputes weighted mixtures for each token from the current sequence.',
+  },
+  'positional-encoding': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 16,
+    prerequisites: ['self-attention'],
+  },
+  transformer: {
+    difficulty: 'advanced',
+    estimatedMinutes: 25,
+    prerequisites: ['self-attention', 'positional-encoding', 'layer-normalization'],
+  },
+  bert: {
+    difficulty: 'advanced',
+    estimatedMinutes: 24,
+    prerequisites: ['transformer', 'tokenization'],
+  },
+  'gpt2-comprehensive': {
+    difficulty: 'advanced',
+    estimatedMinutes: 30,
+    prerequisites: ['transformer', 'positional-encoding'],
+  },
+  'flash-attention': {
+    difficulty: 'advanced',
+    estimatedMinutes: 18,
+    prerequisites: ['self-attention', 'matrix-multiplication'],
+  },
+  'kv-cache': {
+    difficulty: 'advanced',
+    estimatedMinutes: 18,
+    prerequisites: ['self-attention', 'gpt2-comprehensive'],
+  },
+  'grouped-query-attention': {
+    difficulty: 'advanced',
+    estimatedMinutes: 18,
+    prerequisites: ['self-attention', 'kv-cache'],
+  },
+  'neural-network': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['linear-regression', 'gradient-descent'],
+  },
+  relu: {
+    difficulty: 'beginner',
+    estimatedMinutes: 10,
+    prerequisites: ['neural-network'],
+  },
+  'leaky-relu': {
+    difficulty: 'beginner',
+    estimatedMinutes: 10,
+    prerequisites: ['relu'],
+  },
+  'gradient-problems': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 16,
+    prerequisites: ['neural-network', 'relu'],
+  },
+  'layer-normalization': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 16,
+    prerequisites: ['neural-network', 'gradient-problems'],
+  },
+  conv2d: {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['matrix-multiplication', 'neural-network'],
+  },
+  vae: {
+    difficulty: 'advanced',
+    estimatedMinutes: 24,
+    prerequisites: ['probability-distributions', 'neural-network'],
+  },
+  'diffusion-vae': {
+    difficulty: 'advanced',
+    estimatedMinutes: 24,
+    prerequisites: ['vae'],
+  },
+  rag: {
+    difficulty: 'advanced',
+    estimatedMinutes: 22,
+    prerequisites: ['embeddings', 'cosine-similarity'],
+  },
+  'rl-foundations': {
+    difficulty: 'beginner',
+    estimatedMinutes: 16,
+    prerequisites: ['markov-chains'],
+  },
+  'q-learning': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['rl-foundations', 'expected-value-variance'],
+  },
+};
+
+function makeCurriculumMetadata(item, category) {
+  const defaults = CATEGORY_CURRICULUM_DEFAULTS[category.id] || {
+    difficulty: 'intermediate',
+    estimatedMinutes: 15,
+    prerequisites: [],
+  };
+  const override = CURRICULUM_OVERRIDES[item.id] || {};
+  const difficulty = override.difficulty || defaults.difficulty;
+  const estimatedMinutes = override.estimatedMinutes || defaults.estimatedMinutes;
+
+  return {
+    difficulty,
+    prerequisites: override.prerequisites || defaults.prerequisites,
+    estimatedMinutes,
+    learningObjectives: override.learningObjectives || [
+      `Explain the core idea behind ${item.name}`,
+      `Use the animation to predict how ${item.description.toLowerCase()} changes the output`,
+    ],
+    commonMisconception:
+      override.commonMisconception ||
+      `${item.name} is a simplified teaching view; real models add scale, data, and implementation details.`,
+    trackIds: trackIdsByAnimation[item.id] || [category.id],
+  };
+}
+
 // Flatten all items for easy lookup
 export const allAnimations = categories.flatMap(category =>
   category.items.map(item => ({
@@ -190,6 +530,7 @@ export const allAnimations = categories.flatMap(category =>
     categoryId: category.id,
     categoryName: category.name,
     categoryColor: category.color,
+    ...makeCurriculumMetadata(item, category),
   }))
 );
 

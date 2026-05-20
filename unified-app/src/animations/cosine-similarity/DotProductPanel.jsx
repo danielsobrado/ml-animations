@@ -111,7 +111,7 @@ export default function DotProductPanel() {
                     </svg>
 
                     {/* Instructions */}
-                    <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-4 py-2 rounded-lg text-xs text-slate-800">
+                    <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm px-4 py-2 rounded-lg text-xs text-slate-200">
                         Drag the sliders to change the vectors →
                     </div>
                 </div>
@@ -120,7 +120,7 @@ export default function DotProductPanel() {
                 <div className="w-full lg:w-96 flex flex-col gap-6">
                     {/* Vector Controls */}
                     <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 className="font-bold text-slate-800 uppercase text-xs mb-4">Vector A (Cyan)</h3>
+                        <h3 className="font-bold text-slate-200 uppercase text-xs mb-4">Vector A (Cyan)</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="flex justify-between text-sm mb-2">
@@ -148,7 +148,7 @@ export default function DotProductPanel() {
                     </div>
 
                     <div className="bg-slate-800 p-6 rounded-xl border border-slate-700">
-                        <h3 className="font-bold text-slate-800 uppercase text-xs mb-4">Vector B (Pink)</h3>
+                        <h3 className="font-bold text-slate-200 uppercase text-xs mb-4">Vector B (Pink)</h3>
                         <div className="space-y-4">
                             <div>
                                 <label className="flex justify-between text-sm mb-2">
@@ -182,7 +182,7 @@ export default function DotProductPanel() {
                             <div className="text-5xl font-mono font-bold text-purple-200 mb-2">
                                 {cosineSim.toFixed(3)}
                             </div>
-                            <div className="text-xs text-slate-800 space-y-1">
+                            <div className="text-xs text-slate-200 space-y-1">
                                 <p>Dot Product: <span className="text-white font-mono">{dotProduct.toFixed(0)}</span></p>
                                 <p>|A| × |B|: <span className="text-white font-mono">{(mag1 * mag2).toFixed(0)}</span></p>
                             </div>

@@ -4,6 +4,7 @@ import Header from './components/layout/Header';
 import Sidebar from './components/layout/Sidebar';
 import HomePage from './pages/HomePage';
 import AnimationPage from './pages/AnimationPage';
+import GlossaryPage from './pages/GlossaryPage';
 
 export default function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/animation/:id" element={<AnimationPage />} />
+          <Route path="/glossary/:slug" element={<GlossaryPage />} />
         </Routes>
       </main>
     </div>

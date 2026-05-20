@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { categories } from '../data/animations';
+import { allAnimations, categories, curriculumBacklog, curriculumTracks } from '../data/animations';
 
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
+  const animationById = new Map(allAnimations.map((animation) => [animation.id, animation]));
+  const backlogByTrack = curriculumBacklog.reduce((acc, topic) => {
+    acc[topic.trackId] = [...(acc[topic.trackId] || []), topic];
+    return acc;
+  }, {});
 
   return (
     <div className="ua-home">
@@ -19,7 +24,8 @@ export default function HomePage() {
         </h1>
         <p className="ua-home-subtitle">
           A browsable set of animated explanations for optimization, probability,
-          neural networks, transformers, diffusion, reinforcement learning, and linear algebra.
+          neural networks, transformers, diffusion, reinforcement learning, and linear algebra,
+          now arranged into guided learning tracks with prerequisites and next steps.
         </p>
       </section>
 
@@ -39,6 +45,57 @@ export default function HomePage() {
         <div>
           <strong>KaTeX</strong>
           <span>Math notes</span>
+        </div>
+      </section>
+
+      <section className="ua-tracks" aria-labelledby="guided-tracks-title">
+        <div className="ua-section-head">
+          <span>Guided paths</span>
+          <h2 id="guided-tracks-title">Curriculum tracks</h2>
+          <p>Follow these paths when you want sequencing; use the catalog below when you want reference browsing.</p>
+        </div>
+
+        <div className="ua-track-grid">
+          {curriculumTracks.map((track, trackIndex) => {
+            const firstAnimation = animationById.get(track.animationIds[0]);
+            const activeMinutes = track.animationIds.reduce(
+              (sum, id) => sum + (animationById.get(id)?.estimatedMinutes || 0),
+              0,
+            );
+            const plannedTopics = backlogByTrack[track.id] || [];
+
+            return (
+              <article className="ua-track-card" key={track.id}>
+                <div className="ua-track-card-head">
+                  <span>{String(trackIndex + 1).padStart(2, '0')}</span>
+                  <strong>{track.title}</strong>
+                </div>
+                <p>{track.description}</p>
+                <div className="ua-track-meta">
+                  <span>{track.animationIds.length} active</span>
+                  <span>{activeMinutes} min</span>
+                  <span>{plannedTopics.length} planned</span>
+                </div>
+                <div className="ua-track-sequence">
+                  {track.animationIds.slice(0, 4).map((animationId) => {
+                    const animation = animationById.get(animationId);
+                    if (!animation) return null;
+                    return <span key={animation.id}>{animation.name}</span>;
+                  })}
+                </div>
+                {plannedTopics.length > 0 && (
+                  <div className="ua-track-planned">
+                    Planned: {plannedTopics.slice(0, 2).map((topic) => topic.title).join('; ')}
+                  </div>
+                )}
+                {firstAnimation && (
+                  <Link className="ua-track-link" to={`/animation/${firstAnimation.id}`}>
+                    Start track <ArrowRight size={16} />
+                  </Link>
+                )}
+              </article>
+            );
+          })}
         </div>
       </section>
 

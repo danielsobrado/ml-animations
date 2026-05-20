@@ -159,8 +159,8 @@ export default function EmbeddingsPanel() {
         <div className="space-y-6">
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-lg font-bold text-white mb-4">Word Arithmetic</h3>
-            <p className="text-gray-800 mb-6">
-              The famous "king - man + woman = queen" and more!
+            <p className="text-gray-300 mb-6">
+              These analogies are approximate patterns that can appear in some trained embedding spaces, not universal rules.
             </p>
 
             <div className="space-y-6">
@@ -171,14 +171,14 @@ export default function EmbeddingsPanel() {
                 >
                   <div className="flex flex-wrap items-center justify-center gap-3 text-xl font-mono mb-4">
                     <span className="px-3 py-2 bg-blue-500/30 rounded-lg text-blue-300">{analogy.a}</span>
-                    <span className="text-gray-700">-</span>
+                    <span className="text-gray-300">-</span>
                     <span className="px-3 py-2 bg-red-500/30 rounded-lg text-red-300">{analogy.b}</span>
-                    <span className="text-gray-700">+</span>
+                    <span className="text-gray-300">+</span>
                     <span className="px-3 py-2 bg-red-500/30 rounded-lg text-red-300">{analogy.d}</span>
-                    <span className="text-gray-700">≈</span>
+                    <span className="text-gray-300">≈</span>
                     <span className="px-3 py-2 bg-green-500/30 rounded-lg text-green-300">{analogy.c}</span>
                   </div>
-                  <p className="text-center text-gray-800">{analogy.explanation}</p>
+                  <p className="text-center text-gray-300">{analogy.explanation}</p>
                 </div>
               ))}
             </div>
@@ -189,22 +189,22 @@ export default function EmbeddingsPanel() {
             <h4 className="font-bold text-white mb-4">🎯 How Word Arithmetic Works</h4>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-purple-600 font-bold">1.</span>
-                <p className="text-gray-700">
+                <span className="text-purple-300 font-bold">1.</span>
+                <p className="text-gray-300">
                   <strong className="text-purple-300">Capture relationships:</strong> The vector
                   difference "king - man" captures the concept of "royalty" or "ruling".
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-purple-600 font-bold">2.</span>
-                <p className="text-gray-700">
+                <span className="text-purple-300 font-bold">2.</span>
+                <p className="text-gray-300">
                   <strong className="text-purple-300">Transfer relationships:</strong> Adding this
                   difference to "woman" gives us the female equivalent of "king".
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-purple-600 font-bold">3.</span>
-                <p className="text-gray-700">
+                <span className="text-purple-300 font-bold">3.</span>
+                <p className="text-gray-300">
                   <strong className="text-purple-300">Find nearest:</strong> We find the word whose
                   vector is closest to the result: "queen".
                 </p>

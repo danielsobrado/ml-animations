@@ -145,8 +145,8 @@ export default function ConceptPanel() {
                 )}
 
                 {/* Key Insight */}
-                <motion.div
-                    className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white"
+	                <motion.div
+	                    className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
@@ -158,11 +158,14 @@ export default function ConceptPanel() {
                                 GPUs spend more time <strong>moving data</strong> than computing.
                                 Flash Attention reduces HBM reads/writes from O(N²) to O(N),
                                 achieving <strong>2-4x speedup</strong> and <strong>5-20x memory reduction</strong>
-                                while computing <em>exact</em> attention!
-                            </p>
-                        </div>
-                    </div>
-                </motion.div>
+	                                while computing <em>exact</em> attention!
+	                            </p>
+	                            <p className="text-amber-50 text-sm mt-2">
+	                                Same attention result and still quadratic in sequence length; the win is better IO and memory behavior.
+	                            </p>
+	                        </div>
+	                    </div>
+	                </motion.div>
             </div>
         </div>
     );

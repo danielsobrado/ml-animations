@@ -59,11 +59,11 @@ export default function OverviewPanel() {
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed">
               BERT is a <strong className="text-blue-600">pre-trained language model</strong> developed by Google in 2018.
               It learns deep bidirectional representations by jointly conditioning on both left and right context in all layers.
             </p>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed">
               Unlike previous models that read text sequentially (left-to-right or right-to-left),
               BERT considers the <strong className="text-purple-600">full context</strong> of a word by looking at
               all surrounding words simultaneously.
@@ -73,12 +73,12 @@ export default function OverviewPanel() {
             <h4 className="font-bold text-blue-300 mb-3">Example: "Bank" disambiguation</h4>
             <div className="space-y-2 text-sm">
               <div className="p-2 bg-black/30 rounded">
-                <p className="text-gray-800">Sentence 1:</p>
+                <p className="text-gray-300">Sentence 1:</p>
                 <p>"I went to the <span className="text-yellow-400 font-bold">bank</span> to deposit money"</p>
                 <p className="text-xs mt-1">→ BERT understands: financial institution 🏦</p>
               </div>
               <div className="p-2 bg-black/30 rounded">
-                <p className="text-gray-800">Sentence 2:</p>
+                <p className="text-gray-300">Sentence 2:</p>
                 <p>"I sat by the river <span className="text-yellow-400 font-bold">bank</span> and relaxed"</p>
                 <p className="text-xs mt-1">→ BERT understands: riverside 🏞️</p>
               </div>
@@ -102,7 +102,7 @@ export default function OverviewPanel() {
                 <Icon size={24} />
               </div>
               <h4 className="font-bold text-lg mb-2">{feature.title}</h4>
-              <p className="text-sm text-gray-800">{feature.description}</p>
+              <p className="text-sm text-gray-300">{feature.description}</p>
             </div>
           );
         })}
@@ -121,7 +121,7 @@ export default function OverviewPanel() {
                 <span key={i} className="bg-blue-600/30 px-2 py-1 rounded text-xs">{token}</span>
               ))}
             </div>
-            <p className="text-xs text-gray-700 mt-2">Token + Segment + Position</p>
+            <p className="text-xs text-gray-300 mt-2">Token + Segment + Position</p>
           </div>
 
           <ArrowRight className="text-gray-700 rotate-90 md:rotate-0" />
