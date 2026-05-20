@@ -10,6 +10,7 @@ export default function ProblemPanel() {
     // Mock embeddings (same words have same vectors)
     const embeddings = {
         'Dog': [0.8, 0.2, 0.3],
+        'dog': [0.8, 0.2, 0.3],
         'bites': [0.1, 0.9, 0.4],
         'man': [0.7, 0.3, 0.6],
         'Man': [0.7, 0.3, 0.6] // Same as 'man'

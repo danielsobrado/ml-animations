@@ -1,6 +1,5 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 function LossSurface() {
@@ -39,22 +38,20 @@ function Grid() {
 
 export default function LandscapePanel() {
     return (
-        <div className="w-full h-full min-h-[500px] bg-slate-900 rounded-xl overflow-hidden relative">
-            <div className="absolute top-4 left-4 z-10 bg-slate-900/80 p-4 rounded-lg backdrop-blur text-slate-200 pointer-events-none">
-                <h3 className="font-bold text-lg text-emerald-600">The Loss Landscape</h3>
-                <p className="text-sm">Drag to rotate. Scroll to zoom.</p>
-                <p className="text-xs text-slate-800 mt-2">
+        <div className="w-full h-full min-h-[500px] overflow-hidden relative border border-[var(--ds-border)] bg-[var(--ds-paper)]">
+            <div className="absolute top-4 left-4 z-10 border border-[var(--ds-border)] bg-[var(--ds-paper)]/90 p-4 text-[var(--ds-ink)] pointer-events-none">
+                <h3 className="font-bold text-lg text-[var(--ds-accent)]">The Loss Landscape</h3>
+                <p className="text-sm">The surface rotates slowly to reveal the training objective.</p>
+                <p className="text-xs text-[var(--ds-muted)] mt-2">
                     The goal of training is to find the lowest point (Global Minimum).
                 </p>
             </div>
 
-            <Canvas shadows>
-                <PerspectiveCamera makeDefault position={[5, 4, 5]} />
-                <OrbitControls enableDamping />
+            <Canvas shadows camera={{ position: [5, 4, 5], fov: 50 }}>
 
                 <ambientLight intensity={0.5} />
                 <directionalLight position={[5, 10, 5]} intensity={1} castShadow />
-                <pointLight position={[-5, 5, -5]} intensity={0.5} color="#ec4899" />
+                <pointLight position={[-5, 5, -5]} intensity={0.35} color="#244a7f" />
 
                 <LossSurface />
                 <Grid />

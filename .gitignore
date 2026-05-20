@@ -8,3 +8,6 @@ node_modules/
 .history/*
 mini-diffusion/target/
 mini-nn/target/release/*
+*.log
+*.png
+screenshots/theme-audit/*/*.json

@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gradient descent — Distill restyle (preview)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+
+<!-- React + Babel + GSAP -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+
+<!-- Design system tokens + component classes -->
+<link rel="stylesheet" href="restyled-source/_design-system/distill.css" />
+
+<!-- Page-level grid for the Gradient Descent app -->
+<style>
+  html, body { margin: 0; padding: 0; }
+  .page-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: var(--ds-gap-5);
+  }
+  @media (max-width: 900px) {
+    .page-body { grid-template-columns: 1fr; }
+  }
+  .main-col { display: flex; flex-direction: column; gap: var(--ds-gap-3); min-width: 0; }
+  .readouts-and-history {
+    display: grid; grid-template-columns: 300px minmax(0, 1fr);
+    gap: var(--ds-gap-4); align-items: start;
+  }
+  @media (max-width: 900px) {
+    .readouts-and-history { grid-template-columns: 1fr; }
+  }
+  .side-col { position: sticky; top: var(--ds-page-pad-y); align-self: start; }
+  .gd-landscape-wrap { background: var(--ds-paper); padding: 16px 8px 8px; }
+  .gd-controls-strip {
+    display: flex; gap: 10px; padding: 16px 12px 8px;
+    border-top: var(--ds-border); margin-top: 8px;
+  }
+  .gd-controls-strip > .ds-btn:first-child { flex: 1; }
+  .gd-history-empty {
+    font-family: var(--ds-font-serif); font-style: italic;
+    color: var(--ds-faint); text-align: center; padding: 60px 0;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useRef, useCallback, useMemo, useReducer } = React;
+const gsap = window.gsap;
+
+/* ============ Eq (KaTeX wrapper) ============ */
+function Eq({ tex, block = false, className }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!ref.current || !window.katex) return;
+    try {
+      window.katex.render(tex, ref.current, {
+        throwOnError: false, displayMode: block, output: 'html',
+      });
+    } catch (e) {}
+  }, [tex, block]);
+  return <span ref={ref} className={className} />;
+}
+
+function useKatexReady() {
+  const [, force] = useReducer((x) => x + 1, 0);
+  useEffect(() => {
+    if (window.katex) return;
+    const id = setInterval(() => { if (window.katex) { clearInterval(id); force(); } }, 50);
+    return () => clearInterval(id);
+  }, []);
+}
+
+/* ============ UI primitives ============ */
+function Page({ children }) {
+  return <div className="ds-page"><div className="ds-shell">{children}</div></div>;
+}
+
+function Header({ eyebrow, title, subtitle, right }) {
+  return (
+    <header className="ds-header">
+      <div className="ds-eyebrow">
+        {eyebrow.map((part, i) => (
+          <React.Fragment key={i}>
+            <span>{part}</span>
+            {i < eyebrow.length - 1 && <span className="sep">·</span>}
+          </React.Fragment>
+        ))}
+        {right && <span className="right">{right}</span>}
+      </div>
+      <h1 className="ds-title">{title}</h1>
+      {subtitle && <p className="ds-subtitle">{subtitle}</p>}
+    </header>
+  );
+}
+
+function EquationStrip({ label, tex, meta }) {
+  return (
+    <div className="ds-eq-strip">
+      <div className="label">{label}</div>
+      <div className="eq"><Eq tex={tex} /></div>
+      {meta && <div className="meta">{meta}</div>}
+    </div>
+  );
+}
+
+function Figure({ label, title, right, children, caption }) {
+  return (
+    <figure className="ds-figure">
+      <div className="ds-panel">
+        {(label || title || right) && (
+          <div className="ds-panel-head">
+            <span>{label}{title && <span style={{ marginLeft: 8, color: 'var(--ds-ink)', textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--ds-font-serif)', fontStyle: 'italic', fontSize: 13 }}> — {title}</span>}</span>
+            {right && <span>{right}</span>}
+          </div>
+        )}
+        <div>{children}</div>
+      </div>
+      {caption && <figcaption className="ds-figcaption">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+function Readouts({ rows }) {
+  return (
+    <div className="ds-readouts">
+      {rows.map((r) => (
+        <div key={r.label} className="ds-readout-row">
+          <div className="ds-readout-label">{r.label}</div>
+          <div className="ds-readout-tex">{r.tex && <Eq tex={r.tex} />}</div>
+          <div className="ds-readout-val">{r.value}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Aside({ heading, children }) {
+  return (
+    <aside className="ds-aside">
+      {heading && <div className="ds-aside-head">{heading}</div>}
+      {children}
+    </aside>
+  );
+}
+
+function ParamSlider({ label, tex, value, min, max, step, onChange,
+                       format = (v) => v.toFixed(2), hint, hintTone = 'ok' }) {
+  return (
+    <div className="ds-slider">
+      <div className="ds-slider-head">
+        <div className="ds-slider-label">
+          {label}
+          {tex && <span className="tex"><Eq tex={tex} /></span>}
+        </div>
+        <div className="ds-slider-value">{format(value)}</div>
+      </div>
+      <input className="ds-range" type="range" min={min} max={max} step={step} value={value}
+        onChange={(e) => onChange(parseFloat(e.target.value))} />
+      {hint && <div className={`ds-slider-hint ${hintTone}`}>{hint}</div>}
+    </div>
+  );
+}
+
+/* ============ GradientDescentPanel ============ */
+function GradientDescentPanel({ learningRate, startWeight, history, current, onStepChange }) {
+  const containerRef = useRef(null);
+  const ballRef = useRef(null);
+  const [width, setWidth] = useState(760);
+  const [isRunning, setIsRunning] = useState(false);
+  const tweenStateRef = useRef({ w: startWeight });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ro = new ResizeObserver((entries) => {
+      const cr = entries[0].contentRect;
+      if (cr.width) setWidth(cr.width);
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => { tweenStateRef.current.w = startWeight; }, [startWeight]);
+
+  const H = 320, PX = 56, PY = 28;
+  const W = width;
+  const W_RANGE = 4.2, L_MAX = 18, L_MIN = -1;
+  const xs = (w) => PX + ((w + W_RANGE) / (2 * W_RANGE)) * (W - 2 * PX);
+  const ys = (L) => H - PY - ((L - L_MIN) / (L_MAX - L_MIN)) * (H - 2 * PY);
+
+  const curvePts = useMemo(() => {
+    const pts = [];
+    for (let w = -W_RANGE; w <= W_RANGE; w += 0.04)
+      pts.push(`${xs(w).toFixed(2)},${ys(w * w).toFixed(2)}`);
+    return pts.join(' ');
+  }, [W]);
+
+  const xTicks = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+  const yTicks = [0, 4, 8, 12, 16];
+
+  const w = current.weight;
+  const grad = 2 * w;
+  const lossHere = w * w;
+  const tx0 = w - 1.4, tx1 = w + 1.4;
+  const ty0 = lossHere + grad * (tx0 - w);
+  const ty1 = lossHere + grad * (tx1 - w);
+
+  const runDescent = async () => {
+    if (isRunning) return;
+    setIsRunning(true);
+    let wCurr = startWeight;
+    tweenStateRef.current.w = wCurr;
+    onStepChange(0, wCurr);
+    if (ballRef.current) {
+      ballRef.current.setAttribute('cx', xs(wCurr));
+      ballRef.current.setAttribute('cy', ys(wCurr * wCurr));
+    }
+    const maxIter = 50, eps = 0.01;
+    for (let i = 0; i < maxIter; i++) {
+      const g = 2 * wCurr;
+      const wNext = wCurr - learningRate * g;
+      await new Promise((resolve) => {
+        gsap.to(tweenStateRef.current, {
+          w: wNext, duration: 0.55, ease: 'power2.inOut',
+          onUpdate: () => {
+            const tw = tweenStateRef.current.w;
+            if (ballRef.current) {
+              ballRef.current.setAttribute('cx', xs(tw));
+              ballRef.current.setAttribute('cy', ys(tw * tw));
+            }
+          },
+          onComplete: resolve,
+        });
+      });
+      wCurr = wNext;
+      onStepChange(i + 1, wCurr);
+      if (Math.abs(wCurr) < eps) break;
+      if (Math.abs(wCurr) > 10) break;
+      await new Promise((r) => setTimeout(r, 180));
+    }
+    setIsRunning(false);
+  };
+
+  const reset = () => {
+    if (isRunning) return;
+    tweenStateRef.current.w = startWeight;
+    onStepChange(0, startWeight);
+    if (ballRef.current) {
+      ballRef.current.setAttribute('cx', xs(startWeight));
+      ballRef.current.setAttribute('cy', ys(startWeight * startWeight));
+    }
+  };
+
+  const trail = history.slice(0, Math.max(0, current.iteration));
+
+  return (
+    <Figure
+      label="Figure 1"
+      title="Loss landscape ℒ(w) = w²"
+      right={<span>step {current.iteration}</span>}
+      caption={<>
+        <span className="lead">Figure 1.</span>{' '}
+        The loss surface <Eq tex="\mathcal{L}(w)=w^2" />. The marker shows{' '}
+        <Eq tex={`w_{${current.iteration}} = ${w.toFixed(3)}`} />; the tangent indicates the gradient{' '}
+        <Eq tex="\nabla\mathcal{L}=2w" /> at that point.
+      </>}
+    >
+      <div ref={containerRef} className="gd-landscape-wrap">
+        <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} style={{ display: 'block' }}>
+          {xTicks.map((t) => (
+            <line key={`vx${t}`} x1={xs(t)} x2={xs(t)} y1={PY} y2={H - PY}
+              stroke="var(--ds-grid)" strokeWidth="1" />
+          ))}
+          {yTicks.map((t) => (
+            <line key={`hl${t}`} x1={PX} x2={W - PX} y1={ys(t)} y2={ys(t)}
+              stroke="var(--ds-grid)" strokeWidth="1" />
+          ))}
+          <line x1={PX} x2={W - PX} y1={ys(0)} y2={ys(0)} stroke="var(--ds-ink)" strokeWidth="1" />
+          <line x1={xs(0)} x2={xs(0)} y1={PY} y2={H - PY} stroke="var(--ds-ink)" strokeWidth="1" />
+          {xTicks.map((t) => (
+            <text key={`tx${t}`} x={xs(t)} y={ys(0) + 16} fontSize="11"
+              fontFamily="var(--ds-font-mono)" textAnchor="middle" fill="var(--ds-faint)">{t}</text>
+          ))}
+          {yTicks.filter((t) => t > 0).map((t) => (
+            <text key={`tl${t}`} x={xs(0) - 8} y={ys(t) + 4} fontSize="11"
+              fontFamily="var(--ds-font-mono)" textAnchor="end" fill="var(--ds-faint)">{t}</text>
+          ))}
+          <text x={W - PX + 6} y={ys(0) + 4} fontSize="13" fontStyle="italic"
+            fontFamily="var(--ds-font-serif)" fill="var(--ds-ink)">w</text>
+          <text x={xs(0) + 8} y={PY + 4} fontSize="13" fontStyle="italic"
+            fontFamily="var(--ds-font-serif)" fill="var(--ds-ink)">ℒ(w)</text>
+          <polyline points={curvePts} fill="none" stroke="var(--ds-accent)" strokeWidth="1.6" />
+          <line x1={xs(tx0)} y1={ys(ty0)} x2={xs(tx1)} y2={ys(ty1)}
+            stroke="var(--ds-warm)" strokeWidth="1.25" strokeDasharray="4 4" />
+          {trail.map((p, i) => (
+            <circle key={`trail-${i}`} cx={xs(p.weight)} cy={ys(p.loss)} r="3"
+              fill="var(--ds-warm)"
+              opacity={0.3 + 0.5 * (i / Math.max(1, trail.length))} />
+          ))}
+          <circle ref={ballRef} cx={xs(w)} cy={ys(lossHere)} r="6.5"
+            fill="var(--ds-paper)" stroke="var(--ds-warm)" strokeWidth="2" />
+          {current.iteration > 0 && (
+            <g>
+              <line x1={xs(w) + 10} y1={ys(lossHere) - 14}
+                x2={xs(w) + 64} y2={ys(lossHere) - 44}
+                stroke="var(--ds-faint)" strokeWidth="0.8" />
+              <text x={xs(w) + 70} y={ys(lossHere) - 42} fontSize="12"
+                fontStyle="italic" fontFamily="var(--ds-font-serif)" fill="var(--ds-faint)">
+                step {current.iteration} · w = {w.toFixed(3)}
+              </text>
+            </g>
+          )}
+        </svg>
+        <div className="gd-controls-strip">
+          <button className="ds-btn primary" onClick={runDescent} disabled={isRunning}>
+            {isRunning ? 'Running…' : 'Run descent →'}
+          </button>
+          <button className="ds-btn ghost" onClick={reset} disabled={isRunning}>Reset</button>
+        </div>
+      </div>
+    </Figure>
+  );
+}
+
+/* ============ LossHistoryPanel ============ */
+function LossHistoryPanel({ history, current }) {
+  const W = 460, H = 200, PX = 40, PY = 22;
+  if (history.length === 0) {
+    return (
+      <Figure label="Figure 2" title="Loss history"
+        caption={<><span className="lead">Figure 2.</span>{' '}
+          Runs ▶ to plot <Eq tex="\mathcal{L}(w_t)" /> across iterations <Eq tex="t" />.</>}>
+        <div className="gd-history-empty">No data yet.</div>
+      </Figure>
+    );
+  }
+  const maxL = Math.max(...history.map((h) => h.loss), 1);
+  const maxIter = Math.max(history.length - 1, 1);
+  const xs = (i) => PX + (i / maxIter) * (W - 2 * PX);
+  const ys = (L) => H - PY - (L / maxL) * (H - 2 * PY);
+  const linePts = history.map((p) => `${xs(p.iteration).toFixed(2)},${ys(p.loss).toFixed(2)}`).join(' ');
+  const yTickVals = [0, maxL * 0.33, maxL * 0.66, maxL].map((v) => +v.toFixed(2));
+  const xTickStep = Math.max(1, Math.ceil(maxIter / 6));
+  const finalLoss = history[history.length - 1]?.loss ?? 0;
+  return (
+    <Figure label="Figure 2" title="Loss history"
+      right={<span>{history.length} iterations</span>}
+      caption={<>
+        <span className="lead">Figure 2.</span>{' '}
+        <Eq tex="\mathcal{L}" /> decays geometrically when <Eq tex="\alpha < 1" />;
+        the run ended at <Eq tex={`\\mathcal{L} = ${finalLoss.toFixed(4)}`} />.
+      </>}>
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: 'block' }}>
+        {yTickVals.map((t) => (
+          <g key={`yt${t}`}>
+            <line x1={PX} x2={W - PX} y1={ys(t)} y2={ys(t)} stroke="var(--ds-grid)" />
+            <text x={PX - 8} y={ys(t) + 4} fontSize="11" textAnchor="end"
+              fontFamily="var(--ds-font-mono)" fill="var(--ds-faint)">{t}</text>
+          </g>
+        ))}
+        <line x1={PX} x2={W - PX} y1={H - PY} y2={H - PY} stroke="var(--ds-ink)" strokeWidth="1" />
+        <line x1={PX} x2={PX} y1={PY} y2={H - PY} stroke="var(--ds-ink)" strokeWidth="1" />
+        {Array.from({ length: Math.floor(maxIter / xTickStep) + 1 }, (_, k) => k * xTickStep).map((i) => (
+          <text key={`xt${i}`} x={xs(i)} y={H - PY + 16} fontSize="11" textAnchor="middle"
+            fontFamily="var(--ds-font-mono)" fill="var(--ds-faint)">{i}</text>
+        ))}
+        <polyline points={linePts} fill="none" stroke="var(--ds-accent)" strokeWidth="1.6" />
+        {history.map((p) => (
+          <circle key={p.iteration} cx={xs(p.iteration)} cy={ys(p.loss)}
+            r={p.iteration === current.iteration ? 4.5 : 2.5}
+            fill={p.iteration === current.iteration ? 'var(--ds-warm)' : 'var(--ds-accent)'}
+            stroke={p.iteration === current.iteration ? 'var(--ds-paper)' : 'none'} strokeWidth="1.5" />
+        ))}
+        <text x={W - PX} y={H - 4} fontSize="11" textAnchor="end" fontStyle="italic"
+          fontFamily="var(--ds-font-serif)" fill="var(--ds-faint)">iteration t</text>
+      </svg>
+    </Figure>
+  );
+}
+
+/* ============ PracticePanel ============ */
+function PracticePanel({ learningRate, startWeight, onParamsChange }) {
+  const handleLR = (v) => onParamsChange(v, startWeight);
+  const handleW0 = (v) => onParamsChange(learningRate, v);
+  const lrHint = learningRate < 0.05
+    ? { text: 'α < 0.05: convergence is slow', tone: 'warn' }
+    : learningRate >= 1.0
+      ? { text: 'α ≥ 1: iterates will diverge', tone: 'bad' }
+      : learningRate > 0.9
+        ? { text: 'α > 0.9: expect oscillation', tone: 'warn' }
+        : { text: 'within stable region (α < 1)', tone: 'ok' };
+  return (
+    <Aside heading="Controls">
+      <ParamSlider label="Learning rate" tex="\alpha" value={learningRate}
+        min={0.01} max={1.05} step={0.01} onChange={handleLR}
+        format={(v) => v.toFixed(2)} hint={lrHint.text} hintTone={lrHint.tone} />
+      <ParamSlider label="Initial weight" tex="w_0" value={startWeight}
+        min={-5} max={5} step={0.1} onChange={handleW0}
+        format={(v) => (v >= 0 ? '+' : '') + v.toFixed(2)}
+        hint="symmetric about the origin" hintTone="ok" />
+      <p>
+        Try <Eq tex="\alpha = 0.01" /> — convergence is monotone but slow.
+        At <Eq tex="\alpha = 0.95" /> the iterates oscillate;
+        past <Eq tex="\alpha = 1" /> they diverge.
+      </p>
+      <p>
+        The update <Eq tex="w_{t+1} = (1 - 2\alpha)\, w_t" /> contracts whenever{' '}
+        <strong>|1 − 2α| &lt; 1</strong>, i.e. <Eq tex="0 < \alpha < 1" />.
+      </p>
+    </Aside>
+  );
+}
+
+/* ============ App ============ */
+function App() {
+  useKatexReady();
+  const [learningRate, setLearningRate] = useState(0.25);
+  const [startWeight, setStartWeight] = useState(3.0);
+  const [history, setHistory] = useState([]);
+  const [current, setCurrent] = useState({ iteration: 0, weight: 3.0 });
+
+  const handleParamsChange = useCallback((lr, sw) => {
+    setLearningRate(lr); setStartWeight(sw);
+    setHistory([]); setCurrent({ iteration: 0, weight: sw });
+  }, []);
+
+  const handleStepChange = useCallback((iteration, weight) => {
+    setCurrent({ iteration, weight });
+    setHistory((prev) => {
+      const next = [...prev];
+      next[iteration] = { iteration, weight, loss: weight * weight };
+      return next;
+    });
+  }, []);
+
+  const w = current.weight;
+  const grad = 2 * w;
+  const loss = w * w;
+  const readoutRows = [
+    { label: 'iteration', tex: 't', value: String(current.iteration) },
+    { label: 'weight', tex: 'w_t', value: w.toFixed(3) },
+    { label: 'gradient', tex: '\\nabla\\mathcal{L}', value: grad.toFixed(3) },
+    { label: 'loss', tex: '\\mathcal{L}(w_t)', value: loss.toFixed(3) },
+  ];
+
+  return (
+    <Page>
+      <Header
+        eyebrow={['Chapter 04', 'Optimization', '§ 4.1']}
+        right={<span><Eq tex="\alpha" /> = {learningRate.toFixed(2)} · {history.length} iterations</span>}
+        title="Gradient descent on a convex loss"
+        subtitle={<>
+          A scalar walk-through of the simplest optimizer there is — how a single learning rate <Eq tex="\alpha" />{' '}
+          bends a parameter <Eq tex="w" /> toward a minimum, and what changes when we set it too small or too large.
+        </>}
+      />
+      <EquationStrip label="Update rule"
+        tex="w_{t+1} \;=\; w_t \;-\; \alpha \, \nabla_{\!w}\, \mathcal{L}(w_t)"
+        meta={<>with <Eq tex="\mathcal{L}(w) = w^2" /></>} />
+      <div className="page-body">
+        <div className="main-col">
+          <GradientDescentPanel
+            learningRate={learningRate} startWeight={startWeight}
+            history={history} current={current} onStepChange={handleStepChange} />
+          <div className="readouts-and-history">
+            <Readouts rows={readoutRows} />
+            <LossHistoryPanel history={history} current={current} />
+          </div>
+        </div>
+        <div className="side-col">
+          <PracticePanel learningRate={learningRate} startWeight={startWeight}
+            onParamsChange={handleParamsChange} />
+        </div>
+      </div>
+    </Page>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
