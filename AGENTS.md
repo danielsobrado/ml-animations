@@ -19,3 +19,11 @@ The script builds `unified-app` and publishes `unified-app/dist` to the `gh-page
 - Source: `Deploy from a branch`
 - Branch: `gh-pages`
 - Folder: `/ (root)`
+
+## SEO Coverage
+
+All public pages are expected to be SEO-ready. This includes:
+
+- Static pages in each animation directory (`*-animation/index.html`) with core metadata (`title`, description, canonical, Open Graph, Twitter).
+- Unified app entry page (`unified-app/index.html`) with matching base metadata.
+- Route-aware metadata updates inside `unified-app/src/App.jsx` for dynamic routes (`/`, `/animation/:id`, `/glossary/:slug`) so crawlers see route-specific titles and descriptions.

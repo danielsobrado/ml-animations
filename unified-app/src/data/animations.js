@@ -91,6 +91,7 @@ export const categories = [
       { id: 'max-pooling', name: 'Max Pooling', icon: Maximize, description: 'Downsampling in convolutional networks' },
       { id: 'conv-relu', name: 'Conv + ReLU', icon: Box, description: 'Convolution with activation' },
       { id: 'neural-network', name: 'Neural Network Overview', icon: Network, description: 'How artificial neural networks function' },
+      { id: 'computation-graph-backprop', name: 'Computation Graph & Backpropagation', icon: Workflow, description: 'Forward values, local derivatives, reverse accumulation, and updates' },
       { id: 'gradient-problems', name: 'Gradient Problems', icon: TrendingDown, description: 'Vanishing and exploding gradients' },
     ],
   },
@@ -254,6 +255,7 @@ export const curriculumTracks = [
       'leaky-relu',
       'softmax',
       'cross-entropy',
+      'computation-graph-backprop',
       'gradient-problems',
       'layer-normalization',
       'conv2d',
@@ -326,7 +328,6 @@ export const curriculumTracks = [
 
 export const curriculumBacklog = [
   { id: 'cross-validation', title: 'Cross-Validation & Data Leakage', trackId: 'core-ml' },
-  { id: 'computation-graph-backprop', title: 'Computation Graph & Backpropagation', trackId: 'neural-networks' },
   { id: 'pca', title: 'PCA', trackId: 'foundations' },
   { id: 'k-means', title: 'K-Means Clustering', trackId: 'core-ml' },
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
@@ -516,6 +517,18 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'beginner',
     estimatedMinutes: 18,
     prerequisites: ['linear-regression', 'gradient-descent'],
+  },
+  'computation-graph-backprop': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 22,
+    prerequisites: ['gradient-descent', 'cross-entropy', 'relu'],
+    learningObjectives: [
+      'Trace forward values through a computation graph',
+      'Compute local derivatives for each graph edge',
+      'Apply the chain rule in reverse to accumulate parameter gradients',
+      'Use gradients and a learning rate to update weights and reduce loss',
+    ],
+    commonMisconception: 'Backpropagation is not a mysterious new learning rule; it is the chain rule applied to local derivatives in reverse graph order.',
   },
   relu: {
     difficulty: 'beginner',

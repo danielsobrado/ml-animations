@@ -11,6 +11,99 @@ import GlossaryPage from './pages/GlossaryPage';
 import { allAnimations, getAnimationById } from './data/animations';
 
 const VISITED_KEY = 'ml-animations:visited-lessons';
+const SITE_BASE_URL = 'https://danielsobrado.github.io/ml-animations';
+
+const DEFAULT_META = {
+  title: 'ML Animations - Interactive Machine Learning Visualizations',
+  description:
+    'Interactive visualizations and animations for machine learning concepts including transformers, attention mechanisms, neural networks, and more.',
+};
+
+function ensureMetaTag(tagName, key, value, attrs = {}) {
+  const selector = `${tagName}[${key}="${value}"]`;
+  let node = document.head.querySelector(selector);
+
+  if (!node) {
+    node = document.createElement(tagName);
+    node.setAttribute(key, value);
+    document.head.appendChild(node);
+  }
+
+  Object.entries(attrs).forEach(([attr, v]) => {
+    node.setAttribute(attr, v);
+  });
+
+  return node;
+}
+
+function setHeadMeta({ title = DEFAULT_META.title, description = DEFAULT_META.description, path = '/' }) {
+  document.title = title;
+
+  ensureMetaTag('meta', 'name', 'description', { content: description });
+  ensureMetaTag('meta', 'name', 'robots', { content: 'index, follow' });
+  ensureMetaTag('link', 'rel', 'canonical', { href: `${SITE_BASE_URL}${path}` });
+
+  ensureMetaTag('meta', 'property', 'og:type', { content: 'website' });
+  ensureMetaTag('meta', 'property', 'og:title', { content: title });
+  ensureMetaTag('meta', 'property', 'og:description', { content: description });
+  ensureMetaTag('meta', 'property', 'og:url', { content: `${SITE_BASE_URL}${path}` });
+  ensureMetaTag('meta', 'property', 'og:site_name', { content: 'ML Animations' });
+  ensureMetaTag('meta', 'property', 'og:image', {
+    content: `${SITE_BASE_URL}/favicon.svg`,
+  });
+
+  ensureMetaTag('meta', 'name', 'twitter:card', { content: 'summary_large_image' });
+  ensureMetaTag('meta', 'name', 'twitter:title', { content: title });
+  ensureMetaTag('meta', 'name', 'twitter:description', { content: description });
+  ensureMetaTag('meta', 'name', 'twitter:image', {
+    content: `${SITE_BASE_URL}/favicon.svg`,
+  });
+}
+
+function getAnimationMeta(animation) {
+  if (!animation) {
+    return {
+      title: 'Animation not found - ML Animations',
+      description:
+        'That animation is not yet available in the catalog. Try another topic or go back to the main catalog.',
+    };
+  }
+
+  return {
+    title: `${animation.name} - ML Animations`,
+    description: `${animation.description}. An interactive lesson with controls, charts, and visual step-through.`,
+  };
+}
+
+function getMetaFromPath(pathname, currentLesson) {
+  if (pathname === '/') {
+    return {
+      ...DEFAULT_META,
+      path: '/',
+    };
+  }
+
+  if (pathname.startsWith('/animation/')) {
+    return {
+      ...getAnimationMeta(currentLesson),
+      path: `${pathname.replace(/\/?$/, '/')}`,
+    };
+  }
+
+  if (pathname.startsWith('/glossary/')) {
+    const slug = decodeURIComponent(pathname.split('/').pop() || '');
+    return {
+      title: `Glossary: ${slug} - ML Animations`,
+      description: `A concise definition and explanation for ${slug} in the ML Animations glossary.`,
+      path: `${pathname.replace(/\/?$/, '/')}`,
+    };
+  }
+
+  return {
+    ...DEFAULT_META,
+    path: `${pathname.replace(/\/?$/, '/')}`,
+  };
+}
 
 function isEditableTarget(target) {
   return target?.closest?.('input, textarea, select, [contenteditable="true"]');
@@ -85,6 +178,12 @@ export default function App() {
 
   const currentLessonId = location.pathname.match(/^\/animation\/([^/]+)/)?.[1];
   const currentLesson = currentLessonId ? getAnimationById(currentLessonId) : null;
+
+  useEffect(() => {
+    const normalizedPath = location.pathname || '/';
+    const pageMeta = getMetaFromPath(normalizedPath, currentLesson);
+    setHeadMeta(pageMeta);
+  }, [location.pathname, currentLessonId, currentLesson]);
 
   return (
     <div className="ua-app">
