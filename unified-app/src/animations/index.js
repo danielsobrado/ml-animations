@@ -44,6 +44,15 @@ const animationRegistry = {
 
   // Linear Algebra & Math
   'matrix-multiplication': lazy(() => import('./matrix-multiplication')),
+  'matrix-decompositions': lazy(() => import('./matrix-decompositions')),
+  'fundamental-subspaces': lazy(() => import('./fundamental-subspaces')),
+  'least-squares-projection': lazy(() => import('./least-squares-projection')),
+  'pseudoinverse': lazy(() => import('./pseudoinverse')),
+  'change-of-basis': lazy(() => import('./change-of-basis')),
+  'condition-number': lazy(() => import('./condition-number')),
+  'determinant-volume': lazy(() => import('./determinant-volume')),
+  'projection-matrices': lazy(() => import('./projection-matrices')),
+  'low-rank-approximation': lazy(() => import('./low-rank-approximation')),
   'eigenvalue': lazy(() => import('./eigenvalue')),
   'svd': lazy(() => import('./svd')),
   'qr-decomposition': lazy(() => import('./qr-decomposition')),
