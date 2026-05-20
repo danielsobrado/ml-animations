@@ -12,10 +12,10 @@ export default function ConceptPanel() {
             <div className="max-w-4xl w-full">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">
+                    <h2 className="text-3xl font-bold text-emerald-600 mb-4">
                         The Problem: Redundant Computation
                     </h2>
-                    <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
                         When generating text <strong>token by token</strong>, without caching we recompute
                         the Keys and Values for <em>every previous token</em> at each step.
                     </p>
@@ -26,13 +26,13 @@ export default function ConceptPanel() {
                     <button
                         onClick={() => setStep(Math.max(0, step - 1))}
                         disabled={step === 0}
-                        className="px-4 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg disabled:opacity-50 font-medium"
+                        className="px-4 py-2 bg-slate-200 rounded-lg disabled:opacity-50 font-medium"
                     >
                         ← Previous
                     </button>
                     <div className="flex items-center gap-2 px-4">
-                        <span className="text-slate-500 dark:text-slate-400">Token:</span>
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400 text-xl">{step + 1} / {tokens.length}</span>
+                        <span className="text-slate-500">Token:</span>
+                        <span className="font-bold text-emerald-600 text-xl">{step + 1} / {tokens.length}</span>
                     </div>
                     <button
                         onClick={() => setStep(Math.min(tokens.length - 1, step + 1))}
@@ -46,12 +46,12 @@ export default function ConceptPanel() {
                 {/* Comparison Grid */}
                 <div className="grid md:grid-cols-2 gap-8">
                     {/* Without Cache */}
-                    <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-6">
+                    <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6">
                         <div className="flex items-center gap-3 mb-4">
                             <AlertTriangle className="text-red-500" size={24} />
-                            <h3 className="text-xl font-bold text-red-600 dark:text-red-400">Without KV Cache</h3>
+                            <h3 className="text-xl font-bold text-red-600">Without KV Cache</h3>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+                        <p className="text-sm text-slate-600 mb-6">
                             Recomputes K and V for all tokens every step. O(n²) complexity!
                         </p>
 
@@ -63,7 +63,7 @@ export default function ConceptPanel() {
                                     animate={{ scale: 1 }}
                                     className={`px-3 py-2 rounded-lg font-mono text-sm ${i === step
                                             ? 'bg-emerald-500 text-white ring-2 ring-emerald-300'
-                                            : 'bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200'
+                                            : 'bg-red-200 text-red-800'
                                         }`}
                                 >
                                     {token}
@@ -74,11 +74,11 @@ export default function ConceptPanel() {
                             ))}
                         </div>
 
-                        <div className="bg-red-100 dark:bg-red-900/40 rounded-lg p-4">
-                            <div className="text-sm font-medium text-red-700 dark:text-red-300 mb-2">
+                        <div className="bg-red-100 rounded-lg p-4">
+                            <div className="text-sm font-medium text-red-700 mb-2">
                                 Computations for step {step + 1}:
                             </div>
-                            <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                            <div className="text-2xl font-bold text-red-600">
                                 {step + 1} × (K + V) = {(step + 1) * 2} ops
                             </div>
                             <div className="text-xs text-red-500 mt-2">
@@ -88,12 +88,12 @@ export default function ConceptPanel() {
                     </div>
 
                     {/* With Cache */}
-                    <div className="bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800 rounded-2xl p-6">
+                    <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-6">
                         <div className="flex items-center gap-3 mb-4">
                             <CheckCircle className="text-emerald-500" size={24} />
-                            <h3 className="text-xl font-bold text-emerald-600 dark:text-emerald-400">With KV Cache</h3>
+                            <h3 className="text-xl font-bold text-emerald-600">With KV Cache</h3>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+                        <p className="text-sm text-slate-600 mb-6">
                             Stores K and V, only computes for the new token. O(n) complexity!
                         </p>
 
@@ -105,7 +105,7 @@ export default function ConceptPanel() {
                                     animate={{ scale: 1 }}
                                     className={`px-3 py-2 rounded-lg font-mono text-sm ${i === step
                                             ? 'bg-emerald-500 text-white ring-2 ring-emerald-300'
-                                            : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-emerald-300 dark:border-emerald-700'
+                                            : 'bg-slate-200 text-slate-600 border border-emerald-300'
                                         }`}
                                 >
                                     {token}
@@ -116,11 +116,11 @@ export default function ConceptPanel() {
                             ))}
                         </div>
 
-                        <div className="bg-emerald-100 dark:bg-emerald-900/40 rounded-lg p-4">
-                            <div className="text-sm font-medium text-emerald-700 dark:text-emerald-300 mb-2">
+                        <div className="bg-emerald-100 rounded-lg p-4">
+                            <div className="text-sm font-medium text-emerald-700 mb-2">
                                 Computations for step {step + 1}:
                             </div>
-                            <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                            <div className="text-2xl font-bold text-emerald-600">
                                 1 × (K + V) = 2 ops
                             </div>
                             <div className="text-xs text-emerald-500 mt-2">

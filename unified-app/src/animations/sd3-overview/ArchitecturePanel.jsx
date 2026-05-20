@@ -55,9 +55,9 @@ export default function ArchitecturePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          SD3 Architecture: <span className="text-fuchsia-600 dark:text-fuchsia-400">The Complete System</span>
+          SD3 Architecture: <span className="text-fuchsia-600">The Complete System</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           How text becomes images through diffusion
         </p>
       </div>
@@ -65,20 +65,20 @@ export default function ArchitecturePanel() {
       {/* Key Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-black/30 rounded-xl p-4 text-center border border-white/10">
-          <p className="text-3xl font-bold text-fuchsia-600 dark:text-fuchsia-400">8B</p>
-          <p className="text-sm text-gray-800 dark:text-gray-400">Parameters (largest)</p>
+          <p className="text-3xl font-bold text-fuchsia-600">8B</p>
+          <p className="text-sm text-gray-800">Parameters (largest)</p>
         </div>
         <div className="bg-black/30 rounded-xl p-4 text-center border border-white/10">
-          <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">3</p>
-          <p className="text-sm text-gray-800 dark:text-gray-400">Text Encoders</p>
+          <p className="text-3xl font-bold text-purple-600">3</p>
+          <p className="text-sm text-gray-800">Text Encoders</p>
         </div>
         <div className="bg-black/30 rounded-xl p-4 text-center border border-white/10">
-          <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">1024²</p>
-          <p className="text-sm text-gray-800 dark:text-gray-400">Max Resolution</p>
+          <p className="text-3xl font-bold text-blue-600">1024²</p>
+          <p className="text-sm text-gray-800">Max Resolution</p>
         </div>
         <div className="bg-black/30 rounded-xl p-4 text-center border border-white/10">
           <p className="text-3xl font-bold text-green-400">28-50</p>
-          <p className="text-sm text-gray-800 dark:text-gray-400">Typical Steps</p>
+          <p className="text-sm text-gray-800">Typical Steps</p>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ export default function ArchitecturePanel() {
                 setHoveredComponent={setHoveredComponent}
                 icon={<FileText size={20} />}
               />
-              <ArrowRight className="text-gray-700 dark:text-gray-500" />
+              <ArrowRight className="text-gray-700" />
               <div className="flex flex-col gap-2">
                 <ComponentBox
                   id="clip"
@@ -148,9 +148,9 @@ export default function ArchitecturePanel() {
                 <div className="w-20 h-20 rounded-lg bg-gray-700 flex items-center justify-center mb-2">
                   <p className="text-2xl">🎲</p>
                 </div>
-                <p className="text-xs text-gray-800 dark:text-gray-400">Random Noise</p>
+                <p className="text-xs text-gray-800">Random Noise</p>
               </div>
-              <ArrowRight className="text-gray-700 dark:text-gray-500" />
+              <ArrowRight className="text-gray-700" />
               <ComponentBox
                 id="mmdit"
                 data={components.mmdit}
@@ -160,7 +160,7 @@ export default function ArchitecturePanel() {
                 large
               />
               <div className="flex items-center gap-2">
-                <ArrowRight className="text-gray-700 dark:text-gray-500" />
+                <ArrowRight className="text-gray-700" />
                 <ComponentBox
                   id="scheduler"
                   data={components.scheduler}
@@ -184,9 +184,9 @@ export default function ArchitecturePanel() {
                 <div className="w-16 h-16 rounded-lg bg-purple-600/30 flex items-center justify-center mb-2 border border-purple-500/50">
                   <p className="text-xs">Latent</p>
                 </div>
-                <p className="text-xs text-gray-800 dark:text-gray-400">128×128×16</p>
+                <p className="text-xs text-gray-800">128×128×16</p>
               </div>
-              <ArrowRight className="text-gray-700 dark:text-gray-500" />
+              <ArrowRight className="text-gray-700" />
               <ComponentBox
                 id="vae_dec"
                 data={components.vae_dec}
@@ -194,12 +194,12 @@ export default function ArchitecturePanel() {
                 setHoveredComponent={setHoveredComponent}
                 icon={<Image size={20} />}
               />
-              <ArrowRight className="text-gray-700 dark:text-gray-500" />
+              <ArrowRight className="text-gray-700" />
               <div className="text-center">
                 <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-rose-500/30 to-orange-500/30 flex items-center justify-center mb-2 border border-rose-500/50">
                   <p className="text-2xl">🖼️</p>
                 </div>
-                <p className="text-xs text-gray-800 dark:text-gray-400">1024×1024 RGB</p>
+                <p className="text-xs text-gray-800">1024×1024 RGB</p>
               </div>
             </div>
           </div>
@@ -216,13 +216,13 @@ export default function ArchitecturePanel() {
                   setHoveredComponent={setHoveredComponent}
                   icon={<FileText size={20} />}
                 />
-                <p className="text-xs text-gray-700 dark:text-gray-500">Caption</p>
+                <p className="text-xs text-gray-700">Caption</p>
               </div>
               <div className="flex flex-col gap-2 items-center">
                 <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-rose-500/30 to-orange-500/30 flex items-center justify-center border border-rose-500/50">
                   <p className="text-2xl">🖼️</p>
                 </div>
-                <p className="text-xs text-gray-700 dark:text-gray-500">Target Image</p>
+                <p className="text-xs text-gray-700">Target Image</p>
               </div>
             </div>
 
@@ -258,13 +258,13 @@ export default function ArchitecturePanel() {
             {/* Training objective */}
             <div className="flex items-center justify-center gap-4">
               <div className="bg-white/5 rounded-lg p-3 text-center">
-                <p className="text-xs text-gray-800 dark:text-gray-400">Text Embeddings</p>
+                <p className="text-xs text-gray-800">Text Embeddings</p>
               </div>
               <div className="bg-white/5 rounded-lg p-3 text-center">
-                <p className="text-xs text-gray-800 dark:text-gray-400">x₁ (clean latent)</p>
+                <p className="text-xs text-gray-800">x₁ (clean latent)</p>
               </div>
               <div className="bg-white/5 rounded-lg p-3 text-center">
-                <p className="text-xs text-gray-800 dark:text-gray-400">x₀ ~ N(0,I)</p>
+                <p className="text-xs text-gray-800">x₀ ~ N(0,I)</p>
               </div>
             </div>
 
@@ -289,7 +289,7 @@ export default function ArchitecturePanel() {
                 <p className="font-mono text-center">
                   Loss = ||v_θ(x_t, t, c) - (x₁ - x₀)||²
                 </p>
-                <p className="text-xs text-gray-800 dark:text-center mt-1">
+                <p className="text-xs text-gray-800 mt-1">
                   Predict velocity from noisy input conditioned on text
                 </p>
               </div>
@@ -301,10 +301,10 @@ export default function ArchitecturePanel() {
         {hoveredComponent && (
           <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
             <div className="flex items-start gap-3">
-              <Info className="text-fuchsia-600 dark:text-fuchsia-400 mt-1" size={20} />
+              <Info className="text-fuchsia-600 mt-1" size={20} />
               <div>
                 <h4 className="font-bold text-lg">{components[hoveredComponent].title}</h4>
-                <p className="text-gray-700 dark:text-gray-300 mt-1">{components[hoveredComponent].description}</p>
+                <p className="text-gray-700 mt-1">{components[hoveredComponent].description}</p>
                 <div className="flex gap-2 mt-3 flex-wrap">
                   {components[hoveredComponent].details.map((detail, i) => (
                     <span key={i} className="bg-white/10 px-2 py-1 rounded text-sm">{detail}</span>
@@ -322,8 +322,8 @@ export default function ArchitecturePanel() {
           <h3 className="font-bold text-fuchsia-300 mb-2 flex items-center gap-2">
             <Zap size={18} /> Multi-Modal DiT (MMDiT)
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Unlike U-Net based models, SD3 uses a Transformer that jointly processes 
+          <p className="text-sm text-gray-700">
+            Unlike U-Net based models, SD3 uses a Transformer that jointly processes
             image and text tokens with bidirectional attention.
           </p>
         </div>
@@ -332,7 +332,7 @@ export default function ArchitecturePanel() {
           <h3 className="font-bold text-purple-300 mb-2 flex items-center gap-2">
             <Brain size={18} /> Triple Text Encoders
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             CLIP-L, CLIP-G, and T5-XXL provide complementary text understanding:
             visual-language alignment + rich semantic comprehension.
           </p>
@@ -342,7 +342,7 @@ export default function ArchitecturePanel() {
           <h3 className="font-bold text-blue-300 mb-2 flex items-center gap-2">
             <Layers size={18} /> Flow Matching
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Replaces score-based diffusion with simpler flow-based training,
             enabling better noise schedules and faster sampling.
           </p>
@@ -353,10 +353,10 @@ export default function ArchitecturePanel() {
 }
 
 function ComponentBox({ id, data, hoveredComponent, setHoveredComponent, icon, small, large }) {
-  const sizeClasses = large 
-    ? 'w-32 h-32' 
-    : small 
-    ? 'w-24 h-16' 
+  const sizeClasses = large
+    ? 'w-32 h-32'
+    : small
+    ? 'w-24 h-16'
     : 'w-28 h-20';
 
   return (

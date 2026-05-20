@@ -57,7 +57,7 @@ export default function QLoRAPanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-purple-900 mb-2">QLoRA: Quantized LoRA</h2>
-                    <p className="text-slate-800 dark:text-slate-600">Combine 4-bit quantization with LoRA for extreme memory efficiency</p>
+                    <p className="text-slate-800">Combine 4-bit quantization with LoRA for extreme memory efficiency</p>
                 </div>
 
                 {/* Controls */}
@@ -82,7 +82,7 @@ export default function QLoRAPanel() {
                 <div className="flex justify-between items-center mb-8 px-4">
                     {steps.map((s, i) => (
                         <React.Fragment key={i}>
-                            <div 
+                            <div
                                 className={`flex flex-col items-center cursor-pointer transition-all ${
                                     i <= step ? 'opacity-100' : 'opacity-40'
                                 }`}
@@ -108,7 +108,7 @@ export default function QLoRAPanel() {
                     {/* Current Step Visualization */}
                     <div className="bg-white rounded-xl p-6 border shadow-sm">
                         <h3 className="font-bold text-purple-800 mb-4">{steps[step].title}</h3>
-                        
+
                         <div className="min-h-48 flex items-center justify-center">
                             {step === 0 && (
                                 <div className="text-center animate-fadeIn">
@@ -117,13 +117,13 @@ export default function QLoRAPanel() {
                                             <div className="text-sm font-medium text-blue-800">FP16 Weights</div>
                                             <div className="text-2xl font-bold text-blue-600">14 GB</div>
                                         </div>
-                                        <ArrowRight className="text-slate-800 dark:text-slate-400" size={32} />
+                                        <ArrowRight className="text-slate-800" size={32} />
                                         <div className="bg-green-100 p-4 rounded-lg border-2 border-green-300">
                                             <div className="text-sm font-medium text-green-800">4-bit (NF4)</div>
                                             <div className="text-2xl font-bold text-green-600">3.5 GB</div>
                                         </div>
                                     </div>
-                                    <div className="text-sm text-slate-800 dark:text-slate-600">
+                                    <div className="text-sm text-slate-800">
                                         NF4 = NormalFloat 4-bit (optimal for normally distributed weights)
                                     </div>
                                 </div>
@@ -153,11 +153,11 @@ export default function QLoRAPanel() {
                                 <div className="animate-fadeIn space-y-4">
                                     <div className="flex items-center gap-4">
                                         <div className="bg-slate-100 p-3 rounded-lg flex-1">
-                                            <div className="text-xs text-slate-700 dark:text-slate-500 mb-1">Forward Pass</div>
+                                            <div className="text-xs text-slate-700 mb-1">Forward Pass</div>
                                             <ArrowRight className="text-green-500 mx-auto" />
                                         </div>
                                         <div className="bg-slate-100 p-3 rounded-lg flex-1">
-                                            <div className="text-xs text-slate-700 dark:text-slate-500 mb-1">Compute Loss</div>
+                                            <div className="text-xs text-slate-700 mb-1">Compute Loss</div>
                                             <div className="text-2xl text-center">📊</div>
                                         </div>
                                         <div className="bg-purple-100 p-3 rounded-lg flex-1 border-2 border-purple-300">
@@ -165,7 +165,7 @@ export default function QLoRAPanel() {
                                             <ArrowDown className="text-purple-500 mx-auto" />
                                         </div>
                                     </div>
-                                    <div className="text-center text-sm text-slate-800 dark:text-slate-600">
+                                    <div className="text-center text-sm text-slate-800">
                                         Base model weights stay frozen & quantized
                                     </div>
                                 </div>
@@ -175,7 +175,7 @@ export default function QLoRAPanel() {
                                 <div className="animate-fadeIn text-center">
                                     <div className="text-4xl mb-4">🚀</div>
                                     <div className="text-lg font-medium text-green-700 mb-2">Ready for Inference!</div>
-                                    <div className="text-sm text-slate-800 dark:text-slate-600">
+                                    <div className="text-sm text-slate-800">
                                         ~4GB total memory for a fine-tuned 7B model
                                     </div>
                                 </div>
@@ -193,9 +193,9 @@ export default function QLoRAPanel() {
                         <div className="space-y-3">
                             {memoryData.map((item, i) => (
                                 <div key={i} className="flex items-center gap-3">
-                                    <div className="w-24 text-sm text-slate-800 dark:text-slate-600">{item.method}</div>
+                                    <div className="w-24 text-sm text-slate-800">{item.method}</div>
                                     <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
-                                        <div 
+                                        <div
                                             className={`${item.color} h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2`}
                                             style={{ width: `${(item.memory / 28) * 100}%` }}
                                         >
@@ -219,20 +219,20 @@ export default function QLoRAPanel() {
                     <h3 className="font-bold text-white mb-4 text-center">QLoRA Key Innovations</h3>
                     <div className="grid grid-cols-3 gap-4">
                         <div className="bg-slate-700 p-4 rounded-lg">
-                            <div className="text-purple-600 dark:text-purple-400 font-bold mb-2">4-bit NormalFloat</div>
-                            <p className="text-slate-700 dark:text-sm">
+                            <div className="text-purple-600 font-bold mb-2">4-bit NormalFloat</div>
+                            <p className="text-slate-700">
                                 Information-theoretically optimal data type for normally distributed weights
                             </p>
                         </div>
                         <div className="bg-slate-700 p-4 rounded-lg">
-                            <div className="text-orange-600 dark:text-orange-400 font-bold mb-2">Double Quantization</div>
-                            <p className="text-slate-700 dark:text-sm">
+                            <div className="text-orange-600 font-bold mb-2">Double Quantization</div>
+                            <p className="text-slate-700">
                                 Quantize the quantization constants to save additional memory
                             </p>
                         </div>
                         <div className="bg-slate-700 p-4 rounded-lg">
                             <div className="text-green-400 font-bold mb-2">Paged Optimizers</div>
-                            <p className="text-slate-700 dark:text-sm">
+                            <p className="text-slate-700">
                                 Use NVIDIA unified memory to avoid OOM during gradient checkpointing
                             </p>
                         </div>

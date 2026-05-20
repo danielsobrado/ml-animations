@@ -90,10 +90,10 @@ export default function PlaygroundPanel() {
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-amber-600 dark:text-amber-400 mb-4">
+                    <h2 className="text-3xl font-bold text-amber-600 mb-4">
                         Flash Attention Tiling Simulator
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-300">
+                    <p className="text-slate-600">
                         Adjust sequence length and block size to see how Flash Attention tiles the computation.
                     </p>
                 </div>
@@ -101,12 +101,12 @@ export default function PlaygroundPanel() {
                 <div className="grid lg:grid-cols-3 gap-8">
                     {/* Controls */}
                     <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                            <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-4">Configuration</h3>
+                        <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                            <h3 className="font-bold text-slate-700 mb-4">Configuration</h3>
 
                             <div className="space-y-5">
                                 <div>
-                                    <label className="flex justify-between text-sm mb-2 dark:text-slate-300">
+                                    <label className="flex justify-between text-sm mb-2">
                                         <span>Sequence Length (N)</span>
                                         <span className="font-mono text-amber-600">{seqLength}</span>
                                     </label>
@@ -119,7 +119,7 @@ export default function PlaygroundPanel() {
                                 </div>
 
                                 <div>
-                                    <label className="flex justify-between text-sm mb-2 dark:text-slate-300">
+                                    <label className="flex justify-between text-sm mb-2">
                                         <span>Block Size (B)</span>
                                         <span className="font-mono text-amber-600">{blockSize}</span>
                                     </label>
@@ -132,7 +132,7 @@ export default function PlaygroundPanel() {
                                 </div>
                             </div>
 
-                            <div className="mt-4 p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                            <div className="mt-4 p-3 bg-slate-100 rounded-lg">
                                 <div className="grid grid-cols-2 gap-2 text-sm">
                                     <div className="text-slate-500">Matrix Size:</div>
                                     <div className="font-mono">{seqLength}×{seqLength}</div>
@@ -145,11 +145,11 @@ export default function PlaygroundPanel() {
                         </div>
 
                         {/* Playback Controls */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+                        <div className="bg-white rounded-2xl p-6 border border-slate-200">
                             <div className="flex items-center justify-center gap-3">
                                 <button
                                     onClick={reset}
-                                    className="p-3 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                                    className="p-3 rounded-full bg-slate-200 hover:bg-slate-300 transition-colors"
                                 >
                                     <RotateCcw size={20} />
                                 </button>
@@ -162,7 +162,7 @@ export default function PlaygroundPanel() {
                                 <button
                                     onClick={stepForward}
                                     disabled={processedTiles.length >= totalTiles}
-                                    className="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 disabled:opacity-50 font-medium text-sm"
+                                    className="px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 disabled:opacity-50 font-medium text-sm"
                                 >
                                     Step
                                 </button>
@@ -218,19 +218,19 @@ export default function PlaygroundPanel() {
                     </div>
 
                     {/* Tiled Matrix Visualization */}
-                    <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-6 text-center">
+                    <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200">
+                        <h3 className="font-bold text-slate-700 mb-6 text-center">
                             Attention Matrix Tiling
                         </h3>
 
                         <div className="flex justify-center">
                             <div className="relative">
                                 {/* Labels */}
-                                <div className="absolute -top-8 left-0 right-0 text-center text-sm font-medium text-blue-600 dark:text-blue-400">
+                                <div className="absolute -top-8 left-0 right-0 text-center text-sm font-medium text-blue-600">
                                     Keys (K)
                                 </div>
                                 <div className="absolute -left-10 top-0 bottom-0 flex items-center">
-                                    <span className="text-sm font-medium text-purple-600 dark:text-purple-400 transform -rotate-90 whitespace-nowrap">
+                                    <span className="text-sm font-medium text-purple-600 transform -rotate-90 whitespace-nowrap">
                                         Queries (Q)
                                     </span>
                                 </div>
@@ -265,8 +265,8 @@ export default function PlaygroundPanel() {
                                                         ${status === 'active'
                                                             ? 'border-amber-500 bg-amber-400 text-white'
                                                             : status === 'processed'
-                                                                ? 'border-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
-                                                                : 'border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 text-slate-400'
+                                                                ? 'border-emerald-400 bg-emerald-100 text-emerald-700'
+                                                                : 'border-slate-300 bg-slate-100 text-slate-400'
                                                         }
                                                     `}
                                                 >
@@ -283,27 +283,27 @@ export default function PlaygroundPanel() {
                         <div className="flex justify-center gap-8 mt-6 text-sm">
                             <div className="flex items-center gap-2">
                                 <div className="w-5 h-5 bg-amber-400 border-2 border-amber-500 rounded"></div>
-                                <span className="text-slate-600 dark:text-slate-400">Computing in SRAM</span>
+                                <span className="text-slate-600">Computing in SRAM</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/40 border-2 border-emerald-400 rounded"></div>
-                                <span className="text-slate-600 dark:text-slate-400">Completed</span>
+                                <div className="w-5 h-5 bg-emerald-100 border-2 border-emerald-400 rounded"></div>
+                                <span className="text-slate-600">Completed</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-5 h-5 bg-slate-100 dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 rounded"></div>
-                                <span className="text-slate-600 dark:text-slate-400">Pending</span>
+                                <div className="w-5 h-5 bg-slate-100 border-2 border-slate-300 rounded"></div>
+                                <span className="text-slate-600">Pending</span>
                             </div>
                         </div>
 
                         {/* Progress Info */}
-                        <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-700/50 rounded-xl">
+                        <div className="mt-6 p-4 bg-slate-100 rounded-xl">
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-sm text-slate-600 dark:text-slate-400">Processing Progress</span>
+                                <span className="text-sm text-slate-600">Processing Progress</span>
                                 <span className="font-mono text-amber-600">
                                     {((processedTiles.length / totalTiles) * 100).toFixed(0)}%
                                 </span>
                             </div>
-                            <div className="h-2 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden">
+                            <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                                 <motion.div
                                     className="h-full bg-gradient-to-r from-amber-500 to-orange-500"
                                     animate={{ width: `${(processedTiles.length / totalTiles) * 100}%` }}
@@ -312,8 +312,8 @@ export default function PlaygroundPanel() {
                         </div>
 
                         {/* Key Insight */}
-                        <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl">
-                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                            <p className="text-sm text-slate-700">
                                 <strong className="text-amber-600">Key Insight:</strong> Each tile only needs
                                 <span className="font-mono mx-1">{blockSize}×{blockSize} = {blockSize * blockSize}</span>
                                 elements in SRAM, regardless of total sequence length. This is why Flash Attention

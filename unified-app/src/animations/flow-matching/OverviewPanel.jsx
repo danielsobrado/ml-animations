@@ -118,9 +118,9 @@ export default function OverviewPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Flow Matching: <span className="text-fuchsia-600 dark:text-fuchsia-400">The Big Picture</span>
+          Flow Matching: <span className="text-fuchsia-600">The Big Picture</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Learning continuous probability flows from noise to data
         </p>
       </div>
@@ -128,12 +128,12 @@ export default function OverviewPanel() {
       {/* Key Insight Box */}
       <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 rounded-2xl p-6 border border-fuchsia-500/30">
         <div className="flex items-start gap-4">
-          <Zap className="text-fuchsia-600 dark:text-fuchsia-400 mt-1" size={24} />
+          <Zap className="text-fuchsia-600 mt-1" size={24} />
           <div>
             <h3 className="font-bold text-lg text-fuchsia-300 mb-2">The Core Idea</h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Instead of learning to <strong>denoise</strong> step by step (like DDPM), flow matching learns a 
-              <strong className="text-fuchsia-600 dark:text-fuchsia-400"> continuous velocity field</strong> that transports samples 
+            <p className="text-gray-700">
+              Instead of learning to <strong>denoise</strong> step by step (like DDPM), flow matching learns a
+              <strong className="text-fuchsia-600"> continuous velocity field</strong> that transports samples
               from noise to data. Think of it as learning the "current" that carries particles through probability space.
             </p>
           </div>
@@ -172,9 +172,9 @@ export default function OverviewPanel() {
               onMouseEnter={() => setHoveredComponent('flow')}
               onMouseLeave={() => setHoveredComponent(null)}
             >
-              <canvas 
-                ref={canvasRef} 
-                width={300} 
+              <canvas
+                ref={canvasRef}
+                width={300}
                 height={150}
                 className="rounded-xl bg-black/20"
               />
@@ -227,10 +227,10 @@ export default function OverviewPanel() {
         {hoveredComponent && (
           <div className="mt-4 p-4 bg-white/5 rounded-xl border border-white/10">
             <div className="flex items-start gap-3">
-              <Info className="text-fuchsia-600 dark:text-fuchsia-400 mt-1" size={20} />
+              <Info className="text-fuchsia-600 mt-1" size={20} />
               <div>
                 <h4 className="font-bold text-lg">{components[hoveredComponent].title}</h4>
-                <p className="text-gray-700 dark:text-gray-300 mt-1">{components[hoveredComponent].description}</p>
+                <p className="text-gray-700 mt-1">{components[hoveredComponent].description}</p>
                 <div className="flex gap-2 mt-3 flex-wrap">
                   {components[hoveredComponent].details.map((detail, i) => (
                     <span key={i} className="bg-white/10 px-2 py-1 rounded text-sm">{detail}</span>
@@ -248,8 +248,8 @@ export default function OverviewPanel() {
         <div className="text-center text-2xl font-mono text-fuchsia-300 mb-4">
           dx/dt = v_θ(x_t, t)
         </div>
-        <p className="text-gray-800 dark:text-center max-w-2xl mx-auto">
-          Starting from x₀ ~ N(0, I), we integrate this ODE from t=0 to t=1 to get x₁ ~ p_data. 
+        <p className="text-gray-800 max-w-2xl mx-auto">
+          Starting from x₀ ~ N(0, I), we integrate this ODE from t=0 to t=1 to get x₁ ~ p_data.
           The network v_θ learns the velocity field that makes this transformation happen.
         </p>
       </div>
@@ -260,8 +260,8 @@ export default function OverviewPanel() {
           <h3 className="font-bold text-fuchsia-300 mb-2 flex items-center gap-2">
             <Zap size={18} /> Why "Flow"?
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Inspired by physics: particles flow through a velocity field. Here, probability mass 
+          <p className="text-sm text-gray-700">
+            Inspired by physics: particles flow through a velocity field. Here, probability mass
             "flows" from the noise distribution to the data distribution along learned paths.
           </p>
         </div>
@@ -270,7 +270,7 @@ export default function OverviewPanel() {
           <h3 className="font-bold text-purple-300 mb-2 flex items-center gap-2">
             <Shuffle size={18} /> vs DDPM
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             DDPM predicts noise ε to be removed. Flow matching predicts velocity v directly.
             Both achieve similar results, but flow matching has simpler training objectives.
           </p>
@@ -280,7 +280,7 @@ export default function OverviewPanel() {
           <h3 className="font-bold text-blue-300 mb-2 flex items-center gap-2">
             <Target size={18} /> SD3's Choice
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Stable Diffusion 3 uses flow matching because it enables more flexible noise schedules
             and often converges faster with fewer sampling steps.
           </p>
@@ -294,29 +294,29 @@ export default function OverviewPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Aspect</th>
-                <th className="py-3 px-4 text-left text-fuchsia-600 dark:text-fuchsia-400">Flow Matching</th>
-                <th className="py-3 px-4 text-left text-blue-600 dark:text-blue-400">Score Matching (DDPM)</th>
+                <th className="py-3 px-4 text-left text-gray-800">Aspect</th>
+                <th className="py-3 px-4 text-left text-fuchsia-600">Flow Matching</th>
+                <th className="py-3 px-4 text-left text-blue-600">Score Matching (DDPM)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Network predicts</td>
+                <td className="py-3 px-4 text-gray-700">Network predicts</td>
                 <td className="py-3 px-4">Velocity v_θ(x_t, t)</td>
                 <td className="py-3 px-4">Noise ε_θ(x_t, t)</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Training objective</td>
+                <td className="py-3 px-4 text-gray-700">Training objective</td>
                 <td className="py-3 px-4">MSE on velocity</td>
                 <td className="py-3 px-4">MSE on noise</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Interpolation path</td>
+                <td className="py-3 px-4 text-gray-700">Interpolation path</td>
                 <td className="py-3 px-4">Linear: x_t = (1-t)x₀ + tx₁</td>
                 <td className="py-3 px-4">Gaussian: x_t = √ᾱ_t x₀ + √(1-ᾱ_t) ε</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300">Sampling</td>
+                <td className="py-3 px-4 text-gray-700">Sampling</td>
                 <td className="py-3 px-4">ODE solver (Euler, Heun)</td>
                 <td className="py-3 px-4">SDE/ODE (DDPM, DDIM)</td>
               </tr>

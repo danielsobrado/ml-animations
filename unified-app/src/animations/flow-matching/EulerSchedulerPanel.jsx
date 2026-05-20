@@ -87,7 +87,7 @@ export default function EulerSchedulerPanel() {
     for (let i = 0; i < currentSteps; i++) {
       const t = i / numSteps;
       const nextT = (i + 1) / numSteps;
-      
+
       // Get velocity at current point (derivative of true path)
       const curr = truePath(t);
       const next = truePath(t + 0.01);
@@ -109,7 +109,7 @@ export default function EulerSchedulerPanel() {
 
     for (let i = 0; i < currentSteps; i++) {
       const t = i / numSteps;
-      
+
       // Velocity at current position
       const curr = truePath(t);
       const next = truePath(t + 0.01);
@@ -199,9 +199,9 @@ export default function EulerSchedulerPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Euler Scheduler: <span className="text-fuchsia-600 dark:text-fuchsia-400">ODE Solvers</span>
+          Euler Scheduler: <span className="text-fuchsia-600">ODE Solvers</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Numerical methods to follow the velocity field from noise to data
         </p>
       </div>
@@ -223,8 +223,8 @@ export default function EulerSchedulerPanel() {
               <span className="font-bold">{s.name}</span>
               <span className="text-xs bg-white/10 px-2 py-0.5 rounded">Order {s.order}</span>
             </div>
-            <p className="text-xs text-gray-800 dark:text-gray-400 mb-2">{s.description}</p>
-            <code className="text-xs text-gray-700 dark:text-gray-500 block overflow-x-auto">{s.formula}</code>
+            <p className="text-xs text-gray-800 mb-2">{s.description}</p>
+            <code className="text-xs text-gray-700 block overflow-x-auto">{s.formula}</code>
           </button>
         ))}
       </div>
@@ -266,7 +266,7 @@ export default function EulerSchedulerPanel() {
 
         {/* Step Count Slider */}
         <div className="flex items-center gap-4 px-4">
-          <span className="text-sm text-gray-800 dark:text-gray-400 w-20">Steps: {numSteps}</span>
+          <span className="text-sm text-gray-800 w-20">Steps: {numSteps}</span>
           <input
             type="range"
             min="4"
@@ -284,47 +284,47 @@ export default function EulerSchedulerPanel() {
 
         {/* Step Counter */}
         <div className="text-center mt-4 text-lg">
-          Step <span className="text-fuchsia-600 dark:text-fuchsia-400 font-bold">{step}</span> / {numSteps}
+          Step <span className="text-fuchsia-600 font-bold">{step}</span> / {numSteps}
         </div>
       </div>
 
       {/* Euler Method Explained */}
       <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 rounded-2xl p-6 border border-fuchsia-500/30">
         <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <Info size={20} className="text-fuchsia-600 dark:text-fuchsia-400" />
+          <Info size={20} className="text-fuchsia-600" />
           Euler Method Deep Dive
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-bold text-fuchsia-300 mb-3">The Algorithm</h4>
             <div className="bg-black/30 rounded-lg p-4 font-mono text-sm space-y-2">
-              <p className="text-gray-800 dark:text-gray-400"># Initialize</p>
-              <p><span className="text-blue-600 dark:text-blue-400">x</span> = sample_noise()</p>
-              <p><span className="text-blue-600 dark:text-blue-400">dt</span> = 1.0 / num_steps</p>
-              <p className="text-gray-800 dark:text-gray-400 mt-2"># Iterate</p>
-              <p><span className="text-purple-600 dark:text-purple-400">for</span> t <span className="text-purple-600 dark:text-purple-400">in</span> linspace(0, 1, num_steps):</p>
-              <p className="pl-4"><span className="text-blue-600 dark:text-blue-400">v</span> = model(x, t)</p>
-              <p className="pl-4"><span className="text-blue-600 dark:text-blue-400">x</span> = x + v * dt</p>
-              <p className="text-gray-800 dark:text-gray-400 mt-2"># x is now the generated sample</p>
+              <p className="text-gray-800"># Initialize</p>
+              <p><span className="text-blue-600">x</span> = sample_noise()</p>
+              <p><span className="text-blue-600">dt</span> = 1.0 / num_steps</p>
+              <p className="text-gray-800 mt-2"># Iterate</p>
+              <p><span className="text-purple-600">for</span> t <span className="text-purple-600">in</span> linspace(0, 1, num_steps):</p>
+              <p className="pl-4"><span className="text-blue-600">v</span> = model(x, t)</p>
+              <p className="pl-4"><span className="text-blue-600">x</span> = x + v * dt</p>
+              <p className="text-gray-800 mt-2"># x is now the generated sample</p>
             </div>
           </div>
           <div>
             <h4 className="font-bold text-purple-300 mb-3">Key Insights</h4>
-            <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+            <ul className="space-y-3 text-sm text-gray-700">
               <li className="flex items-start gap-2">
-                <span className="text-fuchsia-600 dark:text-fuchsia-400">•</span>
+                <span className="text-fuchsia-600">•</span>
                 <span><strong>Discretization:</strong> We approximate the continuous ODE with discrete steps</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-fuchsia-600 dark:text-fuchsia-400">•</span>
+                <span className="text-fuchsia-600">•</span>
                 <span><strong>Error:</strong> More steps = less error, but more compute</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-fuchsia-600 dark:text-fuchsia-400">•</span>
+                <span className="text-fuchsia-600">•</span>
                 <span><strong>Trade-off:</strong> SD3 typically uses 20-50 steps for good quality</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-fuchsia-600 dark:text-fuchsia-400">•</span>
+                <span className="text-fuchsia-600">•</span>
                 <span><strong>Heun advantage:</strong> 2nd order means same accuracy with fewer steps</span>
               </li>
             </ul>
@@ -339,30 +339,30 @@ export default function EulerSchedulerPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Solver</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Order</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">NFE/step</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Error (O)</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Best For</th>
+                <th className="py-3 px-4 text-left text-gray-800">Solver</th>
+                <th className="py-3 px-4 text-left text-gray-800">Order</th>
+                <th className="py-3 px-4 text-left text-gray-800">NFE/step</th>
+                <th className="py-3 px-4 text-left text-gray-800">Error (O)</th>
+                <th className="py-3 px-4 text-left text-gray-800">Best For</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               <tr>
-                <td className="py-3 px-4 text-fuchsia-600 dark:text-fuchsia-400">Euler</td>
+                <td className="py-3 px-4 text-fuchsia-600">Euler</td>
                 <td className="py-3 px-4">1st</td>
                 <td className="py-3 px-4">1</td>
                 <td className="py-3 px-4">O(Δt)</td>
                 <td className="py-3 px-4">Fast prototyping, many steps</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-purple-600 dark:text-purple-400">Heun</td>
+                <td className="py-3 px-4 text-purple-600">Heun</td>
                 <td className="py-3 px-4">2nd</td>
                 <td className="py-3 px-4">2</td>
                 <td className="py-3 px-4">O(Δt²)</td>
                 <td className="py-3 px-4">Balanced quality/speed</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 text-blue-600 dark:text-blue-400">DPM++</td>
+                <td className="py-3 px-4 text-blue-600">DPM++</td>
                 <td className="py-3 px-4">2nd+</td>
                 <td className="py-3 px-4">1-2</td>
                 <td className="py-3 px-4">O(Δt²)</td>
@@ -371,7 +371,7 @@ export default function EulerSchedulerPanel() {
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-gray-700 dark:text-gray-500 mt-4">
+        <p className="text-xs text-gray-700 mt-4">
           NFE = Number of Function Evaluations (model calls). Higher order solvers need more evaluations but achieve better accuracy per step.
         </p>
       </div>

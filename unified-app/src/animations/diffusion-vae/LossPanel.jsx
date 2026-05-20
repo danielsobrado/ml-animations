@@ -28,9 +28,9 @@ export default function LossPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          VAE Loss: <span className="text-pink-600 dark:text-pink-400">The ELBO</span>
+          VAE Loss: <span className="text-pink-600">The ELBO</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Evidence Lower Bound = Reconstruction Loss + KL Divergence
         </p>
       </div>
@@ -38,44 +38,44 @@ export default function LossPanel() {
       {/* Loss Formula */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-center text-lg font-bold mb-4">The VAE Loss Function</h3>
-        
+
         <div className="flex items-center justify-center gap-4 flex-wrap text-lg font-mono">
-          <span className="text-gray-800 dark:text-gray-400">ℒ</span>
-          <span className="text-gray-700 dark:text-gray-500">=</span>
+          <span className="text-gray-800">ℒ</span>
+          <span className="text-gray-700">=</span>
           <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg px-4 py-2">
-            <span className="text-blue-600 dark:text-blue-400">𝔼<sub>q(z|x)</sub>[log p(x|z)]</span>
+            <span className="text-blue-600">𝔼<sub>q(z|x)</sub>[log p(x|z)]</span>
           </div>
-          <span className="text-gray-700 dark:text-gray-500">−</span>
+          <span className="text-gray-700">−</span>
           <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg px-4 py-2">
-            <span className="text-purple-600 dark:text-purple-400">β · KL(q(z|x) || p(z))</span>
+            <span className="text-purple-600">β · KL(q(z|x) || p(z))</span>
           </div>
         </div>
 
         <div className="mt-4 grid md:grid-cols-2 gap-4">
           <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
-            <h4 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            <h4 className="font-bold text-blue-600 flex items-center gap-2">
               <BarChart3 size={18} />
               Reconstruction Loss
             </h4>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
-              How well can we reconstruct the input from z? Usually Binary Cross-Entropy (for [0,1] pixels) 
+            <p className="text-sm text-gray-700 mt-2">
+              How well can we reconstruct the input from z? Usually Binary Cross-Entropy (for [0,1] pixels)
               or MSE. Encourages decoder to output x̂ ≈ x.
             </p>
-            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2 font-mono">
+            <p className="text-xs text-gray-700 mt-2 font-mono">
               BCE = -Σ[x·log(x̂) + (1-x)·log(1-x̂)]
             </p>
           </div>
-          
+
           <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
-            <h4 className="font-bold text-purple-600 dark:text-purple-400 flex items-center gap-2">
+            <h4 className="font-bold text-purple-600 flex items-center gap-2">
               <Scale size={18} />
               KL Divergence Loss
             </h4>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
-              Forces q(z|x) to be close to the prior p(z) = N(0, I). Regularizes the latent space 
+            <p className="text-sm text-gray-700 mt-2">
+              Forces q(z|x) to be close to the prior p(z) = N(0, I). Regularizes the latent space
               to be smooth and continuous.
             </p>
-            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2 font-mono">
+            <p className="text-xs text-gray-700 mt-2 font-mono">
               KL = -½ Σ[1 + log(σ²) - μ² - σ²]
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function LossPanel() {
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
             <label className="text-sm font-medium">β (KL Weight):</label>
-            <span className="text-purple-600 dark:text-purple-400 font-mono">{beta.toFixed(1)}</span>
+            <span className="text-purple-600 font-mono">{beta.toFixed(1)}</span>
           </div>
           <input
             type="range"
@@ -104,7 +104,7 @@ export default function LossPanel() {
             onChange={(e) => setBeta(parseFloat(e.target.value))}
             className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
           />
-          <div className="flex justify-between text-xs text-gray-700 dark:text-gray-500 mt-1">
+          <div className="flex justify-between text-xs text-gray-700 mt-1">
             <span>0 (No KL)</span>
             <span>1 (Standard VAE)</span>
             <span>4 (Strong regularization)</span>
@@ -115,11 +115,11 @@ export default function LossPanel() {
         <div className="space-y-4">
           <div>
             <div className="flex justify-between text-sm mb-1">
-              <span className="text-blue-600 dark:text-blue-400">Reconstruction Loss</span>
+              <span className="text-blue-600">Reconstruction Loss</span>
               <span className="font-mono">{reconLoss.toFixed(1)}</span>
             </div>
             <div className="h-6 bg-gray-800 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300"
                 style={{ width: `${Math.min(100, reconLoss / 2)}%` }}
               />
@@ -128,11 +128,11 @@ export default function LossPanel() {
 
           <div>
             <div className="flex justify-between text-sm mb-1">
-              <span className="text-purple-600 dark:text-purple-400">KL Loss × β</span>
+              <span className="text-purple-600">KL Loss × β</span>
               <span className="font-mono">{(beta * klLoss).toFixed(1)}</span>
             </div>
             <div className="h-6 bg-gray-800 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-purple-500 to-purple-600 transition-all duration-300"
                 style={{ width: `${Math.min(100, (beta * klLoss) / 2)}%` }}
               />
@@ -141,11 +141,11 @@ export default function LossPanel() {
 
           <div className="pt-2 border-t border-white/10">
             <div className="flex justify-between text-sm mb-1">
-              <span className="text-pink-600 dark:text-pink-400 font-bold">Total Loss (ELBO)</span>
+              <span className="text-pink-600 font-bold">Total Loss (ELBO)</span>
               <span className="font-mono font-bold">{totalLoss.toFixed(1)}</span>
             </div>
             <div className="h-8 bg-gray-800 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-pink-500 to-rose-600 transition-all duration-300"
                 style={{ width: `${Math.min(100, totalLoss / 4)}%` }}
               />
@@ -164,27 +164,27 @@ export default function LossPanel() {
       {/* β-VAE Explanation */}
       <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-2xl p-6 border border-purple-500/30">
         <h3 className="text-lg font-bold mb-3 text-purple-300">🔬 β-VAE: Disentanglement</h3>
-        <p className="text-gray-700 dark:text-gray-300 mb-4">
+        <p className="text-gray-700 mb-4">
           By increasing β {'>'}1, we get <strong>β-VAE</strong> which encourages more disentangled latent representations.
           Each latent dimension learns to capture a single factor of variation.
         </p>
-        
+
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-black/20 rounded-lg p-3">
             <p className="font-bold text-center">β = 0</p>
-            <p className="text-xs text-gray-800 dark:text-center mt-1">
+            <p className="text-xs text-gray-800 mt-1">
               Regular autoencoder. No KL constraint, no generation ability.
             </p>
           </div>
           <div className="bg-black/20 rounded-lg p-3 ring-2 ring-purple-500/50">
-            <p className="font-bold text-center text-purple-600 dark:text-purple-400">β = 1</p>
-            <p className="text-xs text-gray-800 dark:text-center mt-1">
+            <p className="font-bold text-center text-purple-600">β = 1</p>
+            <p className="text-xs text-gray-800 mt-1">
               Standard VAE. Balance of reconstruction and regularization.
             </p>
           </div>
           <div className="bg-black/20 rounded-lg p-3">
             <p className="font-bold text-center">β {'>'} 1</p>
-            <p className="text-xs text-gray-800 dark:text-center mt-1">
+            <p className="text-xs text-gray-800 mt-1">
               β-VAE. Stronger regularization → more disentanglement, blurrier reconstructions.
             </p>
           </div>
@@ -194,8 +194,8 @@ export default function LossPanel() {
       {/* KL Divergence Deep Dive */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-lg font-bold mb-4">📐 KL Divergence Closed Form</h3>
-        
-        <p className="text-gray-700 dark:text-gray-300 mb-4">
+
+        <p className="text-gray-700 mb-4">
           For Gaussian distributions, KL divergence has a closed-form solution (no sampling needed!):
         </p>
 
@@ -203,7 +203,7 @@ export default function LossPanel() {
           <p className="text-purple-300">
             KL(q(z|x) || p(z)) = -½ Σ<sub>j=1</sub><sup>J</sup> (1 + log(σ<sub>j</sub>²) - μ<sub>j</sub>² - σ<sub>j</sub>²)
           </p>
-          <p className="text-gray-700 dark:text-gray-500 mt-2">
+          <p className="text-gray-700 mt-2">
             where J = latent_dim, and μ, σ are outputs from encoder
           </p>
         </div>
@@ -219,10 +219,10 @@ export default function LossPanel() {
 def vae_loss(x, x_recon, mu, logvar, beta=1.0):
     # Reconstruction loss (BCE for binary images)
     recon_loss = F.binary_cross_entropy(x_recon, x, reduction='sum')
-    
+
     # KL divergence
     kl_loss = kl_divergence(mu, logvar)
-    
+
     return recon_loss + beta * kl_loss`}</code>
           </pre>
         </div>
@@ -232,7 +232,7 @@ def vae_loss(x, x_recon, mu, logvar, beta=1.0):
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
           <h4 className="font-bold text-blue-300 mb-2">⬆️ High Reconstruction, Low KL</h4>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Sharp, accurate reconstructions</li>
             <li>• Latent space may have "holes"</li>
             <li>• Poor generation quality</li>
@@ -241,7 +241,7 @@ def vae_loss(x, x_recon, mu, logvar, beta=1.0):
         </div>
         <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
           <h4 className="font-bold text-purple-300 mb-2">⬆️ Low Reconstruction, High KL</h4>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Blurry reconstructions</li>
             <li>• Smooth, continuous latent space</li>
             <li>• Better generation/interpolation</li>

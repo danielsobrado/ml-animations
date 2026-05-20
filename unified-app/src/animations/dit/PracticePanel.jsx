@@ -131,9 +131,9 @@ export default function PracticePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Practice Lab: <span className="text-pink-600 dark:text-pink-400">DiT Architecture</span>
+          Practice Lab: <span className="text-pink-600">DiT Architecture</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Test your understanding and explore hands-on exercises
         </p>
       </div>
@@ -145,7 +145,7 @@ export default function PracticePanel() {
           className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all ${
             !showExercise
               ? 'bg-pink-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <BookOpen size={18} />
@@ -156,7 +156,7 @@ export default function PracticePanel() {
           className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all ${
             showExercise
               ? 'bg-pink-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Code size={18} />
@@ -170,10 +170,10 @@ export default function PracticePanel() {
           {!quizComplete ? (
             <>
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-800 dark:text-gray-400">
+                <span className="text-gray-800">
                   Question {currentQuestion + 1} of {questions.length}
                 </span>
-                <span className="text-pink-600 dark:text-pink-400">Score: {score}</span>
+                <span className="text-pink-600">Score: {score}</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2 mb-8">
                 <div
@@ -240,10 +240,10 @@ export default function PracticePanel() {
             <div className="text-center py-8">
               <Trophy className="w-20 h-20 mx-auto mb-6 text-yellow-400" />
               <h3 className="text-2xl font-bold mb-4">Quiz Complete!</h3>
-              <p className="text-4xl font-bold text-pink-600 dark:text-pink-400 mb-4">
+              <p className="text-4xl font-bold text-pink-600 mb-4">
                 {score} / {questions.length}
               </p>
-              <p className="text-gray-800 dark:text-gray-400 mb-6">
+              <p className="text-gray-800 mb-6">
                 {score === questions.length
                   ? "Perfect! You've mastered DiT architecture!"
                   : score >= questions.length * 0.7
@@ -269,11 +269,11 @@ export default function PracticePanel() {
               <span className="w-8 h-8 rounded-lg bg-pink-600 flex items-center justify-center text-sm">1</span>
               Implement AdaLN from Scratch
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Build an Adaptive Layer Normalization module.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import torch
+              <pre className="text-gray-700">{`import torch
 import torch.nn as nn
 
 class AdaLayerNorm(nn.Module):
@@ -281,18 +281,18 @@ class AdaLayerNorm(nn.Module):
         super().__init__()
         # TODO: Create a LayerNorm without learnable affine
         # self.norm = nn.LayerNorm(hidden_size, elementwise_affine=False)
-        
+
         # TODO: Create MLP to produce gamma, beta, alpha
         # Output size should be 3 * hidden_size
         # self.modulation = nn.Sequential(...)
-        
+
         # TODO: Zero-initialize the output layer
         pass
-    
+
     def forward(self, x, c):
         # x: (B, N, D) - features
         # c: (B, D) - conditioning
-        
+
         # TODO: Get gamma, beta, alpha from modulation MLP
         # TODO: Apply adaptive normalization
         # return normalized_x, alpha
@@ -314,11 +314,11 @@ c = torch.randn(B, D)
               <span className="w-8 h-8 rounded-lg bg-orange-600 flex items-center justify-center text-sm">2</span>
               Implement Patchify/Unpatchify
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Convert between spatial latent and sequence of patch tokens.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import torch
+              <pre className="text-gray-700">{`import torch
 import torch.nn as nn
 
 def patchify(x, patch_size=2):
@@ -360,11 +360,11 @@ x = torch.randn(B, C, H, W)
               <span className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center text-sm">3</span>
               Build a Simple DiT Block
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Combine attention, MLP, and AdaLN into a full DiT block.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import torch
+              <pre className="text-gray-700">{`import torch
 import torch.nn as nn
 
 class DiTBlock(nn.Module):
@@ -373,29 +373,29 @@ class DiTBlock(nn.Module):
         # TODO: Create two AdaLN layers
         # self.norm1 = AdaLayerNorm(hidden_size)
         # self.norm2 = AdaLayerNorm(hidden_size)
-        
+
         # TODO: Create multi-head self-attention
         # self.attn = nn.MultiheadAttention(hidden_size, num_heads, batch_first=True)
-        
+
         # TODO: Create MLP (hidden_size -> mlp_ratio*hidden_size -> hidden_size)
         # self.mlp = nn.Sequential(...)
-        
+
         pass
-    
+
     def forward(self, x, c):
         # x: (B, N, D) - features
         # c: (B, D) - conditioning
-        
+
         # TODO: Pre-norm attention with residual and gating
         # norm_x, alpha1 = self.norm1(x, c)
         # attn_out, _ = self.attn(norm_x, norm_x, norm_x)
         # x = x + alpha1.unsqueeze(1) * attn_out
-        
+
         # TODO: Pre-norm MLP with residual and gating
         # norm_x, alpha2 = self.norm2(x, c)
         # mlp_out = self.mlp(norm_x)
         # x = x + alpha2.unsqueeze(1) * mlp_out
-        
+
         return x
 
 # Test
@@ -413,11 +413,11 @@ class DiTBlock(nn.Module):
               <span className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center text-sm">4</span>
               Compute FLOPs for DiT Variants
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Calculate the computational cost for different model sizes.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`def compute_dit_flops(
+              <pre className="text-gray-700">{`def compute_dit_flops(
     seq_len: int,      # Number of tokens
     hidden_size: int,  # Model dimension
     num_heads: int,    # Attention heads
@@ -431,23 +431,23 @@ class DiTBlock(nn.Module):
     # - Q, K, V projections: 3 * seq_len * hidden_size^2
     # - Attention scores: 2 * seq_len^2 * hidden_size
     # - Output projection: seq_len * hidden_size^2
-    
+
     # TODO: Calculate attention FLOPs
     attn_flops = 0
-    
+
     # MLP FLOPs per layer:
     # - Up projection: seq_len * hidden_size * (mlp_ratio * hidden_size)
     # - Down projection: same
-    
+
     # TODO: Calculate MLP FLOPs
     mlp_flops = 0
-    
+
     # Total per layer
     layer_flops = attn_flops + mlp_flops
-    
+
     # Total for all layers
     total_flops = num_layers * layer_flops
-    
+
     return total_flops / 1e9  # Return in GFLOPs
 
 # Compare DiT variants
@@ -460,7 +460,7 @@ models = {
 
 seq_len = 256  # 16x16 patches from 256x256 image with patch_size=16
 for name, config in models.items():
-    # gflops = compute_dit_flops(seq_len, config['hidden'], 
+    # gflops = compute_dit_flops(seq_len, config['hidden'],
     #                           config['heads'], config['layers'])
     # print(f"{name}: {gflops:.2f} GFLOPs")
     pass`}</pre>
@@ -475,25 +475,25 @@ for name, config in models.items():
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-pink-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>DiT</strong> replaces U-Net with a simple, uniform transformer architecture
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-orange-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>AdaLN-Zero</strong> injects conditioning by modulating layer norm parameters
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-violet-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>Patchify</strong> converts images to sequences, enabling transformer processing
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-green-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               DiT follows <strong>scaling laws</strong> - larger models consistently improve quality
             </p>
           </div>

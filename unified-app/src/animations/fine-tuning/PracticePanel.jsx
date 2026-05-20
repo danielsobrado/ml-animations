@@ -118,28 +118,28 @@ export default function PracticePanel() {
     // Calculate memory requirements
     const calculateMemory = () => {
         const { modelSize, hiddenDim, numLayers, rank, targetModules, precision, quantization } = calcParams;
-        
+
         // Base model memory
         let baseModelBytes = modelSize * 1e9 * (precision / 8);
         if (quantization === '8bit') baseModelBytes = modelSize * 1e9 * 1;
         if (quantization === '4bit') baseModelBytes = modelSize * 1e9 * 0.5;
-        
+
         // LoRA parameters per layer: 2 * hiddenDim * rank * targetModules
         const loraParamsPerLayer = 2 * hiddenDim * rank * targetModules;
         const totalLoraParams = loraParamsPerLayer * numLayers;
         const loraBytes = totalLoraParams * (precision / 8);
-        
+
         // Optimizer states (for trainable params only)
         const optimizerBytes = loraBytes * 3; // Adam: params + momentum + variance
-        
+
         // Gradients
         const gradientBytes = loraBytes;
-        
+
         // Activation memory (rough estimate)
         const activationBytes = modelSize * 0.5 * 1e9;
-        
+
         const totalTrainingBytes = baseModelBytes + loraBytes + optimizerBytes + gradientBytes + activationBytes;
-        
+
         return {
             baseModel: (baseModelBytes / 1e9).toFixed(2),
             loraParams: totalLoraParams,
@@ -187,7 +187,7 @@ export default function PracticePanel() {
                             <>
                                 {/* Progress */}
                                 <div className="flex justify-between items-center mb-6">
-                                    <span className="text-sm text-slate-700 dark:text-slate-500">
+                                    <span className="text-sm text-slate-700">
                                         Question {currentQuestion + 1} of {quizQuestions.length}
                                     </span>
                                     <div className="flex gap-1">
@@ -273,7 +273,7 @@ export default function PracticePanel() {
                                 <h3 className="text-2xl font-bold text-slate-800 mb-2">
                                     Quiz Complete!
                                 </h3>
-                                <p className="text-xl text-slate-800 dark:text-slate-600 mb-6">
+                                <p className="text-xl text-slate-800 mb-6">
                                     You scored <span className="font-bold text-purple-600">{getScore()}</span> out of {quizQuestions.length}
                                 </p>
                                 <button
@@ -294,7 +294,7 @@ export default function PracticePanel() {
                                 <Settings size={20} className="text-purple-500" />
                                 Configure Model & LoRA
                             </h3>
-                            
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -392,7 +392,7 @@ export default function PracticePanel() {
                                 <Zap size={20} className="text-green-500" />
                                 Memory Estimates
                             </h3>
-                            
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                                     <div className="text-sm text-blue-600 mb-1">Base Model Memory</div>
@@ -413,9 +413,9 @@ export default function PracticePanel() {
                             </div>
 
                             <div className="mt-4 p-4 bg-slate-800 rounded-lg">
-                                <div className="text-slate-800 dark:text-sm mb-1">Estimated Training Memory</div>
+                                <div className="text-slate-800 mb-1">Estimated Training Memory</div>
                                 <div className="text-3xl font-bold text-white">{memCalc.totalTraining} GB</div>
-                                <div className="text-slate-800 dark:text-sm mt-1">
+                                <div className="text-slate-800 mt-1">
                                     (includes model + LoRA + optimizer + activations)
                                 </div>
                             </div>

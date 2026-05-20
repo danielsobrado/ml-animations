@@ -146,7 +146,7 @@ Remember: ▁ marks word boundaries (including leading space)`,
    → ["▁un", "believ", "able"]
    (Common prefix + suffix split)
 
-3. "artificial intelligence"  
+3. "artificial intelligence"
    → ["▁art", "ificial", "▁intellig", "ence"]
    (Long words split into subwords)
 
@@ -154,7 +154,7 @@ Remember: ▁ marks word boundaries (including leading space)`,
    → ["▁SD", "3", "▁is", "▁amazing"]
    (Numbers often separate, common words intact)
 
-Key insight: ▁ appears at START of words (not end), 
+Key insight: ▁ appears at START of words (not end),
 representing the space BEFORE the word.`
     },
     {
@@ -179,7 +179,7 @@ float32 memory:
 8,388,608 × 4 bytes = 33,554,432 bytes
 = 32 MB per batch
 
-Note: This is just the OUTPUT. The model weights 
+Note: This is just the OUTPUT. The model weights
 themselves require ~8-10GB for T5-XXL encoder!
 
 Total during inference ≈ 10GB + batch outputs`
@@ -206,8 +206,8 @@ Total during inference ≈ 10GB + batch outputs`
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">Practice Lab</h2>
-        <p className="text-gray-700 dark:text-gray-300">
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">Practice Lab</h2>
+        <p className="text-gray-700">
           Test your understanding of T5 text encoders with quizzes and exercises.
         </p>
       </div>
@@ -219,7 +219,7 @@ Total during inference ≈ 10GB + batch outputs`
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
             activeExercise === -1
               ? 'bg-emerald-600 text-white'
-              : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+              : 'bg-white/10 text-gray-700 hover:bg-white/20'
           }`}
         >
           <BookOpen size={18} />
@@ -230,7 +230,7 @@ Total during inference ≈ 10GB + batch outputs`
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
             activeExercise >= 0
               ? 'bg-teal-600 text-white'
-              : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+              : 'bg-white/10 text-gray-700 hover:bg-white/20'
           }`}
         >
           <Code size={18} />
@@ -242,7 +242,7 @@ Total during inference ≈ 10GB + batch outputs`
         /* Quiz Section */
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            <h3 className="text-lg font-semibold text-gray-700">
               T5 Text Encoder Quiz
             </h3>
             <button
@@ -286,11 +286,11 @@ Total during inference ≈ 10GB + batch outputs`
                       } border`}
                     >
                       <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-sm ${
-                        isSelected ? 'border-emerald-400 text-emerald-600 dark:text-emerald-400' : 'border-gray-500 text-gray-700 dark:text-gray-500'
+                        isSelected ? 'border-emerald-400 text-emerald-600' : 'border-gray-500 text-gray-700'
                       }`}>
                         {String.fromCharCode(65 + optIdx)}
                       </span>
-                      <span className="text-gray-700 dark:text-gray-300">{option}</span>
+                      <span className="text-gray-700">{option}</span>
                       {showCorrect && <CheckCircle className="ml-auto text-green-400" size={20} />}
                       {showWrong && <XCircle className="ml-auto text-red-400" size={20} />}
                     </button>
@@ -304,7 +304,7 @@ Total during inference ≈ 10GB + batch outputs`
                 }`}>
                   <div className="flex items-center gap-2 text-sm">
                     <Lightbulb size={16} className="text-yellow-400" />
-                    <span className="text-gray-700 dark:text-gray-300">{q.explanation}</span>
+                    <span className="text-gray-700">{q.explanation}</span>
                   </div>
                 </div>
               )}
@@ -326,7 +326,7 @@ Total during inference ≈ 10GB + batch outputs`
                 <div className="text-3xl font-bold text-white mb-2">
                   {calculateScore()} / {questions.length}
                 </div>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                   {calculateScore() === questions.length
                     ? "🎉 Perfect! You've mastered T5 text encoders!"
                     : calculateScore() >= questions.length * 0.7
@@ -349,7 +349,7 @@ Total during inference ≈ 10GB + batch outputs`
                 className={`px-3 py-2 rounded-lg text-sm transition-colors ${
                   activeExercise === idx
                     ? 'bg-teal-600 text-white'
-                    : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+                    : 'bg-white/10 text-gray-700 hover:bg-white/20'
                 }`}
               >
                 Exercise {idx + 1}
@@ -359,15 +359,15 @@ Total during inference ≈ 10GB + batch outputs`
 
           {/* Active Exercise */}
           <div className="bg-black/30 rounded-xl p-6 border border-teal-500/30">
-            <h3 className="text-xl font-semibold text-teal-600 dark:text-teal-400 mb-2">
+            <h3 className="text-xl font-semibold text-teal-600 mb-2">
               {exercises[activeExercise].title}
             </h3>
-            <p className="text-gray-700 dark:text-gray-300 mb-4">
+            <p className="text-gray-700 mb-4">
               {exercises[activeExercise].description}
             </p>
 
             <div className="bg-black/40 rounded-lg p-4 mb-4">
-              <div className="text-sm text-gray-800 dark:text-gray-400 mb-2">Task:</div>
+              <div className="text-sm text-gray-800 mb-2">Task:</div>
               <pre className="text-gray-200 whitespace-pre-wrap font-mono text-sm">
                 {exercises[activeExercise].task}
               </pre>
@@ -391,7 +391,7 @@ Total during inference ≈ 10GB + batch outputs`
               <Lightbulb size={18} />
               Tips for Success
             </h4>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• T5-XXL hidden_dim = 4096 (much larger than CLIP)</li>
               <li>• Bidirectional attention = n² attention computations</li>
               <li>• SentencePiece uses ▁ to mark word boundaries</li>

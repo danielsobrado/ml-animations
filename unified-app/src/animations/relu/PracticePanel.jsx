@@ -13,11 +13,11 @@ const generateProblem = () => {
     Math.floor(Math.random() * 3) - 1
   ];
   const b = Math.floor(Math.random() * 10) - 5;
-  
+
   const dotProduct = x[0] * w[0] + x[1] * w[1] + x[2] * w[2];
   const z = dotProduct + b;
   const reluOutput = Math.max(0, z);
-  
+
   return { x, w, b, dotProduct, z, reluOutput };
 };
 
@@ -58,11 +58,11 @@ export default function PracticePanel({ onStepChange }) {
   const getHint = () => {
     const { x, w, b, dotProduct } = problem;
     switch(currentStep) {
-      case 0: 
+      case 0:
         return `W·X = (${w[0]}×${x[0]}) + (${w[1]}×${x[1]}) + (${w[2]}×${x[2]})`;
-      case 1: 
+      case 1:
         return `z = ${dotProduct} + (${b}) = ?`;
-      case 2: 
+      case 2:
         return `ReLU(${problem.z}) = max(0, ${problem.z}) = ?`;
       default: return '';
     }
@@ -72,15 +72,15 @@ export default function PracticePanel({ onStepChange }) {
     const userAnswer = parseInt(userInput, 10);
     const correctAnswer = getCorrectAnswer();
     setAttempts(prev => prev + 1);
-    
+
     if (userAnswer === correctAnswer) {
       setFeedback('✓ Correct!');
       setScore(prev => prev + 1);
-      
+
       const newAnswers = [...completedAnswers];
       newAnswers[currentStep] = userAnswer;
       setCompletedAnswers(newAnswers);
-      
+
       setTimeout(() => {
         if (currentStep < PRACTICE_STEPS.length - 1) {
           setCurrentStep(prev => prev + 1);
@@ -133,7 +133,7 @@ export default function PracticePanel({ onStepChange }) {
   return (
     <div className="flex flex-col items-center p-3 h-full">
       <h2 className="text-xl font-bold text-gray-800 mb-2">Practice Exercise</h2>
-      
+
       {/* Problem Display */}
       <div className="bg-white rounded-lg shadow-lg p-4 w-full">
         <div className="flex flex-col items-center gap-4">
@@ -179,7 +179,7 @@ export default function PracticePanel({ onStepChange }) {
         {/* Calculation Flow */}
         <div className="mt-4 flex items-center justify-center gap-2 text-sm flex-wrap">
           <div className={`px-3 py-2 rounded font-bold ${
-            completedAnswers[0] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
+            completedAnswers[0] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-700'
           }`}>
             W·X = {completedAnswers[0] ?? '?'}
           </div>
@@ -189,13 +189,13 @@ export default function PracticePanel({ onStepChange }) {
           </div>
           <span className="text-xl">=</span>
           <div className={`px-3 py-2 rounded font-bold ${
-            completedAnswers[1] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
+            completedAnswers[1] !== null ? 'bg-orange-400 text-black' : 'bg-gray-200 text-gray-700'
           }`}>
             z = {completedAnswers[1] ?? '?'}
           </div>
           <span className="text-xl">→</span>
           <div className={`px-3 py-2 rounded font-bold ${
-            completedAnswers[2] !== null ? 'bg-yellow-400 text-black' : 'bg-gray-200 text-gray-700 dark:text-gray-500'
+            completedAnswers[2] !== null ? 'bg-yellow-400 text-black' : 'bg-gray-200 text-gray-700'
           }`}>
             ReLU = {completedAnswers[2] ?? '?'}
           </div>
@@ -236,7 +236,7 @@ export default function PracticePanel({ onStepChange }) {
               Submit
             </button>
           </div>
-          
+
           <button
             onClick={handleHint}
             className="mt-2 w-full px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-lg transition-colors"
@@ -280,7 +280,7 @@ export default function PracticePanel({ onStepChange }) {
 
       {/* Progress & Reset */}
       <div className="mt-3 flex items-center gap-4">
-        <div className="text-sm text-gray-800 dark:text-gray-600">
+        <div className="text-sm text-gray-800">
           Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}
         </div>
         <button

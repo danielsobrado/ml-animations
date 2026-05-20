@@ -55,7 +55,7 @@ export default function ConceptPanel() {
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-4">What are Multimodal LLMs?</h2>
                     <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
-                        Multimodal LLMs can understand and generate content across <strong>multiple types of data</strong> - 
+                        Multimodal LLMs can understand and generate content across <strong>multiple types of data</strong> -
                         text, images, audio, and video - all in one unified model.
                     </p>
                 </div>
@@ -71,7 +71,7 @@ export default function ConceptPanel() {
                             orange: 'bg-orange-50 border-orange-200 text-orange-600',
                         };
                         return (
-                            <div 
+                            <div
                                 key={mod.id}
                                 className={`p-4 rounded-xl border-2 text-center transition-all duration-500 ${
                                     colorClasses[mod.color]
@@ -79,7 +79,7 @@ export default function ConceptPanel() {
                             >
                                 <Icon className="mx-auto mb-2" size={32} />
                                 <h3 className="font-bold">{mod.label}</h3>
-                                <div className="text-xs mt-2 text-slate-800 dark:text-slate-600">
+                                <div className="text-xs mt-2 text-slate-800">
                                     {mod.examples.join(' • ')}
                                 </div>
                             </div>
@@ -105,23 +105,23 @@ export default function ConceptPanel() {
                             <div className="text-3xl mb-1">🎵</div>
                             <span className="text-sm">Audio</span>
                         </div>
-                        <ArrowRight className="text-indigo-600 dark:text-indigo-400 mx-4" size={32} />
+                        <ArrowRight className="text-indigo-600 mx-4" size={32} />
                         <div className="bg-white rounded-xl p-4 shadow-md border">
                             <div className="text-center">
                                 <Sparkles className="mx-auto text-indigo-600 mb-2" size={32} />
                                 <div className="font-bold text-indigo-900">Unified</div>
                                 <div className="font-bold text-indigo-900">Embedding Space</div>
-                                <div className="font-mono text-xs text-slate-700 dark:text-slate-500 mt-1">[0.23, -0.45, ...]</div>
+                                <div className="font-mono text-xs text-slate-700 mt-1">[0.23, -0.45, ...]</div>
                             </div>
                         </div>
-                        <ArrowRight className="text-indigo-600 dark:text-indigo-400 mx-4" size={32} />
+                        <ArrowRight className="text-indigo-600 mx-4" size={32} />
                         <div className="flex flex-col items-center">
                             <MessageSquare className="text-green-600 mb-1" size={32} />
                             <span className="text-sm font-bold">Understanding</span>
                         </div>
                     </div>
-                    <p className="text-center text-slate-800 dark:text-slate-600 mt-4 text-sm">
-                        Different modalities are encoded into the <strong>same vector space</strong>, 
+                    <p className="text-center text-slate-800 mt-4 text-sm">
+                        Different modalities are encoded into the <strong>same vector space</strong>,
                         allowing the model to reason across them.
                     </p>
                 </div>
@@ -129,7 +129,7 @@ export default function ConceptPanel() {
                 {/* Example Tasks */}
                 <div className="bg-slate-50 rounded-xl p-6 mb-8">
                     <h3 className="text-xl font-bold text-slate-800 mb-4">Example Tasks</h3>
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                         {EXAMPLE_TASKS.map((ex, i) => (
                             <button
@@ -141,7 +141,7 @@ export default function ConceptPanel() {
                                         : 'bg-white border hover:bg-slate-100'
                                 }`}
                             >
-                                {ex.inputs.map(inp => 
+                                {ex.inputs.map(inp =>
                                     inp === 'image' ? '🖼️' : inp === 'audio' ? '🎵' : '📝'
                                 ).join('+')} {ex.question.slice(0, 20)}...
                             </button>
@@ -152,10 +152,10 @@ export default function ConceptPanel() {
                         <div className="flex items-start gap-4 mb-4">
                             <div className="flex gap-2">
                                 {example.inputs.map(inp => (
-                                    <div 
+                                    <div
                                         key={inp}
                                         className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${
-                                            inp === 'image' ? 'bg-green-100' : 
+                                            inp === 'image' ? 'bg-green-100' :
                                             inp === 'audio' ? 'bg-purple-100' : 'bg-blue-100'
                                         }`}
                                     >
@@ -164,21 +164,21 @@ export default function ConceptPanel() {
                                 ))}
                             </div>
                             <div className="flex-1">
-                                <div className="text-sm text-slate-700 dark:text-slate-500 mb-1">Input:</div>
+                                <div className="text-sm text-slate-700 mb-1">Input:</div>
                                 <div className="font-medium text-slate-800">"{example.question}"</div>
                             </div>
                         </div>
-                        
-                        <div className="text-sm text-slate-800 dark:text-slate-600 bg-slate-50 p-3 rounded mb-4">
+
+                        <div className="text-sm text-slate-800 bg-slate-50 p-3 rounded mb-4">
                             {example.description}
                         </div>
-                        
+
                         <div className="flex items-start gap-4">
                             <div className="w-12 h-12 rounded-lg bg-indigo-100 flex items-center justify-center">
                                 <MessageSquare className="text-indigo-600" size={24} />
                             </div>
                             <div className="flex-1">
-                                <div className="text-sm text-slate-700 dark:text-slate-500 mb-1">Output:</div>
+                                <div className="text-sm text-slate-700 mb-1">Output:</div>
                                 <div className="font-medium text-green-700">{example.output}</div>
                             </div>
                         </div>
@@ -195,7 +195,7 @@ export default function ConceptPanel() {
                     ].map(model => (
                         <div key={model.name} className="bg-white rounded-lg p-3 border text-center">
                             <div className="font-bold text-slate-800">{model.name}</div>
-                            <div className="text-xs text-slate-700 dark:text-slate-500">{model.company}</div>
+                            <div className="text-xs text-slate-700">{model.company}</div>
                             <div className="text-xs text-indigo-600 mt-1">{model.capabilities}</div>
                         </div>
                     ))}
@@ -207,8 +207,8 @@ export default function ConceptPanel() {
                     <div>
                         <h4 className="font-bold text-amber-900 mb-1">Key Insight</h4>
                         <p className="text-sm">
-                            The magic of multimodal LLMs is <strong>alignment</strong> - training different encoders 
-                            (vision, audio) to map their inputs into the same space as text. This allows 
+                            The magic of multimodal LLMs is <strong>alignment</strong> - training different encoders
+                            (vision, audio) to map their inputs into the same space as text. This allows
                             the language model to "understand" images and sounds as if they were words.
                         </p>
                     </div>

@@ -157,7 +157,7 @@ export default function PracticePanel() {
   const calculateParams = () => {
     let total = 0;
     let breakdown = [];
-    
+
     // Encoder
     let prevDim = inputDim;
     hiddenDims.forEach((dim, i) => {
@@ -166,14 +166,14 @@ export default function PracticePanel() {
       total += params;
       prevDim = dim;
     });
-    
+
     // μ and log σ² layers
     const muParams = prevDim * latentDim + latentDim;
     const logvarParams = prevDim * latentDim + latentDim;
     breakdown.push({ name: 'FC μ', params: muParams, dims: `${prevDim} → ${latentDim}` });
     breakdown.push({ name: 'FC log σ²', params: logvarParams, dims: `${prevDim} → ${latentDim}` });
     total += muParams + logvarParams;
-    
+
     // Decoder (mirror of encoder)
     prevDim = latentDim;
     [...hiddenDims].reverse().forEach((dim, i) => {
@@ -182,12 +182,12 @@ export default function PracticePanel() {
       total += params;
       prevDim = dim;
     });
-    
+
     // Output layer
     const outParams = prevDim * inputDim + inputDim;
     breakdown.push({ name: 'FC Output', params: outParams, dims: `${prevDim} → ${inputDim}` });
     total += outParams;
-    
+
     return { total, breakdown };
   };
 
@@ -202,7 +202,7 @@ export default function PracticePanel() {
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
             mode === 'quiz'
               ? 'bg-purple-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Brain size={20} />
@@ -213,7 +213,7 @@ export default function PracticePanel() {
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
             mode === 'calculator'
               ? 'bg-purple-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Calculator size={20} />
@@ -241,14 +241,14 @@ export default function PracticePanel() {
 
           {/* Score */}
           <div className="text-center">
-            <p className="text-gray-800 dark:text-gray-400">
-              Score: <span className="text-purple-600 dark:text-purple-400 font-bold">{score}</span> / {answered}
+            <p className="text-gray-800">
+              Score: <span className="text-purple-600 font-bold">{score}</span> / {answered}
             </p>
           </div>
 
           {/* Question Card */}
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
-            <p className="text-sm text-gray-700 dark:text-gray-500 mb-2">
+            <p className="text-sm text-gray-700 mb-2">
               Question {currentQuestion + 1} of {questions.length}
             </p>
             <h3 className="text-xl font-bold mb-6">
@@ -258,7 +258,7 @@ export default function PracticePanel() {
             <div className="space-y-3">
               {questions[currentQuestion].options.map((option, i) => {
                 let buttonClass = 'bg-white/5 hover:bg-white/10 border-white/10';
-                
+
                 if (showResult) {
                   if (i === questions[currentQuestion].correct) {
                     buttonClass = 'bg-green-900/50 border-green-500';
@@ -290,8 +290,8 @@ export default function PracticePanel() {
 
             {showResult && (
               <div className="mt-4 p-4 bg-purple-900/30 rounded-xl border border-purple-500/30">
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong className="text-purple-600 dark:text-purple-400">Explanation:</strong> {questions[currentQuestion].explanation}
+                <p className="text-sm text-gray-700">
+                  <strong className="text-purple-600">Explanation:</strong> {questions[currentQuestion].explanation}
                 </p>
               </div>
             )}
@@ -313,7 +313,7 @@ export default function PracticePanel() {
                 </button>
               )}
               {showResult && currentQuestion === questions.length - 1 && (
-                <div className="text-purple-600 dark:text-purple-400 font-bold">
+                <div className="text-purple-600 font-bold">
                   Final Score: {score} / {questions.length}
                 </div>
               )}
@@ -326,10 +326,10 @@ export default function PracticePanel() {
         <div className="space-y-6">
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-xl font-bold mb-4">VAE Parameter Calculator</h3>
-            
+
             <div className="grid md:grid-cols-3 gap-4 mb-6">
               <div>
-                <label className="text-sm text-gray-800 dark:text-gray-400">Input Dimension</label>
+                <label className="text-sm text-gray-800">Input Dimension</label>
                 <input
                   type="number"
                   value={inputDim}
@@ -338,7 +338,7 @@ export default function PracticePanel() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-800 dark:text-gray-400">Hidden Dims (comma-sep)</label>
+                <label className="text-sm text-gray-800">Hidden Dims (comma-sep)</label>
                 <input
                   type="text"
                   value={hiddenDims.join(', ')}
@@ -347,7 +347,7 @@ export default function PracticePanel() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-800 dark:text-gray-400">Latent Dimension</label>
+                <label className="text-sm text-gray-800">Latent Dimension</label>
                 <input
                   type="number"
                   value={latentDim}
@@ -359,7 +359,7 @@ export default function PracticePanel() {
 
             {/* Quick Presets */}
             <div className="mb-6">
-              <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">Quick Presets:</p>
+              <p className="text-sm text-gray-800 mb-2">Quick Presets:</p>
               <div className="flex gap-2 flex-wrap">
                 <button
                   onClick={() => { setInputDim(784); setHiddenDims([400, 200]); setLatentDim(20); }}
@@ -393,7 +393,7 @@ export default function PracticePanel() {
               <h4 className="font-bold mb-3">Parameter Breakdown</h4>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-gray-700 dark:text-gray-500 border-b border-white/10">
+                  <tr className="text-gray-700 border-b border-white/10">
                     <th className="text-left py-2">Layer</th>
                     <th className="text-left py-2">Dimensions</th>
                     <th className="text-right py-2">Parameters</th>
@@ -403,15 +403,15 @@ export default function PracticePanel() {
                   {breakdown.map((item, i) => (
                     <tr key={i} className="border-b border-white/5">
                       <td className="py-2">{item.name}</td>
-                      <td className="py-2 text-gray-800 dark:text-gray-400 font-mono text-xs">{item.dims}</td>
-                      <td className="py-2 text-right text-purple-600 dark:text-purple-400">{item.params.toLocaleString()}</td>
+                      <td className="py-2 text-gray-800 font-mono text-xs">{item.dims}</td>
+                      <td className="py-2 text-right text-purple-600">{item.params.toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="font-bold">
                     <td className="py-3" colSpan={2}>Total Parameters</td>
-                    <td className="py-3 text-right text-pink-600 dark:text-lg">{total.toLocaleString()}</td>
+                    <td className="py-3 text-right text-pink-600">{total.toLocaleString()}</td>
                   </tr>
                 </tfoot>
               </table>

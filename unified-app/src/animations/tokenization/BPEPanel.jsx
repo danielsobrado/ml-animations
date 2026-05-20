@@ -5,18 +5,18 @@ import gsap from 'gsap';
 // BPE Algorithm Steps Simulation
 const runBPE = (text, maxMerges = 10) => {
     const steps = [];
-    
+
     // Step 1: Character-level tokenization with end-of-word marker
-    let tokens = text.split(/\s+/).map(word => 
+    let tokens = text.split(/\s+/).map(word =>
         word.split('').map((c, i, arr) => i === arr.length - 1 ? c + '</w>' : c)
     ).flat();
-    
+
     // For visualization, we track the original words
     const words = text.split(/\s+/);
-    let wordTokens = words.map(word => 
+    let wordTokens = words.map(word =>
         word.split('').map((c, i, arr) => i === arr.length - 1 ? c + '</w>' : c)
     );
-    
+
     steps.push({
         title: 'Initial Characters',
         description: 'Split each word into characters. Add </w> to mark word endings.',
@@ -24,7 +24,7 @@ const runBPE = (text, maxMerges = 10) => {
         vocabulary: [...new Set(wordTokens.flat())],
         merge: null
     });
-    
+
     // Run BPE merges
     for (let i = 0; i < maxMerges; i++) {
         // Count pairs
@@ -35,20 +35,20 @@ const runBPE = (text, maxMerges = 10) => {
                 pairCounts[pair] = (pairCounts[pair] || 0) + 1;
             }
         });
-        
+
         if (Object.keys(pairCounts).length === 0) break;
-        
+
         // Find most frequent pair
-        const bestPair = Object.entries(pairCounts).reduce((a, b) => 
+        const bestPair = Object.entries(pairCounts).reduce((a, b) =>
             b[1] > a[1] ? b : a
         );
-        
+
         if (bestPair[1] < 2) break; // Stop if no pair appears more than once
-        
+
         const [pairStr, count] = bestPair;
         const [first, second] = pairStr.split(' ');
         const merged = first + second;
-        
+
         // Apply merge
         wordTokens = wordTokens.map(wt => {
             const newWt = [];
@@ -64,7 +64,7 @@ const runBPE = (text, maxMerges = 10) => {
             }
             return newWt;
         });
-        
+
         steps.push({
             title: `Merge #${i + 1}: "${first}" + "${second}"`,
             description: `Found pair "${first} ${second}" appears ${count} times. Merge into "${merged}"`,
@@ -73,7 +73,7 @@ const runBPE = (text, maxMerges = 10) => {
             merge: { first, second, merged, count }
         });
     }
-    
+
     return steps;
 };
 
@@ -103,7 +103,7 @@ export default function BPEPanel() {
 
     useEffect(() => {
         if (!isPlaying) return;
-        
+
         const timer = setInterval(() => {
             setCurrentStep(prev => {
                 if (prev >= steps.length - 1) {
@@ -113,7 +113,7 @@ export default function BPEPanel() {
                 return prev + 1;
             });
         }, 2000);
-        
+
         return () => clearInterval(timer);
     }, [isPlaying, steps.length]);
 
@@ -136,7 +136,7 @@ export default function BPEPanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Byte Pair Encoding (BPE)</h2>
-                    <p className="text-slate-800 dark:text-slate-600">
+                    <p className="text-slate-800">
                         Watch how BPE iteratively merges the most frequent pairs of tokens
                     </p>
                 </div>
@@ -197,7 +197,7 @@ export default function BPEPanel() {
                     >
                         <ChevronRight size={20} />
                     </button>
-                    <span className="text-sm text-slate-800 dark:text-slate-600">
+                    <span className="text-sm text-slate-800">
                         Step {currentStep + 1} / {steps.length}
                     </span>
                 </div>
@@ -226,7 +226,7 @@ export default function BPEPanel() {
                         <div ref={tokensRef} className="space-y-3">
                             {inputText.split(/\s+/).map((word, wordIdx) => (
                                 <div key={wordIdx} className="flex items-center gap-2">
-                                    <span className="font-mono text-slate-800 dark:text-slate-600 w-20">{word}:</span>
+                                    <span className="font-mono text-slate-800 w-20">{word}:</span>
                                     <div className="flex flex-wrap gap-1">
                                         {(currentStepData.wordTokens[wordIdx] || []).map((token, tokenIdx) => (
                                             <span

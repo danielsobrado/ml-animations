@@ -10,16 +10,16 @@ export default function ComputationPanel() {
   // Calculations
   const imgTokens = imgSize * imgSize;
   const totalTokens = imgTokens + txtLen;
-  
+
   // Attention FLOPs: 4 * seq_len^2 * d_model (Q, K, V projections + attention)
   const attentionFlops = 4 * totalTokens * totalTokens * dModel;
-  
+
   // Memory for attention matrix: seq_len^2 * num_heads * 2 bytes (fp16)
   const attentionMemory = totalTokens * totalTokens * numHeads * 2;
-  
+
   // Compare to cross-attention
   const crossAttnFlops = 4 * imgTokens * txtLen * dModel + 4 * imgTokens * imgTokens * dModel;
-  
+
   const formatNumber = (n) => {
     if (n >= 1e12) return (n / 1e12).toFixed(2) + 'T';
     if (n >= 1e9) return (n / 1e9).toFixed(2) + 'G';
@@ -42,7 +42,7 @@ export default function ComputationPanel() {
         <h2 className="text-3xl font-bold mb-2">
           <span className="text-violet-400">Computational</span> Costs
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Understanding the memory and compute requirements of joint attention
         </p>
       </div>
@@ -56,7 +56,7 @@ export default function ComputationPanel() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div>
-            <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">
+            <label className="text-sm text-gray-800 block mb-2">
               Image Size: {imgSize}×{imgSize} ({imgTokens} tokens)
             </label>
             <input
@@ -70,7 +70,7 @@ export default function ComputationPanel() {
             />
           </div>
           <div>
-            <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">
+            <label className="text-sm text-gray-800 block mb-2">
               Text Length: {txtLen} tokens
             </label>
             <input
@@ -84,7 +84,7 @@ export default function ComputationPanel() {
             />
           </div>
           <div>
-            <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">
+            <label className="text-sm text-gray-800 block mb-2">
               d_model: {dModel}
             </label>
             <select
@@ -98,7 +98,7 @@ export default function ComputationPanel() {
             </select>
           </div>
           <div>
-            <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">
+            <label className="text-sm text-gray-800 block mb-2">
               Attention Heads: {numHeads}
             </label>
             <input
@@ -116,26 +116,26 @@ export default function ComputationPanel() {
         {/* Results */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-violet-900/30 rounded-xl p-4 border border-violet-500/30">
-            <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">Total Sequence</p>
+            <p className="text-xs text-gray-800 mb-1">Total Sequence</p>
             <p className="text-2xl font-bold text-violet-400">{formatNumber(totalTokens)}</p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">{imgTokens} img + {txtLen} txt</p>
+            <p className="text-xs text-gray-700">{imgTokens} img + {txtLen} txt</p>
           </div>
           <div className="bg-blue-900/30 rounded-xl p-4 border border-blue-500/30">
-            <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">Attention FLOPs</p>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{formatNumber(attentionFlops)}</p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">per layer</p>
+            <p className="text-xs text-gray-800 mb-1">Attention FLOPs</p>
+            <p className="text-2xl font-bold text-blue-600">{formatNumber(attentionFlops)}</p>
+            <p className="text-xs text-gray-700">per layer</p>
           </div>
           <div className="bg-orange-900/30 rounded-xl p-4 border border-orange-500/30">
-            <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">Attn Matrix Memory</p>
-            <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{formatBytes(attentionMemory)}</p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">FP16, per layer</p>
+            <p className="text-xs text-gray-800 mb-1">Attn Matrix Memory</p>
+            <p className="text-2xl font-bold text-orange-600">{formatBytes(attentionMemory)}</p>
+            <p className="text-xs text-gray-700">FP16, per layer</p>
           </div>
           <div className="bg-green-900/30 rounded-xl p-4 border border-green-500/30">
-            <p className="text-xs text-gray-800 dark:text-gray-400 mb-1">vs Cross-Attn</p>
+            <p className="text-xs text-gray-800 mb-1">vs Cross-Attn</p>
             <p className="text-2xl font-bold text-green-400">
               {((attentionFlops / crossAttnFlops - 1) * 100).toFixed(0)}%
             </p>
-            <p className="text-xs text-gray-700 dark:text-gray-500">more compute</p>
+            <p className="text-xs text-gray-700">more compute</p>
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@ export default function ComputationPanel() {
       {/* Complexity Analysis */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4">Complexity Breakdown</h3>
-        
+
         <div className="space-y-4">
           {/* Self-attention on joint sequence */}
           <div className="bg-violet-900/20 rounded-xl p-4 border border-violet-500/30">
@@ -151,11 +151,11 @@ export default function ComputationPanel() {
               <h4 className="font-bold text-violet-400">Joint Self-Attention</h4>
               <span className="font-mono text-violet-300">O((N_img + N_txt)²)</span>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-400">
+            <p className="text-sm text-gray-800">
               Every token attends to every other token. For 4096 image + 77 text = 4173² ≈ 17.4M attention scores per head.
             </p>
             <div className="mt-2 w-full bg-white/10 rounded-full h-3">
-              <div 
+              <div
                 className="bg-gradient-to-r from-violet-500 to-fuchsia-500 h-3 rounded-full"
                 style={{ width: '100%' }}
               />
@@ -165,14 +165,14 @@ export default function ComputationPanel() {
           {/* Cross attention equivalent */}
           <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-bold text-blue-600 dark:text-blue-400">Cross-Attention (for comparison)</h4>
+              <h4 className="font-bold text-blue-600">Cross-Attention (for comparison)</h4>
               <span className="font-mono text-blue-300">O(N_img × N_txt)</span>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-400">
+            <p className="text-sm text-gray-800">
               Only image queries text. For 4096 × 77 ≈ 315K attention scores - much smaller!
             </p>
             <div className="mt-2 w-full bg-white/10 rounded-full h-3">
-              <div 
+              <div
                 className="bg-gradient-to-r from-blue-500 to-cyan-500 h-3 rounded-full"
                 style={{ width: `${(imgTokens * txtLen) / (totalTokens * totalTokens) * 100}%` }}
               />
@@ -184,7 +184,7 @@ export default function ComputationPanel() {
           <p className="text-sm">
             <strong>⚠️ Why is joint attention worth the cost?</strong><br/>
             The quadratic scaling means joint attention is computationally expensive, but:
-            <ul className="mt-2 text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="mt-2 text-gray-700 space-y-1">
               <li>• Flash Attention reduces memory from O(N²) to O(N)</li>
               <li>• Modern GPUs handle large matrix ops efficiently</li>
               <li>• The quality gains are significant</li>
@@ -200,7 +200,7 @@ export default function ComputationPanel() {
           <h3 className="font-bold text-green-300 mb-3 flex items-center gap-2">
             <Zap size={18} /> Flash Attention
           </h3>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Fused CUDA kernels</li>
             <li>• O(N) memory instead of O(N²)</li>
             <li>• 2-4× faster training</li>
@@ -212,7 +212,7 @@ export default function ComputationPanel() {
           <h3 className="font-bold text-purple-300 mb-3 flex items-center gap-2">
             <Clock size={18} /> xFormers
           </h3>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Memory-efficient attention</li>
             <li>• Automatic kernel selection</li>
             <li>• Works with various GPUs</li>
@@ -224,7 +224,7 @@ export default function ComputationPanel() {
           <h3 className="font-bold text-blue-300 mb-3 flex items-center gap-2">
             <HardDrive size={18} /> Gradient Checkpointing
           </h3>
-          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+          <ul className="text-sm text-gray-700 space-y-1">
             <li>• Trade compute for memory</li>
             <li>• Recompute activations</li>
             <li>• Enable larger batches</li>
@@ -240,11 +240,11 @@ export default function ComputationPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Resolution</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Image Tokens</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Total Seq</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Attn Memory</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Total VRAM</th>
+                <th className="py-3 px-4 text-left text-gray-800">Resolution</th>
+                <th className="py-3 px-4 text-left text-gray-800">Image Tokens</th>
+                <th className="py-3 px-4 text-left text-gray-800">Total Seq</th>
+                <th className="py-3 px-4 text-left text-gray-800">Attn Memory</th>
+                <th className="py-3 px-4 text-left text-gray-800">Total VRAM</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
@@ -267,7 +267,7 @@ export default function ComputationPanel() {
                 <td className="py-3 px-4">4096</td>
                 <td className="py-3 px-4">~4200</td>
                 <td className="py-3 px-4">~847 MB</td>
-                <td className="py-3 px-4 text-orange-600 dark:text-orange-400">~12 GB</td>
+                <td className="py-3 px-4 text-orange-600">~12 GB</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 text-violet-400">1536×1536</td>
@@ -279,7 +279,7 @@ export default function ComputationPanel() {
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-gray-700 dark:text-gray-500 mt-4">
+        <p className="text-xs text-gray-700 mt-4">
           Note: Numbers are approximate. Flash Attention can reduce attention memory significantly.
           Total VRAM includes model weights, activations, and optimizer states.
         </p>
@@ -289,7 +289,7 @@ export default function ComputationPanel() {
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4">Enabling Flash Attention</h3>
         <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-          <pre className="text-gray-700 dark:text-gray-300">{`# In diffusers, enable memory-efficient attention
+          <pre className="text-gray-700">{`# In diffusers, enable memory-efficient attention
 from diffusers import StableDiffusion3Pipeline
 
 pipe = StableDiffusion3Pipeline.from_pretrained(

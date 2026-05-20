@@ -45,7 +45,7 @@ function OverviewPanel() {
 
   const handlePlayPause = () => {
     if (!timelineRef.current) return;
-    
+
     if (isPlaying) {
       timelineRef.current.pause();
     } else {
@@ -67,10 +67,10 @@ function OverviewPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">What is T5?</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          <strong>T5 (Text-to-Text Transfer Transformer)</strong> is Google's powerful language model 
-          that treats all NLP tasks as text-to-text problems. SD3 uses the <strong>encoder part only</strong> 
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">What is T5?</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          <strong>T5 (Text-to-Text Transfer Transformer)</strong> is Google's powerful language model
+          that treats all NLP tasks as text-to-text problems. SD3 uses the <strong>encoder part only</strong>
           of T5-XXL for deep language understanding.
         </p>
       </div>
@@ -78,38 +78,38 @@ function OverviewPanel() {
       {/* Key Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-emerald-500/10 rounded-xl p-4 text-center border border-emerald-500/30">
-          <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">4.7B</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Parameters</div>
+          <div className="text-2xl font-bold text-emerald-600">4.7B</div>
+          <div className="text-sm text-gray-800">Parameters</div>
         </div>
         <div className="bg-teal-500/10 rounded-xl p-4 text-center border border-teal-500/30">
-          <div className="text-2xl font-bold text-teal-600 dark:text-teal-400">24</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Encoder Layers</div>
+          <div className="text-2xl font-bold text-teal-600">24</div>
+          <div className="text-sm text-gray-800">Encoder Layers</div>
         </div>
         <div className="bg-cyan-500/10 rounded-xl p-4 text-center border border-cyan-500/30">
-          <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">4096</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Hidden Dimension</div>
+          <div className="text-2xl font-bold text-cyan-600">4096</div>
+          <div className="text-sm text-gray-800">Hidden Dimension</div>
         </div>
         <div className="bg-blue-500/10 rounded-xl p-4 text-center border border-blue-500/30">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">256+</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Max Tokens</div>
+          <div className="text-2xl font-bold text-blue-600">256+</div>
+          <div className="text-sm text-gray-800">Max Tokens</div>
         </div>
       </div>
 
       {/* T5 vs Full Model */}
       <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-xl p-6 border border-emerald-500/30">
-        <h3 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mb-3">🔍 SD3 Uses Encoder Only</h3>
+        <h3 className="text-lg font-semibold text-emerald-600 mb-3">🔍 SD3 Uses Encoder Only</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-4">
-            <div className="font-semibold text-emerald-600 dark:text-emerald-400 mb-2">Full T5 (Encoder-Decoder)</div>
-            <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <div className="font-semibold text-emerald-600 mb-2">Full T5 (Encoder-Decoder)</div>
+            <div className="text-sm text-gray-700 space-y-1">
               <p>• <strong>Encoder:</strong> Understands input text</p>
               <p>• <strong>Decoder:</strong> Generates output text</p>
               <p>• Used for: translation, summarization, Q&A</p>
             </div>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <div className="font-semibold text-teal-600 dark:text-teal-400 mb-2">T5 in SD3 (Encoder Only)</div>
-            <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <div className="font-semibold text-teal-600 mb-2">T5 in SD3 (Encoder Only)</div>
+            <div className="text-sm text-gray-700 space-y-1">
               <p>• Only encoder part is used</p>
               <p>• Decoder is discarded entirely</p>
               <p>• Purpose: Create rich text embeddings</p>
@@ -165,15 +165,15 @@ function OverviewPanel() {
           <g className="encoder-stack" style={{ opacity: 0 }}>
             <text x="530" y="50" textAnchor="middle" fill="#a78bfa" fontSize="11" fontWeight="bold">T5 Encoder (24 Layers)</text>
             {[...Array(12)].map((_, i) => (
-              <rect 
-                key={i} 
+              <rect
+                key={i}
                 className="encoder-layer"
-                x="450" 
-                y={60 + i * 18} 
-                width="160" 
-                height="15" 
-                rx="2" 
-                fill="#8b5cf6" 
+                x="450"
+                y={60 + i * 18}
+                width="160"
+                height="15"
+                rx="2"
+                fill="#8b5cf6"
                 fillOpacity={0.2 + i * 0.05}
                 stroke="#8b5cf6"
                 strokeWidth="1"
@@ -205,23 +205,23 @@ function OverviewPanel() {
       {/* Why T5 in SD3 */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-emerald-500/10 rounded-lg p-4 border border-emerald-500/30">
-          <FileText className="text-emerald-600 dark:text-emerald-400 mb-2" size={24} />
-          <h4 className="font-semibold text-emerald-600 dark:text-emerald-400 mb-1">Long Context</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <FileText className="text-emerald-600 mb-2" size={24} />
+          <h4 className="font-semibold text-emerald-600 mb-1">Long Context</h4>
+          <p className="text-sm text-gray-700">
             256+ tokens vs CLIP's 77. Handle detailed descriptions and complex prompts.
           </p>
         </div>
         <div className="bg-teal-500/10 rounded-lg p-4 border border-teal-500/30">
-          <Zap className="text-teal-600 dark:text-teal-400 mb-2" size={24} />
-          <h4 className="font-semibold text-teal-600 dark:text-teal-400 mb-1">Deep Understanding</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <Zap className="text-teal-600 mb-2" size={24} />
+          <h4 className="font-semibold text-teal-600 mb-1">Deep Understanding</h4>
+          <p className="text-sm text-gray-700">
             Bidirectional attention captures context from both directions for better comprehension.
           </p>
         </div>
         <div className="bg-cyan-500/10 rounded-lg p-4 border border-cyan-500/30">
-          <HardDrive className="text-cyan-600 dark:text-cyan-400 mb-2" size={24} />
-          <h4 className="font-semibold text-cyan-600 dark:text-cyan-400 mb-1">Optional Component</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <HardDrive className="text-cyan-600 mb-2" size={24} />
+          <h4 className="font-semibold text-cyan-600 mb-1">Optional Component</h4>
+          <p className="text-sm text-gray-700">
             T5 is optional in SD3. Skip it for faster inference with simpler prompts.
           </p>
         </div>
@@ -233,7 +233,7 @@ function OverviewPanel() {
           <Clock size={18} />
           Resource Requirements
         </div>
-        <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-700 dark:text-gray-300">
+        <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-700">
           <div>
             <span className="text-yellow-400">Memory:</span> ~8-10GB VRAM for T5-XXL
           </div>

@@ -65,7 +65,7 @@ function ArchitecturePanel() {
 
   const resetAnimation = () => {
     if (timelineRef.current) timelineRef.current.kill();
-    
+
     const ctx = gsap.context(() => {
       gsap.set('.arch-block', { opacity: 0, x: -20 });
       gsap.set('.arch-arrow', { scaleX: 0 });
@@ -78,8 +78,8 @@ function ArchitecturePanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">T5-XXL Encoder Architecture</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">T5-XXL Encoder Architecture</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
           T5's encoder uses 24 transformer blocks with pre-layer normalization and GEGLU activations.
           Each block has bidirectional self-attention allowing full context understanding.
         </p>
@@ -88,20 +88,20 @@ function ArchitecturePanel() {
       {/* Architecture Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-black/30 rounded-lg p-4 text-center">
-          <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">24</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Encoder Layers</div>
+          <div className="text-xl font-bold text-emerald-600">24</div>
+          <div className="text-sm text-gray-800">Encoder Layers</div>
         </div>
         <div className="bg-black/30 rounded-lg p-4 text-center">
-          <div className="text-xl font-bold text-teal-600 dark:text-teal-400">4096</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Hidden Dim</div>
+          <div className="text-xl font-bold text-teal-600">4096</div>
+          <div className="text-sm text-gray-800">Hidden Dim</div>
         </div>
         <div className="bg-black/30 rounded-lg p-4 text-center">
-          <div className="text-xl font-bold text-cyan-600 dark:text-cyan-400">64</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">Attention Heads</div>
+          <div className="text-xl font-bold text-cyan-600">64</div>
+          <div className="text-sm text-gray-800">Attention Heads</div>
         </div>
         <div className="bg-black/30 rounded-lg p-4 text-center">
-          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">10240</div>
-          <div className="text-sm text-gray-800 dark:text-gray-400">FFN Dim</div>
+          <div className="text-xl font-bold text-blue-600">10240</div>
+          <div className="text-sm text-gray-800">FFN Dim</div>
         </div>
       </div>
 
@@ -141,27 +141,27 @@ function ArchitecturePanel() {
           <g className="arch-block">
             <rect x="150" y="60" width="280" height="220" rx="8" fill="#1e293b" stroke="#475569" strokeWidth="2" />
             <text x="290" y="85" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">Encoder Block × 24</text>
-            
+
             {/* Pre-LN */}
             <rect x="170" y="100" width="100" height="30" rx="4" fill="#06b6d4" fillOpacity="0.3" stroke="#06b6d4" />
             <text x="220" y="120" textAnchor="middle" fill="#22d3ee" fontSize="9">LayerNorm</text>
-            
+
             {/* Self-Attention */}
             <rect x="170" y="140" width="240" height="40" rx="4" fill="#10b981" fillOpacity="0.2" stroke="#10b981" strokeWidth="2" />
             <text x="290" y="165" textAnchor="middle" fill="#34d399" fontSize="10">Bidirectional Self-Attention</text>
-            
+
             {/* Add & Norm */}
             <circle cx="395" y="115" r="15" fill="#f59e0b" fillOpacity="0.3" stroke="#f59e0b" />
             <text x="395" y="120" textAnchor="middle" fill="#fbbf24" fontSize="12">+</text>
-            
+
             {/* Pre-LN 2 */}
             <rect x="170" y="195" width="100" height="30" rx="4" fill="#06b6d4" fillOpacity="0.3" stroke="#06b6d4" />
             <text x="220" y="215" textAnchor="middle" fill="#22d3ee" fontSize="9">LayerNorm</text>
-            
+
             {/* FFN */}
             <rect x="170" y="235" width="240" height="35" rx="4" fill="#8b5cf6" fillOpacity="0.2" stroke="#8b5cf6" strokeWidth="2" />
             <text x="290" y="258" textAnchor="middle" fill="#a78bfa" fontSize="10">Feed-Forward (GEGLU)</text>
-            
+
             {/* Add */}
             <circle cx="395" y="210" r="15" fill="#f59e0b" fillOpacity="0.3" stroke="#f59e0b" />
             <text x="395" y="215" textAnchor="middle" fill="#fbbf24" fontSize="12">+</text>
@@ -219,16 +219,16 @@ function ArchitecturePanel() {
               <div className="w-4 h-4 rounded" style={{ backgroundColor: comp.color }} />
               <span className="font-semibold text-white">{comp.name}</span>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-400">{comp.desc}</p>
+            <p className="text-sm text-gray-800">{comp.desc}</p>
           </div>
         ))}
       </div>
 
       {/* GEGLU Explanation */}
       <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/30">
-        <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-3">🔧 GEGLU Activation</h3>
+        <h3 className="font-semibold text-purple-600 mb-3">🔧 GEGLU Activation</h3>
         <div className="grid md:grid-cols-2 gap-4 text-sm">
-          <div className="text-gray-700 dark:text-gray-300">
+          <div className="text-gray-700">
             <p className="mb-2">
               T5 uses <strong>GEGLU</strong> (Gaussian Error Gated Linear Unit) instead of ReLU:
             </p>
@@ -236,9 +236,9 @@ function ArchitecturePanel() {
               GEGLU(x) = GELU(xW₁) ⊙ (xW₂)
             </div>
           </div>
-          <div className="text-gray-700 dark:text-gray-300">
+          <div className="text-gray-700">
             <p className="mb-2">Benefits:</p>
-            <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-400">
+            <ul className="list-disc list-inside space-y-1 text-gray-800">
               <li>Better gradient flow</li>
               <li>Smoother activations</li>
               <li>Improved training stability</li>
@@ -249,21 +249,21 @@ function ArchitecturePanel() {
 
       {/* Pre-LN vs Post-LN */}
       <div className="bg-teal-500/10 rounded-xl p-6 border border-teal-500/30">
-        <h3 className="font-semibold text-teal-600 dark:text-teal-400 mb-3">📐 Pre-Layer Normalization</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
+        <h3 className="font-semibold text-teal-600 mb-3">📐 Pre-Layer Normalization</h3>
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
           <div className="bg-black/30 rounded p-4">
-            <div className="font-semibold text-gray-800 dark:text-gray-400 mb-2">Post-LN (original Transformer)</div>
+            <div className="font-semibold text-gray-800 mb-2">Post-LN (original Transformer)</div>
             <div className="font-mono text-xs">
               y = LayerNorm(x + Attention(x))
             </div>
-            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">Norm after residual - harder to train</p>
+            <p className="text-xs text-gray-700 mt-2">Norm after residual - harder to train</p>
           </div>
           <div className="bg-black/30 rounded p-4">
-            <div className="font-semibold text-teal-600 dark:text-teal-400 mb-2">Pre-LN (T5)</div>
+            <div className="font-semibold text-teal-600 mb-2">Pre-LN (T5)</div>
             <div className="font-mono text-xs">
               y = x + Attention(LayerNorm(x))
             </div>
-            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">Norm before attention - more stable training</p>
+            <p className="text-xs text-gray-700 mt-2">Norm before attention - more stable training</p>
           </div>
         </div>
       </div>

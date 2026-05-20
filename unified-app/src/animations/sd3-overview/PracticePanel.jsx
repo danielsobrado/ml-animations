@@ -131,9 +131,9 @@ export default function PracticePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Practice Lab: <span className="text-fuchsia-600 dark:text-fuchsia-400">SD3 Architecture</span>
+          Practice Lab: <span className="text-fuchsia-600">SD3 Architecture</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Test your understanding and explore hands-on exercises
         </p>
       </div>
@@ -145,7 +145,7 @@ export default function PracticePanel() {
           className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all ${
             !showExercise
               ? 'bg-fuchsia-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <BookOpen size={18} />
@@ -156,7 +156,7 @@ export default function PracticePanel() {
           className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all ${
             showExercise
               ? 'bg-fuchsia-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Code size={18} />
@@ -171,10 +171,10 @@ export default function PracticePanel() {
             <>
               {/* Progress */}
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-800 dark:text-gray-400">
+                <span className="text-gray-800">
                   Question {currentQuestion + 1} of {questions.length}
                 </span>
-                <span className="text-fuchsia-600 dark:text-fuchsia-400">Score: {score}</span>
+                <span className="text-fuchsia-600">Score: {score}</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2 mb-8">
                 <div
@@ -246,10 +246,10 @@ export default function PracticePanel() {
             <div className="text-center py-8">
               <Trophy className="w-20 h-20 mx-auto mb-6 text-yellow-400" />
               <h3 className="text-2xl font-bold mb-4">Quiz Complete!</h3>
-              <p className="text-4xl font-bold text-fuchsia-600 dark:text-fuchsia-400 mb-4">
+              <p className="text-4xl font-bold text-fuchsia-600 mb-4">
                 {score} / {questions.length}
               </p>
-              <p className="text-gray-800 dark:text-gray-400 mb-6">
+              <p className="text-gray-800 mb-6">
                 {score === questions.length
                   ? "Perfect! You've mastered SD3 architecture!"
                   : score >= questions.length * 0.7
@@ -275,11 +275,11 @@ export default function PracticePanel() {
               <span className="w-8 h-8 rounded-lg bg-fuchsia-600 flex items-center justify-center text-sm">1</span>
               Explore the VAE Latent Space
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Encode an image to latents, visualize the 16 channels, and decode back.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`from diffusers import AutoencoderKL
+              <pre className="text-gray-700">{`from diffusers import AutoencoderKL
 from PIL import Image
 import torch
 import matplotlib.pyplot as plt
@@ -311,11 +311,11 @@ image = Image.open("your_image.png").resize((1024, 1024))
               <span className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-sm">2</span>
               Compare Text Encodings
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Compare how CLIP and T5 encode the same prompt differently.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`from transformers import CLIPTextModel, T5EncoderModel
+              <pre className="text-gray-700">{`from transformers import CLIPTextModel, T5EncoderModel
 from transformers import CLIPTokenizer, T5Tokenizer
 
 # Load models
@@ -344,11 +344,11 @@ prompt = "A serene mountain lake at sunset"
               <span className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-sm">3</span>
               Implement Timestep Shifting
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Implement resolution-dependent timestep shifting for flow matching.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import numpy as np
+              <pre className="text-gray-700">{`import numpy as np
 import matplotlib.pyplot as plt
 
 def compute_shift(resolution: int, base_res: int = 256) -> float:
@@ -383,11 +383,11 @@ timesteps = np.linspace(0, 1, 1000)
               <span className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-sm">4</span>
               Visualize Joint Attention
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Extract and visualize attention maps from the MM-DiT blocks.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import torch
+              <pre className="text-gray-700">{`import torch
 from diffusers import StableDiffusion3Pipeline
 
 pipe = StableDiffusion3Pipeline.from_pretrained(
@@ -422,25 +422,25 @@ def attention_hook(module, input, output):
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-fuchsia-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               SD3 uses <strong>3 text encoders</strong> (CLIP-L, CLIP-G, T5-XXL) for rich prompt understanding
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-purple-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>MM-DiT</strong> replaces UNet with transformers using joint attention
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-blue-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>Flow matching</strong> enables efficient training and straight sampling paths
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-rose-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>16-channel VAE</strong> provides better image reconstruction quality
             </p>
           </div>

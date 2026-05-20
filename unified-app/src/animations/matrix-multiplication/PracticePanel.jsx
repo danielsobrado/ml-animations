@@ -29,15 +29,15 @@ export default function PracticePanel() {
   const handleSubmit = () => {
     const userAnswer = parseInt(userInput, 10);
     setAttempts(prev => prev + 1);
-    
+
     if (userAnswer === currentPractice.answer) {
       setFeedback('✓ Correct!');
       setScore(prev => prev + 1);
-      
+
       const newAnswers = [...completedAnswers];
       newAnswers[currentStep] = userAnswer;
       setCompletedAnswers(newAnswers);
-      
+
       setTimeout(() => {
         if (currentStep < PRACTICE_STEPS.length - 1) {
           setCurrentStep(prev => prev + 1);
@@ -90,7 +90,7 @@ export default function PracticePanel() {
   return (
     <div className="flex flex-col items-center p-3 h-full">
       <h2 className="text-xl font-bold text-gray-800 mb-2">Practice Exercise</h2>
-      
+
       {/* Matrices Display */}
       <div className="bg-white rounded-lg shadow-lg p-4 w-full">
         <div className="flex items-center justify-center gap-2 flex-wrap">
@@ -145,15 +145,15 @@ export default function PracticePanel() {
                   const stepIndex = i * 3 + j;
                   const isCurrentCell = currentStep === stepIndex;
                   const isCompleted = completedAnswers[stepIndex] !== null;
-                  
+
                   return (
                     <div
                       key={`r-${i}-${j}`}
                       className={`w-10 h-10 flex items-center justify-center font-bold text-black rounded transition-all ${
-                        isCurrentCell 
-                          ? 'bg-yellow-300 ring-2 ring-yellow-500 scale-110' 
-                          : isCompleted 
-                            ? 'bg-orange-400' 
+                        isCurrentCell
+                          ? 'bg-yellow-300 ring-2 ring-yellow-500 scale-110'
+                          : isCompleted
+                            ? 'bg-orange-400'
                             : 'bg-orange-200'
                       }`}
                     >
@@ -171,7 +171,7 @@ export default function PracticePanel() {
           <p className="text-gray-700 font-medium">
             Step {currentStep + 1} of {PRACTICE_STEPS.length}: Calculate C[{currentPractice.row + 1}][{currentPractice.col + 1}]
           </p>
-          <p className="text-sm text-gray-700 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-700 mt-1">
             Row {currentPractice.row + 1} of A × Column {currentPractice.col + 1} of B
           </p>
         </div>
@@ -197,7 +197,7 @@ export default function PracticePanel() {
               Submit
             </button>
           </div>
-          
+
           <button
             onClick={handleHint}
             className="mt-2 w-full px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-lg transition-colors"
@@ -235,7 +235,7 @@ export default function PracticePanel() {
 
       {/* Progress & Reset */}
       <div className="mt-4 flex items-center gap-4">
-        <div className="text-sm text-gray-800 dark:text-gray-600">
+        <div className="text-sm text-gray-800">
           Progress: {completedAnswers.filter(a => a !== null).length} / {PRACTICE_STEPS.length}
         </div>
         <button

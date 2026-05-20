@@ -61,12 +61,12 @@ export default function LatentSpacePanel() {
     };
     const pattern = patterns[digit] || patterns[0];
     const cellSize = size / 5;
-    
+
     return (
       <div className="grid" style={{ gridTemplateColumns: `repeat(4, ${cellSize}px)`, gap: '1px' }}>
         {pattern.flat().map((cell, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className={`${cell ? 'bg-white' : 'bg-white/10'} rounded-sm`}
             style={{ width: cellSize, height: cellSize }}
           />
@@ -80,9 +80,9 @@ export default function LatentSpacePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Latent Space: <span className="text-purple-600 dark:text-purple-400">The Hidden World</span>
+          Latent Space: <span className="text-purple-600">The Hidden World</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           A continuous, structured space where similar inputs are close together
         </p>
       </div>
@@ -100,7 +100,7 @@ export default function LatentSpacePanel() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               mode === m.id
                 ? 'bg-purple-600 text-white'
-                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+                : 'bg-white/10 text-gray-800 hover:bg-white/20'
             }`}
           >
             <m.icon size={18} />
@@ -123,11 +123,11 @@ export default function LatentSpacePanel() {
                 <div className="absolute w-48 h-48 rounded-full gaussian-gradient opacity-40" />
                 <div className="absolute w-32 h-32 rounded-full gaussian-gradient opacity-30" />
               </div>
-              
+
               {/* Axis labels */}
-              <div className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-700 dark:text-sm">z₁</div>
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-700 dark:text-sm">z₂</div>
-              
+              <div className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-700">z₁</div>
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-700">z₂</div>
+
               {/* Sample points */}
               {samples.map((s, i) => (
                 <div
@@ -141,12 +141,12 @@ export default function LatentSpacePanel() {
                   }}
                 />
               ))}
-              
+
               {/* Origin cross */}
               <div className="absolute top-1/2 left-1/2 w-4 h-0.5 bg-gray-500 -translate-x-1/2" />
               <div className="absolute top-1/2 left-1/2 w-0.5 h-4 bg-gray-500 -translate-y-1/2" />
             </div>
-            
+
             <button
               onClick={generateSamples}
               className="mx-auto flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg"
@@ -154,8 +154,8 @@ export default function LatentSpacePanel() {
               <Shuffle size={18} />
               Resample
             </button>
-            
-            <p className="text-center text-sm text-gray-800 dark:text-gray-400">
+
+            <p className="text-center text-sm text-gray-800">
               The KL divergence loss encourages the learned distribution q(z|x) to be close to N(0, I),
               creating a smooth, continuous latent space.
             </p>
@@ -181,9 +181,9 @@ export default function LatentSpacePanel() {
                       top: `calc(50% + ${Math.sin(angle) * radius}px - 20px)`,
                     }}
                   >
-                    <div 
+                    <div
                       className="w-12 h-12 rounded-lg flex items-center justify-center opacity-80 border-2"
-                      style={{ 
+                      style={{
                         backgroundColor: colors[digit] + '40',
                         borderColor: colors[digit]
                       }}
@@ -205,13 +205,13 @@ export default function LatentSpacePanel() {
                   </div>
                 );
               })}
-              
-              <div className="absolute top-4 left-4 text-xs text-gray-700 dark:text-gray-500">
+
+              <div className="absolute top-4 left-4 text-xs text-gray-700">
                 2D projection of latent space (t-SNE style)
               </div>
             </div>
-            
-            <p className="text-center text-sm text-gray-800 dark:text-gray-400">
+
+            <p className="text-center text-sm text-gray-800">
               Different digit classes form distinct clusters in latent space.
               VAE learns meaningful features that separate similar from dissimilar inputs.
             </p>
@@ -223,26 +223,26 @@ export default function LatentSpacePanel() {
             <h3 className="text-center text-lg font-bold text-purple-300">
               Smooth Interpolation in Latent Space
             </h3>
-            
+
             <div className="flex items-center justify-center gap-8">
               {/* Start digit */}
               <div className="text-center">
                 <div className="bg-blue-900/30 p-4 rounded-xl border border-blue-500/30">
                   {drawDigit(3, 50)}
                 </div>
-                <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">z_start (digit 3)</p>
+                <p className="text-sm text-blue-600 mt-2">z_start (digit 3)</p>
               </div>
 
               {/* Interpolation path */}
               <div className="flex-1 max-w-md">
                 <div className="relative h-16 bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-orange-600/30 rounded-full">
                   {/* Progress indicator */}
-                  <div 
+                  <div
                     className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-lg transition-all duration-100"
                     style={{ left: `calc(${interpolationProgress * 100}% - 12px)` }}
                   />
                   {/* Formula */}
-                  <div className="absolute -bottom-8 left-0 right-0 text-center text-xs text-gray-800 dark:text-gray-400 font-mono">
+                  <div className="absolute -bottom-8 left-0 right-0 text-center text-xs text-gray-800 font-mono">
                     z_interp = (1-t) × z_start + t × z_end, t = {interpolationProgress.toFixed(2)}
                   </div>
                 </div>
@@ -253,23 +253,23 @@ export default function LatentSpacePanel() {
                 <div className="bg-orange-900/30 p-4 rounded-xl border border-orange-500/30">
                   {drawDigit(8, 50)}
                 </div>
-                <p className="text-sm text-orange-600 dark:text-orange-400 mt-2">z_end (digit 8)</p>
+                <p className="text-sm text-orange-600 mt-2">z_end (digit 8)</p>
               </div>
             </div>
 
             {/* Interpolated outputs */}
             <div className="mt-12 pt-4">
-              <p className="text-center text-sm text-gray-800 dark:text-gray-400 mb-4">Generated outputs along the interpolation path:</p>
+              <p className="text-center text-sm text-gray-800 mb-4">Generated outputs along the interpolation path:</p>
               <div className="flex justify-center gap-2">
                 {[0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1].map((t, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className={`p-2 rounded-lg transition-all ${
                       Math.abs(t - interpolationProgress) < 0.1 ? 'bg-purple-600/50 scale-110' : 'bg-white/5'
                     }`}
                   >
                     {drawDigit(Math.round(3 + (8 - 3) * t) % 10, 35)}
-                    <p className="text-center text-xs text-gray-700 dark:text-gray-500 mt-1">{t.toFixed(2)}</p>
+                    <p className="text-center text-xs text-gray-700 mt-1">{t.toFixed(2)}</p>
                   </div>
                 ))}
               </div>
@@ -299,19 +299,19 @@ export default function LatentSpacePanel() {
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-blue-900/20 rounded-xl p-4 border border-blue-500/30">
           <h4 className="font-bold text-blue-300 mb-2">🎯 Continuity</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Small changes in z produce small changes in output. No "dead zones" in latent space thanks to KL regularization.
           </p>
         </div>
         <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
           <h4 className="font-bold text-purple-300 mb-2">✨ Generation</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Sample z ~ N(0, I) and decode to generate new data. The decoder has learned to map any point in this space.
           </p>
         </div>
         <div className="bg-pink-900/20 rounded-xl p-4 border border-pink-500/30">
           <h4 className="font-bold text-pink-300 mb-2">🔀 Interpolation</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Linear interpolation between two latent codes produces meaningful transitions between their decoded outputs.
           </p>
         </div>
@@ -328,9 +328,9 @@ export default function LatentSpacePanel() {
             { dim: 512, use: 'High-res images', notes: 'Even more expressive power' },
           ].map((d, i) => (
             <div key={i} className="bg-white/5 rounded-lg p-3">
-              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{d.dim}</p>
+              <p className="text-2xl font-bold text-purple-600">{d.dim}</p>
               <p className="text-sm font-medium">{d.use}</p>
-              <p className="text-xs text-gray-700 dark:text-gray-500">{d.notes}</p>
+              <p className="text-xs text-gray-700">{d.notes}</p>
             </div>
           ))}
         </div>

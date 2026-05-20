@@ -24,7 +24,7 @@ export default function ChainPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-red-400 mb-4">The Chain Rule</h2>
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 leading-relaxed">
                     Gradients are calculated by <strong>multiplying</strong> many small numbers together.
                     <br />
                     If weights are even slightly off 1.0, the signal dies or explodes exponentially.
@@ -39,7 +39,7 @@ export default function ChainPanel() {
                     <div className="space-y-6">
                         <div>
                             <div className="flex justify-between items-end mb-2">
-                                <label className="text-sm text-slate-800 dark:text-slate-400">Network Depth (Layers)</label>
+                                <label className="text-sm text-slate-800">Network Depth (Layers)</label>
                                 <span className="font-mono font-bold text-red-400">{layers}</span>
                             </div>
                             <input
@@ -52,7 +52,7 @@ export default function ChainPanel() {
 
                         <div>
                             <div className="flex justify-between items-end mb-2">
-                                <label className="text-sm text-slate-800 dark:text-slate-400">Average Weight Magnitude</label>
+                                <label className="text-sm text-slate-800">Average Weight Magnitude</label>
                                 <span className="font-mono font-bold text-red-400">{weight.toFixed(2)}</span>
                             </div>
                             <input
@@ -61,7 +61,7 @@ export default function ChainPanel() {
                                 onChange={(e) => setWeight(parseFloat(e.target.value))}
                                 className="w-full accent-red-400"
                             />
-                            <div className="flex justify-between text-xs text-slate-700 dark:text-slate-500 mt-1">
+                            <div className="flex justify-between text-xs text-slate-700 mt-1">
                                 <span>Vanishing (&lt;1.0)</span>
                                 <span>Stable (1.0)</span>
                                 <span>Exploding (&gt;1.0)</span>
@@ -70,13 +70,13 @@ export default function ChainPanel() {
                     </div>
 
                     <div className="mt-8 p-4 bg-slate-900 rounded-lg border border-slate-600">
-                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-400 mb-2">Gradient at First Layer:</h4>
+                        <h4 className="text-sm font-bold text-slate-800 mb-2">Gradient at First Layer:</h4>
                         <div className={`text-3xl font-mono font-bold truncate ${isVanishing ? 'text-slate-600' : isExploding ? 'text-red-500' : 'text-green-400'
                             }`}>
                             {finalGrad.toExponential(4)}
                         </div>
                         <div className="mt-2 text-sm">
-                            {isVanishing && <span className="text-slate-700 dark:text-slate-500">⚠️ Signal Vanished! The network stops learning.</span>}
+                            {isVanishing && <span className="text-slate-700">⚠️ Signal Vanished! The network stops learning.</span>}
                             {isExploding && <span className="text-red-400">⚠️ Signal Exploded! Weights become NaN.</span>}
                             {!isVanishing && !isExploding && <span className="text-green-500">✅ Signal is Healthy.</span>}
                         </div>
@@ -96,7 +96,7 @@ export default function ChainPanel() {
 
                             return (
                                 <div key={i} className="flex items-center gap-4 group">
-                                    <span className="text-xs font-mono text-slate-700 dark:text-slate-500 w-16 text-right">Layer {layers - i}</span>
+                                    <span className="text-xs font-mono text-slate-700 w-16 text-right">Layer {layers - i}</span>
                                     <div className="flex-1 h-8 bg-slate-900 rounded relative overflow-hidden">
                                         <div
                                             className={`h-full transition-all duration-300 ${color}`}
@@ -106,14 +106,14 @@ export default function ChainPanel() {
                                             {g.toFixed(4)}
                                         </span>
                                     </div>
-                                    <div className="text-xs text-slate-800 dark:text-slate-600 w-8">
+                                    <div className="text-xs text-slate-800 w-8">
                                         {i > 0 && <span className="flex items-center">× {weight}</span>}
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
-                    <div className="mt-4 text-center text-slate-800 dark:text-sm">
+                    <div className="mt-4 text-center text-slate-800">
                         Gradient flows from Output (Bottom) to Input (Top)
                     </div>
                 </div>

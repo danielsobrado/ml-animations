@@ -222,7 +222,7 @@ def compute_idf(documents, vocabulary):
     """Inverse Document Frequency: log(N / df)"""
     N = len(documents)
     tokenized = [set(preprocess(doc)) for doc in documents]
-    
+
     idf = []
     for word in vocabulary:
         df = sum(1 for doc_tokens in tokenized if word in doc_tokens)
@@ -236,17 +236,17 @@ def compute_tfidf(documents):
     for doc in documents:
         all_words.extend(preprocess(doc))
     vocab = sorted(set(all_words))
-    
+
     # Compute IDF once
     idf = compute_idf(documents, vocab)
-    
+
     # Compute TF-IDF for each document
     tfidf_matrix = []
     for doc in documents:
         tf = compute_tf(doc, vocab)
         tfidf = tf * idf
         tfidf_matrix.append(tfidf)
-    
+
     return np.array(tfidf_matrix), vocab, idf
 
 # Example
@@ -272,7 +272,7 @@ def cosine_similarity(vec1, vec2):
     dot_product = np.dot(vec1, vec2)
     norm1 = np.linalg.norm(vec1)
     norm2 = np.linalg.norm(vec2)
-    
+
     if norm1 == 0 or norm2 == 0:
         return 0.0
     return dot_product / (norm1 * norm2)
@@ -281,11 +281,11 @@ def pairwise_cosine_similarity(matrix):
     """Compute cosine similarity between all pairs of rows"""
     n_docs = matrix.shape[0]
     similarity = np.zeros((n_docs, n_docs))
-    
+
     for i in range(n_docs):
         for j in range(n_docs):
             similarity[i, j] = cosine_similarity(matrix[i], matrix[j])
-    
+
     return similarity
 
 # Example with TF-IDF vectors
@@ -353,12 +353,12 @@ class LemmaTokenizer:
     def __init__(self):
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
-    
+
     def __call__(self, doc):
         tokens = word_tokenize(doc.lower())
         return [
-            self.lemmatizer.lemmatize(t) 
-            for t in tokens 
+            self.lemmatizer.lemmatize(t)
+            for t in tokens
             if t.isalpha() and t not in self.stop_words
         ]
 
@@ -403,8 +403,8 @@ for token in doc:
 
 # Get clean tokens (lemmatized, no stopwords, no punctuation)
 clean_tokens = [
-    token.lemma_.lower() 
-    for token in doc 
+    token.lemma_.lower()
+    for token in doc
     if not token.is_stop and token.is_alpha
 ]
 print("\\nClean tokens:", clean_tokens)`
@@ -422,8 +422,8 @@ class SpacyTokenizer:
     def __call__(self, doc):
         parsed = nlp(doc)
         return [
-            token.lemma_.lower() 
-            for token in parsed 
+            token.lemma_.lower()
+            for token in parsed
             if not token.is_stop and token.is_alpha
         ]
 
@@ -456,9 +456,9 @@ print(sim.round(3))`
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-purple-600 dark:text-purple-400">Python</span> Code Examples
+          <span className="text-purple-600">Python</span> Code Examples
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Implement BoW and TF-IDF with popular libraries
         </p>
       </div>
@@ -472,7 +472,7 @@ print(sim.round(3))`
             className={`px-4 py-2 rounded-lg transition-all ${
               activeTab === key
                 ? 'bg-purple-600 text-white'
-                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:text-white'
+                : 'bg-white/10 text-gray-800 hover:text-white'
             }`}
           >
             {lib.title}
@@ -481,7 +481,7 @@ print(sim.round(3))`
       </div>
 
       {/* Library Description */}
-      <div className="text-center text-gray-800 dark:text-sm">
+      <div className="text-center text-gray-800">
         {codeExamples[activeTab].description}
       </div>
 
@@ -491,12 +491,12 @@ print(sim.round(3))`
           <div key={index} className="bg-black/40 rounded-xl border border-white/10 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Code size={16} className="text-purple-600 dark:text-purple-400" />
+                <Code size={16} className="text-purple-600" />
                 <span className="font-medium text-white">{example.title}</span>
               </div>
               <button
                 onClick={() => copyToClipboard(example.code, index)}
-                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-800 dark:text-gray-400 hover:text-white transition-colors"
+                className="flex items-center gap-1 px-2 py-1 text-sm text-gray-800 hover:text-white transition-colors"
               >
                 {copiedIndex === index ? (
                   <>
@@ -520,22 +520,22 @@ print(sim.round(3))`
 
       {/* Quick Reference */}
       <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-xl p-6 border border-purple-500/30">
-        <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-4">📦 Quick Install Commands</h4>
+        <h4 className="font-bold text-purple-600 mb-4">📦 Quick Install Commands</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">scikit-learn</p>
+            <p className="text-sm text-gray-800 mb-2">scikit-learn</p>
             <code className="text-sm">pip install scikit-learn</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">NLTK</p>
+            <p className="text-sm text-gray-800 mb-2">NLTK</p>
             <code className="text-sm">pip install nltk</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">spaCy</p>
+            <p className="text-sm text-gray-800 mb-2">spaCy</p>
             <code className="text-sm">pip install spacy && python -m spacy download en_core_web_sm</code>
           </div>
           <div className="bg-black/30 rounded-lg p-3">
-            <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">All dependencies</p>
+            <p className="text-sm text-gray-800 mb-2">All dependencies</p>
             <code className="text-sm">pip install numpy pandas scikit-learn nltk spacy</code>
           </div>
         </div>

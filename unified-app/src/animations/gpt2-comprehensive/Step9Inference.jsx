@@ -17,13 +17,13 @@ export default function Step9Inference({ onComplete, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 9: Inference Optimizations</h2>
-                <p className="text-gray-800 dark:text-gray-400">Making generation fast</p>
+                <p className="text-gray-800">Making generation fast</p>
             </div>
 
             {/* KV Cache Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">KV Caching</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">KV Caching</h3>
+                <p className="text-gray-700">
                     When generating text token-by-token, we don't need to recompute the Keys and Values for previous tokens. We can <strong>cache</strong> them.
                 </p>
 
@@ -31,55 +31,55 @@ export default function Step9Inference({ onComplete, onPrev }) {
                     {/* Without Cache */}
                     <div className="bg-gray-900 p-4 rounded border border-red-900/30">
                         <div className="text-red-400 font-bold text-sm mb-2">Without Cache (O(N²) complexity)</div>
-                        <div className="flex gap-1 text-xs font-mono text-gray-700 dark:text-gray-500">
+                        <div className="flex gap-1 text-xs font-mono text-gray-700">
                             <span className="bg-gray-700 px-1 rounded text-white">The</span>
                             <span className="bg-gray-700 px-1 rounded text-white">cat</span>
                             <span className="bg-gray-700 px-1 rounded text-white">sat</span>
                             <span className="bg-emerald-600 px-1 rounded text-white">on</span>
                         </div>
-                        <div className="mt-1 text-xs text-gray-800 dark:text-gray-400">Recomputes attention for "The", "cat", "sat"</div>
+                        <div className="mt-1 text-xs text-gray-800">Recomputes attention for "The", "cat", "sat"</div>
                     </div>
 
                     {/* With Cache */}
                     <div className="bg-gray-900 p-4 rounded border border-emerald-900/30">
-                        <div className="text-emerald-600 dark:text-emerald-400 font-bold text-sm mb-2">With Cache (O(N) complexity)</div>
-                        <div className="flex gap-1 text-xs font-mono text-gray-700 dark:text-gray-500">
-                            <span className="bg-gray-800 px-1 rounded text-gray-800 dark:text-gray-400 border border-emerald-500/50">The</span>
-                            <span className="bg-gray-800 px-1 rounded text-gray-800 dark:text-gray-400 border border-emerald-500/50">cat</span>
-                            <span className="bg-gray-800 px-1 rounded text-gray-800 dark:text-gray-400 border border-emerald-500/50">sat</span>
+                        <div className="text-emerald-600 font-bold text-sm mb-2">With Cache (O(N) complexity)</div>
+                        <div className="flex gap-1 text-xs font-mono text-gray-700">
+                            <span className="bg-gray-800 px-1 rounded text-gray-800 border border-emerald-500/50">The</span>
+                            <span className="bg-gray-800 px-1 rounded text-gray-800 border border-emerald-500/50">cat</span>
+                            <span className="bg-gray-800 px-1 rounded text-gray-800 border border-emerald-500/50">sat</span>
                             <span className="bg-emerald-600 px-1 rounded text-white">on</span>
                         </div>
-                        <div className="mt-1 text-xs text-gray-800 dark:text-gray-400">Uses cached K/V for "The", "cat", "sat". Only computes "on".</div>
+                        <div className="mt-1 text-xs text-gray-800">Uses cached K/V for "The", "cat", "sat". Only computes "on".</div>
                     </div>
                 </div>
             </div>
 
             {/* Sampling Strategies */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Sampling Strategies</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">Sampling Strategies</h3>
+                <p className="text-gray-700">
                     How do we pick the next token from the probabilities?
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-gray-900 p-4 rounded">
                         <div className="font-bold text-white mb-1">Greedy</div>
-                        <div className="text-xs text-gray-800 dark:text-gray-400">Always pick the highest probability token. Can be repetitive.</div>
+                        <div className="text-xs text-gray-800">Always pick the highest probability token. Can be repetitive.</div>
                     </div>
                     <div className="bg-gray-900 p-4 rounded">
                         <div className="font-bold text-white mb-1">Top-k</div>
-                        <div className="text-xs text-gray-800 dark:text-gray-400">Sample from the top <em>k</em> most likely tokens.</div>
+                        <div className="text-xs text-gray-800">Sample from the top <em>k</em> most likely tokens.</div>
                     </div>
                     <div className="bg-gray-900 p-4 rounded">
                         <div className="font-bold text-white mb-1">Nucleus (Top-p)</div>
-                        <div className="text-xs text-gray-800 dark:text-gray-400">Sample from the smallest set of tokens whose cumulative probability exceeds <em>p</em>.</div>
+                        <div className="text-xs text-gray-800">Sample from the smallest set of tokens whose cumulative probability exceeds <em>p</em>.</div>
                     </div>
                 </div>
             </div>
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     Why does KV Caching make text generation significantly faster?
                 </p>
                 <textarea
@@ -103,8 +103,8 @@ export default function Step9Inference({ onComplete, onPrev }) {
 
             {/* Completion */}
             <div className="bg-emerald-900 bg-opacity-30 border border-emerald-700 rounded-lg p-8 text-center space-y-4 mt-8">
-                <h2 className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">🎉 Course Complete!</h2>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h2 className="text-3xl font-bold text-emerald-600">🎉 Course Complete!</h2>
+                <p className="text-gray-700">
                     You've explored the architecture and optimizations of GPT-2.
                 </p>
                 <button

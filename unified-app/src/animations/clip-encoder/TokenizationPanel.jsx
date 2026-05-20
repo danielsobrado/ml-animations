@@ -13,7 +13,7 @@ function TokenizationPanel() {
     // Add BOS and EOS tokens
     const bos = { text: '[BOS]', id: 49406, type: 'special' };
     const eos = { text: '[EOS]', id: 49407, type: 'special' };
-    
+
     // Simple word-level tokenization for demo (real BPE is more complex)
     const words = text.toLowerCase().split(/\s+/).filter(w => w);
     const tokens = words.map((word, i) => ({
@@ -21,10 +21,10 @@ function TokenizationPanel() {
       id: 1000 + i * 100 + Math.floor(Math.random() * 100), // Fake IDs
       type: 'word'
     }));
-    
+
     // Padding to 77 tokens
     const padding = Array(77 - tokens.length - 2).fill({ text: '[PAD]', id: 0, type: 'padding' });
-    
+
     return [bos, ...tokens, eos, ...padding.slice(0, Math.max(0, 77 - tokens.length - 2))];
   };
 
@@ -47,7 +47,7 @@ function TokenizationPanel() {
 
     const ctx = gsap.context(() => {
       timelineRef.current = gsap.timeline();
-      
+
       // Animate tokens appearing
       timelineRef.current.to('.token-item', {
         opacity: 1,
@@ -75,7 +75,7 @@ function TokenizationPanel() {
     if (timelineRef.current) {
       timelineRef.current.kill();
     }
-    
+
     const ctx = gsap.context(() => {
       gsap.set('.token-item', { opacity: 0, y: 20 });
       gsap.set('.id-item', { opacity: 0, scale: 0.5 });
@@ -87,8 +87,8 @@ function TokenizationPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">CLIP Tokenization (BPE)</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-blue-600 mb-2">CLIP Tokenization (BPE)</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
           CLIP uses <strong>Byte Pair Encoding (BPE)</strong> with a vocabulary of ~49,000 tokens.
           Text is split into subword units, converted to token IDs, and padded to 77 tokens.
         </p>
@@ -96,7 +96,7 @@ function TokenizationPanel() {
 
       {/* Input */}
       <div className="bg-black/30 rounded-xl p-6">
-        <label className="block text-sm text-gray-800 dark:text-gray-400 mb-2">Enter a prompt to tokenize:</label>
+        <label className="block text-sm text-gray-800 mb-2">Enter a prompt to tokenize:</label>
         <input
           type="text"
           value={inputText}
@@ -129,20 +129,20 @@ function TokenizationPanel() {
       <div ref={animationRef} className="space-y-6">
         {/* Step 1: Text to Tokens */}
         <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl p-6 border border-blue-500/30">
-          <h3 className="font-semibold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-blue-600 mb-4 flex items-center gap-2">
             <Type size={20} />
             Step 1: BPE Tokenization
           </h3>
-          
+
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-black/40 rounded-lg px-4 py-3 flex-1">
-              <span className="text-sm text-gray-800 dark:text-gray-400">Input:</span>
+              <span className="text-sm text-gray-800">Input:</span>
               <div className="text-white font-mono mt-1">"{inputText}"</div>
             </div>
-            <ArrowRight className="text-blue-600 dark:text-blue-400 shrink-0" size={24} />
+            <ArrowRight className="text-blue-600 shrink-0" size={24} />
             <div className="bg-black/40 rounded-lg px-4 py-3">
-              <span className="text-sm text-gray-800 dark:text-gray-400">Tokens:</span>
-              <div className="text-blue-600 dark:text-blue-400 font-mono mt-1">{tokens.filter(t => t.type !== 'padding').length}</div>
+              <span className="text-sm text-gray-800">Tokens:</span>
+              <div className="text-blue-600 font-mono mt-1">{tokens.filter(t => t.type !== 'padding').length}</div>
             </div>
           </div>
 
@@ -151,10 +151,10 @@ function TokenizationPanel() {
               <div
                 key={i}
                 className={`token-item px-3 py-2 rounded-lg text-sm font-mono ${
-                  token.type === 'special' 
-                    ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50' 
+                  token.type === 'special'
+                    ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50'
                     : token.type === 'padding'
-                    ? 'bg-gray-500/30 text-gray-700 dark:text-gray-500 border border-gray-500/30'
+                    ? 'bg-gray-500/30 text-gray-700 border border-gray-500/30'
                     : 'bg-blue-500/30 text-blue-300 border border-blue-500/50'
                 }`}
               >
@@ -162,19 +162,19 @@ function TokenizationPanel() {
               </div>
             ))}
             {tokens.length > 15 && (
-              <div className="px-3 py-2 text-gray-700 dark:text-gray-500">...+{tokens.length - 15} more</div>
+              <div className="px-3 py-2 text-gray-700">...+{tokens.length - 15} more</div>
             )}
           </div>
         </div>
 
         {/* Step 2: Token IDs */}
         <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/30">
-          <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-purple-600 mb-4 flex items-center gap-2">
             <Hash size={20} />
             Step 2: Token IDs
           </h3>
-          
-          <p className="text-gray-700 dark:text-sm mb-4">
+
+          <p className="text-gray-700 mb-4">
             Each token maps to a unique integer ID in CLIP's vocabulary (0-49407):
           </p>
 
@@ -182,15 +182,15 @@ function TokenizationPanel() {
             {displayTokens.map((token, i) => (
               <div key={i} className="id-item flex flex-col items-center gap-1">
                 <div className={`px-3 py-1 rounded text-xs font-mono ${
-                  token.type === 'special' 
-                    ? 'bg-purple-500/30 text-purple-300' 
+                  token.type === 'special'
+                    ? 'bg-purple-500/30 text-purple-300'
                     : token.type === 'padding'
-                    ? 'bg-gray-500/30 text-gray-700 dark:text-gray-500'
+                    ? 'bg-gray-500/30 text-gray-700'
                     : 'bg-blue-500/30 text-blue-300'
                 }`}>
                   {token.text}
                 </div>
-                <div className="text-xs text-gray-800 dark:text-gray-400">↓</div>
+                <div className="text-xs text-gray-800">↓</div>
                 <div className="px-2 py-1 bg-black/40 rounded text-xs font-mono text-yellow-400">
                   {token.id}
                 </div>
@@ -201,22 +201,22 @@ function TokenizationPanel() {
 
         {/* Step 3: Final Shape */}
         <div className="bg-gradient-to-r from-pink-500/10 to-orange-500/10 rounded-xl p-6 border border-pink-500/30">
-          <h3 className="font-semibold text-pink-600 dark:text-pink-400 mb-4">Step 3: Fixed Shape Output</h3>
-          
+          <h3 className="font-semibold text-pink-600 mb-4">Step 3: Fixed Shape Output</h3>
+
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-black/40 rounded-lg p-4">
-              <div className="text-sm text-gray-800 dark:text-gray-400 mb-2">Input Shape</div>
+              <div className="text-sm text-gray-800 mb-2">Input Shape</div>
               <div className="font-mono text-white">
-                <span className="text-blue-600 dark:text-blue-400">[batch_size, 77]</span>
+                <span className="text-blue-600">[batch_size, 77]</span>
               </div>
-              <div className="text-xs text-gray-700 dark:text-gray-500 mt-2">77 token IDs (padded)</div>
+              <div className="text-xs text-gray-700 mt-2">77 token IDs (padded)</div>
             </div>
             <div className="bg-black/40 rounded-lg p-4">
-              <div className="text-sm text-gray-800 dark:text-gray-400 mb-2">After Embedding</div>
+              <div className="text-sm text-gray-800 mb-2">After Embedding</div>
               <div className="font-mono text-white">
-                <span className="text-purple-600 dark:text-purple-400">[batch_size, 77, 768]</span>
+                <span className="text-purple-600">[batch_size, 77, 768]</span>
               </div>
-              <div className="text-xs text-gray-700 dark:text-gray-500 mt-2">CLIP-L: 768-dim vectors</div>
+              <div className="text-xs text-gray-700 mt-2">CLIP-L: 768-dim vectors</div>
             </div>
           </div>
         </div>
@@ -225,15 +225,15 @@ function TokenizationPanel() {
       {/* BPE Explanation */}
       <div className="bg-yellow-500/10 rounded-xl p-6 border border-yellow-500/30">
         <h3 className="font-semibold text-yellow-400 mb-3">📚 How BPE Works</h3>
-        <div className="text-gray-700 dark:text-gray-300 space-y-2 text-sm">
+        <div className="text-gray-700 space-y-2 text-sm">
           <p>
             <strong>Byte Pair Encoding</strong> builds a vocabulary by iteratively merging the most frequent character pairs:
           </p>
           <ol className="list-decimal list-inside space-y-1 ml-2">
-            <li>Start with individual characters: <code className="text-blue-600 dark:text-blue-400">c a t</code></li>
-            <li>Find frequent pairs: <code className="text-blue-600 dark:text-blue-400">"at"</code> appears often → merge</li>
-            <li>Continue merging: <code className="text-blue-600 dark:text-blue-400">"cat"</code> → single token</li>
-            <li>Rare words split into subwords: <code className="text-purple-600 dark:text-purple-400">"unhappiness"</code> → <code className="text-purple-600 dark:text-purple-400">un + happiness</code></li>
+            <li>Start with individual characters: <code className="text-blue-600">c a t</code></li>
+            <li>Find frequent pairs: <code className="text-blue-600">"at"</code> appears often → merge</li>
+            <li>Continue merging: <code className="text-blue-600">"cat"</code> → single token</li>
+            <li>Rare words split into subwords: <code className="text-purple-600">"unhappiness"</code> → <code className="text-purple-600">un + happiness</code></li>
           </ol>
           <p className="mt-2">
             This balances vocabulary size (~49K) with coverage of rare words.
@@ -244,20 +244,20 @@ function TokenizationPanel() {
       {/* Special Tokens */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30">
-          <div className="font-mono text-purple-600 dark:text-lg mb-2">[BOS]</div>
-          <div className="text-sm text-gray-700 dark:text-gray-300">
+          <div className="font-mono text-purple-600 mb-2">[BOS]</div>
+          <div className="text-sm text-gray-700">
             <strong>Beginning of Sequence</strong> - ID 49406. Marks the start of the text.
           </div>
         </div>
         <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30">
-          <div className="font-mono text-purple-600 dark:text-lg mb-2">[EOS]</div>
-          <div className="text-sm text-gray-700 dark:text-gray-300">
+          <div className="font-mono text-purple-600 mb-2">[EOS]</div>
+          <div className="text-sm text-gray-700">
             <strong>End of Sequence</strong> - ID 49407. Its hidden state becomes the pooled embedding.
           </div>
         </div>
         <div className="bg-gray-500/10 rounded-lg p-4 border border-gray-500/30">
-          <div className="font-mono text-gray-800 dark:text-lg mb-2">[PAD]</div>
-          <div className="text-sm text-gray-700 dark:text-gray-300">
+          <div className="font-mono text-gray-800 mb-2">[PAD]</div>
+          <div className="text-sm text-gray-700">
             <strong>Padding</strong> - ID 0. Fills remaining positions to reach 77 tokens.
           </div>
         </div>

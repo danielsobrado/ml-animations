@@ -26,19 +26,19 @@ export default function Step1Tokenization({ onComplete, onNext }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 1: Tokenization & Embeddings</h2>
-                <p className="text-gray-800 dark:text-gray-400">How text becomes numbers that GPT-2 can understand</p>
+                <p className="text-gray-800">How text becomes numbers that GPT-2 can understand</p>
             </div>
 
             {/* Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">What is Tokenization?</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">What is Tokenization?</h3>
+                <p className="text-gray-700">
                     GPT-2 can't process raw text - it needs numbers. <strong>Tokenization</strong> converts text into a sequence of tokens (subword units).
                 </p>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     GPT-2 uses <strong>Byte-Pair Encoding (BPE)</strong> with a vocabulary of 50,257 tokens. This allows it to:
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
                     <li>Handle any text (including rare words)</li>
                     <li>Break unknown words into known subwords</li>
                     <li>Keep common words as single tokens</li>
@@ -47,9 +47,9 @@ export default function Step1Tokenization({ onComplete, onNext }) {
 
             {/* Interactive Demo */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Try it Yourself</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">Try it Yourself</h3>
                 <div>
-                    <label className="block text-sm text-gray-800 dark:text-gray-400 mb-2">Enter text:</label>
+                    <label className="block text-sm text-gray-800 mb-2">Enter text:</label>
                     <input
                         type="text"
                         value={inputText}
@@ -67,7 +67,7 @@ export default function Step1Tokenization({ onComplete, onNext }) {
 
                 {tokens.length > 0 && (
                     <div className="mt-4">
-                        <div className="text-sm text-gray-800 dark:text-gray-400 mb-2">Tokens ({tokens.length}):</div>
+                        <div className="text-sm text-gray-800 mb-2">Tokens ({tokens.length}):</div>
                         <div className="flex flex-wrap gap-2">
                             {tokens.map((token, i) => (
                                 <div key={i} className="bg-emerald-900 text-emerald-100 px-3 py-1 rounded text-sm font-mono">
@@ -81,22 +81,22 @@ export default function Step1Tokenization({ onComplete, onNext }) {
 
             {/* Embedding Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Token Embeddings</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">Token Embeddings</h3>
+                <p className="text-gray-700">
                     Each token is converted to a <strong>learned embedding vector</strong> of size 768 (for GPT-2 Small).
                 </p>
-                <div className="bg-gray-900 p-4 rounded font-mono text-sm text-gray-700 dark:text-gray-300">
+                <div className="bg-gray-900 p-4 rounded font-mono text-sm text-gray-700">
                     Token "Hello" → Token ID: 15496 → Embedding: [0.23, -0.45, 0.12, ..., 0.67] (768 dimensions)
                 </div>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     These embeddings are <strong>learned during training</strong> so that similar tokens have similar vectors.
                 </p>
             </div>
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     Why does GPT-2 use Byte-Pair Encoding instead of word-level tokenization?
                 </p>
                 <textarea

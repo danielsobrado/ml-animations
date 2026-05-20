@@ -49,7 +49,7 @@ function OverviewPanel() {
 
   const handlePlayPause = () => {
     if (!timelineRef.current) return;
-    
+
     if (isPlaying) {
       timelineRef.current.pause();
     } else {
@@ -71,10 +71,10 @@ function OverviewPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-2">Why Tokenization?</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-orange-600 mb-2">Why Tokenization?</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
           Neural networks can't process text directly - they work with numbers.
-          <strong> Tokenization</strong> converts human-readable text into sequences of integers 
+          <strong> Tokenization</strong> converts human-readable text into sequences of integers
           that can be embedded into high-dimensional vectors.
         </p>
       </div>
@@ -82,24 +82,24 @@ function OverviewPanel() {
       {/* The Process */}
       <div className="grid md:grid-cols-4 gap-4">
         <div className="bg-blue-500/10 rounded-xl p-4 text-center border border-blue-500/30">
-          <Type className="mx-auto text-blue-600 dark:text-blue-400 mb-2" size={32} />
-          <div className="font-semibold text-blue-600 dark:text-blue-400">Text</div>
-          <div className="text-xs text-gray-800 dark:text-gray-400 mt-1">"A cat on a mat"</div>
+          <Type className="mx-auto text-blue-600 mb-2" size={32} />
+          <div className="font-semibold text-blue-600">Text</div>
+          <div className="text-xs text-gray-800 mt-1">"A cat on a mat"</div>
         </div>
         <div className="bg-orange-500/10 rounded-xl p-4 text-center border border-orange-500/30">
-          <Hash className="mx-auto text-orange-600 dark:text-orange-400 mb-2" size={32} />
-          <div className="font-semibold text-orange-600 dark:text-orange-400">Tokenize</div>
-          <div className="text-xs text-gray-800 dark:text-gray-400 mt-1">Split into subwords</div>
+          <Hash className="mx-auto text-orange-600 mb-2" size={32} />
+          <div className="font-semibold text-orange-600">Tokenize</div>
+          <div className="text-xs text-gray-800 mt-1">Split into subwords</div>
         </div>
         <div className="bg-purple-500/10 rounded-xl p-4 text-center border border-purple-500/30">
           <div className="mx-auto w-8 h-8 rounded bg-purple-400/50 flex items-center justify-center text-white font-mono text-sm mb-2">ID</div>
-          <div className="font-semibold text-purple-600 dark:text-purple-400">Encode</div>
-          <div className="text-xs text-gray-800 dark:text-gray-400 mt-1">Map to integers</div>
+          <div className="font-semibold text-purple-600">Encode</div>
+          <div className="text-xs text-gray-800 mt-1">Map to integers</div>
         </div>
         <div className="bg-green-500/10 rounded-xl p-4 text-center border border-green-500/30">
           <Cpu className="mx-auto text-green-400 mb-2" size={32} />
           <div className="font-semibold text-green-400">Embed</div>
-          <div className="text-xs text-gray-800 dark:text-gray-400 mt-1">768/4096-dim vectors</div>
+          <div className="text-xs text-gray-800 mt-1">768/4096-dim vectors</div>
         </div>
       </div>
 
@@ -178,11 +178,11 @@ function OverviewPanel() {
 
       {/* SD3 Tokenizers */}
       <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl p-6 border border-orange-500/30">
-        <h3 className="text-lg font-semibold text-orange-600 dark:text-orange-400 mb-4">SD3's Three Tokenizers</h3>
+        <h3 className="text-lg font-semibold text-orange-600 mb-4">SD3's Three Tokenizers</h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-black/30 rounded-lg p-4">
-            <div className="font-semibold text-blue-600 dark:text-blue-400 mb-2">CLIP-L Tokenizer</div>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <div className="font-semibold text-blue-600 mb-2">CLIP-L Tokenizer</div>
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• BPE algorithm</li>
               <li>• ~49,000 vocabulary</li>
               <li>• Max 77 tokens</li>
@@ -190,8 +190,8 @@ function OverviewPanel() {
             </ul>
           </div>
           <div className="bg-black/30 rounded-lg p-4">
-            <div className="font-semibold text-purple-600 dark:text-purple-400 mb-2">CLIP-G Tokenizer</div>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <div className="font-semibold text-purple-600 mb-2">CLIP-G Tokenizer</div>
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• BPE algorithm</li>
               <li>• ~49,000 vocabulary</li>
               <li>• Max 77 tokens</li>
@@ -200,7 +200,7 @@ function OverviewPanel() {
           </div>
           <div className="bg-black/30 rounded-lg p-4">
             <div className="font-semibold text-green-400 mb-2">T5 Tokenizer</div>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="text-sm text-gray-700 space-y-1">
               <li>• SentencePiece</li>
               <li>• ~32,000 vocabulary</li>
               <li>• Max 256+ tokens</li>
@@ -214,15 +214,15 @@ function OverviewPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-black/30 rounded-lg p-4 border border-white/10">
           <h4 className="font-semibold text-white mb-2">🎯 Why Subword Tokenization?</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Word-level tokenization can't handle new words. Character-level is too fine-grained.
-            <strong> Subword tokenization</strong> balances both: common words stay whole, 
+            <strong> Subword tokenization</strong> balances both: common words stay whole,
             rare words split into meaningful pieces.
           </p>
         </div>
         <div className="bg-black/30 rounded-lg p-4 border border-white/10">
           <h4 className="font-semibold text-white mb-2">📊 Token vs Word</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             "photorealistic" → ["photo", "real", "istic"] (3 tokens)<br/>
             "cat" → ["cat"] (1 token)<br/>
             "a" → ["a"] (1 token)<br/>

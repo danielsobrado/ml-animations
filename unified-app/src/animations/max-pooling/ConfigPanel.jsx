@@ -94,13 +94,13 @@ export default function ConfigPanel({ onParamsChange }) {
                 {/* Dimensions */}
                 <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
                     <p className="text-sm font-bold text-gray-700 mb-2">Dimensions:</p>
-                    <p className="text-sm text-gray-800 dark:text-gray-600">
+                    <p className="text-sm text-gray-800">
                         Input: <span className="font-mono font-bold">{inputSize}×{inputSize}</span>
                     </p>
-                    <p className="text-sm text-gray-800 dark:text-gray-600">
+                    <p className="text-sm text-gray-800">
                         Output: <span className="font-mono font-bold">{outputSize}×{outputSize}</span>
                     </p>
-                    <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">
+                    <p className="text-xs text-gray-700 mt-2">
                         Formula: (Input - Pool) / Stride + 1
                     </p>
                 </div>

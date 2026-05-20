@@ -49,7 +49,7 @@ export default function App() {
                   ? 'bg-fuchsia-600 text-white'
                   : isCompleted
                     ? 'bg-fuchsia-900/50 text-fuchsia-300 hover:bg-fuchsia-800/50'
-                    : 'bg-white/5 text-gray-800 dark:text-gray-400 hover:bg-white/10 hover:text-white'
+                    : 'bg-white/5 text-gray-800 hover:bg-white/10 hover:text-white'
                 }`}
             >
               <Icon size={18} />

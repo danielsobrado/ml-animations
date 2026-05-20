@@ -29,7 +29,7 @@ export default function AttentionFlowPanel() {
   useEffect(() => {
     if (selectedSource !== null && svgRef.current) {
       const lines = svgRef.current.querySelectorAll('.attention-line');
-      gsap.fromTo(lines, 
+      gsap.fromTo(lines,
         { strokeDashoffset: 100 },
         { strokeDashoffset: 0, duration: 0.5, stagger: 0.02 }
       );
@@ -59,7 +59,7 @@ export default function AttentionFlowPanel() {
         <h2 className="text-3xl font-bold mb-2">
           Attention <span className="text-violet-400">Flow</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Visualize how each token attends to every other token
         </p>
       </div>
@@ -84,7 +84,7 @@ export default function AttentionFlowPanel() {
           </button>
         </div>
 
-        <p className="text-center text-sm text-gray-800 dark:text-gray-400 mb-4">
+        <p className="text-center text-sm text-gray-800 mb-4">
           Click on any token to see what it attends to (all other tokens!)
         </p>
 
@@ -94,24 +94,24 @@ export default function AttentionFlowPanel() {
             {/* Grid labels */}
             <text x="130" y="25" fill="#60a5fa" className="text-xs">Image Tokens</text>
             <text x="300" y="25" fill="#fb923c" className="text-xs">Text</text>
-            
+
             {/* Attention lines from selected source */}
             {selectedSource !== null && (
               <g>
                 {[...Array(totalTokens)].map((_, targetIdx) => {
                   if (targetIdx === selectedSource) return null;
-                  const source = selectedSource < imgTokens 
+                  const source = selectedSource < imgTokens
                     ? getTokenPosition(selectedSource, imgTokens)
                     : { x: 300, y: 80 + (selectedSource - imgTokens) * 50 };
                   const target = targetIdx < imgTokens
                     ? getTokenPosition(targetIdx, imgTokens)
                     : { x: 300, y: 80 + (targetIdx - imgTokens) * 50 };
-                  
+
                   const isImgToTxt = selectedSource < imgTokens && targetIdx >= imgTokens;
                   const isTxtToImg = selectedSource >= imgTokens && targetIdx < imgTokens;
                   const strokeColor = isImgToTxt ? '#60a5fa' : isTxtToImg ? '#fb923c' : '#a855f7';
                   const opacity = Math.random() * 0.5 + 0.3; // Random attention weight
-                  
+
                   return (
                     <line
                       key={targetIdx}
@@ -217,10 +217,10 @@ export default function AttentionFlowPanel() {
       {/* Attention Matrix Visualization */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4">Attention Matrix View</h3>
-        <p className="text-sm text-gray-800 dark:text-gray-400 mb-4">
+        <p className="text-sm text-gray-800 mb-4">
           The full attention matrix for joint attention (simplified 4×4 img + 2 text)
         </p>
-        
+
         <div className="overflow-x-auto">
           <table className="mx-auto text-xs">
             <thead>
@@ -248,7 +248,7 @@ export default function AttentionFlowPanel() {
                     if (isImgToImg) bg = `rgba(59, 130, 246, ${val})`;
                     else if (isTxtToTxt) bg = `rgba(249, 115, 22, ${val})`;
                     else bg = `rgba(168, 85, 247, ${val})`;
-                    
+
                     return (
                       <td
                         key={col}
@@ -268,15 +268,15 @@ export default function AttentionFlowPanel() {
         <div className="mt-4 flex justify-center gap-6 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-blue-500/60" />
-            <span className="text-gray-800 dark:text-gray-400">Image↔Image</span>
+            <span className="text-gray-800">Image↔Image</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-orange-500/60" />
-            <span className="text-gray-800 dark:text-gray-400">Text↔Text</span>
+            <span className="text-gray-800">Text↔Text</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-violet-500/60" />
-            <span className="text-gray-800 dark:text-gray-400">Cross-modal</span>
+            <span className="text-gray-800">Cross-modal</span>
           </div>
         </div>
       </div>
@@ -284,13 +284,13 @@ export default function AttentionFlowPanel() {
       {/* Key Insight */}
       <div className="bg-gradient-to-r from-violet-900/30 to-fuchsia-900/30 rounded-xl p-6 border border-violet-500/30">
         <h3 className="font-bold text-violet-300 mb-2">💡 Key Insight</h3>
-        <p className="text-gray-700 dark:text-gray-300">
-          In joint attention, the attention matrix is <strong>fully dense</strong> - every token (both image and text) 
+        <p className="text-gray-700">
+          In joint attention, the attention matrix is <strong>fully dense</strong> - every token (both image and text)
           can attend to every other token. This creates four types of attention:
         </p>
-        <ul className="mt-3 text-sm text-gray-800 dark:text-gray-400 space-y-1">
-          <li>• <span className="text-blue-600 dark:text-blue-400">Image→Image:</span> Spatial coherence, object consistency</li>
-          <li>• <span className="text-orange-600 dark:text-orange-400">Text→Text:</span> Language understanding, context</li>
+        <ul className="mt-3 text-sm text-gray-800 space-y-1">
+          <li>• <span className="text-blue-600">Image→Image:</span> Spatial coherence, object consistency</li>
+          <li>• <span className="text-orange-600">Text→Text:</span> Language understanding, context</li>
           <li>• <span className="text-violet-400">Image→Text:</span> Image regions query text for guidance</li>
           <li>• <span className="text-violet-400">Text→Image:</span> Text concepts attend to relevant image regions</li>
         </ul>

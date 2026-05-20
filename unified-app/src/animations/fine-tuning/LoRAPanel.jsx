@@ -53,7 +53,7 @@ export default function LoRAPanel() {
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-purple-900 mb-2">LoRA: Low-Rank Adaptation</h2>
-                    <p className="text-slate-800 dark:text-slate-600">Freeze the base model, learn small rank-decomposed matrices</p>
+                    <p className="text-slate-800">Freeze the base model, learn small rank-decomposed matrices</p>
                 </div>
 
                 {/* Controls */}
@@ -73,7 +73,7 @@ export default function LoRAPanel() {
                         Reset
                     </button>
                     <div className="flex items-center gap-2 ml-4">
-                        <span className="text-sm text-slate-800 dark:text-slate-600">Rank (r):</span>
+                        <span className="text-sm text-slate-800">Rank (r):</span>
                         <select
                             value={rank}
                             onChange={(e) => setRank(Number(e.target.value))}
@@ -99,7 +99,7 @@ export default function LoRAPanel() {
                                     ? 'bg-purple-500 text-white'
                                     : i < step
                                         ? 'bg-green-100 text-green-700'
-                                        : 'bg-slate-200 text-slate-700 dark:text-slate-500'
+                                        : 'bg-slate-200 text-slate-700'
                             }`}
                         >
                             {i + 1}
@@ -119,27 +119,27 @@ export default function LoRAPanel() {
                         {/* W Matrix - Always shown */}
                         <div className={`transition-all ${step > 0 ? 'opacity-50' : ''}`}>
                             <div className="text-center mb-2 font-bold text-slate-700">W (frozen)</div>
-                            <div 
+                            <div
                                 className="bg-gradient-to-br from-blue-200 to-blue-400 rounded-lg flex items-center justify-center"
                                 style={{ width: 120, height: 120 }}
                             >
                                 <span className="text-blue-800 font-mono text-xs">{d}×{k}</span>
                             </div>
-                            <div className="text-center mt-1 text-xs text-slate-700 dark:text-slate-500">
+                            <div className="text-center mt-1 text-xs text-slate-700">
                                 {(d*k).toLocaleString()} params
                             </div>
                         </div>
 
                         {step >= 1 && (
                             <>
-                                <Plus className="text-slate-800 dark:text-slate-400" size={24} />
-                                
+                                <Plus className="text-slate-800" size={24} />
+
                                 {/* ΔW Decomposition */}
                                 <div className="flex items-center gap-2">
                                     {/* A Matrix */}
                                     <div className="animate-fadeIn">
                                         <div className="text-center mb-2 font-bold text-green-700">B</div>
-                                        <div 
+                                        <div
                                             className="bg-gradient-to-br from-green-200 to-green-400 rounded-lg flex items-center justify-center"
                                             style={{ width: 120, height: 30 + rank * 2 }}
                                         >
@@ -150,12 +150,12 @@ export default function LoRAPanel() {
                                         </div>
                                     </div>
 
-                                    <span className="text-slate-800 dark:text-slate-400 font-bold">×</span>
+                                    <span className="text-slate-800 font-bold">×</span>
 
                                     {/* B Matrix */}
                                     <div className="animate-fadeIn" style={{ animationDelay: '200ms' }}>
                                         <div className="text-center mb-2 font-bold text-orange-700">A</div>
-                                        <div 
+                                        <div
                                             className="bg-gradient-to-br from-orange-200 to-orange-400 rounded-lg flex items-center justify-center"
                                             style={{ width: 30 + rank * 2, height: 120 }}
                                         >
@@ -171,12 +171,12 @@ export default function LoRAPanel() {
 
                         {step >= 2 && (
                             <>
-                                <Equal className="text-slate-800 dark:text-slate-400" size={24} />
-                                
+                                <Equal className="text-slate-800" size={24} />
+
                                 {/* ΔW Result */}
                                 <div className="animate-fadeIn">
                                     <div className="text-center mb-2 font-bold text-purple-700">ΔW</div>
-                                    <div 
+                                    <div
                                         className="bg-gradient-to-br from-purple-200 to-purple-400 rounded-lg flex items-center justify-center border-2 border-purple-500 border-dashed"
                                         style={{ width: 120, height: 120 }}
                                     >
@@ -222,11 +222,11 @@ export default function LoRAPanel() {
 
                 {/* Key Formula */}
                 <div className="bg-slate-800 rounded-xl p-6 mb-6 text-center">
-                    <div className="text-slate-800 dark:text-sm mb-2">The LoRA Formula</div>
+                    <div className="text-slate-800 mb-2">The LoRA Formula</div>
                     <div className="text-white font-mono text-xl">
                         W' = W + α · BA
                     </div>
-                    <div className="text-slate-800 dark:text-sm mt-2">
+                    <div className="text-slate-800 mt-2">
                         where α is a scaling factor (typically α/r)
                     </div>
                 </div>

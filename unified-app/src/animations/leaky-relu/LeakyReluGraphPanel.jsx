@@ -23,7 +23,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
     const graphHeight = height - 2 * padding;
     const originX = padding + graphWidth / 2;
     const originY = padding + graphHeight / 2;
-    
+
     // Scale: 1 unit = 30 pixels
     const scale = 30;
     const xRange = 8; // -8 to 8
@@ -32,7 +32,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
     // Draw grid
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 1;
-    
+
     // Vertical grid lines
     for (let x = -xRange; x <= xRange; x++) {
       const px = originX + x * scale;
@@ -41,7 +41,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
       ctx.lineTo(px, height - padding);
       ctx.stroke();
     }
-    
+
     // Horizontal grid lines
     for (let y = -yRange; y <= yRange; y++) {
       const py = originY - y * scale;
@@ -54,13 +54,13 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
     // Draw axes
     ctx.strokeStyle = '#374151';
     ctx.lineWidth = 2;
-    
+
     // X-axis
     ctx.beginPath();
     ctx.moveTo(padding, originY);
     ctx.lineTo(width - padding, originY);
     ctx.stroke();
-    
+
     // Y-axis
     ctx.beginPath();
     ctx.moveTo(originX, padding);
@@ -94,20 +94,20 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
     ctx.strokeStyle = '#f97316';
     ctx.lineWidth = 3;
     ctx.beginPath();
-    
+
     // Draw from left side (negative x: f(x) = αx)
     for (let x = -xRange; x <= 0; x += 0.1) {
       const y = ALPHA * x;
       const px = originX + x * scale;
       const py = originY - y * scale;
-      
+
       if (x === -xRange) {
         ctx.moveTo(px, py);
       } else {
         ctx.lineTo(px, py);
       }
     }
-    
+
     // Continue to positive side (f(x) = x)
     for (let x = 0; x <= xRange; x += 0.1) {
       const y = x;
@@ -126,7 +126,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
       const y = x;
       const px = originX + x * scale;
       const py = originY - y * scale;
-      
+
       if (x === -xRange) {
         ctx.moveTo(px, py);
       } else {
@@ -152,7 +152,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
     if (isActive && zValue !== null && leakyReluValue !== null) {
       const px = originX + zValue * scale;
       const py = originY - leakyReluValue * scale;
-      
+
       // Clamp to graph bounds
       const clampedPx = Math.max(padding, Math.min(width - padding, px));
       const clampedPy = Math.max(padding, Math.min(height - padding, py));
@@ -165,7 +165,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
       ctx.moveTo(clampedPx, originY);
       ctx.lineTo(clampedPx, clampedPy);
       ctx.stroke();
-      
+
       // Draw horizontal line from y-axis to point
       ctx.beginPath();
       ctx.moveTo(originX, clampedPy);
@@ -178,7 +178,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
       ctx.beginPath();
       ctx.arc(clampedPx, clampedPy, 8, 0, Math.PI * 2);
       ctx.fill();
-      
+
       // Draw white inner circle
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
@@ -204,9 +204,9 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
 
   return (
     <div className="flex flex-col items-center">
-      <canvas 
-        ref={canvasRef} 
-        width={600} 
+      <canvas
+        ref={canvasRef}
+        width={600}
         height={400}
         className="border border-gray-200 rounded-lg bg-white"
       />
@@ -220,7 +220,7 @@ export default function LeakyReluGraphPanel({ zValue = null, leakyReluValue = nu
             </span>
           </p>
         ) : (
-          <p className="text-gray-700 dark:text-gray-500">
+          <p className="text-gray-700">
             Complete steps in the animation or practice to see the point on the graph
           </p>
         )}

@@ -61,7 +61,7 @@ export default function EncoderPanel() {
 
   const NeuronLayer = ({ count, width, color, label, active, sublabel }) => (
     <div className="flex flex-col items-center">
-      <div 
+      <div
         className={`relative transition-all duration-500 ${active ? 'scale-110' : 'scale-100'}`}
         style={{ width: `${width}px` }}
       >
@@ -71,7 +71,7 @@ export default function EncoderPanel() {
         </div>
       </div>
       <p className={`mt-2 text-sm font-medium transition-colors ${active ? 'text-white' : 'text-gray-400'}`}>{label}</p>
-      {sublabel && <p className="text-xs text-gray-700 dark:text-gray-500">{sublabel}</p>}
+      {sublabel && <p className="text-xs text-gray-700">{sublabel}</p>}
     </div>
   );
 
@@ -82,7 +82,7 @@ export default function EncoderPanel() {
         <h2 className="text-3xl font-bold mb-2">
           Encoder: <span className="text-green-400">From Data to Distribution</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           The encoder learns to map input data to latent distribution parameters μ and σ
         </p>
       </div>
@@ -112,11 +112,11 @@ export default function EncoderPanel() {
             key={i}
             onClick={() => { setCurrentStep(i); setIsPlaying(false); }}
             className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
-              i === currentStep 
-                ? 'bg-green-500 text-white scale-110' 
-                : i < currentStep 
-                ? 'bg-green-900 text-green-300' 
-                : 'bg-white/10 text-gray-700 dark:text-gray-500'
+              i === currentStep
+                ? 'bg-green-500 text-white scale-110'
+                : i < currentStep
+                ? 'bg-green-900 text-green-300'
+                : 'bg-white/10 text-gray-700'
             }`}
           >
             {i + 1}
@@ -127,44 +127,44 @@ export default function EncoderPanel() {
       {/* Step Description */}
       <div className="bg-green-900/20 border border-green-500/30 rounded-xl p-4">
         <h3 className="font-bold text-green-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Architecture Visualization */}
       <div className="bg-black/30 rounded-2xl p-8 border border-white/10">
         <div className="flex items-center justify-between gap-2">
-          <NeuronLayer 
-            count={784} 
-            width={80} 
+          <NeuronLayer
+            count={784}
+            width={80}
             color="bg-gradient-to-b from-blue-600 to-blue-800"
             label="Input"
             sublabel="28×28 = 784"
             active={steps[currentStep].highlight === 'input'}
           />
 
-          <ChevronRight className="text-gray-800 dark:text-gray-600" />
+          <ChevronRight className="text-gray-800" />
 
-          <NeuronLayer 
-            count={400} 
-            width={60} 
+          <NeuronLayer
+            count={400}
+            width={60}
             color="bg-gradient-to-b from-green-600 to-green-800"
             label="Hidden 1"
             sublabel="ReLU"
             active={steps[currentStep].highlight === 'hidden1'}
           />
 
-          <ChevronRight className="text-gray-800 dark:text-gray-600" />
+          <ChevronRight className="text-gray-800" />
 
-          <NeuronLayer 
-            count={200} 
-            width={50} 
+          <NeuronLayer
+            count={200}
+            width={50}
             color="bg-gradient-to-b from-green-600 to-green-800"
             label="Hidden 2"
             sublabel="ReLU"
             active={steps[currentStep].highlight === 'hidden2'}
           />
 
-          <ChevronRight className="text-gray-800 dark:text-gray-600" />
+          <ChevronRight className="text-gray-800" />
 
           {/* Split into mu and logvar */}
           <div className="flex flex-col gap-4">
@@ -184,7 +184,7 @@ export default function EncoderPanel() {
             </div>
           </div>
 
-          <ChevronRight className="text-gray-800 dark:text-gray-600" />
+          <ChevronRight className="text-gray-800" />
 
           {/* Reparameterization */}
           <div className={`transition-all duration-500 ${steps[currentStep].highlight === 'reparam' ? 'scale-110' : ''}`}>
@@ -200,13 +200,13 @@ export default function EncoderPanel() {
         {steps[currentStep].highlight === 'reparam' && (
           <div className="mt-6 p-4 bg-purple-900/30 rounded-xl border border-purple-500/30">
             <p className="text-center font-mono text-lg">
-              <span className="text-purple-600 dark:text-purple-400">z</span> = 
-              <span className="text-purple-300"> μ</span> + 
-              <span className="text-pink-300"> σ</span> ⊙ 
+              <span className="text-purple-600">z</span> =
+              <span className="text-purple-300"> μ</span> +
+              <span className="text-pink-300"> σ</span> ⊙
               <span className="text-yellow-300"> ε</span>
-              <span className="text-gray-800 dark:text-sm ml-2">(where ε ~ N(0, I))</span>
+              <span className="text-gray-800 ml-2">(where ε ~ N(0, I))</span>
             </p>
-            <p className="text-center text-sm text-gray-800 dark:text-gray-400 mt-2">
+            <p className="text-center text-sm text-gray-800 mt-2">
               σ = exp(0.5 × log σ²) — computing σ from log-variance for numerical stability
             </p>
           </div>
@@ -215,7 +215,7 @@ export default function EncoderPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">PyTorch Encoder Implementation:</p>
+        <p className="text-sm text-gray-800 mb-3">PyTorch Encoder Implementation:</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-green-300">{`class Encoder(nn.Module):
     def __init__(self, input_dim=784, hidden_dim=400, latent_dim=20):
@@ -224,14 +224,14 @@ export default function EncoderPanel() {
         self.fc2 = nn.Linear(hidden_dim, hidden_dim // 2)
         self.fc_mu = nn.Linear(hidden_dim // 2, latent_dim)      # Mean
         self.fc_logvar = nn.Linear(hidden_dim // 2, latent_dim)  # Log-variance
-    
+
     def forward(self, x):
         h = F.relu(self.fc1(x))
         h = F.relu(self.fc2(h))
         mu = self.fc_mu(h)
         logvar = self.fc_logvar(h)
         return mu, logvar
-    
+
     def reparameterize(self, mu, logvar):
         std = torch.exp(0.5 * logvar)  # σ = exp(0.5 × log σ²)
         eps = torch.randn_like(std)     # ε ~ N(0, I)
@@ -243,14 +243,14 @@ export default function EncoderPanel() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
           <h4 className="font-bold text-purple-300 mb-2">Why Two Outputs?</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            The encoder outputs both μ and log σ² because we're learning a <strong>distribution</strong>, 
+          <p className="text-sm text-gray-700">
+            The encoder outputs both μ and log σ² because we're learning a <strong>distribution</strong>,
             not a single point. Each latent dimension has its own mean and variance.
           </p>
         </div>
         <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
           <h4 className="font-bold text-green-300 mb-2">Why Log-Variance?</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             We output log σ² instead of σ because: (1) variance must be positive, but log can be any real number,
             (2) it's more numerically stable during training.
           </p>

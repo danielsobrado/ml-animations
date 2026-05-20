@@ -57,7 +57,7 @@ function BidirectionalPanel() {
 
   const resetAnimation = () => {
     if (timelineRef.current) timelineRef.current.kill();
-    
+
     const ctx = gsap.context(() => {
       gsap.set('.attention-line', { opacity: 0 });
       gsap.set('.token-highlight', { scale: 1 });
@@ -69,8 +69,8 @@ function BidirectionalPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">Bidirectional Attention</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">Bidirectional Attention</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
           Unlike CLIP's causal attention, T5 uses <strong>bidirectional self-attention</strong>.
           Every token can attend to ALL other tokens - both before and after it.
         </p>
@@ -97,7 +97,7 @@ function BidirectionalPanel() {
 
       {/* Token Selection */}
       <div className="bg-black/30 rounded-xl p-4">
-        <div className="text-sm text-gray-800 dark:text-gray-400 mb-3">Select a token to see what it attends to:</div>
+        <div className="text-sm text-gray-800 mb-3">Select a token to see what it attends to:</div>
         <div className="flex flex-wrap gap-2">
           {tokens.map((token, i) => (
             <button
@@ -109,7 +109,7 @@ function BidirectionalPanel() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 selectedToken === i
                   ? 'bg-emerald-600 text-white'
-                  : 'bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/20'
+                  : 'bg-white/10 text-gray-700 hover:bg-white/20'
               }`}
             >
               {token}
@@ -125,7 +125,7 @@ function BidirectionalPanel() {
           {tokens.map((token, i) => {
             const x = 80 + i * 110;
             const isSelected = i === selectedToken;
-            
+
             return (
               <g key={i}>
                 {/* Token box */}
@@ -191,13 +191,13 @@ function BidirectionalPanel() {
       {/* Comparison: Causal vs Bidirectional */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-blue-500/10 rounded-xl p-6 border border-blue-500/30">
-          <h3 className="font-semibold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-blue-600 mb-4 flex items-center gap-2">
             <ArrowLeftRight size={20} />
             CLIP: Causal (Unidirectional)
           </h3>
-          
+
           <div className="bg-black/40 rounded-lg p-4 mb-4">
-            <div className="font-mono text-xs text-gray-800 dark:text-gray-400 mb-2">Attention Mask:</div>
+            <div className="font-mono text-xs text-gray-800 mb-2">Attention Mask:</div>
             <div className="grid grid-cols-6 gap-1 text-xs">
               {tokens.map((_, i) => (
                 <div key={i} className="flex flex-col gap-1">
@@ -205,7 +205,7 @@ function BidirectionalPanel() {
                     <div
                       key={j}
                       className={`w-full aspect-square rounded flex items-center justify-center ${
-                        j <= i ? 'bg-blue-500/50 text-white' : 'bg-gray-800 text-gray-800 dark:text-gray-600'
+                        j <= i ? 'bg-blue-500/50 text-white' : 'bg-gray-800 text-gray-800'
                       }`}
                     >
                       {j <= i ? '1' : '0'}
@@ -215,21 +215,21 @@ function BidirectionalPanel() {
               ))}
             </div>
           </div>
-          
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+
+          <p className="text-sm text-gray-700">
             Token can only see <strong>itself and previous tokens</strong>.
             Good for generation, but limits understanding.
           </p>
         </div>
 
         <div className="bg-emerald-500/10 rounded-xl p-6 border border-emerald-500/30">
-          <h3 className="font-semibold text-emerald-600 dark:text-emerald-400 mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-emerald-600 mb-4 flex items-center gap-2">
             <Eye size={20} />
             T5: Bidirectional
           </h3>
-          
+
           <div className="bg-black/40 rounded-lg p-4 mb-4">
-            <div className="font-mono text-xs text-gray-800 dark:text-gray-400 mb-2">Attention Mask:</div>
+            <div className="font-mono text-xs text-gray-800 mb-2">Attention Mask:</div>
             <div className="grid grid-cols-6 gap-1 text-xs">
               {tokens.map((_, i) => (
                 <div key={i} className="flex flex-col gap-1">
@@ -245,8 +245,8 @@ function BidirectionalPanel() {
               ))}
             </div>
           </div>
-          
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+
+          <p className="text-sm text-gray-700">
             Every token sees <strong>all other tokens</strong>.
             Full context for understanding complex relationships.
           </p>
@@ -255,18 +255,18 @@ function BidirectionalPanel() {
 
       {/* Why Bidirectional Matters */}
       <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-xl p-6 border border-emerald-500/30">
-        <h3 className="font-semibold text-emerald-600 dark:text-emerald-400 mb-4">🎯 Why Bidirectional Matters for SD3</h3>
-        
+        <h3 className="font-semibold text-emerald-600 mb-4">🎯 Why Bidirectional Matters for SD3</h3>
+
         <div className="space-y-4">
           <div className="bg-black/30 rounded-lg p-4">
             <div className="font-semibold text-white mb-2">Example: "A red ball to the LEFT of a blue cube"</div>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div className="text-gray-700 dark:text-gray-300">
-                <span className="text-blue-600 dark:text-blue-400">CLIP (causal):</span> When processing "LEFT", 
+              <div className="text-gray-700">
+                <span className="text-blue-600">CLIP (causal):</span> When processing "LEFT",
                 it hasn't seen "blue cube" yet. Harder to understand the spatial relationship.
               </div>
-              <div className="text-gray-700 dark:text-gray-300">
-                <span className="text-emerald-600 dark:text-emerald-400">T5 (bidirectional):</span> "LEFT" can attend to 
+              <div className="text-gray-700">
+                <span className="text-emerald-600">T5 (bidirectional):</span> "LEFT" can attend to
                 both "red ball" AND "blue cube" simultaneously. Full spatial context!
               </div>
             </div>
@@ -275,12 +275,12 @@ function BidirectionalPanel() {
           <div className="bg-black/30 rounded-lg p-4">
             <div className="font-semibold text-white mb-2">Example: "not a dog but a cat"</div>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div className="text-gray-700 dark:text-gray-300">
-                <span className="text-blue-600 dark:text-blue-400">CLIP:</span> "dog" is encoded before seeing "but a cat", 
+              <div className="text-gray-700">
+                <span className="text-blue-600">CLIP:</span> "dog" is encoded before seeing "but a cat",
                 potentially missing the negation context.
               </div>
-              <div className="text-gray-700 dark:text-gray-300">
-                <span className="text-emerald-600 dark:text-emerald-400">T5:</span> "dog" sees the full context including "not" 
+              <div className="text-gray-700">
+                <span className="text-emerald-600">T5:</span> "dog" sees the full context including "not"
                 and "but a cat", properly encoding the negation.
               </div>
             </div>
@@ -290,17 +290,17 @@ function BidirectionalPanel() {
 
       {/* Relative Position Bias */}
       <div className="bg-teal-500/10 rounded-xl p-6 border border-teal-500/30">
-        <h3 className="font-semibold text-teal-600 dark:text-teal-400 mb-3">📍 Relative Position Bias</h3>
-        <div className="text-gray-700 dark:text-sm space-y-2">
+        <h3 className="font-semibold text-teal-600 mb-3">📍 Relative Position Bias</h3>
+        <div className="text-gray-700 space-y-2">
           <p>
             T5 uses <strong>relative position biases</strong> instead of absolute position embeddings:
           </p>
           <div className="bg-black/40 rounded p-4 font-mono text-xs">
             Attention(Q, K) = softmax((QKᵀ + B) / √d) V<br/>
-            <span className="text-teal-600 dark:text-teal-400">where B = learned_bias(pos_i - pos_j)</span>
+            <span className="text-teal-600">where B = learned_bias(pos_i - pos_j)</span>
           </div>
           <p>
-            This means T5 can generalize to longer sequences than it was trained on, 
+            This means T5 can generalize to longer sequences than it was trained on,
             and the attention patterns are translation-invariant.
           </p>
         </div>

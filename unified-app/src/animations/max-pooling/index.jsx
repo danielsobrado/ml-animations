@@ -27,7 +27,7 @@ export default function App() {
     };
 
     return (
-        <div className="text-slate-900 dark:text-white">
+        <div className="text-slate-900">
             <div className="flex flex-col gap-4 max-w-7xl mx-auto">
                 {/* Top Row - Animation and Config */}
                 <div className="flex flex-col lg:flex-row gap-4">

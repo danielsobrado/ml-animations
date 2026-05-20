@@ -42,9 +42,9 @@ export default function OverviewPanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          VAE Architecture: <span className="text-purple-600 dark:text-purple-400">The Big Picture</span>
+          VAE Architecture: <span className="text-purple-600">The Big Picture</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Autoencoders that learn probabilistic latent representations for generation
         </p>
       </div>
@@ -66,10 +66,10 @@ export default function OverviewPanel() {
               </div>
             </div>
             <p className="text-center mt-2 text-sm font-medium">Input x</p>
-            <p className="text-center text-xs text-gray-700 dark:text-gray-500">[batch, 784]</p>
+            <p className="text-center text-xs text-gray-700">[batch, 784]</p>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 flex-shrink-0" />
+          <ArrowRight className="text-gray-700 flex-shrink-0" />
 
           {/* Encoder */}
           <div
@@ -89,7 +89,7 @@ export default function OverviewPanel() {
             <p className="text-center mt-2 text-sm font-medium">Encoder</p>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 flex-shrink-0" />
+          <ArrowRight className="text-gray-700 flex-shrink-0" />
 
           {/* Latent Space */}
           <div
@@ -105,10 +105,10 @@ export default function OverviewPanel() {
               </div>
             </div>
             <p className="text-center mt-2 text-sm font-medium">Latent Space</p>
-            <p className="text-center text-xs text-gray-700 dark:text-gray-500">[batch, latent_dim]</p>
+            <p className="text-center text-xs text-gray-700">[batch, latent_dim]</p>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 flex-shrink-0" />
+          <ArrowRight className="text-gray-700 flex-shrink-0" />
 
           {/* Decoder */}
           <div
@@ -124,7 +124,7 @@ export default function OverviewPanel() {
             <p className="text-center mt-2 text-sm font-medium">Decoder</p>
           </div>
 
-          <ArrowRight className="text-gray-700 dark:text-gray-500 flex-shrink-0" />
+          <ArrowRight className="text-gray-700 flex-shrink-0" />
 
           {/* Output */}
           <div
@@ -140,7 +140,7 @@ export default function OverviewPanel() {
               </div>
             </div>
             <p className="text-center mt-2 text-sm font-medium">Output x̂</p>
-            <p className="text-center text-xs text-gray-700 dark:text-gray-500">[batch, 784]</p>
+            <p className="text-center text-xs text-gray-700">[batch, 784]</p>
           </div>
         </div>
 
@@ -148,10 +148,10 @@ export default function OverviewPanel() {
         {hoveredComponent && (
           <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
             <div className="flex items-start gap-3">
-              <Info className="text-purple-600 dark:text-purple-400 mt-1" size={20} />
+              <Info className="text-purple-600 mt-1" size={20} />
               <div>
                 <h4 className="font-bold text-lg">{components[hoveredComponent].title}</h4>
-                <p className="text-gray-700 dark:text-gray-300 mt-1">{components[hoveredComponent].description}</p>
+                <p className="text-gray-700 mt-1">{components[hoveredComponent].description}</p>
                 <div className="flex gap-2 mt-3">
                   {components[hoveredComponent].details.map((detail, i) => (
                     <span key={i} className="bg-white/10 px-2 py-1 rounded text-sm">{detail}</span>
@@ -169,8 +169,8 @@ export default function OverviewPanel() {
           <h3 className="font-bold text-purple-300 mb-2 flex items-center gap-2">
             <Zap size={18} /> Why "Variational"?
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Unlike regular autoencoders, VAEs learn a <strong>probability distribution</strong> in 
+          <p className="text-sm text-gray-700">
+            Unlike regular autoencoders, VAEs learn a <strong>probability distribution</strong> in
             latent space, not just fixed points. This allows smooth interpolation and generation of new samples.
           </p>
         </div>
@@ -179,8 +179,8 @@ export default function OverviewPanel() {
           <h3 className="font-bold text-green-300 mb-2 flex items-center gap-2">
             <Brain size={18} /> The Reparameterization Trick
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            To backpropagate through sampling, we use: <code className="bg-black/30 px-1 rounded">z = μ + σ ⊙ ε</code> 
+          <p className="text-sm text-gray-700">
+            To backpropagate through sampling, we use: <code className="bg-black/30 px-1 rounded">z = μ + σ ⊙ ε</code>
             where ε ~ N(0,1). This moves randomness outside the gradient path.
           </p>
         </div>
@@ -189,7 +189,7 @@ export default function OverviewPanel() {
           <h3 className="font-bold text-orange-300 mb-2 flex items-center gap-2">
             <Shuffle size={18} /> Generation Power
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
+          <p className="text-sm text-gray-700">
             Once trained, we can generate new data by sampling z ~ N(0,1) and passing it through
             the decoder - no encoder needed! The learned latent space captures data structure.
           </p>
@@ -204,8 +204,8 @@ export default function OverviewPanel() {
             <thead>
               <tr className="border-b border-white/10">
                 <th className="text-left py-2 px-4">Feature</th>
-                <th className="text-left py-2 px-4 text-blue-600 dark:text-blue-400">Regular Autoencoder</th>
-                <th className="text-left py-2 px-4 text-purple-600 dark:text-purple-400">Variational AE</th>
+                <th className="text-left py-2 px-4 text-blue-600">Regular Autoencoder</th>
+                <th className="text-left py-2 px-4 text-purple-600">Variational AE</th>
               </tr>
             </thead>
             <tbody>
@@ -241,8 +241,8 @@ export default function OverviewPanel() {
 
       {/* Paper Reference */}
       <div className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-xl p-4 border border-purple-500/20">
-        <p className="text-sm text-gray-800 dark:text-gray-400">
-          📄 <strong>Key Paper:</strong> "Auto-Encoding Variational Bayes" (Kingma & Welling, 2013) - 
+        <p className="text-sm text-gray-800">
+          📄 <strong>Key Paper:</strong> "Auto-Encoding Variational Bayes" (Kingma & Welling, 2013) -
           Introduced VAEs with the reparameterization trick, enabling practical training of deep generative models.
         </p>
       </div>

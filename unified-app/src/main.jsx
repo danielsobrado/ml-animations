@@ -1,19 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import App from './App'
-import { ThemeProvider } from './context/ThemeContext'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './index.css';
 
-// Use base path for GitHub Pages deployment
-const basename = import.meta.env.BASE_URL
+const basename = import.meta.env.BASE_URL;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter basename={basename}>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>,
-)
+);

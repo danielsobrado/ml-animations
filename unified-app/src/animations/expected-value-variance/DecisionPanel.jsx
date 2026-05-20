@@ -49,7 +49,7 @@ export default function DecisionPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-red-400 mb-4">Decision Making</h2>
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                <p className="text-lg text-slate-700 leading-relaxed">
                     Higher E[X] is good, but higher Var(X) means more <strong>risk</strong>.
                     <br />
                     Which investment should you choose?
@@ -60,7 +60,7 @@ export default function DecisionPanel() {
             <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 w-full max-w-4xl mb-8">
                 <label className="flex justify-between text-sm font-bold mb-3">
                     Your Risk Tolerance:
-                    <span className="text-amber-600 dark:text-amber-400">
+                    <span className="text-amber-600">
                         {riskTolerance < 0.3 ? 'Risk-Averse 😰' : riskTolerance < 0.7 ? 'Moderate 😐' : 'Risk-Seeking 😎'}
                     </span>
                 </label>
@@ -78,15 +78,15 @@ export default function DecisionPanel() {
                     <h3 className="font-bold text-green-400 mb-4 text-center text-xl">Safe Investment</h3>
                     <div className="space-y-3">
                         <div className="flex justify-between">
-                            <span className="text-slate-800 dark:text-slate-400">Expected Return:</span>
+                            <span className="text-slate-800">Expected Return:</span>
                             <span className="text-green-400 font-bold">${safe.mean}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-slate-800 dark:text-slate-400">Std Deviation:</span>
+                            <span className="text-slate-800">Std Deviation:</span>
                             <span className="text-green-400 font-bold">±${safe.std}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-slate-800 dark:text-slate-400">Risk-Adjusted Value:</span>
+                            <span className="text-slate-800">Risk-Adjusted Value:</span>
                             <span className="text-green-400 font-bold">${safeUtility.toFixed(1)}</span>
                         </div>
                     </div>
@@ -101,15 +101,15 @@ export default function DecisionPanel() {
                     <h3 className="font-bold text-red-400 mb-4 text-center text-xl">Risky Investment</h3>
                     <div className="space-y-3">
                         <div className="flex justify-between">
-                            <span className="text-slate-800 dark:text-slate-400">Expected Return:</span>
+                            <span className="text-slate-800">Expected Return:</span>
                             <span className="text-red-400 font-bold">${risky.mean}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-slate-800 dark:text-slate-400">Std Deviation:</span>
+                            <span className="text-slate-800">Std Deviation:</span>
                             <span className="text-red-400 font-bold">±${risky.std}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-slate-800 dark:text-slate-400">Risk-Adjusted Value:</span>
+                            <span className="text-slate-800">Risk-Adjusted Value:</span>
                             <span className="text-red-400 font-bold">${riskyUtility.toFixed(1)}</span>
                         </div>
                     </div>

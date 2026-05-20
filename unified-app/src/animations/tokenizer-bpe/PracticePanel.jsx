@@ -127,8 +127,8 @@ function PracticePanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-2">Practice Lab</h2>
-        <p className="text-gray-700 dark:text-gray-300">Test your understanding of diffusion model tokenization</p>
+        <h2 className="text-2xl font-bold text-orange-600 mb-2">Practice Lab</h2>
+        <p className="text-gray-700">Test your understanding of diffusion model tokenization</p>
       </div>
 
       {/* Mode Toggle */}
@@ -136,7 +136,7 @@ function PracticePanel() {
         <button
           onClick={() => setShowExercise(false)}
           className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-            !showExercise ? 'bg-orange-500 text-white' : 'bg-black/30 text-gray-800 dark:text-gray-400 hover:text-white'
+            !showExercise ? 'bg-orange-500 text-white' : 'bg-black/30 text-gray-800 hover:text-white'
           }`}
         >
           Quiz
@@ -144,7 +144,7 @@ function PracticePanel() {
         <button
           onClick={() => setShowExercise(true)}
           className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-            showExercise ? 'bg-orange-500 text-white' : 'bg-black/30 text-gray-800 dark:text-gray-400 hover:text-white'
+            showExercise ? 'bg-orange-500 text-white' : 'bg-black/30 text-gray-800 hover:text-white'
           }`}
         >
           Code Exercises
@@ -158,8 +158,8 @@ function PracticePanel() {
             <>
               {/* Progress */}
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-800 dark:text-gray-400">Question {currentQuestion + 1} of {questions.length}</span>
-                <span className="text-orange-600 dark:text-orange-400 font-semibold">Score: {score}/{questions.length}</span>
+                <span className="text-gray-800">Question {currentQuestion + 1} of {questions.length}</span>
+                <span className="text-orange-600 font-semibold">Score: {score}/{questions.length}</span>
               </div>
 
               {/* Question */}
@@ -187,7 +187,7 @@ function PracticePanel() {
                             ? 'bg-green-500 text-white'
                             : showResult && i === selectedAnswer
                               ? 'bg-red-500 text-white'
-                              : 'bg-gray-700 text-gray-700 dark:text-gray-300'
+                              : 'bg-gray-700 text-gray-700'
                         }`}>
                           {String.fromCharCode(65 + i)}
                         </span>
@@ -217,7 +217,7 @@ function PracticePanel() {
                         ? 'text-green-400'
                         : 'text-red-400'
                     } />
-                    <p className="text-gray-700 dark:text-sm">{questions[currentQuestion].explanation}</p>
+                    <p className="text-gray-700">{questions[currentQuestion].explanation}</p>
                   </div>
                 </div>
               )}
@@ -237,8 +237,8 @@ function PracticePanel() {
             <div className="text-center py-8">
               <Trophy size={64} className="mx-auto text-yellow-400 mb-4" />
               <h3 className="text-2xl font-bold text-white mb-2">Quiz Complete!</h3>
-              <p className="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-4">{score} / {questions.length}</p>
-              <p className="text-gray-800 dark:text-gray-400 mb-6">
+              <p className="text-4xl font-bold text-orange-600 mb-4">{score} / {questions.length}</p>
+              <p className="text-gray-800 mb-6">
                 {score === questions.length ? "Perfect score! You're a tokenization expert!" :
                  score >= questions.length * 0.7 ? "Great job! You understand tokenization well." :
                  "Keep learning! Review the concepts and try again."}
@@ -258,14 +258,14 @@ function PracticePanel() {
           {/* Exercise 1 */}
           <div className="bg-black/40 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Code className="text-orange-600 dark:text-orange-400" size={20} />
+              <Code className="text-orange-600" size={20} />
               <h3 className="text-lg font-semibold text-white">Exercise 1: Simple Tokenizer</h3>
             </div>
-            <p className="text-gray-800 dark:text-sm mb-4">
+            <p className="text-gray-800 mb-4">
               Implement a basic character-level tokenizer with special tokens:
             </p>
             <div className="bg-black/60 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">
+              <pre className="text-gray-700">
 {`class SimpleTokenizer:
     def __init__(self):
         # Build character vocabulary a-z, space
@@ -274,13 +274,13 @@ function PracticePanel() {
         self.vocab['<START>'] = 27
         self.vocab['<END>'] = 28
         self.vocab['<PAD>'] = 29
-    
+
     def encode(self, text: str, max_length: int = 20) -> list:
         # TODO: Implement tokenization
         # 1. Convert to lowercase
         # 2. Add START token
         # 3. Convert each character to ID
-        # 4. Add END token  
+        # 4. Add END token
         # 5. Pad to max_length
         pass
 
@@ -295,18 +295,18 @@ print(tokenizer.encode("hello"))
           {/* Exercise 2 */}
           <div className="bg-black/40 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Code className="text-orange-600 dark:text-orange-400" size={20} />
+              <Code className="text-orange-600" size={20} />
               <h3 className="text-lg font-semibold text-white">Exercise 2: BPE Merge</h3>
             </div>
-            <p className="text-gray-800 dark:text-sm mb-4">
+            <p className="text-gray-800 mb-4">
               Implement one step of BPE merging:
             </p>
             <div className="bg-black/60 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">
+              <pre className="text-gray-700">
 {`def bpe_merge(tokens: list, pair: tuple) -> list:
     """
     Merge all occurrences of pair in tokens.
-    
+
     Example:
     tokens = ['l', 'o', 'w', '</w>', 'l', 'o', 'w', 'e', 'r', '</w>']
     pair = ('l', 'o')
@@ -331,20 +331,20 @@ print(bpe_merge(tokens, ('l', 'o')))`}
           {/* Exercise 3 */}
           <div className="bg-black/40 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Code className="text-orange-600 dark:text-orange-400" size={20} />
+              <Code className="text-orange-600" size={20} />
               <h3 className="text-lg font-semibold text-white">Exercise 3: Count Pairs</h3>
             </div>
-            <p className="text-gray-800 dark:text-sm mb-4">
+            <p className="text-gray-800 mb-4">
               Count adjacent token pairs (needed for BPE training):
             </p>
             <div className="bg-black/60 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">
+              <pre className="text-gray-700">
 {`from collections import Counter
 
 def count_pairs(tokens: list) -> Counter:
     """
     Count frequency of adjacent pairs.
-    
+
     Example:
     tokens = ['t', 'h', 'e', '</w>', 't', 'h', 'e', 'r', 'e', '</w>']
     result = Counter({('t', 'h'): 2, ('h', 'e'): 2, ('e', '</w>'): 1, ...})
@@ -362,11 +362,11 @@ print(pairs.most_common(3))`}
 
           {/* Solution Hints */}
           <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/30">
-            <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-purple-600 mb-3 flex items-center gap-2">
               <Lightbulb size={18} />
               Solution Hints
             </h3>
-            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <ul className="space-y-2 text-sm text-gray-700">
               <li>• <strong>Exercise 1:</strong> Use list comprehension with <code>self.vocab.get(c, 29)</code> for unknown chars</li>
               <li>• <strong>Exercise 2:</strong> Check if <code>tokens[i:i+2] == list(pair)</code>, merge if true, else append single token</li>
               <li>• <strong>Exercise 3:</strong> Use <code>zip(tokens, tokens[1:])</code> to get adjacent pairs</li>

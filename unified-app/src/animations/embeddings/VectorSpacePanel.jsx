@@ -100,17 +100,17 @@ export default function VectorSpacePanel() {
             const categories = [...new Set(WORDS.map(w => w.category))];
             categories.forEach(cat => {
                 if (selectedCategory && selectedCategory !== cat) return;
-                
+
                 const catWords = WORDS.filter(w => w.category === cat);
                 const color = CATEGORY_COLORS[cat];
-                
+
                 // Calculate cluster center and radius
                 const avgX = catWords.reduce((s, w) => s + w.x, 0) / catWords.length;
                 const avgY = catWords.reduce((s, w) => s + w.y, 0) / catWords.length;
-                const maxDist = Math.max(...catWords.map(w => 
+                const maxDist = Math.max(...catWords.map(w =>
                     Math.sqrt((w.x - avgX) ** 2 + (w.y - avgY) ** 2)
                 ));
-                
+
                 ctx.beginPath();
                 ctx.arc(
                     centerX + avgX * scale,
@@ -131,10 +131,10 @@ export default function VectorSpacePanel() {
             const isSelected = selectedCategory ? word.category === selectedCategory : true;
             const isHovered = hoveredWord === word.word;
             const color = CATEGORY_COLORS[word.category];
-            
+
             const x = centerX + word.x * scale;
             const y = centerY - word.y * scale;
-            
+
             // Draw point
             ctx.beginPath();
             ctx.arc(x, y, isHovered ? 10 : 6, 0, Math.PI * 2);
@@ -143,7 +143,7 @@ export default function VectorSpacePanel() {
             ctx.strokeStyle = isHovered ? '#1e293b' : color.border;
             ctx.lineWidth = isHovered ? 3 : 2;
             ctx.stroke();
-            
+
             // Draw label
             ctx.fillStyle = isSelected ? '#1e293b' : '#94a3b8';
             ctx.font = isHovered ? 'bold 14px sans-serif' : '12px sans-serif';
@@ -167,15 +167,15 @@ export default function VectorSpacePanel() {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         const scale = Math.min(canvas.width, canvas.height) * 0.4 * zoom;
-        
+
         // Find closest word
         let closest = null;
         let minDist = Infinity;
-        
+
         WORDS.forEach(word => {
             const wx = centerX + word.x * scale;
             const wy = centerY - word.y * scale;
@@ -185,7 +185,7 @@ export default function VectorSpacePanel() {
                 closest = word.word;
             }
         });
-        
+
         setHoveredWord(closest);
     };
 
@@ -196,7 +196,7 @@ export default function VectorSpacePanel() {
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-4">
                     <h2 className="text-2xl font-bold text-indigo-900 mb-2">Vector Space Visualization</h2>
-                    <p className="text-slate-800 dark:text-slate-600">
+                    <p className="text-slate-800">
                         Words plotted in 2D space - similar words cluster together
                     </p>
                 </div>
@@ -206,7 +206,7 @@ export default function VectorSpacePanel() {
                     <div className="w-64 flex-shrink-0">
                         <div className="bg-slate-50 rounded-xl p-4 mb-4">
                             <h3 className="font-bold text-slate-800 mb-3">Controls</h3>
-                            
+
                             {/* Zoom */}
                             <div className="flex items-center gap-2 mb-4">
                                 <button
@@ -215,7 +215,7 @@ export default function VectorSpacePanel() {
                                 >
                                     <ZoomOut size={16} />
                                 </button>
-                                <span className="text-sm text-slate-800 dark:text-slate-600">{(zoom * 100).toFixed(0)}%</span>
+                                <span className="text-sm text-slate-800">{(zoom * 100).toFixed(0)}%</span>
                                 <button
                                     onClick={() => setZoom(z => Math.min(2, z + 0.25))}
                                     className="p-2 rounded-lg bg-white border hover:bg-slate-100"
@@ -260,8 +260,8 @@ export default function VectorSpacePanel() {
                                             selectedCategory === cat ? 'bg-indigo-100 text-indigo-800' : 'hover:bg-slate-100'
                                         }`}
                                     >
-                                        <span 
-                                            className="w-3 h-3 rounded-full" 
+                                        <span
+                                            className="w-3 h-3 rounded-full"
                                             style={{ backgroundColor: CATEGORY_COLORS[cat].fill }}
                                         />
                                         {cat}
@@ -278,7 +278,7 @@ export default function VectorSpacePanel() {
                                     const w = WORDS.find(w => w.word === hoveredWord);
                                     return w && (
                                         <>
-                                            <div className="text-sm text-slate-800 dark:text-slate-600 mb-2">
+                                            <div className="text-sm text-slate-800 mb-2">
                                                 Category: <span className="font-medium">{w.category}</span>
                                             </div>
                                             <div className="font-mono text-xs bg-slate-100 p-2 rounded">

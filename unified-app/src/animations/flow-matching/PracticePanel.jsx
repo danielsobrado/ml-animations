@@ -171,9 +171,9 @@ export default function PracticePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          Practice Lab: <span className="text-fuchsia-600 dark:text-fuchsia-400">Test Your Knowledge</span>
+          Practice Lab: <span className="text-fuchsia-600">Test Your Knowledge</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">Quiz yourself and explore interactive calculations</p>
+        <p className="text-gray-800">Quiz yourself and explore interactive calculations</p>
       </div>
 
       {/* Mode Selector */}
@@ -183,7 +183,7 @@ export default function PracticePanel() {
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
             mode === 'quiz'
               ? 'bg-fuchsia-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Brain size={20} />
@@ -194,7 +194,7 @@ export default function PracticePanel() {
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
             mode === 'calculator'
               ? 'bg-fuchsia-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Calculator size={20} />
@@ -205,7 +205,7 @@ export default function PracticePanel() {
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
             mode === 'code'
               ? 'bg-fuchsia-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Code size={20} />
@@ -218,10 +218,10 @@ export default function PracticePanel() {
         <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
           {/* Score */}
           <div className="flex justify-between items-center mb-6">
-            <span className="text-gray-800 dark:text-gray-400">
+            <span className="text-gray-800">
               Question {currentQuestion + 1} of {questions.length}
             </span>
-            <span className="text-fuchsia-600 dark:text-fuchsia-400 font-bold">
+            <span className="text-fuchsia-600 font-bold">
               Score: {score}/{answered}
             </span>
           </div>
@@ -249,7 +249,7 @@ export default function PracticePanel() {
                   } else if (isSelected) {
                     buttonClass += 'border-red-500 bg-red-500/20 text-red-300';
                   } else {
-                    buttonClass += 'border-white/10 bg-white/5 text-gray-700 dark:text-gray-500';
+                    buttonClass += 'border-white/10 bg-white/5 text-gray-700';
                   }
                 } else {
                   buttonClass += 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-fuchsia-500/50';
@@ -276,8 +276,8 @@ export default function PracticePanel() {
           {/* Explanation */}
           {showResult && (
             <div className="bg-white/5 rounded-xl p-4 mb-6">
-              <p className="text-gray-700 dark:text-gray-300">
-                <strong className="text-fuchsia-600 dark:text-fuchsia-400">Explanation:</strong>{' '}
+              <p className="text-gray-700">
+                <strong className="text-fuchsia-600">Explanation:</strong>{' '}
                 {questions[currentQuestion].explanation}
               </p>
             </div>
@@ -301,7 +301,7 @@ export default function PracticePanel() {
               </button>
             )}
             {showResult && currentQuestion === questions.length - 1 && (
-              <div className="text-lg font-bold text-fuchsia-600 dark:text-fuchsia-400">
+              <div className="text-lg font-bold text-fuchsia-600">
                 Quiz Complete! Final Score: {score}/{questions.length}
               </div>
             )}
@@ -318,7 +318,7 @@ export default function PracticePanel() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">t = {calcT.toFixed(2)}</label>
+                  <label className="text-sm text-gray-800 block mb-2">t = {calcT.toFixed(2)}</label>
                   <input
                     type="range"
                     min="0.01"
@@ -330,7 +330,7 @@ export default function PracticePanel() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">μ = {calcMean.toFixed(1)}</label>
+                  <label className="text-sm text-gray-800 block mb-2">μ = {calcMean.toFixed(1)}</label>
                   <input
                     type="range"
                     min="-2"
@@ -342,7 +342,7 @@ export default function PracticePanel() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-800 dark:text-gray-400 block mb-2">σ = {calcStd.toFixed(1)}</label>
+                  <label className="text-sm text-gray-800 block mb-2">σ = {calcStd.toFixed(1)}</label>
                   <input
                     type="range"
                     min="0.3"
@@ -357,9 +357,9 @@ export default function PracticePanel() {
               <div className="bg-white/5 rounded-xl p-4">
                 <h4 className="font-bold text-fuchsia-300 mb-3">Results</h4>
                 <div className="space-y-2 font-mono text-sm">
-                  <p>logit(t) = log({calcT.toFixed(2)} / {(1-calcT).toFixed(2)}) = <span className="text-fuchsia-600 dark:text-fuchsia-400">{Math.log(calcT / (1 - calcT)).toFixed(4)}</span></p>
-                  <p>PDF(t) = <span className="text-fuchsia-600 dark:text-fuchsia-400">{logitNormalPDF(calcT, calcMean, calcStd).toFixed(4)}</span></p>
-                  <p>Mode ≈ <span className="text-purple-600 dark:text-purple-400">{(1 / (1 + Math.exp(-calcMean))).toFixed(3)}</span></p>
+                  <p>logit(t) = log({calcT.toFixed(2)} / {(1-calcT).toFixed(2)}) = <span className="text-fuchsia-600">{Math.log(calcT / (1 - calcT)).toFixed(4)}</span></p>
+                  <p>PDF(t) = <span className="text-fuchsia-600">{logitNormalPDF(calcT, calcMean, calcStd).toFixed(4)}</span></p>
+                  <p>Mode ≈ <span className="text-purple-600">{(1 / (1 + Math.exp(-calcMean))).toFixed(3)}</span></p>
                 </div>
               </div>
             </div>
@@ -370,7 +370,7 @@ export default function PracticePanel() {
             <h3 className="text-xl font-bold mb-4">Euler Step Calculator</h3>
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-white/5 rounded-xl p-4">
-                <h4 className="text-sm text-gray-800 dark:text-gray-400 mb-2">Current Position (x)</h4>
+                <h4 className="text-sm text-gray-800 mb-2">Current Position (x)</h4>
                 <input
                   type="number"
                   defaultValue="0"
@@ -379,7 +379,7 @@ export default function PracticePanel() {
                 />
               </div>
               <div className="bg-white/5 rounded-xl p-4">
-                <h4 className="text-sm text-gray-800 dark:text-gray-400 mb-2">Velocity (v)</h4>
+                <h4 className="text-sm text-gray-800 mb-2">Velocity (v)</h4>
                 <input
                   type="number"
                   defaultValue="1"
@@ -388,7 +388,7 @@ export default function PracticePanel() {
                 />
               </div>
               <div className="bg-white/5 rounded-xl p-4">
-                <h4 className="text-sm text-gray-800 dark:text-gray-400 mb-2">Step Size (dt)</h4>
+                <h4 className="text-sm text-gray-800 mb-2">Step Size (dt)</h4>
                 <input
                   type="number"
                   defaultValue="0.1"
@@ -399,8 +399,8 @@ export default function PracticePanel() {
               </div>
             </div>
             <div className="mt-4 p-4 bg-fuchsia-500/20 rounded-xl text-center">
-              <p className="text-gray-800 dark:text-gray-400">x_new = x + v × dt</p>
-              <p className="text-2xl font-bold text-fuchsia-600 dark:text-fuchsia-400 mt-2">
+              <p className="text-gray-800">x_new = x + v × dt</p>
+              <p className="text-2xl font-bold text-fuchsia-600 mt-2">
                 = 0 + 1 × 0.1 = 0.1
               </p>
             </div>
@@ -413,18 +413,18 @@ export default function PracticePanel() {
         <div className="space-y-6">
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-xl font-bold mb-4">Exercise 1: Implement Linear Interpolation</h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Complete the function to perform linear interpolation between noise x₀ and data x₁:
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm">
-              <pre className="text-gray-700 dark:text-gray-300">{`fn interpolate(x0: f32, x1: f32, t: f32) -> f32 {
+              <pre className="text-gray-700">{`fn interpolate(x0: f32, x1: f32, t: f32) -> f32 {
     // TODO: Return the interpolated value
     // x_t = (1-t)*x0 + t*x1
     ???
 }`}</pre>
             </div>
             <details className="mt-4">
-              <summary className="text-fuchsia-600 dark:text-fuchsia-400 cursor-pointer hover:text-fuchsia-300">Show Solution</summary>
+              <summary className="text-fuchsia-600 cursor-pointer hover:text-fuchsia-300">Show Solution</summary>
               <div className="bg-black/50 rounded-lg p-4 font-mono text-sm mt-2">
                 <pre className="text-green-400">{`fn interpolate(x0: f32, x1: f32, t: f32) -> f32 {
     (1.0 - t) * x0 + t * x1
@@ -435,14 +435,14 @@ export default function PracticePanel() {
 
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-xl font-bold mb-4">Exercise 2: Implement Euler Sampler</h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Complete the Euler sampling loop:
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm">
-              <pre className="text-gray-700 dark:text-gray-300">{`fn euler_sample(model: &Model, num_steps: usize) -> Tensor {
+              <pre className="text-gray-700">{`fn euler_sample(model: &Model, num_steps: usize) -> Tensor {
     let mut x = sample_noise();  // Start from noise
     let dt = 1.0 / num_steps as f32;
-    
+
     for i in 0..num_steps {
         let t = i as f32 / num_steps as f32;
         let v = model.predict_velocity(&x, t);
@@ -453,12 +453,12 @@ export default function PracticePanel() {
 }`}</pre>
             </div>
             <details className="mt-4">
-              <summary className="text-fuchsia-600 dark:text-fuchsia-400 cursor-pointer hover:text-fuchsia-300">Show Solution</summary>
+              <summary className="text-fuchsia-600 cursor-pointer hover:text-fuchsia-300">Show Solution</summary>
               <div className="bg-black/50 rounded-lg p-4 font-mono text-sm mt-2">
                 <pre className="text-green-400">{`fn euler_sample(model: &Model, num_steps: usize) -> Tensor {
     let mut x = sample_noise();
     let dt = 1.0 / num_steps as f32;
-    
+
     for i in 0..num_steps {
         let t = i as f32 / num_steps as f32;
         let v = model.predict_velocity(&x, t);
@@ -472,11 +472,11 @@ export default function PracticePanel() {
 
           <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
             <h3 className="text-xl font-bold mb-4">Exercise 3: Sample from Logit-Normal</h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Implement logit-normal sampling for timesteps:
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm">
-              <pre className="text-gray-700 dark:text-gray-300">{`fn sample_logit_normal(mean: f32, std: f32) -> f32 {
+              <pre className="text-gray-700">{`fn sample_logit_normal(mean: f32, std: f32) -> f32 {
     let z: f32 = /* sample from N(0,1) */;
     // TODO: Apply logit-normal transform
     // 1. Compute logit = mean + std * z
@@ -485,7 +485,7 @@ export default function PracticePanel() {
 }`}</pre>
             </div>
             <details className="mt-4">
-              <summary className="text-fuchsia-600 dark:text-fuchsia-400 cursor-pointer hover:text-fuchsia-300">Show Solution</summary>
+              <summary className="text-fuchsia-600 cursor-pointer hover:text-fuchsia-300">Show Solution</summary>
               <div className="bg-black/50 rounded-lg p-4 font-mono text-sm mt-2">
                 <pre className="text-green-400">{`fn sample_logit_normal(mean: f32, std: f32) -> f32 {
     let z = randn();  // Standard normal sample

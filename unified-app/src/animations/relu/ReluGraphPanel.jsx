@@ -31,7 +31,7 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
     // Draw grid
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 1;
-    
+
     // Vertical grid lines
     for (let x = xMin; x <= xMax; x += 2.5) {
       ctx.beginPath();
@@ -39,7 +39,7 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
       ctx.lineTo(toCanvasX(x), height - padding);
       ctx.stroke();
     }
-    
+
     // Horizontal grid lines
     for (let y = yMin; y <= yMax; y += 2.5) {
       ctx.beginPath();
@@ -68,14 +68,14 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
     ctx.fillStyle = '#374151';
     ctx.font = 'bold 14px Arial';
     ctx.textAlign = 'center';
-    
+
     // X-axis labels
     for (let x = xMin; x <= xMax; x += 2.5) {
       if (x !== 0) {
         ctx.fillText(x.toString(), toCanvasX(x), toCanvasY(0) + 20);
       }
     }
-    
+
     // Y-axis labels
     ctx.textAlign = 'right';
     for (let y = yMin; y <= yMax; y += 2.5) {
@@ -92,7 +92,7 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('x (input z)', width / 2, height - 10);
-    
+
     ctx.save();
     ctx.translate(15, height / 2);
     ctx.rotate(-Math.PI / 2);
@@ -175,9 +175,9 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
 
   return (
     <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg">
-      <canvas 
-        ref={canvasRef} 
-        width={500} 
+      <canvas
+        ref={canvasRef}
+        width={500}
         height={350}
         className="border border-gray-200 rounded"
       />
@@ -185,10 +185,10 @@ export default function ReluGraphPanel({ zValue = null, reluValue = null, isActi
         <p className="text-gray-700 font-medium">
           ReLU(x) = max(0, x)
         </p>
-        <p className="text-gray-700 dark:text-sm mt-1">
+        <p className="text-gray-700 mt-1">
           {isActive && zValue !== null ? (
             <>
-              Input z = <span className="font-bold text-blue-600">{zValue}</span> → 
+              Input z = <span className="font-bold text-blue-600">{zValue}</span> →
               Output = <span className="font-bold text-red-600">{reluValue}</span>
               {zValue < 0 && <span className="text-orange-500 ml-2">(negative → 0)</span>}
               {zValue >= 0 && <span className="text-green-500 ml-2">(positive → unchanged)</span>}

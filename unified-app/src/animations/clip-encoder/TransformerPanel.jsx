@@ -71,7 +71,7 @@ function TransformerPanel() {
     if (timelineRef.current) {
       timelineRef.current.kill();
     }
-    
+
     const ctx = gsap.context(() => {
       gsap.set('.attention-line', { scaleX: 0 });
       gsap.set('.mlp-node', { scale: 0 });
@@ -84,9 +84,9 @@ function TransformerPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">CLIP Transformer Architecture</h2>
-        <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-          CLIP's text encoder uses a standard Transformer architecture with <strong>causal self-attention</strong> 
+        <h2 className="text-2xl font-bold text-blue-600 mb-2">CLIP Transformer Architecture</h2>
+        <p className="text-gray-700 max-w-3xl mx-auto">
+          CLIP's text encoder uses a standard Transformer architecture with <strong>causal self-attention</strong>
           (each token can only attend to previous tokens). CLIP-L has 12 layers, CLIP-G has 32 layers.
         </p>
       </div>
@@ -94,43 +94,43 @@ function TransformerPanel() {
       {/* Architecture Comparison */}
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-blue-500/10 rounded-xl p-4 border border-blue-500/30">
-          <h3 className="font-semibold text-blue-600 dark:text-blue-400 mb-3">CLIP-L/14 Architecture</h3>
+          <h3 className="font-semibold text-blue-600 mb-3">CLIP-L/14 Architecture</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">Layers:</span>
+              <span className="text-gray-800">Layers:</span>
               <span className="text-white ml-2">12</span>
             </div>
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">Hidden:</span>
+              <span className="text-gray-800">Hidden:</span>
               <span className="text-white ml-2">768</span>
             </div>
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">Heads:</span>
+              <span className="text-gray-800">Heads:</span>
               <span className="text-white ml-2">12</span>
             </div>
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">MLP:</span>
+              <span className="text-gray-800">MLP:</span>
               <span className="text-white ml-2">3072</span>
             </div>
           </div>
         </div>
         <div className="bg-purple-500/10 rounded-xl p-4 border border-purple-500/30">
-          <h3 className="font-semibold text-purple-600 dark:text-purple-400 mb-3">CLIP-G/14 Architecture</h3>
+          <h3 className="font-semibold text-purple-600 mb-3">CLIP-G/14 Architecture</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">Layers:</span>
+              <span className="text-gray-800">Layers:</span>
               <span className="text-white ml-2">32</span>
             </div>
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">Hidden:</span>
+              <span className="text-gray-800">Hidden:</span>
               <span className="text-white ml-2">1280</span>
             </div>
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">Heads:</span>
+              <span className="text-gray-800">Heads:</span>
               <span className="text-white ml-2">20</span>
             </div>
             <div className="bg-black/30 rounded px-3 py-2">
-              <span className="text-gray-800 dark:text-gray-400">MLP:</span>
+              <span className="text-gray-800">MLP:</span>
               <span className="text-white ml-2">5120</span>
             </div>
           </div>
@@ -158,10 +158,10 @@ function TransformerPanel() {
 
       {/* Single Layer Visualization */}
       <div ref={animationRef} className="bg-black/40 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-center text-gray-700 dark:text-gray-300 mb-4">
+        <h3 className="text-lg font-semibold text-center text-gray-700 mb-4">
           Single Transformer Layer
         </h3>
-        
+
         <svg viewBox="0 0 800 300" className="w-full h-auto">
           {/* Input Tokens */}
           <text x="80" y="30" textAnchor="middle" fill="#94a3b8" fontSize="12">Input Tokens</text>
@@ -175,7 +175,7 @@ function TransformerPanel() {
           {/* Self-Attention Block */}
           <rect x="30" y="95" width="520" height="60" rx="8" fill="#3b82f6" fillOpacity="0.2" stroke="#3b82f6" strokeWidth="2" />
           <text x="290" y="115" textAnchor="middle" fill="#60a5fa" fontSize="12" fontWeight="bold">Causal Self-Attention</text>
-          
+
           {/* Attention lines (causal - can only see previous) */}
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <g key={i}>
@@ -197,14 +197,14 @@ function TransformerPanel() {
           {/* Layer Norm 1 */}
           <rect x="570" y="95" width="80" height="30" rx="4" fill="#10b981" fillOpacity="0.3" stroke="#10b981" strokeWidth="1" />
           <text x="610" y="115" textAnchor="middle" fill="#34d399" fontSize="10">LayerNorm</text>
-          
+
           {/* Residual arrow 1 */}
           <path d="M 550 125 L 560 125" stroke="#60a5fa" strokeWidth="2" markerEnd="url(#arrow)" />
 
           {/* MLP Block */}
           <rect x="30" y="170" width="520" height="50" rx="8" fill="#8b5cf6" fillOpacity="0.2" stroke="#8b5cf6" strokeWidth="2" />
           <text x="290" y="190" textAnchor="middle" fill="#a78bfa" fontSize="12" fontWeight="bold">Feed-Forward MLP</text>
-          
+
           {/* MLP nodes */}
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <circle
@@ -245,7 +245,7 @@ function TransformerPanel() {
       {/* Causal Attention Explanation */}
       <div className="bg-yellow-500/10 rounded-xl p-6 border border-yellow-500/30">
         <h3 className="font-semibold text-yellow-400 mb-3">🎯 Why Causal (Unidirectional) Attention?</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-300">
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
           <div>
             <p className="mb-2">
               <strong>Causal mask:</strong> Each token can only "see" tokens that came before it.
@@ -277,12 +277,12 @@ function TransformerPanel() {
             className="bg-black/30 rounded-lg p-4 border border-white/10 cursor-pointer hover:border-white/30 transition-colors"
             onMouseEnter={() => setActiveLayer(i)}
           >
-            <div 
+            <div
               className="w-full h-2 rounded mb-3"
               style={{ backgroundColor: layer.color }}
             />
             <div className="font-semibold text-white text-sm mb-1">{layer.name}</div>
-            <div className="text-xs text-gray-800 dark:text-gray-400">{layer.description}</div>
+            <div className="text-xs text-gray-800">{layer.description}</div>
           </div>
         ))}
       </div>

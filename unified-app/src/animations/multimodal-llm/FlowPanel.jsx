@@ -61,7 +61,7 @@ export default function FlowPanel() {
 
     useEffect(() => {
         if (!isPlaying) return;
-        
+
         const timer = setInterval(() => {
             setCurrentStep(prev => {
                 if (prev >= FLOW_STEPS.length - 1) {
@@ -71,7 +71,7 @@ export default function FlowPanel() {
                 return prev + 1;
             });
         }, 3000);
-        
+
         return () => clearInterval(timer);
     }, [isPlaying]);
 
@@ -98,7 +98,7 @@ export default function FlowPanel() {
                             </div>
                             <div className="mt-2 text-sm text-green-700 font-medium">Image Input</div>
                         </div>
-                        <div className="text-3xl text-slate-700 dark:text-slate-300">+</div>
+                        <div className="text-3xl text-slate-700">+</div>
                         <div className="text-center">
                             <div className="bg-blue-100 rounded-lg border-2 border-blue-400 p-4 shadow-lg">
                                 <div className="text-blue-800 font-medium">"What animal is in this image?"</div>
@@ -107,14 +107,14 @@ export default function FlowPanel() {
                         </div>
                     </div>
                 );
-            
+
             case 'vision':
                 return (
                     <div className="text-center">
                         <div className="inline-grid grid-cols-4 gap-1 p-4 bg-green-50 rounded-lg border border-green-200">
                             {Array(16).fill(0).map((_, i) => (
-                                <div 
-                                    key={i} 
+                                <div
+                                    key={i}
                                     className="w-12 h-12 bg-green-200 rounded flex items-center justify-center text-green-700 font-mono text-xs border border-green-300"
                                     style={{ animationDelay: `${i * 50}ms` }}
                                 >
@@ -125,13 +125,13 @@ export default function FlowPanel() {
                         <div className="mt-3 text-sm text-green-700">Image split into 16 patches → encoded by ViT</div>
                     </div>
                 );
-            
+
             case 'text':
                 return (
                     <div className="text-center">
                         <div className="flex justify-center gap-2 flex-wrap">
                             {['What', 'animal', 'is', 'in', 'this', 'image', '?'].map((token, i) => (
-                                <div 
+                                <div
                                     key={i}
                                     className="px-3 py-2 bg-blue-200 rounded-lg border border-blue-400 font-mono text-blue-800"
                                 >
@@ -142,7 +142,7 @@ export default function FlowPanel() {
                         <div className="mt-3 text-sm text-blue-700">Text tokenized into subwords</div>
                     </div>
                 );
-            
+
             case 'projection':
                 return (
                     <div className="flex items-center justify-center gap-4">
@@ -165,7 +165,7 @@ export default function FlowPanel() {
                         </div>
                     </div>
                 );
-            
+
             case 'combine':
                 return (
                     <div className="text-center">
@@ -185,14 +185,14 @@ export default function FlowPanel() {
                         <div className="mt-3 text-sm text-purple-700">Combined sequence of 15 tokens</div>
                     </div>
                 );
-            
+
             case 'attention':
                 return (
                     <div className="text-center">
                         <div className="inline-block bg-slate-50 p-4 rounded-lg">
                             <div className="flex justify-center gap-2 mb-4">
                                 {['V1', 'V2', 'V3', 'animal', '?'].map((t, i) => (
-                                    <div 
+                                    <div
                                         key={i}
                                         className={`w-12 h-12 rounded flex items-center justify-center text-xs ${
                                             t.startsWith('V') ? 'bg-green-200' : 'bg-blue-200'
@@ -217,7 +217,7 @@ export default function FlowPanel() {
                         </div>
                     </div>
                 );
-            
+
             case 'generate':
                 return (
                     <div className="text-center">
@@ -229,7 +229,7 @@ export default function FlowPanel() {
                         </div>
                         <div className="mt-3 flex justify-center gap-2">
                             {['This', 'image', 'shows', 'a', 'cat', '...'].map((t, i) => (
-                                <div 
+                                <div
                                     key={i}
                                     className="px-2 py-1 bg-amber-200 rounded text-xs text-amber-800"
                                     style={{ opacity: 1 - i * 0.1 }}
@@ -240,7 +240,7 @@ export default function FlowPanel() {
                         </div>
                     </div>
                 );
-            
+
             default:
                 return null;
         }
@@ -251,7 +251,7 @@ export default function FlowPanel() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-indigo-900 mb-2">Data Flow Animation</h2>
-                    <p className="text-slate-800 dark:text-slate-600">
+                    <p className="text-slate-800">
                         Watch how data flows through a multimodal LLM step by step
                     </p>
                 </div>
@@ -264,11 +264,11 @@ export default function FlowPanel() {
                                 key={s.id}
                                 onClick={() => setCurrentStep(i)}
                                 className={`w-8 h-8 rounded-full font-bold text-sm transition-all ${
-                                    i === currentStep 
-                                        ? 'bg-indigo-600 text-white scale-125' 
+                                    i === currentStep
+                                        ? 'bg-indigo-600 text-white scale-125'
                                         : i < currentStep
                                             ? 'bg-indigo-200 text-indigo-700'
-                                            : 'bg-slate-200 text-slate-700 dark:text-slate-500'
+                                            : 'bg-slate-200 text-slate-700'
                                 }`}
                             >
                                 {i + 1}
@@ -276,7 +276,7 @@ export default function FlowPanel() {
                         ))}
                     </div>
                     <div className="h-2 bg-slate-200 rounded-full">
-                        <div 
+                        <div
                             className="h-full bg-indigo-600 rounded-full transition-all duration-300"
                             style={{ width: `${(currentStep / (FLOW_STEPS.length - 1)) * 100}%` }}
                         />
@@ -323,7 +323,7 @@ export default function FlowPanel() {
                 </div>
 
                 {/* Visualization */}
-                <div 
+                <div
                     ref={visualRef}
                     className="bg-white rounded-xl p-8 border min-h-[200px] flex items-center justify-center"
                 >
@@ -337,8 +337,8 @@ export default function FlowPanel() {
                         <div>
                             <h4 className="font-bold text-amber-900 mb-1">Key Concept</h4>
                             <p className="text-sm">
-                                The magic happens at the <strong>attention layer</strong> - text tokens can "look at" 
-                                relevant visual patches. When processing "animal", the model attends strongly to the 
+                                The magic happens at the <strong>attention layer</strong> - text tokens can "look at"
+                                relevant visual patches. When processing "animal", the model attends strongly to the
                                 patches containing the cat, enabling accurate visual understanding.
                             </p>
                         </div>

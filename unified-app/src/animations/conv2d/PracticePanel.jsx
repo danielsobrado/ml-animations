@@ -59,7 +59,7 @@ export default function PracticePanel() {
   const checkAnswer = (row, col) => {
     const userVal = parseInt(userAnswers[row][col]);
     const correct = userVal === output[row][col];
-    
+
     const newFeedback = feedback.map((r, i) =>
       r.map((v, j) => (i === row && j === col ? correct : v))
     );
@@ -82,7 +82,7 @@ export default function PracticePanel() {
       row.map((val, j) => parseInt(userAnswers[i][j]) === val)
     );
     setFeedback(newFeedback);
-    
+
     const allCorrect = newFeedback.every(row => row.every(v => v === true));
     if (allCorrect) setCompleted(true);
   };
@@ -177,7 +177,7 @@ export default function PracticePanel() {
           {/* Kernel */}
           <div>
             <p className="text-sm font-bold text-center mb-1">Kernel (3×3)</p>
-            <p className="text-xs text-gray-700 dark:text-center mb-1">{kernelName}</p>
+            <p className="text-xs text-gray-700 mb-1">{kernelName}</p>
             <div className="grid gap-0.5" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
               {kernel.flat().map((val, idx) => (
                 <div
@@ -245,7 +245,7 @@ export default function PracticePanel() {
         </div>
 
         {showHint && (
-          <div className="text-sm text-gray-800 dark:text-gray-600 bg-white p-2 rounded border">
+          <div className="text-sm text-gray-800 bg-white p-2 rounded border">
             <p className="mb-1">Element-wise multiply and sum:</p>
             <div className="flex flex-wrap gap-1 font-mono text-xs">
               {computeHint(currentCell.row, currentCell.col).products.map((p, i) => (
@@ -304,7 +304,7 @@ export default function PracticePanel() {
         <p className="text-sm text-gray-700">
           <strong>Common Kernels:</strong>
         </p>
-        <ul className="text-xs text-gray-800 dark:text-gray-600 mt-1 space-y-1">
+        <ul className="text-xs text-gray-800 mt-1 space-y-1">
           <li><strong>Edge Detection:</strong> Highlights boundaries (positive on one side, negative on other)</li>
           <li><strong>Sharpen:</strong> Enhances edges while keeping center (large positive center, negative surroundings)</li>
           <li><strong>Blur:</strong> Averages neighboring pixels (all same values)</li>

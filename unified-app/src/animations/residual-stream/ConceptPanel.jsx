@@ -18,10 +18,10 @@ export default function ConceptPanel() {
             <div className="max-w-5xl w-full">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">
+                    <h2 className="text-3xl font-bold text-cyan-600 mb-4">
                         The Residual Stream: A Highway for Information
                     </h2>
-                    <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
+                    <p className="text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
                         In transformers, each token has a <strong>residual stream</strong> - a vector that flows through
                         all layers. Instead of overwriting this vector, each layer <strong>adds</strong> to it.
                         This is the secret to why deep networks work!
@@ -31,11 +31,11 @@ export default function ConceptPanel() {
                 {/* The Two Approaches */}
                 <div className="grid md:grid-cols-2 gap-8 mb-12">
                     {/* Without Residuals */}
-                    <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-6">
+                    <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6">
                         <div className="flex items-center gap-3 mb-4">
                             <AlertTriangle className="text-red-500" size={28} />
                             <div>
-                                <h3 className="text-xl font-bold text-red-600 dark:text-red-400">Without Residuals</h3>
+                                <h3 className="text-xl font-bold text-red-600">Without Residuals</h3>
                                 <p className="text-sm text-red-500">Information gets overwritten</p>
                             </div>
                         </div>
@@ -47,10 +47,10 @@ export default function ConceptPanel() {
                                     <motion.div
                                         className={`w-full py-3 rounded-lg text-center font-medium ${
                                             i === 0
-                                                ? 'bg-blue-400 dark:bg-blue-600 text-white'
+                                                ? 'bg-blue-400 text-white'
                                                 : animationStep >= i
-                                                    ? 'bg-red-400 dark:bg-red-600 text-white'
-                                                    : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                                                    ? 'bg-red-400 text-white'
+                                                    : 'bg-slate-200 text-slate-600'
                                         }`}
                                         animate={{
                                             opacity: animationStep >= i || i === 0 ? 1 : 0.5,
@@ -79,18 +79,18 @@ export default function ConceptPanel() {
                             ))}
                         </div>
 
-                        <div className="bg-red-100 dark:bg-red-900/40 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
+                        <div className="bg-red-100 rounded-lg p-3 text-sm text-red-700">
                             <strong>Problem:</strong> Early information is lost! The model "forgets" what it learned
                             in earlier layers.
                         </div>
                     </div>
 
                     {/* With Residuals */}
-                    <div className="bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800 rounded-2xl p-6">
+                    <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-6">
                         <div className="flex items-center gap-3 mb-4">
                             <CheckCircle className="text-emerald-500" size={28} />
                             <div>
-                                <h3 className="text-xl font-bold text-emerald-600 dark:text-emerald-400">With Residual Stream</h3>
+                                <h3 className="text-xl font-bold text-emerald-600">With Residual Stream</h3>
                                 <p className="text-sm text-emerald-500">Information accumulates</p>
                             </div>
                         </div>
@@ -123,7 +123,7 @@ export default function ConceptPanel() {
                                                 }}
                                             >
                                                 <Plus className="text-emerald-500" size={16} />
-                                                <span className="text-xs font-mono bg-emerald-200 dark:bg-emerald-800 px-2 py-1 rounded text-emerald-700 dark:text-emerald-300">
+                                                <span className="text-xs font-mono bg-emerald-200 px-2 py-1 rounded text-emerald-700">
                                                     f{i}(x)
                                                 </span>
                                             </motion.div>
@@ -143,7 +143,7 @@ export default function ConceptPanel() {
                             ))}
                         </div>
 
-                        <div className="bg-emerald-100 dark:bg-emerald-900/40 rounded-lg p-3 text-sm text-emerald-700 dark:text-emerald-300">
+                        <div className="bg-emerald-100 rounded-lg p-3 text-sm text-emerald-700">
                             <strong>Solution:</strong> Each layer adds its contribution. Original information is
                             preserved throughout!
                         </div>
@@ -151,35 +151,35 @@ export default function ConceptPanel() {
                 </div>
 
                 {/* The Formula */}
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 mb-8">
-                    <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                <div className="bg-white rounded-2xl p-6 border border-slate-200 mb-8">
+                    <h3 className="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2">
                         <Layers className="text-cyan-500" size={24} />
                         The Residual Formula
                     </h3>
                     <div className="grid md:grid-cols-2 gap-6">
-                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+                        <div className="bg-slate-50 rounded-xl p-4">
                             <div className="text-center font-mono text-lg mb-2">
-                                <span className="text-cyan-600 dark:text-cyan-400">x</span>
+                                <span className="text-cyan-600">x</span>
                                 <span className="text-slate-500 mx-2">=</span>
-                                <span className="text-cyan-600 dark:text-cyan-400">x</span>
+                                <span className="text-cyan-600">x</span>
                                 <span className="text-emerald-500 mx-2">+</span>
                                 <span className="text-indigo-500">f(x)</span>
                             </div>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 text-center">
+                            <p className="text-sm text-slate-600 text-center">
                                 Output = Input + Layer's Contribution
                             </p>
                         </div>
-                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+                        <div className="bg-slate-50 rounded-xl p-4">
                             <div className="text-center font-mono text-lg mb-2">
-                                <span className="text-cyan-600 dark:text-cyan-400">x<sub>out</sub></span>
+                                <span className="text-cyan-600">x<sub>out</sub></span>
                                 <span className="text-slate-500 mx-2">=</span>
-                                <span className="text-cyan-600 dark:text-cyan-400">x<sub>in</sub></span>
+                                <span className="text-cyan-600">x<sub>in</sub></span>
                                 <span className="text-slate-500 mx-1">+</span>
                                 <span className="text-purple-500">Attn(x)</span>
                                 <span className="text-slate-500 mx-1">+</span>
                                 <span className="text-orange-500">FFN(x)</span>
                             </div>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 text-center">
+                            <p className="text-sm text-slate-600 text-center">
                                 In Transformers: Add Attention + MLP outputs
                             </p>
                         </div>

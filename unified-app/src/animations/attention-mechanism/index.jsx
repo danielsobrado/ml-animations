@@ -29,10 +29,10 @@ function PlaceholderPanel({ tabId, tabLabel }) {
         <div className="p-6 text-center">
             <div className="card p-8 max-w-lg mx-auto">
                 <div className="text-4xl mb-4">🚧</div>
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">
                     {tabLabel} Panel
                 </h3>
-                <p className="text-slate-800 dark:text-sm">
+                <p className="text-slate-800">
                     This panel is being integrated from the original animation.
                     Check back soon!
                 </p>
@@ -67,7 +67,7 @@ export default function AttentionMechanismAnimation() {
     return (
         <div className="flex flex-col h-full">
             {/* Navigation Tabs */}
-            <nav className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
+            <nav className="bg-white/50 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
                 <div className="px-4 overflow-x-auto">
                     <div className="flex space-x-1 py-2">
                         {tabs.map((tab) => (
@@ -77,7 +77,7 @@ export default function AttentionMechanismAnimation() {
                                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                                     activeTab === tab.id
                                         ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
-                                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50'
+                                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                                 }`}
                             >
                                 <tab.icon size={18} />
@@ -89,18 +89,18 @@ export default function AttentionMechanismAnimation() {
             </nav>
 
             {/* Progress Indicator */}
-            <div className="bg-slate-100/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-slate-700">
+            <div className="bg-slate-100/50 border-b border-slate-200">
                 <div className="px-4 py-2">
                     <div className="flex items-center gap-2">
                         {tabs.map((tab, i) => (
                             <React.Fragment key={tab.id}>
-                                <div 
+                                <div
                                     className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
-                                        activeTab === tab.id 
-                                            ? `bg-gradient-to-r ${tab.color} animate-pulse` 
+                                        activeTab === tab.id
+                                            ? `bg-gradient-to-r ${tab.color} animate-pulse`
                                             : tabs.findIndex(t => t.id === activeTab) > i
                                                 ? 'bg-green-500'
-                                                : 'bg-slate-300 dark:bg-slate-600'
+                                                : 'bg-slate-300'
                                     }`}
                                     onClick={() => setActiveTab(tab.id)}
                                     title={tab.label}
@@ -109,7 +109,7 @@ export default function AttentionMechanismAnimation() {
                                     <div className={`flex-1 h-0.5 ${
                                         tabs.findIndex(t => t.id === activeTab) > i
                                             ? 'bg-green-500'
-                                            : 'bg-slate-300 dark:bg-slate-600'
+                                            : 'bg-slate-300'
                                     }`} />
                                 )}
                             </React.Fragment>

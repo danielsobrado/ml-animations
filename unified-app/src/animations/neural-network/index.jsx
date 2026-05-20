@@ -32,16 +32,16 @@ const CODE_SNIPPETS = {
     code: `/// Forward pass through the dense layer
 fn forward(&mut self, input: &Tensor) -> Tensor {
     self.input = Some(input.clone());
-    
+
     // z = W × x + b (Linear transformation)
     let z = input.matmul(&self.weights);
     let z = z.add(&self.biases);
-    
+
     self.z = Some(z.clone());
     z
 }`,
     explanation: `This is the core of forward propagation. For each layer:
-    
+
 1. **Store input** for use in backward pass
 2. **Matrix multiply**: z = W × x (weights × inputs)
 3. **Add bias**: z = z + b
@@ -56,15 +56,15 @@ fn forward(&mut self, input: &Tensor) -> Tensor {
 fn backward(&mut self, grad_output: &Tensor) -> Tensor {
     let input = self.input.as_ref().unwrap();
     let (batch_size, _) = input.shape();
-    
+
     // Gradient w.r.t. weights: dL/dW = x^T × δ
     self.grad_weights = Some(
         input.transpose().matmul(grad_output)
     );
-    
+
     // Gradient w.r.t. biases: dL/db = sum(δ)
     self.grad_biases = Some(grad_output.sum_axis(0));
-    
+
     // Gradient w.r.t. input: dL/dx = δ × W^T
     grad_output.matmul(&self.weights.transpose())
 }`,
@@ -72,10 +72,10 @@ fn backward(&mut self, grad_output: &Tensor) -> Tensor {
 
 1. **Weight gradient**: How much each weight contributed to the error
    - dL/dW = input^T × gradient (outer product)
-   
+
 2. **Bias gradient**: Sum of gradients (bias affects all equally)
    - dL/db = sum(gradients)
-   
+
 3. **Input gradient**: Pass error to previous layer
    - dL/dx = gradient × weights^T`,
   },
@@ -175,18 +175,18 @@ The gradient of the loss tells us which direction to adjust weights!`,
             let beta1 = 0.9;
             let beta2 = 0.999;
             let eps = 1e-8;
-            
+
             // Update biased first moment estimate
             *m = m.mul_scalar(beta1).add(&grads.mul_scalar(1.0 - beta1));
-            
-            // Update biased second moment estimate  
+
+            // Update biased second moment estimate
             let grad_sq = Tensor::new(grads.data.mapv(|x| x * x));
             *v = v.mul_scalar(beta2).add(&grad_sq.mul_scalar(1.0 - beta2));
-            
+
             // Bias correction and update
             let m_hat = m.mul_scalar(1.0 / (1.0 - beta1.powi(*t)));
             let v_hat = v.mul_scalar(1.0 / (1.0 - beta2.powi(*t)));
-            
+
             // w = w - lr × m̂ / (√v̂ + ε)
             let denom = v_hat.sqrt().add_scalar(eps);
             let update = m_hat.div(&denom).mul_scalar(lr);
@@ -204,7 +204,7 @@ The gradient of the loss tells us which direction to adjust weights!`,
    - Maintains running averages of gradients (m) and squared gradients (v)
    - Adapts learning rate per-parameter
    - Usually faster convergence
-   
+
 The learning rate (lr) controls step size - too big overshoots, too small is slow!`,
   },
   matmul: {
@@ -219,7 +219,7 @@ pub fn matmul(&self, other: &Tensor) -> Tensor {
         self.shape().1, other.shape().0,
         "Matrix dimensions must match for multiplication"
     );
-    
+
     Tensor::new(self.data.dot(&other.data))
 }`,
     explanation: `Matrix multiplication is the core operation in neural networks:
@@ -231,7 +231,7 @@ pub fn matmul(&self, other: &Tensor) -> Tensor {
 🧮 **What it computes**
    - Each output element is a dot product
    - C[i,j] = Σ A[i,k] × B[k,j]
-   
+
 In neural networks:
    - Input: (batch_size × features)
    - Weights: (features × neurons)
@@ -246,13 +246,13 @@ const INTUITION_CARDS = [
     icon: '🧠',
     title: 'What is a Neuron?',
     content: `A neuron is like a tiny decision maker. It:
-    
+
 1. **Receives inputs** (numbers from previous layer)
 2. **Multiplies each by a weight** (importance)
 3. **Adds them up** with a bias
 4. **Applies activation** (decides how much to "fire")
 
-Think of it like voting: each input gets a vote (weight), 
+Think of it like voting: each input gets a vote (weight),
 and the neuron decides based on the total.`,
   },
   {
@@ -283,7 +283,7 @@ Starting from the output, we trace back asking:
 • How much did each weight contribute to the error?
 • How should we adjust to do better?
 
-Like finding who broke the window by asking 
+Like finding who broke the window by asking
 each person who they passed the ball to!`,
   },
   {
@@ -305,7 +305,7 @@ Too small? Takes forever!`,
     id: 'activation',
     icon: '⚡',
     title: 'Why Activation Functions?',
-    content: `Without activation functions, neural networks 
+    content: `Without activation functions, neural networks
 would just be fancy linear regression!
 
 **Activation adds non-linearity:**
@@ -313,7 +313,7 @@ would just be fancy linear regression!
 • Sigmoid: "Squash to 0-1" → probability
 • Tanh: "Squash to -1 to 1" → centered
 
-This lets networks learn complex patterns 
+This lets networks learn complex patterns
 like curves, not just straight lines!`,
   },
   {
@@ -331,7 +331,7 @@ like curves, not just straight lines!`,
 
 **Why it matters:**
 XOR can't be solved with a single line!
-You need hidden layers to create 
+You need hidden layers to create
 non-linear decision boundaries.
 
 Our mini-nn achieves 100% on XOR! 🎉`,
@@ -688,13 +688,13 @@ function App() {
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
             </div>
-            <span className="text-gray-800 dark:text-sm font-mono">{snippet.file}</span>
+            <span className="text-gray-800 font-mono">{snippet.file}</span>
           </div>
           <a
             href={`${GITHUB_BASE}/${snippet.file}#L${snippet.lineStart}-L${snippet.lineEnd}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-300 transition-colors"
+            className="flex items-center gap-2 text-xs text-blue-600 hover:text-blue-300 transition-colors"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -710,7 +710,7 @@ function App() {
             <span className="text-lg">💡</span>
             Understanding the Code:
           </h4>
-          <div className="text-gray-700 dark:text-sm space-y-1">
+          <div className="text-gray-700 space-y-1">
             {formatExplanation(snippet.explanation)}
           </div>
         </div>
@@ -749,12 +749,12 @@ function App() {
         <div className="flex items-center gap-3 mb-2">
           <span className="text-2xl">{card.icon}</span>
           <h3 className="font-semibold text-white">{card.title}</h3>
-          <span className={`ml-auto text-gray-700 dark:text-gray-500 transition-transform duration-300 ${isSelected ? 'rotate-180' : ''}`}>
+          <span className={`ml-auto text-gray-700 transition-transform duration-300 ${isSelected ? 'rotate-180' : ''}`}>
             ▼
           </span>
         </div>
         {isSelected && (
-          <div className="text-gray-700 dark:text-sm mt-3 space-y-1 animate-fadeIn">
+          <div className="text-gray-700 mt-3 space-y-1 animate-fadeIn">
             {formatContent(card.content)}
           </div>
         )}
@@ -777,7 +777,7 @@ function App() {
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-3 rounded-xl transition-all duration-300 ${activeTab === tab.id
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                  : 'bg-gray-800 text-gray-800 dark:text-gray-400 hover:bg-gray-700 hover:text-white'
+                  : 'bg-gray-800 text-gray-800 hover:bg-gray-700 hover:text-white'
                 }`}
             >
               <div className="font-semibold">{tab.label}</div>
@@ -794,7 +794,7 @@ function App() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div>
-                    <label className="text-gray-800 dark:text-xs block mb-1">Input (XOR)</label>
+                    <label className="text-gray-800 block mb-1">Input (XOR)</label>
                     <select
                       className="bg-gray-700 text-white rounded px-3 py-2 text-sm"
                       value={`${input[0]},${input[1]}`}
@@ -817,7 +817,7 @@ function App() {
                   </div>
 
                   <div className="text-center">
-                    <label className="text-gray-800 dark:text-xs block mb-1">Target</label>
+                    <label className="text-gray-800 block mb-1">Target</label>
                     <div className="bg-gray-700 text-green-400 rounded px-4 py-2 font-mono text-sm">
                       {target}
                     </div>
@@ -825,7 +825,7 @@ function App() {
 
                   {loss !== null && (
                     <div className="text-center">
-                      <label className="text-gray-800 dark:text-xs block mb-1">Loss</label>
+                      <label className="text-gray-800 block mb-1">Loss</label>
                       <div className="bg-gray-700 text-red-400 rounded px-4 py-2 font-mono text-sm">
                         {loss.toFixed(4)}
                       </div>
@@ -833,7 +833,7 @@ function App() {
                   )}
 
                   <div className="text-center">
-                    <label className="text-gray-800 dark:text-xs block mb-1">Epoch</label>
+                    <label className="text-gray-800 block mb-1">Epoch</label>
                     <div className="bg-gray-700 text-yellow-400 rounded px-4 py-2 font-mono text-sm">
                       {epoch}
                     </div>
@@ -898,22 +898,22 @@ function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
                 <h3 className="text-lg font-bold text-green-400 mb-2">➡️ Forward Pass</h3>
-                <div className="text-gray-700 dark:text-sm font-mono space-y-1">
+                <div className="text-gray-700 font-mono space-y-1">
                   <p>z<sup>(l)</sup> = W<sup>(l)</sup> · a<sup>(l-1)</sup> + b</p>
                   <p>a<sup>(l)</sup> = σ(z<sup>(l)</sup>)</p>
                 </div>
-                <p className="text-gray-700 dark:text-xs mt-2">
+                <p className="text-gray-700 mt-2">
                   Compute weighted sum, apply activation
                 </p>
               </div>
 
               <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                <h3 className="text-lg font-bold text-orange-600 dark:text-orange-400 mb-2">⬅️ Backward Pass</h3>
-                <div className="text-gray-700 dark:text-sm font-mono space-y-1">
+                <h3 className="text-lg font-bold text-orange-600 mb-2">⬅️ Backward Pass</h3>
+                <div className="text-gray-700 font-mono space-y-1">
                   <p>δ<sup>(L)</sup> = ∇L · σ'(z<sup>(L)</sup>)</p>
                   <p>δ<sup>(l)</sup> = (W<sup>(l+1)</sup>)<sup>T</sup>δ<sup>(l+1)</sup> ⊙ σ'</p>
                 </div>
-                <p className="text-gray-700 dark:text-xs mt-2">
+                <p className="text-gray-700 mt-2">
                   Compute gradients via chain rule
                 </p>
               </div>
@@ -940,19 +940,19 @@ function App() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center p-4 bg-gray-800/50 rounded-lg">
                   <div className="text-3xl font-bold text-green-400">100%</div>
-                  <div className="text-gray-800 dark:text-sm">XOR Accuracy</div>
+                  <div className="text-gray-800">XOR Accuracy</div>
                 </div>
                 <div className="text-center p-4 bg-gray-800/50 rounded-lg">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">84.3%</div>
-                  <div className="text-gray-800 dark:text-sm">Titanic Accuracy</div>
+                  <div className="text-3xl font-bold text-blue-600">84.3%</div>
+                  <div className="text-gray-800">Titanic Accuracy</div>
                 </div>
                 <div className="text-center p-4 bg-gray-800/50 rounded-lg">
-                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">993</div>
-                  <div className="text-gray-800 dark:text-sm">Parameters</div>
+                  <div className="text-3xl font-bold text-purple-600">993</div>
+                  <div className="text-gray-800">Parameters</div>
                 </div>
                 <div className="text-center p-4 bg-gray-800/50 rounded-lg">
                   <div className="text-3xl font-bold text-yellow-400">0</div>
-                  <div className="text-gray-800 dark:text-sm">ML Frameworks</div>
+                  <div className="text-gray-800">ML Frameworks</div>
                 </div>
               </div>
             </div>
@@ -969,7 +969,7 @@ function App() {
                   onClick={() => setSelectedCode(key)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedCode === key
                       ? 'bg-indigo-600 text-white'
-                      : 'bg-gray-800 text-gray-800 dark:text-gray-400 hover:bg-gray-700 hover:text-white'
+                      : 'bg-gray-800 text-gray-800 hover:bg-gray-700 hover:text-white'
                     }`}
                 >
                   {snippet.title}
@@ -985,7 +985,7 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-bold text-white mb-1">🦀 Full Implementation</h3>
-                  <p className="text-gray-800 dark:text-sm">
+                  <p className="text-gray-800">
                     Explore the complete neural network implementation in Rust
                   </p>
                 </div>
@@ -1021,10 +1021,10 @@ function App() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 p-2 bg-gray-700/50 rounded hover:bg-gray-700 transition-colors"
                   >
-                    <span className="text-orange-600 dark:text-orange-400">📄</span>
+                    <span className="text-orange-600">📄</span>
                     <div>
                       <div className="text-white font-mono text-xs">{item.file}</div>
-                      <div className="text-gray-700 dark:text-xs">{item.desc}</div>
+                      <div className="text-gray-700">{item.desc}</div>
                     </div>
                   </a>
                 ))}
@@ -1034,10 +1034,10 @@ function App() {
         )}
 
         {/* Footer */}
-        <div className="mt-8 text-center text-gray-700 dark:text-sm">
+        <div className="mt-8 text-center text-gray-700">
           Built with React + GSAP | Rust implementation:{' '}
           <a href="https://github.com/danielsobrado/ml-animations/tree/main/mini-nn"
-            className="text-blue-600 dark:text-blue-400 hover:text-blue-300">mini-nn</a>
+            className="text-blue-600 hover:text-blue-300">mini-nn</a>
           {' '}| 84.3% Titanic accuracy, 100% XOR accuracy
         </div>
       </div>

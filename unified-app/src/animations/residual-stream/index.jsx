@@ -41,7 +41,7 @@ export default function ResidualStreamAnimation() {
     return (
         <div className="flex flex-col h-full">
             {/* Navigation Tabs */}
-            <nav className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
+            <nav className="bg-white/50 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
                 <div className="px-4 overflow-x-auto">
                     <div className="flex space-x-1 py-2">
                         {tabs.map((tab) => (
@@ -50,7 +50,7 @@ export default function ResidualStreamAnimation() {
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${activeTab === tab.id
                                     ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
-                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50'
+                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                                     }`}
                             >
                                 <tab.icon size={18} />

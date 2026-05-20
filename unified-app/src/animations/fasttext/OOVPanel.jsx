@@ -47,7 +47,7 @@ function OOVPanel() {
             <span className="text-white">[</span>
             <span className="text-red-400">"kingship"</span>
             <span className="text-white">]</span>
-            <span className="text-gray-800 dark:text-gray-400"> → </span>
+            <span className="text-gray-800"> → </span>
             <span className="text-red-400">KeyError!</span>
           </div>
         </motion.div>
@@ -69,7 +69,7 @@ function OOVPanel() {
             <span className="text-white">[</span>
             <span className="text-green-400">"kingship"</span>
             <span className="text-white">]</span>
-            <span className="text-gray-800 dark:text-gray-400"> → </span>
+            <span className="text-gray-800"> → </span>
             <span className="text-green-400">[0.3, -0.2, ...]</span>
           </div>
         </motion.div>
@@ -78,7 +78,7 @@ function OOVPanel() {
       {/* Interactive OOV Demo */}
       <div className="bg-white/5 rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <Sparkles className="w-5 h-5 text-purple-600" />
           OOV Word Resolution
         </h3>
 

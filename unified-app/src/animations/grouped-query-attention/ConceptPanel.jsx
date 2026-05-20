@@ -32,8 +32,8 @@ export default function ConceptPanel() {
     return (
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-12">
-                <h2 className="text-3xl font-bold text-fuchsia-600 dark:text-fuchsia-400 mb-4">The Study Group Analogy</h2>
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                <h2 className="text-3xl font-bold text-fuchsia-600 mb-4">The Study Group Analogy</h2>
+                <p className="text-lg text-slate-700 leading-relaxed">
                     <strong>Multi-Head Attention (MHA)</strong>: Every student has their own unique textbook. (Expensive!)
                     <br />
                     <strong>Multi-Query Attention (MQA)</strong>: All students share one single textbook. (Fast but lossy)
@@ -45,12 +45,12 @@ export default function ConceptPanel() {
             <div className="grid md:grid-cols-2 gap-16 w-full max-w-5xl">
                 {/* Students (Queries) */}
                 <div className="flex flex-col gap-8">
-                    <h3 className="text-xl font-bold text-center text-slate-700 dark:text-slate-200">Students (Queries)</h3>
+                    <h3 className="text-xl font-bold text-center text-slate-700">Students (Queries)</h3>
                     {groups.map((group, groupIndex) => (
                         <div key={group.id}
                             className={`p-6 rounded-2xl border-2 transition-all cursor-pointer ${activeGroup === groupIndex
-                                    ? `${group.borderColor} bg-slate-50 dark:bg-slate-800/50 shadow-xl scale-105`
-                                    : 'border-slate-200 dark:border-slate-700 hover:border-slate-400'
+                                    ? `${group.borderColor} bg-slate-50 shadow-xl scale-105`
+                                    : 'border-slate-200 hover:border-slate-400'
                                 }`}
                             onClick={() => setActiveGroup(groupIndex)}
                         >
@@ -67,7 +67,7 @@ export default function ConceptPanel() {
                                         <div className={`p-3 rounded-full ${group.color} text-white`}>
                                             <Users size={24} />
                                         </div>
-                                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{student}</span>
+                                        <span className="text-sm font-medium text-slate-600">{student}</span>
                                     </motion.div>
                                 ))}
                             </div>
@@ -80,7 +80,7 @@ export default function ConceptPanel() {
 
                 {/* Textbooks (Keys/Values) */}
                 <div className="flex flex-col justify-center gap-8">
-                    <h3 className="text-xl font-bold text-center text-slate-700 dark:text-slate-200">Shared Resource (Key/Value)</h3>
+                    <h3 className="text-xl font-bold text-center text-slate-700">Shared Resource (Key/Value)</h3>
 
                     <div className="relative h-[300px] flex items-center justify-center">
                         <AnimatePresence mode="wait">
@@ -90,24 +90,24 @@ export default function ConceptPanel() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 transition={{ duration: 0.3 }}
-                                className={`w-64 p-6 rounded-xl border-2 ${groups[activeGroup].borderColor} bg-white dark:bg-slate-800 shadow-2xl`}
+                                className={`w-64 p-6 rounded-xl border-2 ${groups[activeGroup].borderColor} bg-white shadow-2xl`}
                             >
                                 <div className="flex items-center gap-4 mb-4">
                                     <div className={`p-3 rounded-lg ${groups[activeGroup].color} text-white`}>
                                         <BookOpen size={28} />
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-lg dark:text-white">KEY</h4>
+                                        <h4 className="font-bold text-lg">KEY</h4>
                                         <p className="text-sm text-slate-500">{groups[activeGroup].key.title}</p>
                                     </div>
                                 </div>
-                                <div className="h-px bg-slate-200 dark:bg-slate-700 my-4" />
+                                <div className="h-px bg-slate-200 my-4" />
                                 <div className="flex items-center gap-4">
                                     <div className={`p-3 rounded-lg ${groups[activeGroup].color} bg-opacity-20 text-${groups[activeGroup].color.replace('bg-', '')}`}>
                                         <FileText size={28} />
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-lg dark:text-white">VALUE</h4>
+                                        <h4 className="font-bold text-lg">VALUE</h4>
                                         <p className="text-sm text-slate-500">{groups[activeGroup].key.content}</p>
                                     </div>
                                 </div>
@@ -116,12 +116,12 @@ export default function ConceptPanel() {
 
                         {/* Connection Lines (Visual only, implying connection) */}
                         <div className="absolute left-[-40px] top-1/2 -translate-y-1/2 md:block hidden">
-                            <ArrowRight size={32} className="text-slate-300 dark:text-slate-600 animate-pulse" />
+                            <ArrowRight size={32} className="text-slate-300 animate-pulse" />
                         </div>
                     </div>
 
-                    <div className="text-center p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <div className="text-center p-4 bg-slate-100 rounded-lg">
+                        <p className="text-sm text-slate-600">
                             The students in <strong>Group {activeGroup + 1}</strong> only need to load <strong>ONE</strong> textbook into memory.
                         </p>
                     </div>

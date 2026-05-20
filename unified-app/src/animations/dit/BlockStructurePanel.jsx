@@ -50,9 +50,9 @@ export default function BlockStructurePanel() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">
-          <span className="text-pink-600 dark:text-pink-400">Block</span> Structure
+          <span className="text-pink-600">Block</span> Structure
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Inside a DiT transformer block: from standard ViT to MM-DiT
         </p>
       </div>
@@ -66,7 +66,7 @@ export default function BlockStructurePanel() {
             className={`px-4 py-2 rounded-lg transition-all ${
               selectedBlock === key
                 ? 'bg-gradient-to-r from-pink-600 to-orange-600 text-white'
-                : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+                : 'bg-white/10 text-gray-800 hover:bg-white/20'
             }`}
           >
             {block.name}
@@ -77,7 +77,7 @@ export default function BlockStructurePanel() {
       {/* Block Visualization */}
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-6 text-center">{current.name}</h3>
-        
+
         <div className="flex justify-center">
           <div className="relative">
             {/* Input */}
@@ -85,23 +85,23 @@ export default function BlockStructurePanel() {
               <div className="w-32 h-10 mx-auto rounded-lg bg-gray-700 flex items-center justify-center">
                 <span className="text-sm">Input x</span>
               </div>
-              <ArrowDown className="mx-auto mt-2 text-gray-700 dark:text-gray-500" />
+              <ArrowDown className="mx-auto mt-2 text-gray-700" />
             </div>
 
             {/* Residual wrapper */}
             <div className="relative border-2 border-dashed border-pink-500/30 rounded-xl p-4 mx-auto max-w-md">
               {current.residual && (
                 <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-32 border-l-2 border-t-2 border-b-2 border-pink-400/50 rounded-l-lg">
-                  <span className="absolute -left-6 top-1/2 -translate-y-1/2 text-pink-600 dark:text-xs">+</span>
+                  <span className="absolute -left-6 top-1/2 -translate-y-1/2 text-pink-600">+</span>
                 </div>
               )}
-              
+
               {/* Components */}
               {current.separate ? (
                 // MM-DiT has parallel streams
                 <div className="flex gap-4">
                   <div className="flex-1 space-y-3">
-                    <p className="text-xs text-blue-600 dark:text-center mb-2">Image Stream</p>
+                    <p className="text-xs text-blue-600 mb-2">Image Stream</p>
                     {current.components.filter(c => c.name.includes('Img') || c.name.includes('Joint')).map((comp, i) => (
                       <div key={i} className={`${comp.color} rounded-lg p-3 text-center`}>
                         <span className="text-sm font-medium">{comp.name.replace(' (Img)', '')}</span>
@@ -109,7 +109,7 @@ export default function BlockStructurePanel() {
                     ))}
                   </div>
                   <div className="flex-1 space-y-3">
-                    <p className="text-xs text-orange-600 dark:text-center mb-2">Text Stream</p>
+                    <p className="text-xs text-orange-600 mb-2">Text Stream</p>
                     {current.components.filter(c => c.name.includes('Txt') || c.name.includes('Joint')).map((comp, i) => (
                       <div key={i} className={`${comp.color} rounded-lg p-3 text-center`}>
                         <span className="text-sm font-medium">{comp.name.replace(' (Txt)', '')}</span>
@@ -126,15 +126,15 @@ export default function BlockStructurePanel() {
                         <span className="text-sm font-medium">{comp.name}</span>
                       </div>
                       {i < current.components.length - 1 && (
-                        <ArrowDown className="mx-auto my-1 text-gray-700 dark:text-gray-500" size={16} />
+                        <ArrowDown className="mx-auto my-1 text-gray-700" size={16} />
                       )}
                     </div>
                   ))}
                 </div>
               )}
-              
+
               {current.gated && (
-                <div className="absolute -right-20 top-1/2 -translate-y-1/2 text-xs text-pink-600 dark:text-pink-400">
+                <div className="absolute -right-20 top-1/2 -translate-y-1/2 text-xs text-pink-600">
                   ×α (gate)
                 </div>
               )}
@@ -142,7 +142,7 @@ export default function BlockStructurePanel() {
 
             {/* Output */}
             <div className="text-center mt-4">
-              <ArrowDown className="mx-auto mb-2 text-gray-700 dark:text-gray-500" />
+              <ArrowDown className="mx-auto mb-2 text-gray-700" />
               <div className="w-32 h-10 mx-auto rounded-lg bg-gradient-to-r from-pink-700 to-orange-700 flex items-center justify-center">
                 <span className="text-sm">Output x'</span>
               </div>
@@ -160,7 +160,7 @@ export default function BlockStructurePanel() {
             .map((comp, i) => (
               <div key={i} className={`${comp.color}/20 rounded-xl p-4 border border-white/10`}>
                 <h4 className="font-bold mb-2">{comp.name}</h4>
-                <p className="text-sm text-gray-800 dark:text-gray-400">{comp.desc}</p>
+                <p className="text-sm text-gray-800">{comp.desc}</p>
               </div>
             ))}
         </div>
@@ -173,24 +173,24 @@ export default function BlockStructurePanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Feature</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">Standard ViT</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">DiT</th>
-                <th className="py-3 px-4 text-left text-gray-800 dark:text-gray-400">MM-DiT</th>
+                <th className="py-3 px-4 text-left text-gray-800">Feature</th>
+                <th className="py-3 px-4 text-left text-gray-800">Standard ViT</th>
+                <th className="py-3 px-4 text-left text-gray-800">DiT</th>
+                <th className="py-3 px-4 text-left text-gray-800">MM-DiT</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               <tr>
                 <td className="py-3 px-4">Normalization</td>
                 <td className="py-3 px-4">LayerNorm</td>
-                <td className="py-3 px-4 text-pink-600 dark:text-pink-400">AdaLN</td>
-                <td className="py-3 px-4 text-pink-600 dark:text-pink-400">AdaLN (separate)</td>
+                <td className="py-3 px-4 text-pink-600">AdaLN</td>
+                <td className="py-3 px-4 text-pink-600">AdaLN (separate)</td>
               </tr>
               <tr>
                 <td className="py-3 px-4">Conditioning</td>
                 <td className="py-3 px-4">None (class token)</td>
-                <td className="py-3 px-4 text-pink-600 dark:text-pink-400">Via AdaLN</td>
-                <td className="py-3 px-4 text-pink-600 dark:text-pink-400">Via AdaLN + Joint Attn</td>
+                <td className="py-3 px-4 text-pink-600">Via AdaLN</td>
+                <td className="py-3 px-4 text-pink-600">Via AdaLN + Joint Attn</td>
               </tr>
               <tr>
                 <td className="py-3 px-4">Attention Type</td>
@@ -208,7 +208,7 @@ export default function BlockStructurePanel() {
                 <td className="py-3 px-4">MLP Streams</td>
                 <td className="py-3 px-4">1 (shared)</td>
                 <td className="py-3 px-4">1 (shared)</td>
-                <td className="py-3 px-4 text-cyan-600 dark:text-cyan-400">2 (separate)</td>
+                <td className="py-3 px-4 text-cyan-600">2 (separate)</td>
               </tr>
             </tbody>
           </table>
@@ -219,27 +219,27 @@ export default function BlockStructurePanel() {
       <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
         <h3 className="text-xl font-bold mb-4">DiT Block in Code</h3>
         <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-          <pre className="text-gray-700 dark:text-gray-300">{`class DiTBlock(nn.Module):
+          <pre className="text-gray-700">{`class DiTBlock(nn.Module):
     def __init__(self, hidden_size, num_heads, mlp_ratio=4.0):
         super().__init__()
         self.norm1 = AdaLayerNorm(hidden_size)  # AdaLN instead of LayerNorm
         self.attn = Attention(hidden_size, num_heads)
         self.norm2 = AdaLayerNorm(hidden_size)
         self.mlp = MLP(hidden_size, int(hidden_size * mlp_ratio))
-        
+
         # Gating parameters (initialized to 0)
         self.gate_attn = nn.Parameter(torch.zeros(hidden_size))
         self.gate_mlp = nn.Parameter(torch.zeros(hidden_size))
-    
+
     def forward(self, x, c):
         # c = conditioning embedding (timestep + text pooled)
-        
+
         # Attention with AdaLN and gating
         x = x + self.gate_attn * self.attn(self.norm1(x, c))
-        
+
         # MLP with AdaLN and gating
         x = x + self.gate_mlp * self.mlp(self.norm2(x, c))
-        
+
         return x`}</pre>
         </div>
       </div>

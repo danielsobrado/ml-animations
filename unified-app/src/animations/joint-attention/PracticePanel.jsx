@@ -133,7 +133,7 @@ export default function PracticePanel() {
         <h2 className="text-3xl font-bold mb-2">
           Practice Lab: <span className="text-violet-400">Joint Attention</span>
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Test your understanding and explore hands-on exercises
         </p>
       </div>
@@ -145,7 +145,7 @@ export default function PracticePanel() {
           className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all ${
             !showExercise
               ? 'bg-violet-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <BookOpen size={18} />
@@ -156,7 +156,7 @@ export default function PracticePanel() {
           className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all ${
             showExercise
               ? 'bg-violet-600 text-white'
-              : 'bg-white/10 text-gray-800 dark:text-gray-400 hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           <Code size={18} />
@@ -171,7 +171,7 @@ export default function PracticePanel() {
             <>
               {/* Progress */}
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-800 dark:text-gray-400">
+                <span className="text-gray-800">
                   Question {currentQuestion + 1} of {questions.length}
                 </span>
                 <span className="text-violet-400">Score: {score}</span>
@@ -249,7 +249,7 @@ export default function PracticePanel() {
               <p className="text-4xl font-bold text-violet-400 mb-4">
                 {score} / {questions.length}
               </p>
-              <p className="text-gray-800 dark:text-gray-400 mb-6">
+              <p className="text-gray-800 mb-6">
                 {score === questions.length
                   ? "Perfect! You've mastered joint attention!"
                   : score >= questions.length * 0.7
@@ -275,11 +275,11 @@ export default function PracticePanel() {
               <span className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center text-sm">1</span>
               Implement Basic Joint Attention
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Create a simple joint attention mechanism from scratch.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import torch
+              <pre className="text-gray-700">{`import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -289,20 +289,20 @@ class JointAttention(nn.Module):
         self.d_model = d_model
         self.num_heads = num_heads
         self.head_dim = d_model // num_heads
-        
+
         # TODO: Define Q, K, V projections
         # TODO: Define output projection
-        
+
     def forward(self, img_tokens, txt_tokens):
         # TODO: Concatenate tokens
         # joint = torch.cat([img_tokens, txt_tokens], dim=1)
-        
+
         # TODO: Project to Q, K, V
-        
+
         # TODO: Compute attention (scaled dot-product)
-        
+
         # TODO: Split back into img and txt portions
-        
+
         pass
 
 # Test your implementation
@@ -331,11 +331,11 @@ txt = torch.randn(batch_size, txt_seq, d_model)
               <span className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-sm">2</span>
               Visualize Attention Patterns
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Extract and visualize the four attention pattern types.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import matplotlib.pyplot as plt
+              <pre className="text-gray-700">{`import matplotlib.pyplot as plt
 import seaborn as sns
 
 def visualize_joint_attention(attn_weights, n_img, n_txt):
@@ -345,19 +345,19 @@ def visualize_joint_attention(attn_weights, n_img, n_txt):
     n_txt: number of text tokens
     """
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-    
+
     # TODO: Extract four quadrants
     # img_to_img = attn_weights[:n_img, :n_img]
     # img_to_txt = attn_weights[:n_img, n_img:]
     # txt_to_img = attn_weights[n_img:, :n_img]
     # txt_to_txt = attn_weights[n_img:, n_img:]
-    
+
     # TODO: Plot each quadrant as a heatmap
     # Use sns.heatmap() or plt.imshow()
-    
+
     # TODO: Add titles and labels
     # "Image→Image", "Image→Text", "Text→Image", "Text→Text"
-    
+
     plt.tight_layout()
     plt.savefig("joint_attention_patterns.png")
 
@@ -380,11 +380,11 @@ fake_attn = torch.softmax(torch.randn(total, total), dim=-1)
               <span className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-sm">3</span>
               Compare Memory Usage
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Benchmark memory usage of joint vs cross attention.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`import torch
+              <pre className="text-gray-700">{`import torch
 import gc
 
 def measure_attention_memory(attn_type, n_img, n_txt, d_model):
@@ -392,10 +392,10 @@ def measure_attention_memory(attn_type, n_img, n_txt, d_model):
     torch.cuda.reset_peak_memory_stats()
     gc.collect()
     torch.cuda.empty_cache()
-    
+
     img = torch.randn(1, n_img, d_model, device='cuda')
     txt = torch.randn(1, n_txt, d_model, device='cuda')
-    
+
     if attn_type == 'joint':
         # TODO: Implement joint attention
         # joint = torch.cat([img, txt], dim=1)
@@ -406,7 +406,7 @@ def measure_attention_memory(attn_type, n_img, n_txt, d_model):
         # cross = F.scaled_dot_product_attention(img, txt, txt)
         # self_attn = F.scaled_dot_product_attention(img, img, img)
         pass
-    
+
     peak_mem = torch.cuda.max_memory_allocated() / 1e6  # MB
     return peak_mem
 
@@ -415,11 +415,11 @@ results = []
 for n_img in [256, 1024, 4096]:
     n_txt = 77
     d_model = 1536
-    
+
     # joint_mem = measure_attention_memory('joint', n_img, n_txt, d_model)
     # cross_mem = measure_attention_memory('cross', n_img, n_txt, d_model)
     # results.append((n_img, joint_mem, cross_mem))
-    
+
 # TODO: Plot results showing memory scaling`}</pre>
             </div>
             <div className="mt-4 p-4 bg-blue-500/10 rounded-xl border border-blue-500/30">
@@ -435,11 +435,11 @@ for n_img in [256, 1024, 4096]:
               <span className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-sm">4</span>
               Extract Real Attention from SD3
             </h3>
-            <p className="text-gray-800 dark:text-gray-400 mb-4">
+            <p className="text-gray-800 mb-4">
               Hook into SD3's MM-DiT to visualize real attention patterns.
             </p>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre className="text-gray-700 dark:text-gray-300">{`from diffusers import StableDiffusion3Pipeline
+              <pre className="text-gray-700">{`from diffusers import StableDiffusion3Pipeline
 from diffusers.models.attention_processor import Attention
 import torch
 
@@ -486,25 +486,25 @@ def register_hooks(pipe):
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-violet-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>Joint attention</strong> concatenates image and text tokens, then applies self-attention
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-fuchsia-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>Bidirectional flow</strong> allows text to see and adapt to the forming image
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-blue-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>Quadratic complexity</strong> O((N_img + N_txt)²) is the cost of full interaction
             </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-green-400 mt-2" />
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-700">
               <strong>Flash Attention</strong> makes joint attention practical at scale
             </p>
           </div>

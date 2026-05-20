@@ -64,20 +64,20 @@ export default function Step2Positional({ onComplete, onNext, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 2: Positional Encoding</h2>
-                <p className="text-gray-800 dark:text-gray-400">Teaching the model about word order</p>
+                <p className="text-gray-800">Teaching the model about word order</p>
             </div>
 
             {/* Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Why Positional Encoding?</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">Why Positional Encoding?</h3>
+                <p className="text-gray-700">
                     Self-attention is <strong>permutation-invariant</strong> - it treats sequences as unordered sets.
                     But word order matters! "Dog bites man" ≠ "Man bites dog"
                 </p>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     GPT-2 uses <strong>learned absolute positional embeddings</strong>:
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
                     <li>Each position (0 to 1023) has its own learned embedding vector</li>
                     <li>These are <strong>added</strong> to the token embeddings</li>
                     <li>Allows the model to learn position-dependent patterns</li>
@@ -86,7 +86,7 @@ export default function Step2Positional({ onComplete, onNext, onPrev }) {
 
             {/* Visualization */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Positional Embedding Visualization</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">Positional Embedding Visualization</h3>
                 <canvas
                     ref={canvasRef}
                     width={600}
@@ -100,22 +100,22 @@ export default function Step2Positional({ onComplete, onNext, onPrev }) {
                     }}
                 />
                 <div className="bg-gray-900 p-4 rounded">
-                    <div className="text-sm text-gray-800 dark:text-gray-400">Selected Position: <span className="text-emerald-600 dark:text-emerald-400 font-mono">{selectedPos}</span></div>
-                    <div className="text-sm text-gray-800 dark:text-gray-400">Embedding Dimension: <span className="text-emerald-600 dark:text-emerald-400 font-mono">{embeddingDim}</span></div>
+                    <div className="text-sm text-gray-800">Selected Position: <span className="text-emerald-600 font-mono">{selectedPos}</span></div>
+                    <div className="text-sm text-gray-800">Embedding Dimension: <span className="text-emerald-600 font-mono">{embeddingDim}</span></div>
                 </div>
             </div>
 
             {/* Formula */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">How It Works</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">How It Works</h3>
                 <div className="bg-gray-900 p-4 rounded space-y-2">
-                    <div className="font-mono text-sm text-gray-700 dark:text-gray-300">
-                        <div>Token Embedding: <span className="text-blue-600 dark:text-blue-400">E_token</span> (768-dim)</div>
+                    <div className="font-mono text-sm text-gray-700">
+                        <div>Token Embedding: <span className="text-blue-600">E_token</span> (768-dim)</div>
                         <div>Position Embedding: <span className="text-yellow-400">E_pos</span> (768-dim)</div>
-                        <div className="mt-2 text-emerald-600 dark:text-emerald-400">Final Input: E_token + E_pos</div>
+                        <div className="mt-2 text-emerald-600">Final Input: E_token + E_pos</div>
                     </div>
                 </div>
-                <p className="text-gray-700 dark:text-sm">
+                <p className="text-gray-700">
                     <strong>Alternative:</strong> Original Transformer used sinusoidal encodings (not learned).
                     GPT-2 learns them because it can capture more complex position-dependent patterns.
                 </p>
@@ -123,8 +123,8 @@ export default function Step2Positional({ onComplete, onNext, onPrev }) {
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     What would happen if we removed positional encodings from GPT-2?
                 </p>
                 <textarea

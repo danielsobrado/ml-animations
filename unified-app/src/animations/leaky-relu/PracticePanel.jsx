@@ -9,11 +9,11 @@ function generateProblem() {
   const W = Array.from({ length: 3 }, () => Math.floor(Math.random() * 5) - 2);
   // Generate random b (between -8 and 4)
   const b = Math.floor(Math.random() * 13) - 8;
-  
+
   const dotProduct = X.reduce((sum, x, i) => sum + x * W[i], 0);
   const z = dotProduct + b;
   const leakyRelu = z > 0 ? z : ALPHA * z;
-  
+
   return { X, W, b, dotProduct, z, leakyRelu };
 }
 
@@ -45,7 +45,7 @@ export default function PracticePanel({ onStepChange }) {
   const checkAnswer = (field) => {
     const userVal = parseFloat(userAnswers[field]);
     let correct;
-    
+
     if (field === 'dotProduct') {
       correct = userVal === problem.dotProduct;
     } else if (field === 'z') {
@@ -54,9 +54,9 @@ export default function PracticePanel({ onStepChange }) {
       // For leaky relu, allow some floating point tolerance
       correct = Math.abs(userVal - problem.leakyRelu) < 0.001;
     }
-    
+
     setFeedback(prev => ({ ...prev, [field]: correct }));
-    
+
     if (correct) {
       if (field === 'dotProduct') setCurrentStep(2);
       else if (field === 'z') setCurrentStep(3);
@@ -81,7 +81,7 @@ export default function PracticePanel({ onStepChange }) {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold text-gray-800 mb-3 text-center">Interactive Practice</h2>
-      
+
       {/* Problem Display */}
       <div className="bg-white p-4 rounded-lg border border-gray-200 mb-4">
         <div className="grid grid-cols-3 gap-4 text-center">
@@ -115,14 +115,14 @@ export default function PracticePanel({ onStepChange }) {
             {showHints.dotProduct ? 'Hide Hint' : 'Show Hint'}
           </button>
         </div>
-        
+
         {showHints.dotProduct && (
-          <p className="text-sm text-gray-800 dark:text-gray-600 mb-2">
+          <p className="text-sm text-gray-800 mb-2">
             X · W = ({X[0]} × {W[0]}) + ({X[1]} × {W[1]}) + ({X[2]} × {W[2]})
             = {X[0] * W[0]} + {X[1] * W[1]} + {X[2] * W[2]} = ?
           </p>
         )}
-        
+
         <div className="flex gap-2 items-center">
           <input
             type="number"
@@ -160,13 +160,13 @@ export default function PracticePanel({ onStepChange }) {
             </button>
           )}
         </div>
-        
+
         {showHints.z && currentStep >= 2 && (
-          <p className="text-sm text-gray-800 dark:text-gray-600 mb-2">
+          <p className="text-sm text-gray-800 mb-2">
             z = {dotProduct} + ({b}) = ?
           </p>
         )}
-        
+
         <div className="flex gap-2 items-center">
           <input
             type="number"
@@ -204,15 +204,15 @@ export default function PracticePanel({ onStepChange }) {
             </button>
           )}
         </div>
-        
+
         {showHints.leakyRelu && currentStep >= 3 && (
-          <p className="text-sm text-gray-800 dark:text-gray-600 mb-2">
-            {z > 0 
-              ? `z = ${z} > 0, so Leaky ReLU(${z}) = ${z}` 
+          <p className="text-sm text-gray-800 mb-2">
+            {z > 0
+              ? `z = ${z} > 0, so Leaky ReLU(${z}) = ${z}`
               : `z = ${z} ≤ 0, so Leaky ReLU(${z}) = α × ${z} = ${ALPHA} × ${z} = ?`}
           </p>
         )}
-        
+
         <div className="flex gap-2 items-center">
           <input
             type="number"
@@ -233,8 +233,8 @@ export default function PracticePanel({ onStepChange }) {
         </div>
         {feedback.leakyRelu !== null && (
           <p className={`mt-2 text-sm ${feedback.leakyRelu ? 'text-green-600' : 'text-red-600'}`}>
-            {feedback.leakyRelu 
-              ? '✓ Correct! 🎉' 
+            {feedback.leakyRelu
+              ? '✓ Correct! 🎉'
               : `✗ Try again. ${z > 0 ? `z > 0, so output = ${z}` : `z ≤ 0, so output = ${ALPHA} × ${z}`}`}
           </p>
         )}

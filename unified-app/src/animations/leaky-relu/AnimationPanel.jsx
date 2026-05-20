@@ -100,7 +100,7 @@ export default function AnimationPanel({ onStepChange }) {
 
     const createBox = (color, x, y, label, value) => {
       const group = new THREE.Group();
-      
+
       const geometry = new THREE.BoxGeometry(50, 50, 10);
       const material = new THREE.MeshLambertMaterial({ color });
       const mesh = new THREE.Mesh(geometry, material);
@@ -146,7 +146,7 @@ export default function AnimationPanel({ onStepChange }) {
     if (step >= 1) {
       const xLabel = createLabel('X (Input)', -200, 140, 18, '#2563eb');
       scene.add(xLabel);
-      
+
       X.forEach((val, i) => {
         const box = createBox(0x3b82f6, -200, 80 - i * 60, 'x', val);
         scene.add(box);
@@ -159,7 +159,7 @@ export default function AnimationPanel({ onStepChange }) {
     if (step >= 2) {
       const wLabel = createLabel('W (Weights)', -80, 140, 18, '#16a34a');
       scene.add(wLabel);
-      
+
       W.forEach((val, i) => {
         const box = createBox(0x22c55e, -80, 80 - i * 60, 'w', val);
         scene.add(box);
@@ -172,7 +172,7 @@ export default function AnimationPanel({ onStepChange }) {
     if (step >= 3) {
       const bLabel = createLabel('b (Bias)', 40, 140, 18, '#ca8a04');
       scene.add(bLabel);
-      
+
       const box = createBox(0xeab308, 40, 20, 'b', b);
       scene.add(box);
       const valLabel = createLabel(b.toString(), 40, 20, 20, '#000');
@@ -183,10 +183,10 @@ export default function AnimationPanel({ onStepChange }) {
     if (step >= 4) {
       const dotLabel = createLabel('X · W', 160, 140, 18, '#7c3aed');
       scene.add(dotLabel);
-      
+
       const calcLabel = createLabel(`${X[0]}×${W[0]} + ${X[1]}×${W[1]} + ${X[2]}×${W[2]}`, 160, 80, 12, '#666');
       scene.add(calcLabel);
-      
+
       const resultLabel = createLabel(`= ${dotProduct}`, 160, 40, 20, '#7c3aed');
       scene.add(resultLabel);
     }
@@ -195,10 +195,10 @@ export default function AnimationPanel({ onStepChange }) {
     if (step >= 5) {
       const zLabel = createLabel('z = X·W + b', 160, -20, 16, '#dc2626');
       scene.add(zLabel);
-      
+
       const zCalcLabel = createLabel(`= ${dotProduct} + (${b})`, 160, -60, 14, '#666');
       scene.add(zCalcLabel);
-      
+
       const box = createBox(0xef4444, 160, -110, 'z', zValue);
       scene.add(box);
       const zValLabel = createLabel(zValue.toString(), 160, -110, 20, '#000');
@@ -209,16 +209,16 @@ export default function AnimationPanel({ onStepChange }) {
     if (step >= 6) {
       const leakyReluLabel = createLabel('Leaky ReLU(z)', 300, 100, 18, '#ea580c');
       scene.add(leakyReluLabel);
-      
+
       const formulaLabel = createLabel(`α = ${ALPHA}`, 300, 60, 14, '#666');
       scene.add(formulaLabel);
-      
+
       const conditionLabel = createLabel(zValue > 0 ? 'z > 0 → z' : `z ≤ 0 → α × z`, 300, 20, 14, '#666');
       scene.add(conditionLabel);
-      
+
       const calcLabel = createLabel(zValue > 0 ? `= ${zValue}` : `= ${ALPHA} × ${zValue}`, 300, -20, 14, '#666');
       scene.add(calcLabel);
-      
+
       const box = createBox(0xf97316, 300, -80, 'leaky_relu', leakyReluOutput);
       scene.add(box);
       const outputLabel = createLabel(leakyReluOutput.toFixed(2), 300, -80, 20, '#000');
@@ -259,9 +259,9 @@ export default function AnimationPanel({ onStepChange }) {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold text-gray-800 mb-3 text-center">Animation Demo</h2>
-      
+
       <div ref={containerRef} className="w-full rounded-lg overflow-hidden border border-gray-200" />
-      
+
       <div className="mt-4 flex justify-center gap-4">
         <button
           onClick={playAnimation}
@@ -296,7 +296,7 @@ export default function AnimationPanel({ onStepChange }) {
         <p className="text-sm text-gray-700">
           <strong>Leaky ReLU Formula:</strong> f(x) = x if x &gt; 0, else α × x
         </p>
-        <p className="text-sm text-gray-800 dark:text-gray-600 mt-1">
+        <p className="text-sm text-gray-800 mt-1">
           Where α is a small constant (typically 0.01). Unlike ReLU, Leaky ReLU allows a small gradient when the input is negative.
         </p>
       </div>

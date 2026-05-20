@@ -51,8 +51,8 @@ export default function App() {
                                         className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${currentStepId === step.id
                                             ? 'bg-emerald-600 text-white'
                                             : completedSteps.has(step.id)
-                                                ? 'bg-gray-700 text-emerald-600 dark:text-emerald-400'
-                                                : 'bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-600'
+                                                ? 'bg-gray-700 text-emerald-600'
+                                                : 'bg-gray-700 text-gray-700 hover:bg-gray-600'
                                             }`}
                                     >
                                         <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function App() {
                                                 <div className="text-xs opacity-75">{step.description}</div>
                                             </div>
                                             {completedSteps.has(step.id) && (
-                                                <span className="text-emerald-600 dark:text-emerald-400">✓</span>
+                                                <span className="text-emerald-600">✓</span>
                                             )}
                                         </div>
                                     </button>

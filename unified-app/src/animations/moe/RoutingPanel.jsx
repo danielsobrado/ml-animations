@@ -140,7 +140,7 @@ export default function RoutingPanel({ numExperts, topK, batchSize, onGenerate }
             // and spawn "ghost" tokens for others if needed.
 
             const expert = scene.children.find(c => c.geometry.type === 'BoxGeometry' && scene.children.indexOf(c) > 2 + targetIndices[0]); // Hacky find
-            // Better: we need to store expert references. 
+            // Better: we need to store expert references.
             // Re-finding them:
             const expertMeshes = scene.children.filter(c => c.geometry.type === 'BoxGeometry');
 
@@ -183,7 +183,7 @@ export default function RoutingPanel({ numExperts, topK, batchSize, onGenerate }
             <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center pointer-events-none">
                 <div className="bg-slate-800/80 backdrop-blur p-4 rounded-lg border border-slate-600 pointer-events-auto">
                     <h3 className="text-neon-blue font-bold mb-2">Router Visualization</h3>
-                    <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs">
+                    <p className="text-sm text-slate-700 max-w-xs">
                         Tokens (white spheres) enter the Router (ring) and are dispatched to the Top-{topK} Experts (colored boxes) based on learned gating weights.
                     </p>
                 </div>

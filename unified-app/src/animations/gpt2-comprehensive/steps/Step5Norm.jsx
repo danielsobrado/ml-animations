@@ -17,37 +17,37 @@ export default function Step5Norm({ onComplete, onNext, onPrev }) {
         <div className="space-y-8">
             <div>
                 <h2 className="text-3xl font-bold mb-2">Step 5: Layer Norm & Residuals</h2>
-                <p className="text-gray-800 dark:text-gray-400">The secret sauce for training deep networks</p>
+                <p className="text-gray-800">The secret sauce for training deep networks</p>
             </div>
 
             {/* Explanation */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Residual Connections (Skip Connections)</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-emerald-600">Residual Connections (Skip Connections)</h3>
+                <p className="text-gray-700">
                     Deep networks are hard to train because gradients vanish as they propagate back through many layers.
                 </p>
-                <p className="text-gray-700 dark:text-gray-300">
+                <p className="text-gray-700">
                     <strong>Residual connections</strong> solve this by adding the input of a layer to its output:
                 </p>
-                <div className="bg-gray-900 p-4 rounded font-mono text-center text-emerald-600 dark:text-emerald-400">
+                <div className="bg-gray-900 p-4 rounded font-mono text-center text-emerald-600">
                     Output = Layer(Input) + Input
                 </div>
-                <p className="text-gray-700 dark:text-sm">
+                <p className="text-gray-700">
                     This creates a "highway" for gradients to flow unchanged during backpropagation.
                 </p>
             </div>
 
             {/* Diagram */}
             <div className="bg-gray-800 rounded-lg p-6 space-y-4 flex flex-col items-center">
-                <h3 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">Pre-Layer Normalization (GPT-2 Style)</h3>
+                <h3 className="text-xl font-semibold text-emerald-600">Pre-Layer Normalization (GPT-2 Style)</h3>
                 <div className="relative w-64 h-96 bg-gray-900 rounded-lg p-4 flex flex-col items-center justify-between border border-gray-700">
                     {/* Input */}
-                    <div className="w-full text-center text-gray-800 dark:text-gray-400">Input x</div>
+                    <div className="w-full text-center text-gray-800">Input x</div>
 
                     {/* Path Split */}
                     <div className="w-0.5 h-4 bg-gray-500"></div>
                     <div className="w-full h-0.5 bg-gray-500 relative">
-                        <div className="absolute -right-2 -top-1 text-xs text-gray-700 dark:text-gray-500">Residual Path</div>
+                        <div className="absolute -right-2 -top-1 text-xs text-gray-700">Residual Path</div>
                     </div>
 
                     <div className="flex w-full justify-between">
@@ -72,17 +72,17 @@ export default function Step5Norm({ onComplete, onNext, onPrev }) {
 
                     {/* Output */}
                     <div className="w-0.5 h-4 bg-gray-500"></div>
-                    <div className="w-full text-center text-gray-800 dark:text-gray-400">Output</div>
+                    <div className="w-full text-center text-gray-800">Output</div>
                 </div>
-                <p className="text-sm text-gray-800 dark:text-gray-400 mt-2 text-center">
+                <p className="text-sm text-gray-800 mt-2 text-center">
                     In GPT-2, Layer Norm is applied <strong>before</strong> the sub-layer (Pre-LN), unlike the original Transformer (Post-LN). This improves stability.
                 </p>
             </div>
 
             {/* Exercise */}
             <div className="bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg p-6 space-y-4">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">📝 Exercise</h3>
-                <p className="text-gray-700 dark:text-gray-300">
+                <h3 className="text-xl font-semibold text-blue-600">📝 Exercise</h3>
+                <p className="text-gray-700">
                     Why are residual connections critical for training deep networks like GPT-2 (which has up to 48 layers)?
                 </p>
                 <textarea

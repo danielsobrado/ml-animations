@@ -13,10 +13,10 @@ export default function MechanismPanel() {
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">
+                    <h2 className="text-3xl font-bold text-emerald-600 mb-4">
                         How KV Cache Works
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                    <p className="text-slate-600 max-w-2xl mx-auto">
                         The cache stores Key and Value matrices from previous tokens.
                         When generating a new token, we only compute K and V for that token,
                         then <strong>append</strong> them to the cache.
@@ -24,8 +24,8 @@ export default function MechanismPanel() {
                 </div>
 
                 {/* Token Slider */}
-                <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-6 mb-8">
-                    <label className="flex justify-between text-sm font-medium mb-3 dark:text-slate-300">
+                <div className="bg-slate-100 rounded-xl p-6 mb-8">
+                    <label className="flex justify-between text-sm font-medium mb-3">
                         <span>Current Generation Step</span>
                         <span className="text-emerald-600">Token {currentToken + 1}: "{tokens[currentToken]}"</span>
                     </label>
@@ -46,8 +46,8 @@ export default function MechanismPanel() {
                 {/* Main Visualization */}
                 <div className="grid lg:grid-cols-3 gap-6 mb-8">
                     {/* Input Token */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                        <h3 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
                             <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm">1</span>
                             New Token Input
                         </h3>
@@ -64,10 +64,10 @@ export default function MechanismPanel() {
                             <div className="text-center">
                                 <div className="text-xs text-slate-500 mb-1">Compute</div>
                                 <div className="flex gap-2">
-                                    <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded font-mono text-sm">
+                                    <div className="px-3 py-1 bg-blue-100 text-blue-600 rounded font-mono text-sm">
                                         K<sub>new</sub>
                                     </div>
-                                    <div className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded font-mono text-sm">
+                                    <div className="px-3 py-1 bg-purple-100 text-purple-600 rounded font-mono text-sm">
                                         V<sub>new</sub>
                                     </div>
                                 </div>
@@ -76,8 +76,8 @@ export default function MechanismPanel() {
                     </div>
 
                     {/* KV Cache */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                        <h3 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
                             <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm">2</span>
                             <Database size={18} className="text-emerald-500" />
                             KV Cache (Memory)
@@ -85,7 +85,7 @@ export default function MechanismPanel() {
 
                         {/* K Cache */}
                         <div className="mb-4">
-                            <div className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-2">Key Cache</div>
+                            <div className="text-xs font-medium text-blue-600 mb-2">Key Cache</div>
                             <div className="flex gap-1">
                                 {tokens.slice(0, currentToken + 1).map((_, i) => (
                                     <motion.div
@@ -95,7 +95,7 @@ export default function MechanismPanel() {
                                         transition={{ delay: i * 0.1 }}
                                         className={`h-8 w-8 rounded flex items-center justify-center text-xs font-mono ${i === currentToken
                                                 ? 'bg-blue-500 text-white ring-2 ring-blue-300'
-                                                : 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                                                : 'bg-blue-100 text-blue-600'
                                             }`}
                                     >
                                         K{i}
@@ -106,7 +106,7 @@ export default function MechanismPanel() {
 
                         {/* V Cache */}
                         <div>
-                            <div className="text-xs font-medium text-purple-600 dark:text-purple-400 mb-2">Value Cache</div>
+                            <div className="text-xs font-medium text-purple-600 mb-2">Value Cache</div>
                             <div className="flex gap-1">
                                 {tokens.slice(0, currentToken + 1).map((_, i) => (
                                     <motion.div
@@ -116,7 +116,7 @@ export default function MechanismPanel() {
                                         transition={{ delay: i * 0.1 }}
                                         className={`h-8 w-8 rounded flex items-center justify-center text-xs font-mono ${i === currentToken
                                                 ? 'bg-purple-500 text-white ring-2 ring-purple-300'
-                                                : 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
+                                                : 'bg-purple-100 text-purple-600'
                                             }`}
                                     >
                                         V{i}
@@ -126,7 +126,7 @@ export default function MechanismPanel() {
                         </div>
 
                         {/* Memory Size */}
-                        <div className="mt-4 p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                        <div className="mt-4 p-3 bg-slate-100 rounded-lg">
                             <div className="text-xs text-slate-500 mb-1">Cache Size</div>
                             <div className="font-mono text-sm">
                                 2 × {currentToken + 1} × {dimK} = <span className="text-emerald-600 font-bold">{2 * (currentToken + 1) * dimK}</span> floats
@@ -135,8 +135,8 @@ export default function MechanismPanel() {
                     </div>
 
                     {/* Attention Computation */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <h3 className="font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                        <h3 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
                             <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm">3</span>
                             Attention Scores
                         </h3>
@@ -154,7 +154,7 @@ export default function MechanismPanel() {
                                         className="flex items-center gap-2"
                                     >
                                         <span className="font-mono text-xs w-12 text-slate-500">{token}</span>
-                                        <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded h-4 overflow-hidden">
+                                        <div className="flex-1 bg-slate-100 rounded h-4 overflow-hidden">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${score * 100}%` }}

@@ -57,7 +57,7 @@ export default function EncoderLayerPanel() {
         <h2 className="text-3xl font-bold mb-2">
           BERT <span className="text-yellow-400">Encoder Layer</span> Architecture
         </h2>
-        <p className="text-gray-800 dark:text-gray-400">
+        <p className="text-gray-800">
           Inside one Transformer encoder block - repeated 12× in BERT-Base
         </p>
       </div>
@@ -94,11 +94,11 @@ export default function EncoderLayerPanel() {
             key={i}
             onClick={() => { setCurrentStep(i); setIsPlaying(false); }}
             className={`px-3 py-1 rounded-full text-sm transition-all ${
-              i === currentStep 
-                ? 'bg-yellow-500 text-black' 
-                : i < currentStep 
-                ? 'bg-yellow-900 text-yellow-300' 
-                : 'bg-white/10 text-gray-700 dark:text-gray-500'
+              i === currentStep
+                ? 'bg-yellow-500 text-black'
+                : i < currentStep
+                ? 'bg-yellow-900 text-yellow-300'
+                : 'bg-white/10 text-gray-700'
             }`}
           >
             {i + 1}
@@ -109,7 +109,7 @@ export default function EncoderLayerPanel() {
       {/* Current Step Description */}
       <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-4">
         <h3 className="font-bold text-yellow-400">Step {currentStep + 1}: {steps[currentStep].title}</h3>
-        <p className="text-gray-700 dark:text-gray-300 mt-1">{steps[currentStep].description}</p>
+        <p className="text-gray-700 mt-1">{steps[currentStep].description}</p>
       </div>
 
       {/* Main Architecture Diagram */}
@@ -120,7 +120,7 @@ export default function EncoderLayerPanel() {
             {currentStep >= 5 && (
               <div className="absolute -left-16 top-1/2 transform -translate-y-1/2">
                 <div className="bg-orange-900/30 border border-orange-500 rounded-lg px-2 py-8">
-                  <p className="text-xs text-orange-600 dark:text-orange-400 writing-mode-vertical transform -rotate-180" style={{ writingMode: 'vertical-rl' }}>
+                  <p className="text-xs text-orange-600 writing-mode-vertical transform -rotate-180" style={{ writingMode: 'vertical-rl' }}>
                     × 12 Layers
                   </p>
                 </div>
@@ -129,28 +129,28 @@ export default function EncoderLayerPanel() {
 
             <div className="flex flex-col items-center gap-2">
               {/* Input */}
-              <div 
+              <div
                 className={`w-48 p-3 rounded-lg border-2 transition-all duration-500 ${
                   currentStep >= 0 ? 'bg-blue-900/30 border-blue-500' : 'bg-gray-800/30 border-gray-600'
                 }`}
                 style={{ opacity: getOpacity(0) }}
               >
                 <p className="text-center text-sm font-medium text-blue-300">Input Embeddings</p>
-                <p className="text-center text-xs text-gray-800 dark:text-gray-400">[batch, seq_len, 768]</p>
+                <p className="text-center text-xs text-gray-800">[batch, seq_len, 768]</p>
               </div>
 
               {/* Arrow */}
-              <div className="text-gray-700 dark:text-gray-500">↓</div>
+              <div className="text-gray-700">↓</div>
 
               {/* Multi-Head Attention */}
-              <div 
+              <div
                 className={`w-48 p-3 rounded-lg border-2 transition-all duration-500 ${
                   currentStep >= 1 ? 'bg-yellow-900/30 border-yellow-500' : 'bg-gray-800/30 border-gray-600'
                 }`}
                 style={{ opacity: getOpacity(1) }}
               >
                 <p className="text-center text-sm font-medium text-yellow-300">Multi-Head Attention</p>
-                <p className="text-center text-xs text-gray-800 dark:text-gray-400">12 heads × 64 dims</p>
+                <p className="text-center text-xs text-gray-800">12 heads × 64 dims</p>
               </div>
 
               {/* Residual connection 1 */}
@@ -171,33 +171,33 @@ export default function EncoderLayerPanel() {
 
               {/* Add & Norm 1 */}
               <div className="flex items-center gap-2">
-                <div className="text-gray-700 dark:text-gray-500">↓</div>
+                <div className="text-gray-700">↓</div>
                 {showResiduals && <span className="text-xs">+ residual</span>}
               </div>
-              <div 
+              <div
                 className={`w-48 p-3 rounded-lg border-2 transition-all duration-500 ${
                   currentStep >= 2 ? 'bg-green-900/30 border-green-500' : 'bg-gray-800/30 border-gray-600'
                 }`}
                 style={{ opacity: getOpacity(2) }}
               >
                 <p className="text-center text-sm font-medium text-green-300">Add & LayerNorm</p>
-                <p className="text-center text-xs text-gray-800 dark:text-gray-400">x + Attention(x)</p>
+                <p className="text-center text-xs text-gray-800">x + Attention(x)</p>
               </div>
 
               {/* Arrow */}
-              <div className="text-gray-700 dark:text-gray-500">↓</div>
+              <div className="text-gray-700">↓</div>
 
               {/* Feed-Forward Network */}
-              <div 
+              <div
                 className={`w-48 p-4 rounded-lg border-2 transition-all duration-500 ${
                   currentStep >= 3 ? 'bg-purple-900/30 border-purple-500' : 'bg-gray-800/30 border-gray-600'
                 }`}
                 style={{ opacity: getOpacity(3) }}
               >
                 <p className="text-center text-sm font-medium text-purple-300">Feed-Forward Network</p>
-                <div className="flex flex-col items-center mt-2 text-xs text-gray-800 dark:text-gray-400">
+                <div className="flex flex-col items-center mt-2 text-xs text-gray-800">
                   <span>Linear: 768 → 3072</span>
-                  <span className="text-purple-600 dark:text-purple-400">GELU activation</span>
+                  <span className="text-purple-600">GELU activation</span>
                   <span>Linear: 3072 → 768</span>
                 </div>
               </div>
@@ -220,31 +220,31 @@ export default function EncoderLayerPanel() {
 
               {/* Add & Norm 2 */}
               <div className="flex items-center gap-2">
-                <div className="text-gray-700 dark:text-gray-500">↓</div>
+                <div className="text-gray-700">↓</div>
                 {showResiduals && <span className="text-xs">+ residual</span>}
               </div>
-              <div 
+              <div
                 className={`w-48 p-3 rounded-lg border-2 transition-all duration-500 ${
                   currentStep >= 4 ? 'bg-green-900/30 border-green-500' : 'bg-gray-800/30 border-gray-600'
                 }`}
                 style={{ opacity: getOpacity(4) }}
               >
                 <p className="text-center text-sm font-medium text-green-300">Add & LayerNorm</p>
-                <p className="text-center text-xs text-gray-800 dark:text-gray-400">x + FFN(x)</p>
+                <p className="text-center text-xs text-gray-800">x + FFN(x)</p>
               </div>
 
               {/* Arrow */}
-              <div className="text-gray-700 dark:text-gray-500">↓</div>
+              <div className="text-gray-700">↓</div>
 
               {/* Output */}
-              <div 
+              <div
                 className={`w-48 p-3 rounded-lg border-2 transition-all duration-500 ${
                   currentStep >= 4 ? 'bg-orange-900/30 border-orange-500' : 'bg-gray-800/30 border-gray-600'
                 }`}
                 style={{ opacity: getOpacity(5) }}
               >
                 <p className="text-center text-sm font-medium text-orange-300">Layer Output</p>
-                <p className="text-center text-xs text-gray-800 dark:text-gray-400">[batch, seq_len, 768]</p>
+                <p className="text-center text-xs text-gray-800">[batch, seq_len, 768]</p>
               </div>
             </div>
           </div>
@@ -256,7 +256,7 @@ export default function EncoderLayerPanel() {
         {/* Layer Normalization */}
         <div className="bg-green-900/20 rounded-xl p-4 border border-green-500/30">
           <h4 className="font-bold text-green-400 mb-3">📊 Layer Normalization</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+          <p className="text-sm text-gray-700 mb-2">
             Normalizes across the feature dimension (not batch), stabilizing training:
           </p>
           <div className="bg-black/30 rounded-lg p-3">
@@ -264,7 +264,7 @@ export default function EncoderLayerPanel() {
               LayerNorm(x) = γ * (x - μ) / √(σ² + ε) + β
             </code>
           </div>
-          <ul className="text-xs text-gray-800 dark:text-gray-400 mt-2 space-y-1">
+          <ul className="text-xs text-gray-800 mt-2 space-y-1">
             <li>• μ, σ computed per token (across 768 dims)</li>
             <li>• γ, β are learned parameters</li>
             <li>• Helps with vanishing/exploding gradients</li>
@@ -273,8 +273,8 @@ export default function EncoderLayerPanel() {
 
         {/* Feed-Forward Network */}
         <div className="bg-purple-900/20 rounded-xl p-4 border border-purple-500/30">
-          <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-3">🔧 Feed-Forward Network</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+          <h4 className="font-bold text-purple-600 mb-3">🔧 Feed-Forward Network</h4>
+          <p className="text-sm text-gray-700 mb-2">
             Position-wise FFN with expansion factor 4:
           </p>
           <div className="bg-black/30 rounded-lg p-3">
@@ -282,7 +282,7 @@ export default function EncoderLayerPanel() {
               FFN(x) = GELU(xW₁ + b₁)W₂ + b₂
             </code>
           </div>
-          <ul className="text-xs text-gray-800 dark:text-gray-400 mt-2 space-y-1">
+          <ul className="text-xs text-gray-800 mt-2 space-y-1">
             <li>• W₁: [768, 3072] - expansion</li>
             <li>• W₂: [3072, 768] - contraction</li>
             <li>• GELU: smooth ReLU alternative</li>
@@ -296,8 +296,8 @@ export default function EncoderLayerPanel() {
         <h4 className="font-bold text-green-400 mb-3">🔄 Residual Connections (Skip Connections)</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2"><strong>Why Residuals?</strong></p>
-            <ul className="text-sm text-gray-800 dark:text-gray-400 space-y-1">
+            <p className="text-sm text-gray-700 mb-2"><strong>Why Residuals?</strong></p>
+            <ul className="text-sm text-gray-800 space-y-1">
               <li>• Enable training of very deep networks (12+ layers)</li>
               <li>• Gradient flows directly through skip path</li>
               <li>• Each layer learns a "modification" to input</li>
@@ -305,13 +305,13 @@ export default function EncoderLayerPanel() {
             </ul>
           </div>
           <div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2"><strong>Mathematical Form:</strong></p>
+            <p className="text-sm text-gray-700 mb-2"><strong>Mathematical Form:</strong></p>
             <div className="bg-black/30 rounded-lg p-3">
               <code className="text-sm text-green-300">
                 output = LayerNorm(x + SubLayer(x))
               </code>
             </div>
-            <p className="text-xs text-gray-700 dark:text-gray-500 mt-2">
+            <p className="text-xs text-gray-700 mt-2">
               BERT uses "post-norm": LayerNorm after residual addition
             </p>
           </div>
@@ -320,10 +320,10 @@ export default function EncoderLayerPanel() {
 
       {/* GELU Activation */}
       <div className="bg-black/30 rounded-xl p-4 border border-white/10">
-        <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-3">🌊 GELU Activation (Gaussian Error Linear Unit)</h4>
+        <h4 className="font-bold text-purple-600 mb-3">🌊 GELU Activation (Gaussian Error Linear Unit)</h4>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Used instead of ReLU in BERT:</p>
+            <p className="text-sm text-gray-700 mb-2">Used instead of ReLU in BERT:</p>
             <div className="bg-black/30 rounded-lg p-3">
               <code className="text-xs text-purple-300">
                 GELU(x) = x * Φ(x)<br/>
@@ -332,8 +332,8 @@ export default function EncoderLayerPanel() {
             </div>
           </div>
           <div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Properties:</p>
-            <ul className="text-xs text-gray-800 dark:text-gray-400 space-y-1">
+            <p className="text-sm text-gray-700 mb-2">Properties:</p>
+            <ul className="text-xs text-gray-800 space-y-1">
               <li>• Smooth, non-monotonic</li>
               <li>• Allows small negative values</li>
               <li>• Weights inputs by their magnitude</li>
@@ -350,9 +350,9 @@ export default function EncoderLayerPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="text-left py-2 text-gray-800 dark:text-gray-400">Component</th>
-                <th className="text-center py-2 text-gray-800 dark:text-gray-400">BERT-Base</th>
-                <th className="text-center py-2 text-gray-800 dark:text-gray-400">BERT-Large</th>
+                <th className="text-left py-2 text-gray-800">Component</th>
+                <th className="text-center py-2 text-gray-800">BERT-Base</th>
+                <th className="text-center py-2 text-gray-800">BERT-Large</th>
               </tr>
             </thead>
             <tbody>
@@ -393,14 +393,14 @@ export default function EncoderLayerPanel() {
 
       {/* Code Example */}
       <div className="bg-black/40 rounded-xl p-4 border border-white/10">
-        <p className="text-sm text-gray-800 dark:text-gray-400 mb-3">🐍 PyTorch Encoder Layer:</p>
+        <p className="text-sm text-gray-800 mb-3">🐍 PyTorch Encoder Layer:</p>
         <pre className="text-sm overflow-x-auto">
           <code className="text-blue-300">{`class BertEncoderLayer(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.attention = MultiHeadAttention(config.hidden_size, config.num_heads)
         self.attention_norm = nn.LayerNorm(config.hidden_size)
-        
+
         self.ffn = nn.Sequential(
             nn.Linear(config.hidden_size, config.intermediate_size),  # 768 → 3072
             nn.GELU(),
@@ -409,16 +409,16 @@ export default function EncoderLayerPanel() {
             nn.Dropout(config.dropout)
         )
         self.ffn_norm = nn.LayerNorm(config.hidden_size)
-    
+
     def forward(self, x, attention_mask=None):
         # Multi-Head Attention + Residual + LayerNorm
         attn_output = self.attention(x, attention_mask)
         x = self.attention_norm(x + attn_output)
-        
+
         # Feed-Forward + Residual + LayerNorm
         ffn_output = self.ffn(x)
         x = self.ffn_norm(x + ffn_output)
-        
+
         return x  # [batch, seq_len, 768]
 
 class BertEncoder(nn.Module):
@@ -427,7 +427,7 @@ class BertEncoder(nn.Module):
         self.layers = nn.ModuleList([
             BertEncoderLayer(config) for _ in range(config.num_layers)
         ])
-    
+
     def forward(self, x, attention_mask=None):
         for layer in self.layers:
             x = layer(x, attention_mask)

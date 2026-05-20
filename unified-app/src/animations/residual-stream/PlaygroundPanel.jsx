@@ -49,7 +49,7 @@ function LayerBlock({ layerNum, output, onOutputChange, color }) {
     return (
         <div className={`p-4 rounded-xl border-2 ${color}`}>
             <div className="flex items-center justify-between mb-3">
-                <span className="font-semibold text-slate-700 dark:text-slate-200">
+                <span className="font-semibold text-slate-700">
                     Layer {layerNum} Output
                 </span>
                 <span className="text-xs text-slate-500 font-mono">
@@ -152,11 +152,11 @@ export default function PlaygroundPanel() {
     ];
 
     const layerColors = [
-        'border-violet-300 dark:border-violet-700 bg-violet-50 dark:bg-violet-900/20',
-        'border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20',
-        'border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20',
-        'border-rose-300 dark:border-rose-700 bg-rose-50 dark:bg-rose-900/20',
-        'border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/20',
+        'border-violet-300 bg-violet-50',
+        'border-amber-300 bg-amber-50',
+        'border-emerald-300 bg-emerald-50',
+        'border-rose-300 bg-rose-50',
+        'border-indigo-300 bg-indigo-50',
     ];
 
     const finalMagnitude = Math.sqrt(
@@ -168,22 +168,22 @@ export default function PlaygroundPanel() {
             <div className="max-w-6xl w-full">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">
+                    <h2 className="text-3xl font-bold text-indigo-600 mb-4">
                         Interactive Residual Stream
                     </h2>
-                    <p className="text-lg text-slate-700 dark:text-slate-300">
+                    <p className="text-lg text-slate-700">
                         Adjust layer outputs and watch how they accumulate in the residual stream
                     </p>
                 </div>
 
                 {/* Controls */}
                 <div className="flex flex-wrap justify-center gap-4 mb-8">
-                    <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">
-                        <label className="text-sm text-slate-600 dark:text-slate-400">Layers:</label>
+                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg border border-slate-200">
+                        <label className="text-sm text-slate-600">Layers:</label>
                         <select
                             value={numLayers}
                             onChange={(e) => setNumLayers(parseInt(e.target.value))}
-                            className="bg-transparent text-slate-700 dark:text-slate-200 font-medium"
+                            className="bg-transparent text-slate-700 font-medium"
                         >
                             {[1, 2, 3, 4, 5].map((n) => (
                                 <option key={n} value={n}>{n}</option>
@@ -199,7 +199,7 @@ export default function PlaygroundPanel() {
                     </button>
                     <button
                         onClick={reset}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors"
                     >
                         Reset
                     </button>
@@ -207,14 +207,14 @@ export default function PlaygroundPanel() {
 
                 <div className="grid lg:grid-cols-2 gap-8">
                     {/* Vector Visualization */}
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200">
+                        <h3 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
                             <Zap className="text-indigo-500" size={20} />
                             Vector Space Visualization
                         </h3>
 
                         <div className="flex justify-center">
-                            <svg width="350" height="350" className="bg-slate-50 dark:bg-slate-900 rounded-xl">
+                            <svg width="350" height="350" className="bg-slate-50 rounded-xl">
                                 {/* Grid */}
                                 <g transform="translate(175, 175)">
                                     {/* Axes */}
@@ -268,11 +268,11 @@ export default function PlaygroundPanel() {
                         <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors[0] }} />
-                                <span className="text-slate-600 dark:text-slate-400">Input: [{inputVector[0].toFixed(2)}, {inputVector[1].toFixed(2)}]</span>
+                                <span className="text-slate-600">Input: [{inputVector[0].toFixed(2)}, {inputVector[1].toFixed(2)}]</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-green-500" />
-                                <span className="text-slate-600 dark:text-slate-400">
+                                <span className="text-slate-600">
                                     Final: [{residuals[numLayers][0].toFixed(2)}, {residuals[numLayers][1].toFixed(2)}]
                                 </span>
                             </div>
@@ -282,9 +282,9 @@ export default function PlaygroundPanel() {
                     {/* Layer Controls */}
                     <div className="space-y-4">
                         {/* Input Vector Control */}
-                        <div className="p-4 rounded-xl border-2 border-cyan-300 dark:border-cyan-700 bg-cyan-50 dark:bg-cyan-900/20">
+                        <div className="p-4 rounded-xl border-2 border-cyan-300 bg-cyan-50">
                             <div className="flex items-center justify-between mb-3">
-                                <span className="font-semibold text-slate-700 dark:text-slate-200">
+                                <span className="font-semibold text-slate-700">
                                     Input Vector
                                 </span>
                                 <span className="text-xs text-slate-500 font-mono">x</span>
@@ -333,8 +333,8 @@ export default function PlaygroundPanel() {
                 </div>
 
                 {/* Residual Stream Breakdown */}
-                <div className="mt-8 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                    <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                <div className="mt-8 bg-white rounded-2xl p-6 border border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
                         <TrendingUp className="text-green-500" size={20} />
                         Residual Stream at Each Layer
                     </h3>
@@ -342,11 +342,11 @@ export default function PlaygroundPanel() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="border-b border-slate-200 dark:border-slate-700">
-                                    <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Position</th>
-                                    <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Formula</th>
-                                    <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Value</th>
-                                    <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Magnitude</th>
+                                <tr className="border-b border-slate-200">
+                                    <th className="text-left py-2 px-4 text-slate-600">Position</th>
+                                    <th className="text-left py-2 px-4 text-slate-600">Formula</th>
+                                    <th className="text-left py-2 px-4 text-slate-600">Value</th>
+                                    <th className="text-left py-2 px-4 text-slate-600">Magnitude</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -355,7 +355,7 @@ export default function PlaygroundPanel() {
                                     return (
                                         <motion.tr
                                             key={i}
-                                            className="border-b border-slate-100 dark:border-slate-700/50"
+                                            className="border-b border-slate-100"
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: i * 0.1 }}
@@ -366,7 +366,7 @@ export default function PlaygroundPanel() {
                                                         className="w-3 h-3 rounded-full"
                                                         style={{ backgroundColor: i === numLayers ? '#22c55e' : colors[i] }}
                                                     />
-                                                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                                                    <span className="font-medium text-slate-700">
                                                         {i === 0 ? 'Input' : i === numLayers ? 'Output' : `After Layer ${i}`}
                                                     </span>
                                                 </div>
@@ -374,7 +374,7 @@ export default function PlaygroundPanel() {
                                             <td className="py-2 px-4 font-mono text-xs text-slate-500">
                                                 {i === 0 ? 'x' : `x + ${Array.from({ length: i }).map((_, j) => `f${j + 1}`).join(' + ')}`}
                                             </td>
-                                            <td className="py-2 px-4 font-mono text-slate-600 dark:text-slate-300">
+                                            <td className="py-2 px-4 font-mono text-slate-600">
                                                 [{vec[0].toFixed(2)}, {vec[1].toFixed(2)}]
                                             </td>
                                             <td className="py-2 px-4">
