@@ -1,0 +1,12 @@
+com\mininn\Loss.class
+com\mininn\Tensor.class
+com\mininn\Activation.class
+com\mininn\Network.class
+com\mininn\AdamOptimizer.class
+com\mininn\Optimizer.class
+com\mininn\SGDOptimizer.class
+com\mininn\Trainer.class
+com\mininn\DenseLayer$InitType.class
+com\mininn\Trainer$TrainingHistory.class
+com\mininn\DemoXOR.class
+com\mininn\DenseLayer.class

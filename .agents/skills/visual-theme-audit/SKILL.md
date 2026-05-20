@@ -12,7 +12,7 @@ Use this skill for repo-local visual QA of the `unified-app` Distill restyle.
 1. Run the screenshot audit script from the repo root:
 
    ```bash
-   rtk npm exec --prefix unified-app -- node ../.agents/skills/visual-theme-audit/scripts/audit-unified-app.mjs
+   rtk node .agents/skills/visual-theme-audit/scripts/audit-unified-app.mjs
    ```
 
 2. Inspect the generated output under `screenshots/theme-audit/<timestamp>/`:
@@ -36,7 +36,7 @@ Use this skill for repo-local visual QA of the `unified-app` Distill restyle.
 
    ```bash
    rtk npm run build --prefix unified-app
-   rtk npm exec --prefix unified-app -- node ../.agents/skills/visual-theme-audit/scripts/audit-unified-app.mjs
+   rtk node .agents/skills/visual-theme-audit/scripts/audit-unified-app.mjs
    ```
 
 6. Commit source and skill changes. If the user expects GitHub Pages to update, run:
