@@ -41,6 +41,7 @@ const animationRegistry = {
   'softmax': lazy(() => import('./softmax')),
   initialization: lazy(() => import('./initialization')),
   'optimizers': lazy(() => import('./optimizers')),
+  'dropout-batchnorm': lazy(() => import('./dropout-batchnorm')),
 
   // Advanced Models
   'vae': lazy(() => import('./vae')),

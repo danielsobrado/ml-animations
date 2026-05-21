@@ -104,6 +104,7 @@ export const categories = [
       { id: 'neural-network', name: 'Neural Network Overview', icon: Network, description: 'How artificial neural networks function' },
       { id: 'computation-graph-backprop', name: 'Computation Graph & Backpropagation', icon: Workflow, description: 'Forward values, local derivatives, reverse accumulation, and updates' },
       { id: 'initialization', name: 'Initialization', icon: Sparkles, description: 'Xavier, He, and signal scale through deep networks' },
+      { id: 'dropout-batchnorm', name: 'Dropout & BatchNorm', icon: Layers, description: 'Regularize units and stabilize activation scale during training' },
       { id: 'gradient-problems', name: 'Gradient Problems', icon: TrendingDown, description: 'Vanishing and exploding gradients' },
     ],
   },
@@ -301,6 +302,7 @@ export const curriculumTracks = [
       'computation-graph-backprop',
       'initialization',
       'optimizers',
+      'dropout-batchnorm',
       'gradient-problems',
       'layer-normalization',
       'conv2d',
@@ -450,6 +452,17 @@ const CURRICULUM_OVERRIDES = {
       'Diagnose overshooting, zigzagging, and slow convergence from the loss path',
     ],
     commonMisconception: 'Adam is not automatically best; learning rate, batch noise, and validation behavior still decide whether training is healthy.',
+  },
+  'dropout-batchnorm': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['initialization', 'optimizers'],
+    learningObjectives: [
+      'Separate BatchNorm normalization from dropout regularization',
+      'Compute how batch mean, variance, gamma, and beta change activations',
+      'Explain why dropout is active during training but disabled at inference',
+    ],
+    commonMisconception: 'Dropout and BatchNorm are not interchangeable; one masks units for regularization while the other normalizes activation scale.',
   },
   'linear-regression': {
     difficulty: 'beginner',

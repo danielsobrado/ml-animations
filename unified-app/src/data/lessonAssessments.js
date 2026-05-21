@@ -19,6 +19,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'gradient-descent',
   'initialization',
   'optimizers',
+  'dropout-batchnorm',
   'relu',
   'computation-graph-backprop',
   'tokenization',
@@ -722,6 +723,40 @@ export const lessonAssessments = {
         title: 'Find a stable signal scale',
         prompt: 'Switch between tiny, Xavier, He, and huge initialization while changing activation and depth.',
         successCriteria: 'You can explain which setup keeps layer variance stable and why another one vanishes or explodes.',
+      },
+    ],
+  },
+  'dropout-batchnorm': {
+    quiz: [
+      {
+        id: 'different-jobs',
+        prompt: 'What is the key difference between BatchNorm and dropout?',
+        choices: [
+          'BatchNorm stabilizes activation scale; dropout regularizes by masking units during training',
+          'BatchNorm deletes units permanently; dropout computes batch statistics',
+          'They are two names for the same inference-time operation',
+        ],
+        answerIndex: 0,
+        explanation: 'BatchNorm normalizes and learns scale/shift, while dropout randomly masks activations during training.',
+      },
+      {
+        id: 'dropout-inference',
+        prompt: 'What happens to dropout at inference time?',
+        choices: [
+          'Units are no longer randomly masked',
+          'The dropout rate is usually doubled',
+          'Batch statistics replace every weight',
+        ],
+        answerIndex: 0,
+        explanation: 'Dropout is a training-time regularizer; inference uses the full network with the learned weights.',
+      },
+    ],
+    labs: [
+      {
+        id: 'mode-switch',
+        title: 'Compare training and inference',
+        prompt: 'Toggle training mode and change dropout rate, then explain why the visible output no longer masks units at inference.',
+        successCriteria: 'You can separate BatchNorm scaling effects from dropout masking effects.',
       },
     ],
   },

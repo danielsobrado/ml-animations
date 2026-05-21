@@ -68,6 +68,7 @@ const EQUATION_OVERRIDES = {
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
+  'dropout-batchnorm': '\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}},\\quad y=\\gamma\\hat{x}+\\beta',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
@@ -241,6 +242,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate fan-in, fan-out, activation, and depth to see when signal vanishes, stays stable, or explodes.',
     'Mistake to avoid: random initialization is not automatically safe; the variance matters as much as randomness.',
     'Check understanding by deciding why ReLU networks usually prefer He initialization over Xavier.',
+  ),
+  'dropout-batchnorm': cardSet(
+    'Dropout and BatchNorm solve different training problems: over-reliance on units and unstable activation scale.',
+    'BatchNorm recenters and rescales a batch; dropout randomly removes units during training so paths cannot co-adapt too easily.',
+    'The math normalizes with batch mean and variance, then learns gamma and beta to scale and shift the result.',
+    'Manipulate batch statistics, gamma, beta, dropout rate, and training mode to compare stabilization with regularization.',
+    'Mistake to avoid: dropout is not used the same way at inference, and BatchNorm is not just another dropout mask.',
+    'Check understanding by predicting what changes when switching from training mode to inference mode.',
   ),
   relu: cardSet(
     'ReLU solves the activation problem by giving networks a simple nonlinearity that keeps positive signal easy to pass.',

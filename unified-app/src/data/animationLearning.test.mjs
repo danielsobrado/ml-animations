@@ -469,6 +469,29 @@ test('initialization is promoted before optimizers in the neural-network path', 
   );
 });
 
+test('dropout and batchnorm are promoted after optimizer basics in the neural-network path', () => {
+  const animation = getAnimationById('dropout-batchnorm');
+  const neuralTrack = curriculumTracks.find((track) => track.id === 'neural-networks');
+
+  assert.ok(animation, 'dropout and batchnorm lesson should be active');
+  assert.equal(animation.categoryId, 'neural-networks');
+  assert.ok(animation.trackIds.includes('neural-networks'));
+  assert.ok(neuralTrack.animationIds.includes('dropout-batchnorm'));
+  assert.ok(isAnimationAvailable('dropout-batchnorm'));
+  assert.deepEqual(animation.prerequisites, ['initialization', 'optimizers']);
+  assert.match(animation.learningObjectives.join(' '), /BatchNorm|dropout|inference/i);
+  assert.match(animation.commonMisconception, /not interchangeable|masks units/i);
+
+  assert.ok(
+    neuralTrack.animationIds.indexOf('optimizers') < neuralTrack.animationIds.indexOf('dropout-batchnorm'),
+    'optimizer basics should come before regularization layers',
+  );
+  assert.ok(
+    neuralTrack.animationIds.indexOf('dropout-batchnorm') < neuralTrack.animationIds.indexOf('gradient-problems'),
+    'dropout and batchnorm should precede later gradient stability lessons',
+  );
+});
+
 test('PCA is promoted into the foundations path as a variance projection lesson', () => {
   const animation = getAnimationById('pca');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
