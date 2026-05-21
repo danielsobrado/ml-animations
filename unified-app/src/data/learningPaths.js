@@ -65,13 +65,19 @@ export const HUB_LEARNING_PATHS = [
   {
     id: 'vision-path',
     label: 'Vision And Generation',
-    description: 'A visual-model route from convolution and pooling into latent-variable models and modern diffusion systems.',
+    description: 'A visual-model route from convolution and pooling into latent variables, attention, and modern diffusion components.',
     nodes: [
       'conv2d',
       'max-pooling',
       'vae',
       'diffusion-vae',
+      'self-attention',
       'sd3-overview',
+      'flow-matching',
+      'clip-encoder',
+      't5-encoder',
+      'joint-attention',
+      'dit',
     ],
   },
   {

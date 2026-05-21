@@ -375,6 +375,36 @@ test('RAG path sequences retrieval, grounding, failures, and evaluation', () => 
   assert.ok(pathOrder.get('rag-failure-modes') < pathOrder.get('rag-retrieval-evaluation'));
 });
 
+test('vision path includes active diffusion component lessons after the latent bridge', () => {
+  const visionPath = HUB_LEARNING_PATHS.find((path) => path.id === 'vision-path');
+  assert.ok(visionPath, 'vision-path should exist');
+
+  const pathOrder = new Map(visionPath.nodes.map((id, index) => [id, index]));
+  const diffusionComponentIds = [
+    'self-attention',
+    'sd3-overview',
+    'flow-matching',
+    'clip-encoder',
+    't5-encoder',
+    'joint-attention',
+    'dit',
+  ];
+
+  for (const nodeId of diffusionComponentIds) {
+    assert.ok(visionPath.nodes.includes(nodeId), `vision-path should include ${nodeId}`);
+    assert.ok(getAnimationById(nodeId), `${nodeId} in vision-path must be active`);
+  }
+
+  assert.ok(pathOrder.get('vae') < pathOrder.get('diffusion-vae'));
+  assert.ok(pathOrder.get('diffusion-vae') < pathOrder.get('self-attention'));
+  assert.ok(pathOrder.get('self-attention') < pathOrder.get('sd3-overview'));
+  assert.ok(pathOrder.get('sd3-overview') < pathOrder.get('flow-matching'));
+  assert.ok(pathOrder.get('flow-matching') < pathOrder.get('clip-encoder'));
+  assert.ok(pathOrder.get('clip-encoder') < pathOrder.get('t5-encoder'));
+  assert.ok(pathOrder.get('t5-encoder') < pathOrder.get('joint-attention'));
+  assert.ok(pathOrder.get('joint-attention') < pathOrder.get('dit'));
+});
+
 test('logistic regression metadata matches the sigmoid binary-classification lesson', () => {
   const animation = getAnimationById('logistic-regression');
 
