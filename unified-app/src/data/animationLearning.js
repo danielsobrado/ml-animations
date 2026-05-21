@@ -76,6 +76,7 @@ const EQUATION_OVERRIDES = {
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
   'mdp-formalism': 'M=(S,A,P,R,\\gamma)',
   'value-iteration': 'V_{k+1}(s)=\\max_a\\sum_{s\\prime}P(s\\prime\\mid s,a)[R+\\gamma V_k(s\\prime)]',
+  'policy-iteration': '\\pi_{k+1}(s)=\\arg\\max_a\\mathbb{E}[R+\\gamma V^{\\pi_k}(s\\prime)]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
@@ -396,6 +397,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate discount and sweep count to watch values propagate backward from terminal rewards.',
     'Mistake to avoid: value iteration is not sample-based trial and error; it uses the model to plan before acting.',
     'Check understanding by predicting which state changes after one more Bellman sweep.',
+  ),
+  'policy-iteration': cardSet(
+    'Policy iteration solves planning by repeatedly evaluating a policy and then improving that policy.',
+    'First ask how good the current instructions are, then replace bad instructions with greedier ones.',
+    'The math evaluates V for the current policy, then sets each state policy to the action with best one-step lookahead.',
+    'Manipulate evaluation depth and improvement rounds to watch a policy stabilize.',
+    'Mistake to avoid: policy evaluation and policy improvement are separate phases, not one blended update.',
+    'Check understanding by predicting which state changes action after an improvement round.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

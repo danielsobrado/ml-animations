@@ -89,6 +89,7 @@ export const HUB_LEARNING_PATHS = [
       'rl-foundations',
       'mdp-formalism',
       'value-iteration',
+      'policy-iteration',
       'q-learning',
       'rl-exploration',
       'pagerank',

@@ -961,7 +961,7 @@ test('MDP formalism bridges RL foundations and Q-learning', () => {
 
 test('value iteration bridges MDP planning and Q-learning', () => {
   const animation = getAnimationById('value-iteration');
-  const qLearning = getAnimationById('q-learning');
+  const policyIteration = getAnimationById('policy-iteration');
   const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
   const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
 
@@ -971,13 +971,35 @@ test('value iteration bridges MDP planning and Q-learning', () => {
   assert.ok(rlTrack.animationIds.includes('value-iteration'));
   assert.ok(isAnimationAvailable('value-iteration'));
   assert.deepEqual(animation.prerequisites, ['mdp-formalism', 'expected-value-variance']);
-  assert.deepEqual(qLearning.prerequisites, ['value-iteration', 'expected-value-variance']);
+  assert.deepEqual(policyIteration.prerequisites, ['value-iteration']);
   assert.match(animation.learningObjectives.join(' '), /Bellman|sweeps|policy/i);
   assert.match(animation.commonMisconception, /known transition model|sampled experience/i);
 
   assert.ok(
-    rlPath.nodes.indexOf('value-iteration') < rlPath.nodes.indexOf('q-learning'),
-    'Value iteration should precede Q-learning updates',
+    rlPath.nodes.indexOf('value-iteration') < rlPath.nodes.indexOf('policy-iteration'),
+    'Value iteration should precede policy iteration comparison',
+  );
+});
+
+test('policy iteration is active before model-free Q-learning', () => {
+  const animation = getAnimationById('policy-iteration');
+  const qLearning = getAnimationById('q-learning');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+
+  assert.ok(animation, 'Policy iteration lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('policy-iteration'));
+  assert.ok(isAnimationAvailable('policy-iteration'));
+  assert.deepEqual(animation.prerequisites, ['value-iteration']);
+  assert.deepEqual(qLearning.prerequisites, ['value-iteration', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /policy evaluation|policy improvement|stable/i);
+  assert.match(animation.commonMisconception, /evaluates the current policy|greedily improves/i);
+
+  assert.ok(
+    rlPath.nodes.indexOf('policy-iteration') < rlPath.nodes.indexOf('q-learning'),
+    'Policy iteration should be seen before model-free Q-learning',
   );
 });
 

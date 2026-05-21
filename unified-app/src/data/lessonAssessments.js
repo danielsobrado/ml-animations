@@ -1370,6 +1370,40 @@ export const lessonAssessments = {
       },
     ],
   },
+  'policy-iteration': {
+    quiz: [
+      {
+        id: 'two-phases',
+        prompt: 'What are the two repeating phases of policy iteration?',
+        choices: [
+          'Evaluate the current policy, then greedily improve it',
+          'Tokenize the state, then sample a reward',
+          'Split train and test data, then fit a classifier',
+        ],
+        answerIndex: 0,
+        explanation: 'Policy iteration alternates policy evaluation with policy improvement until the greedy policy stops changing.',
+      },
+      {
+        id: 'stable-policy',
+        prompt: 'What does it mean when the improved policy matches the current policy?',
+        choices: [
+          'The policy is stable under the current value estimates',
+          'The transition model has been deleted',
+          'Rewards no longer affect decisions',
+        ],
+        answerIndex: 0,
+        explanation: 'If greedy improvement no longer changes any state action, policy iteration has reached a stable policy for the model.',
+      },
+    ],
+    labs: [
+      {
+        id: 'policy-flip',
+        title: 'Find a policy flip',
+        prompt: 'Increase improvement rounds and identify the first state whose action changes from the initial policy.',
+        successCriteria: 'You can name the state, the old action, and the improved greedy action.',
+      },
+    ],
+  },
 };
 
 export function getLessonAssessment(lessonId) {

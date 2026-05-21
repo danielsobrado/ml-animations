@@ -103,6 +103,7 @@ const animationRegistry = {
   'rl-foundations': lazy(() => import('./rl-foundations')),
   'mdp-formalism': lazy(() => import('./mdp-formalism')),
   'value-iteration': lazy(() => import('./value-iteration')),
+  'policy-iteration': lazy(() => import('./policy-iteration')),
   'rl-exploration': lazy(() => import('./rl-exploration')),
   'q-learning': lazy(() => import('./q-learning')),
 

@@ -193,6 +193,7 @@ export const categories = [
       { id: 'rl-foundations', name: 'RL Foundations', icon: BookOpen, description: 'Basic RL concepts' },
       { id: 'mdp-formalism', name: 'MDP Formalism', icon: Workflow, description: 'States, actions, rewards, transitions, and discounting' },
       { id: 'value-iteration', name: 'Value Iteration', icon: Calculator, description: 'Bellman backups for planning with a known model' },
+      { id: 'policy-iteration', name: 'Policy Iteration', icon: GitBranch, description: 'Alternate policy evaluation and policy improvement' },
       { id: 'q-learning', name: 'Q-Learning', icon: Brain, description: 'Value-based learning algorithm' },
       { id: 'rl-exploration', name: 'Exploration vs Exploitation', icon: Shuffle, description: 'The exploration-exploitation tradeoff' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
@@ -369,6 +370,7 @@ export const curriculumTracks = [
       'rl-foundations',
       'mdp-formalism',
       'value-iteration',
+      'policy-iteration',
       'q-learning',
       'rl-exploration',
       'pagerank',
@@ -881,6 +883,17 @@ const CURRICULUM_OVERRIDES = {
       'Extract a greedy policy from the final value estimates',
     ],
     commonMisconception: 'Value iteration is planning with a known transition model; it is not the same as learning Q-values only from sampled experience.',
+  },
+  'policy-iteration': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['value-iteration'],
+    learningObjectives: [
+      'Separate policy evaluation from policy improvement',
+      'Explain why a stable greedy policy means policy iteration has converged',
+      'Compare policy iteration with value iteration as two planning approaches',
+    ],
+    commonMisconception: 'Policy iteration does not improve every action at once by guessing; it evaluates the current policy, then greedily improves it from those values.',
   },
   'q-learning': {
     difficulty: 'intermediate',
