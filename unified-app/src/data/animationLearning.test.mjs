@@ -456,13 +456,13 @@ test('transformer token generation is promoted into the NLP transformer path', (
   assert.ok(transformerTrack.animationIds.includes('transformer-token-generation'));
   assert.ok(!backlogIds.has('transformer-token-generation'));
   assert.ok(isAnimationAvailable('transformer-token-generation'));
-  assert.deepEqual(animation.prerequisites, ['transformer-architecture-families', 'tokenization', 'softmax']);
+  assert.deepEqual(animation.prerequisites, ['llm-training-objectives', 'tokenization', 'softmax']);
   assert.match(animation.learningObjectives.join(' '), /temperature|top-k|top-p|KV cache/i);
 
   assert.ok(
-    transformerTrack.animationIds.indexOf('gpt2-comprehensive') <
+    transformerTrack.animationIds.indexOf('llm-training-objectives') <
       transformerTrack.animationIds.indexOf('transformer-token-generation'),
-    'GPT-style architecture should come before generation loop practice',
+    'training objectives should come before generation loop practice',
   );
   assert.ok(
     transformerTrack.animationIds.indexOf('transformer-token-generation') <
@@ -482,7 +482,6 @@ test('transformer architecture families are promoted before model-specific trans
   assert.ok(transformerTrack.animationIds.includes('transformer-architecture-families'));
   assert.ok(isAnimationAvailable('transformer-architecture-families'));
   assert.deepEqual(animation.prerequisites, ['transformer', 'attention-masks']);
-  assert.ok(tokenGeneration.prerequisites.includes('transformer-architecture-families'));
   assert.match(animation.learningObjectives.join(' '), /encoder-only|decoder-only|encoder-decoder|BERT|GPT|T5/i);
   assert.match(animation.commonMisconception, /BERT|GPT|T5|interchangeable/i);
 
@@ -495,6 +494,33 @@ test('transformer architecture families are promoted before model-specific trans
     transformerTrack.animationIds.indexOf('transformer-architecture-families') <
       transformerTrack.animationIds.indexOf('bert'),
     'family comparison should precede BERT-specific detail',
+  );
+});
+
+test('LLM training objectives are promoted before token generation and fine-tuning', () => {
+  const animation = getAnimationById('llm-training-objectives');
+  const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');
+  const tokenGeneration = getAnimationById('transformer-token-generation');
+
+  assert.ok(animation, 'LLM training objectives lesson should be active');
+  assert.equal(animation.categoryId, 'transformers');
+  assert.ok(animation.trackIds.includes('nlp-transformers'));
+  assert.ok(transformerTrack.animationIds.includes('llm-training-objectives'));
+  assert.ok(isAnimationAvailable('llm-training-objectives'));
+  assert.deepEqual(animation.prerequisites, ['transformer-architecture-families', 'tokenization', 'softmax']);
+  assert.ok(tokenGeneration.prerequisites.includes('llm-training-objectives'));
+  assert.match(animation.learningObjectives.join(' '), /next-token|masked|preference|fine-tuning/i);
+  assert.match(animation.commonMisconception, /Instruction tuning|preference|pretraining/i);
+
+  assert.ok(
+    transformerTrack.animationIds.indexOf('transformer-architecture-families') <
+      transformerTrack.animationIds.indexOf('llm-training-objectives'),
+    'architecture families should precede objective comparison',
+  );
+  assert.ok(
+    transformerTrack.animationIds.indexOf('llm-training-objectives') <
+      transformerTrack.animationIds.indexOf('transformer-token-generation'),
+    'training objectives should precede inference-time token generation',
   );
 });
 

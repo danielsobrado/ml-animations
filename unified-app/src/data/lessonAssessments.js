@@ -27,6 +27,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'attention-masks',
   'transformer',
   'transformer-architecture-families',
+  'llm-training-objectives',
   'transformer-token-generation',
   'rag-retrieval-evaluation',
 ];
@@ -986,6 +987,40 @@ export const lessonAssessments = {
         title: 'Choose the right family',
         prompt: 'Pick search reranking, chat completion, and translation tasks, then choose the architecture family for each.',
         successCriteria: 'You can justify each choice using attention visibility, objective, and output type.',
+      },
+    ],
+  },
+  'llm-training-objectives': {
+    quiz: [
+      {
+        id: 'next-token-target',
+        prompt: 'What does next-token prediction train a decoder-only model to do?',
+        choices: [
+          'Predict the next token from the previous prefix',
+          'Read future tokens bidirectionally during generation',
+          'Compare two completed answers without token probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Autoregressive pretraining predicts each next token from the prefix, which matches left-to-right generation.',
+      },
+      {
+        id: 'preference-signal',
+        prompt: 'What does preference optimization usually compare?',
+        choices: [
+          'A chosen response against a rejected response for the same prompt',
+          'A validation fold against a test fold',
+          'A masked token against every source token',
+        ],
+        answerIndex: 0,
+        explanation: 'Preference training uses comparative feedback to make chosen responses more likely than rejected alternatives.',
+      },
+    ],
+    labs: [
+      {
+        id: 'match-objective-stage',
+        title: 'Match objective to behavior',
+        prompt: 'Select each objective and decide whether it mainly teaches continuation, representation, instruction following, or preference-shaped response behavior.',
+        successCriteria: 'You can justify each match using the target in the loss.',
       },
     ],
   },

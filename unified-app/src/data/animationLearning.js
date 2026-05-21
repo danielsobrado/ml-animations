@@ -58,6 +58,7 @@ const EQUATION_OVERRIDES = {
   'rag-retrieval-evaluation': 'Recall@k=\\frac{|R\\cap Top_k|}{|R|}',
   'attention-masks': '\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V',
   'transformer-architecture-families': 'Encoder\\;only\\neq Decoder\\;only\\neq Encoder\\text{-}Decoder',
+  'llm-training-objectives': '\\mathcal{L}=-\\log p_\\theta(target\\mid context)',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -307,6 +308,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the family selector to compare BERT-style, GPT-style, and T5-style token visibility and output behavior.',
     'Mistake to avoid: a transformer block is not the whole model design; objectives and masks decide what the system can naturally do.',
     'Check understanding by choosing the family for classification, chat completion, and translation before revealing the examples.',
+  ),
+  'llm-training-objectives': cardSet(
+    'LLM training objectives solve the problem of turning raw text, demonstrations, and preferences into different learning signals.',
+    'Pretraining teaches prediction, supervised fine-tuning teaches response format, and preference optimization teaches chosen-over-rejected behavior.',
+    'The math is usually log-probability loss, but the target changes from next token to masked token to reference answer or preferred answer.',
+    'Manipulate the objective and data quality to compare which behavior each training stage rewards.',
+    'Mistake to avoid: alignment objectives do not simply add factual knowledge; they mostly change how the model responds.',
+    'Check understanding by matching continuation, instruction following, and preference shaping to the right objective.',
   ),
   'transformer-token-generation': cardSet(
     'Token generation solves the problem of turning a trained transformer into text one next-token decision at a time.',

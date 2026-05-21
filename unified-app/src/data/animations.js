@@ -71,6 +71,7 @@ export const categories = [
       { id: 'rope', name: 'RoPE (Rotary Embeddings)', icon: RotateCcw, description: 'Modern position encoding via rotation' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
       { id: 'transformer-architecture-families', name: 'Transformer Architecture Families', icon: GitBranch, description: 'Encoder-only, decoder-only, and encoder-decoder model patterns' },
+      { id: 'llm-training-objectives', name: 'LLM Training Objectives', icon: BookOpen, description: 'Pretraining, instruction tuning, and preference optimization signals' },
       { id: 'transformer-token-generation', name: 'Token Generation Loop', icon: MessageSquare, description: 'Logits, sampling, token append, and KV cache reuse' },
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
@@ -311,6 +312,7 @@ export const curriculumTracks = [
       'positional-encoding',
       'transformer',
       'transformer-architecture-families',
+      'llm-training-objectives',
       'bert',
       'gpt2-comprehensive',
       'transformer-token-generation',
@@ -656,10 +658,21 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'BERT, GPT, and T5 are not interchangeable wrappers around the same block; their masks, objectives, and outputs differ.',
   },
+  'llm-training-objectives': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['transformer-architecture-families', 'tokenization', 'softmax'],
+    learningObjectives: [
+      'Compare next-token prediction, masked language modeling, supervised fine-tuning, and preference optimization',
+      'Explain what target each objective trains the model to predict or prefer',
+      'Connect pretraining, instruction tuning, and alignment stages to different model behaviors',
+    ],
+    commonMisconception: 'Instruction tuning and preference optimization do not add the same kind of knowledge as pretraining; they reshape behavior from different feedback signals.',
+  },
   'transformer-token-generation': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['transformer-architecture-families', 'tokenization', 'softmax'],
+    prerequisites: ['llm-training-objectives', 'tokenization', 'softmax'],
     learningObjectives: [
       'Trace one autoregressive decoding step from context tokens to next-token logits',
       'Explain how temperature, top-k, and top-p change the candidate distribution',
