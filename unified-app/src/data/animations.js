@@ -191,6 +191,7 @@ export const categories = [
     color: 'from-amber-500 to-orange-500',
     items: [
       { id: 'rl-foundations', name: 'RL Foundations', icon: BookOpen, description: 'Basic RL concepts' },
+      { id: 'mdp-formalism', name: 'MDP Formalism', icon: Workflow, description: 'States, actions, rewards, transitions, and discounting' },
       { id: 'q-learning', name: 'Q-Learning', icon: Brain, description: 'Value-based learning algorithm' },
       { id: 'rl-exploration', name: 'Exploration vs Exploitation', icon: Shuffle, description: 'The exploration-exploitation tradeoff' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
@@ -365,6 +366,7 @@ export const curriculumTracks = [
     animationIds: [
       'markov-chains',
       'rl-foundations',
+      'mdp-formalism',
       'q-learning',
       'rl-exploration',
       'pagerank',
@@ -856,10 +858,21 @@ const CURRICULUM_OVERRIDES = {
     estimatedMinutes: 16,
     prerequisites: ['markov-chains'],
   },
+  'mdp-formalism': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['rl-foundations'],
+    learningObjectives: [
+      'Define an MDP using states, actions, transition probabilities, rewards, and discount factor',
+      'Trace how one action changes the next-state distribution',
+      'Explain why the discount factor changes the value of delayed rewards',
+    ],
+    commonMisconception: 'An MDP is not just a state diagram; each action owns a probability distribution over next states and rewards.',
+  },
   'q-learning': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['rl-foundations', 'expected-value-variance'],
+    prerequisites: ['mdp-formalism', 'expected-value-variance'],
   },
 };
 

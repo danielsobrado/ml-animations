@@ -933,12 +933,48 @@ test('RAG failure modes lesson is active between reranking and retrieval evaluat
   );
 });
 
+test('MDP formalism bridges RL foundations and Q-learning', () => {
+  const animation = getAnimationById('mdp-formalism');
+  const qLearning = getAnimationById('q-learning');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+
+  assert.ok(animation, 'MDP formalism lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('mdp-formalism'));
+  assert.ok(isAnimationAvailable('mdp-formalism'));
+  assert.deepEqual(animation.prerequisites, ['rl-foundations']);
+  assert.deepEqual(qLearning.prerequisites, ['mdp-formalism', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /states|actions|transition|rewards|discount/i);
+  assert.match(animation.commonMisconception, /state diagram|probability distribution/i);
+
+  assert.ok(
+    rlPath.nodes.indexOf('rl-foundations') < rlPath.nodes.indexOf('mdp-formalism'),
+    'RL foundations should introduce MDP vocabulary first',
+  );
+  assert.ok(
+    rlPath.nodes.indexOf('mdp-formalism') < rlPath.nodes.indexOf('q-learning'),
+    'MDP formalism should precede Q-learning updates',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);
+  const expectedStats = Object.values(lessonAssessments).reduce(
+    (totals, assessment) => ({
+      totalQuizQuestions: totals.totalQuizQuestions + assessment.quiz.length,
+      totalLabs: totals.totalLabs + assessment.labs.length,
+    }),
+    { totalQuizQuestions: 0, totalLabs: 0 },
+  );
 
-  assert.equal(stats.totalQuizQuestions, PRIORITY_ASSESSMENT_LESSON_IDS.length * 2);
-  assert.equal(stats.totalLabs, PRIORITY_ASSESSMENT_LESSON_IDS.length);
+  assert.deepEqual(stats, expectedStats);
+
+  for (const lessonId of Object.keys(lessonAssessments)) {
+    assert.ok(animationIds.has(lessonId), `${lessonId} should be an active lesson`);
+  }
 
   for (const lessonId of PRIORITY_ASSESSMENT_LESSON_IDS) {
     const assessment = lessonAssessments[lessonId];

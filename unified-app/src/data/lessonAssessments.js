@@ -1302,6 +1302,40 @@ export const lessonAssessments = {
       },
     ],
   },
+  'mdp-formalism': {
+    quiz: [
+      {
+        id: 'mdp-parts',
+        prompt: 'What does the transition model P describe in an MDP?',
+        choices: [
+          'The probability distribution over next states after taking an action',
+          'The list of all parameters in a neural network',
+          'The final answer chosen by a language model',
+        ],
+        answerIndex: 0,
+        explanation: 'P describes environment dynamics: from a state and action, it gives probabilities for possible next states.',
+      },
+      {
+        id: 'discount-role',
+        prompt: 'What changes when gamma is reduced toward zero?',
+        choices: [
+          'Immediate rewards dominate delayed rewards',
+          'Future rewards become more important than immediate rewards',
+          'Transition probabilities stop summing to one',
+        ],
+        answerIndex: 0,
+        explanation: 'A smaller discount factor puts less weight on future rewards, so near-term reward matters more.',
+      },
+    ],
+    labs: [
+      {
+        id: 'gamma-comparison',
+        title: 'Compare action values',
+        prompt: 'Switch between actions and lower gamma until the safer immediate reward becomes more attractive.',
+        successCriteria: 'You can explain how the same transition probabilities lead to different action choices when gamma changes.',
+      },
+    ],
+  },
 };
 
 export function getLessonAssessment(lessonId) {

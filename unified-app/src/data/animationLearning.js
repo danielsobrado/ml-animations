@@ -74,6 +74,7 @@ const EQUATION_OVERRIDES = {
   'k-means': '\\min_C\\sum_i \\lVert x_i-c_{a_i}\\rVert^2',
   'conditional-probability': 'P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}',
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
+  'mdp-formalism': 'M=(S,A,P,R,\\gamma)',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
@@ -378,6 +379,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Use the controls to move top-k, reranker, and strictness, then predict each claim’s outcome.',
     'Mistake to avoid: fixing decoding settings before retrieval quality often makes fluent answers more confidently wrong.',
     'Check understanding by identifying why a claim is rejected when no valid evidence remains in the grounded set.',
+  ),
+  'mdp-formalism': cardSet(
+    'MDP formalism solves the problem of describing sequential decisions with one consistent vocabulary.',
+    'A state says where the agent is, an action says what it tries, and the environment samples what happens next.',
+    'The math is M=(S,A,P,R,gamma): states, actions, transition probabilities, rewards, and discounted future value.',
+    'Manipulate the action choice and discount factor to see how immediate and delayed rewards change value.',
+    'Mistake to avoid: treating a transition as deterministic when the action really creates a probability distribution.',
+    'Check understanding by predicting which action has higher expected return before changing gamma.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',
