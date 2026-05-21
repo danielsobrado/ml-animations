@@ -1003,6 +1003,26 @@ test('policy iteration is active before model-free Q-learning', () => {
   );
 });
 
+test('policy gradients are active after exploration in the RL path', () => {
+  const animation = getAnimationById('policy-gradients');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+
+  assert.ok(animation, 'Policy gradients lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('policy-gradients'));
+  assert.ok(isAnimationAvailable('policy-gradients'));
+  assert.deepEqual(animation.prerequisites, ['rl-exploration', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /stochastic policy|returns|expected return/i);
+  assert.match(animation.commonMisconception, /action probabilities|sampled returns/i);
+
+  assert.ok(
+    rlPath.nodes.indexOf('rl-exploration') < rlPath.nodes.indexOf('policy-gradients'),
+    'Exploration should precede policy-gradient probability updates',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);

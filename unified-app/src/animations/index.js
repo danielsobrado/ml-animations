@@ -106,6 +106,7 @@ const animationRegistry = {
   'policy-iteration': lazy(() => import('./policy-iteration')),
   'rl-exploration': lazy(() => import('./rl-exploration')),
   'q-learning': lazy(() => import('./q-learning')),
+  'policy-gradients': lazy(() => import('./policy-gradients')),
 
   // Algorithms & Data Structures
   'bloom-filter': lazy(() => import('./bloom-filter')),

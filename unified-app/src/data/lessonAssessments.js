@@ -1404,6 +1404,40 @@ export const lessonAssessments = {
       },
     ],
   },
+  'policy-gradients': {
+    quiz: [
+      {
+        id: 'positive-advantage',
+        prompt: 'What happens to the sampled action when its advantage is positive?',
+        choices: [
+          'Its log-probability is pushed upward',
+          'Its probability is forced to zero',
+          'The transition model is recomputed exactly',
+        ],
+        answerIndex: 0,
+        explanation: 'Policy gradients reinforce sampled actions that beat the baseline by increasing their log-probability.',
+      },
+      {
+        id: 'policy-object',
+        prompt: 'What is optimized directly in policy-gradient methods?',
+        choices: [
+          'The stochastic policy action probabilities',
+          'Only a fixed Q-table',
+          'Only the train/test split',
+        ],
+        answerIndex: 0,
+        explanation: 'Unlike tabular value methods, policy gradients update policy parameters that control action probabilities.',
+      },
+    ],
+    labs: [
+      {
+        id: 'advantage-flip',
+        title: 'Flip the advantage',
+        prompt: 'Move return below and above the baseline and watch the sampled action probability move down or up.',
+        successCriteria: 'You can explain how the sign of advantage changes the policy update direction.',
+      },
+    ],
+  },
 };
 
 export function getLessonAssessment(lessonId) {

@@ -196,6 +196,7 @@ export const categories = [
       { id: 'policy-iteration', name: 'Policy Iteration', icon: GitBranch, description: 'Alternate policy evaluation and policy improvement' },
       { id: 'q-learning', name: 'Q-Learning', icon: Brain, description: 'Value-based learning algorithm' },
       { id: 'rl-exploration', name: 'Exploration vs Exploitation', icon: Shuffle, description: 'The exploration-exploitation tradeoff' },
+      { id: 'policy-gradients', name: 'Policy Gradients', icon: TrendingUp, description: 'Improve action probabilities using returns and log-probability gradients' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
     ],
   },
@@ -373,6 +374,7 @@ export const curriculumTracks = [
       'policy-iteration',
       'q-learning',
       'rl-exploration',
+      'policy-gradients',
       'pagerank',
       'bloom-filter',
     ],
@@ -899,6 +901,17 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
     prerequisites: ['value-iteration', 'expected-value-variance'],
+  },
+  'policy-gradients': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['rl-exploration', 'expected-value-variance'],
+    learningObjectives: [
+      'Explain how a stochastic policy assigns probabilities to actions',
+      'Use returns to reinforce sampled actions that performed well',
+      'Describe why policy gradients optimize expected return directly',
+    ],
+    commonMisconception: 'Policy gradients do not need to pick only the current best action; they adjust action probabilities from sampled returns.',
   },
 };
 

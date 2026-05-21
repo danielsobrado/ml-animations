@@ -78,6 +78,7 @@ const EQUATION_OVERRIDES = {
   'value-iteration': 'V_{k+1}(s)=\\max_a\\sum_{s\\prime}P(s\\prime\\mid s,a)[R+\\gamma V_k(s\\prime)]',
   'policy-iteration': '\\pi_{k+1}(s)=\\arg\\max_a\\mathbb{E}[R+\\gamma V^{\\pi_k}(s\\prime)]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
+  'policy-gradients': '\\nabla J(\\theta)=\\mathbb{E}[G_t\\nabla_\\theta\\log\\pi_\\theta(a_t\\mid s_t)]',
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
 };
@@ -405,6 +406,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate evaluation depth and improvement rounds to watch a policy stabilize.',
     'Mistake to avoid: policy evaluation and policy improvement are separate phases, not one blended update.',
     'Check understanding by predicting which state changes action after an improvement round.',
+  ),
+  'policy-gradients': cardSet(
+    'Policy gradients solve the problem of learning a stochastic action policy directly from returns.',
+    'Good sampled actions become more likely, bad sampled actions become less likely, but exploration can remain.',
+    'The math raises log-probability of actions in proportion to return or advantage.',
+    'Manipulate return and baseline to see which action probability receives the strongest update.',
+    'Mistake to avoid: this is not Q-learning with a table; the policy itself is the optimized object.',
+    'Check understanding by predicting whether a positive advantage increases or decreases the sampled action probability.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',
