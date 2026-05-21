@@ -611,7 +611,7 @@ test('RAG retrieval evaluation is promoted into the generative AI path', () => {
   assert.ok(generativeTrack.animationIds.includes('rag-retrieval-evaluation'));
   assert.ok(!backlogIds.has('rag-retrieval-evaluation'));
   assert.ok(isAnimationAvailable('rag-retrieval-evaluation'));
-  assert.deepEqual(animation.prerequisites, ['rag-vector-indexing', 'embeddings', 'cosine-similarity']);
+  assert.deepEqual(animation.prerequisites, ['rag-reranking-grounding', 'embeddings', 'cosine-similarity']);
   assert.match(animation.learningObjectives.join(' '), /chunk|rerank|recall@k|nDCG/i);
   assert.match(animation.commonMisconception, /missing evidence|right chunks|context/i);
 
@@ -660,7 +660,7 @@ test('RAG vector indexing is promoted between chunking and retrieval evaluation'
   assert.ok(generativeTrack.animationIds.includes('rag-vector-indexing'));
   assert.ok(isAnimationAvailable('rag-vector-indexing'));
   assert.deepEqual(animation.prerequisites, ['rag-chunking-context', 'embeddings', 'cosine-similarity']);
-  assert.ok(evaluation.prerequisites.includes('rag-vector-indexing'));
+  assert.ok(evaluation.prerequisites.includes('rag-reranking-grounding'));
   assert.match(animation.learningObjectives.join(' '), /exact|approximate|IVF|HNSW|latency|recall/i);
   assert.match(animation.commonMisconception, /Approximate|exact search|reranking/i);
 
@@ -672,7 +672,36 @@ test('RAG vector indexing is promoted between chunking and retrieval evaluation'
   assert.ok(
     generativeTrack.animationIds.indexOf('rag-vector-indexing') <
       generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
-    'vector indexing should precede retrieval quality metrics',
+    'vector indexing should precede downstream reranking and evaluation',
+  );
+});
+
+test('RAG reranking and grounding is promoted before retrieval evaluation', () => {
+  const animation = getAnimationById('rag-reranking-grounding');
+  const evaluation = getAnimationById('rag-retrieval-evaluation');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+
+  assert.ok(animation, 'RAG reranking and grounding lesson should be active');
+  assert.equal(animation.categoryId, 'advanced-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('rag-reranking-grounding'));
+  assert.ok(isAnimationAvailable('rag-reranking-grounding'));
+  assert.ok(!backlogIds.has('rag-reranking-grounding'));
+  assert.deepEqual(animation.prerequisites, ['rag-vector-indexing', 'rag-chunking-context', 'embeddings', 'cosine-similarity']);
+  assert.match(animation.learningObjectives.join(' '), /first-pass|rerank|grounding|conflicting|stale/i);
+  assert.match(animation.commonMisconception, /cannot fix|stale|conflicting/i);
+  assert.ok(evaluation.prerequisites.includes('rag-reranking-grounding'));
+
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-vector-indexing') <
+      generativeTrack.animationIds.indexOf('rag-reranking-grounding'),
+    'vector indexing should enable reranking and grounding',
+  );
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-reranking-grounding') <
+      generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
+    'reranking and grounding should be before retrieval metrics',
   );
 });
 

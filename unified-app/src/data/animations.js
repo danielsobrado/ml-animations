@@ -115,6 +115,7 @@ export const categories = [
       { id: 'rag', name: 'RAG', icon: Database, description: 'Retrieval-augmented generation' },
       { id: 'rag-chunking-context', name: 'RAG Chunking & Context Packing', icon: Scissors, description: 'Chunk size, overlap, top-k, and token budget tradeoffs' },
       { id: 'rag-vector-indexing', name: 'Vector Indexing & ANN Search', icon: Database, description: 'Exact search, IVF clusters, HNSW graphs, latency, and recall' },
+      { id: 'rag-reranking-grounding', name: 'RAG Reranking & Grounding', icon: Search, description: 'Re-rank candidate chunks and apply strict grounding checks before citation' },
       { id: 'rag-retrieval-evaluation', name: 'RAG Retrieval Evaluation', icon: Search, description: 'Chunking, reranking, recall@k, MRR, and nDCG' },
       { id: 'multimodal-llm', name: 'Multimodal LLM', icon: Image, description: 'Multi-modal language models' },
     ],
@@ -347,6 +348,7 @@ export const curriculumTracks = [
       'rag',
       'rag-chunking-context',
       'rag-vector-indexing',
+      'rag-reranking-grounding',
       'rag-retrieval-evaluation',
       'multimodal-llm',
       'fine-tuning',
@@ -756,6 +758,17 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Approximate nearest neighbor search is not automatically equivalent to exact search; speed gains can miss relevant chunks before reranking ever runs.',
   },
+  'rag-reranking-grounding': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['rag-vector-indexing', 'rag-chunking-context', 'embeddings', 'cosine-similarity'],
+    learningObjectives: [
+      'Explain why first-pass retrieval and reranking solve different problems',
+      'Evaluate how reranking affects which evidence enters top-k',
+      'Diagnose grounding failures caused by stale or conflicting chunks',
+    ],
+    commonMisconception: 'A reranker can reorder chunks, but it cannot fix missing evidence or contradictory source policies.',
+  },
   'neural-network': {
     difficulty: 'beginner',
     estimatedMinutes: 18,
@@ -816,7 +829,7 @@ const CURRICULUM_OVERRIDES = {
   'rag-retrieval-evaluation': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['rag-vector-indexing', 'embeddings', 'cosine-similarity'],
+    prerequisites: ['rag-reranking-grounding', 'embeddings', 'cosine-similarity'],
     learningObjectives: [
       'Explain how chunk size and overlap change retrieved evidence',
       'Compare first-pass retrieval with reranked candidate ordering',

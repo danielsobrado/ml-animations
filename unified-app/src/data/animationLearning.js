@@ -63,6 +63,7 @@ const EQUATION_OVERRIDES = {
   'fine-tuning': 'W^{\\prime}=W+BA\\quad or\\quad \\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})',
   'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
   'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
+  'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -360,6 +361,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate index type, corpus scale, and search breadth to compare recall and latency.',
     'Mistake to avoid: approximate search can miss relevant chunks before reranking or generation has a chance to use them.',
     'Check understanding by choosing exact, IVF, or HNSW for small corpora, large corpora, and high-recall workflows.',
+  ),
+  'rag-reranking-grounding': cardSet(
+    'Reranking decides which retrieved chunks should be surfaced first; grounding decides whether surfaced claims can be trusted as citations.',
+    'Reranking changes ranking and top-k composition, while grounding checks for stale, conflicting, and unsupported evidence.',
+    'The math re-scores candidates with a second layer, then applies a validity gate before a claim is considered grounded.',
+    'Move strictness and reranker mode, then predict which claim flips from grounded to unsupported.',
+    'Mistake to avoid: a high-ranked chunk is not automatically a valid citation source.',
+    'Check understanding by comparing lenient and strict grounding for the same top-k output.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

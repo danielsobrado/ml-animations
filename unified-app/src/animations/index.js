@@ -47,6 +47,7 @@ const animationRegistry = {
   'rag': lazy(() => import('./rag')),
   'rag-chunking-context': lazy(() => import('./rag-chunking-context')),
   'rag-vector-indexing': lazy(() => import('./rag-vector-indexing')),
+  'rag-reranking-grounding': lazy(() => import('./rag-reranking-grounding')),
   'rag-retrieval-evaluation': lazy(() => import('./rag-retrieval-evaluation')),
   'multimodal-llm': lazy(() => import('./multimodal-llm')),
   'fine-tuning': lazy(() => import('./fine-tuning')),
