@@ -40,6 +40,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'rag-failure-modes',
   'rag-retrieval-evaluation',
   'diffusion-basics',
+  'diffusion-sampling',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -1643,6 +1644,40 @@ export const lessonAssessments = {
         title: 'Tune the noise prediction',
         prompt: 'Move timestep and prediction error to see how noisy sample and denoised estimate diverge from the clean signal.',
         successCriteria: 'You can explain why a better noise estimate produces a cleaner recovered sample.',
+      },
+    ],
+  },
+  'diffusion-sampling': {
+    quiz: [
+      {
+        id: 'ddpm-vs-ddim',
+        prompt: 'What is the key difference between DDPM and DDIM sampling in this beginner comparison?',
+        choices: [
+          'DDPM keeps stochastic reverse noise, while DDIM can follow a deterministic path',
+          'DDIM trains a classifier, while DDPM trains a tokenizer',
+          'DDPM only works for text and DDIM only works for images',
+        ],
+        answerIndex: 0,
+        explanation: 'Both use the denoising model, but DDIM can remove the extra sampling randomness that DDPM retains.',
+      },
+      {
+        id: 'step-tradeoff',
+        prompt: 'What is the main risk when reducing the number of reverse sampling steps?',
+        choices: [
+          'Each step must do more denoising work, so prediction errors matter more',
+          'The forward noising process becomes impossible to define',
+          'The model stops using latents and switches to supervised labels',
+        ],
+        answerIndex: 0,
+        explanation: 'Fewer steps can be faster, but each update covers more distance and can amplify denoising mistakes.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-samplers',
+        title: 'Compare sampler paths',
+        prompt: 'Switch between DDPM, DDIM, and flow/ODE while changing step count and prediction quality.',
+        successCriteria: 'You can describe how stochasticity, step count, and prediction quality change the path from noise to sample.',
       },
     ],
   },

@@ -222,6 +222,7 @@ export const categories = [
     color: 'from-fuchsia-500 to-purple-600',
     items: [
       { id: 'diffusion-basics', name: 'Diffusion Basics', icon: Sparkles, description: 'Add noise, predict noise, and denoise step by step' },
+      { id: 'diffusion-sampling', name: 'Diffusion Sampling', icon: Workflow, description: 'Compare DDPM, DDIM, and flow-style sampling paths' },
       { id: 'sd3-overview', name: 'SD3 Architecture Overview', icon: Cpu, description: 'Complete Stable Diffusion 3 pipeline' },
       { id: 'flow-matching', name: 'Flow Matching', icon: Workflow, description: 'Flow-based generative modeling' },
       { id: 'diffusion-vae', name: 'VAE for Diffusion', icon: Shuffle, description: 'Latent space encoding for images' },
@@ -353,6 +354,7 @@ export const curriculumTracks = [
     animationIds: [
       'vae',
       'diffusion-basics',
+      'diffusion-sampling',
       'diffusion-vae',
       'sd3-overview',
       'flow-matching',
@@ -898,6 +900,17 @@ const CURRICULUM_OVERRIDES = {
       'Use predicted noise to recover a cleaner sample estimate',
     ],
     commonMisconception: 'Diffusion models do not generate by one magic step; they learn repeated denoising from noisy samples.',
+  },
+  'diffusion-sampling': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['diffusion-basics'],
+    learningObjectives: [
+      'Compare stochastic DDPM sampling with deterministic DDIM sampling',
+      'Explain how fewer reverse steps trade speed against sample quality',
+      'Describe why flow and ODE samplers view generation as following a continuous path',
+    ],
+    commonMisconception: 'A sampler is not a new image model; it is a procedure for using the trained denoiser to move from noise toward data.',
   },
   rag: {
     difficulty: 'advanced',

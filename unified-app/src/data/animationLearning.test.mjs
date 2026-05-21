@@ -382,6 +382,7 @@ test('vision path includes active diffusion component lessons after the latent b
   const pathOrder = new Map(visionPath.nodes.map((id, index) => [id, index]));
   const diffusionComponentIds = [
     'diffusion-basics',
+    'diffusion-sampling',
     'self-attention',
     'sd3-overview',
     'flow-matching',
@@ -397,7 +398,8 @@ test('vision path includes active diffusion component lessons after the latent b
   }
 
   assert.ok(pathOrder.get('vae') < pathOrder.get('diffusion-basics'));
-  assert.ok(pathOrder.get('diffusion-basics') < pathOrder.get('diffusion-vae'));
+  assert.ok(pathOrder.get('diffusion-basics') < pathOrder.get('diffusion-sampling'));
+  assert.ok(pathOrder.get('diffusion-sampling') < pathOrder.get('diffusion-vae'));
   assert.ok(pathOrder.get('diffusion-vae') < pathOrder.get('self-attention'));
   assert.ok(pathOrder.get('self-attention') < pathOrder.get('sd3-overview'));
   assert.ok(pathOrder.get('sd3-overview') < pathOrder.get('flow-matching'));
@@ -424,6 +426,26 @@ test('diffusion basics bridges VAE and advanced diffusion components', () => {
     visionPath.nodes.indexOf('vae') < visionPath.nodes.indexOf('diffusion-basics') &&
       visionPath.nodes.indexOf('diffusion-basics') < visionPath.nodes.indexOf('diffusion-vae'),
     'diffusion basics should sit between VAE and diffusion VAE',
+  );
+});
+
+test('diffusion sampling compares DDPM, DDIM, and flow-style generation paths', () => {
+  const animation = getAnimationById('diffusion-sampling');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+  const visionPath = HUB_LEARNING_PATHS.find((path) => path.id === 'vision-path');
+
+  assert.ok(animation, 'diffusion sampling lesson should be active');
+  assert.equal(animation.categoryId, 'diffusion-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('diffusion-sampling'));
+  assert.ok(isAnimationAvailable('diffusion-sampling'));
+  assert.deepEqual(animation.prerequisites, ['diffusion-basics']);
+  assert.match(animation.learningObjectives.join(' '), /DDPM|DDIM|flow|ODE/i);
+  assert.match(animation.commonMisconception, /sampler|denoiser/i);
+  assert.ok(
+    visionPath.nodes.indexOf('diffusion-basics') < visionPath.nodes.indexOf('diffusion-sampling') &&
+      visionPath.nodes.indexOf('diffusion-sampling') < visionPath.nodes.indexOf('diffusion-vae'),
+    'diffusion sampling should sit after basics and before diffusion VAE',
   );
 });
 

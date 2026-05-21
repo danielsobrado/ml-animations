@@ -66,6 +66,7 @@ const EQUATION_OVERRIDES = {
   'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
   'rag-failure-modes': 'grounded\\iff supported\\;\\land\\;\\neg stale\\;\\land\\;\\neg conflict',
   'diffusion-basics': 'x_t=\\sqrt{1-t}\\,x_0+\\sqrt{t}\\,\\epsilon,\\quad \\hat{x}_0\\leftarrow x_t-\\hat{\\epsilon}',
+  'diffusion-sampling': 'x_T\\sim\\mathcal{N}(0,I),\\quad x_{t-1}\\leftarrow S_\\phi(x_t,t,\\hat{\\epsilon}_\\theta)',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
@@ -420,6 +421,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate clean signal, noise, timestep, and prediction error to see why better noise prediction improves denoising.',
     'Mistake to avoid: the model is not asked to invent the whole image in one step; it learns many denoising steps.',
     'Check understanding by predicting what happens when the model overestimates the noise that was added.',
+  ),
+  'diffusion-sampling': cardSet(
+    'Diffusion sampling solves the problem of turning a trained denoiser into an actual generation procedure.',
+    'Start from noise, repeatedly estimate what noise to remove, and choose how much randomness each reverse step keeps.',
+    'The math treats each sampler as an update rule from x_t to x_{t-1}, with DDPM adding stochasticity and DDIM setting it to zero.',
+    'Manipulate sampler type, step count, and prediction quality to see speed, randomness, and clarity trade off.',
+    'Mistake to avoid: DDPM, DDIM, and flow-style paths are sampler choices, not three unrelated image models.',
+    'Check understanding by explaining why fewer steps can be faster yet more sensitive to denoising errors.',
   ),
   'mdp-formalism': cardSet(
     'MDP formalism solves the problem of describing sequential decisions with one consistent vocabulary.',
