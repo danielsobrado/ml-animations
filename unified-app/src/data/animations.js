@@ -146,6 +146,7 @@ export const categories = [
     items: [
       { id: 'train-validation-test-split', name: 'Train / Validation / Test Split', icon: Shuffle, description: 'Separating data for learning, tuning, and honest evaluation' },
       { id: 'cross-validation', name: 'Cross-Validation & Data Leakage', icon: GitBranch, description: 'Rotating validation folds while keeping leakage out of evaluation' },
+      { id: 'data-leakage-deep-dive', name: 'Data Leakage Deep Dive', icon: ShieldCheck, description: 'Duplicate users, target leakage, time leakage, and repeated test tuning' },
       { id: 'feature-scaling-preprocessing', name: 'Feature Scaling & Preprocessing', icon: Scale, description: 'Standardization, min-max scaling, robust scaling, and leakage-safe fitting' },
       { id: 'k-means', name: 'K-Means Clustering', icon: CircleDot, description: 'Assigning points to nearest centroids and updating means' },
       { id: 'overfitting', name: 'Overfitting', icon: TrendingDown, description: 'When a model memorizes training quirks instead of learning the pattern' },
@@ -251,6 +252,7 @@ export const curriculumTracks = [
       'linear-regression',
       'train-validation-test-split',
       'cross-validation',
+      'data-leakage-deep-dive',
       'feature-scaling-preprocessing',
       'k-means',
       'logistic-regression',
@@ -446,10 +448,21 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Cross-validation does not fix data leakage; the whole modeling pipeline must be fitted inside each fold.',
   },
-  'feature-scaling-preprocessing': {
+  'data-leakage-deep-dive': {
     difficulty: 'beginner',
     estimatedMinutes: 18,
     prerequisites: ['cross-validation'],
+    learningObjectives: [
+      'Identify leakage from duplicate entities, preprocessing before splitting, target-derived features, time order, and repeated test tuning',
+      'Explain which information boundary each leakage mode crosses',
+      'Choose safer grouped, time-aware, train-only pipeline, or test-once evaluation fixes',
+    ],
+    commonMisconception: 'A random split is not automatically honest; the split unit and prediction time must match the real deployment question.',
+  },
+  'feature-scaling-preprocessing': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['data-leakage-deep-dive'],
     learningObjectives: [
       'Compare standardization, min-max scaling, and robust scaling on raw numeric features',
       'Explain why scalers and imputers must be fitted on training data only',

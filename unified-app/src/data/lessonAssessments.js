@@ -5,6 +5,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'k-means',
   'train-validation-test-split',
   'cross-validation',
+  'data-leakage-deep-dive',
   'feature-scaling-preprocessing',
   'logistic-regression',
   'classification-metrics',
@@ -236,6 +237,40 @@ export const lessonAssessments = {
         title: 'Audit a fold pipeline',
         prompt: 'Pick one preprocessing step and decide whether it must be learned inside each fold.',
         successCriteria: 'You can explain what information would leak if the step ran before splitting folds.',
+      },
+    ],
+  },
+  'data-leakage-deep-dive': {
+    quiz: [
+      {
+        id: 'duplicate-users',
+        prompt: 'Why can duplicate users create leakage?',
+        choices: [
+          'The model can learn user-specific patterns in train and see the same user in validation',
+          'Duplicate users always make the dataset smaller',
+          'Validation rows cannot have user ids',
+        ],
+        answerIndex: 0,
+        explanation: 'If rows from the same entity cross the split, validation no longer measures generalization to unseen entities.',
+      },
+      {
+        id: 'target-derived-feature',
+        prompt: 'Which feature is a target-leakage warning sign?',
+        choices: [
+          'A value created from information known only after the outcome',
+          'A feature scaled using training data only',
+          'A categorical feature observed before prediction time',
+        ],
+        answerIndex: 0,
+        explanation: 'Target leakage often enters through post-outcome fields, future labels, or aggregates that include the answer.',
+      },
+    ],
+    labs: [
+      {
+        id: 'leakage-mode-audit',
+        title: 'Audit one leakage mode',
+        prompt: 'Select each leakage mode and state the boundary being crossed and the safer split or pipeline rule.',
+        successCriteria: 'You can name the leaked information and the concrete prevention rule for at least three modes.',
       },
     ],
   },

@@ -69,6 +69,7 @@ const animationRegistry = {
   // Core ML
   'train-validation-test-split': lazy(() => import('./train-validation-test-split')),
   'cross-validation': lazy(() => import('./cross-validation')),
+  'data-leakage-deep-dive': lazy(() => import('./data-leakage-deep-dive')),
   'feature-scaling-preprocessing': lazy(() => import('./feature-scaling-preprocessing')),
   'overfitting': lazy(() => import('./overfitting')),
   'k-means': lazy(() => import('./k-means')),

@@ -42,6 +42,7 @@ const EQUATION_OVERRIDES = {
   'linear-regression': '\\hat{y}=X\\beta+\\epsilon',
   'train-validation-test-split': 'D=D_{train}\\cup D_{val}\\cup D_{test}',
   'cross-validation': '\\operatorname{CV}_k=\\frac{1}{k}\\sum_{i=1}^{k} score_i',
+  'data-leakage-deep-dive': 'D_{eval}\\cap Information(D_{train})=\\varnothing',
   'feature-scaling-preprocessing': 'z=\\frac{x-\\mu_{train}}{\\sigma_{train}}',
   overfitting: '\\mathcal{L}_{train}\\downarrow\\quad while\\quad \\mathcal{L}_{val}\\uparrow',
   'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
@@ -113,6 +114,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the fold count and leakage risk, then compare reported validation score with honest signal.',
     'Mistake to avoid: preprocessing before the fold split lets validation information leak into training.',
     'Check understanding by naming which unit, such as user or time, must stay grouped before random splitting.',
+  ),
+  'data-leakage-deep-dive': cardSet(
+    'Data leakage audits solve the problem of scores looking valid while hidden evaluation information shaped training.',
+    'Leakage is an information boundary failure: validation or future facts sneak into features, preprocessing, splits, or decisions.',
+    'The math is an independence promise: evaluation rows must not share learned information with the training process.',
+    'Manipulate leakage mode and strict-pipeline controls to see how duplicate users, target fields, time order, and test tuning inflate scores.',
+    'Mistake to avoid: random rows are not always independent when entities repeat, chronology matters, or features know the answer.',
+    'Check understanding by naming the leaked information and the split or pipeline rule that blocks it.',
   ),
   'feature-scaling-preprocessing': cardSet(
     'Feature scaling solves the problem of raw columns having incompatible units, ranges, and missing-value treatments.',

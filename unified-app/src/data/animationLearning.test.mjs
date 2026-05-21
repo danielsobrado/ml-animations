@@ -129,6 +129,7 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
   const activeCoreMlIds = [
     'train-validation-test-split',
     'cross-validation',
+    'data-leakage-deep-dive',
     'feature-scaling-preprocessing',
     'overfitting',
     'logistic-regression',
@@ -290,14 +291,39 @@ test('feature scaling and preprocessing is promoted into Core ML before distance
   assert.ok(coreMlTrack.animationIds.includes('feature-scaling-preprocessing'));
   assert.ok(!backlogIds.has('feature-scaling-preprocessing'));
   assert.ok(isAnimationAvailable('feature-scaling-preprocessing'));
-  assert.deepEqual(animation.prerequisites, ['cross-validation']);
+  assert.deepEqual(animation.prerequisites, ['data-leakage-deep-dive']);
   assert.match(animation.learningObjectives.join(' '), /standardization|min-max|robust|training data/i);
   assert.match(animation.commonMisconception, /leaks|validation|test/i);
 
   assert.ok(
-    coreMlTrack.animationIds.indexOf('cross-validation') <
+    coreMlTrack.animationIds.indexOf('data-leakage-deep-dive') <
       coreMlTrack.animationIds.indexOf('feature-scaling-preprocessing'),
-    'leakage-aware validation should precede preprocessing fit-scope decisions',
+    'leakage deep dive should precede preprocessing fit-scope decisions',
+  );
+});
+
+test('data leakage deep dive is promoted into Core ML before preprocessing', () => {
+  const animation = getAnimationById('data-leakage-deep-dive');
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'data leakage deep dive should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('data-leakage-deep-dive'));
+  assert.ok(isAnimationAvailable('data-leakage-deep-dive'));
+  assert.deepEqual(animation.prerequisites, ['cross-validation']);
+  assert.match(animation.learningObjectives.join(' '), /duplicate|target|time|test/i);
+  assert.match(animation.commonMisconception, /random split|deployment/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('cross-validation') <
+      coreMlTrack.animationIds.indexOf('data-leakage-deep-dive'),
+    'cross-validation should introduce folds before leakage mode audits',
+  );
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('data-leakage-deep-dive') <
+      coreMlTrack.animationIds.indexOf('feature-scaling-preprocessing'),
+    'leakage audits should precede train-only preprocessing rules',
   );
 });
 
