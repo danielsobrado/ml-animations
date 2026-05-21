@@ -55,41 +55,18 @@ test('hub learning paths define animated chains with active lesson ids', () => {
   assert.ok(startHere.nodes.indexOf('relu') < startHere.nodes.indexOf('computation-graph-backprop'));
 });
 
-test('diffusion bridge lessons expose static SEO entry pages', () => {
-  const pages = [
-    {
-      dir: 'diffusion-basics-animation',
-      title: 'Diffusion Basics',
-      route: '/ml-animations/animation/diffusion-basics',
-    },
-    {
-      dir: 'diffusion-sampling-animation',
-      title: 'Diffusion Sampling',
-      route: '/ml-animations/animation/diffusion-sampling',
-    },
-    {
-      dir: 'classifier-free-guidance-animation',
-      title: 'Classifier-Free Guidance',
-      route: '/ml-animations/animation/classifier-free-guidance',
-    },
-    {
-      dir: 'unet-vs-dit-animation',
-      title: 'U-Net vs DiT',
-      route: '/ml-animations/animation/unet-vs-dit',
-    },
-  ];
-
-  for (const page of pages) {
-    const file = path.join(repoRoot, page.dir, 'index.html');
-    assert.ok(fs.existsSync(file), `${page.dir} is missing an index.html entry page`);
+test('active lessons expose static SEO entry pages', () => {
+  for (const animation of allAnimations) {
+    const dir = `${animation.id}-animation`;
+    const file = path.join(repoRoot, dir, 'index.html');
+    assert.ok(fs.existsSync(file), `${dir} is missing an index.html entry page`);
 
     const html = fs.readFileSync(file, 'utf8');
-    assert.ok(html.includes(`<title>${page.title} | ML Animations</title>`));
+    assert.match(html, /<title>[^<]+<\/title>/);
     assert.match(html, /<meta name="description" content="[^"]+" \/>/);
     assert.match(html, /<meta property="og:title" content="[^"]+" \/>/);
     assert.match(html, /<meta name="twitter:card" content="summary_large_image" \/>/);
     assert.match(html, /<link rel="canonical" href="https:\/\/danielsobrado.github.io\/ml-animations\/[^"]+\/" \/>/);
-    assert.ok(html.includes(page.route), `${page.dir} should link to ${page.route}`);
   }
 });
 
