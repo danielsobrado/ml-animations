@@ -121,6 +121,7 @@ const animationRegistry = {
   // Diffusion Models (SD3)
   'diffusion-basics': lazy(() => import('./diffusion-basics')),
   'diffusion-sampling': lazy(() => import('./diffusion-sampling')),
+  'classifier-free-guidance': lazy(() => import('./classifier-free-guidance')),
   'sd3-overview': lazy(() => import('./sd3-overview')),
   'flow-matching': lazy(() => import('./flow-matching')),
   'diffusion-vae': lazy(() => import('./diffusion-vae')),

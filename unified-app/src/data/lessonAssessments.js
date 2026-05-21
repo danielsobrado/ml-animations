@@ -41,6 +41,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'rag-retrieval-evaluation',
   'diffusion-basics',
   'diffusion-sampling',
+  'classifier-free-guidance',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -1678,6 +1679,40 @@ export const lessonAssessments = {
         title: 'Compare sampler paths',
         prompt: 'Switch between DDPM, DDIM, and flow/ODE while changing step count and prediction quality.',
         successCriteria: 'You can describe how stochasticity, step count, and prediction quality change the path from noise to sample.',
+      },
+    ],
+  },
+  'classifier-free-guidance': {
+    quiz: [
+      {
+        id: 'cfg-combination',
+        prompt: 'What two predictions does classifier-free guidance combine?',
+        choices: [
+          'A prompt-conditioned prediction and an unconditional prediction',
+          'A train-set prediction and a test-set prediction',
+          'A classifier label and a retrieval score',
+        ],
+        answerIndex: 0,
+        explanation: 'CFG amplifies the direction from unconditional denoising toward prompt-conditioned denoising.',
+      },
+      {
+        id: 'scale-tradeoff',
+        prompt: 'What is the main tradeoff when increasing guidance scale too far?',
+        choices: [
+          'Prompt adherence can improve, but diversity and visual quality can suffer',
+          'The model stops using text conditioning entirely',
+          'The sampler must switch from images to tabular data',
+        ],
+        answerIndex: 0,
+        explanation: 'High scale can force prompt features harder, but it can also overshoot and create artifacts.',
+      },
+    ],
+    labs: [
+      {
+        id: 'guidance-scale-sweep',
+        title: 'Sweep guidance scale',
+        prompt: 'Move guidance scale from low to high and compare prompt match, diversity, and artifact risk.',
+        successCriteria: 'You can explain why a moderate scale can be better than the maximum scale.',
       },
     ],
   },

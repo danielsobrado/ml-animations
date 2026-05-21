@@ -74,6 +74,7 @@ export const HUB_LEARNING_PATHS = [
       'vae',
       'diffusion-basics',
       'diffusion-sampling',
+      'classifier-free-guidance',
       'diffusion-vae',
       'self-attention',
       'sd3-overview',

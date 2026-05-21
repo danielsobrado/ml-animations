@@ -383,6 +383,7 @@ test('vision path includes active diffusion component lessons after the latent b
   const diffusionComponentIds = [
     'diffusion-basics',
     'diffusion-sampling',
+    'classifier-free-guidance',
     'self-attention',
     'sd3-overview',
     'flow-matching',
@@ -399,7 +400,8 @@ test('vision path includes active diffusion component lessons after the latent b
 
   assert.ok(pathOrder.get('vae') < pathOrder.get('diffusion-basics'));
   assert.ok(pathOrder.get('diffusion-basics') < pathOrder.get('diffusion-sampling'));
-  assert.ok(pathOrder.get('diffusion-sampling') < pathOrder.get('diffusion-vae'));
+  assert.ok(pathOrder.get('diffusion-sampling') < pathOrder.get('classifier-free-guidance'));
+  assert.ok(pathOrder.get('classifier-free-guidance') < pathOrder.get('diffusion-vae'));
   assert.ok(pathOrder.get('diffusion-vae') < pathOrder.get('self-attention'));
   assert.ok(pathOrder.get('self-attention') < pathOrder.get('sd3-overview'));
   assert.ok(pathOrder.get('sd3-overview') < pathOrder.get('flow-matching'));
@@ -446,6 +448,26 @@ test('diffusion sampling compares DDPM, DDIM, and flow-style generation paths', 
     visionPath.nodes.indexOf('diffusion-basics') < visionPath.nodes.indexOf('diffusion-sampling') &&
       visionPath.nodes.indexOf('diffusion-sampling') < visionPath.nodes.indexOf('diffusion-vae'),
     'diffusion sampling should sit after basics and before diffusion VAE',
+  );
+});
+
+test('classifier-free guidance bridges sampling and prompt-conditioned diffusion', () => {
+  const animation = getAnimationById('classifier-free-guidance');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+  const visionPath = HUB_LEARNING_PATHS.find((path) => path.id === 'vision-path');
+
+  assert.ok(animation, 'classifier-free guidance lesson should be active');
+  assert.equal(animation.categoryId, 'diffusion-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('classifier-free-guidance'));
+  assert.ok(isAnimationAvailable('classifier-free-guidance'));
+  assert.deepEqual(animation.prerequisites, ['diffusion-sampling']);
+  assert.match(animation.learningObjectives.join(' '), /conditional|guidance|diversity|artifact/i);
+  assert.match(animation.commonMisconception, /classifier|conditional/i);
+  assert.ok(
+    visionPath.nodes.indexOf('diffusion-sampling') < visionPath.nodes.indexOf('classifier-free-guidance') &&
+      visionPath.nodes.indexOf('classifier-free-guidance') < visionPath.nodes.indexOf('diffusion-vae'),
+    'classifier-free guidance should sit after sampling and before diffusion VAE',
   );
 });
 

@@ -223,6 +223,7 @@ export const categories = [
     items: [
       { id: 'diffusion-basics', name: 'Diffusion Basics', icon: Sparkles, description: 'Add noise, predict noise, and denoise step by step' },
       { id: 'diffusion-sampling', name: 'Diffusion Sampling', icon: Workflow, description: 'Compare DDPM, DDIM, and flow-style sampling paths' },
+      { id: 'classifier-free-guidance', name: 'Classifier-Free Guidance', icon: Target, description: 'Steer prompt following with conditional and unconditional predictions' },
       { id: 'sd3-overview', name: 'SD3 Architecture Overview', icon: Cpu, description: 'Complete Stable Diffusion 3 pipeline' },
       { id: 'flow-matching', name: 'Flow Matching', icon: Workflow, description: 'Flow-based generative modeling' },
       { id: 'diffusion-vae', name: 'VAE for Diffusion', icon: Shuffle, description: 'Latent space encoding for images' },
@@ -355,6 +356,7 @@ export const curriculumTracks = [
       'vae',
       'diffusion-basics',
       'diffusion-sampling',
+      'classifier-free-guidance',
       'diffusion-vae',
       'sd3-overview',
       'flow-matching',
@@ -911,6 +913,17 @@ const CURRICULUM_OVERRIDES = {
       'Describe why flow and ODE samplers view generation as following a continuous path',
     ],
     commonMisconception: 'A sampler is not a new image model; it is a procedure for using the trained denoiser to move from noise toward data.',
+  },
+  'classifier-free-guidance': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['diffusion-sampling'],
+    learningObjectives: [
+      'Explain how conditional and unconditional noise predictions combine',
+      'Use guidance scale to trade prompt adherence against sample diversity',
+      'Identify why excessive guidance can create artifacts or over-saturated samples',
+    ],
+    commonMisconception: 'Classifier-free guidance does not require an external classifier; it steers the denoiser using conditional and unconditional predictions.',
   },
   rag: {
     difficulty: 'advanced',

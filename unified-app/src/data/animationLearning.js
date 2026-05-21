@@ -67,6 +67,7 @@ const EQUATION_OVERRIDES = {
   'rag-failure-modes': 'grounded\\iff supported\\;\\land\\;\\neg stale\\;\\land\\;\\neg conflict',
   'diffusion-basics': 'x_t=\\sqrt{1-t}\\,x_0+\\sqrt{t}\\,\\epsilon,\\quad \\hat{x}_0\\leftarrow x_t-\\hat{\\epsilon}',
   'diffusion-sampling': 'x_T\\sim\\mathcal{N}(0,I),\\quad x_{t-1}\\leftarrow S_\\phi(x_t,t,\\hat{\\epsilon}_\\theta)',
+  'classifier-free-guidance': '\\hat{\\epsilon}=\\epsilon_{uncond}+s(\\epsilon_{cond}-\\epsilon_{uncond})',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
@@ -429,6 +430,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate sampler type, step count, and prediction quality to see speed, randomness, and clarity trade off.',
     'Mistake to avoid: DDPM, DDIM, and flow-style paths are sampler choices, not three unrelated image models.',
     'Check understanding by explaining why fewer steps can be faster yet more sensitive to denoising errors.',
+  ),
+  'classifier-free-guidance': cardSet(
+    'Classifier-free guidance solves prompt steering without training or running a separate image classifier.',
+    'The denoiser predicts noise once with the prompt and once without it, then amplifies the difference between those predictions.',
+    'The math is eps_uncond plus guidance scale times the conditional-minus-unconditional direction.',
+    'Manipulate guidance scale and both predictions to see prompt match rise while diversity can fall.',
+    'Mistake to avoid: higher guidance is not always better because extreme scale can overshoot and create artifacts.',
+    'Check understanding by predicting what happens when conditional and unconditional predictions are nearly identical.',
   ),
   'mdp-formalism': cardSet(
     'MDP formalism solves the problem of describing sequential decisions with one consistent vocabulary.',
