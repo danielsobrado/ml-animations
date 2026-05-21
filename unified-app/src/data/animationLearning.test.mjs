@@ -3,7 +3,14 @@ import assert from 'node:assert/strict';
 
 import { allAnimations, curriculumBacklog, curriculumTracks, getAnimationById } from './animations.js';
 import {
+  PRIORITY_ASSESSMENT_LESSON_IDS,
+  getAssessmentStats,
+  lessonAssessments,
+} from './lessonAssessments.js';
+import { isAssessmentComplete } from './learningProgress.js';
+import {
   CARD_TYPES,
+  LEARNING_CARD_OVERRIDES,
   MATH_CONTROLS,
   createLearningModel,
 } from './animationLearning.js';
@@ -168,7 +175,7 @@ test('computation graph and backpropagation is an active neural-network bridge l
   assert.ok(neuralTrack.animationIds.includes('computation-graph-backprop'));
   assert.ok(!backlogIds.has('computation-graph-backprop'));
   assert.ok(isAnimationAvailable('computation-graph-backprop'));
-  assert.deepEqual(animation.prerequisites, ['gradient-descent', 'cross-entropy', 'relu']);
+  assert.deepEqual(animation.prerequisites, ['linear-regression', 'gradient-descent', 'relu']);
   assert.ok(animation.learningObjectives.length >= 4);
   assert.match(animation.commonMisconception, /chain rule|local derivative/i);
 
@@ -181,6 +188,63 @@ test('computation graph and backpropagation is an active neural-network bridge l
     neuralTrack.animationIds.indexOf('computation-graph-backprop') <
       neuralTrack.animationIds.indexOf('gradient-problems'),
     'backprop should unlock gradient stability topics',
+  );
+});
+
+test('logistic regression metadata matches the sigmoid binary-classification lesson', () => {
+  const animation = getAnimationById('logistic-regression');
+
+  assert.deepEqual(animation.prerequisites, ['linear-regression']);
+  assert.match(animation.learningObjectives.join(' '), /sigmoid/i);
+});
+
+test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
+  const animationIds = new Set(allAnimations.map((animation) => animation.id));
+  const stats = getAssessmentStats(lessonAssessments);
+
+  assert.equal(stats.totalQuizQuestions, PRIORITY_ASSESSMENT_LESSON_IDS.length * 2);
+  assert.equal(stats.totalLabs, PRIORITY_ASSESSMENT_LESSON_IDS.length);
+
+  for (const lessonId of PRIORITY_ASSESSMENT_LESSON_IDS) {
+    const assessment = lessonAssessments[lessonId];
+
+    assert.ok(animationIds.has(lessonId), `${lessonId} should be an active lesson`);
+    assert.equal(assessment.quiz.length, 2, `${lessonId} needs two seeded quiz questions`);
+    assert.equal(assessment.labs.length, 1, `${lessonId} needs one seeded lab`);
+
+    for (const question of assessment.quiz) {
+      assert.ok(question.id);
+      assert.ok(question.prompt);
+      assert.ok(question.choices.length >= 2);
+      assert.ok(question.answerIndex >= 0);
+      assert.ok(question.answerIndex < question.choices.length);
+      assert.ok(question.explanation);
+    }
+
+    for (const lab of assessment.labs) {
+      assert.ok(lab.id);
+      assert.ok(lab.title);
+      assert.ok(lab.prompt);
+      assert.ok(lab.successCriteria);
+    }
+  }
+});
+
+test('assessment completion requires all seeded quiz and lab items', () => {
+  const assessment = lessonAssessments['logistic-regression'];
+
+  assert.equal(isAssessmentComplete(assessment, {}), false);
+  assert.equal(
+    isAssessmentComplete(assessment, {
+      quiz: {
+        'sigmoid-role': { correct: true },
+        'threshold-tradeoff': { correct: true },
+      },
+      labs: {
+        'threshold-flips': true,
+      },
+    }),
+    true,
   );
 });
 
@@ -214,4 +278,32 @@ test('softmax adds formal theorem and marginalia learning card flavours', () => 
   assert.match(marginalia.body, /overflow/i);
   assert.ok(model.glossary.some((term) => term.id === 'logits'));
   assert.ok(model.glossary.some((term) => term.id === 'temperature'));
+});
+
+test('priority lessons use lesson-specific learning card overrides', () => {
+  const genericFragments = [
+    'change one value, token, state, or vector',
+    'Read the stage as a flow',
+    'headline equation compresses',
+  ];
+
+  for (const lessonId of PRIORITY_ASSESSMENT_LESSON_IDS) {
+    const overrides = LEARNING_CARD_OVERRIDES[lessonId];
+    const model = createLearningModel(getAnimationById(lessonId), allAnimations);
+
+    assert.ok(overrides, `${lessonId} needs card overrides`);
+
+    for (const cardType of CARD_TYPES) {
+      const override = overrides[cardType.id];
+      const rendered = model.learningCards.find((card) => card.type === cardType.id);
+
+      assert.ok(override?.body, `${lessonId} needs ${cardType.id} override copy`);
+      assert.equal(rendered.body, override.body);
+      assert.ok(override.body.length > 40, `${lessonId} ${cardType.id} copy is too thin`);
+
+      for (const fragment of genericFragments) {
+        assert.ok(!override.body.includes(fragment), `${lessonId} still uses generic ${cardType.id} copy`);
+      }
+    }
+  }
 });

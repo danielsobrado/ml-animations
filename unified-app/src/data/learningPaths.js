@@ -9,6 +9,8 @@ export const HUB_LEARNING_PATHS = [
       'train-validation-test-split',
       'logistic-regression',
       'classification-metrics',
+      'gradient-descent',
+      'relu',
       'computation-graph-backprop',
     ],
   },

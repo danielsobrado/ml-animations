@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { BarChart3, CheckCircle2, GitBranch, SlidersHorizontal } from 'lucide-react';
 import { coreMlLessons } from './lessons';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 const sampleScores = [
   { score: 0.94, actual: 1 },
@@ -338,17 +339,13 @@ export default function CoreMlLesson({ lessonId }) {
         )}
 
         {activeTab === 'check' && (
-          <div className="grid gap-5 lg:grid-cols-2">
-            <div className="rounded-lg border border-slate-200 bg-white p-5">
-              <div className="mb-3 text-sm font-bold uppercase text-slate-500">Check yourself</div>
-              <p className="text-xl font-semibold leading-8 text-slate-900">{lesson.check}</p>
-            </div>
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-              <div className="mb-3 text-sm font-bold uppercase text-emerald-800">Answer</div>
-              <p className="text-lg leading-8 text-emerald-950">{lesson.answer}</p>
-              <p className="mt-4 text-sm leading-6 text-emerald-900">{mechanismCopy}</p>
-            </div>
-          </div>
+          <AssessmentPanel
+            lessonId={lesson.id}
+            title="Check yourself"
+            legacyQuestion={lesson.check}
+            legacyAnswer={lesson.answer}
+            legacyExplanation={mechanismCopy}
+          />
         )}
       </section>
     </div>

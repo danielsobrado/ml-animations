@@ -44,6 +44,10 @@ test('hub learning paths define animated chains with active lesson ids', () => {
       assert.ok(animationIds.has(nodeId), `${path.id} references unknown ${nodeId}`);
     }
   }
+
+  const startHere = HUB_LEARNING_PATHS.find((path) => path.id === 'start-here');
+  assert.ok(startHere.nodes.indexOf('gradient-descent') < startHere.nodes.indexOf('computation-graph-backprop'));
+  assert.ok(startHere.nodes.indexOf('relu') < startHere.nodes.indexOf('computation-graph-backprop'));
 });
 
 test('softmax model supports temperature, logit nudging, and sharpness metrics', () => {

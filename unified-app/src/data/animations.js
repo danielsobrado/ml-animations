@@ -406,7 +406,7 @@ const CURRICULUM_OVERRIDES = {
   'logistic-regression': {
     difficulty: 'beginner',
     estimatedMinutes: 18,
-    prerequisites: ['linear-regression', 'softmax'],
+    prerequisites: ['linear-regression'],
     learningObjectives: [
       'Map a linear score through the sigmoid function to get a probability',
       'Move a classification threshold and predict how labels change',
@@ -521,7 +521,7 @@ const CURRICULUM_OVERRIDES = {
   'computation-graph-backprop': {
     difficulty: 'intermediate',
     estimatedMinutes: 22,
-    prerequisites: ['gradient-descent', 'cross-entropy', 'relu'],
+    prerequisites: ['linear-regression', 'gradient-descent', 'relu'],
     learningObjectives: [
       'Trace forward values through a computation graph',
       'Compute local derivatives for each graph edge',

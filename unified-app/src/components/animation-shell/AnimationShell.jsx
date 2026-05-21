@@ -4,6 +4,8 @@ import { BookOpen, ChevronRight, CircleDot, FlaskConical } from 'lucide-react';
 import Eq from '../../_design-system/Eq';
 import { allAnimations } from '../../data/animations';
 import { createLearningModel } from '../../data/animationLearning';
+import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
+import AssessmentPanel from './AssessmentPanel';
 
 function GlossaryTerm({ entry }) {
   const [open, setOpen] = useState(false);
@@ -180,6 +182,8 @@ function Glossary({ terms }) {
 export default function AnimationShell({ animation, children }) {
   const [resetNonce, setResetNonce] = useState(0);
   const model = useMemo(() => createLearningModel(animation, allAnimations), [animation]);
+  const assessment = useMemo(() => getLessonAssessment(animation.id), [animation.id]);
+  const showShellAssessment = hasAssessmentContent(assessment) && animation.categoryId !== 'core-ml';
 
   const resetStage = () => {
     setResetNonce((value) => value + 1);
@@ -220,6 +224,10 @@ export default function AnimationShell({ animation, children }) {
 
         <LearningCards cards={model.learningCards} />
       </div>
+
+      {showShellAssessment && (
+        <AssessmentPanel lessonId={animation.id} title={`${animation.name} check`} />
+      )}
 
       <Glossary terms={model.glossary} />
     </div>

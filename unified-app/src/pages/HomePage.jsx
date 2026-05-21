@@ -3,19 +3,34 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { allAnimations, categories, curriculumBacklog, curriculumTracks } from '../data/animations';
 import { HUB_LEARNING_PATHS } from '../data/learningPaths';
+import { getAssessmentStats, lessonAssessments } from '../data/lessonAssessments';
+import { LEARNING_PROGRESS_EVENT, readCompletedLessons } from '../data/learningProgress';
 
-const totalLabs = 41;
-const totalQuizQuestions = 161;
+const { totalLabs, totalQuizQuestions } = getAssessmentStats(lessonAssessments);
 
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
   const [activePathId, setActivePathId] = React.useState(HUB_LEARNING_PATHS[0].id);
+  const [completedLessons, setCompletedLessons] = React.useState(() => readCompletedLessons());
   const animationById = new Map(allAnimations.map((animation) => [animation.id, animation]));
   const activePath = HUB_LEARNING_PATHS.find((path) => path.id === activePathId) || HUB_LEARNING_PATHS[0];
+  const nextRecommendedId = activePath.nodes.find((animationId) => !completedLessons.has(animationId));
+  const nextRecommended = nextRecommendedId ? animationById.get(nextRecommendedId) : null;
   const backlogByTrack = curriculumBacklog.reduce((acc, topic) => {
     acc[topic.trackId] = [...(acc[topic.trackId] || []), topic];
     return acc;
   }, {});
+
+  React.useEffect(() => {
+    const syncCompletedLessons = () => setCompletedLessons(readCompletedLessons());
+
+    window.addEventListener(LEARNING_PROGRESS_EVENT, syncCompletedLessons);
+    window.addEventListener('storage', syncCompletedLessons);
+    return () => {
+      window.removeEventListener(LEARNING_PROGRESS_EVENT, syncCompletedLessons);
+      window.removeEventListener('storage', syncCompletedLessons);
+    };
+  }, []);
 
   return (
     <div className="ua-home">
@@ -78,17 +93,32 @@ export default function HomePage() {
           {activePath.nodes.map((animationId, index) => {
             const animation = animationById.get(animationId);
             if (!animation) return null;
+            const isCompleted = completedLessons.has(animation.id);
+            const isRecommended = animation.id === nextRecommendedId;
 
             return (
-              <Link className="ua-path-node" to={`/animation/${animation.id}`} key={animation.id}>
+              <Link
+                className={`ua-path-node ${isCompleted ? 'completed' : ''} ${isRecommended ? 'recommended' : ''}`}
+                to={`/animation/${animation.id}`}
+                key={animation.id}
+              >
                 <span>{index + 1}</span>
                 <strong>{animation.name}</strong>
-                <small>{animation.categoryName}</small>
+                <small>{isCompleted ? 'Completed' : isRecommended ? 'Next recommended' : animation.categoryName}</small>
               </Link>
             );
           })}
         </div>
         <p className="ua-path-caption">{activePath.description}</p>
+        <p className="ua-next-recommendation">
+          {nextRecommended ? (
+            <>
+              Next recommended: <Link to={`/animation/${nextRecommended.id}`}>{nextRecommended.name}</Link>
+            </>
+          ) : (
+            'Path complete. Pick another path or revisit a lesson for practice.'
+          )}
+        </p>
       </section>
 
       <section className="ua-tracks" aria-labelledby="guided-tracks-title">

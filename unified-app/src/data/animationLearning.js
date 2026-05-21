@@ -57,6 +57,140 @@ const EQUATION_OVERRIDES = {
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
 };
 
+function cardSet(def, intuition, equation, example, why, tryIt) {
+  return {
+    def: { body: def },
+    int: { body: intuition },
+    eqn: { body: equation },
+    ex: { body: example },
+    why: { body: why },
+    do: { body: tryIt },
+  };
+}
+
+export const LEARNING_CARD_OVERRIDES = {
+  'matrix-multiplication': cardSet(
+    'Matrix multiplication solves the problem of composing many weighted sums into one reusable operation.',
+    'Read each output cell as one row asking one column how strongly they line up.',
+    'The math is a row-column dot product: multiply aligned entries, then add the products.',
+    'Manipulate one entry in A or B and predict exactly which output cells can change.',
+    'Mistake to avoid: this is not elementwise multiplication; order and shape decide what the product means.',
+    'Check understanding by computing one highlighted cell before revealing the animation result.',
+  ),
+  'linear-regression': cardSet(
+    'Linear regression solves the problem of fitting a simple numeric trend from features to a continuous target.',
+    'The line is a compromise: it moves to reduce all residuals, not to pass through every point.',
+    'The math compares predictions with targets through residuals, then chooses parameters that reduce squared error.',
+    'Manipulate slope and intercept, then watch which residuals shrink and which grow.',
+    'Mistake to avoid: a lower training error alone does not prove the line will generalize.',
+    'Check understanding by predicting whether a slope change raises or lowers total residual error.',
+  ),
+  'train-validation-test-split': cardSet(
+    'Data splitting solves the problem of measuring generalization without letting evaluation data shape the model.',
+    'Training is practice, validation is coaching, and the test set is the final exam.',
+    'The math separates D into train, validation, and test slices with different jobs.',
+    'Manipulate validation and test percentages and watch how much data remains for fitting.',
+    'Mistake to avoid: repeated test-set tuning quietly turns the test set into validation data.',
+    'Check understanding by identifying which split should guide threshold or hyperparameter choices.',
+  ),
+  'logistic-regression': cardSet(
+    'Logistic regression solves binary classification by turning a linear score into a class probability.',
+    'A straight boundary creates a logit; sigmoid bends that score onto a 0-to-1 scale.',
+    'The math is p = sigmoid(w x + b), followed by a decision threshold.',
+    'Manipulate weight, bias, or threshold and predict which points flip labels.',
+    'Mistake to avoid: a sigmoid output is not automatically well calibrated just because it is between 0 and 1.',
+    'Check understanding by explaining what changes when the threshold moves from 0.5 to 0.7.',
+  ),
+  'classification-metrics': cardSet(
+    'Classification metrics solve the problem of describing which mistakes a classifier is making.',
+    'The confusion matrix is an accounting table for positive and negative decisions.',
+    'The math builds precision, recall, F1, and accuracy from TP, FP, FN, and TN counts.',
+    'Manipulate the threshold and predict which count changes before reading the metrics.',
+    'Mistake to avoid: high accuracy can hide poor recall when positives are rare.',
+    'Check understanding by choosing a metric for a case where false negatives are expensive.',
+  ),
+  overfitting: cardSet(
+    'Overfitting explains why a model can look better on training data while becoming worse on new data.',
+    'The model starts learning the pattern, then begins chasing quirks of the sample.',
+    'The math shows a widening gap: training error keeps falling while validation error rises.',
+    'Manipulate model complexity and find the point where validation error is lowest.',
+    'Mistake to avoid: the most flexible model is not automatically the best model.',
+    'Check understanding by naming the first visual sign that memorization has started.',
+  ),
+  regularization: cardSet(
+    'Regularization solves the problem of models spending too much complexity on weak evidence.',
+    'It is a budget: a parameter can be large only if it earns enough predictive value.',
+    'The math adds a penalty term to the data loss, controlled by lambda.',
+    'Manipulate lambda and watch coefficients shrink while total loss changes.',
+    'Mistake to avoid: stronger regularization is not always better; too much penalty underfits.',
+    'Check understanding by explaining why validation data should choose lambda.',
+  ),
+  'gradient-descent': cardSet(
+    'Gradient descent solves the problem of improving parameters when the loss surface gives only local slope information.',
+    'Each step feels the uphill direction and walks a scaled distance downhill.',
+    'The math updates parameters with theta_next = theta - learning_rate * gradient.',
+    'Manipulate the learning rate and compare crawling, converging, and overshooting traces.',
+    'Mistake to avoid: the gradient is local, so one step does not guarantee the global minimum.',
+    'Check understanding by predicting the next step direction from the slope sign.',
+  ),
+  relu: cardSet(
+    'ReLU solves the activation problem by giving networks a simple nonlinearity that keeps positive signal easy to pass.',
+    'Positive inputs go through unchanged; negative inputs are shut off.',
+    'The math is f(x)=max(0,x), with slope 1 on the active side and 0 on the blocked side.',
+    'Manipulate the input across zero and watch both output and local slope switch.',
+    'Mistake to avoid: a blocked ReLU has zero local gradient for that example.',
+    'Check understanding by identifying whether a negative pre-activation can send gradient backward.',
+  ),
+  'computation-graph-backprop': cardSet(
+    'Backpropagation solves the problem of assigning blame to each parameter in a nested computation.',
+    'The forward graph stores local operations; the backward pass reuses them in reverse.',
+    'The math is chain rule multiplication of upstream gradients and local derivatives.',
+    'Manipulate x, w, b, target, or learning rate and predict the next loss before updating.',
+    'Mistake to avoid: backprop is not a separate learning rule; it is the chain rule on a graph.',
+    'Check understanding by explaining why a negative ReLU pre-activation blocks the weight gradient.',
+  ),
+  tokenization: cardSet(
+    'Tokenization solves the problem of turning raw text into units a model can index and embed.',
+    'The tokenizer decides what the model sees: characters, words, or reusable subword pieces.',
+    'The math is mostly discrete mapping from text spans to token ids before vectors enter the model.',
+    'Manipulate the input phrase and compare how character, word, BPE, or WordPiece splits change length.',
+    'Mistake to avoid: tokens are not the same as words, especially for rare words and punctuation.',
+    'Check understanding by predicting which part of a rare word becomes a shared subword.',
+  ),
+  embeddings: cardSet(
+    'Embeddings solve the problem of representing discrete items as vectors that can be compared and transformed.',
+    'Nearby vectors often share learned behavior, but the geometry comes from data and objectives.',
+    'The math stores each item as a dense vector in R^d and compares vectors with distance or similarity.',
+    'Manipulate one vector or query and observe which neighbors become closest.',
+    'Mistake to avoid: embedding distance is learned correlation, not guaranteed semantic truth.',
+    'Check understanding by explaining why two similar words can still differ along one direction.',
+  ),
+  'attention-mechanism': cardSet(
+    'Attention solves the problem of selecting useful context instead of compressing everything equally.',
+    'A query asks questions of keys; the answers become weights over values.',
+    'The math scores query-key matches, applies softmax, then forms a weighted sum of values.',
+    'Manipulate a query or key and predict which value receives the largest weight.',
+    'Mistake to avoid: attention weights are contextual mixtures, not permanent word importance scores.',
+    'Check understanding by tracing one high score through softmax into the output vector.',
+  ),
+  'self-attention': cardSet(
+    'Self-attention solves the problem of letting every token build context from the same sequence.',
+    'Each token creates its own query, then mixes value information from other positions.',
+    'The math uses softmax(QK^T / sqrt(d_k))V so dot-product scale does not overwhelm softmax.',
+    'Manipulate one token vector and inspect which row of attention weights changes.',
+    'Mistake to avoid: self-attention recomputes mixtures for each sequence, not a fixed lookup table.',
+    'Check understanding by explaining one row of weights and the context vector it creates.',
+  ),
+  transformer: cardSet(
+    'A transformer solves sequence modeling by stacking attention, feed-forward transforms, residual paths, and normalization.',
+    'Attention moves information across positions; feed-forward layers transform each position; residuals preserve the stream.',
+    'The math alternates token mixing and per-token nonlinear transforms inside repeated blocks.',
+    'Manipulate or step through a token path and watch what attention changes versus what the MLP changes.',
+    'Mistake to avoid: a transformer is not only attention; residual, normalization, and feed-forward layers are essential.',
+    'Check understanding by naming what information is mixed across tokens and what is processed per token.',
+  ),
+};
+
 function slugify(value) {
   return String(value)
     .toLowerCase()
@@ -238,7 +372,13 @@ function makeCards(animation, glossary, equation) {
     );
   }
 
-  return cards;
+  const overrides = LEARNING_CARD_OVERRIDES[animation.id];
+  if (!overrides) return cards;
+
+  return cards.map((card) => ({
+    ...card,
+    ...(overrides[card.type] || {}),
+  }));
 }
 
 export function createLearningModel(animation, allAnimations) {
