@@ -271,6 +271,14 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
     'regularization should come after bias-variance framing',
   );
   assert.ok(
+    pathOrder.get('regularization') < pathOrder.get('knn-naive-bayes-svm'),
+    'classical classifiers should come after regularization in start-here',
+  );
+  assert.ok(
+    pathOrder.get('knn-naive-bayes-svm') < pathOrder.get('tree-ensembles'),
+    'tree ensembles should follow knn-naive-bayes-svm in start-here',
+  );
+  assert.ok(
     pathOrder.get('relu') < pathOrder.get('computation-graph-backprop'),
     'ReLU should come before computation graph backprop',
   );
@@ -285,6 +293,8 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
   assert.ok(startPath.nodes.includes('overfitting'), 'start-here should include overfitting');
   assert.ok(startPath.nodes.includes('bias-variance-tradeoff'), 'start-here should include bias-variance tradeoff');
   assert.ok(startPath.nodes.includes('regularization'), 'start-here should include regularization');
+  assert.ok(startPath.nodes.includes('knn-naive-bayes-svm'), 'start-here should include classical classifiers');
+  assert.ok(startPath.nodes.includes('tree-ensembles'), 'start-here should include tree ensembles');
 });
 
 test('LLM path includes modern inference sequencing', () => {
