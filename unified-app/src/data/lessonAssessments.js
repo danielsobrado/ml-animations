@@ -10,6 +10,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'roc-pr-curves',
   'overfitting',
   'regularization',
+  'tree-ensembles',
   'gradient-descent',
   'relu',
   'computation-graph-backprop',
@@ -398,6 +399,40 @@ export const lessonAssessments = {
         title: 'Sweep lambda',
         prompt: 'Increase the penalty and watch which weights shrink fastest.',
         successCriteria: 'You can describe the tradeoff between data loss, penalty, and total loss.',
+      },
+    ],
+  },
+  'tree-ensembles': {
+    quiz: [
+      {
+        id: 'forest-variance',
+        prompt: 'Why does a random forest average many trees?',
+        choices: [
+          'To reduce variance from any one unstable tree',
+          'To make every tree deeper than before',
+          'To remove the need for validation data',
+        ],
+        answerIndex: 0,
+        explanation: 'Bagging and feature randomness make trees differ, and averaging their votes reduces variance.',
+      },
+      {
+        id: 'boosting-sequence',
+        prompt: 'What does gradient boosting add at each round?',
+        choices: [
+          'A weak tree that corrects remaining errors',
+          'A duplicate of the first tree',
+          'A random train/test split',
+        ],
+        answerIndex: 0,
+        explanation: 'Boosting is sequential: each new weak learner targets the residual signal left by the current ensemble.',
+      },
+    ],
+    labs: [
+      {
+        id: 'depth-vs-ensemble',
+        title: 'Compare depth and ensemble size',
+        prompt: 'Change tree depth, forest tree count, and boosting rounds, then identify which control most risks memorizing quirks.',
+        successCriteria: 'You can explain the difference between deeper single trees, forest averaging, and boosting rounds.',
       },
     ],
   },

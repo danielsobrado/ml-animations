@@ -268,6 +268,28 @@ test('ROC and precision-recall curves are promoted into Core ML evaluation', () 
   );
 });
 
+test('tree ensembles are promoted into Core ML as a guided model-family lesson', () => {
+  const animation = getAnimationById('tree-ensembles');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'tree ensembles lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('tree-ensembles'));
+  assert.ok(!backlogIds.has('tree-ensembles'));
+  assert.ok(isAnimationAvailable('tree-ensembles'));
+  assert.deepEqual(animation.prerequisites, ['overfitting', 'classification-metrics']);
+  assert.match(animation.learningObjectives.join(' '), /decision tree|random forests|gradient boosting/i);
+  assert.match(animation.commonMisconception, /deeper|overfit|variance/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('regularization') <
+      coreMlTrack.animationIds.indexOf('tree-ensembles'),
+    'overfitting and regularization should precede ensemble capacity tradeoffs',
+  );
+});
+
 test('transformer token generation is promoted into the NLP transformer path', () => {
   const animation = getAnimationById('transformer-token-generation');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));

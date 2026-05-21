@@ -147,6 +147,7 @@ export const categories = [
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
       { id: 'roc-pr-curves', name: 'ROC / Precision-Recall Curves', icon: BarChart3, description: 'Threshold sweeps, ROC tradeoffs, and PR curves for rare positives' },
       { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
+      { id: 'tree-ensembles', name: 'Tree Ensembles', icon: GitBranch, description: 'Decision trees, random forests, and gradient boosting' },
     ],
   },
   {
@@ -247,6 +248,7 @@ export const curriculumTracks = [
       'roc-pr-curves',
       'overfitting',
       'regularization',
+      'tree-ensembles',
       'cross-entropy',
       'softmax',
       'gradient-descent',
@@ -339,7 +341,6 @@ export const curriculumTracks = [
 
 export const curriculumBacklog = [
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
-  { id: 'tree-ensembles', title: 'Decision Trees, Random Forests, and Gradient Boosting', trackId: 'core-ml' },
   { id: 'rag-retrieval-evaluation', title: 'Chunking, Reranking, and Retrieval Evaluation', trackId: 'generative-ai' },
 ];
 
@@ -486,6 +487,17 @@ const CURRICULUM_OVERRIDES = {
       'Use validation performance to tune the regularization strength',
     ],
     commonMisconception: 'Regularization is not a magic accuracy boost; too much penalty can underfit by making the model too simple.',
+  },
+  'tree-ensembles': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['overfitting', 'classification-metrics'],
+    learningObjectives: [
+      'Trace how a decision tree routes examples through threshold splits',
+      'Explain why random forests reduce variance by averaging many varied trees',
+      'Explain how gradient boosting adds weak trees to correct remaining errors',
+    ],
+    commonMisconception: 'More trees are not the same as deeper trees: forests average variance, while overly deep individual trees can still overfit.',
   },
   tokenization: {
     difficulty: 'beginner',

@@ -72,6 +72,7 @@ const animationRegistry = {
   'classification-metrics': lazy(() => import('./classification-metrics')),
   'roc-pr-curves': lazy(() => import('./roc-pr-curves')),
   'regularization': lazy(() => import('./regularization')),
+  'tree-ensembles': lazy(() => import('./tree-ensembles')),
   'computation-graph-backprop': lazy(() => import('./computation-graph-backprop')),
 
   // Probability & Statistics

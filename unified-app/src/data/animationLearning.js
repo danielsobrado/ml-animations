@@ -47,6 +47,7 @@ const EQUATION_OVERRIDES = {
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
   'roc-pr-curves': 'ROC=(FPR,TPR)\\quad PR=(Recall,Precision)',
   regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
+  'tree-ensembles': '\\hat{y}=\\operatorname{aggregate}(T_1(x),\\ldots,T_M(x))',
   'computation-graph-backprop': '\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}',
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
@@ -145,6 +146,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate lambda and watch coefficients shrink while total loss changes.',
     'Mistake to avoid: stronger regularization is not always better; too much penalty underfits.',
     'Check understanding by explaining why validation data should choose lambda.',
+  ),
+  'tree-ensembles': cardSet(
+    'Tree ensembles solve the problem of making threshold-split models stronger and more stable than one tree.',
+    'A single tree asks yes/no feature questions; forests vote across many trees; boosting fixes errors in sequence.',
+    'The math aggregates tree predictions, either by averaging votes or by summing scaled weak-tree corrections.',
+    'Manipulate depth, forest size, boosting rounds, and learning rate to compare variance and correction behavior.',
+    'Mistake to avoid: more ensemble members do not mean the same thing as a deeper individual tree.',
+    'Check understanding by explaining why a forest can generalize better even when each tree is noisy.',
   ),
   'gradient-descent': cardSet(
     'Gradient descent solves the problem of improving parameters when the loss surface gives only local slope information.',
