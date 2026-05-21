@@ -67,6 +67,7 @@ const EQUATION_OVERRIDES = {
   'rag-failure-modes': 'grounded\\iff supported\\;\\land\\;\\neg stale\\;\\land\\;\\neg conflict',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
+  initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
@@ -232,6 +233,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate update rule, learning rate, momentum, batch size, and steps to compare path smoothness and final loss.',
     'Mistake to avoid: Adam is not a substitute for tuning; a bad learning rate or noisy batch can still produce unstable training.',
     'Check understanding by predicting how a larger mini-batch changes the visible path before moving the slider.',
+  ),
+  initialization: cardSet(
+    'Initialization solves the problem of starting a deep network with signal scales that can survive many layers.',
+    'Xavier and He choose random weight variance from fan-in and fan-out instead of using arbitrary small numbers.',
+    'The math sets standard deviation so activation and gradient variance stay near a useful range.',
+    'Manipulate fan-in, fan-out, activation, and depth to see when signal vanishes, stays stable, or explodes.',
+    'Mistake to avoid: random initialization is not automatically safe; the variance matters as much as randomness.',
+    'Check understanding by deciding why ReLU networks usually prefer He initialization over Xavier.',
   ),
   relu: cardSet(
     'ReLU solves the activation problem by giving networks a simple nonlinearity that keeps positive signal easy to pass.',

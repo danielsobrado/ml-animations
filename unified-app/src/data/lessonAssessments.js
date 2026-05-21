@@ -17,6 +17,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'knn-naive-bayes-svm',
   'tree-ensembles',
   'gradient-descent',
+  'initialization',
   'optimizers',
   'relu',
   'computation-graph-backprop',
@@ -687,6 +688,40 @@ export const lessonAssessments = {
         title: 'Compare update rules',
         prompt: 'Run SGD, momentum, and Adam with the same learning rate and batch size, then identify which path zigzags least.',
         successCriteria: 'You can connect the visible path to velocity, adaptive scaling, or mini-batch noise.',
+      },
+    ],
+  },
+  initialization: {
+    quiz: [
+      {
+        id: 'he-for-relu',
+        prompt: 'Why does He initialization usually fit ReLU networks better than Xavier?',
+        choices: [
+          'It compensates for ReLU zeroing many activations',
+          'It removes the need for backpropagation',
+          'It makes every weight start with the same value',
+        ],
+        answerIndex: 0,
+        explanation: 'He initialization uses fan-in scaling that accounts for ReLU discarding roughly half the signal.',
+      },
+      {
+        id: 'bad-variance',
+        prompt: 'What can happen when initial weight variance is far too large?',
+        choices: [
+          'Activations and gradients can explode through depth',
+          'The model becomes perfectly regularized',
+          'The optimizer no longer needs a learning rate',
+        ],
+        answerIndex: 0,
+        explanation: 'Large initial weights can amplify signals layer after layer, making training unstable before it begins.',
+      },
+    ],
+    labs: [
+      {
+        id: 'signal-scale',
+        title: 'Find a stable signal scale',
+        prompt: 'Switch between tiny, Xavier, He, and huge initialization while changing activation and depth.',
+        successCriteria: 'You can explain which setup keeps layer variance stable and why another one vanishes or explodes.',
       },
     ],
   },

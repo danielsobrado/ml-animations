@@ -103,6 +103,7 @@ export const categories = [
       { id: 'conv-relu', name: 'Conv + ReLU', icon: Box, description: 'Convolution with activation' },
       { id: 'neural-network', name: 'Neural Network Overview', icon: Network, description: 'How artificial neural networks function' },
       { id: 'computation-graph-backprop', name: 'Computation Graph & Backpropagation', icon: Workflow, description: 'Forward values, local derivatives, reverse accumulation, and updates' },
+      { id: 'initialization', name: 'Initialization', icon: Sparkles, description: 'Xavier, He, and signal scale through deep networks' },
       { id: 'gradient-problems', name: 'Gradient Problems', icon: TrendingDown, description: 'Vanishing and exploding gradients' },
     ],
   },
@@ -298,6 +299,7 @@ export const curriculumTracks = [
       'softmax',
       'cross-entropy',
       'computation-graph-backprop',
+      'initialization',
       'optimizers',
       'gradient-problems',
       'layer-normalization',
@@ -441,7 +443,7 @@ const CURRICULUM_OVERRIDES = {
   optimizers: {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['gradient-descent', 'computation-graph-backprop'],
+    prerequisites: ['gradient-descent', 'computation-graph-backprop', 'initialization'],
     learningObjectives: [
       'Compare how SGD, momentum, and Adam turn gradients into parameter updates',
       'Explain why mini-batch size changes gradient noise and training smoothness',
@@ -811,6 +813,17 @@ const CURRICULUM_OVERRIDES = {
       'Use gradients and a learning rate to update weights and reduce loss',
     ],
     commonMisconception: 'Backpropagation is not a mysterious new learning rule; it is the chain rule applied to local derivatives in reverse graph order.',
+  },
+  initialization: {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['computation-graph-backprop', 'relu'],
+    learningObjectives: [
+      'Compare Xavier and He initialization from fan-in and fan-out',
+      'Explain how weight scale affects activation and gradient variance through depth',
+      'Diagnose vanishing or exploding signal before optimizer updates begin',
+    ],
+    commonMisconception: 'Initialization is not just random noise; its variance controls whether signal and gradients survive through layers.',
   },
   relu: {
     difficulty: 'beginner',

@@ -423,7 +423,7 @@ test('optimizers are promoted into the neural-network training path', () => {
   assert.ok(neuralTrack.animationIds.includes('optimizers'));
   assert.ok(!backlogIds.has('optimizers'));
   assert.ok(isAnimationAvailable('optimizers'));
-  assert.deepEqual(animation.prerequisites, ['gradient-descent', 'computation-graph-backprop']);
+  assert.deepEqual(animation.prerequisites, ['gradient-descent', 'computation-graph-backprop', 'initialization']);
   assert.match(animation.learningObjectives.join(' '), /SGD|momentum|Adam|mini-batch/i);
   assert.match(animation.commonMisconception, /Adam|learning rate|batch/i);
 
@@ -436,6 +436,36 @@ test('optimizers are promoted into the neural-network training path', () => {
     neuralTrack.animationIds.indexOf('optimizers') <
       neuralTrack.animationIds.indexOf('gradient-problems'),
     'optimizer behavior should come before gradient stability failure modes',
+  );
+});
+
+test('initialization is promoted before optimizers in the neural-network path', () => {
+  const animation = getAnimationById('initialization');
+  const neuralTrack = curriculumTracks.find((track) => track.id === 'neural-networks');
+  const startPath = HUB_LEARNING_PATHS.find((path) => path.id === 'start-here');
+
+  assert.ok(animation, 'initialization lesson should be active');
+  assert.equal(animation.categoryId, 'neural-networks');
+  assert.ok(animation.trackIds.includes('neural-networks'));
+  assert.ok(neuralTrack.animationIds.includes('initialization'));
+  assert.ok(isAnimationAvailable('initialization'));
+  assert.deepEqual(animation.prerequisites, ['computation-graph-backprop', 'relu']);
+  assert.match(animation.learningObjectives.join(' '), /Xavier|He|variance|gradient/i);
+  assert.match(animation.commonMisconception, /random noise|variance/i);
+
+  assert.ok(
+    neuralTrack.animationIds.indexOf('computation-graph-backprop') <
+      neuralTrack.animationIds.indexOf('initialization'),
+    'backprop should come before initialization',
+  );
+  assert.ok(
+    neuralTrack.animationIds.indexOf('initialization') < neuralTrack.animationIds.indexOf('optimizers'),
+    'initialization should come before optimizers',
+  );
+  assert.ok(
+    startPath.nodes.indexOf('computation-graph-backprop') < startPath.nodes.indexOf('initialization') &&
+      startPath.nodes.indexOf('initialization') < startPath.nodes.indexOf('optimizers'),
+    'start-here should sequence initialization between backprop and optimizers',
   );
 });
 
