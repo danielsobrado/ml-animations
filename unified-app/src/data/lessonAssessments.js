@@ -19,6 +19,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'embeddings',
   'attention-mechanism',
   'self-attention',
+  'attention-masks',
   'transformer',
   'transformer-token-generation',
   'rag-retrieval-evaluation',
@@ -707,6 +708,40 @@ export const lessonAssessments = {
         title: 'Read one attention row',
         prompt: 'Pick a token and explain which other tokens it attends to most.',
         successCriteria: 'You can connect one row of weights to the resulting context vector.',
+      },
+    ],
+  },
+  'attention-masks': {
+    quiz: [
+      {
+        id: 'causal-purpose',
+        prompt: 'Why does a decoder use a causal attention mask?',
+        choices: [
+          'To prevent a position from reading future tokens during next-token prediction',
+          'To make every token attend only to padding',
+          'To replace softmax with a sigmoid',
+        ],
+        answerIndex: 0,
+        explanation: 'A causal mask keeps training and generation honest by hiding tokens that come after the current position.',
+      },
+      {
+        id: 'padding-purpose',
+        prompt: 'What should a padding mask do?',
+        choices: [
+          'Remove [PAD] positions from attention scores before softmax',
+          'Increase the probability of every padding token',
+          'Change the tokenizer vocabulary size',
+        ],
+        answerIndex: 0,
+        explanation: 'Padding is sequence-shaping filler, not content, so its scores are replaced by a very negative value before softmax.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-visible-keys',
+        title: 'Trace visible keys',
+        prompt: 'Pick one query row, switch between mask types, and list which keys remain visible before softmax.',
+        successCriteria: 'You can justify each visible or blocked key using causal order, padding, or cross-attention memory.',
       },
     ],
   },

@@ -343,6 +343,35 @@ test('transformer token generation is promoted into the NLP transformer path', (
   );
 });
 
+test('attention masks are promoted into the transformer path before full architecture', () => {
+  const animation = getAnimationById('attention-masks');
+  const transformer = getAnimationById('transformer');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');
+
+  assert.ok(animation, 'attention masks lesson should be active');
+  assert.equal(animation.categoryId, 'transformers');
+  assert.ok(animation.trackIds.includes('nlp-transformers'));
+  assert.ok(transformerTrack.animationIds.includes('attention-masks'));
+  assert.ok(!backlogIds.has('attention-masks'));
+  assert.ok(isAnimationAvailable('attention-masks'));
+  assert.deepEqual(animation.prerequisites, ['self-attention', 'tokenization']);
+  assert.ok(transformer.prerequisites.includes('attention-masks'));
+  assert.match(animation.learningObjectives.join(' '), /causal|padding|bidirectional|cross-attention/i);
+  assert.match(animation.commonMisconception, /masked-language|visibility/i);
+
+  assert.ok(
+    transformerTrack.animationIds.indexOf('self-attention') <
+      transformerTrack.animationIds.indexOf('attention-masks'),
+    'self-attention mechanics should precede mask rules',
+  );
+  assert.ok(
+    transformerTrack.animationIds.indexOf('attention-masks') <
+      transformerTrack.animationIds.indexOf('transformer'),
+    'mask rules should precede full transformer architecture',
+  );
+});
+
 test('RAG retrieval evaluation is promoted into the generative AI path', () => {
   const animation = getAnimationById('rag-retrieval-evaluation');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
@@ -422,7 +451,7 @@ test('createLearningModel uses curriculum metadata for one-click navigation cont
   assert.equal(model.mindmap.current.label, 'Self-Attention');
   assert.ok(model.mindmap.prereqs.some((node) => node.id === 'matrix-multiplication'));
   assert.ok(model.mindmap.prereqs.some((node) => node.id === 'softmax'));
-  assert.ok(model.mindmap.next.some((node) => node.id === 'positional-encoding'));
+  assert.ok(model.mindmap.next.some((node) => node.id === 'attention-masks'));
   assert.equal(model.chips.difficulty, 'intermediate');
   assert.equal(model.chips.prereq, 'Matrix Multiplication, Softmax');
 });

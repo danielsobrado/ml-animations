@@ -65,6 +65,7 @@ export const categories = [
     items: [
       { id: 'attention-mechanism', name: 'Attention Mechanism', icon: Target, description: 'The foundation of modern NLP' },
       { id: 'self-attention', name: 'Self-Attention', icon: CircleDot, description: 'Relating positions in a sequence' },
+      { id: 'attention-masks', name: 'Attention Masks', icon: ShieldCheck, description: 'Causal, padding, bidirectional, and cross-attention visibility rules' },
       { id: 'positional-encoding', name: 'Positional Encoding', icon: Workflow, description: 'Adding position information' },
       { id: 'rope', name: 'RoPE (Rotary Embeddings)', icon: RotateCcw, description: 'Modern position encoding via rotation' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
@@ -294,6 +295,7 @@ export const curriculumTracks = [
       'fasttext',
       'attention-mechanism',
       'self-attention',
+      'attention-masks',
       'positional-encoding',
       'transformer',
       'bert',
@@ -556,6 +558,17 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Self-attention is not a lookup table; it recomputes weighted mixtures for each token from the current sequence.',
   },
+  'attention-masks': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['self-attention', 'tokenization'],
+    learningObjectives: [
+      'Explain how attention masks remove illegal query-key connections before softmax',
+      'Compare causal, padding, bidirectional, and cross-attention visibility rules',
+      'Predict which tokens a selected query can read under each mask type',
+    ],
+    commonMisconception: 'Attention masks are not the same as masked-language-model input corruption; masks change which attention scores can be read.',
+  },
   'positional-encoding': {
     difficulty: 'intermediate',
     estimatedMinutes: 16,
@@ -564,7 +577,7 @@ const CURRICULUM_OVERRIDES = {
   transformer: {
     difficulty: 'advanced',
     estimatedMinutes: 25,
-    prerequisites: ['self-attention', 'positional-encoding', 'layer-normalization'],
+    prerequisites: ['self-attention', 'attention-masks', 'positional-encoding', 'layer-normalization'],
   },
   'transformer-token-generation': {
     difficulty: 'intermediate',

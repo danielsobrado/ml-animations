@@ -51,6 +51,7 @@ const EQUATION_OVERRIDES = {
   'computation-graph-backprop': '\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}',
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
   'rag-retrieval-evaluation': 'Recall@k=\\frac{|R\\cap Top_k|}{|R|}',
+  'attention-masks': '\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -236,6 +237,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate one token vector and inspect which row of attention weights changes.',
     'Mistake to avoid: self-attention recomputes mixtures for each sequence, not a fixed lookup table.',
     'Check understanding by explaining one row of weights and the context vector it creates.',
+  ),
+  'attention-masks': cardSet(
+    'Attention masks solve the problem of enforcing which tokens are legally visible before attention weights are formed.',
+    'A mask is a gate on the score matrix: keep allowed query-key pairs and push blocked pairs toward zero probability.',
+    'The math adds M to scaled scores before softmax, where blocked cells receive a very negative value.',
+    'Manipulate mask type and query row to compare causal, padding, bidirectional, and cross-attention visibility.',
+    'Mistake to avoid: attention masks are visibility rules, not the same thing as replacing input tokens with [MASK].',
+    'Check understanding by predicting which keys a decoder query can read before revealing the selected row.',
   ),
   transformer: cardSet(
     'A transformer solves sequence modeling by stacking attention, feed-forward transforms, residual paths, and normalization.',

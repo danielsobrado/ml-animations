@@ -14,6 +14,7 @@ const animationRegistry = {
   // Transformers & Attention
   'attention-mechanism': lazy(() => import('./attention-mechanism')),
   'self-attention': lazy(() => import('./self-attention')),
+  'attention-masks': lazy(() => import('./attention-masks')),
   'grouped-query-attention': lazy(() => import('./grouped-query-attention')),
   'kv-cache': lazy(() => import('./kv-cache')),
   'flash-attention': lazy(() => import('./flash-attention')),
