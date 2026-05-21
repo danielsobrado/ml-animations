@@ -68,6 +68,7 @@ const EQUATION_OVERRIDES = {
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
+  'training-loop-dynamics': '\\theta_{t+1}=\\theta_t-\\eta\\hat{g}_{B_t},\\quad monitor:\\mathcal{L}_{train},\\mathcal{L}_{val}',
   'dropout-batchnorm': '\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}},\\quad y=\\gamma\\hat{x}+\\beta',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
@@ -242,6 +243,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate fan-in, fan-out, activation, and depth to see when signal vanishes, stays stable, or explodes.',
     'Mistake to avoid: random initialization is not automatically safe; the variance matters as much as randomness.',
     'Check understanding by deciding why ReLU networks usually prefer He initialization over Xavier.',
+  ),
+  'training-loop-dynamics': cardSet(
+    'Training loop dynamics solve the problem of connecting optimizer math to real learning curves and validation behavior.',
+    'Mini-batches create noisy gradient estimates; learning rate controls how far each noisy estimate moves the weights.',
+    'The math applies an optimizer step from a batch gradient, then monitors both training and validation losses.',
+    'Manipulate batch size, learning rate, steps, curvature, and validation difficulty to diagnose healthy or unstable training.',
+    'Mistake to avoid: a lower training loss is not enough if validation loss rises or updates are overshooting.',
+    'Check understanding by predicting whether a smaller batch or larger learning rate will make the loss path noisier.',
   ),
   'dropout-batchnorm': cardSet(
     'Dropout and BatchNorm solve different training problems: over-reliance on units and unstable activation scale.',

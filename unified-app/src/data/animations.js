@@ -104,6 +104,7 @@ export const categories = [
       { id: 'neural-network', name: 'Neural Network Overview', icon: Network, description: 'How artificial neural networks function' },
       { id: 'computation-graph-backprop', name: 'Computation Graph & Backpropagation', icon: Workflow, description: 'Forward values, local derivatives, reverse accumulation, and updates' },
       { id: 'initialization', name: 'Initialization', icon: Sparkles, description: 'Xavier, He, and signal scale through deep networks' },
+      { id: 'training-loop-dynamics', name: 'Training Loop Dynamics', icon: Activity, description: 'Mini-batch noise, optimizer steps, loss curves, and validation behavior' },
       { id: 'dropout-batchnorm', name: 'Dropout & BatchNorm', icon: Layers, description: 'Regularize units and stabilize activation scale during training' },
       { id: 'gradient-problems', name: 'Gradient Problems', icon: TrendingDown, description: 'Vanishing and exploding gradients' },
     ],
@@ -302,6 +303,7 @@ export const curriculumTracks = [
       'computation-graph-backprop',
       'initialization',
       'optimizers',
+      'training-loop-dynamics',
       'dropout-batchnorm',
       'gradient-problems',
       'layer-normalization',
@@ -452,6 +454,17 @@ const CURRICULUM_OVERRIDES = {
       'Diagnose overshooting, zigzagging, and slow convergence from the loss path',
     ],
     commonMisconception: 'Adam is not automatically best; learning rate, batch noise, and validation behavior still decide whether training is healthy.',
+  },
+  'training-loop-dynamics': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['optimizers', 'overfitting'],
+    learningObjectives: [
+      'Connect mini-batch size to gradient noise and update smoothness',
+      'Relate learning rate and loss curvature to overshooting or stable descent',
+      'Use validation loss alongside training loss to diagnose overfitting',
+    ],
+    commonMisconception: 'A falling training loss does not prove learning is healthy; validation behavior and update stability matter too.',
   },
   'dropout-batchnorm': {
     difficulty: 'intermediate',

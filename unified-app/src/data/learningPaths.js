@@ -27,6 +27,7 @@ export const HUB_LEARNING_PATHS = [
       'computation-graph-backprop',
       'initialization',
       'optimizers',
+      'training-loop-dynamics',
     ],
   },
   {

@@ -492,6 +492,30 @@ test('dropout and batchnorm are promoted after optimizer basics in the neural-ne
   );
 });
 
+test('training loop dynamics bridge optimizer steps and validation behavior', () => {
+  const animation = getAnimationById('training-loop-dynamics');
+  const neuralTrack = curriculumTracks.find((track) => track.id === 'neural-networks');
+  const startPath = HUB_LEARNING_PATHS.find((path) => path.id === 'start-here');
+
+  assert.ok(animation, 'training loop dynamics lesson should be active');
+  assert.equal(animation.categoryId, 'neural-networks');
+  assert.ok(animation.trackIds.includes('neural-networks'));
+  assert.ok(neuralTrack.animationIds.includes('training-loop-dynamics'));
+  assert.ok(isAnimationAvailable('training-loop-dynamics'));
+  assert.deepEqual(animation.prerequisites, ['optimizers', 'overfitting']);
+  assert.match(animation.learningObjectives.join(' '), /mini-batch|validation|overshooting/i);
+  assert.match(animation.commonMisconception, /training loss|validation/i);
+
+  assert.ok(
+    neuralTrack.animationIds.indexOf('optimizers') < neuralTrack.animationIds.indexOf('training-loop-dynamics'),
+    'optimizer rules should come before training loop diagnosis',
+  );
+  assert.ok(
+    startPath.nodes.indexOf('optimizers') < startPath.nodes.indexOf('training-loop-dynamics'),
+    'start-here should place training loop dynamics after optimizers',
+  );
+});
+
 test('PCA is promoted into the foundations path as a variance projection lesson', () => {
   const animation = getAnimationById('pca');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));

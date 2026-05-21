@@ -19,6 +19,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'gradient-descent',
   'initialization',
   'optimizers',
+  'training-loop-dynamics',
   'dropout-batchnorm',
   'relu',
   'computation-graph-backprop',
@@ -757,6 +758,40 @@ export const lessonAssessments = {
         title: 'Compare training and inference',
         prompt: 'Toggle training mode and change dropout rate, then explain why the visible output no longer masks units at inference.',
         successCriteria: 'You can separate BatchNorm scaling effects from dropout masking effects.',
+      },
+    ],
+  },
+  'training-loop-dynamics': {
+    quiz: [
+      {
+        id: 'batch-noise-diagnosis',
+        prompt: 'What usually happens when mini-batch size is very small?',
+        choices: [
+          'Gradient estimates become noisier from step to step',
+          'Validation loss becomes unnecessary',
+          'The learning rate automatically becomes zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Small batches average fewer examples, so each gradient estimate is more variable.',
+      },
+      {
+        id: 'validation-signal',
+        prompt: 'Why watch validation loss during training?',
+        choices: [
+          'It helps detect overfitting even while training loss falls',
+          'It replaces the need for a training objective',
+          'It makes every optimizer deterministic',
+        ],
+        answerIndex: 0,
+        explanation: 'Validation loss shows whether improvements on training data are transferring to held-out data.',
+      },
+    ],
+    labs: [
+      {
+        id: 'loop-diagnosis',
+        title: 'Diagnose a training loop',
+        prompt: 'Increase learning rate, shrink batch size, and raise validation difficulty, then identify noisy, overshooting, or overfitting behavior.',
+        successCriteria: 'You can explain why train loss, validation loss, and update stability must be read together.',
       },
     ],
   },
