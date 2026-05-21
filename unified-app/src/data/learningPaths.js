@@ -93,6 +93,7 @@ export const HUB_LEARNING_PATHS = [
       'q-learning',
       'rl-exploration',
       'policy-gradients',
+      'actor-critic',
       'pagerank',
     ],
   },

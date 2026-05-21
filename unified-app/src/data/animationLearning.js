@@ -79,6 +79,7 @@ const EQUATION_OVERRIDES = {
   'policy-iteration': '\\pi_{k+1}(s)=\\arg\\max_a\\mathbb{E}[R+\\gamma V^{\\pi_k}(s\\prime)]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
   'policy-gradients': '\\nabla J(\\theta)=\\mathbb{E}[G_t\\nabla_\\theta\\log\\pi_\\theta(a_t\\mid s_t)]',
+  'actor-critic': 'A_t=G_t-V_\\phi(s_t)\\quad actor:\\nabla\\log\\pi_\\theta(a_t\\mid s_t)A_t',
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
 };
@@ -414,6 +415,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate return and baseline to see which action probability receives the strongest update.',
     'Mistake to avoid: this is not Q-learning with a table; the policy itself is the optimized object.',
     'Check understanding by predicting whether a positive advantage increases or decreases the sampled action probability.',
+  ),
+  'actor-critic': cardSet(
+    'Actor-critic solves the noisy policy-gradient problem by learning both a policy and a value baseline.',
+    'The actor chooses actions; the critic judges whether the outcome was better or worse than expected.',
+    'The math uses advantage: return minus critic value, then applies that advantage to the actor update.',
+    'Manipulate critic value and return to see how actor and critic update signals differ.',
+    'Mistake to avoid: the critic is not the controller; it trains the actor by estimating value.',
+    'Check understanding by predicting whether the actor should reinforce an action when return is below critic value.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

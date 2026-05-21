@@ -1438,6 +1438,40 @@ export const lessonAssessments = {
       },
     ],
   },
+  'actor-critic': {
+    quiz: [
+      {
+        id: 'actor-vs-critic',
+        prompt: 'What does the critic provide to the actor?',
+        choices: [
+          'A value baseline used to compute advantage',
+          'The final sampled action with no policy',
+          'A train/test split for supervised learning',
+        ],
+        answerIndex: 0,
+        explanation: 'The critic estimates value; the actor uses return minus that value as an advantage signal.',
+      },
+      {
+        id: 'negative-advantage',
+        prompt: 'If return is below the critic value, what should happen to the sampled action?',
+        choices: [
+          'The actor should reduce its log-probability',
+          'The critic should choose the action directly',
+          'The action must become deterministic',
+        ],
+        answerIndex: 0,
+        explanation: 'A negative advantage means the action underperformed the critic baseline, so the actor is pushed away from it.',
+      },
+    ],
+    labs: [
+      {
+        id: 'critic-baseline',
+        title: 'Find the sign flip',
+        prompt: 'Move critic value above and below return and watch the actor update switch from reinforcing to discouraging.',
+        successCriteria: 'You can explain why the critic changes update sign without choosing actions itself.',
+      },
+    ],
+  },
 };
 
 export function getLessonAssessment(lessonId) {

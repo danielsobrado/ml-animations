@@ -197,6 +197,7 @@ export const categories = [
       { id: 'q-learning', name: 'Q-Learning', icon: Brain, description: 'Value-based learning algorithm' },
       { id: 'rl-exploration', name: 'Exploration vs Exploitation', icon: Shuffle, description: 'The exploration-exploitation tradeoff' },
       { id: 'policy-gradients', name: 'Policy Gradients', icon: TrendingUp, description: 'Improve action probabilities using returns and log-probability gradients' },
+      { id: 'actor-critic', name: 'Actor-Critic', icon: Users, description: 'Pair a policy actor with a value critic for lower-variance updates' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
     ],
   },
@@ -375,6 +376,7 @@ export const curriculumTracks = [
       'q-learning',
       'rl-exploration',
       'policy-gradients',
+      'actor-critic',
       'pagerank',
       'bloom-filter',
     ],
@@ -912,6 +914,17 @@ const CURRICULUM_OVERRIDES = {
       'Describe why policy gradients optimize expected return directly',
     ],
     commonMisconception: 'Policy gradients do not need to pick only the current best action; they adjust action probabilities from sampled returns.',
+  },
+  'actor-critic': {
+    difficulty: 'advanced',
+    estimatedMinutes: 22,
+    prerequisites: ['policy-gradients'],
+    learningObjectives: [
+      'Distinguish the actor policy update from the critic value update',
+      'Compute an advantage from return minus critic value estimate',
+      'Explain how a critic reduces variance without replacing the policy',
+    ],
+    commonMisconception: 'The critic does not choose the action; it estimates value so the actor gets a cleaner learning signal.',
   },
 };
 

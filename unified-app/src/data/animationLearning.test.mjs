@@ -1023,6 +1023,26 @@ test('policy gradients are active after exploration in the RL path', () => {
   );
 });
 
+test('actor-critic follows policy gradients with a value-baseline lesson', () => {
+  const animation = getAnimationById('actor-critic');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+
+  assert.ok(animation, 'Actor-critic lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('actor-critic'));
+  assert.ok(isAnimationAvailable('actor-critic'));
+  assert.deepEqual(animation.prerequisites, ['policy-gradients']);
+  assert.match(animation.learningObjectives.join(' '), /actor|critic|advantage/i);
+  assert.match(animation.commonMisconception, /critic does not choose|cleaner learning signal/i);
+
+  assert.ok(
+    rlPath.nodes.indexOf('policy-gradients') < rlPath.nodes.indexOf('actor-critic'),
+    'Policy gradients should precede actor-critic',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);
