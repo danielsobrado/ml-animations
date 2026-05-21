@@ -32,6 +32,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'sampling-strategies',
   'fine-tuning',
   'rag-chunking-context',
+  'rag-vector-indexing',
   'rag-retrieval-evaluation',
 ];
 
@@ -1160,6 +1161,40 @@ export const lessonAssessments = {
         title: 'Tune chunking and packing',
         prompt: 'Adjust chunk size, overlap, top-k, and context budget until both relevant refund facts fit without too much duplicate text.',
         successCriteria: 'You can explain which control recovered the boundary fact and which control limited packed evidence.',
+      },
+    ],
+  },
+  'rag-vector-indexing': {
+    quiz: [
+      {
+        id: 'ann-tradeoff',
+        prompt: 'What is the core tradeoff in approximate nearest neighbor vector search?',
+        choices: [
+          'Lower latency in exchange for possible recall loss',
+          'No need to create embeddings',
+          'Guaranteed perfect reranking',
+        ],
+        answerIndex: 0,
+        explanation: 'ANN methods avoid comparing every vector, which reduces latency but can miss some nearest neighbors.',
+      },
+      {
+        id: 'search-breadth',
+        prompt: 'What usually happens when search breadth increases in an ANN index?',
+        choices: [
+          'Recall tends to improve and latency tends to increase',
+          'The model weights are fine-tuned',
+          'Chunk overlap becomes zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Broader search probes more candidates or graph paths, so it can find more relevant vectors at higher cost.',
+      },
+    ],
+    labs: [
+      {
+        id: 'choose-index',
+        title: 'Choose an index strategy',
+        prompt: 'Compare exact, IVF, and HNSW modes for a small corpus, a large corpus, and a high-recall support bot.',
+        successCriteria: 'You can justify the choice using latency, recall risk, and corpus scale.',
       },
     ],
   },

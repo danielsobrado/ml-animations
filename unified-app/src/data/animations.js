@@ -114,6 +114,7 @@ export const categories = [
       { id: 'vae', name: 'Variational Autoencoder', icon: Shuffle, description: 'Generative latent variable model' },
       { id: 'rag', name: 'RAG', icon: Database, description: 'Retrieval-augmented generation' },
       { id: 'rag-chunking-context', name: 'RAG Chunking & Context Packing', icon: Scissors, description: 'Chunk size, overlap, top-k, and token budget tradeoffs' },
+      { id: 'rag-vector-indexing', name: 'Vector Indexing & ANN Search', icon: Database, description: 'Exact search, IVF clusters, HNSW graphs, latency, and recall' },
       { id: 'rag-retrieval-evaluation', name: 'RAG Retrieval Evaluation', icon: Search, description: 'Chunking, reranking, recall@k, MRR, and nDCG' },
       { id: 'multimodal-llm', name: 'Multimodal LLM', icon: Image, description: 'Multi-modal language models' },
     ],
@@ -345,6 +346,7 @@ export const curriculumTracks = [
       'dit',
       'rag',
       'rag-chunking-context',
+      'rag-vector-indexing',
       'rag-retrieval-evaluation',
       'multimodal-llm',
       'fine-tuning',
@@ -743,6 +745,17 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Bigger chunks, more overlap, and larger top-k are not automatically better; they can dilute retrieval scores or crowd out answer space.',
   },
+  'rag-vector-indexing': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['rag-chunking-context', 'embeddings', 'cosine-similarity'],
+    learningObjectives: [
+      'Compare exact vector search with approximate nearest neighbor indexes',
+      'Explain how IVF-style buckets and HNSW-style graphs trade latency for recall',
+      'Predict how search breadth affects missing evidence and response latency',
+    ],
+    commonMisconception: 'Approximate nearest neighbor search is not automatically equivalent to exact search; speed gains can miss relevant chunks before reranking ever runs.',
+  },
   'neural-network': {
     difficulty: 'beginner',
     estimatedMinutes: 18,
@@ -803,7 +816,7 @@ const CURRICULUM_OVERRIDES = {
   'rag-retrieval-evaluation': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['rag-chunking-context', 'embeddings', 'cosine-similarity'],
+    prerequisites: ['rag-vector-indexing', 'embeddings', 'cosine-similarity'],
     learningObjectives: [
       'Explain how chunk size and overlap change retrieved evidence',
       'Compare first-pass retrieval with reranked candidate ordering',

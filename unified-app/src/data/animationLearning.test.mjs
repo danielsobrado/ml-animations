@@ -611,7 +611,7 @@ test('RAG retrieval evaluation is promoted into the generative AI path', () => {
   assert.ok(generativeTrack.animationIds.includes('rag-retrieval-evaluation'));
   assert.ok(!backlogIds.has('rag-retrieval-evaluation'));
   assert.ok(isAnimationAvailable('rag-retrieval-evaluation'));
-  assert.deepEqual(animation.prerequisites, ['rag-chunking-context', 'embeddings', 'cosine-similarity']);
+  assert.deepEqual(animation.prerequisites, ['rag-vector-indexing', 'embeddings', 'cosine-similarity']);
   assert.match(animation.learningObjectives.join(' '), /chunk|rerank|recall@k|nDCG/i);
   assert.match(animation.commonMisconception, /missing evidence|right chunks|context/i);
 
@@ -633,7 +633,7 @@ test('RAG chunking and context packing are promoted before retrieval evaluation'
   assert.ok(generativeTrack.animationIds.includes('rag-chunking-context'));
   assert.ok(isAnimationAvailable('rag-chunking-context'));
   assert.deepEqual(animation.prerequisites, ['rag', 'embeddings']);
-  assert.ok(evaluation.prerequisites.includes('rag-chunking-context'));
+  assert.ok(generativeTrack.animationIds.indexOf('rag-chunking-context') < generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'));
   assert.match(animation.learningObjectives.join(' '), /chunk size|overlap|top-k|context budget/i);
   assert.match(animation.commonMisconception, /Bigger chunks|overlap|top-k/i);
 
@@ -646,6 +646,33 @@ test('RAG chunking and context packing are promoted before retrieval evaluation'
     generativeTrack.animationIds.indexOf('rag-chunking-context') <
       generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
     'chunking and packing should precede retrieval metrics',
+  );
+});
+
+test('RAG vector indexing is promoted between chunking and retrieval evaluation', () => {
+  const animation = getAnimationById('rag-vector-indexing');
+  const evaluation = getAnimationById('rag-retrieval-evaluation');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+
+  assert.ok(animation, 'RAG vector indexing lesson should be active');
+  assert.equal(animation.categoryId, 'advanced-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('rag-vector-indexing'));
+  assert.ok(isAnimationAvailable('rag-vector-indexing'));
+  assert.deepEqual(animation.prerequisites, ['rag-chunking-context', 'embeddings', 'cosine-similarity']);
+  assert.ok(evaluation.prerequisites.includes('rag-vector-indexing'));
+  assert.match(animation.learningObjectives.join(' '), /exact|approximate|IVF|HNSW|latency|recall/i);
+  assert.match(animation.commonMisconception, /Approximate|exact search|reranking/i);
+
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-chunking-context') <
+      generativeTrack.animationIds.indexOf('rag-vector-indexing'),
+    'chunking should define indexed units before vector index tradeoffs',
+  );
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-vector-indexing') <
+      generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
+    'vector indexing should precede retrieval quality metrics',
   );
 });
 

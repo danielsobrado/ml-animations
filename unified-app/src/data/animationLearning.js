@@ -62,6 +62,7 @@ const EQUATION_OVERRIDES = {
   'sampling-strategies': 'x_{t+1}\\sim \\operatorname{Sample}(\\operatorname{TopP}(\\operatorname{TopK}(\\operatorname{softmax}(z/\\tau))))',
   'fine-tuning': 'W^{\\prime}=W+BA\\quad or\\quad \\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})',
   'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
+  'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -351,6 +352,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate chunk size, overlap, top-k, and budget to see which refund facts are retrieved and packed.',
     'Mistake to avoid: more overlap or larger top-k can duplicate text and crowd out the answer space.',
     'Check understanding by tuning settings until boundary-spanning evidence fits without excessive duplicate context.',
+  ),
+  'rag-vector-indexing': cardSet(
+    'Vector indexing solves the problem of finding similar chunks quickly when exact comparison across the whole corpus is too slow.',
+    'Exact search checks everything, IVF narrows search to nearby buckets, and HNSW walks a neighbor graph toward likely matches.',
+    'The math approximates nearest neighbors under cosine or dot-product similarity while controlling candidate search breadth.',
+    'Manipulate index type, corpus scale, and search breadth to compare recall and latency.',
+    'Mistake to avoid: approximate search can miss relevant chunks before reranking or generation has a chance to use them.',
+    'Check understanding by choosing exact, IVF, or HNSW for small corpora, large corpora, and high-recall workflows.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

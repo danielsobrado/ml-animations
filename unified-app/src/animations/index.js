@@ -46,6 +46,7 @@ const animationRegistry = {
   'moe': lazy(() => import('./moe')),
   'rag': lazy(() => import('./rag')),
   'rag-chunking-context': lazy(() => import('./rag-chunking-context')),
+  'rag-vector-indexing': lazy(() => import('./rag-vector-indexing')),
   'rag-retrieval-evaluation': lazy(() => import('./rag-retrieval-evaluation')),
   'multimodal-llm': lazy(() => import('./multimodal-llm')),
   'fine-tuning': lazy(() => import('./fine-tuning')),
