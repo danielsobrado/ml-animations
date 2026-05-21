@@ -77,6 +77,7 @@ export const HUB_LEARNING_PATHS = [
       'classifier-free-guidance',
       'diffusion-vae',
       'self-attention',
+      'unet-vs-dit',
       'sd3-overview',
       'flow-matching',
       'clip-encoder',

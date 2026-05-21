@@ -68,6 +68,7 @@ const EQUATION_OVERRIDES = {
   'diffusion-basics': 'x_t=\\sqrt{1-t}\\,x_0+\\sqrt{t}\\,\\epsilon,\\quad \\hat{x}_0\\leftarrow x_t-\\hat{\\epsilon}',
   'diffusion-sampling': 'x_T\\sim\\mathcal{N}(0,I),\\quad x_{t-1}\\leftarrow S_\\phi(x_t,t,\\hat{\\epsilon}_\\theta)',
   'classifier-free-guidance': '\\hat{\\epsilon}=\\epsilon_{uncond}+s(\\epsilon_{cond}-\\epsilon_{uncond})',
+  'unet-vs-dit': 'N=(H/P)(W/P),\\quad Attention\\;cost\\propto N^2',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
@@ -438,6 +439,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate guidance scale and both predictions to see prompt match rise while diversity can fall.',
     'Mistake to avoid: higher guidance is not always better because extreme scale can overshoot and create artifacts.',
     'Check understanding by predicting what happens when conditional and unconditional predictions are nearly identical.',
+  ),
+  'unet-vs-dit': cardSet(
+    'U-Net vs DiT solves the architectural bridge between classic diffusion backbones and newer transformer diffusion systems.',
+    'U-Nets process feature maps with local convolutions and skip connections; DiTs process latent patches as token sequences.',
+    'The math counts patches as tokens, then attention cost grows with the square of token count.',
+    'Manipulate resolution, patch size, depth, and backbone choice to see local bias, global mixing, and memory pressure change.',
+    'Mistake to avoid: DiT is not just a larger U-Net, because it changes the representation and mixing operation.',
+    'Check understanding by explaining why latent patches make transformer diffusion more practical than raw-pixel tokens.',
   ),
   'mdp-formalism': cardSet(
     'MDP formalism solves the problem of describing sequential decisions with one consistent vocabulary.',

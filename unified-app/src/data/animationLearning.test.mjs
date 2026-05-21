@@ -384,6 +384,7 @@ test('vision path includes active diffusion component lessons after the latent b
     'diffusion-basics',
     'diffusion-sampling',
     'classifier-free-guidance',
+    'unet-vs-dit',
     'self-attention',
     'sd3-overview',
     'flow-matching',
@@ -403,6 +404,8 @@ test('vision path includes active diffusion component lessons after the latent b
   assert.ok(pathOrder.get('diffusion-sampling') < pathOrder.get('classifier-free-guidance'));
   assert.ok(pathOrder.get('classifier-free-guidance') < pathOrder.get('diffusion-vae'));
   assert.ok(pathOrder.get('diffusion-vae') < pathOrder.get('self-attention'));
+  assert.ok(pathOrder.get('self-attention') < pathOrder.get('unet-vs-dit'));
+  assert.ok(pathOrder.get('unet-vs-dit') < pathOrder.get('sd3-overview'));
   assert.ok(pathOrder.get('self-attention') < pathOrder.get('sd3-overview'));
   assert.ok(pathOrder.get('sd3-overview') < pathOrder.get('flow-matching'));
   assert.ok(pathOrder.get('flow-matching') < pathOrder.get('clip-encoder'));
@@ -468,6 +471,26 @@ test('classifier-free guidance bridges sampling and prompt-conditioned diffusion
     visionPath.nodes.indexOf('diffusion-sampling') < visionPath.nodes.indexOf('classifier-free-guidance') &&
       visionPath.nodes.indexOf('classifier-free-guidance') < visionPath.nodes.indexOf('diffusion-vae'),
     'classifier-free guidance should sit after sampling and before diffusion VAE',
+  );
+});
+
+test('U-Net vs DiT bridges latent diffusion and transformer diffusion backbones', () => {
+  const animation = getAnimationById('unet-vs-dit');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+  const visionPath = HUB_LEARNING_PATHS.find((path) => path.id === 'vision-path');
+
+  assert.ok(animation, 'U-Net vs DiT lesson should be active');
+  assert.equal(animation.categoryId, 'diffusion-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('unet-vs-dit'));
+  assert.ok(isAnimationAvailable('unet-vs-dit'));
+  assert.deepEqual(animation.prerequisites, ['diffusion-vae', 'self-attention']);
+  assert.match(animation.learningObjectives.join(' '), /U-Net|DiT|patch|attention/i);
+  assert.match(animation.commonMisconception, /U-Net|token/i);
+  assert.ok(
+    visionPath.nodes.indexOf('self-attention') < visionPath.nodes.indexOf('unet-vs-dit') &&
+      visionPath.nodes.indexOf('unet-vs-dit') < visionPath.nodes.indexOf('sd3-overview'),
+    'U-Net vs DiT should sit after self-attention and before SD3 overview',
   );
 });
 

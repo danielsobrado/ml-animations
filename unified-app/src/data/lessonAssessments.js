@@ -42,6 +42,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'diffusion-basics',
   'diffusion-sampling',
   'classifier-free-guidance',
+  'unet-vs-dit',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -1713,6 +1714,40 @@ export const lessonAssessments = {
         title: 'Sweep guidance scale',
         prompt: 'Move guidance scale from low to high and compare prompt match, diversity, and artifact risk.',
         successCriteria: 'You can explain why a moderate scale can be better than the maximum scale.',
+      },
+    ],
+  },
+  'unet-vs-dit': {
+    quiz: [
+      {
+        id: 'unet-bias',
+        prompt: 'What image-processing bias does a diffusion U-Net provide naturally?',
+        choices: [
+          'Local convolutional structure with downsample-upsample skip connections',
+          'A next-token language-modeling objective',
+          'A retrieval index over text chunks',
+        ],
+        answerIndex: 0,
+        explanation: 'U-Nets are strong for images because convolutions and skip connections preserve local structure across scales.',
+      },
+      {
+        id: 'dit-patches',
+        prompt: 'Why do DiT-style models split latents into patches?',
+        choices: [
+          'So the image latent can be processed as a transformer token sequence',
+          'So the model can avoid attention entirely',
+          'So the sampler no longer needs denoising steps',
+        ],
+        answerIndex: 0,
+        explanation: 'A DiT treats image or latent patches like tokens, which lets transformer attention mix global information.',
+      },
+    ],
+    labs: [
+      {
+        id: 'patch-cost',
+        title: 'Inspect patch-token cost',
+        prompt: 'Change resolution and patch size and watch token count and attention-pair cost move.',
+        successCriteria: 'You can explain why smaller patches improve detail but increase transformer attention cost.',
       },
     ],
   },

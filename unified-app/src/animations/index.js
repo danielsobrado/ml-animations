@@ -122,6 +122,7 @@ const animationRegistry = {
   'diffusion-basics': lazy(() => import('./diffusion-basics')),
   'diffusion-sampling': lazy(() => import('./diffusion-sampling')),
   'classifier-free-guidance': lazy(() => import('./classifier-free-guidance')),
+  'unet-vs-dit': lazy(() => import('./unet-vs-dit')),
   'sd3-overview': lazy(() => import('./sd3-overview')),
   'flow-matching': lazy(() => import('./flow-matching')),
   'diffusion-vae': lazy(() => import('./diffusion-vae')),

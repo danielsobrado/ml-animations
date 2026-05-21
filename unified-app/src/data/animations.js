@@ -224,6 +224,7 @@ export const categories = [
       { id: 'diffusion-basics', name: 'Diffusion Basics', icon: Sparkles, description: 'Add noise, predict noise, and denoise step by step' },
       { id: 'diffusion-sampling', name: 'Diffusion Sampling', icon: Workflow, description: 'Compare DDPM, DDIM, and flow-style sampling paths' },
       { id: 'classifier-free-guidance', name: 'Classifier-Free Guidance', icon: Target, description: 'Steer prompt following with conditional and unconditional predictions' },
+      { id: 'unet-vs-dit', name: 'U-Net vs DiT', icon: Boxes, description: 'Compare convolutional diffusion backbones with patch transformers' },
       { id: 'sd3-overview', name: 'SD3 Architecture Overview', icon: Cpu, description: 'Complete Stable Diffusion 3 pipeline' },
       { id: 'flow-matching', name: 'Flow Matching', icon: Workflow, description: 'Flow-based generative modeling' },
       { id: 'diffusion-vae', name: 'VAE for Diffusion', icon: Shuffle, description: 'Latent space encoding for images' },
@@ -358,6 +359,7 @@ export const curriculumTracks = [
       'diffusion-sampling',
       'classifier-free-guidance',
       'diffusion-vae',
+      'unet-vs-dit',
       'sd3-overview',
       'flow-matching',
       'tokenizer-bpe',
@@ -924,6 +926,17 @@ const CURRICULUM_OVERRIDES = {
       'Identify why excessive guidance can create artifacts or over-saturated samples',
     ],
     commonMisconception: 'Classifier-free guidance does not require an external classifier; it steers the denoiser using conditional and unconditional predictions.',
+  },
+  'unet-vs-dit': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['diffusion-vae', 'self-attention'],
+    learningObjectives: [
+      'Compare U-Net convolutional pyramids with DiT patch-token transformers',
+      'Explain why U-Nets have strong local image bias and efficient skip connections',
+      'Describe why DiTs can use global attention once images are represented as latent patches',
+    ],
+    commonMisconception: 'DiT is not simply a bigger U-Net; it changes the image representation from convolutional feature maps to token sequences.',
   },
   rag: {
     difficulty: 'advanced',
