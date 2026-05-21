@@ -1043,6 +1043,26 @@ test('actor-critic follows policy gradients with a value-baseline lesson', () =>
   );
 });
 
+test('reward shaping follows actor-critic with sparse-reward guidance', () => {
+  const animation = getAnimationById('reward-shaping');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+
+  assert.ok(animation, 'Reward shaping lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('reward-shaping'));
+  assert.ok(isAnimationAvailable('reward-shaping'));
+  assert.deepEqual(animation.prerequisites, ['actor-critic']);
+  assert.match(animation.learningObjectives.join(' '), /sparse|potential|optimal/i);
+  assert.match(animation.commonMisconception, /wrong objective|reward hacking/i);
+
+  assert.ok(
+    rlPath.nodes.indexOf('actor-critic') < rlPath.nodes.indexOf('reward-shaping'),
+    'Actor-critic should precede reward shaping',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);

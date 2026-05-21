@@ -94,6 +94,7 @@ export const HUB_LEARNING_PATHS = [
       'rl-exploration',
       'policy-gradients',
       'actor-critic',
+      'reward-shaping',
       'pagerank',
     ],
   },

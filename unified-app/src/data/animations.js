@@ -198,6 +198,7 @@ export const categories = [
       { id: 'rl-exploration', name: 'Exploration vs Exploitation', icon: Shuffle, description: 'The exploration-exploitation tradeoff' },
       { id: 'policy-gradients', name: 'Policy Gradients', icon: TrendingUp, description: 'Improve action probabilities using returns and log-probability gradients' },
       { id: 'actor-critic', name: 'Actor-Critic', icon: Users, description: 'Pair a policy actor with a value critic for lower-variance updates' },
+      { id: 'reward-shaping', name: 'Reward Shaping', icon: Target, description: 'Densify sparse rewards without changing the intended task' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
     ],
   },
@@ -377,6 +378,7 @@ export const curriculumTracks = [
       'rl-exploration',
       'policy-gradients',
       'actor-critic',
+      'reward-shaping',
       'pagerank',
       'bloom-filter',
     ],
@@ -925,6 +927,17 @@ const CURRICULUM_OVERRIDES = {
       'Explain how a critic reduces variance without replacing the policy',
     ],
     commonMisconception: 'The critic does not choose the action; it estimates value so the actor gets a cleaner learning signal.',
+  },
+  'reward-shaping': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['actor-critic'],
+    learningObjectives: [
+      'Distinguish sparse task rewards from dense shaping rewards',
+      'Compute a potential-based shaping bonus from current and next state potentials',
+      'Explain why shaping must not change the optimal task behavior',
+    ],
+    commonMisconception: 'Reward shaping is not free reward hacking; poorly chosen shaping can teach the agent the wrong objective.',
   },
 };
 

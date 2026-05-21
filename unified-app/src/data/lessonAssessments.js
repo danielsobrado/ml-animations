@@ -1472,6 +1472,40 @@ export const lessonAssessments = {
       },
     ],
   },
+  'reward-shaping': {
+    quiz: [
+      {
+        id: 'sparse-vs-shaped',
+        prompt: 'Why add a shaping reward to a sparse-reward task?',
+        choices: [
+          'To provide denser learning feedback while the real goal remains sparse',
+          'To replace the environment objective with an easier one',
+          'To remove the need for discounting or value estimates',
+        ],
+        answerIndex: 0,
+        explanation: 'Shaping gives the agent intermediate feedback, but the task reward should still define success.',
+      },
+      {
+        id: 'potential-based-safety',
+        prompt: 'What is the main reason to prefer potential-based shaping?',
+        choices: [
+          'It can guide progress without changing which policy is optimal',
+          'It always makes rewards larger than zero',
+          'It turns policy gradients into supervised learning',
+        ],
+        answerIndex: 0,
+        explanation: 'Potential-based shaping rewards progress between states and is designed to preserve the intended optimum.',
+      },
+    ],
+    labs: [
+      {
+        id: 'sparse-to-dense',
+        title: 'Turn sparse reward into a hint',
+        prompt: 'Move the next state toward and away from the goal and compare task reward, shaping bonus, and total signal.',
+        successCriteria: 'You can identify when shaping helps exploration and when it would risk changing the objective.',
+      },
+    ],
+  },
 };
 
 export function getLessonAssessment(lessonId) {

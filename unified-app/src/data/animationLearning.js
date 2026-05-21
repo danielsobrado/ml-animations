@@ -80,6 +80,7 @@ const EQUATION_OVERRIDES = {
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
   'policy-gradients': '\\nabla J(\\theta)=\\mathbb{E}[G_t\\nabla_\\theta\\log\\pi_\\theta(a_t\\mid s_t)]',
   'actor-critic': 'A_t=G_t-V_\\phi(s_t)\\quad actor:\\nabla\\log\\pi_\\theta(a_t\\mid s_t)A_t',
+  'reward-shaping': "r'=r+\\gamma\\Phi(s')-\\Phi(s)",
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
 };
@@ -423,6 +424,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate critic value and return to see how actor and critic update signals differ.',
     'Mistake to avoid: the critic is not the controller; it trains the actor by estimating value.',
     'Check understanding by predicting whether the actor should reinforce an action when return is below critic value.',
+  ),
+  'reward-shaping': cardSet(
+    'Reward shaping solves sparse feedback by adding an immediate hint while preserving the real task reward.',
+    'A potential function acts like a progress meter: moves toward useful states earn denser feedback.',
+    'The math adds gamma times next-state potential minus current-state potential to the environment reward.',
+    'Manipulate current state, next state, discount, and shaping weight to see when a transition becomes informative.',
+    'Mistake to avoid: shaping is not a new objective; bad shaping can reward shortcuts that miss the goal.',
+    'Check understanding by predicting whether moving away from the goal should receive a positive or negative shaping bonus.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',
