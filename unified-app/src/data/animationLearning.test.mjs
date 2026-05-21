@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { allAnimations, curriculumBacklog, curriculumTracks, getAnimationById } from './animations.js';
+import { HUB_LEARNING_PATHS } from './learningPaths.js';
 import {
   PRIORITY_ASSESSMENT_LESSON_IDS,
   getAssessmentStats,
@@ -199,6 +200,59 @@ test('computation graph and backpropagation is an active neural-network bridge l
     neuralTrack.animationIds.indexOf('computation-graph-backprop') <
       neuralTrack.animationIds.indexOf('gradient-problems'),
     'backprop should unlock gradient stability topics',
+  );
+});
+
+test('start-here path is prerequisite-safe and includes core-flow milestones', () => {
+  const startPath = HUB_LEARNING_PATHS.find((path) => path.id === 'start-here');
+  assert.ok(startPath, 'start-here path should exist');
+
+  const pathOrder = new Map(startPath.nodes.map((id, index) => [id, index]));
+  for (const nodeId of startPath.nodes) {
+    const animation = getAnimationById(nodeId);
+    assert.ok(animation, `${nodeId} in start-here must be active`);
+    assert.match(animation.name, /\S/);
+  }
+
+  assert.ok(
+    startPath.nodes.includes('cross-validation'),
+    'start-here should include cross-validation before deeper classification modeling',
+  );
+  assert.ok(
+    startPath.nodes.includes('data-leakage-deep-dive'),
+    'start-here should include data leakage before preprocessing or modeling',
+  );
+  assert.ok(
+    startPath.nodes.includes('feature-scaling-preprocessing'),
+    'start-here should include preprocessing fit-scope before dependent workflows',
+  );
+  assert.ok(startPath.nodes.includes('neural-network'), 'start-here should include neural-network before ReLU');
+
+  for (const nodeId of startPath.nodes) {
+    const index = pathOrder.get(nodeId);
+    const animation = getAnimationById(nodeId);
+    for (const prerequisite of animation.prerequisites) {
+      const prereqIndex = pathOrder.get(prerequisite);
+      if (Number.isInteger(prereqIndex)) {
+        assert.ok(
+          prereqIndex < index,
+          `${nodeId} requires ${prerequisite} before it in start-here`,
+        );
+      }
+    }
+  }
+
+  assert.ok(
+    pathOrder.get('gradient-descent') < pathOrder.get('neural-network'),
+    'gradient descent should precede the neural-network review before backprop',
+  );
+  assert.ok(
+    pathOrder.get('neural-network') < pathOrder.get('relu'),
+    'neural-network basics should precede ReLU in start-here',
+  );
+  assert.ok(
+    pathOrder.get('relu') < pathOrder.get('computation-graph-backprop'),
+    'ReLU should come before computation graph backprop',
   );
 });
 
