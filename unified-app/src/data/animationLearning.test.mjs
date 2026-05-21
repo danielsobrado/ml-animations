@@ -283,6 +283,11 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
     'ReLU should come before computation graph backprop',
   );
   assert.ok(
+    pathOrder.get('computation-graph-backprop') < pathOrder.get('optimizers'),
+    'optimizers should come after backprop in start-here',
+  );
+  assert.ok(startPath.nodes.includes('optimizers'), 'start-here should include optimizers');
+  assert.ok(
     startPath.nodes.includes('roc-pr-curves'),
     'start-here should include ROC and precision-recall for threshold interpretation',
   );

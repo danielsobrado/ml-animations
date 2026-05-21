@@ -25,6 +25,7 @@ export const HUB_LEARNING_PATHS = [
       'neural-network',
       'relu',
       'computation-graph-backprop',
+      'optimizers',
     ],
   },
   {
