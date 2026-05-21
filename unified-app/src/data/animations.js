@@ -38,7 +38,8 @@ import {
   GitMerge,
   ShieldCheck,
   ScatterChart,
-  Search
+  Search,
+  Scale
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -145,6 +146,7 @@ export const categories = [
     items: [
       { id: 'train-validation-test-split', name: 'Train / Validation / Test Split', icon: Shuffle, description: 'Separating data for learning, tuning, and honest evaluation' },
       { id: 'cross-validation', name: 'Cross-Validation & Data Leakage', icon: GitBranch, description: 'Rotating validation folds while keeping leakage out of evaluation' },
+      { id: 'feature-scaling-preprocessing', name: 'Feature Scaling & Preprocessing', icon: Scale, description: 'Standardization, min-max scaling, robust scaling, and leakage-safe fitting' },
       { id: 'k-means', name: 'K-Means Clustering', icon: CircleDot, description: 'Assigning points to nearest centroids and updating means' },
       { id: 'overfitting', name: 'Overfitting', icon: TrendingDown, description: 'When a model memorizes training quirks instead of learning the pattern' },
       { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
@@ -246,6 +248,7 @@ export const curriculumTracks = [
       'linear-regression',
       'train-validation-test-split',
       'cross-validation',
+      'feature-scaling-preprocessing',
       'k-means',
       'logistic-regression',
       'classification-metrics',
@@ -439,10 +442,21 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Cross-validation does not fix data leakage; the whole modeling pipeline must be fitted inside each fold.',
   },
+  'feature-scaling-preprocessing': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['cross-validation'],
+    learningObjectives: [
+      'Compare standardization, min-max scaling, and robust scaling on raw numeric features',
+      'Explain why scalers and imputers must be fitted on training data only',
+      'Predict how units and outliers change distances, penalties, and gradient behavior',
+    ],
+    commonMisconception: 'Scaling is not harmless bookkeeping; fitting preprocessing on validation or test data leaks evaluation information.',
+  },
   'k-means': {
     difficulty: 'beginner',
     estimatedMinutes: 16,
-    prerequisites: ['pca', 'expected-value-variance'],
+    prerequisites: ['pca', 'feature-scaling-preprocessing'],
     learningObjectives: [
       'Assign each point to the nearest centroid using distance',
       'Update centroids by averaging the points currently assigned to each cluster',

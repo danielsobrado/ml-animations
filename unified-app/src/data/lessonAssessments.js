@@ -5,6 +5,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'k-means',
   'train-validation-test-split',
   'cross-validation',
+  'feature-scaling-preprocessing',
   'logistic-regression',
   'classification-metrics',
   'roc-pr-curves',
@@ -232,6 +233,40 @@ export const lessonAssessments = {
         title: 'Audit a fold pipeline',
         prompt: 'Pick one preprocessing step and decide whether it must be learned inside each fold.',
         successCriteria: 'You can explain what information would leak if the step ran before splitting folds.',
+      },
+    ],
+  },
+  'feature-scaling-preprocessing': {
+    quiz: [
+      {
+        id: 'train-only-fit',
+        prompt: 'Why should a scaler be fitted on training data only?',
+        choices: [
+          'So validation or test statistics cannot shape the model pipeline',
+          'So validation examples become part of the training labels',
+          'So every feature keeps its original unit scale',
+        ],
+        answerIndex: 0,
+        explanation: 'Preprocessing parameters are learned from data, so fitting them on validation or test rows leaks evaluation information.',
+      },
+      {
+        id: 'unit-dominance',
+        prompt: 'Why can raw feature units hurt distance-based models?',
+        choices: [
+          'A large-unit column can dominate Euclidean distance',
+          'Distances ignore feature values after scaling',
+          'Standardization removes the need for labels',
+        ],
+        answerIndex: 0,
+        explanation: 'If income is measured in thousands and age in years, raw distances mostly reflect income unless features are scaled.',
+      },
+    ],
+    labs: [
+      {
+        id: 'outlier-scaler-comparison',
+        title: 'Compare scaler sensitivity',
+        prompt: 'Toggle the outlier and compare standard, min-max, and robust scaling on the same selected point.',
+        successCriteria: 'You can explain which scaler moved most and why robust scaling is less sensitive to one extreme value.',
       },
     ],
   },

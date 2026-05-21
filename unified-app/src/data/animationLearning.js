@@ -42,6 +42,7 @@ const EQUATION_OVERRIDES = {
   'linear-regression': '\\hat{y}=X\\beta+\\epsilon',
   'train-validation-test-split': 'D=D_{train}\\cup D_{val}\\cup D_{test}',
   'cross-validation': '\\operatorname{CV}_k=\\frac{1}{k}\\sum_{i=1}^{k} score_i',
+  'feature-scaling-preprocessing': 'z=\\frac{x-\\mu_{train}}{\\sigma_{train}}',
   overfitting: '\\mathcal{L}_{train}\\downarrow\\quad while\\quad \\mathcal{L}_{val}\\uparrow',
   'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
@@ -109,6 +110,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the fold count and leakage risk, then compare reported validation score with honest signal.',
     'Mistake to avoid: preprocessing before the fold split lets validation information leak into training.',
     'Check understanding by naming which unit, such as user or time, must stay grouped before random splitting.',
+  ),
+  'feature-scaling-preprocessing': cardSet(
+    'Feature scaling solves the problem of raw columns having incompatible units, ranges, and missing-value treatments.',
+    'A scaler learns training-set statistics, then applies the same transformation to validation, test, and production rows.',
+    'The math includes z = (x - train_mean) / train_std, min-max ranges, and robust median/IQR scaling.',
+    'Manipulate scaler type, outlier presence, fit scope, and selected point to compare distances before and after preprocessing.',
+    'Mistake to avoid: fitting preprocessing on validation or test data leaks information just like tuning on the test set.',
+    'Check understanding by predicting which scaler changes most when one validation outlier appears.',
   ),
   'logistic-regression': cardSet(
     'Logistic regression solves binary classification by turning a linear score into a class probability.',

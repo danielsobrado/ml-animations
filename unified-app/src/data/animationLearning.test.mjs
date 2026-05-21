@@ -129,6 +129,7 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
   const activeCoreMlIds = [
     'train-validation-test-split',
     'cross-validation',
+    'feature-scaling-preprocessing',
     'overfitting',
     'logistic-regression',
     'classification-metrics',
@@ -264,14 +265,36 @@ test('k-means is promoted into Core ML as an unsupervised clustering lesson', ()
   assert.ok(coreMlTrack.animationIds.includes('k-means'));
   assert.ok(!backlogIds.has('k-means'));
   assert.ok(isAnimationAvailable('k-means'));
-  assert.deepEqual(animation.prerequisites, ['pca', 'expected-value-variance']);
+  assert.deepEqual(animation.prerequisites, ['pca', 'feature-scaling-preprocessing']);
   assert.match(animation.learningObjectives.join(' '), /centroid|inertia/i);
   assert.match(animation.commonMisconception, /choosing k|number of groups/i);
 
   assert.ok(
-    coreMlTrack.animationIds.indexOf('cross-validation') <
+    coreMlTrack.animationIds.indexOf('feature-scaling-preprocessing') <
       coreMlTrack.animationIds.indexOf('k-means'),
-    'validation concepts should precede unsupervised model selection discussion',
+    'scaling should precede distance-based clustering',
+  );
+});
+
+test('feature scaling and preprocessing is promoted into Core ML before distance-based models', () => {
+  const animation = getAnimationById('feature-scaling-preprocessing');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'feature scaling lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('feature-scaling-preprocessing'));
+  assert.ok(!backlogIds.has('feature-scaling-preprocessing'));
+  assert.ok(isAnimationAvailable('feature-scaling-preprocessing'));
+  assert.deepEqual(animation.prerequisites, ['cross-validation']);
+  assert.match(animation.learningObjectives.join(' '), /standardization|min-max|robust|training data/i);
+  assert.match(animation.commonMisconception, /leaks|validation|test/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('cross-validation') <
+      coreMlTrack.animationIds.indexOf('feature-scaling-preprocessing'),
+    'leakage-aware validation should precede preprocessing fit-scope decisions',
   );
 });
 
