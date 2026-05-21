@@ -318,6 +318,10 @@ test('LLM path includes modern inference sequencing', () => {
     'llm-path should include sampling strategy lesson',
   );
   assert.ok(
+    llmPath.nodes.includes('fine-tuning'),
+    'llm-path should include fine-tuning methods after decoding controls',
+  );
+  assert.ok(
     pathOrder.get('self-attention') < pathOrder.get('attention-masks'),
     'attention masks should follow self-attention',
   );
@@ -332,6 +336,10 @@ test('LLM path includes modern inference sequencing', () => {
   assert.ok(
     pathOrder.get('transformer-token-generation') < pathOrder.get('sampling-strategies'),
     'sampling should come after token generation',
+  );
+  assert.ok(
+    pathOrder.get('sampling-strategies') < pathOrder.get('fine-tuning'),
+    'fine-tuning should come after sampling and decoding controls',
   );
   assert.ok(
     pathOrder.get('transformer-architecture-families') < pathOrder.get('transformer-token-generation'),

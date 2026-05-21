@@ -31,7 +31,7 @@ export const HUB_LEARNING_PATHS = [
   {
     id: 'llm-path',
     label: 'NLP To LLMs',
-    description: 'A language-model route from tokens and embeddings into attention, token-generation loop, and GPT-style inference behavior.',
+    description: 'A language-model route from tokens and embeddings into attention, token generation, decoding controls, and behavior tuning.',
     nodes: [
       'tokenization',
       'embeddings',
@@ -43,6 +43,7 @@ export const HUB_LEARNING_PATHS = [
       'llm-training-objectives',
       'transformer-token-generation',
       'sampling-strategies',
+      'fine-tuning',
       'gpt2-comprehensive',
     ],
   },
