@@ -64,6 +64,7 @@ const EQUATION_OVERRIDES = {
   'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
   'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
   'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
+  'rag-failure-modes': 'grounded\\iff supported\\;\\land\\;\\neg stale\\;\\land\\;\\neg conflict',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -369,6 +370,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Move strictness and reranker mode, then predict which claim flips from grounded to unsupported.',
     'Mistake to avoid: a high-ranked chunk is not automatically a valid citation source.',
     'Check understanding by comparing lenient and strict grounding for the same top-k output.',
+  ),
+  'rag-failure-modes': cardSet(
+    'RAG failure modes define why an apparently confident answer can still be unreliable.',
+    'Each claim should be tested against top-k evidence: grounded support, stale facts, conflict, or absence.',
+    'The failure math is claim-level: grounded = usable support exists, else classify whether missing, stale, conflicting, or irrelevant.',
+    'Use the controls to move top-k, reranker, and strictness, then predict each claim’s outcome.',
+    'Mistake to avoid: fixing decoding settings before retrieval quality often makes fluent answers more confidently wrong.',
+    'Check understanding by identifying why a claim is rejected when no valid evidence remains in the grounded set.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

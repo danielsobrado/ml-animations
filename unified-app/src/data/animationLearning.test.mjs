@@ -705,6 +705,31 @@ test('RAG reranking and grounding is promoted before retrieval evaluation', () =
   );
 });
 
+test('RAG failure modes lesson is active between reranking and retrieval evaluation', () => {
+  const animation = getAnimationById('rag-failure-modes');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+
+  assert.ok(animation, 'RAG failure modes lesson should be active');
+  assert.equal(animation.categoryId, 'advanced-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('rag-failure-modes'));
+  assert.ok(isAnimationAvailable('rag-failure-modes'));
+  assert.deepEqual(animation.prerequisites, ['rag-reranking-grounding']);
+  assert.match(animation.learningObjectives.join(' '), /missing|stale|conflict|irrelevant/i);
+  assert.match(animation.commonMisconception, /grounded|fluent|evidence/i);
+
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-reranking-grounding') <
+      generativeTrack.animationIds.indexOf('rag-failure-modes'),
+    'reranking should precede failure-mode diagnostics',
+  );
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-failure-modes') <
+      generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
+    'failure-mode diagnostics should prepare retrieval evaluation',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);

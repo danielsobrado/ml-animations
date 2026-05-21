@@ -40,7 +40,8 @@ import {
   ScatterChart,
   Search,
   Scale,
-  Scissors
+  Scissors,
+  AlertTriangle
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -116,6 +117,7 @@ export const categories = [
       { id: 'rag-chunking-context', name: 'RAG Chunking & Context Packing', icon: Scissors, description: 'Chunk size, overlap, top-k, and token budget tradeoffs' },
       { id: 'rag-vector-indexing', name: 'Vector Indexing & ANN Search', icon: Database, description: 'Exact search, IVF clusters, HNSW graphs, latency, and recall' },
       { id: 'rag-reranking-grounding', name: 'RAG Reranking & Grounding', icon: Search, description: 'Re-rank candidate chunks and apply strict grounding checks before citation' },
+      { id: 'rag-failure-modes', name: 'RAG Failure Modes', icon: AlertTriangle, description: 'Diagnose missing, stale, irrelevant, and conflicting retrieval evidence' },
       { id: 'rag-retrieval-evaluation', name: 'RAG Retrieval Evaluation', icon: Search, description: 'Chunking, reranking, recall@k, MRR, and nDCG' },
       { id: 'multimodal-llm', name: 'Multimodal LLM', icon: Image, description: 'Multi-modal language models' },
     ],
@@ -349,6 +351,7 @@ export const curriculumTracks = [
       'rag-chunking-context',
       'rag-vector-indexing',
       'rag-reranking-grounding',
+      'rag-failure-modes',
       'rag-retrieval-evaluation',
       'multimodal-llm',
       'fine-tuning',
@@ -768,6 +771,17 @@ const CURRICULUM_OVERRIDES = {
       'Diagnose grounding failures caused by stale or conflicting chunks',
     ],
     commonMisconception: 'A reranker can reorder chunks, but it cannot fix missing evidence or contradictory source policies.',
+  },
+  'rag-failure-modes': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 16,
+    prerequisites: ['rag-reranking-grounding'],
+    learningObjectives: [
+      'Identify whether a grounded answer failure is missing evidence, stale evidence, irrelevance, or contradiction',
+      'Tune top-k, reranker, and strictness controls to reduce each failure type',
+      'Choose the correct diagnostic step before adjusting model or prompt behavior',
+    ],
+    commonMisconception: 'A fluent answer is not the same as a grounded one; retrieval failures can survive even when generation looks polished.',
   },
   'neural-network': {
     difficulty: 'beginner',
