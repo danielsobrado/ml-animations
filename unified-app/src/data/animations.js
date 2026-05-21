@@ -192,6 +192,7 @@ export const categories = [
     items: [
       { id: 'rl-foundations', name: 'RL Foundations', icon: BookOpen, description: 'Basic RL concepts' },
       { id: 'mdp-formalism', name: 'MDP Formalism', icon: Workflow, description: 'States, actions, rewards, transitions, and discounting' },
+      { id: 'value-iteration', name: 'Value Iteration', icon: Calculator, description: 'Bellman backups for planning with a known model' },
       { id: 'q-learning', name: 'Q-Learning', icon: Brain, description: 'Value-based learning algorithm' },
       { id: 'rl-exploration', name: 'Exploration vs Exploitation', icon: Shuffle, description: 'The exploration-exploitation tradeoff' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
@@ -367,6 +368,7 @@ export const curriculumTracks = [
       'markov-chains',
       'rl-foundations',
       'mdp-formalism',
+      'value-iteration',
       'q-learning',
       'rl-exploration',
       'pagerank',
@@ -869,10 +871,21 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'An MDP is not just a state diagram; each action owns a probability distribution over next states and rewards.',
   },
-  'q-learning': {
+  'value-iteration': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
     prerequisites: ['mdp-formalism', 'expected-value-variance'],
+    learningObjectives: [
+      'Apply Bellman backups to update state values from rewards and neighboring values',
+      'Explain why repeated sweeps converge toward a stable value function',
+      'Extract a greedy policy from the final value estimates',
+    ],
+    commonMisconception: 'Value iteration is planning with a known transition model; it is not the same as learning Q-values only from sampled experience.',
+  },
+  'q-learning': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['value-iteration', 'expected-value-variance'],
   },
 };
 

@@ -935,7 +935,7 @@ test('RAG failure modes lesson is active between reranking and retrieval evaluat
 
 test('MDP formalism bridges RL foundations and Q-learning', () => {
   const animation = getAnimationById('mdp-formalism');
-  const qLearning = getAnimationById('q-learning');
+  const valueIteration = getAnimationById('value-iteration');
   const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
   const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
 
@@ -945,7 +945,7 @@ test('MDP formalism bridges RL foundations and Q-learning', () => {
   assert.ok(rlTrack.animationIds.includes('mdp-formalism'));
   assert.ok(isAnimationAvailable('mdp-formalism'));
   assert.deepEqual(animation.prerequisites, ['rl-foundations']);
-  assert.deepEqual(qLearning.prerequisites, ['mdp-formalism', 'expected-value-variance']);
+  assert.deepEqual(valueIteration.prerequisites, ['mdp-formalism', 'expected-value-variance']);
   assert.match(animation.learningObjectives.join(' '), /states|actions|transition|rewards|discount/i);
   assert.match(animation.commonMisconception, /state diagram|probability distribution/i);
 
@@ -954,8 +954,30 @@ test('MDP formalism bridges RL foundations and Q-learning', () => {
     'RL foundations should introduce MDP vocabulary first',
   );
   assert.ok(
-    rlPath.nodes.indexOf('mdp-formalism') < rlPath.nodes.indexOf('q-learning'),
-    'MDP formalism should precede Q-learning updates',
+    rlPath.nodes.indexOf('mdp-formalism') < rlPath.nodes.indexOf('value-iteration'),
+    'MDP formalism should precede value iteration planning',
+  );
+});
+
+test('value iteration bridges MDP planning and Q-learning', () => {
+  const animation = getAnimationById('value-iteration');
+  const qLearning = getAnimationById('q-learning');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+
+  assert.ok(animation, 'Value iteration lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('value-iteration'));
+  assert.ok(isAnimationAvailable('value-iteration'));
+  assert.deepEqual(animation.prerequisites, ['mdp-formalism', 'expected-value-variance']);
+  assert.deepEqual(qLearning.prerequisites, ['value-iteration', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /Bellman|sweeps|policy/i);
+  assert.match(animation.commonMisconception, /known transition model|sampled experience/i);
+
+  assert.ok(
+    rlPath.nodes.indexOf('value-iteration') < rlPath.nodes.indexOf('q-learning'),
+    'Value iteration should precede Q-learning updates',
   );
 });
 

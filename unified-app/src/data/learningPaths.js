@@ -88,6 +88,7 @@ export const HUB_LEARNING_PATHS = [
       'markov-chains',
       'rl-foundations',
       'mdp-formalism',
+      'value-iteration',
       'q-learning',
       'rl-exploration',
       'pagerank',

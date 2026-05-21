@@ -1336,6 +1336,40 @@ export const lessonAssessments = {
       },
     ],
   },
+  'value-iteration': {
+    quiz: [
+      {
+        id: 'bellman-backup',
+        prompt: 'What does a Bellman optimality backup do in value iteration?',
+        choices: [
+          'It compares action lookaheads and keeps the highest expected return',
+          'It samples one action and permanently stores that single result',
+          'It tokenizes rewards into subword units',
+        ],
+        answerIndex: 0,
+        explanation: 'Value iteration uses the known model to compute expected return for each action, then takes the maximum.',
+      },
+      {
+        id: 'model-vs-samples',
+        prompt: 'Why is value iteration considered planning rather than model-free learning?',
+        choices: [
+          'It uses known transitions and rewards to update values before acting',
+          'It ignores transition probabilities',
+          'It only works when there are no rewards',
+        ],
+        answerIndex: 0,
+        explanation: 'Planning methods use a model of the environment; Q-learning can learn from sampled experience without that full model.',
+      },
+    ],
+    labs: [
+      {
+        id: 'sweep-propagation',
+        title: 'Watch reward propagation',
+        prompt: 'Set sweeps to zero, then increase one step at a time and observe which states change after the goal value appears.',
+        successCriteria: 'You can identify how terminal rewards propagate backward through Bellman sweeps.',
+      },
+    ],
+  },
 };
 
 export function getLessonAssessment(lessonId) {

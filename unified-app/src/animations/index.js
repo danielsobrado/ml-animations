@@ -102,6 +102,7 @@ const animationRegistry = {
   // Reinforcement Learning
   'rl-foundations': lazy(() => import('./rl-foundations')),
   'mdp-formalism': lazy(() => import('./mdp-formalism')),
+  'value-iteration': lazy(() => import('./value-iteration')),
   'rl-exploration': lazy(() => import('./rl-exploration')),
   'q-learning': lazy(() => import('./q-learning')),
 

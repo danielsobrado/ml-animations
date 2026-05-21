@@ -75,6 +75,7 @@ const EQUATION_OVERRIDES = {
   'conditional-probability': 'P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}',
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
   'mdp-formalism': 'M=(S,A,P,R,\\gamma)',
+  'value-iteration': 'V_{k+1}(s)=\\max_a\\sum_{s\\prime}P(s\\prime\\mid s,a)[R+\\gamma V_k(s\\prime)]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
@@ -387,6 +388,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the action choice and discount factor to see how immediate and delayed rewards change value.',
     'Mistake to avoid: treating a transition as deterministic when the action really creates a probability distribution.',
     'Check understanding by predicting which action has higher expected return before changing gamma.',
+  ),
+  'value-iteration': cardSet(
+    'Value iteration solves the planning problem of choosing actions when the transition model and rewards are known.',
+    'Each sweep asks every state what its best one-step lookahead would be if neighboring values were trusted.',
+    'The math is a Bellman optimality backup: reward plus discounted next-state value, then max over actions.',
+    'Manipulate discount and sweep count to watch values propagate backward from terminal rewards.',
+    'Mistake to avoid: value iteration is not sample-based trial and error; it uses the model to plan before acting.',
+    'Check understanding by predicting which state changes after one more Bellman sweep.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',
