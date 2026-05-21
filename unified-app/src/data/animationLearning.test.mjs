@@ -611,7 +611,7 @@ test('RAG retrieval evaluation is promoted into the generative AI path', () => {
   assert.ok(generativeTrack.animationIds.includes('rag-retrieval-evaluation'));
   assert.ok(!backlogIds.has('rag-retrieval-evaluation'));
   assert.ok(isAnimationAvailable('rag-retrieval-evaluation'));
-  assert.deepEqual(animation.prerequisites, ['rag', 'embeddings', 'cosine-similarity']);
+  assert.deepEqual(animation.prerequisites, ['rag-chunking-context', 'embeddings', 'cosine-similarity']);
   assert.match(animation.learningObjectives.join(' '), /chunk|rerank|recall@k|nDCG/i);
   assert.match(animation.commonMisconception, /missing evidence|right chunks|context/i);
 
@@ -619,6 +619,33 @@ test('RAG retrieval evaluation is promoted into the generative AI path', () => {
     generativeTrack.animationIds.indexOf('rag') <
       generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
     'broad RAG introduction should precede retrieval evaluation',
+  );
+});
+
+test('RAG chunking and context packing are promoted before retrieval evaluation', () => {
+  const animation = getAnimationById('rag-chunking-context');
+  const evaluation = getAnimationById('rag-retrieval-evaluation');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+
+  assert.ok(animation, 'RAG chunking lesson should be active');
+  assert.equal(animation.categoryId, 'advanced-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('rag-chunking-context'));
+  assert.ok(isAnimationAvailable('rag-chunking-context'));
+  assert.deepEqual(animation.prerequisites, ['rag', 'embeddings']);
+  assert.ok(evaluation.prerequisites.includes('rag-chunking-context'));
+  assert.match(animation.learningObjectives.join(' '), /chunk size|overlap|top-k|context budget/i);
+  assert.match(animation.commonMisconception, /Bigger chunks|overlap|top-k/i);
+
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag') <
+      generativeTrack.animationIds.indexOf('rag-chunking-context'),
+    'basic RAG pipeline should precede chunking and packing tradeoffs',
+  );
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag-chunking-context') <
+      generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
+    'chunking and packing should precede retrieval metrics',
   );
 });
 

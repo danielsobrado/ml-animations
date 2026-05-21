@@ -61,6 +61,7 @@ const EQUATION_OVERRIDES = {
   'llm-training-objectives': '\\mathcal{L}=-\\log p_\\theta(target\\mid context)',
   'sampling-strategies': 'x_{t+1}\\sim \\operatorname{Sample}(\\operatorname{TopP}(\\operatorname{TopK}(\\operatorname{softmax}(z/\\tau))))',
   'fine-tuning': 'W^{\\prime}=W+BA\\quad or\\quad \\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})',
+  'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -342,6 +343,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate adapter rank, quantization, data quality, and preference margin to compare memory and behavior tradeoffs.',
     'Mistake to avoid: fine-tuning is not retrieval and it is not one fixed method; the data signal decides what behavior can improve.',
     'Check understanding by matching limited GPU memory, demonstration data, and preference pairs to the right method.',
+  ),
+  'rag-chunking-context': cardSet(
+    'RAG chunking and context packing solve the problem of turning long documents into evidence the model can actually use.',
+    'Chunks are retrieval units; packed context is the subset that survives ranking, top-k, and token budget constraints.',
+    'The math splits documents by size and overlap, ranks chunks by relevance, then selects evidence under a context window budget.',
+    'Manipulate chunk size, overlap, top-k, and budget to see which refund facts are retrieved and packed.',
+    'Mistake to avoid: more overlap or larger top-k can duplicate text and crowd out the answer space.',
+    'Check understanding by tuning settings until boundary-spanning evidence fits without excessive duplicate context.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

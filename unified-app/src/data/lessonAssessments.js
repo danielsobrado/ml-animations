@@ -31,6 +31,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'transformer-token-generation',
   'sampling-strategies',
   'fine-tuning',
+  'rag-chunking-context',
   'rag-retrieval-evaluation',
 ];
 
@@ -1125,6 +1126,40 @@ export const lessonAssessments = {
         title: 'Choose a fine-tuning method',
         prompt: 'Pick one scenario with limited GPU memory, one with demonstrations, and one with preference pairs, then choose LoRA, SFT, or DPO/RLHF.',
         successCriteria: 'Your choice matches the available data signal and the memory or behavior constraint.',
+      },
+    ],
+  },
+  'rag-chunking-context': {
+    quiz: [
+      {
+        id: 'overlap-tradeoff',
+        prompt: 'What is the main tradeoff of adding chunk overlap?',
+        choices: [
+          'It can preserve boundary facts but also creates duplicate context and index entries',
+          'It removes the need for embeddings',
+          'It guarantees every generated answer is correct',
+        ],
+        answerIndex: 0,
+        explanation: 'Overlap helps when an answer crosses chunk boundaries, but repeated text can consume retrieval slots and context budget.',
+      },
+      {
+        id: 'context-packing-budget',
+        prompt: 'Why can a high top-k still fail to help a RAG answer?',
+        choices: [
+          'Retrieved chunks may not fit inside the remaining context budget',
+          'Top-k changes the model weights during generation',
+          'The tokenizer stops splitting text into tokens',
+        ],
+        answerIndex: 0,
+        explanation: 'Retrieval and context packing are separate steps; chunks returned by retrieval can be dropped when the context budget is full.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tune-chunk-budget',
+        title: 'Tune chunking and packing',
+        prompt: 'Adjust chunk size, overlap, top-k, and context budget until both relevant refund facts fit without too much duplicate text.',
+        successCriteria: 'You can explain which control recovered the boundary fact and which control limited packed evidence.',
       },
     ],
   },

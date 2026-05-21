@@ -39,7 +39,8 @@ import {
   ShieldCheck,
   ScatterChart,
   Search,
-  Scale
+  Scale,
+  Scissors
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -112,6 +113,7 @@ export const categories = [
     items: [
       { id: 'vae', name: 'Variational Autoencoder', icon: Shuffle, description: 'Generative latent variable model' },
       { id: 'rag', name: 'RAG', icon: Database, description: 'Retrieval-augmented generation' },
+      { id: 'rag-chunking-context', name: 'RAG Chunking & Context Packing', icon: Scissors, description: 'Chunk size, overlap, top-k, and token budget tradeoffs' },
       { id: 'rag-retrieval-evaluation', name: 'RAG Retrieval Evaluation', icon: Search, description: 'Chunking, reranking, recall@k, MRR, and nDCG' },
       { id: 'multimodal-llm', name: 'Multimodal LLM', icon: Image, description: 'Multi-modal language models' },
     ],
@@ -342,6 +344,7 @@ export const curriculumTracks = [
       'joint-attention',
       'dit',
       'rag',
+      'rag-chunking-context',
       'rag-retrieval-evaluation',
       'multimodal-llm',
       'fine-tuning',
@@ -729,6 +732,17 @@ const CURRICULUM_OVERRIDES = {
     estimatedMinutes: 18,
     prerequisites: ['self-attention', 'kv-cache'],
   },
+  'rag-chunking-context': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['rag', 'embeddings'],
+    learningObjectives: [
+      'Explain how chunk size and overlap shape what retrieval can return',
+      'Predict how top-k and context budget decide which evidence reaches the generator',
+      'Identify when overlap improves recall and when it wastes context window space',
+    ],
+    commonMisconception: 'Bigger chunks, more overlap, and larger top-k are not automatically better; they can dilute retrieval scores or crowd out answer space.',
+  },
   'neural-network': {
     difficulty: 'beginner',
     estimatedMinutes: 18,
@@ -789,7 +803,7 @@ const CURRICULUM_OVERRIDES = {
   'rag-retrieval-evaluation': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['rag', 'embeddings', 'cosine-similarity'],
+    prerequisites: ['rag-chunking-context', 'embeddings', 'cosine-similarity'],
     learningObjectives: [
       'Explain how chunk size and overlap change retrieved evidence',
       'Compare first-pass retrieval with reranked candidate ordering',
