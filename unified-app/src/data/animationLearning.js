@@ -57,6 +57,7 @@ const EQUATION_OVERRIDES = {
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
   'rag-retrieval-evaluation': 'Recall@k=\\frac{|R\\cap Top_k|}{|R|}',
   'attention-masks': '\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V',
+  'transformer-architecture-families': 'Encoder\\;only\\neq Decoder\\;only\\neq Encoder\\text{-}Decoder',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -298,6 +299,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate or step through a token path and watch what attention changes versus what the MLP changes.',
     'Mistake to avoid: a transformer is not only attention; residual, normalization, and feed-forward layers are essential.',
     'Check understanding by naming what information is mixed across tokens and what is processed per token.',
+  ),
+  'transformer-architecture-families': cardSet(
+    'Transformer architecture families solve the problem of matching a transformer stack to the way a task consumes and produces text.',
+    'Encoder-only models read fixed inputs, decoder-only models generate from a prefix, and encoder-decoder models condition generation on a source.',
+    'The math changes the attention mask: bidirectional visibility, causal prefix visibility, or decoder cross-attention into encoder states.',
+    'Manipulate the family selector to compare BERT-style, GPT-style, and T5-style token visibility and output behavior.',
+    'Mistake to avoid: a transformer block is not the whole model design; objectives and masks decide what the system can naturally do.',
+    'Check understanding by choosing the family for classification, chat completion, and translation before revealing the examples.',
   ),
   'transformer-token-generation': cardSet(
     'Token generation solves the problem of turning a trained transformer into text one next-token decision at a time.',

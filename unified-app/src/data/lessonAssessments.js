@@ -26,6 +26,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'self-attention',
   'attention-masks',
   'transformer',
+  'transformer-architecture-families',
   'transformer-token-generation',
   'rag-retrieval-evaluation',
 ];
@@ -951,6 +952,40 @@ export const lessonAssessments = {
         title: 'Trace one token',
         prompt: 'Follow one token through attention, feed-forward, residual, and normalization stages.',
         successCriteria: 'You can say what each stage changes and what it preserves.',
+      },
+    ],
+  },
+  'transformer-architecture-families': {
+    quiz: [
+      {
+        id: 'bert-family',
+        prompt: 'Which transformer family best describes BERT-style models?',
+        choices: [
+          'Encoder-only with bidirectional attention',
+          'Decoder-only with causal attention',
+          'Encoder-decoder with cross-attention only',
+        ],
+        answerIndex: 0,
+        explanation: 'BERT-style models encode an input with bidirectional self-attention to produce contextual representations.',
+      },
+      {
+        id: 'gpt-generation',
+        prompt: 'Why are GPT-style models naturally used for left-to-right generation?',
+        choices: [
+          'Causal self-attention and next-token prediction match autoregressive decoding',
+          'Bidirectional masks let every future token be visible during generation',
+          'They do not use token probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Decoder-only models learn to predict the next token from the prefix, then append each sampled token.',
+      },
+    ],
+    labs: [
+      {
+        id: 'choose-family',
+        title: 'Choose the right family',
+        prompt: 'Pick search reranking, chat completion, and translation tasks, then choose the architecture family for each.',
+        successCriteria: 'You can justify each choice using attention visibility, objective, and output type.',
       },
     ],
   },

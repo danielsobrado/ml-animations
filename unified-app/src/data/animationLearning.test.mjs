@@ -456,7 +456,7 @@ test('transformer token generation is promoted into the NLP transformer path', (
   assert.ok(transformerTrack.animationIds.includes('transformer-token-generation'));
   assert.ok(!backlogIds.has('transformer-token-generation'));
   assert.ok(isAnimationAvailable('transformer-token-generation'));
-  assert.deepEqual(animation.prerequisites, ['transformer', 'tokenization', 'softmax']);
+  assert.deepEqual(animation.prerequisites, ['transformer-architecture-families', 'tokenization', 'softmax']);
   assert.match(animation.learningObjectives.join(' '), /temperature|top-k|top-p|KV cache/i);
 
   assert.ok(
@@ -468,6 +468,33 @@ test('transformer token generation is promoted into the NLP transformer path', (
     transformerTrack.animationIds.indexOf('transformer-token-generation') <
       transformerTrack.animationIds.indexOf('kv-cache'),
     'generation loop should motivate the dedicated KV cache lesson',
+  );
+});
+
+test('transformer architecture families are promoted before model-specific transformer lessons', () => {
+  const animation = getAnimationById('transformer-architecture-families');
+  const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');
+  const tokenGeneration = getAnimationById('transformer-token-generation');
+
+  assert.ok(animation, 'transformer architecture families lesson should be active');
+  assert.equal(animation.categoryId, 'transformers');
+  assert.ok(animation.trackIds.includes('nlp-transformers'));
+  assert.ok(transformerTrack.animationIds.includes('transformer-architecture-families'));
+  assert.ok(isAnimationAvailable('transformer-architecture-families'));
+  assert.deepEqual(animation.prerequisites, ['transformer', 'attention-masks']);
+  assert.ok(tokenGeneration.prerequisites.includes('transformer-architecture-families'));
+  assert.match(animation.learningObjectives.join(' '), /encoder-only|decoder-only|encoder-decoder|BERT|GPT|T5/i);
+  assert.match(animation.commonMisconception, /BERT|GPT|T5|interchangeable/i);
+
+  assert.ok(
+    transformerTrack.animationIds.indexOf('transformer') <
+      transformerTrack.animationIds.indexOf('transformer-architecture-families'),
+    'the full transformer block should precede architecture family comparison',
+  );
+  assert.ok(
+    transformerTrack.animationIds.indexOf('transformer-architecture-families') <
+      transformerTrack.animationIds.indexOf('bert'),
+    'family comparison should precede BERT-specific detail',
   );
 });
 

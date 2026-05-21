@@ -70,6 +70,7 @@ export const categories = [
       { id: 'positional-encoding', name: 'Positional Encoding', icon: Workflow, description: 'Adding position information' },
       { id: 'rope', name: 'RoPE (Rotary Embeddings)', icon: RotateCcw, description: 'Modern position encoding via rotation' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
+      { id: 'transformer-architecture-families', name: 'Transformer Architecture Families', icon: GitBranch, description: 'Encoder-only, decoder-only, and encoder-decoder model patterns' },
       { id: 'transformer-token-generation', name: 'Token Generation Loop', icon: MessageSquare, description: 'Logits, sampling, token append, and KV cache reuse' },
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
@@ -309,6 +310,7 @@ export const curriculumTracks = [
       'attention-masks',
       'positional-encoding',
       'transformer',
+      'transformer-architecture-families',
       'bert',
       'gpt2-comprehensive',
       'transformer-token-generation',
@@ -643,10 +645,21 @@ const CURRICULUM_OVERRIDES = {
     estimatedMinutes: 25,
     prerequisites: ['self-attention', 'attention-masks', 'positional-encoding', 'layer-normalization'],
   },
+  'transformer-architecture-families': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['transformer', 'attention-masks'],
+    learningObjectives: [
+      'Compare encoder-only, decoder-only, and encoder-decoder transformer information flow',
+      'Match BERT-style, GPT-style, and T5-style architectures to natural tasks',
+      'Explain how bidirectional, causal, and cross-attention masks support different objectives',
+    ],
+    commonMisconception: 'BERT, GPT, and T5 are not interchangeable wrappers around the same block; their masks, objectives, and outputs differ.',
+  },
   'transformer-token-generation': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['transformer', 'tokenization', 'softmax'],
+    prerequisites: ['transformer-architecture-families', 'tokenization', 'softmax'],
     learningObjectives: [
       'Trace one autoregressive decoding step from context tokens to next-token logits',
       'Explain how temperature, top-k, and top-p change the candidate distribution',
