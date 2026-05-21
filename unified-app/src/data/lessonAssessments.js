@@ -10,6 +10,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'classification-metrics',
   'roc-pr-curves',
   'overfitting',
+  'bias-variance-tradeoff',
   'regularization',
   'knn-naive-bayes-svm',
   'tree-ensembles',
@@ -404,6 +405,40 @@ export const lessonAssessments = {
         title: 'Find the validation sweet spot',
         prompt: 'Move complexity until validation error is lowest, then compare it with the lowest training error.',
         successCriteria: 'You can explain why the best validation point is not necessarily the most complex model.',
+      },
+    ],
+  },
+  'bias-variance-tradeoff': {
+    quiz: [
+      {
+        id: 'high-bias-signal',
+        prompt: 'What usually signals high bias?',
+        choices: [
+          'Training and validation error are both high',
+          'Training error is near zero while validation error rises sharply',
+          'The test set was used exactly once at the end',
+        ],
+        answerIndex: 0,
+        explanation: 'High bias means the model is too simple for the real pattern, so it performs poorly even on training data.',
+      },
+      {
+        id: 'high-variance-fix',
+        prompt: 'Which action often helps a high-variance model?',
+        choices: [
+          'Collect more data or regularize the model',
+          'Make the model more flexible immediately',
+          'Stop using validation data',
+        ],
+        answerIndex: 0,
+        explanation: 'High variance comes from sample sensitivity, so more data, simpler models, regularization, or averaging can help.',
+      },
+    ],
+    labs: [
+      {
+        id: 'complexity-sweep',
+        title: 'Sweep complexity and sample size',
+        prompt: 'Switch between simple, balanced, and flexible models, then change sample size and noise.',
+        successCriteria: 'You can explain when the dominant problem is bias versus variance from the train and validation errors.',
       },
     ],
   },

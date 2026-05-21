@@ -47,6 +47,7 @@ const EQUATION_OVERRIDES = {
   'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
   'roc-pr-curves': 'ROC=(FPR,TPR)\\quad PR=(Recall,Precision)',
+  'bias-variance-tradeoff': '\\mathbb{E}[(y-\\hat{f}(x))^2]=Bias^2+Variance+Noise',
   regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
   'knn-naive-bayes-svm': '\\hat{y}=\\operatorname{vote}_k(x)\\quad or\\quad \\arg\\max_y p(y)\\prod_j p(x_j\\mid y)',
   'tree-ensembles': '\\hat{y}=\\operatorname{aggregate}(T_1(x),\\ldots,T_M(x))',
@@ -151,6 +152,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate model complexity and find the point where validation error is lowest.',
     'Mistake to avoid: the most flexible model is not automatically the best model.',
     'Check understanding by naming the first visual sign that memorization has started.',
+  ),
+  'bias-variance-tradeoff': cardSet(
+    'Bias-variance solves the problem of diagnosing why a model fails to generalize, not just whether it fails.',
+    'Bias is a model being too rigid; variance is a model being too sensitive to the particular sample it saw.',
+    'The math decomposes expected squared error into bias squared, variance, and irreducible noise.',
+    'Manipulate model complexity, sample size, and noise to see train error, validation error, and the generalization gap change.',
+    'Mistake to avoid: high validation error is not always overfitting; high training error points to underfitting and bias.',
+    'Check understanding by deciding whether the next fix should be more flexibility, more data, regularization, or averaging.',
   ),
   regularization: cardSet(
     'Regularization solves the problem of models spending too much complexity on weak evidence.',

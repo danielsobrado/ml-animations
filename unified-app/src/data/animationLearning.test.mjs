@@ -134,6 +134,7 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
     'logistic-regression',
     'classification-metrics',
     'regularization',
+    'bias-variance-tradeoff',
     'knn-naive-bayes-svm',
   ];
   const activeIds = new Set(allAnimations.map((animation) => animation.id));
@@ -338,6 +339,35 @@ test('tree ensembles are promoted into Core ML as a guided model-family lesson',
     coreMlTrack.animationIds.indexOf('knn-naive-bayes-svm') <
       coreMlTrack.animationIds.indexOf('tree-ensembles'),
     'classical single-model baselines should precede ensemble capacity tradeoffs',
+  );
+});
+
+test('bias-variance tradeoff is promoted into Core ML before regularization', () => {
+  const animation = getAnimationById('bias-variance-tradeoff');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+  const regularization = getAnimationById('regularization');
+
+  assert.ok(animation, 'bias-variance lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('bias-variance-tradeoff'));
+  assert.ok(!backlogIds.has('bias-variance-tradeoff'));
+  assert.ok(isAnimationAvailable('bias-variance-tradeoff'));
+  assert.deepEqual(animation.prerequisites, ['overfitting', 'classification-metrics']);
+  assert.ok(regularization.prerequisites.includes('bias-variance-tradeoff'));
+  assert.match(animation.learningObjectives.join(' '), /bias|variance|sample size/i);
+  assert.match(animation.commonMisconception, /overfitting|underfit|bias/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('overfitting') <
+      coreMlTrack.animationIds.indexOf('bias-variance-tradeoff'),
+    'overfitting should introduce generalization failure before the decomposition lesson',
+  );
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('bias-variance-tradeoff') <
+      coreMlTrack.animationIds.indexOf('regularization'),
+    'bias-variance diagnosis should precede regularization as one treatment',
   );
 });
 

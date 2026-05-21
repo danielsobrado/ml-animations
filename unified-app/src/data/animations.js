@@ -152,6 +152,7 @@ export const categories = [
       { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
       { id: 'roc-pr-curves', name: 'ROC / Precision-Recall Curves', icon: BarChart3, description: 'Threshold sweeps, ROC tradeoffs, and PR curves for rare positives' },
+      { id: 'bias-variance-tradeoff', name: 'Bias-Variance Tradeoff', icon: Activity, description: 'Separating underfit bias from sample-sensitive variance' },
       { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
       { id: 'knn-naive-bayes-svm', name: 'kNN, Naive Bayes, and SVM', icon: Target, description: 'Neighbor voting, probabilistic assumptions, and margin classifiers' },
       { id: 'tree-ensembles', name: 'Tree Ensembles', icon: GitBranch, description: 'Decision trees, random forests, and gradient boosting' },
@@ -255,6 +256,7 @@ export const curriculumTracks = [
       'classification-metrics',
       'roc-pr-curves',
       'overfitting',
+      'bias-variance-tradeoff',
       'regularization',
       'knn-naive-bayes-svm',
       'tree-ensembles',
@@ -508,10 +510,21 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Lower training loss is not always better; after a point it can signal memorization rather than generalization.',
   },
+  'bias-variance-tradeoff': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['overfitting', 'classification-metrics'],
+    learningObjectives: [
+      'Separate error from overly simple assumptions from error caused by sample sensitivity',
+      'Predict how model complexity, data noise, and sample size change train and validation error',
+      'Choose whether to add flexibility, regularize, collect data, or average models from the error pattern',
+    ],
+    commonMisconception: 'Bias-variance is not just another name for overfitting; underfit models can have high bias and bad training error too.',
+  },
   regularization: {
     difficulty: 'intermediate',
     estimatedMinutes: 18,
-    prerequisites: ['overfitting', 'classification-metrics'],
+    prerequisites: ['bias-variance-tradeoff', 'classification-metrics'],
     learningObjectives: [
       'Describe how penalties discourage overly large parameters',
       'Compare under-regularized, balanced, and over-regularized models',
