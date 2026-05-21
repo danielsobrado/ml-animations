@@ -39,6 +39,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'rag-reranking-grounding',
   'rag-failure-modes',
   'rag-retrieval-evaluation',
+  'diffusion-basics',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -1608,6 +1609,40 @@ export const lessonAssessments = {
         title: 'Turn sparse reward into a hint',
         prompt: 'Move the next state toward and away from the goal and compare task reward, shaping bonus, and total signal.',
         successCriteria: 'You can identify when shaping helps exploration and when it would risk changing the objective.',
+      },
+    ],
+  },
+  'diffusion-basics': {
+    quiz: [
+      {
+        id: 'predict-noise',
+        prompt: 'In a basic noise-prediction diffusion lesson, what does the model learn to predict?',
+        choices: [
+          'The noise added to the clean sample at a timestep',
+          'Only the final image caption',
+          'A train/test split for the dataset',
+        ],
+        answerIndex: 0,
+        explanation: 'The common beginner formulation trains the model to estimate the noise so it can be removed.',
+      },
+      {
+        id: 'many-steps',
+        prompt: 'Why is diffusion usually described as an iterative denoising process?',
+        choices: [
+          'Generation repeatedly removes noise across timesteps',
+          'The model only runs once at t = 0',
+          'Noise is added only after the image is complete',
+        ],
+        answerIndex: 0,
+        explanation: 'A diffusion sampler walks from noisy latents toward cleaner latents over multiple denoising steps.',
+      },
+    ],
+    labs: [
+      {
+        id: 'noise-prediction-error',
+        title: 'Tune the noise prediction',
+        prompt: 'Move timestep and prediction error to see how noisy sample and denoised estimate diverge from the clean signal.',
+        successCriteria: 'You can explain why a better noise estimate produces a cleaner recovered sample.',
       },
     ],
   },

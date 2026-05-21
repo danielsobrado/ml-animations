@@ -381,6 +381,7 @@ test('vision path includes active diffusion component lessons after the latent b
 
   const pathOrder = new Map(visionPath.nodes.map((id, index) => [id, index]));
   const diffusionComponentIds = [
+    'diffusion-basics',
     'self-attention',
     'sd3-overview',
     'flow-matching',
@@ -395,7 +396,8 @@ test('vision path includes active diffusion component lessons after the latent b
     assert.ok(getAnimationById(nodeId), `${nodeId} in vision-path must be active`);
   }
 
-  assert.ok(pathOrder.get('vae') < pathOrder.get('diffusion-vae'));
+  assert.ok(pathOrder.get('vae') < pathOrder.get('diffusion-basics'));
+  assert.ok(pathOrder.get('diffusion-basics') < pathOrder.get('diffusion-vae'));
   assert.ok(pathOrder.get('diffusion-vae') < pathOrder.get('self-attention'));
   assert.ok(pathOrder.get('self-attention') < pathOrder.get('sd3-overview'));
   assert.ok(pathOrder.get('sd3-overview') < pathOrder.get('flow-matching'));
@@ -403,6 +405,26 @@ test('vision path includes active diffusion component lessons after the latent b
   assert.ok(pathOrder.get('clip-encoder') < pathOrder.get('t5-encoder'));
   assert.ok(pathOrder.get('t5-encoder') < pathOrder.get('joint-attention'));
   assert.ok(pathOrder.get('joint-attention') < pathOrder.get('dit'));
+});
+
+test('diffusion basics bridges VAE and advanced diffusion components', () => {
+  const animation = getAnimationById('diffusion-basics');
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+  const visionPath = HUB_LEARNING_PATHS.find((path) => path.id === 'vision-path');
+
+  assert.ok(animation, 'diffusion basics lesson should be active');
+  assert.equal(animation.categoryId, 'diffusion-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('diffusion-basics'));
+  assert.ok(isAnimationAvailable('diffusion-basics'));
+  assert.deepEqual(animation.prerequisites, ['vae']);
+  assert.match(animation.learningObjectives.join(' '), /noise|timestep|clean/i);
+  assert.match(animation.commonMisconception, /one magic step|denoising/i);
+  assert.ok(
+    visionPath.nodes.indexOf('vae') < visionPath.nodes.indexOf('diffusion-basics') &&
+      visionPath.nodes.indexOf('diffusion-basics') < visionPath.nodes.indexOf('diffusion-vae'),
+    'diffusion basics should sit between VAE and diffusion VAE',
+  );
 });
 
 test('logistic regression metadata matches the sigmoid binary-classification lesson', () => {

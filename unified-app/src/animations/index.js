@@ -119,6 +119,7 @@ const animationRegistry = {
   'pagerank': lazy(() => import('./pagerank')),
 
   // Diffusion Models (SD3)
+  'diffusion-basics': lazy(() => import('./diffusion-basics')),
   'sd3-overview': lazy(() => import('./sd3-overview')),
   'flow-matching': lazy(() => import('./flow-matching')),
   'diffusion-vae': lazy(() => import('./diffusion-vae')),

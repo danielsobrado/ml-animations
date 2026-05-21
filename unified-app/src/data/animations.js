@@ -221,6 +221,7 @@ export const categories = [
     icon: Sparkles,
     color: 'from-fuchsia-500 to-purple-600',
     items: [
+      { id: 'diffusion-basics', name: 'Diffusion Basics', icon: Sparkles, description: 'Add noise, predict noise, and denoise step by step' },
       { id: 'sd3-overview', name: 'SD3 Architecture Overview', icon: Cpu, description: 'Complete Stable Diffusion 3 pipeline' },
       { id: 'flow-matching', name: 'Flow Matching', icon: Workflow, description: 'Flow-based generative modeling' },
       { id: 'diffusion-vae', name: 'VAE for Diffusion', icon: Shuffle, description: 'Latent space encoding for images' },
@@ -351,6 +352,7 @@ export const curriculumTracks = [
     description: 'Latent-variable models, diffusion-era conditioning, multimodal attention, and RAG.',
     animationIds: [
       'vae',
+      'diffusion-basics',
       'diffusion-vae',
       'sd3-overview',
       'flow-matching',
@@ -885,6 +887,17 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'advanced',
     estimatedMinutes: 24,
     prerequisites: ['vae'],
+  },
+  'diffusion-basics': {
+    difficulty: 'beginner',
+    estimatedMinutes: 16,
+    prerequisites: ['vae'],
+    learningObjectives: [
+      'Explain the forward process that mixes clean data with noise',
+      'Describe why the model learns to predict noise at a timestep',
+      'Use predicted noise to recover a cleaner sample estimate',
+    ],
+    commonMisconception: 'Diffusion models do not generate by one magic step; they learn repeated denoising from noisy samples.',
   },
   rag: {
     difficulty: 'advanced',

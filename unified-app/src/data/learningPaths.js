@@ -72,6 +72,7 @@ export const HUB_LEARNING_PATHS = [
       'conv2d',
       'max-pooling',
       'vae',
+      'diffusion-basics',
       'diffusion-vae',
       'self-attention',
       'sd3-overview',

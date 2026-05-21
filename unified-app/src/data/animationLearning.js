@@ -65,6 +65,7 @@ const EQUATION_OVERRIDES = {
   'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
   'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
   'rag-failure-modes': 'grounded\\iff supported\\;\\land\\;\\neg stale\\;\\land\\;\\neg conflict',
+  'diffusion-basics': 'x_t=\\sqrt{1-t}\\,x_0+\\sqrt{t}\\,\\epsilon,\\quad \\hat{x}_0\\leftarrow x_t-\\hat{\\epsilon}',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
@@ -411,6 +412,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Use the controls to move top-k, reranker, and strictness, then predict each claim’s outcome.',
     'Mistake to avoid: fixing decoding settings before retrieval quality often makes fluent answers more confidently wrong.',
     'Check understanding by identifying why a claim is rejected when no valid evidence remains in the grounded set.',
+  ),
+  'diffusion-basics': cardSet(
+    'Diffusion basics solve the beginner gap between latent-variable models and advanced SD3 components.',
+    'The forward process corrupts data with controlled noise; the reverse process learns how to remove that noise.',
+    'The math mixes clean signal with noise at timestep t, then uses predicted noise to estimate the clean sample.',
+    'Manipulate clean signal, noise, timestep, and prediction error to see why better noise prediction improves denoising.',
+    'Mistake to avoid: the model is not asked to invent the whole image in one step; it learns many denoising steps.',
+    'Check understanding by predicting what happens when the model overestimates the noise that was added.',
   ),
   'mdp-formalism': cardSet(
     'MDP formalism solves the problem of describing sequential decisions with one consistent vocabulary.',
