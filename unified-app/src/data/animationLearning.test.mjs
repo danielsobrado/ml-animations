@@ -259,6 +259,18 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
     'calibration should build on ROC/PR understanding',
   );
   assert.ok(
+    pathOrder.get('calibration') < pathOrder.get('overfitting'),
+    'overfitting should come after classification-evaluation checkpoints',
+  );
+  assert.ok(
+    pathOrder.get('overfitting') < pathOrder.get('bias-variance-tradeoff'),
+    'bias-variance should follow overfitting',
+  );
+  assert.ok(
+    pathOrder.get('bias-variance-tradeoff') < pathOrder.get('regularization'),
+    'regularization should come after bias-variance framing',
+  );
+  assert.ok(
     pathOrder.get('relu') < pathOrder.get('computation-graph-backprop'),
     'ReLU should come before computation graph backprop',
   );
@@ -270,6 +282,9 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
     startPath.nodes.includes('calibration'),
     'start-here should include calibration as part of classification evaluation quality',
   );
+  assert.ok(startPath.nodes.includes('overfitting'), 'start-here should include overfitting');
+  assert.ok(startPath.nodes.includes('bias-variance-tradeoff'), 'start-here should include bias-variance tradeoff');
+  assert.ok(startPath.nodes.includes('regularization'), 'start-here should include regularization');
 });
 
 test('LLM path includes modern inference sequencing', () => {
