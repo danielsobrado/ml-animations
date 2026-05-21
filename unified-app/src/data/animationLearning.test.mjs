@@ -256,6 +256,43 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
   );
 });
 
+test('LLM path includes modern inference sequencing', () => {
+  const llmPath = HUB_LEARNING_PATHS.find((path) => path.id === 'llm-path');
+  assert.ok(llmPath, 'llm-path should exist');
+
+  const pathOrder = new Map(llmPath.nodes.map((id, index) => [id, index]));
+
+  assert.ok(llmPath.nodes.includes('attention-masks'), 'llm-path should include attention mask visibility rules');
+  assert.ok(
+    llmPath.nodes.includes('transformer-token-generation'),
+    'llm-path should include token generation loop',
+  );
+  assert.ok(
+    llmPath.nodes.includes('sampling-strategies'),
+    'llm-path should include sampling strategy lesson',
+  );
+  assert.ok(
+    pathOrder.get('self-attention') < pathOrder.get('attention-masks'),
+    'attention masks should follow self-attention',
+  );
+  assert.ok(
+    pathOrder.get('attention-masks') < pathOrder.get('transformer'),
+    'transformer lesson should follow attention-mask setup',
+  );
+  assert.ok(
+    pathOrder.get('transformer') < pathOrder.get('transformer-token-generation'),
+    'token generation should come after transformer',
+  );
+  assert.ok(
+    pathOrder.get('transformer-token-generation') < pathOrder.get('sampling-strategies'),
+    'sampling should come after token generation',
+  );
+  assert.ok(
+    pathOrder.get('transformer-architecture-families') < pathOrder.get('transformer-token-generation'),
+    'architecture family context should come before token generation details',
+  );
+});
+
 test('logistic regression metadata matches the sigmoid binary-classification lesson', () => {
   const animation = getAnimationById('logistic-regression');
 
