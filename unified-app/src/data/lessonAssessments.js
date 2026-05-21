@@ -2,6 +2,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
   'linear-regression',
   'train-validation-test-split',
+  'cross-validation',
   'logistic-regression',
   'classification-metrics',
   'overfitting',
@@ -121,6 +122,40 @@ export const lessonAssessments = {
         title: 'Spot a leakage path',
         prompt: 'Move the split controls and explain one way preprocessing before splitting could leak information.',
         successCriteria: 'Your example names what statistic or label information crosses the split boundary.',
+      },
+    ],
+  },
+  'cross-validation': {
+    quiz: [
+      {
+        id: 'pipeline-inside-fold',
+        prompt: 'Why should preprocessing be fitted inside each cross-validation fold?',
+        choices: [
+          'So validation-fold information cannot shape the training pipeline',
+          'So every fold uses a different target variable',
+          'So the final test set can be used during model selection',
+        ],
+        answerIndex: 0,
+        explanation: 'Scaling, imputation, feature selection, or embedding fitting can leak validation statistics if done before the fold split.',
+      },
+      {
+        id: 'grouped-folds',
+        prompt: 'When repeated users appear in a dataset, what split is usually safer?',
+        choices: [
+          'Group all rows from the same user into the same fold',
+          'Randomly scatter every row independently',
+          'Put all users into every validation fold',
+        ],
+        answerIndex: 0,
+        explanation: 'Grouped folds prevent a model from seeing one row for a user in training and another row for the same user in validation.',
+      },
+    ],
+    labs: [
+      {
+        id: 'leakage-audit',
+        title: 'Audit a fold pipeline',
+        prompt: 'Pick one preprocessing step and decide whether it must be learned inside each fold.',
+        successCriteria: 'You can explain what information would leak if the step ran before splitting folds.',
       },
     ],
   },

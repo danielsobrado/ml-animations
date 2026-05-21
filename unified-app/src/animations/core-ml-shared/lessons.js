@@ -19,6 +19,26 @@ export const coreMlLessons = {
     check: 'If you repeatedly pick the best model by looking at test performance, what set did the test data secretly become?',
     answer: 'It became another validation set, so the final score is optimistic.',
   },
+  'cross-validation': {
+    id: 'cross-validation',
+    title: 'Cross-Validation & Data Leakage',
+    eyebrow: 'Reliable model selection',
+    summary: 'Cross-validation rotates which fold acts as validation so model selection is less dependent on one lucky split, but only works when leakage is kept out of every fold.',
+    equation: 'score = average(validation scores across k folds)',
+    intuition: 'Instead of trusting one practice exam, give the model several independent validation turns. The catch: the answer key must never sneak into any training turn.',
+    mechanism: [
+      'Split training data into k folds while preserving the unit that must not leak, such as user, patient, or time period.',
+      'For each fold, fit preprocessing and model parameters only on the other folds.',
+      'Score on the held-out fold, then rotate until every fold has been validation once.',
+      'Average fold scores for model selection, then train the final model and evaluate once on the untouched test set.',
+    ],
+    controls: [
+      { id: 'folds', label: 'Folds', min: 3, max: 8, step: 1, defaultValue: 5 },
+      { id: 'leakage', label: 'Leakage risk %', min: 0, max: 100, step: 10, defaultValue: 20 },
+    ],
+    check: 'Why must scaling, imputation, feature selection, or embedding fitting happen inside each fold rather than before cross-validation?',
+    answer: 'Fitting preprocessing before the split lets validation-fold information shape the training pipeline, so the validation score becomes optimistic.',
+  },
   overfitting: {
     id: 'overfitting',
     title: 'Overfitting',

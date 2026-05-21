@@ -63,6 +63,7 @@ const animationRegistry = {
 
   // Core ML
   'train-validation-test-split': lazy(() => import('./train-validation-test-split')),
+  'cross-validation': lazy(() => import('./cross-validation')),
   'overfitting': lazy(() => import('./overfitting')),
   'logistic-regression': lazy(() => import('./logistic-regression')),
   'classification-metrics': lazy(() => import('./classification-metrics')),

@@ -213,6 +213,52 @@ function MetricsVisual({ values }) {
   );
 }
 
+function CrossValidationVisual({ values }) {
+  const folds = values.folds;
+  const leakage = values.leakage;
+  const leakagePenalty = leakage / 250;
+  const foldScores = Array.from({ length: folds }, (_, index) => {
+    const baseline = 0.78 + Math.sin(index * 1.7) * 0.045 + ((index % 3) - 1) * 0.015;
+    return Math.max(0.5, Math.min(0.96, baseline + leakagePenalty));
+  });
+  const honestAverage = foldScores.reduce((sum, score) => sum + score, 0) / folds - leakagePenalty;
+  const reportedAverage = foldScores.reduce((sum, score) => sum + score, 0) / folds;
+  const riskTone = leakage >= 60 ? 'orange' : leakage >= 30 ? 'blue' : 'green';
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-3">
+        {foldScores.map((score, validationIndex) => (
+          <div key={validationIndex} className="grid grid-cols-[86px_1fr_64px] items-center gap-3 rounded-lg border border-slate-200 bg-white p-3">
+            <span className="text-xs font-bold uppercase tracking-wide text-slate-500">Round {validationIndex + 1}</span>
+            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${folds}, minmax(0, 1fr))` }}>
+              {Array.from({ length: folds }, (_, foldIndex) => (
+                <div
+                  key={foldIndex}
+                  className={`h-8 rounded ${foldIndex === validationIndex ? 'bg-orange-500' : 'bg-blue-600'}`}
+                  title={foldIndex === validationIndex ? 'validation fold' : 'training fold'}
+                />
+              ))}
+            </div>
+            <span className="text-right font-mono text-sm font-bold text-slate-800">{score.toFixed(2)}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-3 gap-3">
+        <StatTile label="Reported CV" value={reportedAverage.toFixed(2)} tone="blue" />
+        <StatTile label="Leakage risk" value={`${leakage}%`} tone={riskTone} />
+        <StatTile label="Honest signal" value={honestAverage.toFixed(2)} tone="green" />
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-700">
+        Orange folds are validation turns. Blue folds are allowed to fit preprocessing and model parameters.
+        A high leakage setting shows how validation scores can look better than the honest signal when information crosses that boundary.
+      </div>
+    </div>
+  );
+}
+
 function RegularizationVisual({ values }) {
   const lambda = values.lambda;
   const rawWeights = [2.8, -1.9, 1.2, -0.8, 0.55];
@@ -250,6 +296,7 @@ function RegularizationVisual({ values }) {
 
 function Playground({ lesson, values }) {
   if (lesson.id === 'train-validation-test-split') return <TrainSplitVisual values={values} />;
+  if (lesson.id === 'cross-validation') return <CrossValidationVisual values={values} />;
   if (lesson.id === 'overfitting') return <OverfittingVisual values={values} />;
   if (lesson.id === 'logistic-regression') return <LogisticVisual values={values} />;
   if (lesson.id === 'classification-metrics') return <MetricsVisual values={values} />;

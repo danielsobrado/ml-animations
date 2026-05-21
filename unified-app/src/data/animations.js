@@ -137,6 +137,7 @@ export const categories = [
     color: 'from-cyan-600 to-blue-600',
     items: [
       { id: 'train-validation-test-split', name: 'Train / Validation / Test Split', icon: Shuffle, description: 'Separating data for learning, tuning, and honest evaluation' },
+      { id: 'cross-validation', name: 'Cross-Validation & Data Leakage', icon: GitBranch, description: 'Rotating validation folds while keeping leakage out of evaluation' },
       { id: 'overfitting', name: 'Overfitting', icon: TrendingDown, description: 'When a model memorizes training quirks instead of learning the pattern' },
       { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
@@ -233,6 +234,7 @@ export const curriculumTracks = [
     animationIds: [
       'linear-regression',
       'train-validation-test-split',
+      'cross-validation',
       'logistic-regression',
       'classification-metrics',
       'overfitting',
@@ -327,7 +329,6 @@ export const curriculumTracks = [
 ];
 
 export const curriculumBacklog = [
-  { id: 'cross-validation', title: 'Cross-Validation & Data Leakage', trackId: 'core-ml' },
   { id: 'pca', title: 'PCA', trackId: 'foundations' },
   { id: 'k-means', title: 'K-Means Clustering', trackId: 'core-ml' },
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
@@ -402,6 +403,17 @@ const CURRICULUM_OVERRIDES = {
       'Identify how repeated test-set tuning creates data leakage',
     ],
     commonMisconception: 'A high test score is not trustworthy if the test set influenced model choices during development.',
+  },
+  'cross-validation': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['train-validation-test-split'],
+    learningObjectives: [
+      'Explain why k-fold cross-validation rotates the validation role across training data',
+      'Identify leakage from preprocessing, duplicate entities, target-derived features, or time order',
+      'Choose when grouped or time-aware validation is safer than random folds',
+    ],
+    commonMisconception: 'Cross-validation does not fix data leakage; the whole modeling pipeline must be fitted inside each fold.',
   },
   'logistic-regression': {
     difficulty: 'beginner',

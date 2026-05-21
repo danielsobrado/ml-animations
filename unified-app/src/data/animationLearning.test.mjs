@@ -128,6 +128,7 @@ test('curriculum tracks reference only active animations and backlog topics stay
 test('core ml gap topics are promoted from backlog into active guided lessons', () => {
   const activeCoreMlIds = [
     'train-validation-test-split',
+    'cross-validation',
     'overfitting',
     'logistic-regression',
     'classification-metrics',
@@ -154,8 +155,13 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
 
   assert.ok(
     coreMlTrack.animationIds.indexOf('train-validation-test-split') <
+      coreMlTrack.animationIds.indexOf('cross-validation'),
+    'basic holdout splitting should come before cross-validation',
+  );
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('cross-validation') <
       coreMlTrack.animationIds.indexOf('logistic-regression'),
-    'splitting should come before model-specific classification',
+    'leakage-aware validation should come before model-specific classification',
   );
   assert.ok(
     coreMlTrack.animationIds.indexOf('classification-metrics') <

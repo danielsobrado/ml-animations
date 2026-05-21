@@ -41,6 +41,7 @@ const EQUATION_OVERRIDES = {
   'qr-decomposition': 'A=QR',
   'linear-regression': '\\hat{y}=X\\beta+\\epsilon',
   'train-validation-test-split': 'D=D_{train}\\cup D_{val}\\cup D_{test}',
+  'cross-validation': '\\operatorname{CV}_k=\\frac{1}{k}\\sum_{i=1}^{k} score_i',
   overfitting: '\\mathcal{L}_{train}\\downarrow\\quad while\\quad \\mathcal{L}_{val}\\uparrow',
   'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
@@ -92,6 +93,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate validation and test percentages and watch how much data remains for fitting.',
     'Mistake to avoid: repeated test-set tuning quietly turns the test set into validation data.',
     'Check understanding by identifying which split should guide threshold or hyperparameter choices.',
+  ),
+  'cross-validation': cardSet(
+    'Cross-validation solves the problem of model selection depending too much on one validation split.',
+    'Each fold gets one turn as validation while the other folds act as training data.',
+    'The math averages validation scores across k rotations, but each pipeline must be refit inside the rotation.',
+    'Manipulate the fold count and leakage risk, then compare reported validation score with honest signal.',
+    'Mistake to avoid: preprocessing before the fold split lets validation information leak into training.',
+    'Check understanding by naming which unit, such as user or time, must stay grouped before random splitting.',
   ),
   'logistic-regression': cardSet(
     'Logistic regression solves binary classification by turning a linear score into a class probability.',
