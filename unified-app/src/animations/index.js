@@ -22,6 +22,7 @@ const animationRegistry = {
   'transformer-architecture-families': lazy(() => import('./transformer-architecture-families')),
   'llm-training-objectives': lazy(() => import('./llm-training-objectives')),
   'transformer-token-generation': lazy(() => import('./transformer-token-generation')),
+  'sampling-strategies': lazy(() => import('./sampling-strategies')),
   'bert': lazy(() => import('./bert')),
   'gpt2-comprehensive': lazy(() => import('./gpt2-comprehensive')),
   'positional-encoding': lazy(() => import('./positional-encoding')),

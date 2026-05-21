@@ -471,6 +471,33 @@ test('transformer token generation is promoted into the NLP transformer path', (
   );
 });
 
+test('sampling strategies are promoted after the token generation loop', () => {
+  const animation = getAnimationById('sampling-strategies');
+  const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+
+  assert.ok(animation, 'sampling strategies lesson should be active');
+  assert.equal(animation.categoryId, 'transformers');
+  assert.ok(animation.trackIds.includes('nlp-transformers'));
+  assert.ok(transformerTrack.animationIds.includes('sampling-strategies'));
+  assert.ok(!backlogIds.has('sampling-strategies'));
+  assert.ok(isAnimationAvailable('sampling-strategies'));
+  assert.deepEqual(animation.prerequisites, ['transformer-token-generation', 'softmax']);
+  assert.match(animation.learningObjectives.join(' '), /greedy|beam|temperature|top-k|top-p/i);
+  assert.match(animation.commonMisconception, /weights|probability distribution|inference/i);
+
+  assert.ok(
+    transformerTrack.animationIds.indexOf('transformer-token-generation') <
+      transformerTrack.animationIds.indexOf('sampling-strategies'),
+    'token generation should introduce the loop before decoding strategy tradeoffs',
+  );
+  assert.ok(
+    transformerTrack.animationIds.indexOf('sampling-strategies') <
+      transformerTrack.animationIds.indexOf('kv-cache'),
+    'sampling strategy should precede lower-level cache optimization',
+  );
+});
+
 test('transformer architecture families are promoted before model-specific transformer lessons', () => {
   const animation = getAnimationById('transformer-architecture-families');
   const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');

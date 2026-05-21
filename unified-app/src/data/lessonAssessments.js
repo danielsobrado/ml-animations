@@ -29,6 +29,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'transformer-architecture-families',
   'llm-training-objectives',
   'transformer-token-generation',
+  'sampling-strategies',
   'rag-retrieval-evaluation',
 ];
 
@@ -1055,6 +1056,40 @@ export const lessonAssessments = {
         title: 'Compare two decoding settings',
         prompt: 'Generate a few steps with low temperature and greedy mode, then compare it with higher temperature and sampling.',
         successCriteria: 'You can explain which setting is more deterministic and which setting keeps more alternatives alive.',
+      },
+    ],
+  },
+  'sampling-strategies': {
+    quiz: [
+      {
+        id: 'temperature-effect',
+        prompt: 'What does a higher temperature usually do before sampling?',
+        choices: [
+          'Flattens the next-token distribution so weaker candidates receive more probability',
+          'Changes the model weights to remember new facts',
+          'Forces the model to always choose the top token',
+        ],
+        answerIndex: 0,
+        explanation: 'Temperature rescales logits before softmax; higher values make the distribution less sharp.',
+      },
+      {
+        id: 'top-p-meaning',
+        prompt: 'How does top-p sampling choose its candidate set?',
+        choices: [
+          'It keeps the smallest ranked set whose cumulative probability reaches p',
+          'It always keeps exactly p tokens',
+          'It searches multiple full sequences and picks the best final score',
+        ],
+        answerIndex: 0,
+        explanation: 'Top-p is nucleus sampling: the number of kept tokens changes with the probability mass in the current context.',
+      },
+    ],
+    labs: [
+      {
+        id: 'decode-for-task',
+        title: 'Choose decoding for a task',
+        prompt: 'Pick settings for factual QA, brainstorming, and translation, then explain which one should be more deterministic or diverse.',
+        successCriteria: 'You can justify each setting using candidate count, probability mass, and sequence-score tradeoffs.',
       },
     ],
   },

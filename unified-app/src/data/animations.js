@@ -73,6 +73,7 @@ export const categories = [
       { id: 'transformer-architecture-families', name: 'Transformer Architecture Families', icon: GitBranch, description: 'Encoder-only, decoder-only, and encoder-decoder model patterns' },
       { id: 'llm-training-objectives', name: 'LLM Training Objectives', icon: BookOpen, description: 'Pretraining, instruction tuning, and preference optimization signals' },
       { id: 'transformer-token-generation', name: 'Token Generation Loop', icon: MessageSquare, description: 'Logits, sampling, token append, and KV cache reuse' },
+      { id: 'sampling-strategies', name: 'Sampling Strategies', icon: Dice1, description: 'Greedy, beam, temperature, top-k, and top-p decoding tradeoffs' },
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
       { id: 'flash-attention', name: 'Flash Attention', icon: Zap, description: 'Hardware-aware tiled attention for efficiency' },
@@ -316,6 +317,7 @@ export const curriculumTracks = [
       'bert',
       'gpt2-comprehensive',
       'transformer-token-generation',
+      'sampling-strategies',
       'rope',
       'residual-stream',
       'grouped-query-attention',
@@ -679,6 +681,17 @@ const CURRICULUM_OVERRIDES = {
       'Describe why generated tokens are appended and why KV cache rows can be reused',
     ],
     commonMisconception: 'A language model does not plan the whole answer at once; it repeatedly chooses one next token from a probability distribution.',
+  },
+  'sampling-strategies': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['transformer-token-generation', 'softmax'],
+    learningObjectives: [
+      'Compare greedy, beam search, temperature, top-k, and top-p decoding strategies',
+      'Explain how sampling filters reshape the next-token candidate set',
+      'Predict when a decoding setting will make output more deterministic, diverse, or generic',
+    ],
+    commonMisconception: 'Sampling settings do not change the trained model weights; they only decide how to choose from the model probability distribution at inference time.',
   },
   bert: {
     difficulty: 'advanced',

@@ -59,6 +59,7 @@ const EQUATION_OVERRIDES = {
   'attention-masks': '\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V',
   'transformer-architecture-families': 'Encoder\\;only\\neq Decoder\\;only\\neq Encoder\\text{-}Decoder',
   'llm-training-objectives': '\\mathcal{L}=-\\log p_\\theta(target\\mid context)',
+  'sampling-strategies': 'x_{t+1}\\sim \\operatorname{Sample}(\\operatorname{TopP}(\\operatorname{TopK}(\\operatorname{softmax}(z/\\tau))))',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -324,6 +325,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate temperature, top-k, and top-p to see which tokens remain eligible for the next step.',
     'Mistake to avoid: generation is not a single full-sentence prediction; every sampled token changes the next context.',
     'Check understanding by tracing how one selected token becomes part of the KV cache for the following step.',
+  ),
+  'sampling-strategies': cardSet(
+    'Sampling strategies solve the problem of choosing one useful continuation from a probability distribution.',
+    'Greedy and beam search lean deterministic; temperature, top-k, and top-p keep controlled uncertainty for more varied output.',
+    'The math rescales logits with temperature, filters candidates by rank or cumulative probability, then samples or maximizes sequence score.',
+    'Manipulate temperature, top-k, top-p, and beam width to see which tokens or paths remain eligible.',
+    'Mistake to avoid: decoding settings do not retrain the model; they only change how inference chooses from existing probabilities.',
+    'Check understanding by picking settings for factual QA, brainstorming, and translation before comparing the candidate set.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',
