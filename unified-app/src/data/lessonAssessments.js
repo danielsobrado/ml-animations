@@ -2,6 +2,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
   'linear-regression',
   'pca',
+  'k-means',
   'train-validation-test-split',
   'cross-validation',
   'logistic-regression',
@@ -124,6 +125,40 @@ export const lessonAssessments = {
         title: 'Compare one and two components',
         prompt: 'Switch between 1D and 2D projection, then identify when the 1D reconstruction loses the most information.',
         successCriteria: 'You can connect higher noise or weaker correlation to lower PC1 explained variance.',
+      },
+    ],
+  },
+  'k-means': {
+    quiz: [
+      {
+        id: 'assignment-step',
+        prompt: 'During the assignment step, where does each point go?',
+        choices: [
+          'To the nearest centroid',
+          'To the cluster with the largest label value',
+          'To every centroid equally',
+        ],
+        answerIndex: 0,
+        explanation: 'K-means assigns each point to the currently nearest centroid before updating centroid positions.',
+      },
+      {
+        id: 'centroid-update',
+        prompt: 'How is a centroid updated after points are assigned?',
+        choices: [
+          'Move it to the mean of its assigned points',
+          'Move it to the farthest point in the cluster',
+          'Move it to the origin every time',
+        ],
+        answerIndex: 0,
+        explanation: 'The centroid is the coordinate-wise average of the points currently assigned to that cluster.',
+      },
+    ],
+    labs: [
+      {
+        id: 'k-vs-inertia',
+        title: 'Compare k and inertia',
+        prompt: 'Change k and the number of iterations, then describe when lower inertia starts splitting a natural group.',
+        successCriteria: 'You can explain why inertia alone cannot choose the best k.',
       },
     ],
   },

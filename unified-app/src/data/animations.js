@@ -141,6 +141,7 @@ export const categories = [
     items: [
       { id: 'train-validation-test-split', name: 'Train / Validation / Test Split', icon: Shuffle, description: 'Separating data for learning, tuning, and honest evaluation' },
       { id: 'cross-validation', name: 'Cross-Validation & Data Leakage', icon: GitBranch, description: 'Rotating validation folds while keeping leakage out of evaluation' },
+      { id: 'k-means', name: 'K-Means Clustering', icon: CircleDot, description: 'Assigning points to nearest centroids and updating means' },
       { id: 'overfitting', name: 'Overfitting', icon: TrendingDown, description: 'When a model memorizes training quirks instead of learning the pattern' },
       { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
@@ -239,6 +240,7 @@ export const curriculumTracks = [
       'linear-regression',
       'train-validation-test-split',
       'cross-validation',
+      'k-means',
       'logistic-regression',
       'classification-metrics',
       'overfitting',
@@ -334,7 +336,6 @@ export const curriculumTracks = [
 ];
 
 export const curriculumBacklog = [
-  { id: 'k-means', title: 'K-Means Clustering', trackId: 'core-ml' },
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
   { id: 'tree-ensembles', title: 'Decision Trees, Random Forests, and Gradient Boosting', trackId: 'core-ml' },
   { id: 'rag-retrieval-evaluation', title: 'Chunking, Reranking, and Retrieval Evaluation', trackId: 'generative-ai' },
@@ -417,6 +418,17 @@ const CURRICULUM_OVERRIDES = {
       'Choose when grouped or time-aware validation is safer than random folds',
     ],
     commonMisconception: 'Cross-validation does not fix data leakage; the whole modeling pipeline must be fitted inside each fold.',
+  },
+  'k-means': {
+    difficulty: 'beginner',
+    estimatedMinutes: 16,
+    prerequisites: ['pca', 'expected-value-variance'],
+    learningObjectives: [
+      'Assign each point to the nearest centroid using distance',
+      'Update centroids by averaging the points currently assigned to each cluster',
+      'Explain why inertia falls across iterations but k still needs judgment',
+    ],
+    commonMisconception: 'K-means does not discover the true number of groups automatically; choosing k changes the objective and the story.',
   },
   'logistic-regression': {
     difficulty: 'beginner',

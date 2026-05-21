@@ -226,6 +226,28 @@ test('PCA is promoted into the foundations path as a variance projection lesson'
   );
 });
 
+test('k-means is promoted into Core ML as an unsupervised clustering lesson', () => {
+  const animation = getAnimationById('k-means');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'k-means lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('k-means'));
+  assert.ok(!backlogIds.has('k-means'));
+  assert.ok(isAnimationAvailable('k-means'));
+  assert.deepEqual(animation.prerequisites, ['pca', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /centroid|inertia/i);
+  assert.match(animation.commonMisconception, /choosing k|number of groups/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('cross-validation') <
+      coreMlTrack.animationIds.indexOf('k-means'),
+    'validation concepts should precede unsupervised model selection discussion',
+  );
+});
+
 test('transformer token generation is promoted into the NLP transformer path', () => {
   const animation = getAnimationById('transformer-token-generation');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));

@@ -53,6 +53,7 @@ const EQUATION_OVERRIDES = {
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
   pca: 'X_c^TX_c v_i=\\lambda_i v_i',
+  'k-means': '\\min_C\\sum_i \\lVert x_i-c_{a_i}\\rVert^2',
   'conditional-probability': 'P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}',
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
@@ -183,6 +184,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate correlation, noise, and component count to see how projection changes reconstruction.',
     'Mistake to avoid: PCA does not use labels, so high variance is not automatically predictive signal.',
     'Check understanding by explaining why the blue PC1 axis changes when the cloud rotates.',
+  ),
+  'k-means': cardSet(
+    'K-means solves the problem of grouping unlabeled points around a chosen number of representative centroids.',
+    'Each centroid acts like a magnet; points join the nearest one, then the magnet moves to the group average.',
+    'The math minimizes within-cluster squared distance by alternating assignment and centroid update steps.',
+    'Manipulate k and iteration count to watch assignments, centroids, and inertia change together.',
+    'Mistake to avoid: lower inertia from larger k does not automatically mean a better clustering.',
+    'Check understanding by predicting which centroid moves when one point changes cluster.',
   ),
   'attention-mechanism': cardSet(
     'Attention solves the problem of selecting useful context instead of compressing everything equally.',

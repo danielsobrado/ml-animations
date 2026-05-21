@@ -67,6 +67,7 @@ const animationRegistry = {
   'train-validation-test-split': lazy(() => import('./train-validation-test-split')),
   'cross-validation': lazy(() => import('./cross-validation')),
   'overfitting': lazy(() => import('./overfitting')),
+  'k-means': lazy(() => import('./k-means')),
   'logistic-regression': lazy(() => import('./logistic-regression')),
   'classification-metrics': lazy(() => import('./classification-metrics')),
   'regularization': lazy(() => import('./regularization')),
