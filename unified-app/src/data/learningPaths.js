@@ -12,6 +12,8 @@ export const HUB_LEARNING_PATHS = [
       'feature-scaling-preprocessing',
       'logistic-regression',
       'classification-metrics',
+      'roc-pr-curves',
+      'calibration',
       'gradient-descent',
       'neural-network',
       'relu',

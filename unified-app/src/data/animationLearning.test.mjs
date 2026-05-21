@@ -251,8 +251,24 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
     'neural-network basics should precede ReLU in start-here',
   );
   assert.ok(
+    pathOrder.get('classification-metrics') < pathOrder.get('roc-pr-curves'),
+    'ROC/PR should come after classification-metrics in start-here',
+  );
+  assert.ok(
+    pathOrder.get('roc-pr-curves') < pathOrder.get('calibration'),
+    'calibration should build on ROC/PR understanding',
+  );
+  assert.ok(
     pathOrder.get('relu') < pathOrder.get('computation-graph-backprop'),
     'ReLU should come before computation graph backprop',
+  );
+  assert.ok(
+    startPath.nodes.includes('roc-pr-curves'),
+    'start-here should include ROC and precision-recall for threshold interpretation',
+  );
+  assert.ok(
+    startPath.nodes.includes('calibration'),
+    'start-here should include calibration as part of classification evaluation quality',
   );
 });
 
