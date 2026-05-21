@@ -15,6 +15,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'attention-mechanism',
   'self-attention',
   'transformer',
+  'transformer-token-generation',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -564,6 +565,40 @@ export const lessonAssessments = {
         title: 'Trace one token',
         prompt: 'Follow one token through attention, feed-forward, residual, and normalization stages.',
         successCriteria: 'You can say what each stage changes and what it preserves.',
+      },
+    ],
+  },
+  'transformer-token-generation': {
+    quiz: [
+      {
+        id: 'one-token-at-a-time',
+        prompt: 'What does an autoregressive transformer generate at each decoding step?',
+        choices: [
+          'One next token chosen from a probability distribution',
+          'The entire answer as one fixed vector',
+          'A new tokenizer vocabulary',
+        ],
+        answerIndex: 0,
+        explanation: 'The selected token is appended to the context, then the model repeats the same next-token process.',
+      },
+      {
+        id: 'temperature-filtering',
+        prompt: 'What do temperature, top-k, and top-p control?',
+        choices: [
+          'Which next-token candidates remain likely or eligible before selection',
+          'Whether the model has encoder layers',
+          'How many training examples the model sees',
+        ],
+        answerIndex: 0,
+        explanation: 'Temperature reshapes probabilities, while top-k and top-p filter the candidate set before sampling or greedy choice.',
+      },
+    ],
+    labs: [
+      {
+        id: 'sampling-contrast',
+        title: 'Compare two decoding settings',
+        prompt: 'Generate a few steps with low temperature and greedy mode, then compare it with higher temperature and sampling.',
+        successCriteria: 'You can explain which setting is more deterministic and which setting keeps more alternatives alive.',
       },
     ],
   },

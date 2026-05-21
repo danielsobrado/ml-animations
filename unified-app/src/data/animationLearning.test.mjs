@@ -204,6 +204,32 @@ test('logistic regression metadata matches the sigmoid binary-classification les
   assert.match(animation.learningObjectives.join(' '), /sigmoid/i);
 });
 
+test('transformer token generation is promoted into the NLP transformer path', () => {
+  const animation = getAnimationById('transformer-token-generation');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');
+
+  assert.ok(animation, 'token generation lesson should be active');
+  assert.equal(animation.categoryId, 'transformers');
+  assert.ok(animation.trackIds.includes('nlp-transformers'));
+  assert.ok(transformerTrack.animationIds.includes('transformer-token-generation'));
+  assert.ok(!backlogIds.has('transformer-token-generation'));
+  assert.ok(isAnimationAvailable('transformer-token-generation'));
+  assert.deepEqual(animation.prerequisites, ['transformer', 'tokenization', 'softmax']);
+  assert.match(animation.learningObjectives.join(' '), /temperature|top-k|top-p|KV cache/i);
+
+  assert.ok(
+    transformerTrack.animationIds.indexOf('gpt2-comprehensive') <
+      transformerTrack.animationIds.indexOf('transformer-token-generation'),
+    'GPT-style architecture should come before generation loop practice',
+  );
+  assert.ok(
+    transformerTrack.animationIds.indexOf('transformer-token-generation') <
+      transformerTrack.animationIds.indexOf('kv-cache'),
+    'generation loop should motivate the dedicated KV cache lesson',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);

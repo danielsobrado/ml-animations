@@ -47,6 +47,7 @@ const EQUATION_OVERRIDES = {
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
   regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
   'computation-graph-backprop': '\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}',
+  'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
@@ -197,6 +198,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate or step through a token path and watch what attention changes versus what the MLP changes.',
     'Mistake to avoid: a transformer is not only attention; residual, normalization, and feed-forward layers are essential.',
     'Check understanding by naming what information is mixed across tokens and what is processed per token.',
+  ),
+  'transformer-token-generation': cardSet(
+    'Token generation solves the problem of turning a trained transformer into text one next-token decision at a time.',
+    'The model reads the current context, scores possible next tokens, chooses one, appends it, and repeats.',
+    'The math applies softmax to logits divided by temperature, then filters candidates before selecting a token.',
+    'Manipulate temperature, top-k, and top-p to see which tokens remain eligible for the next step.',
+    'Mistake to avoid: generation is not a single full-sentence prediction; every sampled token changes the next context.',
+    'Check understanding by tracing how one selected token becomes part of the KV cache for the following step.',
   ),
 };
 

@@ -66,6 +66,7 @@ export const categories = [
       { id: 'positional-encoding', name: 'Positional Encoding', icon: Workflow, description: 'Adding position information' },
       { id: 'rope', name: 'RoPE (Rotary Embeddings)', icon: RotateCcw, description: 'Modern position encoding via rotation' },
       { id: 'transformer', name: 'Transformer Architecture', icon: Cpu, description: 'Complete transformer model' },
+      { id: 'transformer-token-generation', name: 'Token Generation Loop', icon: MessageSquare, description: 'Logits, sampling, token append, and KV cache reuse' },
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
       { id: 'flash-attention', name: 'Flash Attention', icon: Zap, description: 'Hardware-aware tiled attention for efficiency' },
@@ -284,6 +285,7 @@ export const curriculumTracks = [
       'transformer',
       'bert',
       'gpt2-comprehensive',
+      'transformer-token-generation',
       'rope',
       'residual-stream',
       'grouped-query-attention',
@@ -333,7 +335,6 @@ export const curriculumBacklog = [
   { id: 'k-means', title: 'K-Means Clustering', trackId: 'core-ml' },
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
   { id: 'tree-ensembles', title: 'Decision Trees, Random Forests, and Gradient Boosting', trackId: 'core-ml' },
-  { id: 'transformer-token-generation', title: 'Transformer Token Generation Loop', trackId: 'nlp-transformers' },
   { id: 'rag-retrieval-evaluation', title: 'Chunking, Reranking, and Retrieval Evaluation', trackId: 'generative-ai' },
 ];
 
@@ -499,6 +500,17 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'advanced',
     estimatedMinutes: 25,
     prerequisites: ['self-attention', 'positional-encoding', 'layer-normalization'],
+  },
+  'transformer-token-generation': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['transformer', 'tokenization', 'softmax'],
+    learningObjectives: [
+      'Trace one autoregressive decoding step from context tokens to next-token logits',
+      'Explain how temperature, top-k, and top-p change the candidate distribution',
+      'Describe why generated tokens are appended and why KV cache rows can be reused',
+    ],
+    commonMisconception: 'A language model does not plan the whole answer at once; it repeatedly chooses one next token from a probability distribution.',
   },
   bert: {
     difficulty: 'advanced',

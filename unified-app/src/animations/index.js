@@ -18,6 +18,7 @@ const animationRegistry = {
   'kv-cache': lazy(() => import('./kv-cache')),
   'flash-attention': lazy(() => import('./flash-attention')),
   'transformer': lazy(() => import('./transformer')),
+  'transformer-token-generation': lazy(() => import('./transformer-token-generation')),
   'bert': lazy(() => import('./bert')),
   'gpt2-comprehensive': lazy(() => import('./gpt2-comprehensive')),
   'positional-encoding': lazy(() => import('./positional-encoding')),
