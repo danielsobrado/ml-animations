@@ -1,6 +1,7 @@
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
   'linear-regression',
+  'pca',
   'train-validation-test-split',
   'cross-validation',
   'logistic-regression',
@@ -89,6 +90,40 @@ export const lessonAssessments = {
         title: 'Move the fitted line',
         prompt: 'Change the slope and intercept until residuals shrink, then identify which points still dominate the error.',
         successCriteria: 'You can name at least one point whose residual pulls the fitted line.',
+      },
+    ],
+  },
+  pca: {
+    quiz: [
+      {
+        id: 'center-before-variance',
+        prompt: 'Why does PCA center the data first?',
+        choices: [
+          'So variance directions describe spread around the mean',
+          'So labels can be subtracted from predictions',
+          'So every feature becomes a class probability',
+        ],
+        answerIndex: 0,
+        explanation: 'PCA analyzes covariance around the mean; without centering, the origin can distort the directions.',
+      },
+      {
+        id: 'largest-eigenvalue',
+        prompt: 'Which principal component comes first?',
+        choices: [
+          'The covariance eigenvector with the largest eigenvalue',
+          'The feature with the smallest raw units',
+          'The direction chosen by the target label',
+        ],
+        answerIndex: 0,
+        explanation: 'The largest eigenvalue marks the direction that explains the most variance in the input data.',
+      },
+    ],
+    labs: [
+      {
+        id: 'projection-error',
+        title: 'Compare one and two components',
+        prompt: 'Switch between 1D and 2D projection, then identify when the 1D reconstruction loses the most information.',
+        successCriteria: 'You can connect higher noise or weaker correlation to lower PC1 explained variance.',
       },
     ],
   },

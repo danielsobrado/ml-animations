@@ -54,6 +54,7 @@ const animationRegistry = {
   'determinant-volume': lazy(() => import('./determinant-volume')),
   'projection-matrices': lazy(() => import('./projection-matrices')),
   'low-rank-approximation': lazy(() => import('./low-rank-approximation')),
+  'pca': lazy(() => import('./pca')),
   'eigenvalue': lazy(() => import('./eigenvalue')),
   'svd': lazy(() => import('./svd')),
   'qr-decomposition': lazy(() => import('./qr-decomposition')),

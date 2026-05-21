@@ -52,6 +52,7 @@ const EQUATION_OVERRIDES = {
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
+  pca: 'X_c^TX_c v_i=\\lambda_i v_i',
   'conditional-probability': 'P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}',
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
@@ -174,6 +175,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate one vector or query and observe which neighbors become closest.',
     'Mistake to avoid: embedding distance is learned correlation, not guaranteed semantic truth.',
     'Check understanding by explaining why two similar words can still differ along one direction.',
+  ),
+  pca: cardSet(
+    'PCA solves the problem of compressing numeric data while preserving the largest directions of variation.',
+    'Imagine rotating the axes until the first axis catches the longest shadow cast by the point cloud.',
+    'The math centers X, forms a covariance matrix, and keeps eigenvectors with the largest eigenvalues.',
+    'Manipulate correlation, noise, and component count to see how projection changes reconstruction.',
+    'Mistake to avoid: PCA does not use labels, so high variance is not automatically predictive signal.',
+    'Check understanding by explaining why the blue PC1 axis changes when the cloud rotates.',
   ),
   'attention-mechanism': cardSet(
     'Attention solves the problem of selecting useful context instead of compressing everything equally.',

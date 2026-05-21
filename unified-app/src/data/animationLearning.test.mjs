@@ -204,6 +204,28 @@ test('logistic regression metadata matches the sigmoid binary-classification les
   assert.match(animation.learningObjectives.join(' '), /sigmoid/i);
 });
 
+test('PCA is promoted into the foundations path as a variance projection lesson', () => {
+  const animation = getAnimationById('pca');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const foundationsTrack = curriculumTracks.find((track) => track.id === 'foundations');
+
+  assert.ok(animation, 'PCA lesson should be active');
+  assert.equal(animation.categoryId, 'math-fundamentals');
+  assert.ok(animation.trackIds.includes('foundations'));
+  assert.ok(foundationsTrack.animationIds.includes('pca'));
+  assert.ok(!backlogIds.has('pca'));
+  assert.ok(isAnimationAvailable('pca'));
+  assert.deepEqual(animation.prerequisites, ['matrix-multiplication', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /center|covariance|variance/i);
+  assert.match(animation.commonMisconception, /not supervised/i);
+
+  assert.ok(
+    foundationsTrack.animationIds.indexOf('expected-value-variance') <
+      foundationsTrack.animationIds.indexOf('pca'),
+    'variance should come before PCA',
+  );
+});
+
 test('transformer token generation is promoted into the NLP transformer path', () => {
   const animation = getAnimationById('transformer-token-generation');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));

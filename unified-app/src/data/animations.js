@@ -36,7 +36,8 @@ import {
   Users,
   RotateCcw,
   GitMerge,
-  ShieldCheck
+  ShieldCheck,
+  ScatterChart
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -123,6 +124,7 @@ export const categories = [
       { id: 'determinant-volume', name: 'Determinant as Volume', icon: Box, description: 'Area and volume scaling by matrices' },
       { id: 'projection-matrices', name: 'Projection Matrices', icon: Target, description: 'Idempotent maps onto subspaces' },
       { id: 'low-rank-approximation', name: 'Low-Rank Approximation', icon: Layers, description: 'Truncated SVD and reconstruction error' },
+      { id: 'pca', name: 'PCA', icon: ScatterChart, description: 'Principal directions, variance, and low-dimensional projection' },
       { id: 'eigenvalue', name: 'Eigenvalues', icon: Sigma, description: 'Matrix eigendecomposition' },
       { id: 'svd', name: 'SVD', icon: ArrowRightLeft, description: 'Singular value decomposition' },
       { id: 'qr-decomposition', name: 'QR Decomposition', icon: Boxes, description: 'Orthogonal matrix factorization' },
@@ -222,6 +224,7 @@ export const curriculumTracks = [
       'probability-distributions',
       'conditional-probability',
       'expected-value-variance',
+      'pca',
       'entropy',
       'spearman-correlation',
       'gradient-descent',
@@ -331,7 +334,6 @@ export const curriculumTracks = [
 ];
 
 export const curriculumBacklog = [
-  { id: 'pca', title: 'PCA', trackId: 'foundations' },
   { id: 'k-means', title: 'K-Means Clustering', trackId: 'core-ml' },
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
   { id: 'tree-ensembles', title: 'Decision Trees, Random Forests, and Gradient Boosting', trackId: 'core-ml' },
@@ -474,6 +476,17 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'beginner',
     estimatedMinutes: 12,
     prerequisites: ['matrix-multiplication'],
+  },
+  pca: {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['matrix-multiplication', 'expected-value-variance'],
+    learningObjectives: [
+      'Explain why PCA centers data before measuring variance directions',
+      'Connect covariance eigenvectors to principal component axes',
+      'Use explained variance to decide how many components to keep',
+    ],
+    commonMisconception: 'PCA is not supervised feature selection; it preserves directions of high input variance without looking at labels.',
   },
   'attention-mechanism': {
     difficulty: 'intermediate',
