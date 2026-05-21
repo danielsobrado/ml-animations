@@ -134,6 +134,7 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
     'logistic-regression',
     'classification-metrics',
     'regularization',
+    'knn-naive-bayes-svm',
   ];
   const activeIds = new Set(allAnimations.map((animation) => animation.id));
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
@@ -329,14 +330,36 @@ test('tree ensembles are promoted into Core ML as a guided model-family lesson',
   assert.ok(coreMlTrack.animationIds.includes('tree-ensembles'));
   assert.ok(!backlogIds.has('tree-ensembles'));
   assert.ok(isAnimationAvailable('tree-ensembles'));
-  assert.deepEqual(animation.prerequisites, ['overfitting', 'classification-metrics']);
+  assert.deepEqual(animation.prerequisites, ['overfitting', 'classification-metrics', 'knn-naive-bayes-svm']);
   assert.match(animation.learningObjectives.join(' '), /decision tree|random forests|gradient boosting/i);
   assert.match(animation.commonMisconception, /deeper|overfit|variance/i);
 
   assert.ok(
-    coreMlTrack.animationIds.indexOf('regularization') <
+    coreMlTrack.animationIds.indexOf('knn-naive-bayes-svm') <
       coreMlTrack.animationIds.indexOf('tree-ensembles'),
-    'overfitting and regularization should precede ensemble capacity tradeoffs',
+    'classical single-model baselines should precede ensemble capacity tradeoffs',
+  );
+});
+
+test('kNN, Naive Bayes, and SVM are promoted from backlog into Core ML', () => {
+  const animation = getAnimationById('knn-naive-bayes-svm');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'classical classifier comparison lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('knn-naive-bayes-svm'));
+  assert.ok(!backlogIds.has('knn-naive-bayes-svm'));
+  assert.ok(isAnimationAvailable('knn-naive-bayes-svm'));
+  assert.deepEqual(animation.prerequisites, ['feature-scaling-preprocessing', 'classification-metrics']);
+  assert.match(animation.learningObjectives.join(' '), /kNN|Naive Bayes|SVM|margin/i);
+  assert.match(animation.commonMisconception, /scale|independence|margin/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('feature-scaling-preprocessing') <
+      coreMlTrack.animationIds.indexOf('knn-naive-bayes-svm'),
+    'scaling should precede scale-sensitive classical classifiers',
   );
 });
 

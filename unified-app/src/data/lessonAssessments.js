@@ -11,6 +11,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'roc-pr-curves',
   'overfitting',
   'regularization',
+  'knn-naive-bayes-svm',
   'tree-ensembles',
   'gradient-descent',
   'optimizers',
@@ -437,6 +438,40 @@ export const lessonAssessments = {
         title: 'Sweep lambda',
         prompt: 'Increase the penalty and watch which weights shrink fastest.',
         successCriteria: 'You can describe the tradeoff between data loss, penalty, and total loss.',
+      },
+    ],
+  },
+  'knn-naive-bayes-svm': {
+    quiz: [
+      {
+        id: 'knn-scale',
+        prompt: 'Why does kNN need feature scaling?',
+        choices: [
+          'Euclidean distance can be dominated by the largest-unit feature',
+          'Scaling changes labels into probabilities',
+          'kNN ignores feature values after training',
+        ],
+        answerIndex: 0,
+        explanation: 'kNN compares distances directly, so one unscaled large-unit column can decide most neighbor relationships.',
+      },
+      {
+        id: 'model-assumption',
+        prompt: 'Which statement best matches Gaussian Naive Bayes?',
+        choices: [
+          'It combines per-feature likelihoods under a conditional-independence assumption',
+          'It votes among the nearest k training examples',
+          'It learns a maximum-margin boundary only from support vectors',
+        ],
+        answerIndex: 0,
+        explanation: 'Naive Bayes is probabilistic: it combines class priors with feature likelihoods, often with an independence assumption.',
+      },
+    ],
+    labs: [
+      {
+        id: 'boundary-comparison',
+        title: 'Compare decision changes',
+        prompt: 'Move the query point near the boundary and switch between kNN, Naive Bayes, and SVM.',
+        successCriteria: 'You can explain whether the decision came from local neighbors, likelihood scores, or margin side.',
       },
     ],
   },

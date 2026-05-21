@@ -48,6 +48,7 @@ const EQUATION_OVERRIDES = {
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
   'roc-pr-curves': 'ROC=(FPR,TPR)\\quad PR=(Recall,Precision)',
   regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
+  'knn-naive-bayes-svm': '\\hat{y}=\\operatorname{vote}_k(x)\\quad or\\quad \\arg\\max_y p(y)\\prod_j p(x_j\\mid y)',
   'tree-ensembles': '\\hat{y}=\\operatorname{aggregate}(T_1(x),\\ldots,T_M(x))',
   'computation-graph-backprop': '\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}',
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
@@ -158,6 +159,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate lambda and watch coefficients shrink while total loss changes.',
     'Mistake to avoid: stronger regularization is not always better; too much penalty underfits.',
     'Check understanding by explaining why validation data should choose lambda.',
+  ),
+  'knn-naive-bayes-svm': cardSet(
+    'kNN, Naive Bayes, and SVM solve classification with three different assumptions about the same feature space.',
+    'kNN trusts local neighbors, Naive Bayes trusts class-conditional feature likelihoods, and SVM trusts a separating margin.',
+    'The math is neighbor voting, probabilistic argmax over feature likelihoods, or a signed distance from a margin boundary.',
+    'Manipulate the query point, k value, and classifier mode to see which assumption controls the prediction.',
+    'Mistake to avoid: these models are not plug-compatible; scaling, independence, and margin geometry matter.',
+    'Check understanding by explaining why two classifiers disagree on the same query point.',
   ),
   'tree-ensembles': cardSet(
     'Tree ensembles solve the problem of making threshold-split models stronger and more stable than one tree.',

@@ -76,6 +76,7 @@ const animationRegistry = {
   'classification-metrics': lazy(() => import('./classification-metrics')),
   'roc-pr-curves': lazy(() => import('./roc-pr-curves')),
   'regularization': lazy(() => import('./regularization')),
+  'knn-naive-bayes-svm': lazy(() => import('./knn-naive-bayes-svm')),
   'tree-ensembles': lazy(() => import('./tree-ensembles')),
   'computation-graph-backprop': lazy(() => import('./computation-graph-backprop')),
 

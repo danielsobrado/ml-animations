@@ -153,6 +153,7 @@ export const categories = [
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
       { id: 'roc-pr-curves', name: 'ROC / Precision-Recall Curves', icon: BarChart3, description: 'Threshold sweeps, ROC tradeoffs, and PR curves for rare positives' },
       { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
+      { id: 'knn-naive-bayes-svm', name: 'kNN, Naive Bayes, and SVM', icon: Target, description: 'Neighbor voting, probabilistic assumptions, and margin classifiers' },
       { id: 'tree-ensembles', name: 'Tree Ensembles', icon: GitBranch, description: 'Decision trees, random forests, and gradient boosting' },
     ],
   },
@@ -255,6 +256,7 @@ export const curriculumTracks = [
       'roc-pr-curves',
       'overfitting',
       'regularization',
+      'knn-naive-bayes-svm',
       'tree-ensembles',
       'cross-entropy',
       'softmax',
@@ -349,9 +351,7 @@ export const curriculumTracks = [
   },
 ];
 
-export const curriculumBacklog = [
-  { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
-];
+export const curriculumBacklog = [];
 
 const trackIdsByAnimation = curriculumTracks.reduce((acc, track) => {
   for (const animationId of track.animationIds) {
@@ -519,10 +519,21 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Regularization is not a magic accuracy boost; too much penalty can underfit by making the model too simple.',
   },
+  'knn-naive-bayes-svm': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 22,
+    prerequisites: ['feature-scaling-preprocessing', 'classification-metrics'],
+    learningObjectives: [
+      'Compare kNN neighbor voting, Gaussian Naive Bayes likelihoods, and SVM margin decisions',
+      'Explain which model assumptions make each classifier strong or fragile',
+      'Predict how moving a query point changes each classifier decision',
+    ],
+    commonMisconception: 'Classical classifiers are not interchangeable; scale, independence assumptions, and margin geometry change their behavior.',
+  },
   'tree-ensembles': {
     difficulty: 'intermediate',
     estimatedMinutes: 20,
-    prerequisites: ['overfitting', 'classification-metrics'],
+    prerequisites: ['overfitting', 'classification-metrics', 'knn-naive-bayes-svm'],
     learningObjectives: [
       'Trace how a decision tree routes examples through threshold splits',
       'Explain why random forests reduce variance by averaging many varied trees',
