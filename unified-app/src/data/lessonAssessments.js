@@ -20,6 +20,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'self-attention',
   'transformer',
   'transformer-token-generation',
+  'rag-retrieval-evaluation',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -739,6 +740,40 @@ export const lessonAssessments = {
         title: 'Compare two decoding settings',
         prompt: 'Generate a few steps with low temperature and greedy mode, then compare it with higher temperature and sampling.',
         successCriteria: 'You can explain which setting is more deterministic and which setting keeps more alternatives alive.',
+      },
+    ],
+  },
+  'rag-retrieval-evaluation': {
+    quiz: [
+      {
+        id: 'missing-evidence',
+        prompt: 'What happens if the relevant chunk never appears in the top-k retrieval set?',
+        choices: [
+          'The generator has no grounded evidence to cite',
+          'The reranker can always recreate the missing chunk',
+          'nDCG automatically becomes perfect',
+        ],
+        answerIndex: 0,
+        explanation: 'Reranking can reorder candidates, but it cannot use evidence that first-pass retrieval failed to return.',
+      },
+      {
+        id: 'metric-purpose',
+        prompt: 'Which metric checks whether relevant evidence was recovered somewhere in the top-k set?',
+        choices: [
+          'Recall@k',
+          'Learning rate',
+          'Cross-entropy',
+        ],
+        answerIndex: 0,
+        explanation: 'Recall@k measures how much known relevant evidence appears within the retrieved candidate set.',
+      },
+    ],
+    labs: [
+      {
+        id: 'chunking-rerank-audit',
+        title: 'Audit a retrieval setting',
+        prompt: 'Change chunk size, overlap, top-k, and reranking, then pick the setting with the clearest grounded evidence.',
+        successCriteria: 'You can justify the setting with recall@k, MRR, nDCG, and the text of the top result.',
       },
     ],
   },

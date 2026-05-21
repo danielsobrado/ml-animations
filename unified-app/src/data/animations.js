@@ -37,7 +37,8 @@ import {
   RotateCcw,
   GitMerge,
   ShieldCheck,
-  ScatterChart
+  ScatterChart,
+  Search
 } from 'lucide-react';
 
 // Animation categories and their items
@@ -105,6 +106,7 @@ export const categories = [
     items: [
       { id: 'vae', name: 'Variational Autoencoder', icon: Shuffle, description: 'Generative latent variable model' },
       { id: 'rag', name: 'RAG', icon: Database, description: 'Retrieval-augmented generation' },
+      { id: 'rag-retrieval-evaluation', name: 'RAG Retrieval Evaluation', icon: Search, description: 'Chunking, reranking, recall@k, MRR, and nDCG' },
       { id: 'multimodal-llm', name: 'Multimodal LLM', icon: Image, description: 'Multi-modal language models' },
     ],
   },
@@ -319,6 +321,7 @@ export const curriculumTracks = [
       'joint-attention',
       'dit',
       'rag',
+      'rag-retrieval-evaluation',
       'multimodal-llm',
       'fine-tuning',
       'moe',
@@ -341,7 +344,6 @@ export const curriculumTracks = [
 
 export const curriculumBacklog = [
   { id: 'knn-naive-bayes-svm', title: 'kNN, Naive Bayes, and SVM', trackId: 'core-ml' },
-  { id: 'rag-retrieval-evaluation', title: 'Chunking, Reranking, and Retrieval Evaluation', trackId: 'generative-ai' },
 ];
 
 const trackIdsByAnimation = curriculumTracks.reduce((acc, track) => {
@@ -643,6 +645,17 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'advanced',
     estimatedMinutes: 22,
     prerequisites: ['embeddings', 'cosine-similarity'],
+  },
+  'rag-retrieval-evaluation': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['rag', 'embeddings', 'cosine-similarity'],
+    learningObjectives: [
+      'Explain how chunk size and overlap change retrieved evidence',
+      'Compare first-pass retrieval with reranked candidate ordering',
+      'Evaluate retrieval quality with recall@k, MRR, and nDCG',
+    ],
+    commonMisconception: 'A high generation score cannot fix missing evidence; retrieval must bring the right chunks into context first.',
   },
   'rl-foundations': {
     difficulty: 'beginner',

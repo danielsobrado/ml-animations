@@ -50,6 +50,7 @@ const EQUATION_OVERRIDES = {
   'tree-ensembles': '\\hat{y}=\\operatorname{aggregate}(T_1(x),\\ldots,T_M(x))',
   'computation-graph-backprop': '\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}',
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
+  'rag-retrieval-evaluation': 'Recall@k=\\frac{|R\\cap Top_k|}{|R|}',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
@@ -242,6 +243,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate temperature, top-k, and top-p to see which tokens remain eligible for the next step.',
     'Mistake to avoid: generation is not a single full-sentence prediction; every sampled token changes the next context.',
     'Check understanding by tracing how one selected token becomes part of the KV cache for the following step.',
+  ),
+  'rag-retrieval-evaluation': cardSet(
+    'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',
+    'Chunking decides what can be retrieved; reranking decides what rises to the top; metrics decide if that was good.',
+    'The math includes recall@k for coverage, MRR for first useful rank, and nDCG for rank-sensitive relevance.',
+    'Manipulate chunk size, overlap, top-k, and reranking to watch evidence appear, disappear, or move up.',
+    'Mistake to avoid: a reranker cannot rescue a relevant chunk that was never retrieved as a candidate.',
+    'Check understanding by explaining why a fluent answer can still be ungrounded when recall@k is low.',
   ),
 };
 

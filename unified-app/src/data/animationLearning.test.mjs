@@ -316,6 +316,28 @@ test('transformer token generation is promoted into the NLP transformer path', (
   );
 });
 
+test('RAG retrieval evaluation is promoted into the generative AI path', () => {
+  const animation = getAnimationById('rag-retrieval-evaluation');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const generativeTrack = curriculumTracks.find((track) => track.id === 'generative-ai');
+
+  assert.ok(animation, 'RAG retrieval evaluation lesson should be active');
+  assert.equal(animation.categoryId, 'advanced-models');
+  assert.ok(animation.trackIds.includes('generative-ai'));
+  assert.ok(generativeTrack.animationIds.includes('rag-retrieval-evaluation'));
+  assert.ok(!backlogIds.has('rag-retrieval-evaluation'));
+  assert.ok(isAnimationAvailable('rag-retrieval-evaluation'));
+  assert.deepEqual(animation.prerequisites, ['rag', 'embeddings', 'cosine-similarity']);
+  assert.match(animation.learningObjectives.join(' '), /chunk|rerank|recall@k|nDCG/i);
+  assert.match(animation.commonMisconception, /missing evidence|right chunks|context/i);
+
+  assert.ok(
+    generativeTrack.animationIds.indexOf('rag') <
+      generativeTrack.animationIds.indexOf('rag-retrieval-evaluation'),
+    'broad RAG introduction should precede retrieval evaluation',
+  );
+});
+
 test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);
