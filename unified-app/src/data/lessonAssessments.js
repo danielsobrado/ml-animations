@@ -9,6 +9,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'logistic-regression',
   'classification-metrics',
   'roc-pr-curves',
+  'calibration',
   'overfitting',
   'bias-variance-tradeoff',
   'regularization',
@@ -371,6 +372,40 @@ export const lessonAssessments = {
         title: 'Choose an operating threshold',
         prompt: 'Move the threshold and pick a cutoff for a case where false negatives are more expensive than false positives.',
         successCriteria: 'You can justify the threshold using recall, precision, and the mistake costs.',
+      },
+    ],
+  },
+  calibration: {
+    quiz: [
+      {
+        id: 'probability-meaning',
+        prompt: 'What does a calibrated 0.8 score mean?',
+        choices: [
+          'About 80 percent of similar scored examples should be positive',
+          'The example is guaranteed to be positive',
+          'The model has 80 percent accuracy overall',
+        ],
+        answerIndex: 0,
+        explanation: 'Calibration is about observed frequency within score buckets, not certainty for one row or global accuracy.',
+      },
+      {
+        id: 'sigmoid-warning',
+        prompt: 'Why is a sigmoid output not automatically calibrated?',
+        choices: [
+          'The model score can be overconfident or underconfident after training',
+          'Sigmoid outputs are never between 0 and 1',
+          'Calibration only applies to regression models',
+        ],
+        answerIndex: 0,
+        explanation: 'A bounded probability-shaped score can still disagree with observed outcome frequencies.',
+      },
+    ],
+    labs: [
+      {
+        id: 'reliability-gap',
+        title: 'Find the largest reliability gap',
+        prompt: 'Switch between calibrated, overconfident, and underconfident modes, then identify the bucket with the largest gap.',
+        successCriteria: 'You can compare predicted probability with observed positive rate and describe the calibration error.',
       },
     ],
   },

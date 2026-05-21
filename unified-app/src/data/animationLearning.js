@@ -47,6 +47,7 @@ const EQUATION_OVERRIDES = {
   'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
   'roc-pr-curves': 'ROC=(FPR,TPR)\\quad PR=(Recall,Precision)',
+  calibration: 'P(y=1\\mid \\hat{p}=p)\\approx p',
   'bias-variance-tradeoff': '\\mathbb{E}[(y-\\hat{f}(x))^2]=Bias^2+Variance+Noise',
   regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
   'knn-naive-bayes-svm': '\\hat{y}=\\operatorname{vote}_k(x)\\quad or\\quad \\arg\\max_y p(y)\\prod_j p(x_j\\mid y)',
@@ -144,6 +145,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the threshold and watch the active point move on both curves.',
     'Mistake to avoid: a high ROC-AUC does not choose a deployment threshold or guarantee strong rare-positive precision.',
     'Check understanding by choosing whether ROC or PR is more useful when positives are rare.',
+  ),
+  calibration: cardSet(
+    'Calibration solves the problem of knowing whether a probability score can be trusted as a frequency estimate.',
+    'A score bucket is calibrated when examples scored around 0.8 are positive about 80 percent of the time.',
+    'The math compares predicted probability buckets with observed positive rates using reliability gaps, ECE, and Brier score.',
+    'Manipulate confidence behavior and threshold to separate probability quality from classification cutoff behavior.',
+    'Mistake to avoid: sigmoid and softmax outputs are probability-shaped, but training can still make them overconfident.',
+    'Check understanding by finding which bucket sits farthest from the perfect-calibration diagonal.',
   ),
   overfitting: cardSet(
     'Overfitting explains why a model can look better on training data while becoming worse on new data.',

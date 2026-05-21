@@ -133,6 +133,7 @@ test('core ml gap topics are promoted from backlog into active guided lessons', 
     'overfitting',
     'logistic-regression',
     'classification-metrics',
+    'calibration',
     'regularization',
     'bias-variance-tradeoff',
     'knn-naive-bayes-svm',
@@ -317,6 +318,31 @@ test('ROC and precision-recall curves are promoted into Core ML evaluation', () 
     coreMlTrack.animationIds.indexOf('classification-metrics') <
       coreMlTrack.animationIds.indexOf('roc-pr-curves'),
     'confusion-matrix metrics should precede curve-based threshold sweeps',
+  );
+});
+
+test('calibration is promoted into Core ML probability-quality evaluation', () => {
+  const animation = getAnimationById('calibration');
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'calibration lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('calibration'));
+  assert.ok(isAnimationAvailable('calibration'));
+  assert.deepEqual(animation.prerequisites, ['logistic-regression', 'roc-pr-curves']);
+  assert.match(animation.learningObjectives.join(' '), /probabilities|reliability|Brier/i);
+  assert.match(animation.commonMisconception, /sigmoid|softmax|calibrated/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('roc-pr-curves') <
+      coreMlTrack.animationIds.indexOf('calibration'),
+    'threshold-sweep metrics should precede probability-quality evaluation',
+  );
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('calibration') <
+      coreMlTrack.animationIds.indexOf('overfitting'),
+    'probability quality should be covered before broader generalization diagnostics',
   );
 });
 

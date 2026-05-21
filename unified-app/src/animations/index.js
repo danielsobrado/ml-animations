@@ -75,6 +75,7 @@ const animationRegistry = {
   'logistic-regression': lazy(() => import('./logistic-regression')),
   'classification-metrics': lazy(() => import('./classification-metrics')),
   'roc-pr-curves': lazy(() => import('./roc-pr-curves')),
+  'calibration': lazy(() => import('./calibration')),
   'bias-variance-tradeoff': lazy(() => import('./bias-variance-tradeoff')),
   'regularization': lazy(() => import('./regularization')),
   'knn-naive-bayes-svm': lazy(() => import('./knn-naive-bayes-svm')),

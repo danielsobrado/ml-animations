@@ -152,6 +152,7 @@ export const categories = [
       { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
       { id: 'roc-pr-curves', name: 'ROC / Precision-Recall Curves', icon: BarChart3, description: 'Threshold sweeps, ROC tradeoffs, and PR curves for rare positives' },
+      { id: 'calibration', name: 'Calibration', icon: BarChart3, description: 'Reliability diagrams, Brier score, and probability quality' },
       { id: 'bias-variance-tradeoff', name: 'Bias-Variance Tradeoff', icon: Activity, description: 'Separating underfit bias from sample-sensitive variance' },
       { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
       { id: 'knn-naive-bayes-svm', name: 'kNN, Naive Bayes, and SVM', icon: Target, description: 'Neighbor voting, probabilistic assumptions, and margin classifiers' },
@@ -255,6 +256,7 @@ export const curriculumTracks = [
       'logistic-regression',
       'classification-metrics',
       'roc-pr-curves',
+      'calibration',
       'overfitting',
       'bias-variance-tradeoff',
       'regularization',
@@ -498,6 +500,17 @@ const CURRICULUM_OVERRIDES = {
       'Read precision-recall curves as positive-class quality across recall levels',
     ],
     commonMisconception: 'ROC-AUC is not a threshold choice, and it can look optimistic when positives are rare.',
+  },
+  calibration: {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['logistic-regression', 'roc-pr-curves'],
+    learningObjectives: [
+      'Explain what it means for predicted probabilities to match observed frequencies',
+      'Read a reliability diagram and identify overconfident or underconfident buckets',
+      'Compare calibration metrics such as expected calibration error and Brier score',
+    ],
+    commonMisconception: 'A sigmoid or softmax output is not automatically calibrated just because it is between 0 and 1.',
   },
   overfitting: {
     difficulty: 'beginner',
