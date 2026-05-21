@@ -70,6 +70,7 @@ const animationRegistry = {
   'k-means': lazy(() => import('./k-means')),
   'logistic-regression': lazy(() => import('./logistic-regression')),
   'classification-metrics': lazy(() => import('./classification-metrics')),
+  'roc-pr-curves': lazy(() => import('./roc-pr-curves')),
   'regularization': lazy(() => import('./regularization')),
   'computation-graph-backprop': lazy(() => import('./computation-graph-backprop')),
 

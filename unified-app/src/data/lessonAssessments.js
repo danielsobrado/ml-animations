@@ -7,6 +7,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'cross-validation',
   'logistic-regression',
   'classification-metrics',
+  'roc-pr-curves',
   'overfitting',
   'regularization',
   'gradient-descent',
@@ -295,6 +296,40 @@ export const lessonAssessments = {
         title: 'Trace the confusion matrix',
         prompt: 'Move the threshold and predict which count changes before reading the metric tiles.',
         successCriteria: 'You can connect at least one threshold move to TP, FP, FN, or TN.',
+      },
+    ],
+  },
+  'roc-pr-curves': {
+    quiz: [
+      {
+        id: 'roc-axis',
+        prompt: 'What does the ROC curve put on its axes?',
+        choices: [
+          'True positive rate versus false positive rate',
+          'Precision versus training loss',
+          'Accuracy versus model size',
+        ],
+        answerIndex: 0,
+        explanation: 'ROC curves sweep thresholds and compare recall/TPR against the false positive rate.',
+      },
+      {
+        id: 'pr-rare-positive',
+        prompt: 'Why are precision-recall curves often more revealing for rare positives?',
+        choices: [
+          'They focus on predicted-positive quality and positive-class coverage',
+          'They ignore false positives completely',
+          'They choose the threshold automatically',
+        ],
+        answerIndex: 0,
+        explanation: 'PR curves show how many predicted positives are real and how many real positives are recovered.',
+      },
+    ],
+    labs: [
+      {
+        id: 'threshold-costs',
+        title: 'Choose an operating threshold',
+        prompt: 'Move the threshold and pick a cutoff for a case where false negatives are more expensive than false positives.',
+        successCriteria: 'You can justify the threshold using recall, precision, and the mistake costs.',
       },
     ],
   },

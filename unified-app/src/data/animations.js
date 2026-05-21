@@ -145,6 +145,7 @@ export const categories = [
       { id: 'overfitting', name: 'Overfitting', icon: TrendingDown, description: 'When a model memorizes training quirks instead of learning the pattern' },
       { id: 'logistic-regression', name: 'Logistic Regression', icon: CircleDot, description: 'Linear classification through sigmoid probabilities' },
       { id: 'classification-metrics', name: 'Classification Metrics', icon: BarChart3, description: 'Confusion matrix and threshold tradeoffs' },
+      { id: 'roc-pr-curves', name: 'ROC / Precision-Recall Curves', icon: BarChart3, description: 'Threshold sweeps, ROC tradeoffs, and PR curves for rare positives' },
       { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
     ],
   },
@@ -243,6 +244,7 @@ export const curriculumTracks = [
       'k-means',
       'logistic-regression',
       'classification-metrics',
+      'roc-pr-curves',
       'overfitting',
       'regularization',
       'cross-entropy',
@@ -451,6 +453,17 @@ const CURRICULUM_OVERRIDES = {
       'Choose a metric that matches the cost of different mistakes',
     ],
     commonMisconception: 'Accuracy can look excellent on imbalanced data while the model misses the class you actually care about.',
+  },
+  'roc-pr-curves': {
+    difficulty: 'beginner',
+    estimatedMinutes: 18,
+    prerequisites: ['classification-metrics'],
+    learningObjectives: [
+      'Sweep a classification threshold and track how confusion counts change',
+      'Read ROC curves as true positive rate versus false positive rate',
+      'Read precision-recall curves as positive-class quality across recall levels',
+    ],
+    commonMisconception: 'ROC-AUC is not a threshold choice, and it can look optimistic when positives are rare.',
   },
   overfitting: {
     difficulty: 'beginner',

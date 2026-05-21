@@ -45,6 +45,7 @@ const EQUATION_OVERRIDES = {
   overfitting: '\\mathcal{L}_{train}\\downarrow\\quad while\\quad \\mathcal{L}_{val}\\uparrow',
   'logistic-regression': 'p(y=1\\mid x)=\\sigma(w^Tx+b)',
   'classification-metrics': 'F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}',
+  'roc-pr-curves': 'ROC=(FPR,TPR)\\quad PR=(Recall,Precision)',
   regularization: '\\mathcal{L}_{total}=\\mathcal{L}_{data}+\\lambda\\lVert w\\rVert_2^2',
   'computation-graph-backprop': '\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}',
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
@@ -120,6 +121,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the threshold and predict which count changes before reading the metrics.',
     'Mistake to avoid: high accuracy can hide poor recall when positives are rare.',
     'Check understanding by choosing a metric for a case where false negatives are expensive.',
+  ),
+  'roc-pr-curves': cardSet(
+    'ROC and PR curves solve the problem of evaluating every threshold instead of trusting one cutoff.',
+    'Slide the threshold and the classifier trades found positives against false alarms.',
+    'The math plots TPR against FPR for ROC, and precision against recall for PR.',
+    'Manipulate the threshold and watch the active point move on both curves.',
+    'Mistake to avoid: a high ROC-AUC does not choose a deployment threshold or guarantee strong rare-positive precision.',
+    'Check understanding by choosing whether ROC or PR is more useful when positives are rare.',
   ),
   overfitting: cardSet(
     'Overfitting explains why a model can look better on training data while becoming worse on new data.',

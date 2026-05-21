@@ -248,6 +248,26 @@ test('k-means is promoted into Core ML as an unsupervised clustering lesson', ()
   );
 });
 
+test('ROC and precision-recall curves are promoted into Core ML evaluation', () => {
+  const animation = getAnimationById('roc-pr-curves');
+  const coreMlTrack = curriculumTracks.find((track) => track.id === 'core-ml');
+
+  assert.ok(animation, 'ROC / PR curves lesson should be active');
+  assert.equal(animation.categoryId, 'core-ml');
+  assert.ok(animation.trackIds.includes('core-ml'));
+  assert.ok(coreMlTrack.animationIds.includes('roc-pr-curves'));
+  assert.ok(isAnimationAvailable('roc-pr-curves'));
+  assert.deepEqual(animation.prerequisites, ['classification-metrics']);
+  assert.match(animation.learningObjectives.join(' '), /threshold|ROC|precision-recall/i);
+  assert.match(animation.commonMisconception, /ROC-AUC|threshold/i);
+
+  assert.ok(
+    coreMlTrack.animationIds.indexOf('classification-metrics') <
+      coreMlTrack.animationIds.indexOf('roc-pr-curves'),
+    'confusion-matrix metrics should precede curve-based threshold sweeps',
+  );
+});
+
 test('transformer token generation is promoted into the NLP transformer path', () => {
   const animation = getAnimationById('transformer-token-generation');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
