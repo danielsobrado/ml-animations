@@ -60,6 +60,7 @@ const EQUATION_OVERRIDES = {
   'transformer-architecture-families': 'Encoder\\;only\\neq Decoder\\;only\\neq Encoder\\text{-}Decoder',
   'llm-training-objectives': '\\mathcal{L}=-\\log p_\\theta(target\\mid context)',
   'sampling-strategies': 'x_{t+1}\\sim \\operatorname{Sample}(\\operatorname{TopP}(\\operatorname{TopK}(\\operatorname{softmax}(z/\\tau))))',
+  'fine-tuning': 'W^{\\prime}=W+BA\\quad or\\quad \\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
@@ -333,6 +334,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate temperature, top-k, top-p, and beam width to see which tokens or paths remain eligible.',
     'Mistake to avoid: decoding settings do not retrain the model; they only change how inference chooses from existing probabilities.',
     'Check understanding by picking settings for factual QA, brainstorming, and translation before comparing the candidate set.',
+  ),
+  'fine-tuning': cardSet(
+    'Fine-tuning methods solve the problem of changing a pretrained model behavior using a smaller task-specific signal.',
+    'Full fine-tuning changes many weights, LoRA learns small adapter updates, SFT imitates demonstrations, and preference tuning compares answers.',
+    'The math can be a low-rank weight update W plus BA or a preference objective that raises chosen answers over rejected answers.',
+    'Manipulate adapter rank, quantization, data quality, and preference margin to compare memory and behavior tradeoffs.',
+    'Mistake to avoid: fine-tuning is not retrieval and it is not one fixed method; the data signal decides what behavior can improve.',
+    'Check understanding by matching limited GPU memory, demonstration data, and preference pairs to the right method.',
   ),
   'rag-retrieval-evaluation': cardSet(
     'RAG retrieval evaluation solves the problem of knowing whether the answer evidence actually reached the model.',

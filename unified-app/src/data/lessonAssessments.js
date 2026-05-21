@@ -30,6 +30,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'llm-training-objectives',
   'transformer-token-generation',
   'sampling-strategies',
+  'fine-tuning',
   'rag-retrieval-evaluation',
 ];
 
@@ -1090,6 +1091,40 @@ export const lessonAssessments = {
         title: 'Choose decoding for a task',
         prompt: 'Pick settings for factual QA, brainstorming, and translation, then explain which one should be more deterministic or diverse.',
         successCriteria: 'You can justify each setting using candidate count, probability mass, and sequence-score tradeoffs.',
+      },
+    ],
+  },
+  'fine-tuning': {
+    quiz: [
+      {
+        id: 'lora-trains-what',
+        prompt: 'What does LoRA train during fine-tuning?',
+        choices: [
+          'Small low-rank adapter matrices while the base weights stay frozen',
+          'Only the tokenizer vocabulary',
+          'A retrieval index with no gradient updates',
+        ],
+        answerIndex: 0,
+        explanation: 'LoRA keeps the pretrained weights fixed and learns low-rank update matrices that approximate the needed weight change.',
+      },
+      {
+        id: 'preference-data-shape',
+        prompt: 'What data shape is most natural for DPO-style preference tuning?',
+        choices: [
+          'A prompt with a chosen answer and a rejected answer',
+          'Unlabeled rows for k-means clustering',
+          'A single test-set metric with no examples',
+        ],
+        answerIndex: 0,
+        explanation: 'Preference tuning compares candidate answers for the same prompt and increases the relative likelihood of the chosen one.',
+      },
+    ],
+    labs: [
+      {
+        id: 'choose-finetune-method',
+        title: 'Choose a fine-tuning method',
+        prompt: 'Pick one scenario with limited GPU memory, one with demonstrations, and one with preference pairs, then choose LoRA, SFT, or DPO/RLHF.',
+        successCriteria: 'Your choice matches the available data signal and the memory or behavior constraint.',
       },
     ],
   },

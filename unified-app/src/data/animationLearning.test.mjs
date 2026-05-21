@@ -498,6 +498,26 @@ test('sampling strategies are promoted after the token generation loop', () => {
   );
 });
 
+test('fine-tuning methods are guided after training objectives and decoding', () => {
+  const animation = getAnimationById('fine-tuning');
+  const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');
+
+  assert.ok(animation, 'fine-tuning lesson should be active');
+  assert.equal(animation.categoryId, 'transformers');
+  assert.ok(animation.trackIds.includes('nlp-transformers'));
+  assert.ok(transformerTrack.animationIds.includes('fine-tuning'));
+  assert.ok(isAnimationAvailable('fine-tuning'));
+  assert.deepEqual(animation.prerequisites, ['llm-training-objectives', 'sampling-strategies']);
+  assert.match(animation.learningObjectives.join(' '), /LoRA|QLoRA|SFT|DPO|RLHF|preference/i);
+  assert.match(animation.commonMisconception, /retrieval|gradients|preference/i);
+
+  assert.ok(
+    transformerTrack.animationIds.indexOf('sampling-strategies') <
+      transformerTrack.animationIds.indexOf('fine-tuning'),
+    'decoding controls should precede method selection for behavior tuning',
+  );
+});
+
 test('transformer architecture families are promoted before model-specific transformer lessons', () => {
   const animation = getAnimationById('transformer-architecture-families');
   const transformerTrack = curriculumTracks.find((track) => track.id === 'nlp-transformers');

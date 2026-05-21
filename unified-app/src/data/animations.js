@@ -81,7 +81,7 @@ export const categories = [
       { id: 'bert', name: 'BERT', icon: BookOpen, description: 'Bidirectional encoder representations' },
       { id: 'gpt2-comprehensive', name: 'GPT-2 Comprehensive', icon: MessageSquare, description: 'Detailed look at GPT-2 architecture' },
       { id: 'moe', name: 'Mixture of Experts', icon: GitBranch, description: 'Scaling models with conditional computation' },
-      { id: 'fine-tuning', name: 'Fine-Tuning', icon: Settings, description: 'Adapting pretrained models' },
+      { id: 'fine-tuning', name: 'Fine-Tuning Methods', icon: Settings, description: 'LoRA, QLoRA, instruction tuning, and preference optimization' },
     ],
   },
   {
@@ -692,6 +692,17 @@ const CURRICULUM_OVERRIDES = {
       'Predict when a decoding setting will make output more deterministic, diverse, or generic',
     ],
     commonMisconception: 'Sampling settings do not change the trained model weights; they only decide how to choose from the model probability distribution at inference time.',
+  },
+  'fine-tuning': {
+    difficulty: 'advanced',
+    estimatedMinutes: 26,
+    prerequisites: ['llm-training-objectives', 'sampling-strategies'],
+    learningObjectives: [
+      'Compare full fine-tuning, LoRA, QLoRA, instruction SFT, DPO-style preference tuning, and RLHF',
+      'Explain how adapter rank, quantization, demonstrations, and preference pairs change the training signal',
+      'Choose a fine-tuning method based on memory budget, data type, and desired behavior change',
+    ],
+    commonMisconception: 'Fine-tuning is not a single method and it is not the same as retrieval; it updates model behavior using gradients from demonstrations, adapters, or preference signals.',
   },
   bert: {
     difficulty: 'advanced',

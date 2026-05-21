@@ -1,10 +1,12 @@
 import React, { useState, Suspense, lazy } from 'react';
-import { GraduationCap, Layers, Zap, Database } from 'lucide-react';
+import { GraduationCap, Layers, Zap, Database, GitCompare } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const ConceptPanel = lazy(() => import('./ConceptPanel'));
 const LoRAPanel = lazy(() => import('./LoRAPanel'));
 const QLoRAPanel = lazy(() => import('./QLoRAPanel'));
+const AlignmentPanel = lazy(() => import('./AlignmentPanel'));
 const PracticePanel = lazy(() => import('./PracticePanel'));
 
 // Tab configuration
@@ -12,7 +14,8 @@ const tabs = [
     { id: 'concept', label: '1. Concept', icon: GraduationCap, color: 'from-purple-500 to-indigo-500' },
     { id: 'lora', label: '2. LoRA', icon: Layers, color: 'from-blue-500 to-cyan-500' },
     { id: 'qlora', label: '3. QLoRA', icon: Zap, color: 'from-amber-500 to-orange-500' },
-    { id: 'practice', label: '4. Practice Lab', icon: Database, color: 'from-rose-500 to-red-500' },
+    { id: 'alignment', label: '4. Alignment', icon: GitCompare, color: 'from-emerald-500 to-teal-500' },
+    { id: 'practice', label: '5. Practice Lab', icon: Database, color: 'from-rose-500 to-red-500' },
 ];
 
 // Loading fallback
@@ -35,6 +38,8 @@ export default function FineTuningAnimation() {
                 return <Suspense fallback={<LoadingPanel />}><LoRAPanel /></Suspense>;
             case 'qlora':
                 return <Suspense fallback={<LoadingPanel />}><QLoRAPanel /></Suspense>;
+            case 'alignment':
+                return <Suspense fallback={<LoadingPanel />}><AlignmentPanel /></Suspense>;
             case 'practice':
                 return <Suspense fallback={<LoadingPanel />}><PracticePanel /></Suspense>;
             default:
@@ -69,6 +74,9 @@ export default function FineTuningAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="p-6">
+                    <AssessmentPanel lessonId="fine-tuning" title="Fine-Tuning Methods check" />
+                </div>
             </div>
         </div>
     );
