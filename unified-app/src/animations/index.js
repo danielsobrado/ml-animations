@@ -35,6 +35,7 @@ const animationRegistry = {
   'lstm': lazy(() => import('./lstm')),
   'layer-normalization': lazy(() => import('./layer-normalization')),
   'softmax': lazy(() => import('./softmax')),
+  'optimizers': lazy(() => import('./optimizers')),
 
   // Advanced Models
   'vae': lazy(() => import('./vae')),

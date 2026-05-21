@@ -12,6 +12,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'regularization',
   'tree-ensembles',
   'gradient-descent',
+  'optimizers',
   'relu',
   'computation-graph-backprop',
   'tokenization',
@@ -468,6 +469,40 @@ export const lessonAssessments = {
         title: 'Tune step size',
         prompt: 'Try a small, medium, and large learning rate and compare the loss trace.',
         successCriteria: 'You can identify which run converges, crawls, or overshoots.',
+      },
+    ],
+  },
+  optimizers: {
+    quiz: [
+      {
+        id: 'momentum-purpose',
+        prompt: 'What does momentum add to plain SGD?',
+        choices: [
+          'A velocity term that accumulates repeated gradient directions',
+          'A second validation set after every step',
+          'A guarantee that every update reaches the global minimum',
+        ],
+        answerIndex: 0,
+        explanation: 'Momentum keeps a running velocity, so consistent directions build speed while alternating directions get damped.',
+      },
+      {
+        id: 'batch-noise',
+        prompt: 'What usually happens when mini-batch size increases?',
+        choices: [
+          'Gradient estimates become smoother but each step uses more examples',
+          'The learning rate becomes irrelevant',
+          'Adam stops using squared-gradient estimates',
+        ],
+        answerIndex: 0,
+        explanation: 'Larger batches average more examples, so the gradient is less noisy, but each update costs more computation.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-update-rules',
+        title: 'Compare update rules',
+        prompt: 'Run SGD, momentum, and Adam with the same learning rate and batch size, then identify which path zigzags least.',
+        successCriteria: 'You can connect the visible path to velocity, adaptive scaling, or mini-batch noise.',
       },
     ],
   },

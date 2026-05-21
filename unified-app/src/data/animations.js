@@ -88,6 +88,7 @@ export const categories = [
       { id: 'relu', name: 'ReLU Activation', icon: Zap, description: 'Rectified linear unit function' },
       { id: 'leaky-relu', name: 'Leaky ReLU', icon: Activity, description: 'ReLU with small negative slope' },
       { id: 'softmax', name: 'Softmax', icon: BarChart3, description: 'Probability distribution output' },
+      { id: 'optimizers', name: 'Optimizers', icon: Settings, description: 'SGD, momentum, Adam, and mini-batch training dynamics' },
       { id: 'layer-normalization', name: 'Layer Normalization', icon: Layers, description: 'Normalizing layer activations' },
       { id: 'lstm', name: 'LSTM', icon: GitBranch, description: 'Long short-term memory networks' },
       { id: 'conv2d', name: 'Conv2D', icon: Grid3X3, description: '2D convolutional layers' },
@@ -270,6 +271,7 @@ export const curriculumTracks = [
       'softmax',
       'cross-entropy',
       'computation-graph-backprop',
+      'optimizers',
       'gradient-problems',
       'layer-normalization',
       'conv2d',
@@ -396,6 +398,17 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'beginner',
     estimatedMinutes: 18,
     prerequisites: ['linear-regression'],
+  },
+  optimizers: {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['gradient-descent', 'computation-graph-backprop'],
+    learningObjectives: [
+      'Compare how SGD, momentum, and Adam turn gradients into parameter updates',
+      'Explain why mini-batch size changes gradient noise and training smoothness',
+      'Diagnose overshooting, zigzagging, and slow convergence from the loss path',
+    ],
+    commonMisconception: 'Adam is not automatically best; learning rate, batch noise, and validation behavior still decide whether training is healthy.',
   },
   'linear-regression': {
     difficulty: 'beginner',

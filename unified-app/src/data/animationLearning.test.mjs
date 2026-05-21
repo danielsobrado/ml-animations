@@ -204,6 +204,33 @@ test('logistic regression metadata matches the sigmoid binary-classification les
   assert.match(animation.learningObjectives.join(' '), /sigmoid/i);
 });
 
+test('optimizers are promoted into the neural-network training path', () => {
+  const animation = getAnimationById('optimizers');
+  const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));
+  const neuralTrack = curriculumTracks.find((track) => track.id === 'neural-networks');
+
+  assert.ok(animation, 'optimizers lesson should be active');
+  assert.equal(animation.categoryId, 'neural-networks');
+  assert.ok(animation.trackIds.includes('neural-networks'));
+  assert.ok(neuralTrack.animationIds.includes('optimizers'));
+  assert.ok(!backlogIds.has('optimizers'));
+  assert.ok(isAnimationAvailable('optimizers'));
+  assert.deepEqual(animation.prerequisites, ['gradient-descent', 'computation-graph-backprop']);
+  assert.match(animation.learningObjectives.join(' '), /SGD|momentum|Adam|mini-batch/i);
+  assert.match(animation.commonMisconception, /Adam|learning rate|batch/i);
+
+  assert.ok(
+    neuralTrack.animationIds.indexOf('computation-graph-backprop') <
+      neuralTrack.animationIds.indexOf('optimizers'),
+    'backpropagation should explain gradients before optimizer variants',
+  );
+  assert.ok(
+    neuralTrack.animationIds.indexOf('optimizers') <
+      neuralTrack.animationIds.indexOf('gradient-problems'),
+    'optimizer behavior should come before gradient stability failure modes',
+  );
+});
+
 test('PCA is promoted into the foundations path as a variance projection lesson', () => {
   const animation = getAnimationById('pca');
   const backlogIds = new Set(curriculumBacklog.map((topic) => topic.id));

@@ -52,6 +52,7 @@ const EQUATION_OVERRIDES = {
   'transformer-token-generation': 'x_{t+1}\\sim \\operatorname{Filter}(\\operatorname{softmax}(z_t/\\tau))',
   'rag-retrieval-evaluation': 'Recall@k=\\frac{|R\\cap Top_k|}{|R|}',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
+  optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
@@ -163,6 +164,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the learning rate and compare crawling, converging, and overshooting traces.',
     'Mistake to avoid: the gradient is local, so one step does not guarantee the global minimum.',
     'Check understanding by predicting the next step direction from the slope sign.',
+  ),
+  optimizers: cardSet(
+    'Optimizers solve the problem of turning noisy training gradients into useful parameter updates over many steps.',
+    'SGD follows the current mini-batch, momentum carries velocity through stable directions, and Adam rescales updates per parameter.',
+    'The math starts with theta_next = theta - eta * update, where update can be a raw gradient, velocity, or bias-corrected adaptive step.',
+    'Manipulate update rule, learning rate, momentum, batch size, and steps to compare path smoothness and final loss.',
+    'Mistake to avoid: Adam is not a substitute for tuning; a bad learning rate or noisy batch can still produce unstable training.',
+    'Check understanding by predicting how a larger mini-batch changes the visible path before moving the slider.',
   ),
   relu: cardSet(
     'ReLU solves the activation problem by giving networks a simple nonlinearity that keeps positive signal easy to pass.',
