@@ -347,6 +347,34 @@ test('LLM path includes modern inference sequencing', () => {
   );
 });
 
+test('RAG path sequences retrieval, grounding, failures, and evaluation', () => {
+  const ragPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rag-path');
+  assert.ok(ragPath, 'rag-path should exist');
+
+  const pathOrder = new Map(ragPath.nodes.map((id, index) => [id, index]));
+  for (const nodeId of ragPath.nodes) {
+    const animation = getAnimationById(nodeId);
+    assert.ok(animation, `${nodeId} in rag-path must be active`);
+    for (const prerequisite of animation.prerequisites) {
+      const prereqIndex = pathOrder.get(prerequisite);
+      if (Number.isInteger(prereqIndex)) {
+        assert.ok(
+          prereqIndex < pathOrder.get(nodeId),
+          `${nodeId} requires ${prerequisite} before it in rag-path`,
+        );
+      }
+    }
+  }
+
+  assert.ok(pathOrder.get('embeddings') < pathOrder.get('cosine-similarity'));
+  assert.ok(pathOrder.get('cosine-similarity') < pathOrder.get('rag'));
+  assert.ok(pathOrder.get('rag') < pathOrder.get('rag-chunking-context'));
+  assert.ok(pathOrder.get('rag-chunking-context') < pathOrder.get('rag-vector-indexing'));
+  assert.ok(pathOrder.get('rag-vector-indexing') < pathOrder.get('rag-reranking-grounding'));
+  assert.ok(pathOrder.get('rag-reranking-grounding') < pathOrder.get('rag-failure-modes'));
+  assert.ok(pathOrder.get('rag-failure-modes') < pathOrder.get('rag-retrieval-evaluation'));
+});
+
 test('logistic regression metadata matches the sigmoid binary-classification lesson', () => {
   const animation = getAnimationById('logistic-regression');
 

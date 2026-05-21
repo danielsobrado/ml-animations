@@ -48,6 +48,21 @@ export const HUB_LEARNING_PATHS = [
     ],
   },
   {
+    id: 'rag-path',
+    label: 'RAG And Retrieval',
+    description: 'A retrieval route from vector similarity into chunking, indexing, reranking, grounding, failure diagnosis, and evaluation.',
+    nodes: [
+      'embeddings',
+      'cosine-similarity',
+      'rag',
+      'rag-chunking-context',
+      'rag-vector-indexing',
+      'rag-reranking-grounding',
+      'rag-failure-modes',
+      'rag-retrieval-evaluation',
+    ],
+  },
+  {
     id: 'vision-path',
     label: 'Vision And Generation',
     description: 'A visual-model route from convolution and pooling into latent-variable models and modern diffusion systems.',
