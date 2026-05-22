@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:41:48.562Z
+Generated: 2026-05-22T07:44:13.667Z
 
 ## Review Policy
 
@@ -139,7 +139,7 @@ Generated: 2026-05-22T07:41:48.562Z
 | least-squares-projection | B (good) | auto | 6443 | 0 |  | Review and set explicit manual quality entry. |
 | linear-regression | B (good) | manual | 3056 | 3 | stable | Add outlier and heteroscedastic noise counterexamples. |
 | low-rank-approximation | B (good) | auto | 5270 | 0 |  | Review and set explicit manual quality entry. |
-| matrix-decompositions | C (adequate) | auto | 2209 | 2 |  | Review and set explicit manual quality entry. |
+| matrix-decompositions | B (good) | manual | 2431 | 2 | stable | Add side-by-side numeric examples for LU, QR, SVD, and Cholesky on small matrices. |
 | matrix-multiplication | B (good) | manual | 2737 | 2 | stable | Add geometric interpretation quick checks for rectangular dimensions. |
 | optimization | B (good) | auto | 1265 | 4 |  | Review and set explicit manual quality entry. |
 | pca | A (excellent) | manual | 9907 | 0 | stable | Add reconstruction-error and component-reuse examples. |

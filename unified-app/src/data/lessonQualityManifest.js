@@ -146,6 +146,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Custom linear-algebra lesson with four-subspace map, rank-nullity dimension budget, interactive practice, and persistent assessment coverage.',
     nextAction: 'Add numeric row-reduction examples that derive bases for all four subspaces.',
   },
+  'matrix-decompositions': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Interactive factorization chooser with task filters, assumptions, warnings, practice scenarios, and persistent assessment coverage.',
+    nextAction: 'Add side-by-side numeric examples for LU, QR, SVD, and Cholesky on small matrices.',
+  },
   'linear-regression': {
     tier: 'B',
     status: 'stable',

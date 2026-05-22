@@ -39,6 +39,7 @@ const EQUATION_OVERRIDES = {
   'max-pooling': 'Y_{i,j}=\\max_{0\\le m,n<k} X_{si+m,sj+n}',
   softmax: 'p_i=\\frac{e^{z_i}}{\\sum_j e^{z_j}}',
   'matrix-multiplication': 'C_{ij}=\\sum_k A_{ik}B_{kj}',
+  'matrix-decompositions': 'A\\rightarrow LU,QR,V\\Lambda V^{-1},U\\Sigma V^T,LL^T',
   'fundamental-subspaces': '\\dim Row(A)=\\dim Col(A)=r,\\quad \\dim Null(A)=n-r,\\quad \\dim Null(A^T)=m-r',
   eigenvalue: 'Av=\\lambda v',
   svd: 'A=U\\Sigma V^T',
@@ -176,6 +177,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate rank-nullity cases and classify where each subspace lives before reading the dimension bars.',
     'Mistake to avoid: row space and column space usually live in different ambient spaces, even though they have the same dimension.',
     'Check understanding by deciding whether b must be in Col(A) or Row(A) for Ax = b to be solvable.',
+  ),
+  'matrix-decompositions': cardSet(
+    'Matrix decompositions solve the problem of replacing one hard matrix operation with structured factors suited to a job.',
+    'Different factorizations expose different structure: triangular solves, orthogonal bases, stretch directions, low-rank axes, or nonnegative parts.',
+    'The math is a family of rewrites such as A=LU, A=QR, A=U Sigma V^T, and A=L L^T under different assumptions.',
+    'Filter the one-sheet by task and choose the factorization before reading the detailed requirement and warning.',
+    'Mistake to avoid: no single decomposition is always best; shape, assumptions, stability, and goal decide the right tool.',
+    'Check understanding by choosing QR for stable least squares and SVD for general low-rank approximation.',
   ),
   'bayes-rule-ml': cardSet(
     'Bayes rule solves the problem of updating a class belief after evidence arrives.',

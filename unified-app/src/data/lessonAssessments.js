@@ -3,6 +3,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'linear-regression',
   'pca',
   'fundamental-subspaces',
+  'matrix-decompositions',
   'k-means',
   'train-validation-test-split',
   'cross-validation',
@@ -213,6 +214,51 @@ export const lessonAssessments = {
         title: 'Classify the four spaces',
         prompt: 'Choose one rank-nullity case and list each subspace, its ambient space, and its dimension.',
         successCriteria: 'Your dimensions satisfy n = rank + nullity and m = rank + left-nullity.',
+      },
+    ],
+  },
+  'matrix-decompositions': {
+    quiz: [
+      {
+        id: 'stable-least-squares',
+        prompt: 'Which decomposition is the usual stable choice for least squares with a tall matrix?',
+        choices: [
+          'QR',
+          'NMF',
+          'Cholesky without checking assumptions',
+        ],
+        answerIndex: 0,
+        explanation: 'QR builds an orthonormal basis and avoids the conditioning problems of normal equations.',
+      },
+      {
+        id: 'general-low-rank',
+        prompt: 'Which decomposition gives the most general rank-k approximation view for any real matrix?',
+        choices: [
+          'Truncated SVD',
+          'LU',
+          'Eigen decomposition for every rectangular matrix',
+        ],
+        answerIndex: 0,
+        explanation: 'SVD works for rectangular matrices and its truncated form gives a best rank-k approximation under common norms.',
+      },
+      {
+        id: 'assumption-check',
+        prompt: 'Why is Cholesky not a universal replacement for LU or QR?',
+        choices: [
+          'It requires a symmetric positive definite matrix',
+          'It only works on text data',
+          'It cannot be used to solve systems',
+        ],
+        answerIndex: 0,
+        explanation: 'Cholesky is fast and stable when the SPD assumption holds; it fails outside that setting.',
+      },
+    ],
+    labs: [
+      {
+        id: 'choose-by-goal',
+        title: 'Choose by the job',
+        prompt: 'Pick three scenarios from the chooser and write the factorization, its requirement, and one warning.',
+        successCriteria: 'Your selections are justified by the task and include at least one assumption or stability caveat.',
       },
     ],
   },
