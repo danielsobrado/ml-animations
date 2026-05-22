@@ -215,6 +215,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'The largest eigenvalue marks the direction that explains the most variance in the input data.',
       },
+      {
+        id: 'predict-rotation',
+        prompt: 'If the point cloud stretches mostly along an upward diagonal, where should PC1 point?',
+        choices: [
+          'Along that diagonal stretch',
+          'Straight at the class boundary',
+          'Always along the x-axis',
+        ],
+        answerIndex: 0,
+        explanation: 'PC1 follows the highest input variance direction, independent of any class label.',
+      },
+      {
+        id: 'variance-not-labels',
+        prompt: 'What failure mode appears when the highest-variance direction is unrelated to the label?',
+        choices: [
+          'A low-dimensional PCA view can preserve spread while hiding the class signal',
+          'PCA automatically switches to supervised learning',
+          'The first component becomes invalid because labels were omitted',
+        ],
+        answerIndex: 0,
+        explanation: 'PCA is unsupervised, so it can keep variance that is visually dominant but weak for the prediction task.',
+      },
     ],
     labs: [
       {
@@ -485,6 +507,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'When the class is rare, false alarms can dominate the positive evidence pool, so reducing them can sharply raise the posterior.',
       },
+      {
+        id: 'predict-base-rate-shift',
+        prompt: 'If the hit rate and false-positive rate stay fixed but the class becomes much rarer, what should you predict?',
+        choices: [
+          'The posterior after a positive signal usually drops',
+          'The posterior must stay unchanged',
+          'The false-positive rate becomes irrelevant',
+        ],
+        answerIndex: 0,
+        explanation: 'A rarer prior means more positive signals can come from false alarms, which is the base-rate failure mode.',
+      },
     ],
     labs: [
       {
@@ -541,6 +574,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Standard error scales with 1/sqrt(n), so four times as much data gives about half the margin.',
       },
+      {
+        id: 'coverage-misconception',
+        prompt: 'A team makes many 95% intervals with the same procedure. What should happen in the long run?',
+        choices: [
+          'About 95% of those intervals should contain the fixed population value',
+          'Every interval should contain exactly 95% of the sample rows',
+          'The first interval has a 95% chance of moving after it is computed',
+        ],
+        answerIndex: 0,
+        explanation: 'Coverage is about repeated intervals from the procedure, not the probability of a fixed interval after seeing the data.',
+      },
     ],
     labs: [
       {
@@ -596,6 +640,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Power is a long-run detection probability under an assumed real effect and test setup.',
+      },
+      {
+        id: 'pvalue-not-null-probability',
+        prompt: 'Which interpretation is a p-value failure mode?',
+        choices: [
+          'Calling it the probability that the null hypothesis is true',
+          'Computing it under a null model',
+          'Using it as one part of an evidence summary',
+        ],
+        answerIndex: 0,
+        explanation: 'A p-value is the probability of data at least this extreme under the null setup; it is not P(null is true).',
       },
     ],
     labs: [
@@ -698,6 +753,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Likelihood scores how well a parameter explains observed data; it is not a probability distribution over parameters by itself.',
       },
+      {
+        id: 'predict-likelihood-peak',
+        prompt: 'If 80 of 100 Bernoulli trials are successes, which candidate probability should have the highest likelihood?',
+        choices: [
+          'About 0.8',
+          'Exactly 0.5 because it is most neutral',
+          'About 0.2 because failures are rarer',
+        ],
+        answerIndex: 0,
+        explanation: 'The Bernoulli MLE matches the observed success rate, so the likelihood peaks near 0.8.',
+      },
     ],
     labs: [
       {
@@ -753,6 +819,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Loss choice defines what kinds of errors are expensive, often through an implied probabilistic model.',
+      },
+      {
+        id: 'mismatched-loss-failure',
+        prompt: 'What can go wrong if you use squared error for a heavily skewed count target with rare huge spikes?',
+        choices: [
+          'The loss can over-focus on large residuals and poorly match the noise pattern',
+          'The labels become categorical automatically',
+          'The model is guaranteed to calibrate tail probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'A loss carries assumptions about noise and error cost; a mismatch can train the model toward the wrong behavior.',
       },
     ],
     labs: [
@@ -922,6 +999,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Target leakage often enters through post-outcome fields, future labels, or aggregates that include the answer.',
       },
+      {
+        id: 'predict-score-inflation',
+        prompt: 'What should you predict if validation rows contain a post-outcome feature that will not exist at serving time?',
+        choices: [
+          'Validation score may look inflated and then collapse in production',
+          'Production score must improve because the feature is predictive',
+          'The split becomes safer because validation is easier',
+        ],
+        answerIndex: 0,
+        explanation: 'The model is using information from the future, so offline evaluation no longer matches the real prediction setting.',
+      },
+      {
+        id: 'group-leakage-failure',
+        prompt: 'Why can random splitting fail when one user contributes many rows?',
+        choices: [
+          'The same user can appear in both train and validation, hiding entity-level overfitting',
+          'Random splitting always removes duplicate users',
+          'Validation labels stop being observed',
+        ],
+        answerIndex: 0,
+        explanation: 'Related examples crossing the split can make memorization look like generalization.',
+      },
     ],
     labs: [
       {
@@ -955,6 +1054,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'If income is measured in thousands and age in years, raw distances mostly reflect income unless features are scaled.',
+      },
+      {
+        id: 'predict-outlier-scaler',
+        prompt: 'With one extreme outlier, which scaler is usually least moved by that single point?',
+        choices: [
+          'Robust scaling based on median and interquartile range',
+          'Min-max scaling based on the largest and smallest values',
+          'A scaler fitted on validation and test rows',
+        ],
+        answerIndex: 0,
+        explanation: 'Median and IQR are less sensitive to one extreme value than min and max.',
+      },
+      {
+        id: 'fit-all-data-failure',
+        prompt: 'What is the failure mode when preprocessing is fitted before the train/test split?',
+        choices: [
+          'Evaluation rows can influence learned preprocessing parameters',
+          'The model is forced to ignore all feature scales',
+          'Only the training rows are transformed',
+        ],
+        answerIndex: 0,
+        explanation: 'A scaler or imputer learns from data; fitting it before splitting lets evaluation information leak into the pipeline.',
       },
     ],
     labs: [

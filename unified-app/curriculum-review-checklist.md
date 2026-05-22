@@ -58,16 +58,16 @@ Start Here priority batch:
 | --- | --- | --- | --- | --- | --- |
 | matrix-multiplication | [x] | [x] | [ ] | [x] | Added shape prediction and dimension-mismatch questions. |
 | linear-regression | [x] | [x] | [x] | [x] | Added outlier failure and slope-change prediction questions. |
-| bayes-rule-ml | [x] | [ ] | [ ] | [x] | Add predict-before-updating-prior task. |
-| sampling-confidence-intervals | [x] | [ ] | [ ] | [x] | Add coverage misconception task. |
-| hypothesis-testing-intuition | [x] | [ ] | [ ] | [x] | Add p-value misinterpretation task. |
-| maximum-likelihood-estimation | [x] | [ ] | [ ] | [x] | Add likelihood-vs-probability failure task. |
-| loss-functions-likelihoods | [x] | [ ] | [ ] | [x] | Add mismatch-between-loss-and-noise task. |
+| bayes-rule-ml | [x] | [x] | [x] | [x] | Added base-rate shift prediction and false-alarm failure framing. |
+| sampling-confidence-intervals | [x] | [x] | [x] | [x] | Added long-run coverage misconception; existing sample-size item covers prediction. |
+| hypothesis-testing-intuition | [x] | [x] | [x] | [x] | Added p-value/null-probability failure; existing sample-size item covers prediction. |
+| maximum-likelihood-estimation | [x] | [x] | [x] | [x] | Added Bernoulli peak prediction; existing likelihood-not-prior item covers failure. |
+| loss-functions-likelihoods | [x] | [x] | [x] | [x] | Added mismatched-loss failure; existing loss-choice item covers prediction setup. |
 | train-validation-test-split | [x] | [x] | [x] | [x] | Added suspicious-score leakage diagnosis. |
 | cross-validation | [x] | [x] | [x] | [x] | Added subgroup fold prediction and grouped-fold lab. |
-| data-leakage-deep-dive | [x] | [ ] | [ ] | [x] | Add predict-score-inflation task. |
-| feature-scaling-preprocessing | [x] | [ ] | [ ] | [x] | Add outlier and train-only fitting task. |
-| pca | [x] | [ ] | [ ] | [x] | Add variance-vs-label-signal misconception. |
+| data-leakage-deep-dive | [x] | [x] | [x] | [x] | Added score-inflation prediction and grouped-entity leakage failure. |
+| feature-scaling-preprocessing | [x] | [x] | [x] | [x] | Added outlier scaler prediction and fit-before-split failure. |
+| pca | [x] | [x] | [x] | [x] | Added PC1 direction prediction and variance-vs-label-signal failure. |
 | k-means | [x] | [ ] | [ ] | [x] | Add initialization failure task. |
 | logistic-regression | [x] | [ ] | [ ] | [x] | Add threshold-vs-probability task. |
 | classification-metrics | [x] | [ ] | [ ] | [x] | Add class-imbalance prediction task. |
