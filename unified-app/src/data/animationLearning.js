@@ -39,6 +39,7 @@ const EQUATION_OVERRIDES = {
   'max-pooling': 'Y_{i,j}=\\max_{0\\le m,n<k} X_{si+m,sj+n}',
   softmax: 'p_i=\\frac{e^{z_i}}{\\sum_j e^{z_j}}',
   'matrix-multiplication': 'C_{ij}=\\sum_k A_{ik}B_{kj}',
+  'fundamental-subspaces': '\\dim Row(A)=\\dim Col(A)=r,\\quad \\dim Null(A)=n-r,\\quad \\dim Null(A^T)=m-r',
   eigenvalue: 'Av=\\lambda v',
   svd: 'A=U\\Sigma V^T',
   'qr-decomposition': 'A=QR',
@@ -167,6 +168,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate scaler type, outlier presence, fit scope, and selected point to compare distances before and after preprocessing.',
     'Mistake to avoid: fitting preprocessing on validation or test data leaks information just like tuning on the test set.',
     'Check understanding by predicting which scaler changes most when one validation outlier appears.',
+  ),
+  'fundamental-subspaces': cardSet(
+    'The four fundamental subspaces solve the problem of understanding what a matrix measures, erases, reaches, and misses.',
+    'The domain splits into row-space directions and null-space directions; the codomain splits into column-space outputs and left-null constraints.',
+    'The math ties both worlds together: row and column space share rank r, while nullities fill n-r and m-r dimensions.',
+    'Manipulate rank-nullity cases and classify where each subspace lives before reading the dimension bars.',
+    'Mistake to avoid: row space and column space usually live in different ambient spaces, even though they have the same dimension.',
+    'Check understanding by deciding whether b must be in Col(A) or Row(A) for Ax = b to be solvable.',
   ),
   'bayes-rule-ml': cardSet(
     'Bayes rule solves the problem of updating a class belief after evidence arrives.',

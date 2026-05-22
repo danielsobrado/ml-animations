@@ -2,6 +2,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
   'linear-regression',
   'pca',
+  'fundamental-subspaces',
   'k-means',
   'train-validation-test-split',
   'cross-validation',
@@ -167,6 +168,51 @@ export const lessonAssessments = {
         title: 'Compare one and two components',
         prompt: 'Switch between 1D and 2D projection, then identify when the 1D reconstruction loses the most information.',
         successCriteria: 'You can connect higher noise or weaker correlation to lower PC1 explained variance.',
+      },
+    ],
+  },
+  'fundamental-subspaces': {
+    quiz: [
+      {
+        id: 'domain-subspaces',
+        prompt: 'Which two fundamental subspaces live in the input domain R^n?',
+        choices: [
+          'Row(A) and Null(A)',
+          'Col(A) and Null(A^T)',
+          'Row(A) and Col(A)',
+        ],
+        answerIndex: 0,
+        explanation: 'The row space and null space are both subspaces of the domain R^n.',
+      },
+      {
+        id: 'consistency-rule',
+        prompt: 'When is Ax = b consistent?',
+        choices: [
+          'When b lies in Col(A)',
+          'When x lies in Null(A^T)',
+          'When every row of A is zero',
+        ],
+        answerIndex: 0,
+        explanation: 'The column space is exactly the set of reachable outputs Ax.',
+      },
+      {
+        id: 'rank-nullity',
+        prompt: 'For an m by n matrix with rank r, what is dim Null(A)?',
+        choices: [
+          'n - r',
+          'm - r',
+          'r - n',
+        ],
+        answerIndex: 0,
+        explanation: 'Rank-nullity accounts for the domain: rank(A) + dim Null(A) = n.',
+      },
+    ],
+    labs: [
+      {
+        id: 'classify-four-spaces',
+        title: 'Classify the four spaces',
+        prompt: 'Choose one rank-nullity case and list each subspace, its ambient space, and its dimension.',
+        successCriteria: 'Your dimensions satisfy n = rank + nullity and m = rank + left-nullity.',
       },
     ],
   },

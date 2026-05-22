@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:39:56.687Z
+Generated: 2026-05-22T07:41:48.562Z
 
 ## Review Policy
 
@@ -134,7 +134,7 @@ Generated: 2026-05-22T07:39:56.687Z
 | condition-number | B (good) | auto | 4276 | 0 |  | Review and set explicit manual quality entry. |
 | determinant-volume | B (good) | auto | 4094 | 0 |  | Review and set explicit manual quality entry. |
 | eigenvalue | B (good) | auto | 3706 | 5 |  | Review and set explicit manual quality entry. |
-| fundamental-subspaces | C (adequate) | auto | 2597 | 3 |  | Review and set explicit manual quality entry. |
+| fundamental-subspaces | B (good) | manual | 2819 | 3 | stable | Add numeric row-reduction examples that derive bases for all four subspaces. |
 | gradient-descent | B (good) | manual | 4288 | 7 | stable | Add saddle point and bad-conditioning playbook. |
 | least-squares-projection | B (good) | auto | 6443 | 0 |  | Review and set explicit manual quality entry. |
 | linear-regression | B (good) | manual | 3056 | 3 | stable | Add outlier and heteroscedastic noise counterexamples. |
