@@ -32,7 +32,12 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'embeddings',
   'attention-mechanism',
   'self-attention',
+  'kv-cache',
+  'grouped-query-attention',
+  'flash-attention',
   'attention-masks',
+  'positional-encoding',
+  'rope',
   'transformer',
   'transformer-architecture-families',
   'llm-training-objectives',
@@ -216,6 +221,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Fewer false alarms means a positive signal is more likely to come from true positives.',
       },
+      {
+        id: 'normalizer-meaning',
+        prompt: 'In the Bayes denominator for a positive signal, what is being normalized?',
+        choices: [
+          'All ways the positive signal could occur, including true positives and false alarms',
+          'Only the true positive cases',
+          'Only the prior probability before evidence',
+        ],
+        answerIndex: 0,
+        explanation: 'The posterior divides true positive evidence by all positive evidence, including false alarms from non-class cases.',
+      },
+      {
+        id: 'rare-class-action',
+        prompt: 'For a rare class, which change often makes positive evidence more actionable?',
+        choices: [
+          'Reducing the false positive rate',
+          'Ignoring the base rate',
+          'Removing the normalizing denominator',
+        ],
+        answerIndex: 0,
+        explanation: 'When the class is rare, false alarms can dominate the positive evidence pool, so reducing them can sharply raise the posterior.',
+      },
     ],
     labs: [
       {
@@ -249,6 +276,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Higher confidence requires a wider procedure because it must cover more possible samples.',
+      },
+      {
+        id: 'single-interval-meaning',
+        prompt: 'What is wrong with saying a computed 95% confidence interval has a 95% probability of containing the fixed truth?',
+        choices: [
+          'The 95% describes the long-run coverage of the procedure, not probability assigned to this fixed interval',
+          'A confidence interval never uses sampling variation',
+          'The population value changes after every sample',
+        ],
+        answerIndex: 0,
+        explanation: 'In the frequentist interpretation, the procedure has long-run coverage; the fixed interval either captured the value or it did not.',
+      },
+      {
+        id: 'quadruple-sample-size',
+        prompt: 'Roughly what happens to the margin of error when sample size is quadrupled?',
+        choices: [
+          'It is cut about in half',
+          'It is divided by four',
+          'It doubles',
+        ],
+        answerIndex: 0,
+        explanation: 'Standard error scales with 1/sqrt(n), so four times as much data gives about half the margin.',
       },
     ],
     labs: [
@@ -284,6 +333,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'A small p-value can come from a tiny effect with a huge sample; usefulness is a separate question.',
       },
+      {
+        id: 'sample-size-pvalue',
+        prompt: 'If the observed effect stays fixed but sample size grows, what can happen to the p-value?',
+        choices: [
+          'It can shrink because standard error falls',
+          'It must grow because more data adds noise',
+          'It becomes independent of the test statistic',
+        ],
+        answerIndex: 0,
+        explanation: 'Larger samples reduce standard error, so the same effect can become more statistically unusual.',
+      },
+      {
+        id: 'power-meaning',
+        prompt: 'What does statistical power describe in this lesson?',
+        choices: [
+          'The chance the test rejects the null when the modeled effect is real',
+          'The business value of the observed effect',
+          'The probability that the null hypothesis is true',
+        ],
+        answerIndex: 0,
+        explanation: 'Power is a long-run detection probability under an assumed real effect and test setup.',
+      },
     ],
     labs: [
       {
@@ -317,6 +388,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'The best Bernoulli probability is the observed fraction of successes.',
+      },
+      {
+        id: 'nll-link',
+        prompt: 'Why do training loops often minimize negative log-likelihood?',
+        choices: [
+          'Minimizing negative log-likelihood is equivalent to maximizing log-likelihood',
+          'Negative log-likelihood ignores the observed data',
+          'It makes every parameter equally likely',
+        ],
+        answerIndex: 0,
+        explanation: 'The negative sign turns a maximization problem into the minimization form used by most optimizers.',
+      },
+      {
+        id: 'likelihood-not-prior',
+        prompt: 'What is a common mistake when interpreting likelihood?',
+        choices: [
+          'Treating it as the prior probability that a parameter is true',
+          'Comparing candidate parameters using observed data',
+          'Using log-likelihood for numerical stability',
+        ],
+        answerIndex: 0,
+        explanation: 'Likelihood scores how well a parameter explains observed data; it is not a probability distribution over parameters by itself.',
       },
     ],
     labs: [
@@ -352,6 +445,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Cross-entropy penalizes the negative log of the probability assigned to the observed class.',
       },
+      {
+        id: 'squared-error-assumption',
+        prompt: 'What assumption commonly leads to squared error as negative log-likelihood?',
+        choices: [
+          'Gaussian residual noise with fixed variance',
+          'Binary labels with only two classes',
+          'A prior that every parameter is equally useful',
+        ],
+        answerIndex: 0,
+        explanation: 'Under Gaussian residuals with fixed variance, the NLL differs from squared error only by constants and scale.',
+      },
+      {
+        id: 'loss-choice-signal',
+        prompt: 'What does choosing a loss function usually encode?',
+        choices: [
+          'An assumption about target type, noise, or error cost',
+          'A guarantee that the model cannot overfit',
+          'A way to avoid measuring validation performance',
+        ],
+        answerIndex: 0,
+        explanation: 'Loss choice defines what kinds of errors are expensive, often through an implied probabilistic model.',
+      },
     ],
     labs: [
       {
@@ -386,6 +501,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Validation data is the development feedback loop; test data is reserved for the final estimate.',
       },
+      {
+        id: 'stratified-split',
+        prompt: 'Why use a stratified split for a small classification dataset?',
+        choices: [
+          'To keep class proportions closer across train, validation, and test',
+          'To guarantee the model cannot overfit',
+          'To make the test set larger than the training set',
+        ],
+        answerIndex: 0,
+        explanation: 'Stratification reduces the chance that one split has a very different label distribution by accident.',
+      },
+      {
+        id: 'preprocessing-order',
+        prompt: 'When should learned preprocessing be fitted?',
+        choices: [
+          'After splitting, using training data only',
+          'Before splitting, using the full dataset',
+          'After checking the final test score',
+        ],
+        answerIndex: 0,
+        explanation: 'Fitting preprocessing on all rows leaks validation and test statistics into the training recipe.',
+      },
     ],
     labs: [
       {
@@ -419,6 +556,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Grouped folds prevent a model from seeing one row for a user in training and another row for the same user in validation.',
+      },
+      {
+        id: 'fold-variance',
+        prompt: 'What should you inspect besides the mean cross-validation score?',
+        choices: [
+          'The spread of scores across folds',
+          'Only the best fold score',
+          'Only the number of model parameters',
+        ],
+        answerIndex: 0,
+        explanation: 'Large fold-to-fold variance can signal unstable performance, small folds, segment imbalance, or split-specific leakage.',
+      },
+      {
+        id: 'test-set-role',
+        prompt: 'After using cross-validation for model selection, what is the test set for?',
+        choices: [
+          'A final untouched estimate after model choices are made',
+          'Trying more hyperparameters until the score improves',
+          'Fitting the preprocessing statistics for every fold',
+        ],
+        answerIndex: 0,
+        explanation: 'Cross-validation is development feedback; the test set should remain untouched until the final estimate.',
       },
     ],
     labs: [
@@ -521,6 +680,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A higher threshold requires stronger positive evidence before predicting class 1.',
+      },
+      {
+        id: 'logit-vs-probability',
+        prompt: 'What is the relationship between the logit and the predicted probability?',
+        choices: [
+          'The sigmoid maps the logit to a probability-like score',
+          'The threshold is multiplied by the feature weights',
+          'The confusion matrix is computed before probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Logistic regression computes a linear logit first, then applies the sigmoid to place the score between 0 and 1.',
+      },
+      {
+        id: 'threshold-without-refit',
+        prompt: 'What changes when you move only the classification threshold?',
+        choices: [
+          'Predicted labels and confusion-matrix counts can change',
+          'The learned weights are recomputed from scratch',
+          'The feature values are normalized again',
+        ],
+        answerIndex: 0,
+        explanation: 'The probability scores stay fixed, but the label assigned to scores near the threshold can flip.',
       },
     ],
     labs: [
@@ -658,6 +839,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'A flexible model can bend around noise instead of learning reusable signal.',
       },
+      {
+        id: 'early-stopping-signal',
+        prompt: 'Why can early stopping help with overfitting?',
+        choices: [
+          'It can stop near the lowest validation error before memorization dominates',
+          'It removes the need for a validation set',
+          'It guarantees the test score will improve forever',
+        ],
+        answerIndex: 0,
+        explanation: 'Early stopping uses validation behavior to avoid later epochs that keep reducing training error but hurt validation error.',
+      },
+      {
+        id: 'not-every-gap',
+        prompt: 'When is a bad validation score not classic overfitting?',
+        choices: [
+          'When training error is also high, suggesting underfitting',
+          'When training error is lower than validation error',
+          'When the model has more than one parameter',
+        ],
+        answerIndex: 0,
+        explanation: 'Classic overfitting needs a strong training fit with worse validation performance; high error on both splits points to underfitting.',
+      },
     ],
     labs: [
       {
@@ -725,6 +928,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Excess penalty can shrink useful signal along with noisy parameters.',
+      },
+      {
+        id: 'l1-vs-l2',
+        prompt: 'What is a typical difference between L1 and L2 regularization?',
+        choices: [
+          'L1 can set some weights to zero, while L2 usually shrinks weights smoothly',
+          'L2 removes the need for a loss function',
+          'L1 only works for neural networks',
+        ],
+        answerIndex: 0,
+        explanation: 'L1 uses an absolute-value penalty that can create sparse solutions; L2 penalizes squared magnitude and tends to shrink continuously.',
+      },
+      {
+        id: 'lambda-validation',
+        prompt: 'How should lambda usually be chosen?',
+        choices: [
+          'Tune it on validation data while keeping the test set untouched',
+          'Pick the largest possible value every time',
+          'Choose it from the final test score after many retries',
+        ],
+        answerIndex: 0,
+        explanation: 'Lambda is a model-selection choice, so it belongs in the validation loop, not repeated test-set tuning.',
       },
     ],
     labs: [
@@ -1168,6 +1393,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Every position uses its own query to mix information from the sequence.',
       },
+      {
+        id: 'value-mixing',
+        prompt: 'After softmax produces attention weights, what do those weights combine?',
+        choices: [
+          'Value vectors',
+          'Raw token strings',
+          'Optimizer momentum values',
+        ],
+        answerIndex: 0,
+        explanation: 'Attention weights route information by forming a weighted sum of value vectors.',
+      },
+      {
+        id: 'mask-before-softmax',
+        prompt: 'Where should a causal mask be applied in scaled dot-product attention?',
+        choices: [
+          'To the scores before softmax',
+          'Only after the value vectors are mixed',
+          'Only to the final vocabulary logits',
+        ],
+        answerIndex: 0,
+        explanation: 'Masked future positions receive very negative scores before softmax so their attention weight becomes effectively zero.',
+      },
     ],
     labs: [
       {
@@ -1175,6 +1422,141 @@ export const lessonAssessments = {
         title: 'Read one attention row',
         prompt: 'Pick a token and explain which other tokens it attends to most.',
         successCriteria: 'You can connect one row of weights to the resulting context vector.',
+      },
+    ],
+  },
+  'kv-cache': {
+    quiz: [
+      {
+        id: 'what-is-cached',
+        prompt: 'During autoregressive decoding, what does the KV cache store from previous tokens?',
+        choices: [
+          'Key and value vectors',
+          'Only final vocabulary probabilities',
+          'Only tokenized text strings',
+        ],
+        answerIndex: 0,
+        explanation: 'The cache stores previous key and value projections so the new query can attend over them without recomputing them.',
+      },
+      {
+        id: 'new-step-work',
+        prompt: 'With a KV cache, what still has to happen for the current generated token?',
+        choices: [
+          'Compute the current query and attend over cached keys and values',
+          'Skip attention completely',
+          'Delete all previous values before softmax',
+        ],
+        answerIndex: 0,
+        explanation: 'Caching avoids old K/V recomputation, but the current query still reads visible cached positions through attention.',
+      },
+      {
+        id: 'cache-memory-growth',
+        prompt: 'Why can KV cache become a memory bottleneck for long contexts?',
+        choices: [
+          'It grows with visible tokens, layers, heads, and head dimension',
+          'It stores a full copy of the training set',
+          'It makes every token use a separate tokenizer',
+        ],
+        answerIndex: 0,
+        explanation: 'Each visible token contributes cached key and value vectors across model layers and attention heads.',
+      },
+    ],
+    labs: [
+      {
+        id: 'decode-step-savings',
+        title: 'Compare decode-step work',
+        prompt: 'Increase the decode step with caching on and off, then explain which computation grows and which stays flat.',
+        successCriteria: 'You can separate avoided K/V projection work from attention reads over the visible cache.',
+      },
+    ],
+  },
+  'grouped-query-attention': {
+    quiz: [
+      {
+        id: 'what-is-shared',
+        prompt: 'What does grouped-query attention share across multiple query heads?',
+        choices: [
+          'Key and value heads',
+          'The final generated tokens',
+          'The tokenizer vocabulary',
+        ],
+        answerIndex: 0,
+        explanation: 'GQA keeps the query heads but lets several of them reuse the same key and value heads.',
+      },
+      {
+        id: 'mqa-vs-mha',
+        prompt: 'How is multi-query attention different from full multi-head attention?',
+        choices: [
+          'MQA uses one shared KV head while MHA keeps a KV head per query head',
+          'MQA removes queries entirely',
+          'MQA only works for encoder-only models',
+        ],
+        answerIndex: 0,
+        explanation: 'MQA is the extreme sharing case: many query heads read from one key/value head.',
+      },
+      {
+        id: 'cache-scaling',
+        prompt: 'Why does reducing KV heads shrink long-context inference memory?',
+        choices: [
+          'The KV cache stores keys and values for each token and KV head',
+          'The model stores fewer input tokens',
+          'The softmax no longer needs probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'For each visible token, the cache stores key and value vectors across the KV heads.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-mha-mqa-gqa',
+        title: 'Compare sharing regimes',
+        prompt: 'Set KV heads equal to query heads, then to one, then to an intermediate value. Explain the memory and specialization tradeoff.',
+        successCriteria: 'You can identify MHA, MQA, and GQA and explain why GQA is the middle ground.',
+      },
+    ],
+  },
+  'flash-attention': {
+    quiz: [
+      {
+        id: 'what-is-avoided',
+        prompt: 'What large intermediate does Flash Attention avoid materializing in high-bandwidth memory?',
+        choices: [
+          'The full attention score/probability matrix',
+          'The input token ids',
+          'The learned model weights',
+        ],
+        answerIndex: 0,
+        explanation: 'Flash Attention streams score tiles and keeps online softmax state instead of writing the full N by N attention matrix.',
+      },
+      {
+        id: 'exact-or-approximate',
+        prompt: 'Does Flash Attention approximate scaled dot-product attention?',
+        choices: [
+          'No, it computes the same attention result with a more memory-efficient schedule',
+          'Yes, it drops random attention scores',
+          'Yes, it replaces softmax with nearest-neighbor search',
+        ],
+        answerIndex: 0,
+        explanation: 'Flash Attention changes the execution schedule and memory traffic, not the mathematical result.',
+      },
+      {
+        id: 'online-softmax-state',
+        prompt: 'Why does Flash Attention need online softmax statistics while streaming tiles?',
+        choices: [
+          'To combine tile contributions with the correct row-wise normalization',
+          'To permanently sort all tokens by vocabulary id',
+          'To remove the value vectors from attention',
+        ],
+        answerIndex: 0,
+        explanation: 'The row max and denominator let each streamed tile be merged into the same normalized softmax output.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tile-memory-tradeoff',
+        title: 'Trace one streamed tile',
+        prompt: 'Increase sequence length and compare full score-matrix memory with tile working-set memory. Explain why the FLOPs remain attention-like while memory traffic drops.',
+        successCriteria: 'You can separate exact attention computation from the memory schedule that avoids materializing N by N scores.',
       },
     ],
   },
@@ -1209,6 +1591,96 @@ export const lessonAssessments = {
         title: 'Trace visible keys',
         prompt: 'Pick one query row, switch between mask types, and list which keys remain visible before softmax.',
         successCriteria: 'You can justify each visible or blocked key using causal order, padding, or cross-attention memory.',
+      },
+    ],
+  },
+  'positional-encoding': {
+    quiz: [
+      {
+        id: 'why-needed',
+        prompt: 'Why do transformers need a position signal in addition to token embeddings?',
+        choices: [
+          'Self-attention does not inherently know token order',
+          'Tokenization removes all word identities',
+          'Softmax cannot produce probabilities without positions',
+        ],
+        answerIndex: 0,
+        explanation: 'Attention compares token vectors, but order has to be supplied through positional information or a related mechanism.',
+      },
+      {
+        id: 'sinusoidal-pattern',
+        prompt: 'What is the core idea of sinusoidal positional encoding?',
+        choices: [
+          'Use sine and cosine waves at multiple frequencies to give each position a repeatable vector',
+          'Assign every token the same constant vector',
+          'Sort tokens alphabetically before attention',
+        ],
+        answerIndex: 0,
+        explanation: 'Sinusoidal encodings combine many frequencies so positions have distinct but structured signatures.',
+      },
+      {
+        id: 'learned-position-limit',
+        prompt: 'What is a common limitation of learned absolute position embeddings?',
+        choices: [
+          'They need learned rows for positions the model will use',
+          'They cannot be added to token embeddings',
+          'They make attention approximate instead of exact',
+        ],
+        answerIndex: 0,
+        explanation: 'Learned absolute embeddings are parameters tied to position indices, so extrapolating beyond trained positions is not automatic.',
+      },
+    ],
+    labs: [
+      {
+        id: 'order-sensitive-sentence',
+        title: 'Compare order-sensitive meaning',
+        prompt: 'Switch between "dog bites man" and "man bites dog", then disable the position signal. Explain what information the model loses.',
+        successCriteria: 'You can explain why the same tokens need different positional context to represent different meanings.',
+      },
+    ],
+  },
+  rope: {
+    quiz: [
+      {
+        id: 'what-rotates',
+        prompt: 'In RoPE, which vectors are rotated before attention scoring?',
+        choices: [
+          'Query and key vectors',
+          'Only value vectors',
+          'Only final vocabulary logits',
+        ],
+        answerIndex: 0,
+        explanation: 'RoPE rotates query and key dimension pairs so their dot product carries relative-position information.',
+      },
+      {
+        id: 'relative-distance',
+        prompt: 'Why does RoPE help attention reason about relative position?',
+        choices: [
+          'The dot product between rotated Q and K depends on the position difference m - n',
+          'It deletes token embeddings and uses only positions',
+          'It makes every position have the same angle',
+        ],
+        answerIndex: 0,
+        explanation: 'Rotating Q by position m and K by position n makes the score encode their relative offset.',
+      },
+      {
+        id: 'value-vector-misconception',
+        prompt: 'Which statement is true about RoPE in standard attention?',
+        choices: [
+          'RoPE changes attention scores but does not replace the causal mask',
+          'RoPE is the same thing as top-p sampling',
+          'RoPE removes the need for keys and queries',
+        ],
+        answerIndex: 0,
+        explanation: 'RoPE modifies Q/K geometry. Masking and attention computation are still separate parts of the transformer.',
+      },
+    ],
+    labs: [
+      {
+        id: 'relative-shift-check',
+        title: 'Check relative shift behavior',
+        prompt: 'Move query and key positions together by the same amount. Explain what changes and what stays tied to the relative distance.',
+        successCriteria: 'You can explain why absolute rotation angles change while the relative-position relationship is preserved.',
       },
     ],
   },
@@ -1923,6 +2395,231 @@ export const lessonAssessments = {
         title: 'Inspect patch-token cost',
         prompt: 'Change resolution and patch size and watch token count and attention-pair cost move.',
         successCriteria: 'You can explain why smaller patches improve detail but increase transformer attention cost.',
+      },
+    ],
+  },
+  'model-debugging': {
+    quiz: [
+      {
+        id: 'check-order',
+        prompt: 'What should you verify first when an incident appears only in production?',
+        choices: [
+          'The data and serving stages that changed from validation conditions',
+          'Only the last trained checkpoint',
+          "Only the final confusion matrix on today's batch",
+        ],
+        answerIndex: 0,
+        explanation: 'A disciplined pipeline check is needed to localize whether drift comes from data, serving, or training.',
+      },
+      {
+        id: 'slice-target',
+        prompt: 'If one subgroup has much higher error, the first interpretation is usually:',
+        choices: [
+          'A local failure mode that may be hidden in aggregate metrics',
+          'An unrelated random artifact with no operational impact',
+          'A model architecture mismatch that always requires bigger capacity',
+        ],
+        answerIndex: 0,
+        explanation: 'Slicing often reveals failures that global summaries smooth over.',
+      },
+      {
+        id: 'intervention-safety',
+        prompt: 'Why is a single global threshold tweak risky as a first fix?',
+        choices: [
+          'It can hide a subgroup error and increase inequality across traffic slices',
+          'It is equivalent to changing the data split strategy',
+          'It never affects precision or recall',
+        ],
+        answerIndex: 0,
+        explanation: 'Threshold tuning redistributes errors, so it can fix one slice while worsening others.',
+      },
+    ],
+    labs: [
+      {
+        id: 'debug-loop',
+        title: 'Run a constrained debugging loop',
+        prompt: 'Choose a scenario, run checks by stage, pick the highest-support root-cause, and select one targeted intervention.',
+        successCriteria: 'You should produce one slice with improved recall and describe why the root-cause hypothesis aligned with a later signal.',
+      },
+    ],
+  },
+  'model-interpretability': {
+    quiz: [
+      {
+        id: 'why-ablation',
+        prompt: 'What does a feature ablation-style attribution primarily measure in this lesson?',
+        choices: [
+          'How much predictions degrade when a feature is replaced by a reference value',
+          'The exact causal effect of changing one feature',
+          'How to remove all uncertainty from the model',
+        ],
+        answerIndex: 0,
+        explanation: 'Ablation-style checks are directional and help rank features; they are not proof of causality.',
+      },
+      {
+        id: 'local-meaning',
+        prompt: 'In a local explanation panel, the largest signed contribution is best interpreted as:',
+        choices: [
+          'The strongest directional driver for this example under the toy model',
+          'A guarantee of causal influence in every domain',
+          'Proof that the model has no bias',
+        ],
+        answerIndex: 0,
+        explanation: 'Large local contribution means strong influence in the surrogate, with model-dependent caveats.',
+      },
+      {
+        id: 'counterfactual',
+        prompt: 'What is the purpose of the counterfactual perturbation in this lesson?',
+        choices: [
+          'To test decision stability under a controlled input change',
+          'To tune weights for all future samples',
+          'To prove the explanation is causal',
+        ],
+        answerIndex: 0,
+        explanation: 'Counterfactual checks test whether small input changes materially flip decisions.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-modes',
+        title: 'Find an unstable attribution mode',
+        prompt: 'Enable correlation mode and compare top attributions before and after a counterfactual perturbation.',
+        successCriteria: 'You can explain one case where explanation confidence drops when correlation increases.',
+      },
+    ],
+  },
+  'model-monitoring': {
+    quiz: [
+      {
+        id: 'monitor-priority',
+        prompt: 'Which signal in this lesson most directly distinguishes input drift from label drift behavior?',
+        choices: [
+          'Tracking both input drift and precision/recall together',
+          'Precision alone',
+          'Recall alone',
+        ],
+        answerIndex: 0,
+        explanation: 'Input drift and label-quality issues can both hurt scores, so comparing multiple signals avoids false attribution.',
+      },
+      {
+        id: 'alert-meaning',
+        prompt: 'Why can a stricter alert threshold help and hurt at the same time?',
+        choices: [
+          'It reduces late misses but can increase false alerts and intervention noise',
+          'It always improves model quality',
+          'It removes the need to monitor serving metrics',
+        ],
+        answerIndex: 0,
+        explanation: 'Strict alerts catch issues earlier but can fire during normal variance.',
+      },
+      {
+        id: 'playbook-choice',
+        prompt: 'When throughput drops and recall drops together, a first response is usually:',
+        choices: [
+          'Pause rollout, inspect serving contract and upstream sampling, then isolate monitoring signals',
+          'Increase threshold complexity immediately',
+          'Ignore alerts until the trend continues for 3 weeks',
+        ],
+        answerIndex: 0,
+        explanation: 'Parallel degradation in serving and metrics usually needs triage of contract and data before model updates.',
+      },
+    ],
+    labs: [
+      {
+        id: 'configure-playbook',
+        title: 'Tune monitoring and choose a playbook',
+        prompt: 'Set a strictness profile and scenario to create 1-2 active alerts, then choose the best response playbook.',
+        successCriteria: 'You should describe which metric triggered first and why the selected playbook matches that risk.',
+      },
+    ],
+  },
+  'uncertainty-estimation': {
+    quiz: [
+      {
+        id: 'calibration-vs-confidence',
+        prompt: 'What is the distinction between confidence and calibration in this context?',
+        choices: [
+          'Confidence is uncertainty width; calibration is long-run reliability of probabilities or intervals',
+          'They are always equivalent',
+          'Calibration is only for classification, confidence only for regression',
+        ],
+        answerIndex: 0,
+        explanation: 'A model can be highly confident and still poorly calibrated.',
+      },
+      {
+        id: 'wide-interval',
+        prompt: 'A very wide interval should usually be interpreted as:',
+        choices: [
+          'A warning about higher uncertainty or distribution mismatch',
+          'A guaranteed prediction failure',
+          'Proof that the model is overfitting',
+        ],
+        answerIndex: 0,
+        explanation: 'Width is a caution signal; it is useful when interpreted with coverage and abstain policies.',
+      },
+      {
+        id: 'abstain-policy',
+        prompt: 'What is the operational role of abstain or defer in uncertainty-aware systems?',
+        choices: [
+          'Send low-confidence cases to fallback review or broader context',
+          'Drop half the data for free speed gains',
+          'Replace training labels with a prior mean',
+        ],
+        answerIndex: 0,
+        explanation: 'Abstain policies convert uncertain predictions into explicit review cases.',
+      },
+    ],
+    labs: [
+      {
+        id: 'coverage-vs-width',
+        title: 'Balance width and coverage',
+        prompt: 'Increase target coverage and adjust abstain threshold while watching coverage and mean interval width.',
+        successCriteria: 'You can keep coverage stable while preventing too much unnecessary abstention.',
+      },
+    ],
+  },
+  'model-fairness': {
+    quiz: [
+      {
+        id: 'parity-difference',
+        prompt: 'Which objective best focuses on equal selection proportions across groups?',
+        choices: [
+          'Selection-rate parity',
+          'FPR parity',
+          'TPR parity',
+        ],
+        answerIndex: 0,
+        explanation: 'Selection parity compares the share of positive predictions across groups.',
+      },
+      {
+        id: 'conflict-rule',
+        prompt: 'A practical implication of fairness trade-offs is:',
+        choices: [
+          'Satisfying one constraint may worsen another',
+          'Every fairness metric can be optimized simultaneously at full strength',
+          'No threshold changes are needed if one metric is equal',
+        ],
+        answerIndex: 0,
+        explanation: 'Metrics can conflict; governance choices must set priorities.',
+      },
+      {
+        id: 'counterfactual-use',
+        prompt: 'When should group-specific thresholds be considered?',
+        choices: [
+          'When global thresholds cannot meet the chosen fairness and utility trade-off',
+          'Never, because they always invalidate comparisons',
+          'Only when model training accuracy is below 50%',
+        ],
+        answerIndex: 0,
+        explanation: 'Group thresholds are a controlled tool to rebalance operational parity, but they should be policy-driven.',
+      },
+    ],
+    labs: [
+      {
+        id: 'objective-target',
+        title: 'Match one fairness objective',
+        prompt: 'Pick an objective and tune thresholds/shift until your selected objective gap is materially reduced.',
+        successCriteria: 'You can explain which other metric moved and why this reflects a trade-off.',
       },
     ],
   },

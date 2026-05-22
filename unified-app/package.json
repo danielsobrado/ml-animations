@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test:smoke": "node scripts/route-smoke.mjs",
+    "audit:quality": "node scripts/generate-curriculum-audit.mjs",
     "test": "node --test src/**/*.test.mjs",
     "build": "vite build",
     "preview": "vite preview"

@@ -96,6 +96,22 @@ export const HUB_LEARNING_PATHS = [
     ],
   },
   {
+    id: 'model-reliability-path',
+    label: 'Model Reliability',
+    description: 'A deployment-minded route through metrics, leakage, debugging, explanations, uncertainty, monitoring, and fairness.',
+    nodes: [
+      'classification-metrics',
+      'roc-pr-curves',
+      'calibration',
+      'data-leakage-deep-dive',
+      'model-debugging',
+      'model-interpretability',
+      'uncertainty-estimation',
+      'model-monitoring',
+      'model-fairness',
+    ],
+  },
+  {
     id: 'vision-path',
     label: 'Vision And Generation',
     description: 'A visual-model route from convolution and pooling into latent variables, attention, and modern diffusion components.',

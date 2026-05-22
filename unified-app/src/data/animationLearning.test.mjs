@@ -99,7 +99,7 @@ test('curriculum tracks reference only active animations and backlog topics stay
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const seenTrackIds = new Set();
 
-  assert.equal(curriculumTracks.length, 6);
+  assert.equal(curriculumTracks.length, 7);
   for (const track of curriculumTracks) {
     assert.ok(track.id);
     assert.ok(!seenTrackIds.has(track.id), `${track.id} is duplicated`);
@@ -1301,8 +1301,8 @@ test('lesson assessments provide backed quiz and lab counts for priority lessons
     const assessment = lessonAssessments[lessonId];
 
     assert.ok(animationIds.has(lessonId), `${lessonId} should be an active lesson`);
-    assert.equal(assessment.quiz.length, 2, `${lessonId} needs two seeded quiz questions`);
-    assert.equal(assessment.labs.length, 1, `${lessonId} needs one seeded lab`);
+    assert.ok(assessment.quiz.length >= 2, `${lessonId} needs at least two seeded quiz questions`);
+    assert.ok(assessment.labs.length >= 1, `${lessonId} needs at least one seeded lab`);
 
     for (const question of assessment.quiz) {
       assert.ok(question.id);
@@ -1324,17 +1324,14 @@ test('lesson assessments provide backed quiz and lab counts for priority lessons
 
 test('assessment completion requires all seeded quiz and lab items', () => {
   const assessment = lessonAssessments['logistic-regression'];
+  const completedQuiz = Object.fromEntries(assessment.quiz.map((question) => [question.id, { correct: true }]));
+  const completedLabs = Object.fromEntries(assessment.labs.map((lab) => [lab.id, true]));
 
   assert.equal(isAssessmentComplete(assessment, {}), false);
   assert.equal(
     isAssessmentComplete(assessment, {
-      quiz: {
-        'sigmoid-role': { correct: true },
-        'threshold-tradeoff': { correct: true },
-      },
-      labs: {
-        'threshold-flips': true,
-      },
+      quiz: completedQuiz,
+      labs: completedLabs,
     }),
     true,
   );
