@@ -4,6 +4,8 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'pca',
   'fundamental-subspaces',
   'matrix-decompositions',
+  'qr-decomposition',
+  'svd',
   'k-means',
   'train-validation-test-split',
   'cross-validation',
@@ -259,6 +261,96 @@ export const lessonAssessments = {
         title: 'Choose by the job',
         prompt: 'Pick three scenarios from the chooser and write the factorization, its requirement, and one warning.',
         successCriteria: 'Your selections are justified by the task and include at least one assumption or stability caveat.',
+      },
+    ],
+  },
+  'qr-decomposition': {
+    quiz: [
+      {
+        id: 'factor-meaning',
+        prompt: 'In A = QR, what is special about Q?',
+        choices: [
+          'Its columns are orthonormal',
+          'It is always diagonal',
+          'It contains the original labels',
+        ],
+        answerIndex: 0,
+        explanation: 'Q stores orthonormal basis directions, while R stores the coordinates of A in that basis.',
+      },
+      {
+        id: 'gram-schmidt',
+        prompt: 'What does Gram-Schmidt do to the second column after finding q1?',
+        choices: [
+          'Subtract the projection onto q1, then normalize the leftover',
+          'Duplicate q1 exactly',
+          'Replace the column with all zeros no matter what',
+        ],
+        answerIndex: 0,
+        explanation: 'The projection removal creates a component orthogonal to q1; normalization turns it into the next unit vector.',
+      },
+      {
+        id: 'least-squares',
+        prompt: 'Why is QR useful for least squares?',
+        choices: [
+          'Q preserves lengths and angles better than forming normal equations',
+          'It only works when there are no residuals',
+          'It makes every matrix symmetric positive definite',
+        ],
+        answerIndex: 0,
+        explanation: 'Orthogonal factors are numerically stable, so QR avoids squaring the condition number through A^T A.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-projection-removal',
+        title: 'Trace projection removal',
+        prompt: 'Follow the animation through the second Gram-Schmidt step and identify the projection that is removed.',
+        successCriteria: 'You can explain how q2 becomes orthogonal to q1 and where R stores the projection coefficient.',
+      },
+    ],
+  },
+  svd: {
+    quiz: [
+      {
+        id: 'factor-roles',
+        prompt: 'In A = U Sigma V^T, what do the singular values in Sigma describe?',
+        choices: [
+          'How strongly A stretches each singular direction',
+          'The original row labels',
+          'Only the signs of matrix entries',
+        ],
+        answerIndex: 0,
+        explanation: 'Singular values are nonnegative stretch factors ordered from strongest to weakest.',
+      },
+      {
+        id: 'rectangular-support',
+        prompt: 'Why is SVD broadly useful compared with eigen decomposition?',
+        choices: [
+          'SVD works for any real rectangular matrix',
+          'SVD only works for diagonal square matrices',
+          'SVD ignores rank information',
+        ],
+        answerIndex: 0,
+        explanation: 'Eigen decomposition is square-matrix specific; SVD applies to any real m by n matrix.',
+      },
+      {
+        id: 'truncated-svd',
+        prompt: 'What does truncated SVD keep for compression?',
+        choices: [
+          'The largest singular values and their matching singular vectors',
+          'Only the smallest singular value',
+          'Every zero entry in the original matrix',
+        ],
+        answerIndex: 0,
+        explanation: 'Keeping the top k singular components preserves the strongest low-rank structure.',
+      },
+    ],
+    labs: [
+      {
+        id: 'rank-k-reconstruction',
+        title: 'Trace a rank-k reconstruction',
+        prompt: 'Use the SVD animation to identify U, Sigma, and V^T, then explain what is lost when only the largest singular value is kept.',
+        successCriteria: 'You can connect singular value size to retained structure and reconstruction error.',
       },
     ],
   },

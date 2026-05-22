@@ -152,6 +152,18 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Interactive factorization chooser with task filters, assumptions, warnings, practice scenarios, and persistent assessment coverage.',
     nextAction: 'Add side-by-side numeric examples for LU, QR, SVD, and Cholesky on small matrices.',
   },
+  'qr-decomposition': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Gram-Schmidt QR animation with orthogonalization steps, practice lab, least-squares framing, and persistent assessment coverage.',
+    nextAction: 'Add Householder QR comparison for numerical stability.',
+  },
+  svd: {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Step-by-step SVD animation with factor roles, singular value ordering, practice exercises, compression framing, and persistent assessment coverage.',
+    nextAction: 'Add explicit rank-k reconstruction error controls.',
+  },
   'linear-regression': {
     tier: 'B',
     status: 'stable',

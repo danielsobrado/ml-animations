@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Play, FlaskConical } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const AnimationPanel = lazy(() => import('./AnimationPanel'));
@@ -61,6 +62,9 @@ export default function SvdAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="mx-auto max-w-7xl px-4 pb-6">
+                    <AssessmentPanel lessonId="svd" />
+                </div>
             </div>
         </div>
     );

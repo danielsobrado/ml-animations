@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:44:13.667Z
+Generated: 2026-05-22T07:46:57.599Z
 
 ## Review Policy
 
@@ -145,8 +145,8 @@ Generated: 2026-05-22T07:44:13.667Z
 | pca | A (excellent) | manual | 9907 | 0 | stable | Add reconstruction-error and component-reuse examples. |
 | projection-matrices | B (good) | auto | 4420 | 0 |  | Review and set explicit manual quality entry. |
 | pseudoinverse | B (good) | auto | 4929 | 0 |  | Review and set explicit manual quality entry. |
-| qr-decomposition | C (adequate) | auto | 2738 | 2 |  | Review and set explicit manual quality entry. |
-| svd | C (adequate) | auto | 2724 | 2 |  | Review and set explicit manual quality entry. |
+| qr-decomposition | B (good) | manual | 2962 | 2 | stable | Add Householder QR comparison for numerical stability. |
+| svd | B (good) | manual | 2935 | 2 | stable | Add explicit rank-k reconstruction error controls. |
 
 ### core-ml
 
