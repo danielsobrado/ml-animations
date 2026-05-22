@@ -96,6 +96,7 @@ const EQUATION_OVERRIDES = {
   'bayes-rule-ml': 'P(y\\mid x)=\\frac{P(x\\mid y)P(y)}{P(x)}',
   'sampling-confidence-intervals': '\\hat{p}\\pm z\\sqrt{\\frac{\\hat{p}(1-\\hat{p})}{n}}',
   'hypothesis-testing-intuition': 'z=\\frac{observed\\ effect}{standard\\ error}',
+  'spearman-correlation': '\\rho_s=1-\\frac{6\\sum_i d_i^2}{n(n^2-1)}',
   'maximum-likelihood-estimation': '\\hat{\\theta}=\\arg\\max_\\theta P(D\\mid\\theta)',
   'loss-functions-likelihoods': '\\mathcal{L}(\\theta)=-\\log P(y\\mid x,\\theta)',
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
@@ -225,6 +226,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate effect size, noise, and sample size to separate statistical evidence from raw difference.',
     'Mistake to avoid: statistical significance does not prove the effect is large, useful, or causal.',
     'Check understanding by identifying when a tiny effect becomes significant only because the sample is huge.',
+  ),
+  'spearman-correlation': cardSet(
+    'Spearman correlation solves the problem of measuring whether two variables move in the same order, even when the curve is not linear.',
+    'Replace raw values with ranks, then ask whether high-ranked X values tend to pair with high-ranked Y values.',
+    'The no-tie formula subtracts a penalty based on squared rank differences from a perfect score of one.',
+    'Step through the rank table and predict rho before the formula uses the sum of squared rank gaps.',
+    'Mistake to avoid: Spearman measures monotonic order, not causation and not necessarily straight-line fit.',
+    'Check understanding by changing an outlier and deciding whether its rank order actually changed.',
   ),
   'maximum-likelihood-estimation': cardSet(
     'Maximum likelihood solves the problem of choosing the parameter that makes observed data most probable.',

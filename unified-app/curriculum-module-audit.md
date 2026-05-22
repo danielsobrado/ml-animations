@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:50:28.081Z
+Generated: 2026-05-22T07:53:01.845Z
 
 ## Review Policy
 
@@ -183,7 +183,7 @@ Generated: 2026-05-22T07:50:28.081Z
 | --- | --- | --- | ---: | ---: | --- | --- |
 | bayes-rule-ml | B (good) | manual | 12020 | 0 | stable | Add a confusion-matrix bridge for calibrated classifier outputs. |
 | conditional-probability | B (good) | manual | 3058 | 3 | stable | Add a real-case confusion example with noisy observations. |
-| cosine-similarity | B (good) | manual | 3250 | 3 | stable | Add sparse-vs-dense vector contrast and explicit bias/relevance audit examples. |
+| cosine-similarity | B (good) | manual | 3266 | 3 | stable | Add sparse-vs-dense vector contrast and explicit bias/relevance audit examples. |
 | cross-entropy | B (good) | manual | 2734 | 5 | stable | Add targeted counterexample where confidence collapses at wrong scale. |
 | entropy | B (good) | manual | 2734 | 2 | stable | Add sequence entropy and information gain contrast cases. |
 | expected-value-variance | B (good) | manual | 3049 | 3 | stable | Add finite-sample variability case studies. |
@@ -192,7 +192,7 @@ Generated: 2026-05-22T07:50:28.081Z
 | maximum-likelihood-estimation | B (good) | manual | 17345 | 0 | stable | Add a prior-vs-likelihood contrast before introducing MAP estimation. |
 | probability-distributions | B (good) | manual | 3071 | 3 | stable | Add comparative examples that connect distribution assumptions to downstream model behavior. |
 | sampling-confidence-intervals | B (good) | manual | 10531 | 0 | stable | Add bootstrap interval comparison and non-proportion examples. |
-| spearman-correlation | C (adequate) | auto | 3063 | 3 |  | Review and set explicit manual quality entry. |
+| spearman-correlation | B (good) | manual | 3308 | 3 | stable | Add tied-rank handling and a small monotonic-vs-nonmonotonic scenario picker. |
 
 ### reinforcement-learning
 

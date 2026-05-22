@@ -38,6 +38,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Custom signal-vs-noise simulator with p-value, alpha, power, null distribution, and practical-importance checks.',
     nextAction: 'Add one-sided/two-sided mode and multiple-testing correction examples.',
   },
+  'spearman-correlation': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Multi-panel rank-correlation lesson with rank conversion, stepwise rho calculation, Pearson contrast, outlier robustness, and persistent assessment coverage.',
+    nextAction: 'Add tied-rank handling and a small monotonic-vs-nonmonotonic scenario picker.',
+  },
   'train-validation-test-split': {
     tier: 'B',
     status: 'stable',

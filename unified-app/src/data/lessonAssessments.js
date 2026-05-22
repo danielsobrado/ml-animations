@@ -14,6 +14,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'bayes-rule-ml',
   'sampling-confidence-intervals',
   'hypothesis-testing-intuition',
+  'spearman-correlation',
   'maximum-likelihood-estimation',
   'loss-functions-likelihoods',
   'logistic-regression',
@@ -554,6 +555,51 @@ export const lessonAssessments = {
         title: 'Find a tiny significant effect',
         prompt: 'Use a small effect with a large sample and explain why the evidence can look strong while the effect remains small.',
         successCriteria: 'You can separate statistical evidence from practical impact.',
+      },
+    ],
+  },
+  'spearman-correlation': {
+    quiz: [
+      {
+        id: 'rank-purpose',
+        prompt: 'What does Spearman correlation compare before computing association?',
+        choices: [
+          'The ranks of the values',
+          'Only the raw units of the values',
+          'The class labels after thresholding',
+        ],
+        answerIndex: 0,
+        explanation: 'Spearman converts values into rank order, then measures whether the two rankings move together.',
+      },
+      {
+        id: 'monotonic-not-linear',
+        prompt: 'When can Spearman be high even if Pearson is not perfect?',
+        choices: [
+          'When the relationship is monotonic but not a straight line',
+          'When the variables are completely unordered',
+          'When every value is replaced by random noise',
+        ],
+        answerIndex: 0,
+        explanation: 'Spearman rewards consistent ordering, so curved monotonic relationships can still score highly.',
+      },
+      {
+        id: 'outlier-robustness',
+        prompt: 'Why is Spearman often less sensitive to an extreme value than Pearson?',
+        choices: [
+          'The extreme value usually changes rank by only a limited amount',
+          'It deletes all outliers before scoring',
+          'It ignores whether the ordering changes',
+        ],
+        answerIndex: 0,
+        explanation: 'Ranks compress large numeric gaps, so one huge value matters mainly through its position in the order.',
+      },
+    ],
+    labs: [
+      {
+        id: 'rank-before-score',
+        title: 'Rank before scoring',
+        prompt: 'Use the calculation tab to rank X and Y, then predict the sign and size of rho before revealing the formula.',
+        successCriteria: 'You can explain whether rho changed because the order changed or because raw values moved farther apart.',
       },
     ],
   },

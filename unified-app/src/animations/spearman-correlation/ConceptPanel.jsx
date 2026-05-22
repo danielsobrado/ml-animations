@@ -77,7 +77,7 @@ export default function ConceptPanel() {
                     <p className="font-bold">{mode === 'raw' ? 'Non-Linear Curve' : 'Perfect Straight Line'}</p>
                     <p className="text-sm">
                         {mode === 'raw'
-                            ? 'Pearson correlation is low because it expects a straight line.'
+                            ? 'Pearson is weaker here because it measures straight-line association.'
                             : 'Spearman correlation is 1.0 because the ranks match perfectly!'}
                     </p>
                 </div>
