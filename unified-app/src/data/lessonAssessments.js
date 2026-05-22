@@ -125,6 +125,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'The outside dimensions become the output shape: rows from A and columns from B.',
       },
+      {
+        id: 'elementwise-confusion',
+        prompt: 'What is the common failure mode when reading A B as elementwise multiplication?',
+        choices: [
+          'You ignore the row-column dot products that define each output entry',
+          'You correctly preserve transformation composition',
+          'You make non-square matrices easier to multiply',
+        ],
+        answerIndex: 0,
+        explanation: 'Matrix multiplication composes rows and columns; elementwise multiplication is a different operation with different shape rules.',
+      },
     ],
     labs: [
       {
@@ -2964,6 +2975,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Temperature reshapes probabilities, while top-k and top-p filter the candidate set before sampling or greedy choice.',
       },
+      {
+        id: 'kv-cache-misconception',
+        prompt: 'What is a KV-cache misconception?',
+        choices: [
+          'Thinking it changes the next-token probabilities instead of reusing prior key/value rows',
+          'Using it to avoid recomputing attention over prior context',
+          'Appending the selected token before the next decoding step',
+        ],
+        answerIndex: 0,
+        explanation: 'The cache is a compute optimization for previous tokens; it should not change the model distribution for the same context.',
+      },
     ],
     labs: [
       {
@@ -2997,6 +3019,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Top-p is nucleus sampling: the number of kept tokens changes with the probability mass in the current context.',
+      },
+      {
+        id: 'top-p-token-count',
+        prompt: 'What is the top-p sampling misconception?',
+        choices: [
+          'Assuming p means a fixed number or fixed percentage of vocabulary tokens',
+          'Sorting candidates by probability before accumulating mass',
+          'Including enough ranked tokens to reach the probability threshold',
+        ],
+        answerIndex: 0,
+        explanation: 'Top-p keeps a variable-size nucleus based on cumulative probability mass, not a fixed token count.',
       },
     ],
     labs: [
@@ -3100,6 +3133,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Broader search probes more candidates or graph paths, so it can find more relevant vectors at higher cost.',
       },
+      {
+        id: 'ann-perfect-recall',
+        prompt: 'What is the ANN search misconception this lesson warns about?',
+        choices: [
+          'Treating approximate search as guaranteed to recover every exact nearest neighbor',
+          'Using exact search as a high-recall baseline for a small corpus',
+          'Comparing recall and latency together',
+        ],
+        answerIndex: 0,
+        explanation: 'Approximate indexes trade search work for speed, so recall must be measured and tuned.',
+      },
     ],
     labs: [
       {
@@ -3133,6 +3177,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Recall@k measures how much known relevant evidence appears within the retrieved candidate set.',
+      },
+      {
+        id: 'reranker-missing-evidence',
+        prompt: 'What retrieval-evaluation misconception should you avoid?',
+        choices: [
+          'Assuming a reranker can fix evidence that first-pass retrieval never returned',
+          'Checking Recall@k before generation',
+          'Looking at top-result rank with MRR',
+        ],
+        answerIndex: 0,
+        explanation: 'Reranking can only reorder the candidate set it receives; missing evidence remains missing.',
       },
     ],
     labs: [
@@ -3473,6 +3528,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Unlike tabular value methods, policy gradients update policy parameters that control action probabilities.',
       },
+      {
+        id: 'advantage-guarantee',
+        prompt: 'What is a policy-gradient misconception?',
+        choices: [
+          'Thinking one positive-advantage sample guarantees the globally best policy',
+          'Using advantage sign to push a sampled action up or down',
+          'Updating stochastic action probabilities directly',
+        ],
+        answerIndex: 0,
+        explanation: 'A sampled policy-gradient update is noisy local evidence, not a global guarantee.',
+      },
     ],
     labs: [
       {
@@ -3506,6 +3572,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A negative advantage means the action underperformed the critic baseline, so the actor is pushed away from it.',
+      },
+      {
+        id: 'critic-action-choice',
+        prompt: 'What is an actor-critic misconception?',
+        choices: [
+          'Thinking the critic directly chooses the action instead of estimating value for the actor update',
+          'Using the critic value as a baseline',
+          'Letting the actor own the stochastic policy',
+        ],
+        answerIndex: 0,
+        explanation: 'The actor selects actions; the critic estimates value so the update has a lower-variance advantage signal.',
       },
     ],
     labs: [
@@ -3609,6 +3686,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Fewer steps can be faster, but each update covers more distance and can amplify denoising mistakes.',
       },
+      {
+        id: 'deterministic-quality-guarantee',
+        prompt: 'What sampling misconception should you avoid?',
+        choices: [
+          'Assuming deterministic or fewer-step sampling is always higher quality',
+          'Comparing stochasticity and step count',
+          'Noting that prediction quality affects the final sample',
+        ],
+        answerIndex: 0,
+        explanation: 'Sampler settings are tradeoffs; speed, diversity, and quality depend on model quality and task.',
+      },
     ],
     labs: [
       {
@@ -3643,6 +3731,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'High scale can force prompt features harder, but it can also overshoot and create artifacts.',
       },
+      {
+        id: 'max-guidance-misconception',
+        prompt: 'What is the classifier-free guidance misconception?',
+        choices: [
+          'Assuming the largest guidance scale is always best',
+          'Combining conditional and unconditional predictions',
+          'Tuning scale as a prompt-adherence/diversity tradeoff',
+        ],
+        answerIndex: 0,
+        explanation: 'Very high guidance can reduce diversity and increase artifacts even when prompt match appears stronger.',
+      },
     ],
     labs: [
       {
@@ -3676,6 +3775,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A DiT treats image or latent patches like tokens, which lets transformer attention mix global information.',
+      },
+      {
+        id: 'universal-winner-misconception',
+        prompt: 'What architecture-comparison misconception should you avoid?',
+        choices: [
+          'Assuming U-Net or DiT is universally better in every data, scale, and compute regime',
+          'Comparing local inductive bias with global attention',
+          'Tracking token count as patch size changes',
+        ],
+        answerIndex: 0,
+        explanation: 'The useful comparison is tradeoffs: local image bias, scale, global mixing, and compute cost.',
       },
     ],
     labs: [

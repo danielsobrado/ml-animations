@@ -21,42 +21,42 @@ This checklist tracks the reliability pass after the broad curriculum expansion.
 
 Use this checklist for each advanced lesson before marking it reviewed:
 
-- [ ] Displayed formula matches the code path.
-- [ ] Toy numbers and toy worlds are clearly labeled as examples.
-- [ ] Approximations are described as approximations.
-- [ ] Copy avoids implying guarantees when the method is heuristic or probabilistic.
-- [ ] Visual sequence preserves the real causal order.
-- [ ] Assessment tests the main misconception.
+- [x] Displayed formula matches the code path.
+- [x] Toy numbers and toy worlds are clearly labeled as examples.
+- [x] Approximations are described as approximations.
+- [x] Copy avoids implying guarantees when the method is heuristic or probabilistic.
+- [x] Visual sequence preserves the real causal order.
+- [x] Assessment tests the main misconception.
 
 Priority lessons:
 
 | Lesson | Formula/code checked | Toy labels checked | Causal order checked | Assessment misconception checked | Notes |
 | --- | --- | --- | --- | --- | --- |
-| transformer-token-generation | [x] | [x] | [x] | [ ] | Clarified top-p cutoff behavior and changed KV-cache metric to reusable prior rows. |
-| sampling-strategies | [x] | [x] | [x] | [ ] | Clarified top-p threshold inclusion and rank-vs-mass filtering. |
-| rag-vector-indexing | [x] | [x] | [x] | [ ] | Set exact search to 100% recall baseline and labeled ANN recall as simulated recovery. |
-| rag-retrieval-evaluation | [x] | [x] | [x] | [ ] | Metrics and reranker candidate-set limits verified; no code change needed. |
-| policy-gradients | [x] | [x] | [x] | [ ] | Labeled preference update as toy and clarified softmax renormalization. |
-| actor-critic | [x] | [x] | [x] | [ ] | Clarified toy actor signal and critic value update wording. |
-| diffusion-sampling | [x] | [x] | [x] | [ ] | Confirmed sampler labels and clarified beginner flow/ODE comparison wording. |
-| classifier-free-guidance | [x] | [x] | [x] | [ ] | Confirmed guidance formula and clarified toy scalar prediction view. |
-| unet-vs-dit | [x] | [x] | [x] | [ ] | Reworded comparison label to avoid universal-winner framing. |
+| transformer-token-generation | [x] | [x] | [x] | [x] | Clarified top-p cutoff behavior, KV-cache reuse, and cache misconception. |
+| sampling-strategies | [x] | [x] | [x] | [x] | Clarified top-p threshold inclusion and added fixed-token-count misconception. |
+| rag-vector-indexing | [x] | [x] | [x] | [x] | Set exact search to 100% recall baseline and added ANN perfect-recall misconception. |
+| rag-retrieval-evaluation | [x] | [x] | [x] | [x] | Metrics verified and added reranker-missing-evidence misconception. |
+| policy-gradients | [x] | [x] | [x] | [x] | Labeled toy update and added noisy-local-update misconception. |
+| actor-critic | [x] | [x] | [x] | [x] | Clarified actor/critic roles and added critic-action-choice misconception. |
+| diffusion-sampling | [x] | [x] | [x] | [x] | Clarified beginner flow/ODE comparison and added deterministic-quality misconception. |
+| classifier-free-guidance | [x] | [x] | [x] | [x] | Confirmed guidance formula and added max-guidance misconception. |
+| unet-vs-dit | [x] | [x] | [x] | [x] | Reworded comparison label and added universal-winner misconception. |
 
 ## Assessment Depth Pass
 
 Target depth for priority lessons:
 
-- [ ] 3-5 quiz questions.
-- [ ] One predict-before-running task.
-- [ ] One explain-the-failure-mode task.
-- [ ] One practical lab.
-- [ ] Review mode for incorrect answers.
+- [x] 3-5 quiz questions.
+- [x] One predict-before-running task.
+- [x] One explain-the-failure-mode task.
+- [x] One practical lab.
+- [x] Review mode for incorrect answers.
 
 Start Here priority batch:
 
 | Lesson | 3-5 quiz | Predict task | Failure-mode task | Practical lab | Notes |
 | --- | --- | --- | --- | --- | --- |
-| matrix-multiplication | [x] | [x] | [ ] | [x] | Added shape prediction and dimension-mismatch questions. |
+| matrix-multiplication | [x] | [x] | [x] | [x] | Added shape prediction, dimension mismatch, and elementwise-confusion failure questions. |
 | linear-regression | [x] | [x] | [x] | [x] | Added outlier failure and slope-change prediction questions. |
 | bayes-rule-ml | [x] | [x] | [x] | [x] | Added base-rate shift prediction and false-alarm failure framing. |
 | sampling-confidence-intervals | [x] | [x] | [x] | [x] | Added long-run coverage misconception; existing sample-size item covers prediction. |
