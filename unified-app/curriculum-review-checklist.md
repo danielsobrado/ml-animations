@@ -68,16 +68,16 @@ Start Here priority batch:
 | data-leakage-deep-dive | [x] | [x] | [x] | [x] | Added score-inflation prediction and grouped-entity leakage failure. |
 | feature-scaling-preprocessing | [x] | [x] | [x] | [x] | Added outlier scaler prediction and fit-before-split failure. |
 | pca | [x] | [x] | [x] | [x] | Added PC1 direction prediction and variance-vs-label-signal failure. |
-| k-means | [x] | [ ] | [ ] | [x] | Add initialization failure task. |
-| logistic-regression | [x] | [ ] | [ ] | [x] | Add threshold-vs-probability task. |
-| classification-metrics | [x] | [ ] | [ ] | [x] | Add class-imbalance prediction task. |
-| roc-pr-curves | [x] | [ ] | [ ] | [x] | Add ROC-vs-PR selection task. |
-| calibration | [x] | [ ] | [ ] | [x] | Add high-confidence-miscalibration task. |
-| overfitting | [x] | [ ] | [ ] | [x] | Add validation-curve diagnosis task. |
-| bias-variance-tradeoff | [x] | [ ] | [ ] | [x] | Add underfit/overfit prediction task. |
-| regularization | [x] | [ ] | [ ] | [x] | Add too-strong-regularization task. |
-| knn-naive-bayes-svm | [x] | [ ] | [ ] | [x] | Add model-family selection task. |
-| tree-ensembles | [x] | [ ] | [ ] | [x] | Add bagging-vs-boosting failure task. |
+| k-means | [x] | [x] | [x] | [x] | Added centroid-move prediction and initialization-local-minimum failure. |
+| logistic-regression | [x] | [x] | [x] | [x] | Added probability-vs-decision failure; existing threshold move covers prediction. |
+| classification-metrics | [x] | [x] | [x] | [x] | Added rare-class baseline prediction and precision-only failure. |
+| roc-pr-curves | [x] | [x] | [x] | [x] | Added threshold-sweep prediction and ROC-vs-PR selection under imbalance. |
+| calibration | [x] | [x] | [x] | [x] | Added overconfidence bucket prediction and ranking-vs-calibration failure. |
+| overfitting | [x] | [x] | [x] | [x] | Existing validation-curve and underfit contrast items cover prediction and failure. |
+| bias-variance-tradeoff | [x] | [x] | [x] | [x] | Added underfit and overfit pattern predictions from train/validation errors. |
+| regularization | [x] | [x] | [x] | [x] | Added too-large-lambda prediction; existing too-strong item covers failure. |
+| knn-naive-bayes-svm | [x] | [x] | [x] | [x] | Added local kNN prediction and Naive Bayes redundancy failure. |
+| tree-ensembles | [x] | [x] | [x] | [x] | Added forest averaging prediction and boosting-overfit failure. |
 | gradient-descent | [x] | [x] | [x] | [x] | Added small-step and next-step prediction questions. |
 | neural-network | [x] | [x] | [x] | [x] | Added structured XOR forward/backward assessment. |
 | relu | [x] | [ ] | [ ] | [x] | Add dead-unit diagnosis task. |

@@ -451,6 +451,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'The centroid is the coordinate-wise average of the points currently assigned to that cluster.',
       },
+      {
+        id: 'predict-centroid-move',
+        prompt: 'If a centroid owns mostly points to its upper right, what should happen on the update step?',
+        choices: [
+          'It should move toward the mean of those assigned points',
+          'It should move away from its assigned points',
+          'It should stay fixed until labels are provided',
+        ],
+        answerIndex: 0,
+        explanation: 'The update step replaces each centroid with the average of the points currently assigned to it.',
+      },
+      {
+        id: 'bad-initialization',
+        prompt: 'What failure mode can poor initialization create in k-means?',
+        choices: [
+          'The algorithm can settle into a weak local solution or empty-ish cluster pattern',
+          'The algorithm becomes supervised classification',
+          'The nearest-centroid rule stops using distances',
+        ],
+        answerIndex: 0,
+        explanation: 'K-means is sensitive to starting centroids, so multiple restarts or k-means++ can matter.',
+      },
     ],
     labs: [
       {
@@ -1133,6 +1155,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'The probability scores stay fixed, but the label assigned to scores near the threshold can flip.',
       },
+      {
+        id: 'probability-not-decision',
+        prompt: 'What is the threshold-vs-probability failure mode?',
+        choices: [
+          'Treating a 0.61 probability as a guaranteed positive instead of a score compared with a threshold',
+          'Comparing probabilities against a chosen cutoff',
+          'Changing the threshold to reflect false-positive costs',
+        ],
+        answerIndex: 0,
+        explanation: 'The sigmoid output is a score used for decisions; the threshold turns that score into a class label.',
+      },
     ],
     labs: [
       {
@@ -1166,6 +1199,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'When negatives dominate, a high accuracy score can hide missed positives.',
+      },
+      {
+        id: 'predict-rare-class-baseline',
+        prompt: 'If only 2% of examples are positive, what accuracy can an all-negative classifier reach?',
+        choices: [
+          'About 98%, while finding zero positives',
+          'About 2%, because positives are rare',
+          'Exactly 50%, because there are two classes',
+        ],
+        answerIndex: 0,
+        explanation: 'Class imbalance can make a trivial majority-class classifier look accurate while recall is zero.',
+      },
+      {
+        id: 'precision-recall-tradeoff',
+        prompt: 'What failure can appear when you optimize only precision?',
+        choices: [
+          'The model may predict very few positives and miss many real positives',
+          'The model must maximize recall too',
+          'The confusion matrix no longer has false negatives',
+        ],
+        answerIndex: 0,
+        explanation: 'Very selective thresholds can make positive predictions trustworthy while leaving many positives unrecovered.',
       },
     ],
     labs: [
@@ -1201,6 +1256,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'PR curves show how many predicted positives are real and how many real positives are recovered.',
       },
+      {
+        id: 'predict-threshold-sweep',
+        prompt: 'As the threshold is lowered, what usually happens to recall?',
+        choices: [
+          'Recall usually increases because more positives are flagged',
+          'Recall must fall because there are more predicted positives',
+          'Recall becomes independent of the classifier scores',
+        ],
+        answerIndex: 0,
+        explanation: 'Lowering the cutoff accepts more examples as positive, which usually recovers more true positives too.',
+      },
+      {
+        id: 'roc-pr-selection',
+        prompt: 'Which curve is often more diagnostic when positives are very rare and false alarms matter?',
+        choices: [
+          'Precision-recall curve',
+          'Training-loss curve only',
+          'A parameter-count curve',
+        ],
+        answerIndex: 0,
+        explanation: 'PR curves expose the quality and coverage of positive predictions under class imbalance.',
+      },
     ],
     labs: [
       {
@@ -1234,6 +1311,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A bounded probability-shaped score can still disagree with observed outcome frequencies.',
+      },
+      {
+        id: 'predict-overconfidence-gap',
+        prompt: 'If the 0.9 score bucket is positive only 60% of the time, what should you diagnose?',
+        choices: [
+          'Overconfidence in that bucket',
+          'Perfect calibration at 90%',
+          'A threshold that is too low by definition',
+        ],
+        answerIndex: 0,
+        explanation: 'Predicted 90% but observed 60% means the model is overstating confidence for similar examples.',
+      },
+      {
+        id: 'ranking-not-calibration',
+        prompt: 'What calibration failure can a highly ranked classifier still have?',
+        choices: [
+          'Its score ordering can be useful while the probabilities are too high or too low',
+          'Good ranking guarantees calibrated probabilities',
+          'Calibration ignores score buckets',
+        ],
+        answerIndex: 0,
+        explanation: 'Discrimination and calibration are different: a model can rank examples well but misstate probabilities.',
       },
     ],
     labs: [
@@ -1325,6 +1424,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'High variance comes from sample sensitivity, so more data, simpler models, regularization, or averaging can help.',
       },
+      {
+        id: 'predict-underfit',
+        prompt: 'If both training and validation error stay high, what should you suspect first?',
+        choices: [
+          'High bias or underfitting',
+          'Pure high variance only',
+          'A final test-set estimate',
+        ],
+        answerIndex: 0,
+        explanation: 'When the model cannot fit the training data well, the dominant problem is usually bias or insufficient signal/features.',
+      },
+      {
+        id: 'predict-overfit',
+        prompt: 'If training error is very low but validation error is high, what should you suspect?',
+        choices: [
+          'High variance or overfitting',
+          'A model that is too simple to fit the training set',
+          'A metric that no longer uses labels',
+        ],
+        answerIndex: 0,
+        explanation: 'A large train-validation gap points to sample-specific fitting that does not generalize.',
+      },
     ],
     labs: [
       {
@@ -1381,6 +1502,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Lambda is a model-selection choice, so it belongs in the validation loop, not repeated test-set tuning.',
       },
+      {
+        id: 'predict-lambda-too-large',
+        prompt: 'If lambda becomes extremely large, what should you predict for useful weights?',
+        choices: [
+          'They shrink heavily, risking underfit predictions',
+          'They grow without limit',
+          'They stop affecting the loss',
+        ],
+        answerIndex: 0,
+        explanation: 'A strong penalty can dominate the data fit and suppress useful signal.',
+      },
     ],
     labs: [
       {
@@ -1415,6 +1547,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Naive Bayes is probabilistic: it combines class priors with feature likelihoods, often with an independence assumption.',
       },
+      {
+        id: 'predict-knn-local',
+        prompt: 'Which model is most likely to flip when a query crosses near a small local cluster?',
+        choices: [
+          'kNN, because nearby training examples vote directly',
+          'Naive Bayes, because it ignores all feature values',
+          'SVM, because support vectors are never near boundaries',
+        ],
+        answerIndex: 0,
+        explanation: 'kNN is local and instance-based, so neighborhood composition can change the decision abruptly.',
+      },
+      {
+        id: 'naive-bayes-correlation-failure',
+        prompt: 'What can hurt Naive Bayes when features are strongly redundant?',
+        choices: [
+          'The conditional-independence assumption can double-count correlated evidence',
+          'It becomes a nearest-neighbor method',
+          'It cannot use class priors',
+        ],
+        answerIndex: 0,
+        explanation: 'The naive assumption multiplies feature evidence as if conditionally independent, which can overstate redundant signals.',
+      },
     ],
     labs: [
       {
@@ -1448,6 +1602,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Boosting is sequential: each new weak learner targets the residual signal left by the current ensemble.',
+      },
+      {
+        id: 'predict-forest-averaging',
+        prompt: 'What should happen when a random forest averages many decorrelated trees?',
+        choices: [
+          'Variance from individual tree quirks usually drops',
+          'Every tree becomes identical',
+          'The ensemble stops using feature splits',
+        ],
+        answerIndex: 0,
+        explanation: 'Averaging unstable but diverse trees smooths out idiosyncratic splits.',
+      },
+      {
+        id: 'boosting-overfit-failure',
+        prompt: 'What failure can happen if boosting keeps adding rounds after validation stops improving?',
+        choices: [
+          'It can chase residual noise and overfit',
+          'It becomes a bagged forest automatically',
+          'It removes all weak learners from the model',
+        ],
+        answerIndex: 0,
+        explanation: 'Boosting is powerful and sequential; too many rounds or too much depth can fit noise unless validation controls it.',
       },
     ],
     labs: [
