@@ -343,6 +343,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: a blocked ReLU has zero local gradient for that example.',
     'Check understanding by identifying whether a negative pre-activation can send gradient backward.',
   ),
+  'leaky-relu': cardSet(
+    'Leaky ReLU solves the dead-zone problem by giving negative pre-activations a small nonzero slope.',
+    'Positive values pass through normally; negative values keep their sign but are scaled down.',
+    'The math is f(z)=max(alpha z,z), with derivative alpha below zero and 1 at or above zero.',
+    'Manipulate alpha, bias shift, and upstream gradient to see how forward outputs and backprop signals differ from ReLU.',
+    'Mistake to avoid: Leaky ReLU does not turn negative evidence positive; it only avoids a fully flat negative branch.',
+    'Check understanding by predicting the backward gradient for a negative z before changing alpha.',
+  ),
   conv2d: cardSet(
     'Conv2D solves the problem of detecting local spatial patterns with a small reusable set of weights.',
     'Slide the same kernel across the input; each stop asks whether the local patch matches the learned pattern.',

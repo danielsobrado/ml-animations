@@ -29,6 +29,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'gradient-problems',
   'layer-normalization',
   'relu',
+  'leaky-relu',
   'conv2d',
   'conv-relu',
   'computation-graph-backprop',
@@ -1235,6 +1236,51 @@ export const lessonAssessments = {
         title: 'Cross the kink',
         prompt: 'Move the input across zero and watch both output and slope change.',
         successCriteria: 'You can name the active region and the blocked region.',
+      },
+    ],
+  },
+  'leaky-relu': {
+    quiz: [
+      {
+        id: 'negative-output',
+        prompt: 'For z below zero, what does Leaky ReLU output?',
+        choices: [
+          'A small negative value alpha times z',
+          'Exactly zero for every negative z',
+          'A probability between 0 and 1',
+        ],
+        answerIndex: 0,
+        explanation: 'Leaky ReLU keeps a small negative-side slope, so negative inputs become alpha z rather than zero.',
+      },
+      {
+        id: 'gradient-path',
+        prompt: 'Why can Leaky ReLU reduce dead-unit behavior compared with ReLU?',
+        choices: [
+          'Its local derivative is alpha rather than zero on the negative side',
+          'It removes the need for backpropagation',
+          'It makes every pre-activation positive',
+        ],
+        answerIndex: 0,
+        explanation: 'Backprop multiplies by the local derivative. A small nonzero derivative preserves a small learning signal.',
+      },
+      {
+        id: 'alpha-tradeoff',
+        prompt: 'What is the main tradeoff when alpha is increased?',
+        choices: [
+          'More negative-side gradient passes through, but negative activations are less strongly gated',
+          'The model stops using positive activations',
+          'The activation becomes a softmax',
+        ],
+        answerIndex: 0,
+        explanation: 'Larger alpha makes the negative branch less clipped, affecting both forward values and backward gradients.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-dead-zone',
+        title: 'Compare the dead zone',
+        prompt: 'Set z below zero, compare alpha = 0 with alpha above 0, and record how the output and gradient change.',
+        successCriteria: 'You can explain why alpha = 0 behaves like ReLU and alpha above 0 preserves a small gradient.',
       },
     ],
   },

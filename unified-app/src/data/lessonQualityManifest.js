@@ -200,6 +200,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Activation behavior is represented with interactive inputs and outputs.',
     nextAction: 'Add gradient-flow edge-case checks across negative saturation.',
   },
+  'leaky-relu': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom activation workbench comparing ReLU and Leaky ReLU forward outputs, negative-side slope, and preserved backward gradients.',
+    nextAction: 'Add PReLU and ELU comparisons for learned or smooth negative branches.',
+  },
   conv2d: {
     tier: 'B',
     status: 'stable',
