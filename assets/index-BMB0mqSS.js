@@ -1,1 +1,0 @@
-import{j as t}from"./index-BNkjHskQ.js";import{C as o}from"./CoreMlLesson-Cr07oYst.js";import"./sliders-horizontal-hdOfOkrp.js";function s(){return t.jsx(o,{lessonId:"overfitting"})}export{s as default};
