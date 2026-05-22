@@ -104,6 +104,7 @@ const EQUATION_OVERRIDES = {
   'value-iteration': 'V_{k+1}(s)=\\max_a\\sum_{s\\prime}P(s\\prime\\mid s,a)[R+\\gamma V_k(s\\prime)]',
   'policy-iteration': '\\pi_{k+1}(s)=\\arg\\max_a\\mathbb{E}[R+\\gamma V^{\\pi_k}(s\\prime)]',
   'q-learning': "Q(s,a)\\leftarrow Q(s,a)+\\alpha[r+\\gamma\\max Q(s',a')-Q(s,a)]",
+  'rl-exploration': 'a\\sim\\begin{cases}\\operatorname{Random}(A)&\\epsilon\\\\ \\arg\\max_a Q(s,a)&1-\\epsilon\\end{cases}',
   'policy-gradients': '\\nabla J(\\theta)=\\mathbb{E}[G_t\\nabla_\\theta\\log\\pi_\\theta(a_t\\mid s_t)]',
   'actor-critic': 'A_t=G_t-V_\\phi(s_t)\\quad actor:\\nabla\\log\\pi_\\theta(a_t\\mid s_t)A_t',
   'reward-shaping': "r'=r+\\gamma\\Phi(s')-\\Phi(s)",
@@ -682,6 +683,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Edit the Bellman update inputs and predict the target, TD error, and new Q-value before reading the result.',
     'Mistake to avoid: Q-learning backs up toward the greedy future action even when exploration sampled a different action.',
     'Check understanding by explaining why gamma controls delayed reward while alpha controls update size.',
+  ),
+  'rl-exploration': cardSet(
+    'Exploration solves the problem of learning from actions the current policy would not choose greedily.',
+    'The agent needs enough random trials to discover better rewards, but too much randomness makes behavior noisy and risky.',
+    'The math for epsilon-greedy chooses a random action with probability epsilon and the best-known action otherwise.',
+    'Adjust epsilon, watch explore/exploit counts, then compare how the cliff path changes when random moves are likely.',
+    'Mistake to avoid: the shortest path is not always the best deployed path when exploration or execution noise can cause failures.',
+    'Check understanding by predicting whether higher epsilon increases discovery, danger, or both in the cliff scenario.',
   ),
   'policy-gradients': cardSet(
     'Policy gradients solve the problem of learning a stochastic action policy directly from returns.',

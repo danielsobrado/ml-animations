@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:55:46.490Z
+Generated: 2026-05-22T07:57:54.405Z
 
 ## Review Policy
 
@@ -205,7 +205,7 @@ Generated: 2026-05-22T07:55:46.490Z
 | policy-iteration | B (good) | auto | 7866 | 0 |  | Review and set explicit manual quality entry. |
 | q-learning | B (good) | manual | 3315 | 3 | stable | Add explicit epsilon control and compare off-policy Q-learning with on-policy SARSA. |
 | reward-shaping | B (good) | auto | 7792 | 0 |  | Review and set explicit manual quality entry. |
-| rl-exploration | C (adequate) | auto | 3085 | 3 |  | Review and set explicit manual quality entry. |
+| rl-exploration | B (good) | manual | 3331 | 3 | stable | Add UCB and Thompson sampling comparisons for bandit-style exploration. |
 | rl-foundations | C (adequate) | auto | 3011 | 3 |  | Review and set explicit manual quality entry. |
 | value-iteration | B (good) | auto | 6711 | 0 |  | Review and set explicit manual quality entry. |
 

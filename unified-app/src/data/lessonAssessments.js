@@ -67,6 +67,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'classifier-free-guidance',
   'unet-vs-dit',
   'q-learning',
+  'rl-exploration',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -2801,6 +2802,51 @@ export const lessonAssessments = {
         title: 'Trace one Q update',
         prompt: 'Use the Bellman update tab to choose old Q, reward, future Q, alpha, and gamma, then predict the new Q before reading it.',
         successCriteria: 'You can name the target, TD error, and final nudged Q-value for one transition.',
+      },
+    ],
+  },
+  'rl-exploration': {
+    quiz: [
+      {
+        id: 'epsilon-meaning',
+        prompt: 'In epsilon-greedy exploration, what does epsilon control?',
+        choices: [
+          'The probability of choosing a random exploratory action',
+          'The reward discount applied after terminal states',
+          'The number of states in the environment',
+        ],
+        answerIndex: 0,
+        explanation: 'Epsilon is the exploration rate: higher epsilon means more random actions instead of greedy exploitation.',
+      },
+      {
+        id: 'explore-exploit-tradeoff',
+        prompt: 'Why can pure exploitation fail early in training?',
+        choices: [
+          'The agent may commit to a bad action before it has tried enough alternatives',
+          'The agent automatically knows every reward in advance',
+          'The discount factor becomes exactly zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Without exploration, early noisy estimates can trap the policy in a locally attractive but poor behavior.',
+      },
+      {
+        id: 'cliff-risk',
+        prompt: 'Why can a risky shortest path be worse under high exploration noise?',
+        choices: [
+          'Random exploratory moves can push the agent into costly failure states',
+          'Exploration deletes all rewards from the environment',
+          'The Q-table no longer stores action values',
+        ],
+        answerIndex: 0,
+        explanation: 'When random moves are frequent, a path close to a cliff has a high chance of catastrophic deviation.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tune-epsilon',
+        title: 'Tune exploration for risk',
+        prompt: 'Compare low and high epsilon in the epsilon and cliff tabs, then choose a setting for fast learning without frequent falls.',
+        successCriteria: 'You can justify the setting using exploration count, exploitation count, falls, and wins.',
       },
     ],
   },

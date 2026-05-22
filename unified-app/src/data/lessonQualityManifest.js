@@ -368,6 +368,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Three-panel tabular RL lesson with editable Q-table, Bellman update controls, live training loop, and persistent assessment coverage.',
     nextAction: 'Add explicit epsilon control and compare off-policy Q-learning with on-policy SARSA.',
   },
+  'rl-exploration': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Three-panel exploration lesson with epsilon-greedy sampling, cliff-walking risk visualization, hyperparameter tradeoff controls, and persistent assessment coverage.',
+    nextAction: 'Add UCB and Thompson sampling comparisons for bandit-style exploration.',
+  },
 };
 
 export const D_TIER_PLACEHOLDERS = Object.entries(MANUAL_LESSON_QUALITY)

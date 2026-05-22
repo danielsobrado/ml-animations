@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Compass, AlertTriangle, Sliders } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const EpsilonPanel = lazy(() => import('./EpsilonPanel'));
@@ -65,6 +66,9 @@ export default function RlExplorationAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="px-8 pb-8">
+                    <AssessmentPanel lessonId="rl-exploration" title="Exploration vs Exploitation check" />
+                </div>
             </div>
         </div>
     );
