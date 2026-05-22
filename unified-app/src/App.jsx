@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/layout/Header';
-import Sidebar from './components/layout/Sidebar';
-import CommandPalette from './components/app/CommandPalette';
 import KeyboardHintDock from './components/app/KeyboardHintDock';
-import HomePage from './pages/HomePage';
-import AnimationPage from './pages/AnimationPage';
-import GlossaryPage from './pages/GlossaryPage';
-import { allAnimations, getAnimationById } from './data/animations';
+import { ACTIVE_LESSON_COUNT } from './data/catalogStats';
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AnimationPage = lazy(() => import('./pages/AnimationPage'));
+const GlossaryPage = lazy(() => import('./pages/GlossaryPage'));
+const CommandPalette = lazy(() => import('./components/app/CommandPalette'));
+const Sidebar = lazy(() => import('./components/layout/Sidebar'));
 
 const VISITED_KEY = 'ml-animations:visited-lessons';
 const SITE_BASE_URL = 'https://danielsobrado.github.io/ml-animations';
@@ -123,6 +124,7 @@ export default function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [visitedLessons, setVisitedLessons] = useState(() => new Set(readVisitedLessons()));
+  const [currentLesson, setCurrentLesson] = useState(null);
 
   useEffect(() => {
     if (window.innerWidth < 768) setSidebarOpen(false);
@@ -169,7 +171,23 @@ export default function App() {
   }, [navigate]);
 
   const currentLessonId = location.pathname.match(/^\/animation\/([^/]+)/)?.[1];
-  const currentLesson = currentLessonId ? getAnimationById(currentLessonId) : null;
+
+  useEffect(() => {
+    let disposed = false;
+
+    if (!currentLessonId) {
+      setCurrentLesson(null);
+      return undefined;
+    }
+
+    import('./data/animations').then(({ getAnimationById }) => {
+      if (!disposed) setCurrentLesson(getAnimationById(currentLessonId) || null);
+    });
+
+    return () => {
+      disposed = true;
+    };
+  }, [currentLessonId]);
 
   const handleSidebarControlClick = () => {
     if (!sidebarOpen) {
@@ -193,28 +211,36 @@ export default function App() {
         onMenuClick={() => setSidebarOpen((open) => !open)}
         onSidebarControlClick={handleSidebarControlClick}
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
-        progress={{ visited: visitedLessons.size, total: allAnimations.length }}
+        progress={{ visited: visitedLessons.size, total: ACTIVE_LESSON_COUNT }}
         sidebarOpen={sidebarOpen}
         sidebarCollapsed={sidebarCollapsed}
       />
-      <Sidebar
-        isOpen={sidebarOpen}
-        isCollapsed={sidebarCollapsed}
-        onClose={() => setSidebarOpen(false)}
-        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
-      />
+      <Suspense fallback={null}>
+        <Sidebar
+          isOpen={sidebarOpen}
+          isCollapsed={sidebarCollapsed}
+          onClose={() => setSidebarOpen(false)}
+          onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+        />
+      </Suspense>
       <main
         className={`ua-main ${sidebarCollapsed ? 'sidebar-collapsed' : ''} ${
           sidebarOpen ? '' : 'sidebar-closed'
         }`}
       >
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/animation/:id" element={<AnimationPage />} />
-          <Route path="/glossary/:slug" element={<GlossaryPage />} />
-        </Routes>
+        <Suspense fallback={<div className="ds-panel ua-loading">Loading page</div>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/animation/:id" element={<AnimationPage />} />
+            <Route path="/glossary/:slug" element={<GlossaryPage />} />
+          </Routes>
+        </Suspense>
       </main>
-      <CommandPalette open={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
+      {commandPaletteOpen && (
+        <Suspense fallback={null}>
+          <CommandPalette open={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
+        </Suspense>
+      )}
       <KeyboardHintDock />
     </div>
   );

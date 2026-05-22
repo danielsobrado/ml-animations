@@ -86,6 +86,10 @@ test('central glossary repository exposes reusable image-backed term pages', () 
     assert.ok(term.slug);
     assert.equal(term.href, `/glossary/${term.slug}`);
     assert.ok(term.definition);
+    assert.ok(term.explanation);
+    assert.ok(term.intuition);
+    assert.ok(term.example);
+    assert.ok(term.pitfall);
     assert.ok(term.image.src.startsWith('data:image/svg+xml'));
     assert.ok(term.image.alt);
   }

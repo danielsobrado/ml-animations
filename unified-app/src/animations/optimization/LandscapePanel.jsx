@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import { AmbientLight, Color, DirectionalLight, DoubleSide, GridHelper, Mesh, MeshStandardMaterial, PerspectiveCamera, PlaneGeometry, PointLight, Scene, SphereGeometry, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default function LandscapePanel() {
@@ -11,13 +11,13 @@ export default function LandscapePanel() {
 
         const width = container.clientWidth || 900;
         const height = 500;
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xfefcf7);
+        const scene = new Scene();
+        scene.background = new Color(0xfefcf7);
 
-        const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+        const camera = new PerspectiveCamera(50, width / height, 0.1, 1000);
         camera.position.set(5, 4, 5);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         renderer.setSize(width, height);
         renderer.shadowMap.enabled = true;
@@ -28,7 +28,7 @@ export default function LandscapePanel() {
         controls.autoRotate = true;
         controls.autoRotateSpeed = 0.35;
 
-        const geometry = new THREE.PlaneGeometry(6, 6, 72, 72);
+        const geometry = new PlaneGeometry(6, 6, 72, 72);
         const pos = geometry.attributes.position;
         for (let i = 0; i < pos.count; i += 1) {
             const x = pos.getX(i);
@@ -38,37 +38,37 @@ export default function LandscapePanel() {
         }
         geometry.computeVertexNormals();
 
-        const surface = new THREE.Mesh(
+        const surface = new Mesh(
             geometry,
-            new THREE.MeshStandardMaterial({
+            new MeshStandardMaterial({
                 color: 0x3a6a3a,
                 roughness: 0.58,
                 metalness: 0.02,
-                side: THREE.DoubleSide,
+                side: DoubleSide,
             })
         );
         surface.rotation.x = -Math.PI / 2;
         surface.receiveShadow = true;
         scene.add(surface);
 
-        const grid = new THREE.GridHelper(10, 10, 0xb6ac93, 0xece6d3);
+        const grid = new GridHelper(10, 10, 0xb6ac93, 0xece6d3);
         grid.position.y = -1;
         scene.add(grid);
 
-        const marker = new THREE.Mesh(
-            new THREE.SphereGeometry(0.2, 32, 32),
-            new THREE.MeshStandardMaterial({ color: 0xa85a3a, emissive: 0x6b2f1c, emissiveIntensity: 0.2 })
+        const marker = new Mesh(
+            new SphereGeometry(0.2, 32, 32),
+            new MeshStandardMaterial({ color: 0xa85a3a, emissive: 0x6b2f1c, emissiveIntensity: 0.2 })
         );
         marker.position.set(0, -0.5, 0);
         marker.castShadow = true;
         scene.add(marker);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.65));
-        const key = new THREE.DirectionalLight(0xffffff, 1);
+        scene.add(new AmbientLight(0xffffff, 0.65));
+        const key = new DirectionalLight(0xffffff, 1);
         key.position.set(5, 10, 5);
         key.castShadow = true;
         scene.add(key);
-        scene.add(new THREE.PointLight(0x264273, 0.4, 20));
+        scene.add(new PointLight(0x264273, 0.4, 20));
 
         let animationFrame = 0;
         const animate = () => {

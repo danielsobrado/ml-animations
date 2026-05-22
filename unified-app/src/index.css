@@ -1298,6 +1298,16 @@ body {
   font-family: var(--ds-font-serif);
 }
 
+.ua-map-loading {
+  display: grid;
+  place-items: center;
+  color: var(--ds-faint);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .ua-map-canvas .map-container me-root me-tpc,
 .ua-map-canvas .map-container me-main > me-wrapper > me-parent > me-tpc,
 .ua-map-canvas .map-container me-parent me-tpc {
@@ -1756,6 +1766,14 @@ body {
   line-height: 1.4;
 }
 
+.ua-glossary-grid .ua-glossary-intuition {
+  margin-top: 7px;
+  color: var(--ds-ink);
+  font-family: var(--ds-font-serif);
+  font-size: 12px;
+  font-style: italic;
+}
+
 .ua-glossary-page {
   max-width: 1180px;
   margin: 0 auto;
@@ -1830,6 +1848,10 @@ body {
   padding: 14px;
   border-right: var(--ds-border);
   border-bottom: var(--ds-border);
+}
+
+.ua-term-notes article.wide {
+  grid-column: 1 / -1;
 }
 
 .ua-term-notes svg {

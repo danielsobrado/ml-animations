@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { BoxGeometry, CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, OrthographicCamera, Scene, Sprite, SpriteMaterial, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 const STEPS = [
@@ -26,25 +26,25 @@ export default function FlowPanel() {
         const width = containerRef.current.clientWidth;
         const height = 400;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf8fafc); // Slate-50
+        const scene = new Scene();
+        scene.background = new Color(0xf8fafc); // Slate-50
         sceneRef.current = scene;
 
-        const camera = new THREE.OrthographicCamera(
+        const camera = new OrthographicCamera(
             width / -2, width / 2, height / 2, height / -2, 0.1, 1000
         );
         camera.position.z = 100;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
         // Helper to create blocks
         const createBlock = (color, x, y, label) => {
-            const group = new THREE.Group();
-            const geometry = new THREE.BoxGeometry(40, 40, 10);
-            const material = new THREE.MeshBasicMaterial({ color });
-            const mesh = new THREE.Mesh(geometry, material);
+            const group = new Group();
+            const geometry = new BoxGeometry(40, 40, 10);
+            const material = new MeshBasicMaterial({ color });
+            const mesh = new Mesh(geometry, material);
             group.add(mesh);
 
             // Label
@@ -56,9 +56,9 @@ export default function FlowPanel() {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(label, 64, 32);
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMat = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(spriteMat);
+            const texture = new CanvasTexture(canvas);
+            const spriteMat = new SpriteMaterial({ map: texture });
+            const sprite = new Sprite(spriteMat);
             sprite.scale.set(40, 20, 1);
             sprite.position.z = 6;
             group.add(sprite);

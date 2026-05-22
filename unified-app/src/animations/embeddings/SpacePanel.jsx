@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { BufferAttribute, BufferGeometry, Color, FogExp2, Mesh, MeshBasicMaterial, PerspectiveCamera, Points, PointsMaterial, Scene, SphereGeometry, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 
@@ -22,16 +22,16 @@ export default function SpacePanel() {
         const height = 500;
 
         // Scene
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xfefcf7);
-        scene.fog = new THREE.FogExp2(0xfefcf7, 0.04);
+        const scene = new Scene();
+        scene.background = new Color(0xfefcf7);
+        scene.fog = new FogExp2(0xfefcf7, 0.04);
 
         // Camera
-        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+        const camera = new PerspectiveCamera(60, width / height, 0.1, 1000);
         camera.position.set(15, 10, 15);
 
         // Renderers
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
@@ -64,9 +64,9 @@ export default function SpacePanel() {
                 const z = cz + (Math.random() - 0.5) * 4;
 
                 // Visual Dot
-                const geometry = new THREE.SphereGeometry(0.2, 16, 16);
-                const material = new THREE.MeshBasicMaterial({ color: data.color });
-                const mesh = new THREE.Mesh(geometry, material);
+                const geometry = new SphereGeometry(0.2, 16, 16);
+                const material = new MeshBasicMaterial({ color: data.color });
+                const mesh = new Mesh(geometry, material);
                 mesh.position.set(x, y, z);
                 scene.add(mesh);
 
@@ -89,15 +89,15 @@ export default function SpacePanel() {
         });
 
         // Stars/Particles background
-        const starsGeo = new THREE.BufferGeometry();
+        const starsGeo = new BufferGeometry();
         const starsCount = 1000;
         const posArray = new Float32Array(starsCount * 3);
         for (let i = 0; i < starsCount * 3; i++) {
             posArray[i] = (Math.random() - 0.5) * 100;
         }
-        starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const starsMat = new THREE.PointsMaterial({ size: 0.08, color: 0xd9d2c0, transparent: true, opacity: 0.45 });
-        const starsMesh = new THREE.Points(starsGeo, starsMat);
+        starsGeo.setAttribute('position', new BufferAttribute(posArray, 3));
+        const starsMat = new PointsMaterial({ size: 0.08, color: 0xd9d2c0, transparent: true, opacity: 0.45 });
+        const starsMesh = new Points(starsGeo, starsMat);
         scene.add(starsMesh);
 
         // Animation Loop

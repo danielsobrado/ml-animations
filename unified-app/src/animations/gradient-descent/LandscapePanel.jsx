@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { AmbientLight, Color, DirectionalLight, DoubleSide, Fog, Mesh, MeshStandardMaterial, PerspectiveCamera, PlaneGeometry, Scene, SphereGeometry, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default function LandscapePanel() {
@@ -31,15 +31,15 @@ export default function LandscapePanel() {
         const width = containerRef.current.clientWidth;
         const height = 500;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf0f9ff);
-        scene.fog = new THREE.Fog(0xf0f9ff, 10, 50);
+        const scene = new Scene();
+        scene.background = new Color(0xf0f9ff);
+        scene.fog = new Fog(0xf0f9ff, 10, 50);
 
-        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+        const camera = new PerspectiveCamera(60, width / height, 0.1, 1000);
         camera.position.set(10, 10, 10);
         camera.lookAt(0, 0, 0);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         renderer.shadowMap.enabled = true;
         containerRef.current.appendChild(renderer.domElement);
@@ -48,15 +48,15 @@ export default function LandscapePanel() {
         controls.enableDamping = true;
 
         // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const dirLight = new DirectionalLight(0xffffff, 0.8);
         dirLight.position.set(10, 20, 10);
         dirLight.castShadow = true;
         scene.add(dirLight);
 
         // Terrain Mesh
-        const geometry = new THREE.PlaneGeometry(20, 20, 100, 100);
+        const geometry = new PlaneGeometry(20, 20, 100, 100);
         const positions = geometry.attributes.position;
         for (let i = 0; i < positions.count; i++) {
             const x = positions.getX(i);
@@ -66,20 +66,20 @@ export default function LandscapePanel() {
         geometry.computeVertexNormals();
         geometry.rotateX(-Math.PI / 2); // Rotate to horizontal
 
-        const material = new THREE.MeshStandardMaterial({
+        const material = new MeshStandardMaterial({
             color: 0x3b82f6,
             roughness: 0.8,
             flatShading: true,
-            side: THREE.DoubleSide
+            side: DoubleSide
         });
-        const terrain = new THREE.Mesh(geometry, material);
+        const terrain = new Mesh(geometry, material);
         terrain.receiveShadow = true;
         scene.add(terrain);
 
         // Ball
-        const ballGeo = new THREE.SphereGeometry(0.3, 32, 32);
-        const ballMat = new THREE.MeshStandardMaterial({ color: 0xef4444 });
-        const ball = new THREE.Mesh(ballGeo, ballMat);
+        const ballGeo = new SphereGeometry(0.3, 32, 32);
+        const ballMat = new MeshStandardMaterial({ color: 0xef4444 });
+        const ball = new Mesh(ballGeo, ballMat);
         ball.castShadow = true;
         scene.add(ball);
         ballRef.current = ball;

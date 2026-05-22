@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { BufferGeometry, CircleGeometry, Color, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 // Loss function: L(w) = w^2
@@ -41,16 +41,16 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
         const width = containerRef.current.clientWidth;
         const height = 400;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(COLORS.bg);
+        const scene = new Scene();
+        scene.background = new Color(COLORS.bg);
         sceneRef.current = scene;
 
-        const camera = new THREE.OrthographicCamera(
+        const camera = new OrthographicCamera(
             width / -2, width / 2, height / 2, height / -2, 0.1, 1000
         );
         camera.position.z = 100;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
         rendererRef.current = renderer;
@@ -64,18 +64,18 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
             const loss = w * w;
             const x = w * scale;
             const y = -loss * 10 + 100; // Invert y and offset
-            curvePoints.push(new THREE.Vector3(x, y, 0));
+            curvePoints.push(new Vector3(x, y, 0));
         }
 
-        const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-        const curveMaterial = new THREE.LineBasicMaterial({ color: COLORS.curve, linewidth: 3 });
-        const curve = new THREE.Line(curveGeometry, curveMaterial);
+        const curveGeometry = new BufferGeometry().setFromPoints(curvePoints);
+        const curveMaterial = new LineBasicMaterial({ color: COLORS.curve, linewidth: 3 });
+        const curve = new Line(curveGeometry, curveMaterial);
         scene.add(curve);
 
         // Ball
-        const ballGeometry = new THREE.CircleGeometry(8, 32);
-        const ballMaterial = new THREE.MeshBasicMaterial({ color: COLORS.ball });
-        const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+        const ballGeometry = new CircleGeometry(8, 32);
+        const ballMaterial = new MeshBasicMaterial({ color: COLORS.ball });
+        const ball = new Mesh(ballGeometry, ballMaterial);
         scene.add(ball);
 
         // Gradient arrow (will be created dynamically)

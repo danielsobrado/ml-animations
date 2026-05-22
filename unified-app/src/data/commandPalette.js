@@ -58,6 +58,7 @@ export function buildCommandPaletteItems(animations, glossaryTerms) {
     searchText: makeSearchText([
       term.term,
       term.symbol,
+      ...(term.aliases || []),
       SYMBOL_ALIASES[term.symbol],
       term.category,
       term.definition,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Sigma } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, BookOpen, Lightbulb, Sigma } from 'lucide-react';
 import { getGlossaryTerm, glossaryTerms } from '../data/glossaryRepository.js';
 
 export default function GlossaryPage() {
@@ -48,17 +48,25 @@ export default function GlossaryPage() {
       </section>
 
       <section className="ua-term-notes">
-        <article>
+        <article className="wide">
           <BookOpen size={17} />
-          <h2>Reusable definition</h2>
-          <p>This entry is stored once and reused anywhere an animation needs the term.</p>
+          <h2>What it means</h2>
+          <p>{term.explanation}</p>
+        </article>
+        <article>
+          <Lightbulb size={17} />
+          <h2>Intuition</h2>
+          <p>{term.intuition}</p>
         </article>
         <article>
           <Sigma size={17} />
-          <h2>Canonical link</h2>
-          <p>
-            Cards, popovers, and glossary panels point to <code>{term.href}</code>.
-          </p>
+          <h2>Example</h2>
+          <p>{term.example}</p>
+        </article>
+        <article>
+          <AlertTriangle size={17} />
+          <h2>Common pitfall</h2>
+          <p>{term.pitfall}</p>
         </article>
       </section>
 

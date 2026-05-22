@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { CanvasTexture, Color, EdgesGeometry, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Sprite, SpriteMaterial, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 const COLORS = {
@@ -24,16 +24,16 @@ export default function MaxPoolingPanel({ inputMatrix, poolSize, stride, onCompl
         const width = containerRef.current.clientWidth;
         const height = 500;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(COLORS.bg);
+        const scene = new Scene();
+        scene.background = new Color(COLORS.bg);
         sceneRef.current = scene;
 
-        const camera = new THREE.OrthographicCamera(
+        const camera = new OrthographicCamera(
             width / -2, width / 2, height / 2, height / -2, 0.1, 1000
         );
         camera.position.z = 100;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
         rendererRef.current = renderer;
@@ -42,20 +42,20 @@ export default function MaxPoolingPanel({ inputMatrix, poolSize, stride, onCompl
         const gap = 5;
 
         const createCell = (value, x, y, color) => {
-            const group = new THREE.Group();
+            const group = new Group();
 
-            const geometry = new THREE.PlaneGeometry(cellSize, cellSize);
-            const material = new THREE.MeshBasicMaterial({
+            const geometry = new PlaneGeometry(cellSize, cellSize);
+            const material = new MeshBasicMaterial({
                 color,
                 transparent: true,
                 opacity: 0.8
             });
-            const mesh = new THREE.Mesh(geometry, material);
+            const mesh = new Mesh(geometry, material);
             group.add(mesh);
 
-            const border = new THREE.LineSegments(
-                new THREE.EdgesGeometry(geometry),
-                new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 2 })
+            const border = new LineSegments(
+                new EdgesGeometry(geometry),
+                new LineBasicMaterial({ color: 0x333333, linewidth: 2 })
             );
             group.add(border);
 
@@ -69,9 +69,9 @@ export default function MaxPoolingPanel({ inputMatrix, poolSize, stride, onCompl
             ctx.textBaseline = 'middle';
             ctx.fillText(value.toString(), 64, 64);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            const valMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
-            const valSprite = new THREE.Sprite(valMaterial);
+            const texture = new CanvasTexture(canvas);
+            const valMaterial = new SpriteMaterial({ map: texture, transparent: true });
+            const valSprite = new Sprite(valMaterial);
             valSprite.scale.set(cellSize * 0.8, cellSize * 0.8, 1);
             group.add(valSprite);
 
@@ -99,19 +99,19 @@ export default function MaxPoolingPanel({ inputMatrix, poolSize, stride, onCompl
         });
 
         // Window outline
-        const windowGeom = new THREE.PlaneGeometry(
+        const windowGeom = new PlaneGeometry(
             poolSize * cellSize + (poolSize - 1) * gap,
             poolSize * cellSize + (poolSize - 1) * gap
         );
-        const windowMaterial = new THREE.MeshBasicMaterial({
+        const windowMaterial = new MeshBasicMaterial({
             color: COLORS.window,
             transparent: true,
             opacity: 0.3
         });
-        const window = new THREE.Mesh(windowGeom, windowMaterial);
-        const windowBorder = new THREE.LineSegments(
-            new THREE.EdgesGeometry(windowGeom),
-            new THREE.LineBasicMaterial({ color: COLORS.window, linewidth: 4 })
+        const window = new Mesh(windowGeom, windowMaterial);
+        const windowBorder = new LineSegments(
+            new EdgesGeometry(windowGeom),
+            new LineBasicMaterial({ color: COLORS.window, linewidth: 4 })
         );
         window.add(windowBorder);
         window.visible = false;
@@ -228,7 +228,7 @@ export default function MaxPoolingPanel({ inputMatrix, poolSize, stride, onCompl
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(maxVal.toString(), 64, 64);
-                valSprite.material.map = new THREE.CanvasTexture(canvas);
+                valSprite.material.map = new CanvasTexture(canvas);
 
                 await new Promise(r => setTimeout(r, 300));
 

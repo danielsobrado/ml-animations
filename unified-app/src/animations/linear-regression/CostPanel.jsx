@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { AmbientLight, Color, DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, MeshStandardMaterial, PerspectiveCamera, PlaneGeometry, Scene, SphereGeometry, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default function CostPanel() {
@@ -34,14 +34,14 @@ export default function CostPanel() {
         const width = containerRef.current.clientWidth;
         const height = 500;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf8fafc);
+        const scene = new Scene();
+        scene.background = new Color(0xf8fafc);
 
-        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+        const camera = new PerspectiveCamera(60, width / height, 0.1, 1000);
         camera.position.set(5, 5, 5);
         camera.lookAt(0, 0, 0);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
@@ -49,14 +49,14 @@ export default function CostPanel() {
         controls.enableDamping = true;
 
         // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const dirLight = new DirectionalLight(0xffffff, 0.8);
         dirLight.position.set(5, 10, 5);
         scene.add(dirLight);
 
         // Cost Surface Mesh
-        const geometry = new THREE.PlaneGeometry(6, 6, 50, 50);
+        const geometry = new PlaneGeometry(6, 6, 50, 50);
         const positions = geometry.attributes.position;
 
         // Map x -> slope (-1 to 3), y -> intercept (-2 to 4)
@@ -74,25 +74,25 @@ export default function CostPanel() {
         geometry.computeVertexNormals();
         geometry.rotateX(-Math.PI / 2); // Rotate to horizontal
 
-        const material = new THREE.MeshStandardMaterial({
+        const material = new MeshStandardMaterial({
             color: 0x6366f1,
             roughness: 0.4,
             metalness: 0.2,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             wireframe: false
         });
-        const surface = new THREE.Mesh(geometry, material);
+        const surface = new Mesh(geometry, material);
         scene.add(surface);
 
         // Wireframe overlay
-        const wireframeMat = new THREE.MeshBasicMaterial({ color: 0x4338ca, wireframe: true, transparent: true, opacity: 0.2 });
-        const wireframe = new THREE.Mesh(geometry, wireframeMat);
+        const wireframeMat = new MeshBasicMaterial({ color: 0x4338ca, wireframe: true, transparent: true, opacity: 0.2 });
+        const wireframe = new Mesh(geometry, wireframeMat);
         scene.add(wireframe);
 
         // Current Position Marker
-        const markerGeo = new THREE.SphereGeometry(0.2, 32, 32);
-        const markerMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0x991b1b });
-        const marker = new THREE.Mesh(markerGeo, markerMat);
+        const markerGeo = new SphereGeometry(0.2, 32, 32);
+        const markerMat = new MeshStandardMaterial({ color: 0xef4444, emissive: 0x991b1b });
+        const marker = new Mesh(markerGeo, markerMat);
         scene.add(marker);
 
         // Animation Loop
@@ -106,7 +106,7 @@ export default function CostPanel() {
             const z = (intercept - 1) * 1.5; // Y in plane geometry became Z after rotation
             const y = calculateMSE(slope, intercept) / 5;
 
-            marker.position.set(x, y, -z); // Note: Z axis flip in Three.js coordinate system relative to plane logic often needs checking
+            marker.position.set(x, y, -z); // Note: Z axis flip in js coordinate system relative to plane logic often needs checking
 
             renderer.render(scene, camera);
         };

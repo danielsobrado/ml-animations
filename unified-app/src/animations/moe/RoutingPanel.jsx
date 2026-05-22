@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { AmbientLight, BoxGeometry, Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, PerspectiveCamera, PlaneGeometry, PointLight, Scene, SphereGeometry, TorusGeometry, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 export default function RoutingPanel({ numExperts, topK, batchSize, onGenerate }) {
@@ -14,34 +14,34 @@ export default function RoutingPanel({ numExperts, topK, batchSize, onGenerate }
         const width = containerRef.current.clientWidth;
         const height = 500;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0f172a); // Slate-900
+        const scene = new Scene();
+        scene.background = new Color(0x0f172a); // Slate-900
         sceneRef.current = scene;
 
-        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        const camera = new PerspectiveCamera(75, width / height, 0.1, 1000);
         camera.position.z = 50;
         camera.position.y = 10;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
         rendererRef.current = renderer;
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
-        const pointLight = new THREE.PointLight(0xffffff, 1);
+        const pointLight = new PointLight(0xffffff, 1);
         pointLight.position.set(20, 20, 20);
         scene.add(pointLight);
 
         // Router (Gate)
-        const routerGeometry = new THREE.TorusGeometry(5, 0.5, 16, 100);
-        const routerMaterial = new THREE.MeshStandardMaterial({
+        const routerGeometry = new TorusGeometry(5, 0.5, 16, 100);
+        const routerMaterial = new MeshStandardMaterial({
             color: 0x00f3ff,
             emissive: 0x00f3ff,
             emissiveIntensity: 0.5
         });
-        const router = new THREE.Mesh(routerGeometry, routerMaterial);
+        const router = new Mesh(routerGeometry, routerMaterial);
         router.position.set(0, 0, 0);
         scene.add(router);
 
@@ -57,19 +57,19 @@ export default function RoutingPanel({ numExperts, topK, batchSize, onGenerate }
             const y = Math.sin(angle) * radius * 0.5; // Flattened circle
             const z = -20;
 
-            const geometry = new THREE.BoxGeometry(4, 6, 2);
-            const material = new THREE.MeshStandardMaterial({
+            const geometry = new BoxGeometry(4, 6, 2);
+            const material = new MeshStandardMaterial({
                 color: expertColors[i % expertColors.length],
                 transparent: true,
                 opacity: 0.8
             });
-            const expert = new THREE.Mesh(geometry, material);
+            const expert = new Mesh(geometry, material);
             expert.position.set(x, y, z);
 
             // Label (simplified as a smaller box for now)
-            const labelGeo = new THREE.PlaneGeometry(3, 1);
-            const labelMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-            const label = new THREE.Mesh(labelGeo, labelMat);
+            const labelGeo = new PlaneGeometry(3, 1);
+            const labelMat = new MeshBasicMaterial({ color: 0xffffff });
+            const label = new Mesh(labelGeo, labelMat);
             label.position.set(0, 4, 0);
             expert.add(label);
 
@@ -105,9 +105,9 @@ export default function RoutingPanel({ numExperts, topK, batchSize, onGenerate }
 
         // Create tokens
         for (let i = 0; i < batchSize; i++) {
-            const geometry = new THREE.SphereGeometry(0.8, 16, 16);
-            const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-            const token = new THREE.Mesh(geometry, material);
+            const geometry = new SphereGeometry(0.8, 16, 16);
+            const material = new MeshStandardMaterial({ color: 0xffffff });
+            const token = new Mesh(geometry, material);
 
             // Start position (left side or bottom)
             token.position.set(0, -20 - i * 2, 10);

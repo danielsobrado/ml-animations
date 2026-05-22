@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { CanvasTexture, Color, EdgesGeometry, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Sprite, SpriteMaterial, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 // Example: A (3x2) = U (3x3) × Σ (3x2) × V^T (2x2)
@@ -68,16 +68,16 @@ export default function AnimationPanel() {
         const width = containerRef.current.clientWidth;
         const height = 450;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(COLORS.bg);
+        const scene = new Scene();
+        scene.background = new Color(COLORS.bg);
         sceneRef.current = scene;
 
-        const camera = new THREE.OrthographicCamera(
+        const camera = new OrthographicCamera(
             width / -2, width / 2, height / 2, height / -2, 0.1, 1000
         );
         camera.position.z = 100;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
@@ -85,20 +85,20 @@ export default function AnimationPanel() {
         const gap = 3;
 
         const createCell = (value, x, y, color, visible = true) => {
-            const group = new THREE.Group();
+            const group = new Group();
 
-            const geometry = new THREE.PlaneGeometry(cellSize, cellSize);
-            const material = new THREE.MeshBasicMaterial({
+            const geometry = new PlaneGeometry(cellSize, cellSize);
+            const material = new MeshBasicMaterial({
                 color,
                 transparent: true,
                 opacity: 0.8
             });
-            const mesh = new THREE.Mesh(geometry, material);
+            const mesh = new Mesh(geometry, material);
             group.add(mesh);
 
-            const border = new THREE.LineSegments(
-                new THREE.EdgesGeometry(geometry),
-                new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 2 })
+            const border = new LineSegments(
+                new EdgesGeometry(geometry),
+                new LineBasicMaterial({ color: 0x333333, linewidth: 2 })
             );
             group.add(border);
 
@@ -112,9 +112,9 @@ export default function AnimationPanel() {
             ctx.textBaseline = 'middle';
             ctx.fillText(value.toString(), 64, 64);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            const labelMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
-            const label = new THREE.Sprite(labelMaterial);
+            const texture = new CanvasTexture(canvas);
+            const labelMaterial = new SpriteMaterial({ map: texture, transparent: true });
+            const label = new Sprite(labelMaterial);
             label.scale.set(28, 28, 1);
             group.add(label);
 
@@ -136,9 +136,9 @@ export default function AnimationPanel() {
             ctx.textBaseline = 'middle';
             ctx.fillText(text, 256, 64);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture });
-            const sprite = new THREE.Sprite(material);
+            const texture = new CanvasTexture(canvas);
+            const material = new SpriteMaterial({ map: texture });
+            const sprite = new Sprite(material);
             sprite.scale.set(text.length * size / 2, size, 1);
             sprite.position.set(x, y, 0);
             sprite.visible = false;

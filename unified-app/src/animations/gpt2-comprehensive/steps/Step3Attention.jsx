@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import { Color, EdgesGeometry, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 export default function Step3Attention({ onComplete, onNext, onPrev }) {
@@ -10,23 +10,23 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
     const [quizAnswer, setQuizAnswer] = useState('');
     const [quizFeedback, setQuizFeedback] = useState('');
 
-    // Three.js visualization of attention matrix
+    // js visualization of attention matrix
     useEffect(() => {
         if (!containerRef.current) return;
 
         const width = 400;
         const height = 400;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1f2937);
+        const scene = new Scene();
+        scene.background = new Color(0x1f2937);
         sceneRef.current = scene;
 
-        const camera = new THREE.OrthographicCamera(
+        const camera = new OrthographicCamera(
             width / -2, width / 2, height / 2, height / -2, 0.1, 1000
         );
         camera.position.z = 100;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
@@ -42,14 +42,14 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
                 // Causal mask: only attend to current and previous positions
                 const isMasked = showMask && (j > i);
 
-                const geometry = new THREE.PlaneGeometry(cellSize, cellSize);
+                const geometry = new PlaneGeometry(cellSize, cellSize);
                 const intensity = isMasked ? 0 : (1 - Math.abs(i - j) / matrixSize);
                 const color = isMasked
-                    ? new THREE.Color(0x374151)
-                    : new THREE.Color().setHSL(0.55, 0.7, 0.3 + intensity * 0.4);
+                    ? new Color(0x374151)
+                    : new Color().setHSL(0.55, 0.7, 0.3 + intensity * 0.4);
 
-                const material = new THREE.MeshBasicMaterial({ color });
-                const mesh = new THREE.Mesh(geometry, material);
+                const material = new MeshBasicMaterial({ color });
+                const mesh = new Mesh(geometry, material);
 
                 mesh.position.x = startX + j * (cellSize + gap);
                 mesh.position.y = startY - i * (cellSize + gap);
@@ -57,10 +57,10 @@ export default function Step3Attention({ onComplete, onNext, onPrev }) {
                 scene.add(mesh);
 
                 // Add border
-                const edges = new THREE.EdgesGeometry(geometry);
-                const line = new THREE.LineSegments(
+                const edges = new EdgesGeometry(geometry);
+                const line = new LineSegments(
                     edges,
-                    new THREE.LineBasicMaterial({ color: 0x4b5563 })
+                    new LineBasicMaterial({ color: 0x4b5563 })
                 );
                 line.position.copy(mesh.position);
                 scene.add(line);

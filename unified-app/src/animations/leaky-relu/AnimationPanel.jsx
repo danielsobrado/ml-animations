@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { AmbientLight, BoxGeometry, CanvasTexture, Color, DirectionalLight, EdgesGeometry, Group, LineBasicMaterial, LineSegments, Mesh, MeshLambertMaterial, OrthographicCamera, Scene, Sprite, SpriteMaterial, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 // Leaky ReLU example: X = [2, 1, 3], W = [1, -1, 1], b = -5, α = 0.01
@@ -34,29 +34,29 @@ export default function AnimationPanel({ onStepChange }) {
     if (!containerRef.current) return;
 
     // Scene setup
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf8f9fa);
+    const scene = new Scene();
+    scene.background = new Color(0xf8f9fa);
     sceneRef.current = scene;
 
     const width = containerRef.current.clientWidth;
     const height = 400;
 
-    const camera = new THREE.OrthographicCamera(
+    const camera = new OrthographicCamera(
       -width / 2, width / 2,
       height / 2, -height / 2,
       0.1, 1000
     );
     camera.position.z = 100;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 1, 1);
     scene.add(directionalLight);
 
@@ -99,17 +99,17 @@ export default function AnimationPanel({ onStepChange }) {
     }
 
     const createBox = (color, x, y, label, value) => {
-      const group = new THREE.Group();
+      const group = new Group();
 
-      const geometry = new THREE.BoxGeometry(50, 50, 10);
-      const material = new THREE.MeshLambertMaterial({ color });
-      const mesh = new THREE.Mesh(geometry, material);
+      const geometry = new BoxGeometry(50, 50, 10);
+      const material = new MeshLambertMaterial({ color });
+      const mesh = new Mesh(geometry, material);
       group.add(mesh);
 
       // Add border
-      const edges = new THREE.EdgesGeometry(geometry);
-      const lineMaterial = new THREE.LineBasicMaterial({ color: 0x333333 });
-      const line = new THREE.LineSegments(edges, lineMaterial);
+      const edges = new EdgesGeometry(geometry);
+      const lineMaterial = new LineBasicMaterial({ color: 0x333333 });
+      const line = new LineSegments(edges, lineMaterial);
       group.add(line);
 
       group.position.set(x, y, 0);
@@ -128,9 +128,9 @@ export default function AnimationPanel({ onStepChange }) {
       ctx.textBaseline = 'middle';
       ctx.fillText(text, 128, 32);
 
-      const texture = new THREE.CanvasTexture(canvas);
-      const material = new THREE.SpriteMaterial({ map: texture });
-      const sprite = new THREE.Sprite(material);
+      const texture = new CanvasTexture(canvas);
+      const material = new SpriteMaterial({ map: texture });
+      const sprite = new Sprite(material);
       sprite.position.set(x, y, 1);
       sprite.scale.set(128, 32, 1);
       return sprite;

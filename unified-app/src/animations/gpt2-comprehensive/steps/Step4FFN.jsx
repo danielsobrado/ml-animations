@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import { BufferGeometry, CircleGeometry, Color, Group, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, OrthographicCamera, Scene, WebGLRenderer } from 'three';
 import gsap from 'gsap';
 
 export default function Step4FFN({ onComplete, onNext, onPrev }) {
@@ -14,28 +14,28 @@ export default function Step4FFN({ onComplete, onNext, onPrev }) {
         const width = 600;
         const height = 300;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1f2937);
+        const scene = new Scene();
+        scene.background = new Color(0x1f2937);
 
-        const camera = new THREE.OrthographicCamera(
+        const camera = new OrthographicCamera(
             width / -2, width / 2, height / 2, height / -2, 0.1, 1000
         );
         camera.position.z = 100;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
         // Create nodes
         const createLayer = (count, x, color, label) => {
-            const group = new THREE.Group();
+            const group = new Group();
             const spacing = 25;
             const startY = (count * spacing) / 2 - spacing / 2;
 
             for (let i = 0; i < count; i++) {
-                const geometry = new THREE.CircleGeometry(6, 32);
-                const material = new THREE.MeshBasicMaterial({ color });
-                const circle = new THREE.Mesh(geometry, material);
+                const geometry = new CircleGeometry(6, 32);
+                const material = new MeshBasicMaterial({ color });
+                const circle = new Mesh(geometry, material);
                 circle.position.y = startY - i * spacing;
                 group.add(circle);
             }
@@ -55,7 +55,7 @@ export default function Step4FFN({ onComplete, onNext, onPrev }) {
         const outputLayer = createLayer(8, 200, 0x70ad47, 'Output');
 
         // Connections (animated)
-        const linesMaterial = new THREE.LineBasicMaterial({
+        const linesMaterial = new LineBasicMaterial({
             color: 0xffffff,
             transparent: true,
             opacity: 0.1
@@ -65,8 +65,8 @@ export default function Step4FFN({ onComplete, onNext, onPrev }) {
             layer1.children.forEach(n1 => {
                 layer2.children.forEach(n2 => {
                     const points = [n1.position.clone().add(layer1.position), n2.position.clone().add(layer2.position)];
-                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                    const line = new THREE.Line(geometry, linesMaterial);
+                    const geometry = new BufferGeometry().setFromPoints(points);
+                    const line = new Line(geometry, linesMaterial);
                     scene.add(line);
                 });
             });
