@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { allAnimations } from '../unified-app/src/data/animations.js';
+import { toStaticRouteDirectories } from '../unified-app/scripts/static-route-plan.mjs';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, '..');
@@ -133,12 +134,26 @@ function writeStaticAnimationEntryPages() {
   }
 }
 
+function writeStaticSpaRoutePages() {
+  const indexFile = path.join(deployDir, 'index.html');
+  if (!fs.existsSync(indexFile)) {
+    throw new Error(`Cannot materialize SPA routes without ${indexFile}`);
+  }
+
+  for (const routeParts of toStaticRouteDirectories()) {
+    const directory = path.join(deployDir, ...routeParts);
+    fs.mkdirSync(directory, { recursive: true });
+    fs.copyFileSync(indexFile, path.join(directory, 'index.html'));
+  }
+}
+
 function copyDist() {
   if (!fs.existsSync(distDir)) {
     throw new Error(`Build output not found: ${distDir}`);
   }
 
   fs.cpSync(distDir, deployDir, { recursive: true });
+  writeStaticSpaRoutePages();
   writeStaticAnimationEntryPages();
   fs.writeFileSync(path.join(deployDir, '.nojekyll'), '');
 
