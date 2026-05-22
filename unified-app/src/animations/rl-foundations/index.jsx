@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Gamepad2, Coins, TrendingUp } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const AgentPanel = lazy(() => import('./AgentPanel'));
@@ -65,6 +66,9 @@ export default function RlFoundationsAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="px-8 pb-8">
+                    <AssessmentPanel lessonId="rl-foundations" title="RL Foundations check" />
+                </div>
             </div>
         </div>
     );

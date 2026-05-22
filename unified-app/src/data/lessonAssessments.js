@@ -68,6 +68,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'unet-vs-dit',
   'q-learning',
   'rl-exploration',
+  'rl-foundations',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -2757,6 +2758,51 @@ export const lessonAssessments = {
         title: 'Find a policy flip',
         prompt: 'Increase improvement rounds and identify the first state whose action changes from the initial policy.',
         successCriteria: 'You can name the state, the old action, and the improved greedy action.',
+      },
+    ],
+  },
+  'rl-foundations': {
+    quiz: [
+      {
+        id: 'loop-parts',
+        prompt: 'What is the basic reinforcement-learning loop?',
+        choices: [
+          'The agent observes state, takes action, receives reward and next state',
+          'The model splits data into train, validation, and test once',
+          'The tokenizer maps words to fixed dictionary definitions',
+        ],
+        answerIndex: 0,
+        explanation: 'RL is organized around repeated interaction: state, action, reward, next state, and another decision.',
+      },
+      {
+        id: 'reward-hacking',
+        prompt: 'What is reward hacking?',
+        choices: [
+          'Optimizing the numeric reward in a way that misses the designer intent',
+          'Reducing gamma so future rewards count less',
+          'Using a random exploratory action',
+        ],
+        answerIndex: 0,
+        explanation: 'An agent follows the reward signal it is given, so a flawed reward can teach unintended behavior.',
+      },
+      {
+        id: 'discount-factor',
+        prompt: 'What does a larger discount factor gamma usually do?',
+        choices: [
+          'It makes distant future rewards matter more',
+          'It makes all future rewards disappear',
+          'It turns rewards into actions',
+        ],
+        answerIndex: 0,
+        explanation: 'Gamma controls how much delayed reward contributes to return; higher gamma values make long-term payoff more important.',
+      },
+    ],
+    labs: [
+      {
+        id: 'design-reward',
+        title: 'Design a reward safely',
+        prompt: 'Use the reward editor to create a path with a tempting side reward, then explain whether it could distract from the goal.',
+        successCriteria: 'You can identify the intended behavior, the numeric incentive, and one possible reward-hacking failure.',
       },
     ],
   },

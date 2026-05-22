@@ -362,6 +362,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Statistical baseline with expectation/variance visualization hooks.',
     nextAction: 'Add finite-sample variability case studies.',
   },
+  'rl-foundations': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Three-panel introductory RL lesson with interactive agent-environment loop, reward design editor, discounted-return controls, and persistent assessment coverage.',
+    nextAction: 'Add stochastic transition examples and a policy diagram that updates after each action.',
+  },
   'q-learning': {
     tier: 'B',
     status: 'stable',

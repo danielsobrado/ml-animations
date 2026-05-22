@@ -100,6 +100,7 @@ const EQUATION_OVERRIDES = {
   'maximum-likelihood-estimation': '\\hat{\\theta}=\\arg\\max_\\theta P(D\\mid\\theta)',
   'loss-functions-likelihoods': '\\mathcal{L}(\\theta)=-\\log P(y\\mid x,\\theta)',
   'expected-value-variance': '\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mu)^2]',
+  'rl-foundations': 'G_t=R_{t+1}+\\gamma R_{t+2}+\\gamma^2R_{t+3}+\\cdots',
   'mdp-formalism': 'M=(S,A,P,R,\\gamma)',
   'value-iteration': 'V_{k+1}(s)=\\max_a\\sum_{s\\prime}P(s\\prime\\mid s,a)[R+\\gamma V_k(s\\prime)]',
   'policy-iteration': '\\pi_{k+1}(s)=\\arg\\max_a\\mathbb{E}[R+\\gamma V^{\\pi_k}(s\\prime)]',
@@ -651,6 +652,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate resolution, patch size, depth, and backbone choice to see local bias, global mixing, and memory pressure change.',
     'Mistake to avoid: DiT is not just a larger U-Net, because it changes the representation and mixing operation.',
     'Check understanding by explaining why latent patches make transformer diffusion more practical than raw-pixel tokens.',
+  ),
+  'rl-foundations': cardSet(
+    'RL foundations solve the problem of describing learning as repeated interaction with an environment.',
+    'An agent acts, the environment responds, and reward tells the agent which outcomes the designer made valuable.',
+    'The math collects future rewards into return, often discounting delayed rewards by powers of gamma.',
+    'Move the agent, edit rewards, and change gamma to see how local feedback and delayed goals shape behavior.',
+    'Mistake to avoid: the reward number is not the same as the real goal unless the reward function encodes the goal well.',
+    'Check understanding by naming the state, action, reward, next state, and return in one move.',
   ),
   'mdp-formalism': cardSet(
     'MDP formalism solves the problem of describing sequential decisions with one consistent vocabulary.',
