@@ -733,6 +733,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: a reranker cannot rescue a relevant chunk that was never retrieved as a candidate.',
     'Check understanding by explaining why a fluent answer can still be ungrounded when recall@k is low.',
   ),
+  'bloom-filter': cardSet(
+    'A Bloom filter solves approximate set membership with a compact bit array instead of storing every key.',
+    'Each inserted item flips several hash-selected bits; a query checks whether all of those bits are already set.',
+    'The false-positive probability is approximated by p = (1 - exp(-kn/m))^k, with k tuned near (m/n) ln 2.',
+    'Add words, force a false positive, then change m, n, and k to see how saturation changes the error rate.',
+    'Mistake to avoid: probably present is not proof of presence, but any zero bit is proof of absence.',
+    'Check understanding by identifying which shared bits caused a false positive in the collision lab.',
+  ),
 };
 
 function slugify(value) {

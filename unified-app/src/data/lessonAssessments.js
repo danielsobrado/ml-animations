@@ -69,6 +69,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'q-learning',
   'rl-exploration',
   'rl-foundations',
+  'bloom-filter',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -3356,6 +3357,51 @@ export const lessonAssessments = {
         title: 'Match one fairness objective',
         prompt: 'Pick an objective and tune thresholds/shift until your selected objective gap is materially reduced.',
         successCriteria: 'You can explain which other metric moved and why this reflects a trade-off.',
+      },
+    ],
+  },
+  'bloom-filter': {
+    quiz: [
+      {
+        id: 'false-positive',
+        prompt: 'What kind of mistake can a Bloom filter make?',
+        choices: [
+          'It can say probably present for an item that was never inserted',
+          'It can say definitely absent for an item that was inserted',
+          'It can return the stored item value instead of a membership answer',
+        ],
+        answerIndex: 0,
+        explanation: 'A Bloom filter has false positives because different items can set the same bits, but it should not have false negatives if inserts and queries use the same hashes.',
+      },
+      {
+        id: 'definitely-not',
+        prompt: 'Why does a zero bit prove an item is definitely absent?',
+        choices: [
+          'Every inserted item would have set all of its hash positions to 1',
+          'Zero bits store the original inserted keys',
+          'The filter checks a backing database before answering',
+        ],
+        answerIndex: 0,
+        explanation: 'If any queried hash position is 0, that item could not have been inserted because insertion sets every queried position.',
+      },
+      {
+        id: 'parameter-tradeoff',
+        prompt: 'What usually lowers the false-positive probability for a fixed number of inserted items?',
+        choices: [
+          'More bits with a near-optimal number of hash functions',
+          'Fewer bits and as many hash functions as possible',
+          'Removing hash functions so only one bit is checked',
+        ],
+        answerIndex: 0,
+        explanation: 'The false-positive rate falls when the bit array is less saturated and k is tuned near (m/n) ln 2.',
+      },
+    ],
+    labs: [
+      {
+        id: 'force-collision',
+        title: 'Force and explain a collision',
+        prompt: 'Use the false positive lab to add several words, then query a word that was not added until the filter reports probably present.',
+        successCriteria: 'You can list the queried hash positions and explain which inserted words already set those bits.',
       },
     ],
   },

@@ -380,6 +380,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Three-panel exploration lesson with epsilon-greedy sampling, cliff-walking risk visualization, hyperparameter tradeoff controls, and persistent assessment coverage.',
     nextAction: 'Add UCB and Thompson sampling comparisons for bandit-style exploration.',
   },
+  'bloom-filter': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Three-panel probabilistic data-structure lesson with insert/query playground, false-positive collision lab, parameter tuning chart, and persistent assessment coverage.',
+    nextAction: 'Add a counting Bloom filter variant and side-by-side exact set memory comparison.',
+  },
 };
 
 export const D_TIER_PLACEHOLDERS = Object.entries(MANUAL_LESSON_QUALITY)

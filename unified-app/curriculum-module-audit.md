@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T08:00:51.901Z
+Generated: 2026-05-22T08:04:52.743Z
 
 ## Review Policy
 
@@ -213,7 +213,7 @@ Generated: 2026-05-22T08:00:51.901Z
 
 | Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |
 | --- | --- | --- | ---: | ---: | --- | --- |
-| bloom-filter | C (adequate) | auto | 3047 | 3 |  | Review and set explicit manual quality entry. |
+| bloom-filter | B (good) | manual | 3276 | 3 | stable | Add a counting Bloom filter variant and side-by-side exact set memory comparison. |
 | pagerank | B (good) | auto | 3921 | 3 |  | Review and set explicit manual quality entry. |
 
 ### diffusion-models
