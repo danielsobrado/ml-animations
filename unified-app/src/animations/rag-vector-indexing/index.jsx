@@ -6,8 +6,8 @@ const METHODS = {
   exact: {
     label: 'Exact search',
     speed: 0.25,
-    recall: 0.98,
-    detail: 'Compare the query with every vector. Simple and accurate, but expensive at scale.',
+    recall: 1,
+    detail: 'Compare the query with every vector. Exhaustive and recall-preserving for the indexed corpus, but expensive at scale.',
   },
   ivf: {
     label: 'IVF clusters',
@@ -117,7 +117,7 @@ export default function RagVectorIndexingAnimation() {
 
       <div className="grid gap-3 md:grid-cols-4">
         <Stat label="Index" value={active.label} detail="selected search structure" />
-        <Stat label="Recall" value={`${Math.round(metrics.recall * 100)}%`} detail="chance relevant neighbor is found" />
+        <Stat label="Recall" value={`${Math.round(metrics.recall * 100)}%`} detail="simulated relevant-neighbor recovery" />
         <Stat label="Latency" value={`${metrics.latency} ms`} detail="rough search cost" />
         <Stat label="Tradeoff" value={method === 'exact' ? 'accuracy' : 'speed'} detail="dominant behavior" />
       </div>

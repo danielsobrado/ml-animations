@@ -161,7 +161,7 @@ export default function UnetVsDitAnimation() {
               <div className="mt-2 text-3xl font-bold text-slate-900">{comparison.attentionCost}</div>
             </div>
             <div className="rounded-xl border border-slate-900 bg-slate-900 p-4 text-white">
-              <div className="text-xs uppercase tracking-wide text-fuchsia-200">Best instinct</div>
+              <div className="text-xs uppercase tracking-wide text-fuchsia-200">Architecture bias</div>
               <div className="mt-2 text-xl font-bold">{architecture === 'unet' ? 'local pyramid' : 'global patches'}</div>
             </div>
           </div>

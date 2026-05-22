@@ -32,15 +32,15 @@ Priority lessons:
 
 | Lesson | Formula/code checked | Toy labels checked | Causal order checked | Assessment misconception checked | Notes |
 | --- | --- | --- | --- | --- | --- |
-| transformer-token-generation | [ ] | [ ] | [ ] | [ ] | Verify top-k/top-p filtering, temperature wording, and KV-cache savings explanation. |
-| sampling-strategies | [ ] | [ ] | [ ] | [ ] | Verify top-p cutoff behavior and deterministic vs stochastic copy. |
-| rag-vector-indexing | [ ] | [ ] | [ ] | [ ] | Verify ANN recall/latency trade-off wording and index-build flow. |
-| rag-retrieval-evaluation | [ ] | [ ] | [ ] | [ ] | Verify recall@k, MRR, nDCG examples and reranker candidate-set limits. |
-| policy-gradients | [ ] | [ ] | [ ] | [ ] | Verify return weighting and baseline wording. |
-| actor-critic | [ ] | [ ] | [ ] | [ ] | Verify actor/critic update order and advantage explanation. |
-| diffusion-sampling | [ ] | [ ] | [ ] | [ ] | Verify DDPM/DDIM/flow-style sampling labels and step-count trade-offs. |
-| classifier-free-guidance | [ ] | [ ] | [ ] | [ ] | Verify guidance formula, oversaturation warning, and unconditional branch wording. |
-| unet-vs-dit | [ ] | [ ] | [ ] | [ ] | Verify architecture comparison avoids implying one universal winner. |
+| transformer-token-generation | [x] | [x] | [x] | [ ] | Clarified top-p cutoff behavior and changed KV-cache metric to reusable prior rows. |
+| sampling-strategies | [x] | [x] | [x] | [ ] | Clarified top-p threshold inclusion and rank-vs-mass filtering. |
+| rag-vector-indexing | [x] | [x] | [x] | [ ] | Set exact search to 100% recall baseline and labeled ANN recall as simulated recovery. |
+| rag-retrieval-evaluation | [x] | [x] | [x] | [ ] | Metrics and reranker candidate-set limits verified; no code change needed. |
+| policy-gradients | [x] | [x] | [x] | [ ] | Labeled preference update as toy and clarified softmax renormalization. |
+| actor-critic | [x] | [x] | [x] | [ ] | Clarified toy actor signal and critic value update wording. |
+| diffusion-sampling | [x] | [x] | [x] | [ ] | Confirmed sampler labels and clarified beginner flow/ODE comparison wording. |
+| classifier-free-guidance | [x] | [x] | [x] | [ ] | Confirmed guidance formula and clarified toy scalar prediction view. |
+| unet-vs-dit | [x] | [x] | [x] | [ ] | Reworded comparison label to avoid universal-winner framing. |
 
 ## Assessment Depth Pass
 

@@ -17,7 +17,7 @@ const SAMPLERS = {
   },
   flow: {
     label: 'Flow / ODE',
-    caption: 'A continuous velocity field transports noise toward data.',
+    caption: 'A flow or ODE-style path uses a velocity field to transport noise toward data.',
     eta: 0.08,
     color: 'bg-emerald-500',
   },
@@ -164,7 +164,8 @@ export default function DiffusionSamplingAnimation() {
           </div>
 
           <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-            Samplers reuse the same denoising model differently: DDPM keeps randomness, DDIM can remove it, and flow/ODE views sampling as following a smooth transport path.
+            In this beginner comparison, samplers reuse a denoising model differently: DDPM keeps randomness,
+            DDIM can remove it, and flow/ODE-style sampling follows a smooth transport path.
           </p>
         </div>
       </section>

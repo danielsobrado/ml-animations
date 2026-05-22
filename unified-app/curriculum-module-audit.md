@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T08:21:17.582Z
+Generated: 2026-05-22T08:24:50.316Z
 
 ## Review Policy
 
@@ -87,11 +87,11 @@ Generated: 2026-05-22T08:21:17.582Z
 | positional-encoding | B (good) | manual | 13319 | 3 | stable | Add relative position bias and RoPE bridge examples. |
 | residual-stream | B (good) | manual | 11866 | 3 | stable | Add pre-norm versus post-norm architecture presets. |
 | rope | B (good) | manual | 13838 | 3 | stable | Add RoPE scaling variants and long-context aliasing examples. |
-| sampling-strategies | B (good) | auto | 11608 | 0 |  | Review and set explicit manual quality entry. |
+| sampling-strategies | B (good) | auto | 11663 | 0 |  | Review and set explicit manual quality entry. |
 | self-attention | B (good) | manual | 13077 | 3 | stable | Add multi-head comparison and learned projection examples. |
 | transformer | B (good) | auto | 3897 | 6 |  | Review and set explicit manual quality entry. |
 | transformer-architecture-families | B (good) | auto | 9912 | 0 |  | Review and set explicit manual quality entry. |
-| transformer-token-generation | B (good) | auto | 11684 | 0 |  | Review and set explicit manual quality entry. |
+| transformer-token-generation | B (good) | auto | 11830 | 0 |  | Review and set explicit manual quality entry. |
 
 ### neural-networks
 
@@ -123,7 +123,7 @@ Generated: 2026-05-22T08:21:17.582Z
 | rag-failure-modes | A (excellent) | auto | 20097 | 0 |  | Review and set explicit manual quality entry. |
 | rag-reranking-grounding | A (excellent) | auto | 16659 | 0 |  | Review and set explicit manual quality entry. |
 | rag-retrieval-evaluation | B (good) | auto | 12004 | 0 |  | Review and set explicit manual quality entry. |
-| rag-vector-indexing | B (good) | auto | 8670 | 0 |  | Review and set explicit manual quality entry. |
+| rag-vector-indexing | B (good) | auto | 8706 | 0 |  | Review and set explicit manual quality entry. |
 | vae | B (good) | auto | 3877 | 6 |  | Review and set explicit manual quality entry. |
 
 ### math-fundamentals
@@ -198,10 +198,10 @@ Generated: 2026-05-22T08:21:17.582Z
 
 | Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |
 | --- | --- | --- | ---: | ---: | --- | --- |
-| actor-critic | B (good) | auto | 5439 | 0 |  | Review and set explicit manual quality entry. |
+| actor-critic | B (good) | auto | 5509 | 0 |  | Review and set explicit manual quality entry. |
 | markov-chains | B (good) | auto | 3339 | 4 |  | Review and set explicit manual quality entry. |
 | mdp-formalism | B (good) | auto | 5803 | 0 |  | Review and set explicit manual quality entry. |
-| policy-gradients | B (good) | auto | 6229 | 0 |  | Review and set explicit manual quality entry. |
+| policy-gradients | B (good) | auto | 6337 | 0 |  | Review and set explicit manual quality entry. |
 | policy-iteration | B (good) | auto | 7866 | 0 |  | Review and set explicit manual quality entry. |
 | q-learning | B (good) | manual | 3315 | 3 | stable | Add explicit epsilon control and compare off-policy Q-learning with on-policy SARSA. |
 | reward-shaping | B (good) | auto | 7792 | 0 |  | Review and set explicit manual quality entry. |
@@ -220,10 +220,10 @@ Generated: 2026-05-22T08:21:17.582Z
 
 | Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |
 | --- | --- | --- | ---: | ---: | --- | --- |
-| classifier-free-guidance | B (good) | auto | 6390 | 0 |  | Review and set explicit manual quality entry. |
+| classifier-free-guidance | B (good) | auto | 6415 | 0 |  | Review and set explicit manual quality entry. |
 | clip-encoder | B (good) | auto | 2703 | 7 |  | Review and set explicit manual quality entry. |
 | diffusion-basics | B (good) | auto | 6905 | 0 |  | Review and set explicit manual quality entry. |
-| diffusion-sampling | B (good) | auto | 7168 | 0 |  | Review and set explicit manual quality entry. |
+| diffusion-sampling | B (good) | auto | 7218 | 0 |  | Review and set explicit manual quality entry. |
 | diffusion-vae | B (good) | auto | 3822 | 7 |  | Review and set explicit manual quality entry. |
 | dit | B (good) | auto | 2531 | 7 |  | Review and set explicit manual quality entry. |
 | flow-matching | B (good) | auto | 4227 | 7 |  | Review and set explicit manual quality entry. |
@@ -231,7 +231,7 @@ Generated: 2026-05-22T08:21:17.582Z
 | sd3-overview | B (good) | auto | 3117 | 7 |  | Review and set explicit manual quality entry. |
 | t5-encoder | B (good) | auto | 2708 | 7 |  | Review and set explicit manual quality entry. |
 | tokenizer-bpe | B (good) | auto | 2651 | 7 |  | Review and set explicit manual quality entry. |
-| unet-vs-dit | B (good) | auto | 7644 | 0 |  | Review and set explicit manual quality entry. |
+| unet-vs-dit | B (good) | auto | 7648 | 0 |  | Review and set explicit manual quality entry. |
 
 ## Immediate Remediation
 
