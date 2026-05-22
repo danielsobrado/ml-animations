@@ -1,0 +1,1 @@
+import{j as o}from"./index-BNkjHskQ.js";import{C as r}from"./CoreMlLesson-Cr07oYst.js";import"./sliders-horizontal-hdOfOkrp.js";function s(){return o.jsx(r,{lessonId:"regularization"})}export{s as default};

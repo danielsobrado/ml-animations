@@ -1,1 +1,0 @@
-import{j as t}from"./index-C7L1HtIa.js";import{C as i}from"./CoreMlLesson-Cm0uwZWA.js";import"./check-circle-2-BSMhEZOC.js";function r(){return t.jsx(i,{lessonId:"train-validation-test-split"})}export{r as default};

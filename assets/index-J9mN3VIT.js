@@ -1,0 +1,1 @@
+import{j as t}from"./index-BNkjHskQ.js";import{C as i}from"./CoreMlLesson-Cr07oYst.js";import"./sliders-horizontal-hdOfOkrp.js";function r(){return t.jsx(i,{lessonId:"train-validation-test-split"})}export{r as default};
