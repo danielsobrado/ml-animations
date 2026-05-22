@@ -1,7 +1,7 @@
 import { allAnimations } from '../src/data/animations.js';
 import { glossaryTerms } from '../src/data/glossaryRepository.js';
 
-export function toStaticRouteDirectories(animations = allAnimations, terms = glossaryTerms) {
+export function toStaticRouteFiles(animations = allAnimations, terms = glossaryTerms) {
   const animationRoutes = animations.map((animation) => ['animation', animation.id]);
   const glossaryRoutes = terms.map((term) => ['glossary', term.slug]);
 
