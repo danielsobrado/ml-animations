@@ -4,7 +4,6 @@ const HINTS = [
   ['⌘K', 'search'],
   ['/', 'palette'],
   ['S', 'softmax'],
-  ['N', 'notes'],
   ['↑↓', 'move'],
   ['↵', 'open'],
 ];

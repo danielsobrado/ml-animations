@@ -4,41 +4,18 @@ import { ArrowRight } from 'lucide-react';
 import { allAnimations, categories, curriculumBacklog, curriculumTracks } from '../data/animations';
 import { HUB_LEARNING_PATHS } from '../data/learningPaths';
 import { getAssessmentStats, lessonAssessments } from '../data/lessonAssessments';
-import { LEARNING_PROGRESS_EVENT, readCompletedLessons } from '../data/learningProgress';
 
 const { totalLabs, totalQuizQuestions } = getAssessmentStats(lessonAssessments);
 
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
   const [activePathId, setActivePathId] = React.useState(HUB_LEARNING_PATHS[0].id);
-  const [completedLessons, setCompletedLessons] = React.useState(() => readCompletedLessons());
   const animationById = new Map(allAnimations.map((animation) => [animation.id, animation]));
   const activePath = HUB_LEARNING_PATHS.find((path) => path.id === activePathId) || HUB_LEARNING_PATHS[0];
-  const canEnterNode = (animationId) => {
-    const animation = animationById.get(animationId);
-    if (!animation) return false;
-    return (animation.prerequisites || []).every((prerequisiteId) => completedLessons.has(prerequisiteId));
-  };
-
-  const nextRecommendedId = activePath.nodes.find((animationId) => !completedLessons.has(animationId) && canEnterNode(animationId));
-  const nextRecommended = nextRecommendedId ? animationById.get(nextRecommendedId) : null;
-  const activePathCompletedCount = activePath.nodes.filter((animationId) => completedLessons.has(animationId)).length;
-  const activePathPercent = activePath.nodes.length ? Math.round((activePathCompletedCount / activePath.nodes.length) * 100) : 0;
   const backlogByTrack = curriculumBacklog.reduce((acc, topic) => {
     acc[topic.trackId] = [...(acc[topic.trackId] || []), topic];
     return acc;
   }, {});
-
-  React.useEffect(() => {
-    const syncCompletedLessons = () => setCompletedLessons(readCompletedLessons());
-
-    window.addEventListener(LEARNING_PROGRESS_EVENT, syncCompletedLessons);
-    window.addEventListener('storage', syncCompletedLessons);
-    return () => {
-      window.removeEventListener(LEARNING_PROGRESS_EVENT, syncCompletedLessons);
-      window.removeEventListener('storage', syncCompletedLessons);
-    };
-  }, []);
 
   return (
     <div className="ua-home">
@@ -46,7 +23,7 @@ export default function HomePage() {
         <div className="ua-home-eyebrow">
           <span>Catalog</span>
           <span className="sep">/</span>
-          <span>{totalAnimations} interactive notes</span>
+          <span>{totalAnimations} interactive lessons</span>
         </div>
         <h1 className="ua-home-title">
           Machine learning <span className="accent">visualized</span>.
@@ -101,50 +78,21 @@ export default function HomePage() {
           {activePath.nodes.map((animationId, index) => {
             const animation = animationById.get(animationId);
             if (!animation) return null;
-            const isCompleted = completedLessons.has(animation.id);
-            const isRecommended = animation.id === nextRecommendedId;
-            const isLocked = !isCompleted && !canEnterNode(animation.id);
-
-            if (isLocked) {
-              return (
-                <span
-                  className="ua-path-node locked"
-                  key={animation.id}
-                  aria-label={`${animation.name} is locked until prerequisites are completed`}
-                >
-                  <span>{index + 1}</span>
-                  <strong>{animation.name}</strong>
-                  <small>Locked</small>
-                </span>
-              );
-            }
 
             return (
               <Link
-                className={`ua-path-node ${isCompleted ? 'completed' : ''} ${isRecommended ? 'recommended' : ''}`}
+                className="ua-path-node"
                 to={`/animation/${animation.id}`}
                 key={animation.id}
               >
                 <span>{index + 1}</span>
                 <strong>{animation.name}</strong>
-                <small>{isCompleted ? 'Completed' : isRecommended ? 'Next recommended' : animation.categoryName}</small>
+                <small>{animation.categoryName}</small>
               </Link>
             );
           })}
         </div>
         <p className="ua-path-caption">{activePath.description}</p>
-        <p className="ua-path-caption">
-          {activePathCompletedCount}/{activePath.nodes.length} completed ({activePathPercent}%)
-        </p>
-        <p className="ua-next-recommendation">
-          {nextRecommended ? (
-            <>
-              Next recommended: <Link to={`/animation/${nextRecommended.id}`}>{nextRecommended.name}</Link>
-            </>
-          ) : (
-            'Path complete. Pick another path or revisit a lesson for practice.'
-          )}
-        </p>
       </section>
 
       <section className="ua-tracks" aria-labelledby="guided-tracks-title">
@@ -161,10 +109,6 @@ export default function HomePage() {
               (sum, id) => sum + (animationById.get(id)?.estimatedMinutes || 0),
               0,
             );
-            const completedCount = track.animationIds.filter((id) => completedLessons.has(id)).length;
-            const trackPercent = track.animationIds.length
-              ? Math.round((completedCount / track.animationIds.length) * 100)
-              : 0;
             const plannedTopics = backlogByTrack[track.id] || [];
 
             return (
@@ -177,7 +121,6 @@ export default function HomePage() {
                 <div className="ua-track-meta">
                   <span>{track.animationIds.length} active</span>
                   <span>{activeMinutes} min</span>
-                  <span>{completedCount}/{track.animationIds.length} done ({trackPercent}%)</span>
                   <span>{plannedTopics.length} planned</span>
                 </div>
                 <div className="ua-track-sequence">

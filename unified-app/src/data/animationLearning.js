@@ -1,5 +1,6 @@
 import { getGlossaryTermsForCategory } from './glossaryRepository.js';
 import { curriculumTracks } from './animations.js';
+import { getMindmapCuration } from './mindmapCuration.js';
 
 export const CARD_TYPES = [
   { id: 'def', label: 'def.', title: 'Definition' },
@@ -762,12 +763,88 @@ function getCategoryAnimations(animation, allAnimations) {
   return allAnimations.filter((item) => item.categoryId === animation.categoryId);
 }
 
-function toNode(animation) {
+function cleanSentence(value) {
+  return String(value || '')
+    .replace(/\s+/g, ' ')
+    .replace(/\.$/, '')
+    .trim();
+}
+
+function withPeriod(value) {
+  const sentence = cleanSentence(value);
+  if (!sentence) return '';
+  return /[.!?]$/.test(sentence) ? sentence : `${sentence}.`;
+}
+
+function makeNodeExplanation(animation, relation = 'related') {
+  const description = withPeriod(animation.description);
+  if (relation === 'current') return `${animation.name}: ${description}`;
+  if (relation === 'prereq') return `${animation.name} is useful background for this lesson. ${description}`;
+  if (relation === 'next') return `${animation.name} is a good next step after this lesson. ${description}`;
+  return `${animation.name}: ${description}`;
+}
+
+function toNode(animation, relation = 'related') {
   return {
     id: animation.id,
     label: animation.name,
     description: animation.description,
+    explanation: makeNodeExplanation(animation, relation),
   };
+}
+
+function makeInsightNodes(animation) {
+  const curation = getMindmapCuration(animation.id);
+  if (curation) {
+    return [
+      {
+        id: `${animation.id}-mental-model`,
+        label: 'Mental model',
+        tag: 'Model',
+        explanation: `Mental model: ${withPeriod(curation.mentalModel)} Use this as the simplest picture for the lesson.`,
+      },
+      {
+        id: `${animation.id}-explore`,
+        label: 'Try this',
+        tag: 'Do',
+        explanation: `Try this: ${withPeriod(curation.explore)}`,
+      },
+      {
+        id: `${animation.id}-self-check`,
+        label: 'Check yourself',
+        tag: 'Check',
+        explanation: `Check yourself: ${withPeriod(curation.selfCheck)}`,
+      },
+      {
+        id: `${animation.id}-trap`,
+        label: 'Common trap',
+        tag: 'Trap',
+        explanation: `Common trap: ${withPeriod(curation.trap)}`,
+      },
+    ];
+  }
+
+  const objectives = (animation.learningObjectives || []).slice(0, 2);
+  return [
+    {
+      id: `${animation.id}-key-idea`,
+      label: 'Key idea',
+      tag: 'Idea',
+      explanation: `${animation.name} focuses on ${cleanSentence(animation.description).toLowerCase()}.`,
+    },
+    ...objectives.map((objective, index) => ({
+      id: `${animation.id}-goal-${index + 1}`,
+      label: index === 0 ? 'Main goal' : 'Practice goal',
+      tag: 'Goal',
+      explanation: withPeriod(objective),
+    })),
+    {
+      id: `${animation.id}-watch-out`,
+      label: 'Watch out',
+      tag: 'Trap',
+      explanation: withPeriod(animation.commonMisconception),
+    },
+  ].filter((node) => node.explanation);
 }
 
 function getNeighborNodes(animation, allAnimations, direction) {
@@ -777,17 +854,17 @@ function getNeighborNodes(animation, allAnimations, direction) {
   const nodes = [];
 
   if (direction === 'prev') {
-    if (categoryIndex > 0) nodes.push(toNode(categoryAnimations[categoryIndex - 1]));
-    if (globalIndex > 0) nodes.push(toNode(allAnimations[globalIndex - 1]));
+    if (categoryIndex > 0) nodes.push(toNode(categoryAnimations[categoryIndex - 1], 'prereq'));
+    if (globalIndex > 0) nodes.push(toNode(allAnimations[globalIndex - 1], 'prereq'));
   } else {
-    if (categoryIndex < categoryAnimations.length - 1) nodes.push(toNode(categoryAnimations[categoryIndex + 1]));
-    if (globalIndex < allAnimations.length - 1) nodes.push(toNode(allAnimations[globalIndex + 1]));
+    if (categoryIndex < categoryAnimations.length - 1) nodes.push(toNode(categoryAnimations[categoryIndex + 1], 'next'));
+    if (globalIndex < allAnimations.length - 1) nodes.push(toNode(allAnimations[globalIndex + 1], 'next'));
   }
 
   const fallback = direction === 'prev'
     ? categoryAnimations.find((item) => item.id !== animation.id) || allAnimations.find((item) => item.id !== animation.id)
     : [...categoryAnimations].reverse().find((item) => item.id !== animation.id) || [...allAnimations].reverse().find((item) => item.id !== animation.id);
-  if (nodes.length === 0 && fallback) nodes.push(toNode(fallback));
+  if (nodes.length === 0 && fallback) nodes.push(toNode(fallback, direction === 'prev' ? 'prereq' : 'next'));
 
   return nodes.filter((node, index, list) => (
     node.id !== animation.id && list.findIndex((candidate) => candidate.id === node.id) === index
@@ -804,7 +881,7 @@ function getPrereqNodes(animation, allAnimations) {
     .map((id) => animationById.get(id))
     .filter(Boolean)
     .filter((item) => item.id !== animation.id)
-    .map(toNode);
+    .map((item) => toNode(item, 'prereq'));
 
   if (nodes.length > 0) return nodes;
   return getNeighborNodes(animation, allAnimations, 'prev').slice(0, 2);
@@ -824,7 +901,7 @@ function getTrackNextNodes(animation, allAnimations) {
     const nextId = track.animationIds[index + 1];
     const nextAnimation = animationById.get(nextId);
     if (nextAnimation && nextAnimation.id !== animation.id) {
-      nodes.push(toNode(nextAnimation));
+      nodes.push(toNode(nextAnimation, 'next'));
     }
   }
 
@@ -960,7 +1037,8 @@ export function createLearningModel(animation, allAnimations) {
     },
     mindmap: {
       prereqs,
-      current: toNode(animation),
+      current: toNode(animation, 'current'),
+      insights: makeInsightNodes(animation),
       next,
     },
     learningCards: makeCards(animation, glossary, headlineLatex),

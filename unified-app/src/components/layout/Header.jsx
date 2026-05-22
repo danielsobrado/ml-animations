@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Github, Menu, PanelLeft, PanelLeftClose, PencilLine } from 'lucide-react';
+import { BookOpen, Github, Menu, PanelLeft, PanelLeftClose } from 'lucide-react';
 
 export default function Header({
   onMenuClick,
   onSidebarControlClick,
   onOpenCommandPalette,
-  onOpenNotes,
   progress,
   sidebarOpen,
   sidebarCollapsed,
@@ -37,7 +36,7 @@ export default function Header({
           <span className="ua-brand-mark">ml</span>
           <span className="ua-brand-text">
             <span className="ua-brand-title">ML Animations</span>
-            <span className="ua-brand-sub">Interactive machine learning notes</span>
+            <span className="ua-brand-sub">Interactive machine learning lessons</span>
           </span>
         </Link>
       </div>
@@ -57,9 +56,6 @@ export default function Header({
         >
           <BookOpen size={16} />
           Glossary
-        </button>
-        <button type="button" className="ua-icon-btn" onClick={onOpenNotes} aria-label="Open notes">
-          <PencilLine size={18} />
         </button>
         <a
           className="ua-icon-btn"

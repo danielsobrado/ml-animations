@@ -8,6 +8,7 @@ import {
   getAssessmentStats,
   lessonAssessments,
 } from './lessonAssessments.js';
+import { MINDMAP_CURATIONS } from './mindmapCuration.js';
 import { isAssessmentComplete } from './learningProgress.js';
 import {
   CARD_TYPES,
@@ -38,8 +39,19 @@ test('createLearningModel gives every animation the uniform learning shell contr
     );
 
     assert.equal(model.mindmap.current.id, animation.id);
+    assert.ok(model.mindmap.current.explanation, `${animation.id} needs current mindmap explanation`);
     assert.ok(model.mindmap.prereqs.length >= 1);
     assert.ok(model.mindmap.next.length >= 1);
+    assert.ok(model.mindmap.insights.length >= 4, `${animation.id} needs filled mindmap insight leaves`);
+    for (const node of [
+      model.mindmap.current,
+      ...model.mindmap.prereqs,
+      ...model.mindmap.next,
+      ...model.mindmap.insights,
+    ]) {
+      assert.ok(node.explanation, `${animation.id} mindmap node ${node.id} needs tooltip explanation`);
+      assert.ok(node.explanation.length >= 24, `${animation.id} mindmap node ${node.id} explanation is too thin`);
+    }
     assert.ok(model.glossary.length >= 8);
 
     for (const term of model.glossary) {
@@ -50,6 +62,18 @@ test('createLearningModel gives every animation the uniform learning shell contr
       assert.equal(term.href, `/glossary/${canonical.slug}`);
       assert.ok(term.image.src.startsWith('data:image/svg+xml'));
       assert.ok(term.image.alt.includes(canonical.term));
+    }
+  }
+});
+
+test('every active lesson has curated mindmap copy', () => {
+  for (const animation of allAnimations) {
+    const curation = MINDMAP_CURATIONS[animation.id];
+    assert.ok(curation, `${animation.id} needs curated mindmap content`);
+    assert.equal(curation.length, 4, `${animation.id} needs four curated mindmap leaves`);
+    for (const [index, leaf] of curation.entries()) {
+      assert.ok(leaf.length >= 12, `${animation.id} mindmap leaf ${index + 1} is too thin`);
+      assert.ok(/[a-z]/i.test(leaf), `${animation.id} mindmap leaf ${index + 1} needs text`);
     }
   }
 });
@@ -1345,6 +1369,14 @@ test('createLearningModel uses curriculum metadata for one-click navigation cont
   assert.ok(model.mindmap.prereqs.some((node) => node.id === 'matrix-multiplication'));
   assert.ok(model.mindmap.prereqs.some((node) => node.id === 'softmax'));
   assert.ok(model.mindmap.next.some((node) => node.id === 'attention-masks'));
+  assert.ok(model.mindmap.insights.some((node) => node.tag === 'Model'));
+  assert.ok(model.mindmap.insights.some((node) => node.tag === 'Check'));
+  assert.ok(model.mindmap.insights.some((node) => node.tag === 'Trap'));
+  assert.match(model.mindmap.current.explanation, /Self-Attention/);
+  assert.match(
+    model.mindmap.prereqs.find((node) => node.id === 'softmax').explanation,
+    /useful background/,
+  );
   assert.equal(model.chips.difficulty, 'intermediate');
   assert.equal(model.chips.prereq, 'Matrix Multiplication, Softmax');
 });

@@ -4,7 +4,6 @@ import Header from './components/layout/Header';
 import Sidebar from './components/layout/Sidebar';
 import CommandPalette from './components/app/CommandPalette';
 import KeyboardHintDock from './components/app/KeyboardHintDock';
-import NotesDrawer from './components/app/NotesDrawer';
 import HomePage from './pages/HomePage';
 import AnimationPage from './pages/AnimationPage';
 import GlossaryPage from './pages/GlossaryPage';
@@ -123,7 +122,6 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
-  const [notesOpen, setNotesOpen] = useState(false);
   const [visitedLessons, setVisitedLessons] = useState(() => new Set(readVisitedLessons()));
 
   useEffect(() => {
@@ -157,12 +155,6 @@ export default function App() {
       if (event.key === '/') {
         event.preventDefault();
         setCommandPaletteOpen(true);
-        return;
-      }
-
-      if (event.key.toLowerCase() === 'n') {
-        event.preventDefault();
-        setNotesOpen((open) => !open);
         return;
       }
 
@@ -201,7 +193,6 @@ export default function App() {
         onMenuClick={() => setSidebarOpen((open) => !open)}
         onSidebarControlClick={handleSidebarControlClick}
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
-        onOpenNotes={() => setNotesOpen(true)}
         progress={{ visited: visitedLessons.size, total: allAnimations.length }}
         sidebarOpen={sidebarOpen}
         sidebarCollapsed={sidebarCollapsed}
@@ -224,12 +215,6 @@ export default function App() {
         </Routes>
       </main>
       <CommandPalette open={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
-      <NotesDrawer
-        open={notesOpen}
-        scope={currentLessonId || 'catalog'}
-        title={currentLesson?.name || 'Catalog'}
-        onClose={() => setNotesOpen(false)}
-      />
       <KeyboardHintDock />
     </div>
   );
