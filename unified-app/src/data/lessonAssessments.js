@@ -1771,6 +1771,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Larger batches average more examples, so the gradient is less noisy, but each update costs more computation.',
       },
+      {
+        id: 'predict-momentum-path',
+        prompt: 'On a long shallow valley with gradients pointing mostly the same way, what should momentum do?',
+        choices: [
+          'Build velocity along the consistent direction',
+          'Reset every update to zero',
+          'Ignore the gradient sign completely',
+        ],
+        answerIndex: 0,
+        explanation: 'Momentum accumulates repeated directions, which can reduce zigzagging and speed travel through valleys.',
+      },
+      {
+        id: 'adam-sgd-failure',
+        prompt: 'What is a reasonable failure mode when comparing Adam and SGD?',
+        choices: [
+          'Adam can move quickly early but still needs learning-rate validation and may not be the best final generalizer',
+          'Adam guarantees the global minimum for every neural network',
+          'SGD cannot update weights without Adam statistics',
+        ],
+        answerIndex: 0,
+        explanation: 'Adaptive optimizers change step scaling, but validation behavior still decides whether the setting works.',
+      },
     ],
     labs: [
       {
@@ -1804,6 +1826,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Large initial weights can amplify signals layer after layer, making training unstable before it begins.',
+      },
+      {
+        id: 'predict-tiny-weights',
+        prompt: 'If every layer starts with weights that are far too tiny, what should you predict through depth?',
+        choices: [
+          'Signals and gradients can shrink toward zero',
+          'Activations must explode',
+          'The network skips the activation functions',
+        ],
+        answerIndex: 0,
+        explanation: 'Too-small variance can repeatedly shrink forward activations and backward gradients.',
+      },
+      {
+        id: 'same-weight-symmetry',
+        prompt: 'Why is initializing all hidden units with the same weight a failure mode?',
+        choices: [
+          'Units can receive identical gradients and fail to specialize',
+          'It makes the model train faster by creating diversity',
+          'It removes the loss function',
+        ],
+        answerIndex: 0,
+        explanation: 'Symmetry prevents units in the same layer from learning different features unless the initialization breaks it.',
       },
     ],
     labs: [
@@ -1873,6 +1917,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Validation loss shows whether improvements on training data are transferring to held-out data.',
       },
+      {
+        id: 'predict-overshoot',
+        prompt: 'If the learning rate is too high, what pattern should you expect in the training loss?',
+        choices: [
+          'Oscillation or sudden spikes instead of steady descent',
+          'A perfectly smooth monotone decrease every time',
+          'No parameter updates at all',
+        ],
+        answerIndex: 0,
+        explanation: 'Large steps can jump across the valley or destabilize the update path.',
+      },
+      {
+        id: 'early-stopping-failure',
+        prompt: 'What failure does early stopping try to prevent?',
+        choices: [
+          'Continuing to optimize training loss after validation loss has begun worsening',
+          'Training for too few epochs before any validation is measured',
+          'Using batches smaller than the full dataset',
+        ],
+        answerIndex: 0,
+        explanation: 'Early stopping uses held-out performance to avoid late-epoch memorization.',
+      },
     ],
     labs: [
       {
@@ -1906,6 +1972,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'When the pre-activation is negative, ReLU blocks the local gradient.',
+      },
+      {
+        id: 'predict-cross-zero',
+        prompt: 'What happens to a ReLU unit when its pre-activation crosses from -0.2 to +0.2?',
+        choices: [
+          'Its output becomes positive and its local slope changes from 0 to 1',
+          'Its output stays zero forever',
+          'It becomes a probability distribution',
+        ],
+        answerIndex: 0,
+        explanation: 'ReLU has a kink at zero: negative inputs are clipped, positive inputs pass through.',
+      },
+      {
+        id: 'dead-unit-diagnosis',
+        prompt: 'What is a dead ReLU diagnosis?',
+        choices: [
+          'A unit is negative for nearly all examples and receives almost no gradient',
+          'A unit has a large positive activation for every example',
+          'A unit uses a softmax over classes',
+        ],
+        answerIndex: 0,
+        explanation: 'If a ReLU stays in the negative region, its zero derivative can block learning.',
       },
     ],
     labs: [
@@ -1985,6 +2073,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'The MSE/ReLU example makes the activation gate visible in the backward pass.',
+      },
+      {
+        id: 'predict-chain-rule',
+        prompt: 'If the upstream gradient is 3 and the local derivative is 0.5, what gradient flows to the input?',
+        choices: [
+          '1.5',
+          '3.5',
+          '0.5',
+        ],
+        answerIndex: 0,
+        explanation: 'Backprop multiplies upstream gradients by local derivatives along the path.',
+      },
+      {
+        id: 'missing-local-derivative',
+        prompt: 'What failure mode appears if you ignore a local derivative in backprop?',
+        choices: [
+          'The credit assignment can have the wrong scale or sign',
+          'The forward pass becomes unnecessary',
+          'The loss is guaranteed to be zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Each local derivative is part of the chain rule; dropping one corrupts the gradient passed backward.',
       },
     ],
     labs: [

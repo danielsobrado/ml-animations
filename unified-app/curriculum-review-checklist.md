@@ -80,8 +80,8 @@ Start Here priority batch:
 | tree-ensembles | [x] | [x] | [x] | [x] | Added forest averaging prediction and boosting-overfit failure. |
 | gradient-descent | [x] | [x] | [x] | [x] | Added small-step and next-step prediction questions. |
 | neural-network | [x] | [x] | [x] | [x] | Added structured XOR forward/backward assessment. |
-| relu | [x] | [ ] | [ ] | [x] | Add dead-unit diagnosis task. |
-| computation-graph-backprop | [x] | [ ] | [ ] | [x] | Add local-gradient chain prediction. |
-| initialization | [x] | [ ] | [ ] | [x] | Add saturation/variance failure task. |
-| optimizers | [x] | [ ] | [ ] | [x] | Add Adam vs SGD prediction task. |
-| training-loop-dynamics | [x] | [ ] | [ ] | [x] | Add early-stopping failure task. |
+| relu | [x] | [x] | [x] | [x] | Added cross-zero prediction and dead-unit diagnosis. |
+| computation-graph-backprop | [x] | [x] | [x] | [x] | Added local-gradient multiplication prediction and missing-derivative failure. |
+| initialization | [x] | [x] | [x] | [x] | Added tiny-weight prediction and symmetry failure. |
+| optimizers | [x] | [x] | [x] | [x] | Added momentum path prediction and Adam-vs-SGD validation caveat. |
+| training-loop-dynamics | [x] | [x] | [x] | [x] | Added overshoot prediction and early-stopping failure. |
