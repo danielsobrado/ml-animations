@@ -7,6 +7,11 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'cross-validation',
   'data-leakage-deep-dive',
   'feature-scaling-preprocessing',
+  'bayes-rule-ml',
+  'sampling-confidence-intervals',
+  'hypothesis-testing-intuition',
+  'maximum-likelihood-estimation',
+  'loss-functions-likelihoods',
   'logistic-regression',
   'classification-metrics',
   'roc-pr-curves',
@@ -184,6 +189,176 @@ export const lessonAssessments = {
         title: 'Compare k and inertia',
         prompt: 'Change k and the number of iterations, then describe when lower inertia starts splitting a natural group.',
         successCriteria: 'You can explain why inertia alone cannot choose the best k.',
+      },
+    ],
+  },
+  'bayes-rule-ml': {
+    quiz: [
+      {
+        id: 'base-rate-role',
+        prompt: 'Why can a positive signal still leave a modest posterior probability for a rare class?',
+        choices: [
+          'The prior base rate and false positive rate both affect the posterior',
+          'Bayes rule ignores evidence strength',
+          'Rare classes cannot be modeled with probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Bayes rule combines the prior, the true positive rate, and the false positive rate before normalizing.',
+      },
+      {
+        id: 'false-positive-effect',
+        prompt: 'What usually happens when the false positive rate falls while the prior and hit rate stay fixed?',
+        choices: [
+          'The posterior after positive evidence rises',
+          'The posterior must become zero',
+          'The prior disappears from the calculation',
+        ],
+        answerIndex: 0,
+        explanation: 'Fewer false alarms means a positive signal is more likely to come from true positives.',
+      },
+    ],
+    labs: [
+      {
+        id: 'rare-class-posterior',
+        title: 'Audit a rare-class signal',
+        prompt: 'Set a low base rate, then lower the false positive rate until the posterior becomes useful.',
+        successCriteria: 'You can explain why evidence quality matters more when the class is rare.',
+      },
+    ],
+  },
+  'sampling-confidence-intervals': {
+    quiz: [
+      {
+        id: 'sample-size-width',
+        prompt: 'What happens to a confidence interval when sample size increases and everything else stays similar?',
+        choices: [
+          'It usually narrows because standard error falls',
+          'It always widens because more data adds uncertainty',
+          'It becomes unrelated to the observed estimate',
+        ],
+        answerIndex: 0,
+        explanation: 'Standard error falls roughly with the square root of sample size, so intervals usually narrow.',
+      },
+      {
+        id: 'confidence-width',
+        prompt: 'Why does a 99% confidence interval tend to be wider than a 95% interval?',
+        choices: [
+          'It uses a larger critical value to cover more repeated-sampling outcomes',
+          'It changes the observed data',
+          'It removes sampling variation entirely',
+        ],
+        answerIndex: 0,
+        explanation: 'Higher confidence requires a wider procedure because it must cover more possible samples.',
+      },
+    ],
+    labs: [
+      {
+        id: 'sample-size-sweep',
+        title: 'Sweep sample size',
+        prompt: 'Increase sample size from small to large and track how quickly the interval width shrinks.',
+        successCriteria: 'You can explain why quadrupling sample size is closer to halving the margin than quartering it.',
+      },
+    ],
+  },
+  'hypothesis-testing-intuition': {
+    quiz: [
+      {
+        id: 'statistic-ratio',
+        prompt: 'What does the test statistic compare in this lesson?',
+        choices: [
+          'Observed effect against standard error',
+          'Training loss against test labels',
+          'Feature count against model size',
+        ],
+        answerIndex: 0,
+        explanation: 'The statistic grows when the observed effect is large relative to sampling noise.',
+      },
+      {
+        id: 'significance-vs-importance',
+        prompt: 'What is a common mistake with hypothesis tests?',
+        choices: [
+          'Treating statistical significance as practical importance',
+          'Using sample size in the calculation',
+          'Comparing an observed effect with noise',
+        ],
+        answerIndex: 0,
+        explanation: 'A small p-value can come from a tiny effect with a huge sample; usefulness is a separate question.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tiny-effect-large-sample',
+        title: 'Find a tiny significant effect',
+        prompt: 'Use a small effect with a large sample and explain why the evidence can look strong while the effect remains small.',
+        successCriteria: 'You can separate statistical evidence from practical impact.',
+      },
+    ],
+  },
+  'maximum-likelihood-estimation': {
+    quiz: [
+      {
+        id: 'likelihood-meaning',
+        prompt: 'What does likelihood measure?',
+        choices: [
+          'How probable the observed data would be under a candidate parameter',
+          'How probable the parameter is before seeing data',
+          'How many features a model uses',
+        ],
+        answerIndex: 0,
+        explanation: 'Likelihood treats the data as observed and compares how well different parameter values explain it.',
+      },
+      {
+        id: 'bernoulli-peak',
+        prompt: 'For Bernoulli successes and failures, where does the likelihood peak?',
+        choices: [
+          'Near the observed success rate',
+          'Always at 50%',
+          'Always at the smallest candidate value',
+        ],
+        answerIndex: 0,
+        explanation: 'The best Bernoulli probability is the observed fraction of successes.',
+      },
+    ],
+    labs: [
+      {
+        id: 'candidate-parameter-sweep',
+        title: 'Sweep candidate parameters',
+        prompt: 'Move the candidate probability across the observed rate and watch relative likelihood rise and fall.',
+        successCriteria: 'You can identify the candidate closest to the maximum likelihood estimate.',
+      },
+    ],
+  },
+  'loss-functions-likelihoods': {
+    quiz: [
+      {
+        id: 'negative-log-likelihood',
+        prompt: 'What is the link between many ML losses and probability models?',
+        choices: [
+          'The loss is often negative log-likelihood of the observed target',
+          'The loss is always the number of wrong labels',
+          'The loss removes the need for a model assumption',
+        ],
+        answerIndex: 0,
+        explanation: 'Squared error and cross-entropy can be derived as negative log-likelihoods under common target assumptions.',
+      },
+      {
+        id: 'cross-entropy-pressure',
+        prompt: 'Why does cross-entropy rise sharply when the true-class probability is low?',
+        choices: [
+          'Low probability assigned to the observed class is low likelihood',
+          'The label has become continuous',
+          'The model has stopped using softmax',
+        ],
+        answerIndex: 0,
+        explanation: 'Cross-entropy penalizes the negative log of the probability assigned to the observed class.',
+      },
+    ],
+    labs: [
+      {
+        id: 'match-loss-to-noise',
+        title: 'Match losses to assumptions',
+        prompt: 'Compare regression error and true-class probability, then name the likelihood assumption behind each loss.',
+        successCriteria: 'You can connect squared error to Gaussian noise and cross-entropy to categorical likelihood.',
       },
     ],
   },

@@ -226,6 +226,23 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
     startPath.nodes.includes('feature-scaling-preprocessing'),
     'start-here should include preprocessing fit-scope before dependent workflows',
   );
+  assert.ok(startPath.nodes.includes('bayes-rule-ml'), 'start-here should include Bayes rule');
+  assert.ok(
+    startPath.nodes.includes('sampling-confidence-intervals'),
+    'start-here should include sampling uncertainty',
+  );
+  assert.ok(
+    startPath.nodes.includes('hypothesis-testing-intuition'),
+    'start-here should include hypothesis testing intuition',
+  );
+  assert.ok(
+    startPath.nodes.includes('maximum-likelihood-estimation'),
+    'start-here should include maximum likelihood estimation',
+  );
+  assert.ok(
+    startPath.nodes.includes('loss-functions-likelihoods'),
+    'start-here should include loss functions as likelihoods',
+  );
   assert.ok(startPath.nodes.includes('neural-network'), 'start-here should include neural-network before ReLU');
 
   for (const nodeId of startPath.nodes) {
@@ -253,6 +270,14 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
   assert.ok(
     pathOrder.get('classification-metrics') < pathOrder.get('roc-pr-curves'),
     'ROC/PR should come after classification-metrics in start-here',
+  );
+  assert.ok(
+    pathOrder.get('bayes-rule-ml') < pathOrder.get('maximum-likelihood-estimation'),
+    'Bayes rule should precede maximum likelihood in start-here',
+  );
+  assert.ok(
+    pathOrder.get('maximum-likelihood-estimation') < pathOrder.get('loss-functions-likelihoods'),
+    'MLE should precede loss-as-likelihood framing',
   );
   assert.ok(
     pathOrder.get('roc-pr-curves') < pathOrder.get('calibration'),
@@ -300,6 +325,32 @@ test('start-here path is prerequisite-safe and includes core-flow milestones', (
   assert.ok(startPath.nodes.includes('regularization'), 'start-here should include regularization');
   assert.ok(startPath.nodes.includes('knn-naive-bayes-svm'), 'start-here should include classical classifiers');
   assert.ok(startPath.nodes.includes('tree-ensembles'), 'start-here should include tree ensembles');
+});
+
+test('probability bridge path sequences statistical foundations into ML losses', () => {
+  const bridgePath = HUB_LEARNING_PATHS.find((path) => path.id === 'probability-bridge');
+  assert.ok(bridgePath, 'probability bridge path should exist');
+
+  const expectedNodes = [
+    'probability-distributions',
+    'conditional-probability',
+    'bayes-rule-ml',
+    'sampling-confidence-intervals',
+    'hypothesis-testing-intuition',
+    'maximum-likelihood-estimation',
+    'loss-functions-likelihoods',
+  ];
+  const pathOrder = new Map(bridgePath.nodes.map((id, index) => [id, index]));
+
+  for (const nodeId of expectedNodes) {
+    const animation = getAnimationById(nodeId);
+    assert.ok(animation, `${nodeId} should be active`);
+    assert.ok(bridgePath.nodes.includes(nodeId), `${nodeId} should be in probability bridge`);
+  }
+
+  assert.ok(pathOrder.get('conditional-probability') < pathOrder.get('bayes-rule-ml'));
+  assert.ok(pathOrder.get('sampling-confidence-intervals') < pathOrder.get('hypothesis-testing-intuition'));
+  assert.ok(pathOrder.get('maximum-likelihood-estimation') < pathOrder.get('loss-functions-likelihoods'));
 });
 
 test('LLM path includes modern inference sequencing', () => {

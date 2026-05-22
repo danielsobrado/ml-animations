@@ -96,6 +96,11 @@ const animationRegistry = {
   // Probability & Statistics
   'probability-distributions': lazy(() => import('./probability-distributions')),
   'conditional-probability': lazy(() => import('./conditional-probability')),
+  'bayes-rule-ml': lazy(() => import('./bayes-rule-ml')),
+  'sampling-confidence-intervals': lazy(() => import('./sampling-confidence-intervals')),
+  'hypothesis-testing-intuition': lazy(() => import('./hypothesis-testing-intuition')),
+  'maximum-likelihood-estimation': lazy(() => import('./maximum-likelihood-estimation')),
+  'loss-functions-likelihoods': lazy(() => import('./loss-functions-likelihoods')),
   'entropy': lazy(() => import('./entropy')),
   'cross-entropy': lazy(() => import('./cross-entropy')),
   'expected-value-variance': lazy(() => import('./expected-value-variance')),
