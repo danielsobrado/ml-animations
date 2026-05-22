@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:22:37.820Z
+Generated: 2026-05-22T07:30:26.920Z
 
 ## Review Policy
 
@@ -39,7 +39,7 @@ Generated: 2026-05-22T07:22:37.820Z
 | matrix-multiplication | B (good) | manual | 2737 | 2 | stable | Add geometric interpretation quick checks for rectangular dimensions. |
 | maximum-likelihood-estimation | B (good) | manual | 17345 | 0 | stable | Add a prior-vs-likelihood contrast before introducing MAP estimation. |
 | model-debugging | B (good) | manual | 19516 | 0 | stable | Add one "before/after intervention" replay mode with saved snapshots. |
-| model-fairness | B (good) | manual | 15733 | 0 | stable | Add explicit subgroup-level business metric and threshold optimization walkthrough. |
+| model-fairness | B (good) | manual | 15608 | 0 | stable | Add explicit subgroup-level business metric and threshold optimization walkthrough. |
 | model-interpretability | B (good) | manual | 17464 | 0 | stable | Add method comparison between linear and model-agnostic explanations. |
 | model-monitoring | B (good) | manual | 15880 | 0 | stable | Add incident annotation and recovery-action history. |
 | neural-network | A (excellent) | manual | 40231 | 1 | stable | Add architecture ablation and under/over-parameterization checks. |
@@ -99,9 +99,9 @@ Generated: 2026-05-22T07:22:37.820Z
 | --- | --- | --- | ---: | ---: | --- | --- |
 | computation-graph-backprop | A (excellent) | manual | 13122 | 0 | stable | Add chain-rule failure mode examples and exploding-grad examples. |
 | conv-relu | B (good) | manual | 12197 | 2 | stable | Add backward-pass gradient tracing for clipped versus active cells. |
-| conv2d | C (adequate) | auto | 2723 | 2 |  | Review and set explicit manual quality entry. |
+| conv2d | B (good) | manual | 13462 | 2 | stable | Add multi-channel input and multiple output filter examples. |
 | dropout-batchnorm | B (good) | auto | 8692 | 0 |  | Review and set explicit manual quality entry. |
-| gradient-problems | C (adequate) | auto | 1115 | 3 |  | Review and set explicit manual quality entry. |
+| gradient-problems | B (good) | manual | 9631 | 3 | stable | Add activation-specific presets for sigmoid, tanh, ReLU, and GELU chains. |
 | initialization | A (excellent) | manual | 7603 | 0 | stable | Add variance explosion/suppression case studies. |
 | layer-normalization | C (adequate) | auto | 3059 | 3 |  | Review and set explicit manual quality entry. |
 | leaky-relu | C (adequate) | auto | 3049 | 3 |  | Review and set explicit manual quality entry. |
@@ -172,7 +172,7 @@ Generated: 2026-05-22T07:22:37.820Z
 | Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |
 | --- | --- | --- | ---: | ---: | --- | --- |
 | model-debugging | B (good) | manual | 19516 | 0 | stable | Add one "before/after intervention" replay mode with saved snapshots. |
-| model-fairness | B (good) | manual | 15733 | 0 | stable | Add explicit subgroup-level business metric and threshold optimization walkthrough. |
+| model-fairness | B (good) | manual | 15608 | 0 | stable | Add explicit subgroup-level business metric and threshold optimization walkthrough. |
 | model-interpretability | B (good) | manual | 17464 | 0 | stable | Add method comparison between linear and model-agnostic explanations. |
 | model-monitoring | B (good) | manual | 15880 | 0 | stable | Add incident annotation and recovery-action history. |
 | uncertainty-estimation | B (good) | manual | 14241 | 0 | stable | Add a dedicated calibration panel with empirical reliability buckets. |

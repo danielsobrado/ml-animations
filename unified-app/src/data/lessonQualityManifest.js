@@ -182,11 +182,23 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Dense component layer interactions and architecture-level controls.',
     nextAction: 'Add architecture ablation and under/over-parameterization checks.',
   },
+  'gradient-problems': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom gradient-flow diagnostic showing vanishing/exploding products, residual shortcuts, clipping effects, and layer-by-layer gradient ledger.',
+    nextAction: 'Add activation-specific presets for sigmoid, tanh, ReLU, and GELU chains.',
+  },
   relu: {
     tier: 'B',
     status: 'stable',
     reason: 'Activation behavior is represented with interactive inputs and outputs.',
     nextAction: 'Add gradient-flow edge-case checks across negative saturation.',
+  },
+  conv2d: {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom convolution workbench with kernel reuse, stride, padding, output-shape formula, and selected-cell dot-product tracing.',
+    nextAction: 'Add multi-channel input and multiple output filter examples.',
   },
   'conv-relu': {
     tier: 'B',

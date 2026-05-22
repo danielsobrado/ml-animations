@@ -26,7 +26,9 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'optimizers',
   'training-loop-dynamics',
   'dropout-batchnorm',
+  'gradient-problems',
   'relu',
+  'conv2d',
   'conv-relu',
   'computation-graph-backprop',
   'tokenization',
@@ -1773,6 +1775,96 @@ export const lessonAssessments = {
         title: 'Find the activation cutoff',
         prompt: 'Lower the bias until several feature responses disappear, then identify which pre-activation values were clipped.',
         successCriteria: 'You can explain the difference between the signed convolution map and the sparse ReLU activation map.',
+      },
+    ],
+  },
+  conv2d: {
+    quiz: [
+      {
+        id: 'one-output-cell',
+        prompt: 'What creates one Conv2D output cell?',
+        choices: [
+          'A dot product between the kernel and one local input window',
+          'An average of every pixel in the whole image',
+          'A separate learned kernel for every output location',
+        ],
+        answerIndex: 0,
+        explanation: 'The same kernel is reused across positions; each output cell comes from the aligned local patch.',
+      },
+      {
+        id: 'stride-effect',
+        prompt: 'What usually happens when stride increases while input, padding, and kernel size stay fixed?',
+        choices: [
+          'The output grid gets smaller because the kernel visits fewer positions',
+          'The output grid always gets larger',
+          'The kernel weights become non-learnable',
+        ],
+        answerIndex: 0,
+        explanation: 'Stride controls the step size between windows, so larger stride skips positions.',
+      },
+      {
+        id: 'padding-purpose',
+        prompt: 'Why add zero padding before a convolution?',
+        choices: [
+          'To let the kernel cover border pixels and often preserve more spatial size',
+          'To remove the need for learned weights',
+          'To make ReLU happen before convolution',
+        ],
+        answerIndex: 0,
+        explanation: 'Padding extends the grid with zeros so border-centered windows can be computed.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-output-size',
+        title: 'Trace output shape',
+        prompt: 'Switch stride and padding, then compute the output-size formula before checking the displayed grid.',
+        successCriteria: 'You can explain why padding increases available windows while stride skips windows.',
+      },
+    ],
+  },
+  'gradient-problems': {
+    quiz: [
+      {
+        id: 'chain-product',
+        prompt: 'Why do gradients vanish or explode in deep networks?',
+        choices: [
+          'Backprop multiplies many local derivatives through the depth of the network',
+          'The optimizer deletes early layers after each batch',
+          'The loss function ignores all hidden activations',
+        ],
+        answerIndex: 0,
+        explanation: 'A long product of values below one shrinks; a long product above one grows rapidly.',
+      },
+      {
+        id: 'residual-path',
+        prompt: 'How does a residual connection help gradient flow?',
+        choices: [
+          'It adds a direct path so gradients are not forced only through the transformed branch',
+          'It removes the need for a loss function',
+          'It makes every local derivative exactly zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Residual connections give the backward pass an additive shortcut around difficult transformations.',
+      },
+      {
+        id: 'clipping-limit',
+        prompt: 'What is a limitation of gradient clipping?',
+        choices: [
+          'It limits large updates but does not fix the underlying scale or saturation cause',
+          'It makes gradients larger when they vanish',
+          'It changes convolution into pooling',
+        ],
+        answerIndex: 0,
+        explanation: 'Clipping is a guardrail for explosions; initialization, normalization, and architecture still matter.',
+      },
+    ],
+    labs: [
+      {
+        id: 'diagnose-gradient-flow',
+        title: 'Diagnose a gradient chain',
+        prompt: 'Create one vanishing case and one exploding case by changing depth and local multiplier, then stabilize one of them.',
+        successCriteria: 'You can identify whether the problem comes from depth, local derivative scale, residual paths, or clipping.',
       },
     ],
   },

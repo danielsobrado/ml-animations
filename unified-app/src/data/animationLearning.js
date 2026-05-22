@@ -34,6 +34,7 @@ const CATEGORY_EQUATIONS = {
 const EQUATION_OVERRIDES = {
   relu: 'f(x)=\\max(0,x)',
   'leaky-relu': 'f(x)=\\max(\\alpha x,x)',
+  conv2d: 'Y_{i,j}=\\sum_m\\sum_n X_{i+m,j+n}K_{m,n}',
   'conv-relu': 'A=\\max(0, X*K+b)',
   softmax: 'p_i=\\frac{e^{z_i}}{\\sum_j e^{z_j}}',
   'matrix-multiplication': 'C_{ij}=\\sum_k A_{ik}B_{kj}',
@@ -81,6 +82,7 @@ const EQUATION_OVERRIDES = {
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
   'training-loop-dynamics': '\\theta_{t+1}=\\theta_t-\\eta\\hat{g}_{B_t},\\quad monitor:\\mathcal{L}_{train},\\mathcal{L}_{val}',
   'dropout-batchnorm': '\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}},\\quad y=\\gamma\\hat{x}+\\beta',
+  'gradient-problems': '\\frac{\\partial L}{\\partial h_0}=\\frac{\\partial L}{\\partial h_L}\\prod_{\\ell=1}^{L}\\frac{\\partial h_\\ell}{\\partial h_{\\ell-1}}',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
@@ -316,6 +318,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: dropout is not used the same way at inference, and BatchNorm is not just another dropout mask.',
     'Check understanding by predicting what changes when switching from training mode to inference mode.',
   ),
+  'gradient-problems': cardSet(
+    'Gradient problem diagnostics solve the problem of explaining why early layers learn too slowly or update unstably.',
+    'Backprop is a chain of multiplications; many small factors erase signal and many large factors amplify it.',
+    'The math is a product of local derivatives from the output layer back to the earlier hidden state.',
+    'Manipulate depth, derivative scale, residual path strength, and clipping to classify the failure mode.',
+    'Mistake to avoid: clipping can cap explosions, but it does not automatically restore vanished signal.',
+    'Check understanding by predicting whether a deeper chain with multiplier below one will vanish faster.',
+  ),
   relu: cardSet(
     'ReLU solves the activation problem by giving networks a simple nonlinearity that keeps positive signal easy to pass.',
     'Positive inputs go through unchanged; negative inputs are shut off.',
@@ -323,6 +333,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the input across zero and watch both output and local slope switch.',
     'Mistake to avoid: a blocked ReLU has zero local gradient for that example.',
     'Check understanding by identifying whether a negative pre-activation can send gradient backward.',
+  ),
+  conv2d: cardSet(
+    'Conv2D solves the problem of detecting local spatial patterns with a small reusable set of weights.',
+    'Slide the same kernel across the input; each stop asks whether the local patch matches the learned pattern.',
+    'The math sums input-window values times aligned kernel weights for each output location.',
+    'Manipulate stride, padding, and kernel type to see how shape and local responses change.',
+    'Mistake to avoid: convolution reuses one kernel across locations; it is not a different dense matrix for every patch.',
+    'Check understanding by computing one output cell from its highlighted 3x3 input window.',
   ),
   'conv-relu': cardSet(
     'Conv + ReLU solves the problem of turning local image patterns into sparse positive feature maps.',
