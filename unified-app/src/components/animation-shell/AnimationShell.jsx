@@ -42,8 +42,8 @@ function GlossaryTermList({ terms }) {
 
   return (
     <span className="ua-term-list">
-      {terms.map((term) => (
-        <GlossaryTerm key={term.id} entry={term} />
+      {terms.map((term, index) => (
+        <GlossaryTerm key={`${term.id}-${index}`} entry={term} />
       ))}
     </span>
   );
@@ -125,8 +125,8 @@ function Glossary({ terms }) {
         <h2>Terms in this animation</h2>
       </div>
       <div className="ua-glossary-grid">
-        {terms.map((term) => (
-          <article key={term.id} id={`glossary-${term.slug}`}>
+        {terms.map((term, index) => (
+          <article key={`${term.id}-${index}`} id={`glossary-${term.slug}`}>
             <img src={term.image.src} alt={term.image.alt} />
             <span>{term.category}</span>
             <h3>

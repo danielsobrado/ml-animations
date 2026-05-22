@@ -152,7 +152,52 @@ async function themeFindings(page) {
       'rgb(58, 106, 58)',
       'rgb(138, 29, 29)',
       'rgba(0, 0, 0, 0)',
+      'rgba(38, 66, 115, 0.04)',
+      'rgba(38, 66, 115, 0.06)',
+      'rgba(38, 66, 115, 0.08)',
+      'rgba(168, 90, 58, 0.08)',
+      'rgba(168, 90, 58, 0.1)',
+      'rgba(168, 90, 58, 0.12)',
+      'rgba(58, 106, 58, 0.1)',
+      'rgb(243, 249, 239)',
+      'rgb(255, 248, 230)',
     ]);
+
+    const tokenRgb = [
+      [251, 248, 241],
+      [244, 239, 226],
+      [254, 252, 247],
+      [26, 26, 26],
+      [42, 42, 42],
+      [74, 74, 74],
+      [122, 122, 120],
+      [217, 210, 192],
+      [182, 172, 147],
+      [236, 230, 211],
+      [38, 66, 115],
+      [49, 76, 121],
+      [58, 90, 150],
+      [168, 90, 58],
+      [58, 106, 58],
+      [138, 29, 29],
+      [243, 249, 239],
+      [255, 248, 230],
+    ];
+
+    function isTokenishColor(value) {
+      if (allowedColor.has(value)) return true;
+      const match = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/);
+      if (!match) return false;
+      const [, rText, gText, bText, alphaText] = match;
+      const alpha = alphaText === undefined ? 1 : Number(alphaText);
+      if (alpha === 0) return true;
+      const rgb = [Number(rText), Number(gText), Number(bText)];
+      return tokenRgb.some((token) => (
+        Math.abs(rgb[0] - token[0]) <= 8
+        && Math.abs(rgb[1] - token[1]) <= 8
+        && Math.abs(rgb[2] - token[2]) <= 8
+      ));
+    }
 
     const interesting = [...document.querySelectorAll(
       '.ua-animation-page button, .ua-animation-page nav, .ua-animation-page [class*="bg-"], .ua-animation-page [class*="rounded"], .ua-animation-page [class*="shadow"], .ua-animation-page [class*="text-"], .ua-animation-page [class*="border-"]'
@@ -184,8 +229,20 @@ async function themeFindings(page) {
         findings.push({ type: 'large-radius', radius, label, className: el.className.toString().slice(0, 160) });
       }
 
-      if (el.tagName === 'BUTTON' && !allowedColor.has(style.backgroundColor)) {
+      if (el.tagName === 'BUTTON' && !isTokenishColor(style.backgroundColor)) {
         findings.push({ type: 'button-background-token', backgroundColor: style.backgroundColor, label, className: el.className.toString().slice(0, 160) });
+      }
+
+      if (
+        el.tagName !== 'BUTTON'
+        && (
+          style.backgroundColor === 'rgb(15, 23, 42)'
+          || style.backgroundColor === 'rgb(30, 41, 59)'
+          || style.backgroundColor === 'rgb(31, 41, 55)'
+          || style.backgroundColor === 'rgb(17, 24, 39)'
+        )
+      ) {
+        findings.push({ type: 'dark-panel-background', backgroundColor: style.backgroundColor, label, className: el.className.toString().slice(0, 160) });
       }
     }
 

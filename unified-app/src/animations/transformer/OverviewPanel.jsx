@@ -1,319 +1,365 @@
 import React, { useState } from 'react';
-import { Play, Pause, RotateCcw, ArrowRight, ArrowDown, Layers, Eye, Plus, Lightbulb } from 'lucide-react';
+import { ArrowDown, ArrowRight, CheckCircle, Eye, Lightbulb, Plus } from 'lucide-react';
+
+const palette = {
+    embedding: {
+        background: 'rgba(38, 66, 115, 0.08)',
+        border: '#264273',
+        color: '#264273'
+    },
+    position: {
+        background: 'rgba(168, 90, 58, 0.1)',
+        border: '#a85a3a',
+        color: '#7c3f27'
+    },
+    encoder: {
+        background: 'rgba(58, 106, 58, 0.1)',
+        border: '#4f7d39',
+        color: '#2f5d2f'
+    },
+    decoder: {
+        background: 'rgba(38, 66, 115, 0.06)',
+        border: '#3a5a96',
+        color: '#264273'
+    },
+    projection: {
+        background: 'rgba(168, 90, 58, 0.12)',
+        border: '#a85a3a',
+        color: '#7c3f27'
+    },
+    cross: {
+        background: '#fff8e6',
+        border: '#d89b1f',
+        color: '#6b4a0c'
+    }
+};
+
+const panelStyle = {
+    background: 'var(--ds-panel)',
+    border: 'var(--ds-border)',
+    borderRadius: 3
+};
+
+const tileStyle = (tone, active = false) => ({
+    background: active ? tone.border : tone.background,
+    border: `1px solid ${tone.border}`,
+    color: active ? 'var(--ds-paper)' : tone.color,
+    borderRadius: 3
+});
+
+const stackStyle = (tone, active = false) => ({
+    background: active ? tone.background : 'transparent',
+    border: `2px dashed ${tone.border}`,
+    borderRadius: 3
+});
 
 export default function OverviewPanel() {
     const [hoveredComponent, setHoveredComponent] = useState(null);
-    const [showDetails, setShowDetails] = useState(false);
 
     const components = {
         input_embedding: {
             name: 'Input Embedding',
-            description: 'Converts input tokens to dense vectors (d_model dimensions)',
-            color: 'bg-blue-500',
-            details: 'Each token ID is mapped to a learnable vector. For vocab size V and dimension d, this is a V×d matrix.'
+            description: 'Converts input tokens to dense vectors with d_model dimensions.',
+            tone: palette.embedding,
+            details: 'Each token ID looks up a learned vector. With vocabulary size V and hidden size d, this is a V x d table.'
         },
         positional_encoding: {
             name: 'Positional Encoding',
-            description: 'Adds position information using sinusoidal functions',
-            color: 'bg-cyan-500',
-            details: 'PE(pos, 2i) = sin(pos/10000^(2i/d)), PE(pos, 2i+1) = cos(pos/10000^(2i/d))'
+            description: 'Adds order information so the model can tell where each token sits.',
+            tone: palette.position,
+            details: 'The original Transformer used sine and cosine waves at different frequencies, then added those values to token embeddings.'
         },
         encoder_stack: {
-            name: 'Encoder Stack (N×)',
-            description: 'N identical layers processing input in parallel',
-            color: 'bg-green-500',
-            details: 'Each encoder has: Multi-Head Self-Attention → Add & Norm → Feed Forward → Add & Norm'
+            name: 'Encoder Stack (N x)',
+            description: 'Repeated encoder layers read the whole input sequence in parallel.',
+            tone: palette.encoder,
+            details: 'Each encoder layer runs self-attention, adds a residual connection, normalizes, applies a feed-forward network, then normalizes again.'
         },
         decoder_stack: {
-            name: 'Decoder Stack (N×)',
-            description: 'N identical layers generating output autoregressively',
-            color: 'bg-purple-500',
-            details: 'Each decoder has: Masked Self-Attention → Cross-Attention (to encoder) → Feed Forward'
+            name: 'Decoder Stack (N x)',
+            description: 'Repeated decoder layers generate the output sequence one token at a time.',
+            tone: palette.decoder,
+            details: 'The decoder uses masked self-attention for previous output tokens, cross-attention to read encoder states, and a feed-forward block.'
         },
         output_embedding: {
             name: 'Output Embedding',
-            description: 'Same as input embedding (often shared weights)',
-            color: 'bg-pink-500',
-            details: 'Output tokens are embedded, then processed through the decoder stack.'
+            description: 'Represents already-generated target tokens before the decoder predicts the next one.',
+            tone: palette.embedding,
+            details: 'During training, shifted target tokens become decoder inputs. Many implementations share this table with the final vocabulary projection.'
         },
         linear_softmax: {
             name: 'Linear + Softmax',
-            description: 'Projects to vocabulary size, converts to probabilities',
-            color: 'bg-red-500',
-            details: 'Linear layer: d_model → vocab_size, then softmax for probability distribution.'
+            description: 'Projects decoder states to vocabulary scores and probabilities.',
+            tone: palette.projection,
+            details: 'A linear layer maps d_model to vocab_size logits. Softmax turns those logits into a probability distribution over next tokens.'
         }
     };
+
+    const renderBlock = (children, tone, active, extraClass = '') => (
+        <div
+            className={`${extraClass} cursor-pointer transition-all ${active ? 'scale-105' : ''}`}
+            style={tileStyle(tone, active)}
+        >
+            {children}
+        </div>
+    );
 
     return (
         <div className="p-6 min-h-screen">
             <div className="max-w-6xl mx-auto">
-                {/* Header */}
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-white mb-2">
-                        The Transformer: <span className="gradient-text">Complete Architecture</span>
+                    <h2
+                        className="text-3xl mb-2"
+                        style={{ color: 'var(--ds-ink)', fontFamily: 'var(--ds-font-serif)', fontWeight: 500 }}
+                    >
+                        The Transformer: Complete Architecture
                     </h2>
-                    <p className="text-slate-800">
+                    <p style={{ color: 'var(--ds-faint)' }}>
                         A sequence-to-sequence model built entirely on attention mechanisms
                     </p>
                 </div>
 
-                {/* Main Architecture Diagram */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    {/* Interactive Diagram */}
-                    <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
-                        <h3 className="text-white font-bold mb-4 text-center">Interactive Architecture</h3>
-                        <p className="text-slate-800 text-center mb-4">Hover over each component to learn more</p>
+                    <div className="p-6" style={panelStyle}>
+                        <h3 className="font-bold mb-4 text-center" style={{ color: 'var(--ds-ink)' }}>
+                            Interactive Architecture
+                        </h3>
+                        <p className="text-center mb-4" style={{ color: 'var(--ds-faint)' }}>
+                            Hover over each component to learn more
+                        </p>
 
                         <div className="relative flex justify-center gap-8">
-                            {/* Encoder Side */}
                             <div className="flex flex-col items-center gap-3">
-                                <div className="text-slate-800 font-medium mb-2">ENCODER</div>
+                                <div className="font-medium mb-2" style={{ color: 'var(--ds-ink)' }}>ENCODER</div>
 
-                                {/* Encoder Stack */}
                                 <div
-                                    className={`relative w-32 h-40 rounded-lg border-2 border-dashed border-green-500/50 p-2 cursor-pointer transition-all ${
-                                        hoveredComponent === 'encoder_stack' ? 'bg-green-500/20 scale-105' : 'hover:bg-green-500/10'
-                                    }`}
+                                    className={`relative w-32 h-40 p-2 cursor-pointer transition-all ${hoveredComponent === 'encoder_stack' ? 'scale-105' : ''}`}
+                                    style={stackStyle(palette.encoder, hoveredComponent === 'encoder_stack')}
                                     onMouseEnter={() => setHoveredComponent('encoder_stack')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="absolute -top-3 -right-3 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">N×</div>
+                                    <div className="absolute -top-3 -right-3 text-xs px-2 py-0.5" style={tileStyle(palette.encoder)}>N x</div>
                                     <div className="h-full flex flex-col justify-around">
-                                        <div className="bg-green-600/50 rounded p-1 text-xs text-center text-white">Multi-Head Attention</div>
-                                        <div className="bg-green-500/50 rounded p-1 text-xs text-center text-white">Add & Norm</div>
-                                        <div className="bg-green-600/50 rounded p-1 text-xs text-center text-white">Feed Forward</div>
-                                        <div className="bg-green-500/50 rounded p-1 text-xs text-center text-white">Add & Norm</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.encoder)}>Multi-Head Attention</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.encoder)}>Add & Norm</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.encoder)}>Feed Forward</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.encoder)}>Add & Norm</div>
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-700" size={20} />
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} size={20} />
 
-                                {/* Positional Encoding */}
                                 <div
-                                    className={`w-32 p-2 rounded-lg cursor-pointer transition-all ${
-                                        hoveredComponent === 'positional_encoding'
-                                            ? 'bg-cyan-500 scale-105'
-                                            : 'bg-cyan-500/70 hover:bg-cyan-500/90'
-                                    }`}
                                     onMouseEnter={() => setHoveredComponent('positional_encoding')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="flex items-center justify-center gap-1">
-                                        <Plus size={12} className="text-white" />
-                                        <span className="text-xs text-white font-medium">Positional</span>
-                                    </div>
+                                    {renderBlock(
+                                        <div className="flex items-center justify-center gap-1">
+                                            <Plus size={12} />
+                                            <span className="text-xs font-medium">Positional</span>
+                                        </div>,
+                                        palette.position,
+                                        hoveredComponent === 'positional_encoding',
+                                        'w-32 p-2'
+                                    )}
                                 </div>
 
-                                <ArrowDown className="text-slate-700" size={20} />
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} size={20} />
 
-                                {/* Input Embedding */}
                                 <div
-                                    className={`w-32 p-3 rounded-lg cursor-pointer transition-all ${
-                                        hoveredComponent === 'input_embedding'
-                                            ? 'bg-blue-500 scale-105'
-                                            : 'bg-blue-500/70 hover:bg-blue-500/90'
-                                    }`}
                                     onMouseEnter={() => setHoveredComponent('input_embedding')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="text-xs text-white text-center font-medium">Input Embedding</div>
+                                    {renderBlock(
+                                        <div className="text-xs text-center font-medium">Input Embedding</div>,
+                                        palette.embedding,
+                                        hoveredComponent === 'input_embedding',
+                                        'w-32 p-3'
+                                    )}
                                 </div>
 
-                                <ArrowDown className="text-slate-700" size={20} />
-                                <div className="text-slate-800">Inputs</div>
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} size={20} />
+                                <div style={{ color: 'var(--ds-ink)' }}>Inputs</div>
                             </div>
 
-                            {/* Cross Attention Arrow */}
                             <div className="flex items-center">
                                 <div className="flex flex-col items-center">
-                                    <ArrowRight className="text-yellow-400" size={32} />
-                                    <span className="text-xs">K, V</span>
+                                    <ArrowRight size={32} style={{ color: 'var(--ds-warm)' }} />
+                                    <span className="text-xs" style={{ color: 'var(--ds-faint)' }}>K, V</span>
                                 </div>
                             </div>
 
-                            {/* Decoder Side */}
                             <div className="flex flex-col items-center gap-3">
-                                <div className="text-slate-800 font-medium mb-2">DECODER</div>
+                                <div className="font-medium mb-2" style={{ color: 'var(--ds-ink)' }}>DECODER</div>
 
-                                {/* Output */}
                                 <div
-                                    className={`w-32 p-2 rounded-lg cursor-pointer transition-all ${
-                                        hoveredComponent === 'linear_softmax'
-                                            ? 'bg-red-500 scale-105'
-                                            : 'bg-red-500/70 hover:bg-red-500/90'
-                                    }`}
                                     onMouseEnter={() => setHoveredComponent('linear_softmax')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="text-xs text-white text-center font-medium">Linear + Softmax</div>
+                                    {renderBlock(
+                                        <div className="text-xs text-center font-medium">Linear + Softmax</div>,
+                                        palette.projection,
+                                        hoveredComponent === 'linear_softmax',
+                                        'w-32 p-2'
+                                    )}
                                 </div>
 
-                                <ArrowDown className="text-slate-700 rotate-180" size={20} />
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} className="rotate-180" size={20} />
 
-                                {/* Decoder Stack */}
                                 <div
-                                    className={`relative w-32 h-48 rounded-lg border-2 border-dashed border-purple-500/50 p-2 cursor-pointer transition-all ${
-                                        hoveredComponent === 'decoder_stack' ? 'bg-purple-500/20 scale-105' : 'hover:bg-purple-500/10'
-                                    }`}
+                                    className={`relative w-32 h-48 p-2 cursor-pointer transition-all ${hoveredComponent === 'decoder_stack' ? 'scale-105' : ''}`}
+                                    style={stackStyle(palette.decoder, hoveredComponent === 'decoder_stack')}
                                     onMouseEnter={() => setHoveredComponent('decoder_stack')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="absolute -top-3 -right-3 bg-purple-500 text-white text-xs px-2 py-0.5 rounded-full">N×</div>
+                                    <div className="absolute -top-3 -right-3 text-xs px-2 py-0.5" style={tileStyle(palette.decoder)}>N x</div>
                                     <div className="h-full flex flex-col justify-around">
-                                        <div className="bg-purple-600/50 rounded p-1 text-xs text-center text-white">Masked Self-Attn</div>
-                                        <div className="bg-purple-500/50 rounded p-1 text-xs text-center text-white">Add & Norm</div>
-                                        <div className="bg-yellow-500/50 rounded p-1 text-xs text-center text-white">Cross-Attention</div>
-                                        <div className="bg-purple-500/50 rounded p-1 text-xs text-center text-white">Add & Norm</div>
-                                        <div className="bg-purple-600/50 rounded p-1 text-xs text-center text-white">Feed Forward</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.decoder)}>Masked Self-Attn</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.decoder)}>Add & Norm</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.cross)}>Cross-Attention</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.decoder)}>Add & Norm</div>
+                                        <div className="p-1 text-xs text-center" style={tileStyle(palette.decoder)}>Feed Forward</div>
                                     </div>
                                 </div>
 
-                                <ArrowDown className="text-slate-700" size={20} />
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} size={20} />
 
-                                {/* Output Positional */}
                                 <div
-                                    className={`w-32 p-2 rounded-lg cursor-pointer transition-all ${
-                                        hoveredComponent === 'positional_encoding'
-                                            ? 'bg-cyan-500 scale-105'
-                                            : 'bg-cyan-500/70 hover:bg-cyan-500/90'
-                                    }`}
                                     onMouseEnter={() => setHoveredComponent('positional_encoding')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="flex items-center justify-center gap-1">
-                                        <Plus size={12} className="text-white" />
-                                        <span className="text-xs text-white font-medium">Positional</span>
-                                    </div>
+                                    {renderBlock(
+                                        <div className="flex items-center justify-center gap-1">
+                                            <Plus size={12} />
+                                            <span className="text-xs font-medium">Positional</span>
+                                        </div>,
+                                        palette.position,
+                                        hoveredComponent === 'positional_encoding',
+                                        'w-32 p-2'
+                                    )}
                                 </div>
 
-                                <ArrowDown className="text-slate-700" size={20} />
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} size={20} />
 
-                                {/* Output Embedding */}
                                 <div
-                                    className={`w-32 p-3 rounded-lg cursor-pointer transition-all ${
-                                        hoveredComponent === 'output_embedding'
-                                            ? 'bg-pink-500 scale-105'
-                                            : 'bg-pink-500/70 hover:bg-pink-500/90'
-                                    }`}
                                     onMouseEnter={() => setHoveredComponent('output_embedding')}
                                     onMouseLeave={() => setHoveredComponent(null)}
                                 >
-                                    <div className="text-xs text-white text-center font-medium">Output Embedding</div>
+                                    {renderBlock(
+                                        <div className="text-xs text-center font-medium">Output Embedding</div>,
+                                        palette.embedding,
+                                        hoveredComponent === 'output_embedding',
+                                        'w-32 p-3'
+                                    )}
                                 </div>
 
-                                <ArrowDown className="text-slate-700" size={20} />
-                                <div className="text-slate-800">Outputs (shifted)</div>
+                                <ArrowDown style={{ color: 'var(--ds-faint)' }} size={20} />
+                                <div style={{ color: 'var(--ds-ink)' }}>Outputs (shifted)</div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Component Details */}
-                    <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
-                        <h3 className="text-white font-bold mb-4">Component Details</h3>
+                    <div className="p-6" style={panelStyle}>
+                        <h3 className="font-bold mb-4" style={{ color: 'var(--ds-ink)' }}>Component Details</h3>
 
                         {hoveredComponent ? (
                             <div className="space-y-4">
-                                <div className={`${components[hoveredComponent].color} text-white px-4 py-2 rounded-lg font-bold`}>
+                                <div className="px-4 py-2 font-bold" style={tileStyle(components[hoveredComponent].tone, true)}>
                                     {components[hoveredComponent].name}
                                 </div>
-                                <p className="text-slate-700">
-                                    {components[hoveredComponent].description}
-                                </p>
-                                <div className="bg-slate-700/50 p-4 rounded-lg">
-                                    <p className="text-slate-800 font-mono">
+                                <p style={{ color: 'var(--ds-faint)' }}>{components[hoveredComponent].description}</p>
+                                <div className="p-4" style={{ background: 'var(--ds-paper-2)', border: 'var(--ds-border)', borderRadius: 3 }}>
+                                    <p className="font-mono" style={{ color: 'var(--ds-ink)' }}>
                                         {components[hoveredComponent].details}
                                     </p>
                                 </div>
                             </div>
                         ) : (
-                            <div className="text-slate-700 py-8">
+                            <div className="py-8" style={{ color: 'var(--ds-faint)' }}>
                                 <Eye size={48} className="mx-auto mb-4 opacity-50" />
                                 <p>Hover over a component to see details</p>
                             </div>
                         )}
 
-                        {/* Key Numbers */}
                         <div className="mt-6 grid grid-cols-2 gap-3">
-                            <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-blue-600">512</div>
-                                <div className="text-xs text-slate-800">d_model</div>
+                            <div className="p-3 text-center" style={tileStyle(palette.embedding)}>
+                                <div className="text-2xl font-bold">512</div>
+                                <div className="text-xs">d_model</div>
                             </div>
-                            <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-green-400">8</div>
-                                <div className="text-xs text-slate-800">Attention Heads</div>
+                            <div className="p-3 text-center" style={tileStyle(palette.encoder)}>
+                                <div className="text-2xl font-bold">8</div>
+                                <div className="text-xs">Attention Heads</div>
                             </div>
-                            <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-purple-600">6</div>
-                                <div className="text-xs text-slate-800">Encoder/Decoder Layers</div>
+                            <div className="p-3 text-center" style={tileStyle(palette.decoder)}>
+                                <div className="text-2xl font-bold">6</div>
+                                <div className="text-xs">Encoder/Decoder Layers</div>
                             </div>
-                            <div className="bg-slate-700/50 p-3 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-pink-600">2048</div>
-                                <div className="text-xs text-slate-800">FFN Hidden Dim</div>
+                            <div className="p-3 text-center" style={tileStyle(palette.projection)}>
+                                <div className="text-2xl font-bold">2048</div>
+                                <div className="text-xs">FFN Hidden Dim</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Key Innovations */}
-                <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-2xl p-6 border border-amber-500/30 mb-8">
-                    <h3 className="text-amber-600 font-bold mb-4 flex items-center gap-2">
+                <div className="p-6 mb-8" style={{ ...panelStyle, background: 'var(--ds-warm-w)' }}>
+                    <h3 className="font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--ds-warm)' }}>
                         <Lightbulb size={20} />
                         Why Transformers Changed Everything
                     </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-slate-800/50 p-4 rounded-lg">
-                            <h4 className="text-white font-medium mb-2">🚀 Parallelization</h4>
-                            <p className="text-slate-800">
+                        <div className="p-4" style={panelStyle}>
+                            <h4 className="font-medium mb-2" style={{ color: 'var(--ds-ink)' }}>Parallelization</h4>
+                            <p style={{ color: 'var(--ds-faint)' }}>
                                 Unlike RNNs, transformers process all positions simultaneously. Training on GPUs is massively faster.
                             </p>
                         </div>
-                        <div className="bg-slate-800/50 p-4 rounded-lg">
-                            <h4 className="text-white font-medium mb-2">🔗 Long-Range Dependencies</h4>
-                            <p className="text-slate-800">
-                                Any position can attend to any other position directly. No information bottleneck!
+                        <div className="p-4" style={panelStyle}>
+                            <h4 className="font-medium mb-2" style={{ color: 'var(--ds-ink)' }}>Long-Range Dependencies</h4>
+                            <p style={{ color: 'var(--ds-faint)' }}>
+                                Any position can attend to any other position directly. There is no recurrent bottleneck.
                             </p>
                         </div>
-                        <div className="bg-slate-800/50 p-4 rounded-lg">
-                            <h4 className="text-white font-medium mb-2">📈 Scalability</h4>
-                            <p className="text-slate-800">
-                                The architecture scales beautifully - from BERT (110M) to GPT-4 (1.7T+ estimated).
+                        <div className="p-4" style={panelStyle}>
+                            <h4 className="font-medium mb-2" style={{ color: 'var(--ds-ink)' }}>Scalability</h4>
+                            <p style={{ color: 'var(--ds-faint)' }}>
+                                The architecture scales from compact encoders to very large language and multimodal models.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* The Original Paper */}
-                <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
-                    <h3 className="text-white font-bold mb-4">📜 The Original Paper (2017)</h3>
+                <div className="p-6" style={panelStyle}>
+                    <h3 className="font-bold mb-4" style={{ color: 'var(--ds-ink)' }}>The Original Paper (2017)</h3>
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
-                            <p className="text-slate-700 mb-4">
-                                <strong className="text-blue-600">"Attention Is All You Need"</strong> by Vaswani et al.
+                            <p className="mb-4" style={{ color: 'var(--ds-faint)' }}>
+                                <strong style={{ color: 'var(--ds-accent)' }}>"Attention Is All You Need"</strong> by Vaswani et al.
                                 introduced the Transformer architecture, eliminating recurrence entirely.
                             </p>
                             <div className="space-y-2 text-sm">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-green-400">✓</span>
-                                    <span className="text-slate-800">New SOTA on WMT translation tasks</span>
+                                    <CheckCircle size={14} style={{ color: 'var(--ds-ok)' }} />
+                                    <span style={{ color: 'var(--ds-faint)' }}>New SOTA on WMT translation tasks</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-green-400">✓</span>
-                                    <span className="text-slate-800">3.5 days training on 8 GPUs (vs. weeks for RNNs)</span>
+                                    <CheckCircle size={14} style={{ color: 'var(--ds-ok)' }} />
+                                    <span style={{ color: 'var(--ds-faint)' }}>3.5 days training on 8 GPUs instead of weeks for comparable recurrent models</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-green-400">✓</span>
-                                    <span className="text-slate-800">Foundation for BERT, GPT, T5, and all modern LLMs</span>
+                                    <CheckCircle size={14} style={{ color: 'var(--ds-ok)' }} />
+                                    <span style={{ color: 'var(--ds-faint)' }}>Foundation for BERT, GPT, T5, and modern LLMs</span>
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-slate-700/50 p-4 rounded-lg font-mono text-xs">
-                            <div className="text-slate-700">// Original hyperparameters</div>
-                            <div className="text-slate-700">d_model = <span className="text-blue-600">512</span></div>
-                            <div className="text-slate-700">d_ff = <span className="text-green-400">2048</span></div>
-                            <div className="text-slate-700">h = <span className="text-purple-600">8</span> <span className="text-slate-700">// heads</span></div>
-                            <div className="text-slate-700">N = <span className="text-pink-600">6</span> <span className="text-slate-700">// layers</span></div>
-                            <div className="text-slate-700">d_k = d_v = <span className="text-yellow-400">64</span></div>
+                        <div className="p-4 font-mono text-xs" style={{ background: 'var(--ds-paper-2)', border: 'var(--ds-border)', borderRadius: 3 }}>
+                            <div style={{ color: 'var(--ds-faint)' }}>// Original hyperparameters</div>
+                            <div style={{ color: 'var(--ds-faint)' }}>d_model = <span style={{ color: 'var(--ds-accent)' }}>512</span></div>
+                            <div style={{ color: 'var(--ds-faint)' }}>d_ff = <span style={{ color: 'var(--ds-ok)' }}>2048</span></div>
+                            <div style={{ color: 'var(--ds-faint)' }}>h = <span style={{ color: 'var(--ds-accent-2)' }}>8</span> // heads</div>
+                            <div style={{ color: 'var(--ds-faint)' }}>N = <span style={{ color: 'var(--ds-warm)' }}>6</span> // layers</div>
+                            <div style={{ color: 'var(--ds-faint)' }}>d_k = d_v = <span style={{ color: '#6b4a0c' }}>64</span></div>
                         </div>
                     </div>
                 </div>

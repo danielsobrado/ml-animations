@@ -1329,7 +1329,7 @@ test('lesson assessments provide paginated quiz depth and lab counts for priorit
     const assessment = lessonAssessments[lessonId];
 
     assert.ok(animationIds.has(lessonId), `${lessonId} should be an active lesson`);
-    assert.ok(assessment.quiz.length >= 20, `${lessonId} needs at least 20 quiz questions`);
+    assert.ok(assessment.quiz.length >= 100, `${lessonId} needs at least 100 quiz questions`);
     assert.ok(
       new Set(assessment.quiz.map((question) => question.level)).size >= 3,
       `${lessonId} needs beginner, intermediate, and advanced checks`,
@@ -1360,7 +1360,7 @@ test('every catalog lesson has enough quiz items for paginated checks', () => {
     const assessment = lessonAssessments[animation.id];
 
     assert.ok(assessment, `${animation.id} needs an assessment`);
-    assert.ok(assessment.quiz.length >= 20, `${animation.id} needs at least 20 quiz questions`);
+    assert.ok(assessment.quiz.length >= 100, `${animation.id} needs at least 100 quiz questions`);
     assert.ok(
       new Set(assessment.quiz.map((question) => question.level)).size >= 3,
       `${animation.id} needs mixed complexity levels`,

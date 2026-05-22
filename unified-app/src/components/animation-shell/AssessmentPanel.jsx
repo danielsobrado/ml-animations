@@ -8,7 +8,7 @@ import {
   updateLessonProgress,
 } from '../../data/learningProgress';
 
-const QUESTIONS_PER_PAGE = 5;
+const QUESTIONS_PER_PAGE = 10;
 
 export default function AssessmentPanel({
   lessonId,
@@ -40,6 +40,7 @@ export default function AssessmentPanel({
   const pageStart = activeQuizPage * QUESTIONS_PER_PAGE;
   const pageQuestions = quizItems.slice(pageStart, pageStart + QUESTIONS_PER_PAGE);
   const answeredCount = quizItems.filter((question) => lessonProgress.quiz?.[question.id]?.correct === true).length;
+  const activeLevel = pageQuestions.find((question) => question.level)?.level;
 
   const persist = (updater) => {
     const nextProgress = updateLessonProgress(lessonId, assessment, updater);
@@ -99,7 +100,7 @@ export default function AssessmentPanel({
         <p>
           {complete
             ? 'Completed locally.'
-            : `${answeredCount}/${quizItems.length} correct. Work through beginner, intermediate, and advanced checks.`}
+            : `${answeredCount}/${quizItems.length} correct. Build from foundations to interview-level reasoning.`}
         </p>
       </div>
 
@@ -122,6 +123,7 @@ export default function AssessmentPanel({
                 className={index === activeQuizPage ? 'active' : ''}
                 onClick={() => setQuizPage(index)}
                 aria-current={index === activeQuizPage ? 'page' : undefined}
+                title={`Questions ${(index * QUESTIONS_PER_PAGE) + 1}-${Math.min(quizItems.length, (index + 1) * QUESTIONS_PER_PAGE)}`}
               >
                 {index + 1}
               </button>
@@ -137,6 +139,13 @@ export default function AssessmentPanel({
             <ChevronRight size={15} />
           </button>
         </nav>
+      )}
+
+      {quizItems.length > QUESTIONS_PER_PAGE && (
+        <div className="ua-assessment-range">
+          <span>Questions {pageStart + 1}-{Math.min(quizItems.length, pageStart + pageQuestions.length)} of {quizItems.length}</span>
+          {activeLevel && <strong>{activeLevel}</strong>}
+        </div>
       )}
 
       {pageQuestions.map((question, questionIndex) => {

@@ -373,9 +373,9 @@ body {
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-cyan"],
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-teal"],
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-emerald"] {
-  border-color: var(--ds-ink) !important;
-  background: var(--ds-ink) !important;
-  color: var(--ds-paper) !important;
+  border-color: var(--ds-accent) !important;
+  background: var(--ds-accent-w) !important;
+  color: var(--ds-accent) !important;
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-blue"]:hover:not(:disabled),
@@ -389,8 +389,8 @@ body {
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-teal"]:hover:not(:disabled),
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-emerald"]:hover:not(:disabled) {
   border-color: var(--ds-accent) !important;
-  background: var(--ds-accent) !important;
-  color: var(--ds-paper) !important;
+  background: rgba(38, 66, 115, 0.08) !important;
+  color: var(--ds-accent) !important;
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-orange"],
@@ -399,8 +399,8 @@ body {
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-red"],
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-rose"] {
   border-color: var(--ds-warm) !important;
-  background: var(--ds-warm) !important;
-  color: var(--ds-paper) !important;
+  background: var(--ds-warm-w) !important;
+  color: var(--ds-warm) !important;
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-orange"]:hover:not(:disabled),
@@ -408,9 +408,9 @@ body {
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-yellow"]:hover:not(:disabled),
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-red"]:hover:not(:disabled),
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-rose"]:hover:not(:disabled) {
-  border-color: var(--ds-ink) !important;
-  background: var(--ds-ink) !important;
-  color: var(--ds-paper) !important;
+  border-color: var(--ds-warm) !important;
+  background: rgba(168, 90, 58, 0.12) !important;
+  color: var(--ds-warm) !important;
 }
 
 .ua-animation-page button:not(.ua-icon-btn):not(.ua-sidebar-section-head):not(.ds-tab):not(.ds-btn)[class*="bg-gray"],
@@ -1366,6 +1366,69 @@ body {
   max-width: 100%;
 }
 
+/* Legacy animation panels: older lessons used dark app-like Tailwind surfaces.
+   Keep their structure, but pull surfaces and chrome back into the Distill palette. */
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-black"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-slate-900"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-gray-900"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-slate-800"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-gray-800"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-white/"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="backdrop-blur"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="from-"][class*="to-"] {
+  background: var(--ds-panel) !important;
+  border-color: var(--ds-rule) !important;
+  box-shadow: none !important;
+}
+
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-red-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-orange-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-amber-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-yellow-"] {
+  background: var(--ds-warm-w) !important;
+  border-color: rgba(168, 90, 58, 0.28) !important;
+  box-shadow: none !important;
+}
+
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-blue-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-indigo-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-cyan-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-sky-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-purple-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-violet-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-pink-"] {
+  background: var(--ds-accent-w) !important;
+  border-color: rgba(38, 66, 115, 0.22) !important;
+  box-shadow: none !important;
+}
+
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-green-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-emerald-"],
+#root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-teal-"] {
+  background: #f3f9ef !important;
+  border-color: rgba(58, 106, 58, 0.24) !important;
+  box-shadow: none !important;
+}
+
+#root .ua-stage-wrap :where(h1, h2, h3, h4, p, span, li, label, strong, div)[class*="text-white"],
+#root .ua-stage-wrap :where(h1, h2, h3, h4, p, span, li, label, strong, div)[class*="text-gray-100"],
+#root .ua-stage-wrap :where(h1, h2, h3, h4, p, span, li, label, strong, div)[class*="text-slate-100"] {
+  color: var(--ds-ink) !important;
+}
+
+#root .ua-stage-wrap :where(p, span, li, label, div)[class*="text-gray-300"],
+#root .ua-stage-wrap :where(p, span, li, label, div)[class*="text-slate-300"],
+#root .ua-stage-wrap :where(p, span, li, label, div)[class*="text-gray-400"],
+#root .ua-stage-wrap :where(p, span, li, label, div)[class*="text-slate-400"] {
+  color: var(--ds-faint) !important;
+}
+
+#root .ua-stage-wrap :where(div, section, article, aside, pre)[class*="rounded-2xl"],
+#root .ua-stage-wrap :where(div, section, article, aside, pre)[class*="rounded-xl"],
+#root .ua-stage-wrap :where(div, section, article, aside, pre)[class*="rounded-lg"] {
+  border-radius: 3px !important;
+}
+
 .ua-card-stack {
   display: flex;
   flex-direction: column;
@@ -1544,6 +1607,28 @@ body {
 
 .ua-assessment-pager.bottom {
   border-bottom: var(--ds-border);
+}
+
+.ua-assessment-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  border: var(--ds-border);
+  border-left: 0;
+  border-right: 0;
+  padding: 9px 0;
+  color: var(--ds-faint);
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ua-assessment-range strong {
+  color: var(--ds-accent);
+  font-weight: 700;
 }
 
 .ua-assessment-pager > span {
