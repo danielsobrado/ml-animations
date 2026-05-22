@@ -4,38 +4,11 @@ import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { chromium } from 'playwright';
 
-import { allAnimations } from '../src/data/animations.js';
+import { normalizeRoute, toUniqueRoutes } from './route-smoke-plan.mjs';
 
 const PORT = Number(process.env.CURRICULUM_SMOKE_PORT || 4173);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const PACKAGE_DIR = process.cwd();
-const APP_BASE_PATH = (process.env.CURRICULUM_SMOKE_BASE || '/ml-animations').replace(/\/+$/, '');
-
-const EXPLICIT_ROUTES = [
-  '/',
-  '/animation/matrix-multiplication',
-  '/animation/linear-regression',
-  '/animation/cross-validation',
-  '/animation/feature-scaling-preprocessing',
-  '/animation/transformer-token-generation',
-  '/animation/rag-vector-indexing',
-  '/animation/value-iteration',
-  '/animation/diffusion-basics',
-];
-
-function toUniqueRoutes() {
-  const allAnimationRoutes = allAnimations.map((animation) => `/animation/${animation.id}`);
-  return [...new Set([...EXPLICIT_ROUTES, ...allAnimationRoutes])];
-}
-
-function normalizeRoute(route) {
-  if (route === '/') {
-    return `${APP_BASE_PATH}/`;
-  }
-
-  if (route.startsWith(`${APP_BASE_PATH}/`)) return route;
-  return `${APP_BASE_PATH}${route.startsWith('/') ? route : `/${route}`}`;
-}
 
 async function checkServerReady() {
   try {
