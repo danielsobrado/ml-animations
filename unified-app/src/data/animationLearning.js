@@ -36,6 +36,7 @@ const EQUATION_OVERRIDES = {
   'leaky-relu': 'f(x)=\\max(\\alpha x,x)',
   conv2d: 'Y_{i,j}=\\sum_m\\sum_n X_{i+m,j+n}K_{m,n}',
   'conv-relu': 'A=\\max(0, X*K+b)',
+  'max-pooling': 'Y_{i,j}=\\max_{0\\le m,n<k} X_{si+m,sj+n}',
   softmax: 'p_i=\\frac{e^{z_i}}{\\sum_j e^{z_j}}',
   'matrix-multiplication': 'C_{ij}=\\sum_k A_{ik}B_{kj}',
   eigenvalue: 'Av=\\lambda v',
@@ -366,6 +367,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate filter choice, bias, and input contrast to see which feature responses survive.',
     'Mistake to avoid: ReLU does not create the feature map; it gates the pre-activation made by convolution.',
     'Check understanding by predicting which cells will become zero before reading the activation map.',
+  ),
+  'max-pooling': cardSet(
+    'Max pooling solves the problem of shrinking feature maps while keeping the strongest local detections.',
+    'Each pooling window asks which activation shouts loudest, then passes only that value onward.',
+    'The math takes a maximum over each k by k window, with stride deciding where the next window starts.',
+    'Manipulate pool size, stride, and feature-map pattern to trace which input coordinate creates each output cell.',
+    'Mistake to avoid: pooling is not learned convolution; it discards non-maximum detail by design.',
+    'Check understanding by predicting one pooled output from its highlighted input window.',
   ),
   'computation-graph-backprop': cardSet(
     'Backpropagation solves the problem of assigning blame to each parameter in a nested computation.',

@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:37:13.630Z
+Generated: 2026-05-22T07:39:56.687Z
 
 ## Review Policy
 
@@ -106,7 +106,7 @@ Generated: 2026-05-22T07:37:13.630Z
 | layer-normalization | B (good) | manual | 11662 | 3 | stable | Add RMSNorm and scale-only normalization comparison. |
 | leaky-relu | B (good) | manual | 10227 | 3 | stable | Add PReLU and ELU comparisons for learned or smooth negative branches. |
 | lstm | B (good) | auto | 3304 | 4 |  | Review and set explicit manual quality entry. |
-| max-pooling | C (adequate) | auto | 1800 | 3 |  | Review and set explicit manual quality entry. |
+| max-pooling | B (good) | manual | 12283 | 3 | stable | Add average pooling and strided convolution comparisons. |
 | neural-network | A (excellent) | manual | 40231 | 1 | stable | Add architecture ablation and under/over-parameterization checks. |
 | optimizers | A (excellent) | manual | 13443 | 0 | stable | Add momentum warm-up and sparse-gradient diagnostics. |
 | relu | B (good) | manual | 3019 | 3 | stable | Add gradient-flow edge-case checks across negative saturation. |

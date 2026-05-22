@@ -32,6 +32,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'leaky-relu',
   'conv2d',
   'conv-relu',
+  'max-pooling',
   'computation-graph-backprop',
   'tokenization',
   'embeddings',
@@ -1822,6 +1823,51 @@ export const lessonAssessments = {
         title: 'Find the activation cutoff',
         prompt: 'Lower the bias until several feature responses disappear, then identify which pre-activation values were clipped.',
         successCriteria: 'You can explain the difference between the signed convolution map and the sparse ReLU activation map.',
+      },
+    ],
+  },
+  'max-pooling': {
+    quiz: [
+      {
+        id: 'pooling-operation',
+        prompt: 'What does max pooling keep from each local window?',
+        choices: [
+          'The largest activation value in that window',
+          'A learned weighted sum of every value',
+          'The average label for the image',
+        ],
+        answerIndex: 0,
+        explanation: 'Max pooling is a fixed downsampling operation that forwards the strongest activation in each window.',
+      },
+      {
+        id: 'stride-effect',
+        prompt: 'What happens when pooling stride increases?',
+        choices: [
+          'The pooling windows visit fewer positions and the output usually gets smaller',
+          'The input feature map gets larger',
+          'The max operation becomes trainable',
+        ],
+        answerIndex: 0,
+        explanation: 'Stride controls how far the window moves between outputs. Larger strides skip more input positions.',
+      },
+      {
+        id: 'information-loss',
+        prompt: 'What information does max pooling discard?',
+        choices: [
+          'Non-maximum values and exact within-window location detail',
+          'All high activations',
+          'The channel dimension before convolution',
+        ],
+        answerIndex: 0,
+        explanation: 'Only the maximum value is passed forward, so smaller responses and precise local arrangement are compressed away.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-window-argmax',
+        title: 'Trace a pooling window',
+        prompt: 'Select an output cell, write the highlighted input values, and identify which coordinate supplied the max.',
+        successCriteria: 'You can compute the pooled output cell and explain which input details were discarded.',
       },
     ],
   },

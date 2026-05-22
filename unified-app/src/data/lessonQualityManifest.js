@@ -218,6 +218,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Custom CNN feature-map workbench showing convolution pre-activations, ReLU gating, sparsity, bias effects, and dead-filter risk.',
     nextAction: 'Add backward-pass gradient tracing for clipped versus active cells.',
   },
+  'max-pooling': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom pooling workbench with deterministic feature maps, pool/stride controls, selected-window argmax tracing, output-shape math, and information-loss diagnostics.',
+    nextAction: 'Add average pooling and strided convolution comparisons.',
+  },
   'computation-graph-backprop': {
     tier: 'A',
     status: 'stable',
