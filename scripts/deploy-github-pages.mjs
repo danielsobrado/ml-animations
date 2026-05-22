@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { allAnimations } from '../unified-app/src/data/animations.js';
+
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, '..');
 const appDir = path.join(repoRoot, 'unified-app');
@@ -12,6 +14,8 @@ const viteBin = path.join(nodeModulesDir, '.bin', process.platform === 'win32' ?
 const deployDir = path.join(repoRoot, '.deploy', 'gh-pages');
 const branch = process.env.PAGES_BRANCH || 'gh-pages';
 const installMode = process.env.PAGES_INSTALL || 'auto';
+const siteBaseUrl = 'https://danielsobrado.github.io/ml-animations';
+const appBasePath = '/ml-animations';
 
 function run(command, args, options = {}) {
   const useShell = process.platform === 'win32' && ['npm', 'npx'].includes(command);
@@ -66,12 +70,76 @@ function emptyDirectoryExceptGit(directory) {
   }
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function renderStaticAnimationEntry(animation) {
+  const title = escapeHtml(`${animation.name} | ML Animations`);
+  const description = escapeHtml(
+    animation.description ||
+      `Explore the ${animation.name} guided machine-learning lesson with visual intuition and practice checks.`,
+  );
+  const route = `${appBasePath}/animation/${animation.id}`;
+  const canonical = `${siteBaseUrl}/${animation.id}-animation/`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${title}</title>
+    <meta name="description" content="${description}" />
+    <meta name="keywords" content="${escapeHtml(`${animation.name}, machine learning animation, ML Animations`)}" />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="refresh" content="0; url=${route}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:url" content="${canonical}" />
+    <meta property="og:site_name" content="ML Animations" />
+    <meta property="og:image" content="${siteBaseUrl}/favicon.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${title}" />
+    <meta name="twitter:description" content="${description}" />
+    <meta name="twitter:image" content="${siteBaseUrl}/favicon.svg" />
+    <link rel="canonical" href="${canonical}" />
+    <link rel="icon" type="image/svg+xml" href="${appBasePath}/favicon.svg" />
+</head>
+<body>
+    <main>
+        <h1>${escapeHtml(animation.name)}</h1>
+        <p>${description}</p>
+        <p><a href="${route}">Open ${escapeHtml(animation.name)}</a></p>
+    </main>
+    <script>
+        window.location.replace('${route}');
+    </script>
+</body>
+</html>
+`;
+}
+
+function writeStaticAnimationEntryPages() {
+  for (const animation of allAnimations) {
+    const directory = path.join(deployDir, `${animation.id}-animation`);
+    fs.mkdirSync(directory, { recursive: true });
+    fs.writeFileSync(path.join(directory, 'index.html'), renderStaticAnimationEntry(animation));
+  }
+}
+
 function copyDist() {
   if (!fs.existsSync(distDir)) {
     throw new Error(`Build output not found: ${distDir}`);
   }
 
   fs.cpSync(distDir, deployDir, { recursive: true });
+  writeStaticAnimationEntryPages();
   fs.writeFileSync(path.join(deployDir, '.nojekyll'), '');
 
   const indexFile = path.join(deployDir, 'index.html');
