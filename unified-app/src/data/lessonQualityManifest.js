@@ -278,6 +278,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Custom RoPE workbench showing Q/K pair rotations, relative-distance score behavior, frequency schedule, and context extrapolation caveats.',
     nextAction: 'Add RoPE scaling variants and long-context aliasing examples.',
   },
+  'residual-stream': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom residual-stream workbench showing additive attention/MLP writes, before/write/after state, feature accumulation, and normalization effects.',
+    nextAction: 'Add pre-norm versus post-norm architecture presets.',
+  },
   'expected-value-variance': {
     tier: 'B',
     status: 'stable',

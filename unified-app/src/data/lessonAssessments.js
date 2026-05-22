@@ -38,6 +38,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'attention-masks',
   'positional-encoding',
   'rope',
+  'residual-stream',
   'transformer',
   'transformer-architecture-families',
   'llm-training-objectives',
@@ -1681,6 +1682,51 @@ export const lessonAssessments = {
         title: 'Check relative shift behavior',
         prompt: 'Move query and key positions together by the same amount. Explain what changes and what stays tied to the relative distance.',
         successCriteria: 'You can explain why absolute rotation angles change while the relative-position relationship is preserved.',
+      },
+    ],
+  },
+  'residual-stream': {
+    quiz: [
+      {
+        id: 'update-rule',
+        prompt: 'What does a transformer block usually do to the residual stream?',
+        choices: [
+          'Adds attention and MLP outputs into the running representation',
+          'Deletes the previous representation at every layer',
+          'Stores only the final vocabulary probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Residual connections add component outputs to the stream so information can accumulate across layers.',
+      },
+      {
+        id: 'not-memory-bank',
+        prompt: 'Which description best matches the residual stream?',
+        choices: [
+          'The current token representation flowing through the model',
+          'A database of all training examples',
+          'A separate cache that replaces attention',
+        ],
+        answerIndex: 0,
+        explanation: 'The stream is the evolving hidden representation, not a separate retrieval memory or KV cache.',
+      },
+      {
+        id: 'why-normalize',
+        prompt: 'Why do normalization and scaling matter around residual writes?',
+        choices: [
+          'Large writes can dominate or destabilize the running representation',
+          'They make token order unnecessary',
+          'They remove the need for embeddings',
+        ],
+        answerIndex: 0,
+        explanation: 'As many components add into one stream, scale control helps preserve usable information across layers.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-component-write',
+        title: 'Trace one residual write',
+        prompt: 'Increase one attention or MLP write, then explain how the before/write/after vectors change.',
+        successCriteria: 'You can distinguish adding a component write from replacing the whole token representation.',
       },
     ],
   },

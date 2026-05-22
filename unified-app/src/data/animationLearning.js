@@ -62,6 +62,7 @@ const EQUATION_OVERRIDES = {
   'attention-masks': '\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V',
   'positional-encoding': 'PE_{pos,2i}=\\sin(pos/10000^{2i/d}),\\quad PE_{pos,2i+1}=\\cos(pos/10000^{2i/d})',
   rope: 'q_m^T k_n=(R_m q)^T(R_n k)=q^T R_{n-m} k',
+  'residual-stream': 'x_{\\ell+1}=x_{\\ell}+\\operatorname{Attn}(x_{\\ell})+\\operatorname{MLP}(x_{\\ell})',
   'transformer-architecture-families': 'Encoder\\;only\\neq Decoder\\;only\\neq Encoder\\text{-}Decoder',
   'llm-training-objectives': '\\mathcal{L}=-\\log p_\\theta(target\\mid context)',
   'sampling-strategies': 'x_{t+1}\\sim \\operatorname{Sample}(\\operatorname{TopP}(\\operatorname{TopK}(\\operatorname{softmax}(z/\\tau))))',
@@ -457,6 +458,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate query position, key position, dimension pair, model dimension, and RoPE base to inspect rotation angles and scores.',
     'Mistake to avoid: RoPE does not rotate value vectors or replace masks; it changes Q/K geometry before scoring.',
     'Check understanding by shifting query and key together and explaining why relative distance is the important quantity.',
+  ),
+  'residual-stream': cardSet(
+    'The residual stream solves the problem of carrying token information through many transformer components without forcing each layer to rewrite everything.',
+    'Attention and MLP blocks add vector writes into the current token representation, creating a shared workspace across layers.',
+    'The math is an additive update: the next stream equals the current stream plus component outputs, often with normalization around the writes.',
+    'Manipulate attention and MLP write strengths to inspect how subject, relation, syntax, and prediction features accumulate.',
+    'Mistake to avoid: the residual stream is not a separate memory bank; it is the evolving hidden representation.',
+    'Check understanding by tracing one component write from before to after and explaining why scale control matters.',
   ),
   'sampling-strategies': cardSet(
     'Sampling strategies solve the problem of choosing one useful continuation from a probability distribution.',

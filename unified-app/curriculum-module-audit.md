@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:14:26.899Z
+Generated: 2026-05-22T07:17:48.851Z
 
 ## Review Policy
 
@@ -85,7 +85,7 @@ Generated: 2026-05-22T07:14:26.899Z
 | llm-training-objectives | B (good) | auto | 9294 | 0 |  | Review and set explicit manual quality entry. |
 | moe | B (good) | auto | 5203 | 4 |  | Review and set explicit manual quality entry. |
 | positional-encoding | B (good) | manual | 13319 | 3 | stable | Add relative position bias and RoPE bridge examples. |
-| residual-stream | C (adequate) | auto | 2982 | 3 |  | Review and set explicit manual quality entry. |
+| residual-stream | B (good) | manual | 11866 | 3 | stable | Add pre-norm versus post-norm architecture presets. |
 | rope | B (good) | manual | 13838 | 3 | stable | Add RoPE scaling variants and long-context aliasing examples. |
 | sampling-strategies | B (good) | auto | 11608 | 0 |  | Review and set explicit manual quality entry. |
 | self-attention | B (good) | manual | 13077 | 3 | stable | Add multi-head comparison and learned projection examples. |
