@@ -24,6 +24,9 @@ export function normalizeRoute(route, basePath = APP_BASE_PATH) {
     return `${basePath}/`;
   }
 
-  if (route.startsWith(`${basePath}/`)) return route;
-  return `${basePath}${route.startsWith('/') ? route : `/${route}`}`;
+  const normalized = route.startsWith(`${basePath}/`)
+    ? route
+    : `${basePath}${route.startsWith('/') ? route : `/${route}`}`;
+
+  return normalized.endsWith('/') ? normalized : `${normalized}/`;
 }
