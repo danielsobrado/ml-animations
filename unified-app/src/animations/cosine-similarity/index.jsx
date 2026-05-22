@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Calculator, Film, Search } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const DotProductPanel = lazy(() => import('./DotProductPanel'));
@@ -65,6 +66,9 @@ export default function CosineSimilarityAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="px-8 pb-8">
+                    <AssessmentPanel lessonId="cosine-similarity" title="Cosine Similarity check" />
+                </div>
             </div>
         </div>
     );

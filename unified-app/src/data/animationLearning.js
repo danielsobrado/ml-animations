@@ -434,6 +434,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: embedding distance is learned correlation, not guaranteed semantic truth.',
     'Check understanding by explaining why two similar words can still differ along one direction.',
   ),
+  'cosine-similarity': cardSet(
+    'Cosine similarity solves the problem of comparing vector direction without letting vector length dominate the score.',
+    'Two vectors are similar when they point the same way, even if one has a larger magnitude.',
+    'The math divides the dot product by both vector norms, producing 1 for same direction, 0 for perpendicular, and -1 for opposite direction.',
+    'Move the vectors or edit the search query, then predict which candidate should rank highest before reading the score.',
+    'Mistake to avoid: a high cosine score is a ranking signal from the chosen representation, not proof that two items mean the same thing.',
+    'Check understanding by explaining why scaling one nonzero vector alone does not change its cosine similarity.',
+  ),
   pca: cardSet(
     'PCA solves the problem of compressing numeric data while preserving the largest directions of variation.',
     'Imagine rotating the axes until the first axis catches the longest shadow cast by the point cloud.',

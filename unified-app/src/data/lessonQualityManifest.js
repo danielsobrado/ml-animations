@@ -194,6 +194,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Good connection from classification confidence to loss with readable math support.',
     nextAction: 'Add targeted counterexample where confidence collapses at wrong scale.',
   },
+  'cosine-similarity': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Multi-panel lesson connects normalized dot products to vector geometry, recommender matching, search ranking, and persistent assessment coverage.',
+    nextAction: 'Add sparse-vs-dense vector contrast and explicit bias/relevance audit examples.',
+  },
   'gradient-descent': {
     tier: 'B',
     status: 'stable',

@@ -40,6 +40,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'computation-graph-backprop',
   'tokenization',
   'embeddings',
+  'cosine-similarity',
   'attention-mechanism',
   'self-attention',
   'kv-cache',
@@ -1568,6 +1569,51 @@ export const lessonAssessments = {
         title: 'Inspect a neighbor',
         prompt: 'Move or choose a vector and compare its nearest neighbors.',
         successCriteria: 'You can separate semantic similarity from incidental training-data correlation.',
+      },
+    ],
+  },
+  'cosine-similarity': {
+    quiz: [
+      {
+        id: 'normalization-effect',
+        prompt: 'Why does cosine similarity divide the dot product by both vector lengths?',
+        choices: [
+          'To compare direction after removing magnitude scale',
+          'To make every vector length equal to one before training',
+          'To turn a distance into a probability distribution',
+        ],
+        answerIndex: 0,
+        explanation: 'The denominator normalizes by magnitude, so the score mostly reflects the angle between vectors.',
+      },
+      {
+        id: 'orthogonal-score',
+        prompt: 'What cosine similarity do two perpendicular nonzero vectors have?',
+        choices: [
+          '0',
+          '1',
+          '-1',
+        ],
+        answerIndex: 0,
+        explanation: 'Perpendicular vectors have dot product zero, so their normalized dot product is zero.',
+      },
+      {
+        id: 'ranking-risk',
+        prompt: 'What is one risk when using cosine similarity for search or recommendations?',
+        choices: [
+          'High vector similarity can reflect learned correlations, not guaranteed relevance',
+          'Cosine similarity ignores all vector directions',
+          'A larger vector magnitude always guarantees rank one',
+        ],
+        answerIndex: 0,
+        explanation: 'Cosine can be useful for ranking learned vectors, but it still inherits biases and gaps from the representation.',
+      },
+    ],
+    labs: [
+      {
+        id: 'predict-nearest',
+        title: 'Predict the nearest vector',
+        prompt: 'Before changing the sliders or query, predict which vector or document will rank highest and why.',
+        successCriteria: 'Your explanation names either direction alignment or a shared active feature, not just raw magnitude.',
       },
     ],
   },

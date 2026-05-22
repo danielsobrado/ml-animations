@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:46:57.599Z
+Generated: 2026-05-22T07:50:28.081Z
 
 ## Review Policy
 
@@ -183,7 +183,7 @@ Generated: 2026-05-22T07:46:57.599Z
 | --- | --- | --- | ---: | ---: | --- | --- |
 | bayes-rule-ml | B (good) | manual | 12020 | 0 | stable | Add a confusion-matrix bridge for calibrated classifier outputs. |
 | conditional-probability | B (good) | manual | 3058 | 3 | stable | Add a real-case confusion example with noisy observations. |
-| cosine-similarity | C (adequate) | auto | 3026 | 3 |  | Review and set explicit manual quality entry. |
+| cosine-similarity | B (good) | manual | 3250 | 3 | stable | Add sparse-vs-dense vector contrast and explicit bias/relevance audit examples. |
 | cross-entropy | B (good) | manual | 2734 | 5 | stable | Add targeted counterexample where confidence collapses at wrong scale. |
 | entropy | B (good) | manual | 2734 | 2 | stable | Add sequence entropy and information gain contrast cases. |
 | expected-value-variance | B (good) | manual | 3049 | 3 | stable | Add finite-sample variability case studies. |
