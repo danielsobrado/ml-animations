@@ -56,15 +56,15 @@ Start Here priority batch:
 
 | Lesson | 3-5 quiz | Predict task | Failure-mode task | Practical lab | Notes |
 | --- | --- | --- | --- | --- | --- |
-| matrix-multiplication | [ ] | [ ] | [ ] | [x] | Add one more misconception question. |
-| linear-regression | [ ] | [ ] | [ ] | [x] | Add residual/failure-mode prompt. |
+| matrix-multiplication | [x] | [x] | [ ] | [x] | Added shape prediction and dimension-mismatch questions. |
+| linear-regression | [x] | [x] | [x] | [x] | Added outlier failure and slope-change prediction questions. |
 | bayes-rule-ml | [x] | [ ] | [ ] | [x] | Add predict-before-updating-prior task. |
 | sampling-confidence-intervals | [x] | [ ] | [ ] | [x] | Add coverage misconception task. |
 | hypothesis-testing-intuition | [x] | [ ] | [ ] | [x] | Add p-value misinterpretation task. |
 | maximum-likelihood-estimation | [x] | [ ] | [ ] | [x] | Add likelihood-vs-probability failure task. |
 | loss-functions-likelihoods | [x] | [ ] | [ ] | [x] | Add mismatch-between-loss-and-noise task. |
-| train-validation-test-split | [ ] | [ ] | [ ] | [x] | Add leakage-specific quiz depth. |
-| cross-validation | [ ] | [ ] | [ ] | [x] | Add fold variance and grouped-data task. |
+| train-validation-test-split | [x] | [x] | [x] | [x] | Added suspicious-score leakage diagnosis. |
+| cross-validation | [x] | [x] | [x] | [x] | Added subgroup fold prediction and grouped-fold lab. |
 | data-leakage-deep-dive | [x] | [ ] | [ ] | [x] | Add predict-score-inflation task. |
 | feature-scaling-preprocessing | [x] | [ ] | [ ] | [x] | Add outlier and train-only fitting task. |
 | pca | [x] | [ ] | [ ] | [x] | Add variance-vs-label-signal misconception. |
@@ -78,8 +78,8 @@ Start Here priority batch:
 | regularization | [x] | [ ] | [ ] | [x] | Add too-strong-regularization task. |
 | knn-naive-bayes-svm | [x] | [ ] | [ ] | [x] | Add model-family selection task. |
 | tree-ensembles | [x] | [ ] | [ ] | [x] | Add bagging-vs-boosting failure task. |
-| gradient-descent | [ ] | [ ] | [ ] | [x] | Add learning-rate prediction task. |
-| neural-network | [ ] | [ ] | [ ] | [ ] | Add structured assessment. |
+| gradient-descent | [x] | [x] | [x] | [x] | Added small-step and next-step prediction questions. |
+| neural-network | [x] | [x] | [x] | [x] | Added structured XOR forward/backward assessment. |
 | relu | [x] | [ ] | [ ] | [x] | Add dead-unit diagnosis task. |
 | computation-graph-backprop | [x] | [ ] | [ ] | [x] | Add local-gradient chain prediction. |
 | initialization | [x] | [ ] | [ ] | [x] | Add saturation/variance failure task. |

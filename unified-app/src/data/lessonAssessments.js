@@ -27,6 +27,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'knn-naive-bayes-svm',
   'tree-ensembles',
   'gradient-descent',
+  'neural-network',
   'initialization',
   'optimizers',
   'training-loop-dynamics',
@@ -102,6 +103,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'A B applies transformations in a specific order, so swapping them usually changes the result.',
       },
+      {
+        id: 'dimension-match',
+        prompt: 'When can A B be multiplied?',
+        choices: [
+          'The column count of A matches the row count of B',
+          'A and B have the same number of rows',
+          'Both matrices contain only positive entries',
+        ],
+        answerIndex: 0,
+        explanation: 'Each output entry needs a dot product between a row of A and a column of B, so their lengths must match.',
+      },
+      {
+        id: 'predict-output-shape',
+        prompt: 'If A is 2 by 3 and B is 3 by 4, what shape is A B?',
+        choices: [
+          '2 by 4',
+          '3 by 3',
+          '4 by 2',
+        ],
+        answerIndex: 0,
+        explanation: 'The outside dimensions become the output shape: rows from A and columns from B.',
+      },
     ],
     labs: [
       {
@@ -135,6 +158,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Residuals show how far predictions are from the observed targets.',
+      },
+      {
+        id: 'outlier-effect',
+        prompt: 'What failure mode can a large outlier create for ordinary least squares?',
+        choices: [
+          'It can pull the fitted line toward itself and increase errors elsewhere',
+          'It is always ignored automatically',
+          'It turns the model into a classifier',
+        ],
+        answerIndex: 0,
+        explanation: 'Squared error gives large residuals heavy influence, so an outlier can dominate the fitted line.',
+      },
+      {
+        id: 'predict-slope-change',
+        prompt: 'If high-x points are mostly above the current line, what slope change usually reduces their residuals?',
+        choices: [
+          'Increase the slope',
+          'Set the slope to zero',
+          'Decrease the intercept only and keep slope fixed forever',
+        ],
+        answerIndex: 0,
+        explanation: 'Increasing slope raises predictions more on the right side of the plot, which can shrink positive high-x residuals.',
       },
     ],
     labs: [
@@ -765,6 +810,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Fitting preprocessing on all rows leaks validation and test statistics into the training recipe.',
       },
+      {
+        id: 'predict-leakage-score',
+        prompt: 'What score pattern should make you suspicious of split leakage?',
+        choices: [
+          'Validation performance is implausibly high compared with a leakage-safe split',
+          'Training takes longer after the split',
+          'The test set is smaller than the validation set',
+        ],
+        answerIndex: 0,
+        explanation: 'Leakage often shows up as unusually optimistic validation or test scores that disappear under a cleaner split.',
+      },
     ],
     labs: [
       {
@@ -821,13 +877,24 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Cross-validation is development feedback; the test set should remain untouched until the final estimate.',
       },
+      {
+        id: 'predict-fold-failure',
+        prompt: 'What should you predict if one fold contains a very different subgroup from the others?',
+        choices: [
+          'That fold score may be much worse and reveal deployment risk',
+          'The mean score is guaranteed to improve',
+          'The validation fold will be copied into training automatically',
+        ],
+        answerIndex: 0,
+        explanation: 'A subgroup-heavy fold can expose instability that the mean score alone hides.',
+      },
     ],
     labs: [
       {
-        id: 'leakage-audit',
-        title: 'Audit a fold pipeline',
-        prompt: 'Pick one preprocessing step and decide whether it must be learned inside each fold.',
-        successCriteria: 'You can explain what information would leak if the step ran before splitting folds.',
+        id: 'choose-fold-design',
+        title: 'Choose a leakage-safe fold design',
+        prompt: 'Use the fold controls to compare random and grouped splitting, then explain which one is safer for repeated users or related samples.',
+        successCriteria: 'You can name the leakage route and justify the fold design that blocks it.',
       },
     ],
   },
@@ -1295,6 +1362,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Large steps can jump past useful regions and make training oscillate or diverge.',
       },
+      {
+        id: 'small-learning-rate',
+        prompt: 'What does a very small learning rate usually look like in the loss trace?',
+        choices: [
+          'Slow but stable progress',
+          'Instant convergence in one update',
+          'Random jumps unrelated to the gradient',
+        ],
+        answerIndex: 0,
+        explanation: 'Tiny steps usually move downhill safely but may require many iterations.',
+      },
+      {
+        id: 'predict-next-step',
+        prompt: 'Before running the next update, what determines the step direction?',
+        choices: [
+          'The current gradient and the sign of the update rule',
+          'The validation label chosen at random',
+          'The largest feature name alphabetically',
+        ],
+        answerIndex: 0,
+        explanation: 'Gradient descent uses the current local gradient; subtracting it determines the next parameter move.',
+      },
     ],
     labs: [
       {
@@ -1302,6 +1391,62 @@ export const lessonAssessments = {
         title: 'Tune step size',
         prompt: 'Try a small, medium, and large learning rate and compare the loss trace.',
         successCriteria: 'You can identify which run converges, crawls, or overshoots.',
+      },
+    ],
+  },
+  'neural-network': {
+    quiz: [
+      {
+        id: 'layer-computation',
+        prompt: 'What does a dense neural-network layer compute before the activation?',
+        choices: [
+          'A weighted sum plus bias',
+          'A confusion matrix',
+          'A train/test split',
+        ],
+        answerIndex: 0,
+        explanation: 'A dense layer forms z = W x + b, then an activation function transforms that pre-activation.',
+      },
+      {
+        id: 'activation-purpose',
+        prompt: 'Why do hidden layers need nonlinear activation functions?',
+        choices: [
+          'Without them, stacked linear layers collapse into one linear transformation',
+          'They make backpropagation unnecessary',
+          'They store the target labels inside each neuron',
+        ],
+        answerIndex: 0,
+        explanation: 'Nonlinear activations let the network represent curved decision boundaries and interactions.',
+      },
+      {
+        id: 'predict-xor',
+        prompt: 'Why is XOR a useful toy example for a neural-network overview?',
+        choices: [
+          'A single straight-line boundary cannot solve it, so hidden layers matter',
+          'It is solved by sorting the rows alphabetically',
+          'It does not require any weights',
+        ],
+        answerIndex: 0,
+        explanation: 'XOR exposes the limitation of a single linear separator and motivates hidden nonlinear features.',
+      },
+      {
+        id: 'backward-flow',
+        prompt: 'During backpropagation, what flows backward through the network?',
+        choices: [
+          'Gradients that assign local credit for the loss',
+          'Raw input examples copied from the output layer',
+          'Validation rows used as training labels',
+        ],
+        answerIndex: 0,
+        explanation: 'Backpropagation applies the chain rule to send loss gradients backward through layers.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-forward-backward',
+        title: 'Trace one XOR pass',
+        prompt: 'Choose one XOR input, run a forward pass, then step backward and identify where the loss signal first appears.',
+        successCriteria: 'You can name the input, target, output, loss, and the first gradient-carrying layer.',
       },
     ],
   },

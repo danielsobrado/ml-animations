@@ -333,6 +333,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: the gradient is local, so one step does not guarantee the global minimum.',
     'Check understanding by predicting the next step direction from the slope sign.',
   ),
+  'neural-network': cardSet(
+    'A neural network solves the problem of composing many learned transformations into a flexible predictor.',
+    'Each layer computes weighted sums, adds bias, and applies a nonlinear activation before passing values onward.',
+    'The core layer equation is h_l = sigma(W_l h_{l-1} + b_l), with gradients flowing backward by the chain rule.',
+    'Step through one XOR input to connect forward activations, loss, backward gradients, and the weight update.',
+    'Mistake to avoid: stacking linear layers without activations is still just one linear map.',
+    'Check understanding by naming where nonlinearity enters and where the first loss gradient appears.',
+  ),
   optimizers: cardSet(
     'Optimizers solve the problem of turning noisy training gradients into useful parameter updates over many steps.',
     'SGD follows the current mini-batch, momentum carries velocity through stable directions, and Adam rescales updates per parameter.',
