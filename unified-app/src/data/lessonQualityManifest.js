@@ -188,6 +188,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Custom gradient-flow diagnostic showing vanishing/exploding products, residual shortcuts, clipping effects, and layer-by-layer gradient ledger.',
     nextAction: 'Add activation-specific presets for sigmoid, tanh, ReLU, and GELU chains.',
   },
+  'layer-normalization': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom LayerNorm workbench showing per-token mean/variance, gamma/beta effects, residual branch placement, and BatchNorm contrast.',
+    nextAction: 'Add RMSNorm and scale-only normalization comparison.',
+  },
   relu: {
     tier: 'B',
     status: 'stable',

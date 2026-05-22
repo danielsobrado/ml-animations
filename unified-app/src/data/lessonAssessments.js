@@ -27,6 +27,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'training-loop-dynamics',
   'dropout-batchnorm',
   'gradient-problems',
+  'layer-normalization',
   'relu',
   'conv2d',
   'conv-relu',
@@ -1865,6 +1866,51 @@ export const lessonAssessments = {
         title: 'Diagnose a gradient chain',
         prompt: 'Create one vanishing case and one exploding case by changing depth and local multiplier, then stabilize one of them.',
         successCriteria: 'You can identify whether the problem comes from depth, local derivative scale, residual paths, or clipping.',
+      },
+    ],
+  },
+  'layer-normalization': {
+    quiz: [
+      {
+        id: 'within-token',
+        prompt: 'What statistics does LayerNorm use in a transformer token representation?',
+        choices: [
+          'Mean and variance across features within the same token',
+          'Mean and variance across the entire training dataset',
+          'Only the maximum value across the batch',
+        ],
+        answerIndex: 0,
+        explanation: 'LayerNorm normalizes each example or token across its feature dimension, independent of other batch items.',
+      },
+      {
+        id: 'gamma-beta',
+        prompt: 'Why does LayerNorm include learned gamma and beta parameters?',
+        choices: [
+          'To let the model rescale and shift normalized features after stabilization',
+          'To compute attention masks',
+          'To choose the next token directly',
+        ],
+        answerIndex: 0,
+        explanation: 'After standardizing features, learned scale and shift restore useful representational flexibility.',
+      },
+      {
+        id: 'batchnorm-difference',
+        prompt: 'Why is LayerNorm convenient for autoregressive decoding?',
+        choices: [
+          'It does not need batch-level statistics from other examples',
+          'It removes residual connections entirely',
+          'It only works when the batch is large',
+        ],
+        answerIndex: 0,
+        explanation: 'LayerNorm uses per-token features, so inference with batch size one remains well-defined.',
+      },
+    ],
+    labs: [
+      {
+        id: 'normalize-shifted-token',
+        title: 'Normalize a shifted token',
+        prompt: 'Choose the shifted token, inspect mean and standard deviation, then explain what gamma and beta restore after normalization.',
+        successCriteria: 'You can distinguish the raw token shift from the normalized feature pattern and the learned affine output.',
       },
     ],
   },

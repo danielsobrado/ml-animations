@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:30:26.920Z
+Generated: 2026-05-22T07:33:40.602Z
 
 ## Review Policy
 
@@ -103,7 +103,7 @@ Generated: 2026-05-22T07:30:26.920Z
 | dropout-batchnorm | B (good) | auto | 8692 | 0 |  | Review and set explicit manual quality entry. |
 | gradient-problems | B (good) | manual | 9631 | 3 | stable | Add activation-specific presets for sigmoid, tanh, ReLU, and GELU chains. |
 | initialization | A (excellent) | manual | 7603 | 0 | stable | Add variance explosion/suppression case studies. |
-| layer-normalization | C (adequate) | auto | 3059 | 3 |  | Review and set explicit manual quality entry. |
+| layer-normalization | B (good) | manual | 11662 | 3 | stable | Add RMSNorm and scale-only normalization comparison. |
 | leaky-relu | C (adequate) | auto | 3049 | 3 |  | Review and set explicit manual quality entry. |
 | lstm | B (good) | auto | 3304 | 4 |  | Review and set explicit manual quality entry. |
 | max-pooling | C (adequate) | auto | 1800 | 3 |  | Review and set explicit manual quality entry. |

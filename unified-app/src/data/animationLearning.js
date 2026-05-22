@@ -83,6 +83,7 @@ const EQUATION_OVERRIDES = {
   'training-loop-dynamics': '\\theta_{t+1}=\\theta_t-\\eta\\hat{g}_{B_t},\\quad monitor:\\mathcal{L}_{train},\\mathcal{L}_{val}',
   'dropout-batchnorm': '\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}},\\quad y=\\gamma\\hat{x}+\\beta',
   'gradient-problems': '\\frac{\\partial L}{\\partial h_0}=\\frac{\\partial L}{\\partial h_L}\\prod_{\\ell=1}^{L}\\frac{\\partial h_\\ell}{\\partial h_{\\ell-1}}',
+  'layer-normalization': '\\operatorname{LN}(x)=\\gamma\\frac{x-\\mu_x}{\\sqrt{\\sigma_x^2+\\epsilon}}+\\beta',
   entropy: 'H(X)=-\\sum_x p(x)\\log p(x)',
   'cross-entropy': 'H(p,q)=-\\sum_x p(x)\\log q(x)',
   'cosine-similarity': '\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}',
@@ -325,6 +326,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate depth, derivative scale, residual path strength, and clipping to classify the failure mode.',
     'Mistake to avoid: clipping can cap explosions, but it does not automatically restore vanished signal.',
     'Check understanding by predicting whether a deeper chain with multiplier below one will vanish faster.',
+  ),
+  'layer-normalization': cardSet(
+    'LayerNorm solves the problem of token features drifting to unstable scales inside deep networks.',
+    'Normalize across one token vector, then let learned gamma and beta restore useful scale and shift.',
+    'The math subtracts the feature mean, divides by feature standard deviation, then applies an affine transform.',
+    'Manipulate token case, gamma, beta, branch strength, and pre/post placement to inspect residual stability.',
+    'Mistake to avoid: LayerNorm is not BatchNorm; it does not need statistics from other examples in the batch.',
+    'Check understanding by predicting whether a shifted token keeps its large mean after normalization.',
   ),
   relu: cardSet(
     'ReLU solves the activation problem by giving networks a simple nonlinearity that keeps positive signal easy to pass.',
