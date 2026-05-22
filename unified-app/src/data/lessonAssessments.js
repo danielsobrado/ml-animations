@@ -2,6 +2,10 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
   'linear-regression',
   'pca',
+  'fundamental-subspaces',
+  'matrix-decompositions',
+  'qr-decomposition',
+  'svd',
   'k-means',
   'train-validation-test-split',
   'cross-validation',
@@ -10,6 +14,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'bayes-rule-ml',
   'sampling-confidence-intervals',
   'hypothesis-testing-intuition',
+  'spearman-correlation',
   'maximum-likelihood-estimation',
   'loss-functions-likelihoods',
   'logistic-regression',
@@ -22,17 +27,31 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'knn-naive-bayes-svm',
   'tree-ensembles',
   'gradient-descent',
+  'neural-network',
   'initialization',
   'optimizers',
   'training-loop-dynamics',
   'dropout-batchnorm',
+  'gradient-problems',
+  'layer-normalization',
   'relu',
+  'leaky-relu',
+  'conv2d',
+  'conv-relu',
+  'max-pooling',
   'computation-graph-backprop',
   'tokenization',
   'embeddings',
+  'cosine-similarity',
   'attention-mechanism',
   'self-attention',
+  'kv-cache',
+  'grouped-query-attention',
+  'flash-attention',
   'attention-masks',
+  'positional-encoding',
+  'rope',
+  'residual-stream',
   'transformer',
   'transformer-architecture-families',
   'llm-training-objectives',
@@ -48,6 +67,10 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'diffusion-sampling',
   'classifier-free-guidance',
   'unet-vs-dit',
+  'q-learning',
+  'rl-exploration',
+  'rl-foundations',
+  'bloom-filter',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -79,6 +102,39 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A B applies transformations in a specific order, so swapping them usually changes the result.',
+      },
+      {
+        id: 'dimension-match',
+        prompt: 'When can A B be multiplied?',
+        choices: [
+          'The column count of A matches the row count of B',
+          'A and B have the same number of rows',
+          'Both matrices contain only positive entries',
+        ],
+        answerIndex: 0,
+        explanation: 'Each output entry needs a dot product between a row of A and a column of B, so their lengths must match.',
+      },
+      {
+        id: 'predict-output-shape',
+        prompt: 'If A is 2 by 3 and B is 3 by 4, what shape is A B?',
+        choices: [
+          '2 by 4',
+          '3 by 3',
+          '4 by 2',
+        ],
+        answerIndex: 0,
+        explanation: 'The outside dimensions become the output shape: rows from A and columns from B.',
+      },
+      {
+        id: 'elementwise-confusion',
+        prompt: 'What is the common failure mode when reading A B as elementwise multiplication?',
+        choices: [
+          'You ignore the row-column dot products that define each output entry',
+          'You correctly preserve transformation composition',
+          'You make non-square matrices easier to multiply',
+        ],
+        answerIndex: 0,
+        explanation: 'Matrix multiplication composes rows and columns; elementwise multiplication is a different operation with different shape rules.',
       },
     ],
     labs: [
@@ -114,6 +170,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Residuals show how far predictions are from the observed targets.',
       },
+      {
+        id: 'outlier-effect',
+        prompt: 'What failure mode can a large outlier create for ordinary least squares?',
+        choices: [
+          'It can pull the fitted line toward itself and increase errors elsewhere',
+          'It is always ignored automatically',
+          'It turns the model into a classifier',
+        ],
+        answerIndex: 0,
+        explanation: 'Squared error gives large residuals heavy influence, so an outlier can dominate the fitted line.',
+      },
+      {
+        id: 'predict-slope-change',
+        prompt: 'If high-x points are mostly above the current line, what slope change usually reduces their residuals?',
+        choices: [
+          'Increase the slope',
+          'Set the slope to zero',
+          'Decrease the intercept only and keep slope fixed forever',
+        ],
+        answerIndex: 0,
+        explanation: 'Increasing slope raises predictions more on the right side of the plot, which can shrink positive high-x residuals.',
+      },
     ],
     labs: [
       {
@@ -148,6 +226,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'The largest eigenvalue marks the direction that explains the most variance in the input data.',
       },
+      {
+        id: 'predict-rotation',
+        prompt: 'If the point cloud stretches mostly along an upward diagonal, where should PC1 point?',
+        choices: [
+          'Along that diagonal stretch',
+          'Straight at the class boundary',
+          'Always along the x-axis',
+        ],
+        answerIndex: 0,
+        explanation: 'PC1 follows the highest input variance direction, independent of any class label.',
+      },
+      {
+        id: 'variance-not-labels',
+        prompt: 'What failure mode appears when the highest-variance direction is unrelated to the label?',
+        choices: [
+          'A low-dimensional PCA view can preserve spread while hiding the class signal',
+          'PCA automatically switches to supervised learning',
+          'The first component becomes invalid because labels were omitted',
+        ],
+        answerIndex: 0,
+        explanation: 'PCA is unsupervised, so it can keep variance that is visually dominant but weak for the prediction task.',
+      },
     ],
     labs: [
       {
@@ -155,6 +255,186 @@ export const lessonAssessments = {
         title: 'Compare one and two components',
         prompt: 'Switch between 1D and 2D projection, then identify when the 1D reconstruction loses the most information.',
         successCriteria: 'You can connect higher noise or weaker correlation to lower PC1 explained variance.',
+      },
+    ],
+  },
+  'fundamental-subspaces': {
+    quiz: [
+      {
+        id: 'domain-subspaces',
+        prompt: 'Which two fundamental subspaces live in the input domain R^n?',
+        choices: [
+          'Row(A) and Null(A)',
+          'Col(A) and Null(A^T)',
+          'Row(A) and Col(A)',
+        ],
+        answerIndex: 0,
+        explanation: 'The row space and null space are both subspaces of the domain R^n.',
+      },
+      {
+        id: 'consistency-rule',
+        prompt: 'When is Ax = b consistent?',
+        choices: [
+          'When b lies in Col(A)',
+          'When x lies in Null(A^T)',
+          'When every row of A is zero',
+        ],
+        answerIndex: 0,
+        explanation: 'The column space is exactly the set of reachable outputs Ax.',
+      },
+      {
+        id: 'rank-nullity',
+        prompt: 'For an m by n matrix with rank r, what is dim Null(A)?',
+        choices: [
+          'n - r',
+          'm - r',
+          'r - n',
+        ],
+        answerIndex: 0,
+        explanation: 'Rank-nullity accounts for the domain: rank(A) + dim Null(A) = n.',
+      },
+    ],
+    labs: [
+      {
+        id: 'classify-four-spaces',
+        title: 'Classify the four spaces',
+        prompt: 'Choose one rank-nullity case and list each subspace, its ambient space, and its dimension.',
+        successCriteria: 'Your dimensions satisfy n = rank + nullity and m = rank + left-nullity.',
+      },
+    ],
+  },
+  'matrix-decompositions': {
+    quiz: [
+      {
+        id: 'stable-least-squares',
+        prompt: 'Which decomposition is the usual stable choice for least squares with a tall matrix?',
+        choices: [
+          'QR',
+          'NMF',
+          'Cholesky without checking assumptions',
+        ],
+        answerIndex: 0,
+        explanation: 'QR builds an orthonormal basis and avoids the conditioning problems of normal equations.',
+      },
+      {
+        id: 'general-low-rank',
+        prompt: 'Which decomposition gives the most general rank-k approximation view for any real matrix?',
+        choices: [
+          'Truncated SVD',
+          'LU',
+          'Eigen decomposition for every rectangular matrix',
+        ],
+        answerIndex: 0,
+        explanation: 'SVD works for rectangular matrices and its truncated form gives a best rank-k approximation under common norms.',
+      },
+      {
+        id: 'assumption-check',
+        prompt: 'Why is Cholesky not a universal replacement for LU or QR?',
+        choices: [
+          'It requires a symmetric positive definite matrix',
+          'It only works on text data',
+          'It cannot be used to solve systems',
+        ],
+        answerIndex: 0,
+        explanation: 'Cholesky is fast and stable when the SPD assumption holds; it fails outside that setting.',
+      },
+    ],
+    labs: [
+      {
+        id: 'choose-by-goal',
+        title: 'Choose by the job',
+        prompt: 'Pick three scenarios from the chooser and write the factorization, its requirement, and one warning.',
+        successCriteria: 'Your selections are justified by the task and include at least one assumption or stability caveat.',
+      },
+    ],
+  },
+  'qr-decomposition': {
+    quiz: [
+      {
+        id: 'factor-meaning',
+        prompt: 'In A = QR, what is special about Q?',
+        choices: [
+          'Its columns are orthonormal',
+          'It is always diagonal',
+          'It contains the original labels',
+        ],
+        answerIndex: 0,
+        explanation: 'Q stores orthonormal basis directions, while R stores the coordinates of A in that basis.',
+      },
+      {
+        id: 'gram-schmidt',
+        prompt: 'What does Gram-Schmidt do to the second column after finding q1?',
+        choices: [
+          'Subtract the projection onto q1, then normalize the leftover',
+          'Duplicate q1 exactly',
+          'Replace the column with all zeros no matter what',
+        ],
+        answerIndex: 0,
+        explanation: 'The projection removal creates a component orthogonal to q1; normalization turns it into the next unit vector.',
+      },
+      {
+        id: 'least-squares',
+        prompt: 'Why is QR useful for least squares?',
+        choices: [
+          'Q preserves lengths and angles better than forming normal equations',
+          'It only works when there are no residuals',
+          'It makes every matrix symmetric positive definite',
+        ],
+        answerIndex: 0,
+        explanation: 'Orthogonal factors are numerically stable, so QR avoids squaring the condition number through A^T A.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-projection-removal',
+        title: 'Trace projection removal',
+        prompt: 'Follow the animation through the second Gram-Schmidt step and identify the projection that is removed.',
+        successCriteria: 'You can explain how q2 becomes orthogonal to q1 and where R stores the projection coefficient.',
+      },
+    ],
+  },
+  svd: {
+    quiz: [
+      {
+        id: 'factor-roles',
+        prompt: 'In A = U Sigma V^T, what do the singular values in Sigma describe?',
+        choices: [
+          'How strongly A stretches each singular direction',
+          'The original row labels',
+          'Only the signs of matrix entries',
+        ],
+        answerIndex: 0,
+        explanation: 'Singular values are nonnegative stretch factors ordered from strongest to weakest.',
+      },
+      {
+        id: 'rectangular-support',
+        prompt: 'Why is SVD broadly useful compared with eigen decomposition?',
+        choices: [
+          'SVD works for any real rectangular matrix',
+          'SVD only works for diagonal square matrices',
+          'SVD ignores rank information',
+        ],
+        answerIndex: 0,
+        explanation: 'Eigen decomposition is square-matrix specific; SVD applies to any real m by n matrix.',
+      },
+      {
+        id: 'truncated-svd',
+        prompt: 'What does truncated SVD keep for compression?',
+        choices: [
+          'The largest singular values and their matching singular vectors',
+          'Only the smallest singular value',
+          'Every zero entry in the original matrix',
+        ],
+        answerIndex: 0,
+        explanation: 'Keeping the top k singular components preserves the strongest low-rank structure.',
+      },
+    ],
+    labs: [
+      {
+        id: 'rank-k-reconstruction',
+        title: 'Trace a rank-k reconstruction',
+        prompt: 'Use the SVD animation to identify U, Sigma, and V^T, then explain what is lost when only the largest singular value is kept.',
+        successCriteria: 'You can connect singular value size to retained structure and reconstruction error.',
       },
     ],
   },
@@ -181,6 +461,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'The centroid is the coordinate-wise average of the points currently assigned to that cluster.',
+      },
+      {
+        id: 'predict-centroid-move',
+        prompt: 'If a centroid owns mostly points to its upper right, what should happen on the update step?',
+        choices: [
+          'It should move toward the mean of those assigned points',
+          'It should move away from its assigned points',
+          'It should stay fixed until labels are provided',
+        ],
+        answerIndex: 0,
+        explanation: 'The update step replaces each centroid with the average of the points currently assigned to it.',
+      },
+      {
+        id: 'bad-initialization',
+        prompt: 'What failure mode can poor initialization create in k-means?',
+        choices: [
+          'The algorithm can settle into a weak local solution or empty-ish cluster pattern',
+          'The algorithm becomes supervised classification',
+          'The nearest-centroid rule stops using distances',
+        ],
+        answerIndex: 0,
+        explanation: 'K-means is sensitive to starting centroids, so multiple restarts or k-means++ can matter.',
       },
     ],
     labs: [
@@ -216,6 +518,39 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Fewer false alarms means a positive signal is more likely to come from true positives.',
       },
+      {
+        id: 'normalizer-meaning',
+        prompt: 'In the Bayes denominator for a positive signal, what is being normalized?',
+        choices: [
+          'All ways the positive signal could occur, including true positives and false alarms',
+          'Only the true positive cases',
+          'Only the prior probability before evidence',
+        ],
+        answerIndex: 0,
+        explanation: 'The posterior divides true positive evidence by all positive evidence, including false alarms from non-class cases.',
+      },
+      {
+        id: 'rare-class-action',
+        prompt: 'For a rare class, which change often makes positive evidence more actionable?',
+        choices: [
+          'Reducing the false positive rate',
+          'Ignoring the base rate',
+          'Removing the normalizing denominator',
+        ],
+        answerIndex: 0,
+        explanation: 'When the class is rare, false alarms can dominate the positive evidence pool, so reducing them can sharply raise the posterior.',
+      },
+      {
+        id: 'predict-base-rate-shift',
+        prompt: 'If the hit rate and false-positive rate stay fixed but the class becomes much rarer, what should you predict?',
+        choices: [
+          'The posterior after a positive signal usually drops',
+          'The posterior must stay unchanged',
+          'The false-positive rate becomes irrelevant',
+        ],
+        answerIndex: 0,
+        explanation: 'A rarer prior means more positive signals can come from false alarms, which is the base-rate failure mode.',
+      },
     ],
     labs: [
       {
@@ -249,6 +584,39 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Higher confidence requires a wider procedure because it must cover more possible samples.',
+      },
+      {
+        id: 'single-interval-meaning',
+        prompt: 'What is wrong with saying a computed 95% confidence interval has a 95% probability of containing the fixed truth?',
+        choices: [
+          'The 95% describes the long-run coverage of the procedure, not probability assigned to this fixed interval',
+          'A confidence interval never uses sampling variation',
+          'The population value changes after every sample',
+        ],
+        answerIndex: 0,
+        explanation: 'In the frequentist interpretation, the procedure has long-run coverage; the fixed interval either captured the value or it did not.',
+      },
+      {
+        id: 'quadruple-sample-size',
+        prompt: 'Roughly what happens to the margin of error when sample size is quadrupled?',
+        choices: [
+          'It is cut about in half',
+          'It is divided by four',
+          'It doubles',
+        ],
+        answerIndex: 0,
+        explanation: 'Standard error scales with 1/sqrt(n), so four times as much data gives about half the margin.',
+      },
+      {
+        id: 'coverage-misconception',
+        prompt: 'A team makes many 95% intervals with the same procedure. What should happen in the long run?',
+        choices: [
+          'About 95% of those intervals should contain the fixed population value',
+          'Every interval should contain exactly 95% of the sample rows',
+          'The first interval has a 95% chance of moving after it is computed',
+        ],
+        answerIndex: 0,
+        explanation: 'Coverage is about repeated intervals from the procedure, not the probability of a fixed interval after seeing the data.',
       },
     ],
     labs: [
@@ -284,6 +652,39 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'A small p-value can come from a tiny effect with a huge sample; usefulness is a separate question.',
       },
+      {
+        id: 'sample-size-pvalue',
+        prompt: 'If the observed effect stays fixed but sample size grows, what can happen to the p-value?',
+        choices: [
+          'It can shrink because standard error falls',
+          'It must grow because more data adds noise',
+          'It becomes independent of the test statistic',
+        ],
+        answerIndex: 0,
+        explanation: 'Larger samples reduce standard error, so the same effect can become more statistically unusual.',
+      },
+      {
+        id: 'power-meaning',
+        prompt: 'What does statistical power describe in this lesson?',
+        choices: [
+          'The chance the test rejects the null when the modeled effect is real',
+          'The business value of the observed effect',
+          'The probability that the null hypothesis is true',
+        ],
+        answerIndex: 0,
+        explanation: 'Power is a long-run detection probability under an assumed real effect and test setup.',
+      },
+      {
+        id: 'pvalue-not-null-probability',
+        prompt: 'Which interpretation is a p-value failure mode?',
+        choices: [
+          'Calling it the probability that the null hypothesis is true',
+          'Computing it under a null model',
+          'Using it as one part of an evidence summary',
+        ],
+        answerIndex: 0,
+        explanation: 'A p-value is the probability of data at least this extreme under the null setup; it is not P(null is true).',
+      },
     ],
     labs: [
       {
@@ -291,6 +692,51 @@ export const lessonAssessments = {
         title: 'Find a tiny significant effect',
         prompt: 'Use a small effect with a large sample and explain why the evidence can look strong while the effect remains small.',
         successCriteria: 'You can separate statistical evidence from practical impact.',
+      },
+    ],
+  },
+  'spearman-correlation': {
+    quiz: [
+      {
+        id: 'rank-purpose',
+        prompt: 'What does Spearman correlation compare before computing association?',
+        choices: [
+          'The ranks of the values',
+          'Only the raw units of the values',
+          'The class labels after thresholding',
+        ],
+        answerIndex: 0,
+        explanation: 'Spearman converts values into rank order, then measures whether the two rankings move together.',
+      },
+      {
+        id: 'monotonic-not-linear',
+        prompt: 'When can Spearman be high even if Pearson is not perfect?',
+        choices: [
+          'When the relationship is monotonic but not a straight line',
+          'When the variables are completely unordered',
+          'When every value is replaced by random noise',
+        ],
+        answerIndex: 0,
+        explanation: 'Spearman rewards consistent ordering, so curved monotonic relationships can still score highly.',
+      },
+      {
+        id: 'outlier-robustness',
+        prompt: 'Why is Spearman often less sensitive to an extreme value than Pearson?',
+        choices: [
+          'The extreme value usually changes rank by only a limited amount',
+          'It deletes all outliers before scoring',
+          'It ignores whether the ordering changes',
+        ],
+        answerIndex: 0,
+        explanation: 'Ranks compress large numeric gaps, so one huge value matters mainly through its position in the order.',
+      },
+    ],
+    labs: [
+      {
+        id: 'rank-before-score',
+        title: 'Rank before scoring',
+        prompt: 'Use the calculation tab to rank X and Y, then predict the sign and size of rho before revealing the formula.',
+        successCriteria: 'You can explain whether rho changed because the order changed or because raw values moved farther apart.',
       },
     ],
   },
@@ -317,6 +763,39 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'The best Bernoulli probability is the observed fraction of successes.',
+      },
+      {
+        id: 'nll-link',
+        prompt: 'Why do training loops often minimize negative log-likelihood?',
+        choices: [
+          'Minimizing negative log-likelihood is equivalent to maximizing log-likelihood',
+          'Negative log-likelihood ignores the observed data',
+          'It makes every parameter equally likely',
+        ],
+        answerIndex: 0,
+        explanation: 'The negative sign turns a maximization problem into the minimization form used by most optimizers.',
+      },
+      {
+        id: 'likelihood-not-prior',
+        prompt: 'What is a common mistake when interpreting likelihood?',
+        choices: [
+          'Treating it as the prior probability that a parameter is true',
+          'Comparing candidate parameters using observed data',
+          'Using log-likelihood for numerical stability',
+        ],
+        answerIndex: 0,
+        explanation: 'Likelihood scores how well a parameter explains observed data; it is not a probability distribution over parameters by itself.',
+      },
+      {
+        id: 'predict-likelihood-peak',
+        prompt: 'If 80 of 100 Bernoulli trials are successes, which candidate probability should have the highest likelihood?',
+        choices: [
+          'About 0.8',
+          'Exactly 0.5 because it is most neutral',
+          'About 0.2 because failures are rarer',
+        ],
+        answerIndex: 0,
+        explanation: 'The Bernoulli MLE matches the observed success rate, so the likelihood peaks near 0.8.',
       },
     ],
     labs: [
@@ -352,6 +831,39 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Cross-entropy penalizes the negative log of the probability assigned to the observed class.',
       },
+      {
+        id: 'squared-error-assumption',
+        prompt: 'What assumption commonly leads to squared error as negative log-likelihood?',
+        choices: [
+          'Gaussian residual noise with fixed variance',
+          'Binary labels with only two classes',
+          'A prior that every parameter is equally useful',
+        ],
+        answerIndex: 0,
+        explanation: 'Under Gaussian residuals with fixed variance, the NLL differs from squared error only by constants and scale.',
+      },
+      {
+        id: 'loss-choice-signal',
+        prompt: 'What does choosing a loss function usually encode?',
+        choices: [
+          'An assumption about target type, noise, or error cost',
+          'A guarantee that the model cannot overfit',
+          'A way to avoid measuring validation performance',
+        ],
+        answerIndex: 0,
+        explanation: 'Loss choice defines what kinds of errors are expensive, often through an implied probabilistic model.',
+      },
+      {
+        id: 'mismatched-loss-failure',
+        prompt: 'What can go wrong if you use squared error for a heavily skewed count target with rare huge spikes?',
+        choices: [
+          'The loss can over-focus on large residuals and poorly match the noise pattern',
+          'The labels become categorical automatically',
+          'The model is guaranteed to calibrate tail probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'A loss carries assumptions about noise and error cost; a mismatch can train the model toward the wrong behavior.',
+      },
     ],
     labs: [
       {
@@ -385,6 +897,39 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Validation data is the development feedback loop; test data is reserved for the final estimate.',
+      },
+      {
+        id: 'stratified-split',
+        prompt: 'Why use a stratified split for a small classification dataset?',
+        choices: [
+          'To keep class proportions closer across train, validation, and test',
+          'To guarantee the model cannot overfit',
+          'To make the test set larger than the training set',
+        ],
+        answerIndex: 0,
+        explanation: 'Stratification reduces the chance that one split has a very different label distribution by accident.',
+      },
+      {
+        id: 'preprocessing-order',
+        prompt: 'When should learned preprocessing be fitted?',
+        choices: [
+          'After splitting, using training data only',
+          'Before splitting, using the full dataset',
+          'After checking the final test score',
+        ],
+        answerIndex: 0,
+        explanation: 'Fitting preprocessing on all rows leaks validation and test statistics into the training recipe.',
+      },
+      {
+        id: 'predict-leakage-score',
+        prompt: 'What score pattern should make you suspicious of split leakage?',
+        choices: [
+          'Validation performance is implausibly high compared with a leakage-safe split',
+          'Training takes longer after the split',
+          'The test set is smaller than the validation set',
+        ],
+        answerIndex: 0,
+        explanation: 'Leakage often shows up as unusually optimistic validation or test scores that disappear under a cleaner split.',
       },
     ],
     labs: [
@@ -420,13 +965,46 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Grouped folds prevent a model from seeing one row for a user in training and another row for the same user in validation.',
       },
+      {
+        id: 'fold-variance',
+        prompt: 'What should you inspect besides the mean cross-validation score?',
+        choices: [
+          'The spread of scores across folds',
+          'Only the best fold score',
+          'Only the number of model parameters',
+        ],
+        answerIndex: 0,
+        explanation: 'Large fold-to-fold variance can signal unstable performance, small folds, segment imbalance, or split-specific leakage.',
+      },
+      {
+        id: 'test-set-role',
+        prompt: 'After using cross-validation for model selection, what is the test set for?',
+        choices: [
+          'A final untouched estimate after model choices are made',
+          'Trying more hyperparameters until the score improves',
+          'Fitting the preprocessing statistics for every fold',
+        ],
+        answerIndex: 0,
+        explanation: 'Cross-validation is development feedback; the test set should remain untouched until the final estimate.',
+      },
+      {
+        id: 'predict-fold-failure',
+        prompt: 'What should you predict if one fold contains a very different subgroup from the others?',
+        choices: [
+          'That fold score may be much worse and reveal deployment risk',
+          'The mean score is guaranteed to improve',
+          'The validation fold will be copied into training automatically',
+        ],
+        answerIndex: 0,
+        explanation: 'A subgroup-heavy fold can expose instability that the mean score alone hides.',
+      },
     ],
     labs: [
       {
-        id: 'leakage-audit',
-        title: 'Audit a fold pipeline',
-        prompt: 'Pick one preprocessing step and decide whether it must be learned inside each fold.',
-        successCriteria: 'You can explain what information would leak if the step ran before splitting folds.',
+        id: 'choose-fold-design',
+        title: 'Choose a leakage-safe fold design',
+        prompt: 'Use the fold controls to compare random and grouped splitting, then explain which one is safer for repeated users or related samples.',
+        successCriteria: 'You can name the leakage route and justify the fold design that blocks it.',
       },
     ],
   },
@@ -453,6 +1031,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Target leakage often enters through post-outcome fields, future labels, or aggregates that include the answer.',
+      },
+      {
+        id: 'predict-score-inflation',
+        prompt: 'What should you predict if validation rows contain a post-outcome feature that will not exist at serving time?',
+        choices: [
+          'Validation score may look inflated and then collapse in production',
+          'Production score must improve because the feature is predictive',
+          'The split becomes safer because validation is easier',
+        ],
+        answerIndex: 0,
+        explanation: 'The model is using information from the future, so offline evaluation no longer matches the real prediction setting.',
+      },
+      {
+        id: 'group-leakage-failure',
+        prompt: 'Why can random splitting fail when one user contributes many rows?',
+        choices: [
+          'The same user can appear in both train and validation, hiding entity-level overfitting',
+          'Random splitting always removes duplicate users',
+          'Validation labels stop being observed',
+        ],
+        answerIndex: 0,
+        explanation: 'Related examples crossing the split can make memorization look like generalization.',
       },
     ],
     labs: [
@@ -488,6 +1088,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'If income is measured in thousands and age in years, raw distances mostly reflect income unless features are scaled.',
       },
+      {
+        id: 'predict-outlier-scaler',
+        prompt: 'With one extreme outlier, which scaler is usually least moved by that single point?',
+        choices: [
+          'Robust scaling based on median and interquartile range',
+          'Min-max scaling based on the largest and smallest values',
+          'A scaler fitted on validation and test rows',
+        ],
+        answerIndex: 0,
+        explanation: 'Median and IQR are less sensitive to one extreme value than min and max.',
+      },
+      {
+        id: 'fit-all-data-failure',
+        prompt: 'What is the failure mode when preprocessing is fitted before the train/test split?',
+        choices: [
+          'Evaluation rows can influence learned preprocessing parameters',
+          'The model is forced to ignore all feature scales',
+          'Only the training rows are transformed',
+        ],
+        answerIndex: 0,
+        explanation: 'A scaler or imputer learns from data; fitting it before splitting lets evaluation information leak into the pipeline.',
+      },
     ],
     labs: [
       {
@@ -521,6 +1143,39 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A higher threshold requires stronger positive evidence before predicting class 1.',
+      },
+      {
+        id: 'logit-vs-probability',
+        prompt: 'What is the relationship between the logit and the predicted probability?',
+        choices: [
+          'The sigmoid maps the logit to a probability-like score',
+          'The threshold is multiplied by the feature weights',
+          'The confusion matrix is computed before probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Logistic regression computes a linear logit first, then applies the sigmoid to place the score between 0 and 1.',
+      },
+      {
+        id: 'threshold-without-refit',
+        prompt: 'What changes when you move only the classification threshold?',
+        choices: [
+          'Predicted labels and confusion-matrix counts can change',
+          'The learned weights are recomputed from scratch',
+          'The feature values are normalized again',
+        ],
+        answerIndex: 0,
+        explanation: 'The probability scores stay fixed, but the label assigned to scores near the threshold can flip.',
+      },
+      {
+        id: 'probability-not-decision',
+        prompt: 'What is the threshold-vs-probability failure mode?',
+        choices: [
+          'Treating a 0.61 probability as a guaranteed positive instead of a score compared with a threshold',
+          'Comparing probabilities against a chosen cutoff',
+          'Changing the threshold to reflect false-positive costs',
+        ],
+        answerIndex: 0,
+        explanation: 'The sigmoid output is a score used for decisions; the threshold turns that score into a class label.',
       },
     ],
     labs: [
@@ -556,6 +1211,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'When negatives dominate, a high accuracy score can hide missed positives.',
       },
+      {
+        id: 'predict-rare-class-baseline',
+        prompt: 'If only 2% of examples are positive, what accuracy can an all-negative classifier reach?',
+        choices: [
+          'About 98%, while finding zero positives',
+          'About 2%, because positives are rare',
+          'Exactly 50%, because there are two classes',
+        ],
+        answerIndex: 0,
+        explanation: 'Class imbalance can make a trivial majority-class classifier look accurate while recall is zero.',
+      },
+      {
+        id: 'precision-recall-tradeoff',
+        prompt: 'What failure can appear when you optimize only precision?',
+        choices: [
+          'The model may predict very few positives and miss many real positives',
+          'The model must maximize recall too',
+          'The confusion matrix no longer has false negatives',
+        ],
+        answerIndex: 0,
+        explanation: 'Very selective thresholds can make positive predictions trustworthy while leaving many positives unrecovered.',
+      },
     ],
     labs: [
       {
@@ -589,6 +1266,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'PR curves show how many predicted positives are real and how many real positives are recovered.',
+      },
+      {
+        id: 'predict-threshold-sweep',
+        prompt: 'As the threshold is lowered, what usually happens to recall?',
+        choices: [
+          'Recall usually increases because more positives are flagged',
+          'Recall must fall because there are more predicted positives',
+          'Recall becomes independent of the classifier scores',
+        ],
+        answerIndex: 0,
+        explanation: 'Lowering the cutoff accepts more examples as positive, which usually recovers more true positives too.',
+      },
+      {
+        id: 'roc-pr-selection',
+        prompt: 'Which curve is often more diagnostic when positives are very rare and false alarms matter?',
+        choices: [
+          'Precision-recall curve',
+          'Training-loss curve only',
+          'A parameter-count curve',
+        ],
+        answerIndex: 0,
+        explanation: 'PR curves expose the quality and coverage of positive predictions under class imbalance.',
       },
     ],
     labs: [
@@ -624,6 +1323,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'A bounded probability-shaped score can still disagree with observed outcome frequencies.',
       },
+      {
+        id: 'predict-overconfidence-gap',
+        prompt: 'If the 0.9 score bucket is positive only 60% of the time, what should you diagnose?',
+        choices: [
+          'Overconfidence in that bucket',
+          'Perfect calibration at 90%',
+          'A threshold that is too low by definition',
+        ],
+        answerIndex: 0,
+        explanation: 'Predicted 90% but observed 60% means the model is overstating confidence for similar examples.',
+      },
+      {
+        id: 'ranking-not-calibration',
+        prompt: 'What calibration failure can a highly ranked classifier still have?',
+        choices: [
+          'Its score ordering can be useful while the probabilities are too high or too low',
+          'Good ranking guarantees calibrated probabilities',
+          'Calibration ignores score buckets',
+        ],
+        answerIndex: 0,
+        explanation: 'Discrimination and calibration are different: a model can rank examples well but misstate probabilities.',
+      },
     ],
     labs: [
       {
@@ -657,6 +1378,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A flexible model can bend around noise instead of learning reusable signal.',
+      },
+      {
+        id: 'early-stopping-signal',
+        prompt: 'Why can early stopping help with overfitting?',
+        choices: [
+          'It can stop near the lowest validation error before memorization dominates',
+          'It removes the need for a validation set',
+          'It guarantees the test score will improve forever',
+        ],
+        answerIndex: 0,
+        explanation: 'Early stopping uses validation behavior to avoid later epochs that keep reducing training error but hurt validation error.',
+      },
+      {
+        id: 'not-every-gap',
+        prompt: 'When is a bad validation score not classic overfitting?',
+        choices: [
+          'When training error is also high, suggesting underfitting',
+          'When training error is lower than validation error',
+          'When the model has more than one parameter',
+        ],
+        answerIndex: 0,
+        explanation: 'Classic overfitting needs a strong training fit with worse validation performance; high error on both splits points to underfitting.',
       },
     ],
     labs: [
@@ -692,6 +1435,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'High variance comes from sample sensitivity, so more data, simpler models, regularization, or averaging can help.',
       },
+      {
+        id: 'predict-underfit',
+        prompt: 'If both training and validation error stay high, what should you suspect first?',
+        choices: [
+          'High bias or underfitting',
+          'Pure high variance only',
+          'A final test-set estimate',
+        ],
+        answerIndex: 0,
+        explanation: 'When the model cannot fit the training data well, the dominant problem is usually bias or insufficient signal/features.',
+      },
+      {
+        id: 'predict-overfit',
+        prompt: 'If training error is very low but validation error is high, what should you suspect?',
+        choices: [
+          'High variance or overfitting',
+          'A model that is too simple to fit the training set',
+          'A metric that no longer uses labels',
+        ],
+        answerIndex: 0,
+        explanation: 'A large train-validation gap points to sample-specific fitting that does not generalize.',
+      },
     ],
     labs: [
       {
@@ -725,6 +1490,39 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Excess penalty can shrink useful signal along with noisy parameters.',
+      },
+      {
+        id: 'l1-vs-l2',
+        prompt: 'What is a typical difference between L1 and L2 regularization?',
+        choices: [
+          'L1 can set some weights to zero, while L2 usually shrinks weights smoothly',
+          'L2 removes the need for a loss function',
+          'L1 only works for neural networks',
+        ],
+        answerIndex: 0,
+        explanation: 'L1 uses an absolute-value penalty that can create sparse solutions; L2 penalizes squared magnitude and tends to shrink continuously.',
+      },
+      {
+        id: 'lambda-validation',
+        prompt: 'How should lambda usually be chosen?',
+        choices: [
+          'Tune it on validation data while keeping the test set untouched',
+          'Pick the largest possible value every time',
+          'Choose it from the final test score after many retries',
+        ],
+        answerIndex: 0,
+        explanation: 'Lambda is a model-selection choice, so it belongs in the validation loop, not repeated test-set tuning.',
+      },
+      {
+        id: 'predict-lambda-too-large',
+        prompt: 'If lambda becomes extremely large, what should you predict for useful weights?',
+        choices: [
+          'They shrink heavily, risking underfit predictions',
+          'They grow without limit',
+          'They stop affecting the loss',
+        ],
+        answerIndex: 0,
+        explanation: 'A strong penalty can dominate the data fit and suppress useful signal.',
       },
     ],
     labs: [
@@ -760,6 +1558,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Naive Bayes is probabilistic: it combines class priors with feature likelihoods, often with an independence assumption.',
       },
+      {
+        id: 'predict-knn-local',
+        prompt: 'Which model is most likely to flip when a query crosses near a small local cluster?',
+        choices: [
+          'kNN, because nearby training examples vote directly',
+          'Naive Bayes, because it ignores all feature values',
+          'SVM, because support vectors are never near boundaries',
+        ],
+        answerIndex: 0,
+        explanation: 'kNN is local and instance-based, so neighborhood composition can change the decision abruptly.',
+      },
+      {
+        id: 'naive-bayes-correlation-failure',
+        prompt: 'What can hurt Naive Bayes when features are strongly redundant?',
+        choices: [
+          'The conditional-independence assumption can double-count correlated evidence',
+          'It becomes a nearest-neighbor method',
+          'It cannot use class priors',
+        ],
+        answerIndex: 0,
+        explanation: 'The naive assumption multiplies feature evidence as if conditionally independent, which can overstate redundant signals.',
+      },
     ],
     labs: [
       {
@@ -793,6 +1613,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Boosting is sequential: each new weak learner targets the residual signal left by the current ensemble.',
+      },
+      {
+        id: 'predict-forest-averaging',
+        prompt: 'What should happen when a random forest averages many decorrelated trees?',
+        choices: [
+          'Variance from individual tree quirks usually drops',
+          'Every tree becomes identical',
+          'The ensemble stops using feature splits',
+        ],
+        answerIndex: 0,
+        explanation: 'Averaging unstable but diverse trees smooths out idiosyncratic splits.',
+      },
+      {
+        id: 'boosting-overfit-failure',
+        prompt: 'What failure can happen if boosting keeps adding rounds after validation stops improving?',
+        choices: [
+          'It can chase residual noise and overfit',
+          'It becomes a bagged forest automatically',
+          'It removes all weak learners from the model',
+        ],
+        answerIndex: 0,
+        explanation: 'Boosting is powerful and sequential; too many rounds or too much depth can fit noise unless validation controls it.',
       },
     ],
     labs: [
@@ -828,6 +1670,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Large steps can jump past useful regions and make training oscillate or diverge.',
       },
+      {
+        id: 'small-learning-rate',
+        prompt: 'What does a very small learning rate usually look like in the loss trace?',
+        choices: [
+          'Slow but stable progress',
+          'Instant convergence in one update',
+          'Random jumps unrelated to the gradient',
+        ],
+        answerIndex: 0,
+        explanation: 'Tiny steps usually move downhill safely but may require many iterations.',
+      },
+      {
+        id: 'predict-next-step',
+        prompt: 'Before running the next update, what determines the step direction?',
+        choices: [
+          'The current gradient and the sign of the update rule',
+          'The validation label chosen at random',
+          'The largest feature name alphabetically',
+        ],
+        answerIndex: 0,
+        explanation: 'Gradient descent uses the current local gradient; subtracting it determines the next parameter move.',
+      },
     ],
     labs: [
       {
@@ -835,6 +1699,62 @@ export const lessonAssessments = {
         title: 'Tune step size',
         prompt: 'Try a small, medium, and large learning rate and compare the loss trace.',
         successCriteria: 'You can identify which run converges, crawls, or overshoots.',
+      },
+    ],
+  },
+  'neural-network': {
+    quiz: [
+      {
+        id: 'layer-computation',
+        prompt: 'What does a dense neural-network layer compute before the activation?',
+        choices: [
+          'A weighted sum plus bias',
+          'A confusion matrix',
+          'A train/test split',
+        ],
+        answerIndex: 0,
+        explanation: 'A dense layer forms z = W x + b, then an activation function transforms that pre-activation.',
+      },
+      {
+        id: 'activation-purpose',
+        prompt: 'Why do hidden layers need nonlinear activation functions?',
+        choices: [
+          'Without them, stacked linear layers collapse into one linear transformation',
+          'They make backpropagation unnecessary',
+          'They store the target labels inside each neuron',
+        ],
+        answerIndex: 0,
+        explanation: 'Nonlinear activations let the network represent curved decision boundaries and interactions.',
+      },
+      {
+        id: 'predict-xor',
+        prompt: 'Why is XOR a useful toy example for a neural-network overview?',
+        choices: [
+          'A single straight-line boundary cannot solve it, so hidden layers matter',
+          'It is solved by sorting the rows alphabetically',
+          'It does not require any weights',
+        ],
+        answerIndex: 0,
+        explanation: 'XOR exposes the limitation of a single linear separator and motivates hidden nonlinear features.',
+      },
+      {
+        id: 'backward-flow',
+        prompt: 'During backpropagation, what flows backward through the network?',
+        choices: [
+          'Gradients that assign local credit for the loss',
+          'Raw input examples copied from the output layer',
+          'Validation rows used as training labels',
+        ],
+        answerIndex: 0,
+        explanation: 'Backpropagation applies the chain rule to send loss gradients backward through layers.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-forward-backward',
+        title: 'Trace one XOR pass',
+        prompt: 'Choose one XOR input, run a forward pass, then step backward and identify where the loss signal first appears.',
+        successCriteria: 'You can name the input, target, output, loss, and the first gradient-carrying layer.',
       },
     ],
   },
@@ -861,6 +1781,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Larger batches average more examples, so the gradient is less noisy, but each update costs more computation.',
+      },
+      {
+        id: 'predict-momentum-path',
+        prompt: 'On a long shallow valley with gradients pointing mostly the same way, what should momentum do?',
+        choices: [
+          'Build velocity along the consistent direction',
+          'Reset every update to zero',
+          'Ignore the gradient sign completely',
+        ],
+        answerIndex: 0,
+        explanation: 'Momentum accumulates repeated directions, which can reduce zigzagging and speed travel through valleys.',
+      },
+      {
+        id: 'adam-sgd-failure',
+        prompt: 'What is a reasonable failure mode when comparing Adam and SGD?',
+        choices: [
+          'Adam can move quickly early but still needs learning-rate validation and may not be the best final generalizer',
+          'Adam guarantees the global minimum for every neural network',
+          'SGD cannot update weights without Adam statistics',
+        ],
+        answerIndex: 0,
+        explanation: 'Adaptive optimizers change step scaling, but validation behavior still decides whether the setting works.',
       },
     ],
     labs: [
@@ -895,6 +1837,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Large initial weights can amplify signals layer after layer, making training unstable before it begins.',
+      },
+      {
+        id: 'predict-tiny-weights',
+        prompt: 'If every layer starts with weights that are far too tiny, what should you predict through depth?',
+        choices: [
+          'Signals and gradients can shrink toward zero',
+          'Activations must explode',
+          'The network skips the activation functions',
+        ],
+        answerIndex: 0,
+        explanation: 'Too-small variance can repeatedly shrink forward activations and backward gradients.',
+      },
+      {
+        id: 'same-weight-symmetry',
+        prompt: 'Why is initializing all hidden units with the same weight a failure mode?',
+        choices: [
+          'Units can receive identical gradients and fail to specialize',
+          'It makes the model train faster by creating diversity',
+          'It removes the loss function',
+        ],
+        answerIndex: 0,
+        explanation: 'Symmetry prevents units in the same layer from learning different features unless the initialization breaks it.',
       },
     ],
     labs: [
@@ -964,6 +1928,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Validation loss shows whether improvements on training data are transferring to held-out data.',
       },
+      {
+        id: 'predict-overshoot',
+        prompt: 'If the learning rate is too high, what pattern should you expect in the training loss?',
+        choices: [
+          'Oscillation or sudden spikes instead of steady descent',
+          'A perfectly smooth monotone decrease every time',
+          'No parameter updates at all',
+        ],
+        answerIndex: 0,
+        explanation: 'Large steps can jump across the valley or destabilize the update path.',
+      },
+      {
+        id: 'early-stopping-failure',
+        prompt: 'What failure does early stopping try to prevent?',
+        choices: [
+          'Continuing to optimize training loss after validation loss has begun worsening',
+          'Training for too few epochs before any validation is measured',
+          'Using batches smaller than the full dataset',
+        ],
+        answerIndex: 0,
+        explanation: 'Early stopping uses held-out performance to avoid late-epoch memorization.',
+      },
     ],
     labs: [
       {
@@ -998,6 +1984,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'When the pre-activation is negative, ReLU blocks the local gradient.',
       },
+      {
+        id: 'predict-cross-zero',
+        prompt: 'What happens to a ReLU unit when its pre-activation crosses from -0.2 to +0.2?',
+        choices: [
+          'Its output becomes positive and its local slope changes from 0 to 1',
+          'Its output stays zero forever',
+          'It becomes a probability distribution',
+        ],
+        answerIndex: 0,
+        explanation: 'ReLU has a kink at zero: negative inputs are clipped, positive inputs pass through.',
+      },
+      {
+        id: 'dead-unit-diagnosis',
+        prompt: 'What is a dead ReLU diagnosis?',
+        choices: [
+          'A unit is negative for nearly all examples and receives almost no gradient',
+          'A unit has a large positive activation for every example',
+          'A unit uses a softmax over classes',
+        ],
+        answerIndex: 0,
+        explanation: 'If a ReLU stays in the negative region, its zero derivative can block learning.',
+      },
     ],
     labs: [
       {
@@ -1005,6 +2013,51 @@ export const lessonAssessments = {
         title: 'Cross the kink',
         prompt: 'Move the input across zero and watch both output and slope change.',
         successCriteria: 'You can name the active region and the blocked region.',
+      },
+    ],
+  },
+  'leaky-relu': {
+    quiz: [
+      {
+        id: 'negative-output',
+        prompt: 'For z below zero, what does Leaky ReLU output?',
+        choices: [
+          'A small negative value alpha times z',
+          'Exactly zero for every negative z',
+          'A probability between 0 and 1',
+        ],
+        answerIndex: 0,
+        explanation: 'Leaky ReLU keeps a small negative-side slope, so negative inputs become alpha z rather than zero.',
+      },
+      {
+        id: 'gradient-path',
+        prompt: 'Why can Leaky ReLU reduce dead-unit behavior compared with ReLU?',
+        choices: [
+          'Its local derivative is alpha rather than zero on the negative side',
+          'It removes the need for backpropagation',
+          'It makes every pre-activation positive',
+        ],
+        answerIndex: 0,
+        explanation: 'Backprop multiplies by the local derivative. A small nonzero derivative preserves a small learning signal.',
+      },
+      {
+        id: 'alpha-tradeoff',
+        prompt: 'What is the main tradeoff when alpha is increased?',
+        choices: [
+          'More negative-side gradient passes through, but negative activations are less strongly gated',
+          'The model stops using positive activations',
+          'The activation becomes a softmax',
+        ],
+        answerIndex: 0,
+        explanation: 'Larger alpha makes the negative branch less clipped, affecting both forward values and backward gradients.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-dead-zone',
+        title: 'Compare the dead zone',
+        prompt: 'Set z below zero, compare alpha = 0 with alpha above 0, and record how the output and gradient change.',
+        successCriteria: 'You can explain why alpha = 0 behaves like ReLU and alpha above 0 preserves a small gradient.',
       },
     ],
   },
@@ -1031,6 +2084,28 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'The MSE/ReLU example makes the activation gate visible in the backward pass.',
+      },
+      {
+        id: 'predict-chain-rule',
+        prompt: 'If the upstream gradient is 3 and the local derivative is 0.5, what gradient flows to the input?',
+        choices: [
+          '1.5',
+          '3.5',
+          '0.5',
+        ],
+        answerIndex: 0,
+        explanation: 'Backprop multiplies upstream gradients by local derivatives along the path.',
+      },
+      {
+        id: 'missing-local-derivative',
+        prompt: 'What failure mode appears if you ignore a local derivative in backprop?',
+        choices: [
+          'The credit assignment can have the wrong scale or sign',
+          'The forward pass becomes unnecessary',
+          'The loss is guaranteed to be zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Each local derivative is part of the chain rule; dropping one corrupts the gradient passed backward.',
       },
     ],
     labs: [
@@ -1110,6 +2185,51 @@ export const lessonAssessments = {
       },
     ],
   },
+  'cosine-similarity': {
+    quiz: [
+      {
+        id: 'normalization-effect',
+        prompt: 'Why does cosine similarity divide the dot product by both vector lengths?',
+        choices: [
+          'To compare direction after removing magnitude scale',
+          'To make every vector length equal to one before training',
+          'To turn a distance into a probability distribution',
+        ],
+        answerIndex: 0,
+        explanation: 'The denominator normalizes by magnitude, so the score mostly reflects the angle between vectors.',
+      },
+      {
+        id: 'orthogonal-score',
+        prompt: 'What cosine similarity do two perpendicular nonzero vectors have?',
+        choices: [
+          '0',
+          '1',
+          '-1',
+        ],
+        answerIndex: 0,
+        explanation: 'Perpendicular vectors have dot product zero, so their normalized dot product is zero.',
+      },
+      {
+        id: 'ranking-risk',
+        prompt: 'What is one risk when using cosine similarity for search or recommendations?',
+        choices: [
+          'High vector similarity can reflect learned correlations, not guaranteed relevance',
+          'Cosine similarity ignores all vector directions',
+          'A larger vector magnitude always guarantees rank one',
+        ],
+        answerIndex: 0,
+        explanation: 'Cosine can be useful for ranking learned vectors, but it still inherits biases and gaps from the representation.',
+      },
+    ],
+    labs: [
+      {
+        id: 'predict-nearest',
+        title: 'Predict the nearest vector',
+        prompt: 'Before changing the sliders or query, predict which vector or document will rank highest and why.',
+        successCriteria: 'Your explanation names either direction alignment or a shared active feature, not just raw magnitude.',
+      },
+    ],
+  },
   'attention-mechanism': {
     quiz: [
       {
@@ -1168,6 +2288,28 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Every position uses its own query to mix information from the sequence.',
       },
+      {
+        id: 'value-mixing',
+        prompt: 'After softmax produces attention weights, what do those weights combine?',
+        choices: [
+          'Value vectors',
+          'Raw token strings',
+          'Optimizer momentum values',
+        ],
+        answerIndex: 0,
+        explanation: 'Attention weights route information by forming a weighted sum of value vectors.',
+      },
+      {
+        id: 'mask-before-softmax',
+        prompt: 'Where should a causal mask be applied in scaled dot-product attention?',
+        choices: [
+          'To the scores before softmax',
+          'Only after the value vectors are mixed',
+          'Only to the final vocabulary logits',
+        ],
+        answerIndex: 0,
+        explanation: 'Masked future positions receive very negative scores before softmax so their attention weight becomes effectively zero.',
+      },
     ],
     labs: [
       {
@@ -1175,6 +2317,141 @@ export const lessonAssessments = {
         title: 'Read one attention row',
         prompt: 'Pick a token and explain which other tokens it attends to most.',
         successCriteria: 'You can connect one row of weights to the resulting context vector.',
+      },
+    ],
+  },
+  'kv-cache': {
+    quiz: [
+      {
+        id: 'what-is-cached',
+        prompt: 'During autoregressive decoding, what does the KV cache store from previous tokens?',
+        choices: [
+          'Key and value vectors',
+          'Only final vocabulary probabilities',
+          'Only tokenized text strings',
+        ],
+        answerIndex: 0,
+        explanation: 'The cache stores previous key and value projections so the new query can attend over them without recomputing them.',
+      },
+      {
+        id: 'new-step-work',
+        prompt: 'With a KV cache, what still has to happen for the current generated token?',
+        choices: [
+          'Compute the current query and attend over cached keys and values',
+          'Skip attention completely',
+          'Delete all previous values before softmax',
+        ],
+        answerIndex: 0,
+        explanation: 'Caching avoids old K/V recomputation, but the current query still reads visible cached positions through attention.',
+      },
+      {
+        id: 'cache-memory-growth',
+        prompt: 'Why can KV cache become a memory bottleneck for long contexts?',
+        choices: [
+          'It grows with visible tokens, layers, heads, and head dimension',
+          'It stores a full copy of the training set',
+          'It makes every token use a separate tokenizer',
+        ],
+        answerIndex: 0,
+        explanation: 'Each visible token contributes cached key and value vectors across model layers and attention heads.',
+      },
+    ],
+    labs: [
+      {
+        id: 'decode-step-savings',
+        title: 'Compare decode-step work',
+        prompt: 'Increase the decode step with caching on and off, then explain which computation grows and which stays flat.',
+        successCriteria: 'You can separate avoided K/V projection work from attention reads over the visible cache.',
+      },
+    ],
+  },
+  'grouped-query-attention': {
+    quiz: [
+      {
+        id: 'what-is-shared',
+        prompt: 'What does grouped-query attention share across multiple query heads?',
+        choices: [
+          'Key and value heads',
+          'The final generated tokens',
+          'The tokenizer vocabulary',
+        ],
+        answerIndex: 0,
+        explanation: 'GQA keeps the query heads but lets several of them reuse the same key and value heads.',
+      },
+      {
+        id: 'mqa-vs-mha',
+        prompt: 'How is multi-query attention different from full multi-head attention?',
+        choices: [
+          'MQA uses one shared KV head while MHA keeps a KV head per query head',
+          'MQA removes queries entirely',
+          'MQA only works for encoder-only models',
+        ],
+        answerIndex: 0,
+        explanation: 'MQA is the extreme sharing case: many query heads read from one key/value head.',
+      },
+      {
+        id: 'cache-scaling',
+        prompt: 'Why does reducing KV heads shrink long-context inference memory?',
+        choices: [
+          'The KV cache stores keys and values for each token and KV head',
+          'The model stores fewer input tokens',
+          'The softmax no longer needs probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'For each visible token, the cache stores key and value vectors across the KV heads.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-mha-mqa-gqa',
+        title: 'Compare sharing regimes',
+        prompt: 'Set KV heads equal to query heads, then to one, then to an intermediate value. Explain the memory and specialization tradeoff.',
+        successCriteria: 'You can identify MHA, MQA, and GQA and explain why GQA is the middle ground.',
+      },
+    ],
+  },
+  'flash-attention': {
+    quiz: [
+      {
+        id: 'what-is-avoided',
+        prompt: 'What large intermediate does Flash Attention avoid materializing in high-bandwidth memory?',
+        choices: [
+          'The full attention score/probability matrix',
+          'The input token ids',
+          'The learned model weights',
+        ],
+        answerIndex: 0,
+        explanation: 'Flash Attention streams score tiles and keeps online softmax state instead of writing the full N by N attention matrix.',
+      },
+      {
+        id: 'exact-or-approximate',
+        prompt: 'Does Flash Attention approximate scaled dot-product attention?',
+        choices: [
+          'No, it computes the same attention result with a more memory-efficient schedule',
+          'Yes, it drops random attention scores',
+          'Yes, it replaces softmax with nearest-neighbor search',
+        ],
+        answerIndex: 0,
+        explanation: 'Flash Attention changes the execution schedule and memory traffic, not the mathematical result.',
+      },
+      {
+        id: 'online-softmax-state',
+        prompt: 'Why does Flash Attention need online softmax statistics while streaming tiles?',
+        choices: [
+          'To combine tile contributions with the correct row-wise normalization',
+          'To permanently sort all tokens by vocabulary id',
+          'To remove the value vectors from attention',
+        ],
+        answerIndex: 0,
+        explanation: 'The row max and denominator let each streamed tile be merged into the same normalized softmax output.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tile-memory-tradeoff',
+        title: 'Trace one streamed tile',
+        prompt: 'Increase sequence length and compare full score-matrix memory with tile working-set memory. Explain why the FLOPs remain attention-like while memory traffic drops.',
+        successCriteria: 'You can separate exact attention computation from the memory schedule that avoids materializing N by N scores.',
       },
     ],
   },
@@ -1209,6 +2486,366 @@ export const lessonAssessments = {
         title: 'Trace visible keys',
         prompt: 'Pick one query row, switch between mask types, and list which keys remain visible before softmax.',
         successCriteria: 'You can justify each visible or blocked key using causal order, padding, or cross-attention memory.',
+      },
+    ],
+  },
+  'positional-encoding': {
+    quiz: [
+      {
+        id: 'why-needed',
+        prompt: 'Why do transformers need a position signal in addition to token embeddings?',
+        choices: [
+          'Self-attention does not inherently know token order',
+          'Tokenization removes all word identities',
+          'Softmax cannot produce probabilities without positions',
+        ],
+        answerIndex: 0,
+        explanation: 'Attention compares token vectors, but order has to be supplied through positional information or a related mechanism.',
+      },
+      {
+        id: 'sinusoidal-pattern',
+        prompt: 'What is the core idea of sinusoidal positional encoding?',
+        choices: [
+          'Use sine and cosine waves at multiple frequencies to give each position a repeatable vector',
+          'Assign every token the same constant vector',
+          'Sort tokens alphabetically before attention',
+        ],
+        answerIndex: 0,
+        explanation: 'Sinusoidal encodings combine many frequencies so positions have distinct but structured signatures.',
+      },
+      {
+        id: 'learned-position-limit',
+        prompt: 'What is a common limitation of learned absolute position embeddings?',
+        choices: [
+          'They need learned rows for positions the model will use',
+          'They cannot be added to token embeddings',
+          'They make attention approximate instead of exact',
+        ],
+        answerIndex: 0,
+        explanation: 'Learned absolute embeddings are parameters tied to position indices, so extrapolating beyond trained positions is not automatic.',
+      },
+    ],
+    labs: [
+      {
+        id: 'order-sensitive-sentence',
+        title: 'Compare order-sensitive meaning',
+        prompt: 'Switch between "dog bites man" and "man bites dog", then disable the position signal. Explain what information the model loses.',
+        successCriteria: 'You can explain why the same tokens need different positional context to represent different meanings.',
+      },
+    ],
+  },
+  rope: {
+    quiz: [
+      {
+        id: 'what-rotates',
+        prompt: 'In RoPE, which vectors are rotated before attention scoring?',
+        choices: [
+          'Query and key vectors',
+          'Only value vectors',
+          'Only final vocabulary logits',
+        ],
+        answerIndex: 0,
+        explanation: 'RoPE rotates query and key dimension pairs so their dot product carries relative-position information.',
+      },
+      {
+        id: 'relative-distance',
+        prompt: 'Why does RoPE help attention reason about relative position?',
+        choices: [
+          'The dot product between rotated Q and K depends on the position difference m - n',
+          'It deletes token embeddings and uses only positions',
+          'It makes every position have the same angle',
+        ],
+        answerIndex: 0,
+        explanation: 'Rotating Q by position m and K by position n makes the score encode their relative offset.',
+      },
+      {
+        id: 'value-vector-misconception',
+        prompt: 'Which statement is true about RoPE in standard attention?',
+        choices: [
+          'RoPE changes attention scores but does not replace the causal mask',
+          'RoPE is the same thing as top-p sampling',
+          'RoPE removes the need for keys and queries',
+        ],
+        answerIndex: 0,
+        explanation: 'RoPE modifies Q/K geometry. Masking and attention computation are still separate parts of the transformer.',
+      },
+    ],
+    labs: [
+      {
+        id: 'relative-shift-check',
+        title: 'Check relative shift behavior',
+        prompt: 'Move query and key positions together by the same amount. Explain what changes and what stays tied to the relative distance.',
+        successCriteria: 'You can explain why absolute rotation angles change while the relative-position relationship is preserved.',
+      },
+    ],
+  },
+  'residual-stream': {
+    quiz: [
+      {
+        id: 'update-rule',
+        prompt: 'What does a transformer block usually do to the residual stream?',
+        choices: [
+          'Adds attention and MLP outputs into the running representation',
+          'Deletes the previous representation at every layer',
+          'Stores only the final vocabulary probabilities',
+        ],
+        answerIndex: 0,
+        explanation: 'Residual connections add component outputs to the stream so information can accumulate across layers.',
+      },
+      {
+        id: 'not-memory-bank',
+        prompt: 'Which description best matches the residual stream?',
+        choices: [
+          'The current token representation flowing through the model',
+          'A database of all training examples',
+          'A separate cache that replaces attention',
+        ],
+        answerIndex: 0,
+        explanation: 'The stream is the evolving hidden representation, not a separate retrieval memory or KV cache.',
+      },
+      {
+        id: 'why-normalize',
+        prompt: 'Why do normalization and scaling matter around residual writes?',
+        choices: [
+          'Large writes can dominate or destabilize the running representation',
+          'They make token order unnecessary',
+          'They remove the need for embeddings',
+        ],
+        answerIndex: 0,
+        explanation: 'As many components add into one stream, scale control helps preserve usable information across layers.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-component-write',
+        title: 'Trace one residual write',
+        prompt: 'Increase one attention or MLP write, then explain how the before/write/after vectors change.',
+        successCriteria: 'You can distinguish adding a component write from replacing the whole token representation.',
+      },
+    ],
+  },
+  'conv-relu': {
+    quiz: [
+      {
+        id: 'preactivation-order',
+        prompt: 'In a Conv + ReLU block, what happens before ReLU is applied?',
+        choices: [
+          'The input window is convolved with the kernel and bias is added',
+          'Negative values are removed before the filter sees the input',
+          'The output is pooled before any feature response is computed',
+        ],
+        answerIndex: 0,
+        explanation: 'ReLU acts on the signed pre-activation produced by convolution plus bias.',
+      },
+      {
+        id: 'negative-response',
+        prompt: 'What does ReLU do to a negative convolution response?',
+        choices: [
+          'It turns that response into zero for the next layer',
+          'It flips the sign so the response becomes positive',
+          'It stores the negative value in the pooling layer',
+        ],
+        answerIndex: 0,
+        explanation: 'ReLU is max(0, z), so negative pre-activations do not pass forward.',
+      },
+      {
+        id: 'dead-filter-risk',
+        prompt: 'Why can a very negative bias be risky in a Conv + ReLU filter?',
+        choices: [
+          'It can push most pre-activations below zero, reducing signal and gradient flow',
+          'It makes the kernel larger than the input image',
+          'It changes valid convolution into matrix transposition',
+        ],
+        answerIndex: 0,
+        explanation: 'If most z values are below zero, ReLU outputs zeros and the filter may contribute little useful signal.',
+      },
+    ],
+    labs: [
+      {
+        id: 'bias-sparsity-sweep',
+        title: 'Find the activation cutoff',
+        prompt: 'Lower the bias until several feature responses disappear, then identify which pre-activation values were clipped.',
+        successCriteria: 'You can explain the difference between the signed convolution map and the sparse ReLU activation map.',
+      },
+    ],
+  },
+  'max-pooling': {
+    quiz: [
+      {
+        id: 'pooling-operation',
+        prompt: 'What does max pooling keep from each local window?',
+        choices: [
+          'The largest activation value in that window',
+          'A learned weighted sum of every value',
+          'The average label for the image',
+        ],
+        answerIndex: 0,
+        explanation: 'Max pooling is a fixed downsampling operation that forwards the strongest activation in each window.',
+      },
+      {
+        id: 'stride-effect',
+        prompt: 'What happens when pooling stride increases?',
+        choices: [
+          'The pooling windows visit fewer positions and the output usually gets smaller',
+          'The input feature map gets larger',
+          'The max operation becomes trainable',
+        ],
+        answerIndex: 0,
+        explanation: 'Stride controls how far the window moves between outputs. Larger strides skip more input positions.',
+      },
+      {
+        id: 'information-loss',
+        prompt: 'What information does max pooling discard?',
+        choices: [
+          'Non-maximum values and exact within-window location detail',
+          'All high activations',
+          'The channel dimension before convolution',
+        ],
+        answerIndex: 0,
+        explanation: 'Only the maximum value is passed forward, so smaller responses and precise local arrangement are compressed away.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-window-argmax',
+        title: 'Trace a pooling window',
+        prompt: 'Select an output cell, write the highlighted input values, and identify which coordinate supplied the max.',
+        successCriteria: 'You can compute the pooled output cell and explain which input details were discarded.',
+      },
+    ],
+  },
+  conv2d: {
+    quiz: [
+      {
+        id: 'one-output-cell',
+        prompt: 'What creates one Conv2D output cell?',
+        choices: [
+          'A dot product between the kernel and one local input window',
+          'An average of every pixel in the whole image',
+          'A separate learned kernel for every output location',
+        ],
+        answerIndex: 0,
+        explanation: 'The same kernel is reused across positions; each output cell comes from the aligned local patch.',
+      },
+      {
+        id: 'stride-effect',
+        prompt: 'What usually happens when stride increases while input, padding, and kernel size stay fixed?',
+        choices: [
+          'The output grid gets smaller because the kernel visits fewer positions',
+          'The output grid always gets larger',
+          'The kernel weights become non-learnable',
+        ],
+        answerIndex: 0,
+        explanation: 'Stride controls the step size between windows, so larger stride skips positions.',
+      },
+      {
+        id: 'padding-purpose',
+        prompt: 'Why add zero padding before a convolution?',
+        choices: [
+          'To let the kernel cover border pixels and often preserve more spatial size',
+          'To remove the need for learned weights',
+          'To make ReLU happen before convolution',
+        ],
+        answerIndex: 0,
+        explanation: 'Padding extends the grid with zeros so border-centered windows can be computed.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-output-size',
+        title: 'Trace output shape',
+        prompt: 'Switch stride and padding, then compute the output-size formula before checking the displayed grid.',
+        successCriteria: 'You can explain why padding increases available windows while stride skips windows.',
+      },
+    ],
+  },
+  'gradient-problems': {
+    quiz: [
+      {
+        id: 'chain-product',
+        prompt: 'Why do gradients vanish or explode in deep networks?',
+        choices: [
+          'Backprop multiplies many local derivatives through the depth of the network',
+          'The optimizer deletes early layers after each batch',
+          'The loss function ignores all hidden activations',
+        ],
+        answerIndex: 0,
+        explanation: 'A long product of values below one shrinks; a long product above one grows rapidly.',
+      },
+      {
+        id: 'residual-path',
+        prompt: 'How does a residual connection help gradient flow?',
+        choices: [
+          'It adds a direct path so gradients are not forced only through the transformed branch',
+          'It removes the need for a loss function',
+          'It makes every local derivative exactly zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Residual connections give the backward pass an additive shortcut around difficult transformations.',
+      },
+      {
+        id: 'clipping-limit',
+        prompt: 'What is a limitation of gradient clipping?',
+        choices: [
+          'It limits large updates but does not fix the underlying scale or saturation cause',
+          'It makes gradients larger when they vanish',
+          'It changes convolution into pooling',
+        ],
+        answerIndex: 0,
+        explanation: 'Clipping is a guardrail for explosions; initialization, normalization, and architecture still matter.',
+      },
+    ],
+    labs: [
+      {
+        id: 'diagnose-gradient-flow',
+        title: 'Diagnose a gradient chain',
+        prompt: 'Create one vanishing case and one exploding case by changing depth and local multiplier, then stabilize one of them.',
+        successCriteria: 'You can identify whether the problem comes from depth, local derivative scale, residual paths, or clipping.',
+      },
+    ],
+  },
+  'layer-normalization': {
+    quiz: [
+      {
+        id: 'within-token',
+        prompt: 'What statistics does LayerNorm use in a transformer token representation?',
+        choices: [
+          'Mean and variance across features within the same token',
+          'Mean and variance across the entire training dataset',
+          'Only the maximum value across the batch',
+        ],
+        answerIndex: 0,
+        explanation: 'LayerNorm normalizes each example or token across its feature dimension, independent of other batch items.',
+      },
+      {
+        id: 'gamma-beta',
+        prompt: 'Why does LayerNorm include learned gamma and beta parameters?',
+        choices: [
+          'To let the model rescale and shift normalized features after stabilization',
+          'To compute attention masks',
+          'To choose the next token directly',
+        ],
+        answerIndex: 0,
+        explanation: 'After standardizing features, learned scale and shift restore useful representational flexibility.',
+      },
+      {
+        id: 'batchnorm-difference',
+        prompt: 'Why is LayerNorm convenient for autoregressive decoding?',
+        choices: [
+          'It does not need batch-level statistics from other examples',
+          'It removes residual connections entirely',
+          'It only works when the batch is large',
+        ],
+        answerIndex: 0,
+        explanation: 'LayerNorm uses per-token features, so inference with batch size one remains well-defined.',
+      },
+    ],
+    labs: [
+      {
+        id: 'normalize-shifted-token',
+        title: 'Normalize a shifted token',
+        prompt: 'Choose the shifted token, inspect mean and standard deviation, then explain what gamma and beta restore after normalization.',
+        successCriteria: 'You can distinguish the raw token shift from the normalized feature pattern and the learned affine output.',
       },
     ],
   },
@@ -1338,6 +2975,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Temperature reshapes probabilities, while top-k and top-p filter the candidate set before sampling or greedy choice.',
       },
+      {
+        id: 'kv-cache-misconception',
+        prompt: 'What is a KV-cache misconception?',
+        choices: [
+          'Thinking it changes the next-token probabilities instead of reusing prior key/value rows',
+          'Using it to avoid recomputing attention over prior context',
+          'Appending the selected token before the next decoding step',
+        ],
+        answerIndex: 0,
+        explanation: 'The cache is a compute optimization for previous tokens; it should not change the model distribution for the same context.',
+      },
     ],
     labs: [
       {
@@ -1371,6 +3019,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Top-p is nucleus sampling: the number of kept tokens changes with the probability mass in the current context.',
+      },
+      {
+        id: 'top-p-token-count',
+        prompt: 'What is the top-p sampling misconception?',
+        choices: [
+          'Assuming p means a fixed number or fixed percentage of vocabulary tokens',
+          'Sorting candidates by probability before accumulating mass',
+          'Including enough ranked tokens to reach the probability threshold',
+        ],
+        answerIndex: 0,
+        explanation: 'Top-p keeps a variable-size nucleus based on cumulative probability mass, not a fixed token count.',
       },
     ],
     labs: [
@@ -1474,6 +3133,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Broader search probes more candidates or graph paths, so it can find more relevant vectors at higher cost.',
       },
+      {
+        id: 'ann-perfect-recall',
+        prompt: 'What is the ANN search misconception this lesson warns about?',
+        choices: [
+          'Treating approximate search as guaranteed to recover every exact nearest neighbor',
+          'Using exact search as a high-recall baseline for a small corpus',
+          'Comparing recall and latency together',
+        ],
+        answerIndex: 0,
+        explanation: 'Approximate indexes trade search work for speed, so recall must be measured and tuned.',
+      },
     ],
     labs: [
       {
@@ -1507,6 +3177,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Recall@k measures how much known relevant evidence appears within the retrieved candidate set.',
+      },
+      {
+        id: 'reranker-missing-evidence',
+        prompt: 'What retrieval-evaluation misconception should you avoid?',
+        choices: [
+          'Assuming a reranker can fix evidence that first-pass retrieval never returned',
+          'Checking Recall@k before generation',
+          'Looking at top-result rank with MRR',
+        ],
+        answerIndex: 0,
+        explanation: 'Reranking can only reorder the candidate set it receives; missing evidence remains missing.',
       },
     ],
     labs: [
@@ -1688,6 +3369,141 @@ export const lessonAssessments = {
       },
     ],
   },
+  'rl-foundations': {
+    quiz: [
+      {
+        id: 'loop-parts',
+        prompt: 'What is the basic reinforcement-learning loop?',
+        choices: [
+          'The agent observes state, takes action, receives reward and next state',
+          'The model splits data into train, validation, and test once',
+          'The tokenizer maps words to fixed dictionary definitions',
+        ],
+        answerIndex: 0,
+        explanation: 'RL is organized around repeated interaction: state, action, reward, next state, and another decision.',
+      },
+      {
+        id: 'reward-hacking',
+        prompt: 'What is reward hacking?',
+        choices: [
+          'Optimizing the numeric reward in a way that misses the designer intent',
+          'Reducing gamma so future rewards count less',
+          'Using a random exploratory action',
+        ],
+        answerIndex: 0,
+        explanation: 'An agent follows the reward signal it is given, so a flawed reward can teach unintended behavior.',
+      },
+      {
+        id: 'discount-factor',
+        prompt: 'What does a larger discount factor gamma usually do?',
+        choices: [
+          'It makes distant future rewards matter more',
+          'It makes all future rewards disappear',
+          'It turns rewards into actions',
+        ],
+        answerIndex: 0,
+        explanation: 'Gamma controls how much delayed reward contributes to return; higher gamma values make long-term payoff more important.',
+      },
+    ],
+    labs: [
+      {
+        id: 'design-reward',
+        title: 'Design a reward safely',
+        prompt: 'Use the reward editor to create a path with a tempting side reward, then explain whether it could distract from the goal.',
+        successCriteria: 'You can identify the intended behavior, the numeric incentive, and one possible reward-hacking failure.',
+      },
+    ],
+  },
+  'q-learning': {
+    quiz: [
+      {
+        id: 'what-q-means',
+        prompt: 'What does Q(s, a) estimate in Q-learning?',
+        choices: [
+          'Expected discounted return after taking action a in state s and then acting well',
+          'The probability that state s appears in the dataset',
+          'Only the immediate reward before any future value',
+        ],
+        answerIndex: 0,
+        explanation: 'A Q-value is an action-value estimate: immediate reward plus discounted future return from the next state.',
+      },
+      {
+        id: 'td-target',
+        prompt: 'In the update target r + gamma max_a Q(s_prime, a), what does the max over next actions represent?',
+        choices: [
+          'The best estimated future value from the next state',
+          'The action that was definitely sampled in the previous state',
+          'A supervised label assigned by a trainer',
+        ],
+        answerIndex: 0,
+        explanation: 'Q-learning is off-policy: it backs up toward the greedy next action value even if exploration sampled something else.',
+      },
+      {
+        id: 'learning-rate-role',
+        prompt: 'What does the learning rate alpha control in the Q-learning update?',
+        choices: [
+          'How far the old Q-value moves toward the new target',
+          'How many actions the environment has',
+          'Whether rewards are terminal or nonterminal',
+        ],
+        answerIndex: 0,
+        explanation: 'Alpha scales the temporal-difference error, so larger values overwrite old estimates faster.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-one-update',
+        title: 'Trace one Q update',
+        prompt: 'Use the Bellman update tab to choose old Q, reward, future Q, alpha, and gamma, then predict the new Q before reading it.',
+        successCriteria: 'You can name the target, TD error, and final nudged Q-value for one transition.',
+      },
+    ],
+  },
+  'rl-exploration': {
+    quiz: [
+      {
+        id: 'epsilon-meaning',
+        prompt: 'In epsilon-greedy exploration, what does epsilon control?',
+        choices: [
+          'The probability of choosing a random exploratory action',
+          'The reward discount applied after terminal states',
+          'The number of states in the environment',
+        ],
+        answerIndex: 0,
+        explanation: 'Epsilon is the exploration rate: higher epsilon means more random actions instead of greedy exploitation.',
+      },
+      {
+        id: 'explore-exploit-tradeoff',
+        prompt: 'Why can pure exploitation fail early in training?',
+        choices: [
+          'The agent may commit to a bad action before it has tried enough alternatives',
+          'The agent automatically knows every reward in advance',
+          'The discount factor becomes exactly zero',
+        ],
+        answerIndex: 0,
+        explanation: 'Without exploration, early noisy estimates can trap the policy in a locally attractive but poor behavior.',
+      },
+      {
+        id: 'cliff-risk',
+        prompt: 'Why can a risky shortest path be worse under high exploration noise?',
+        choices: [
+          'Random exploratory moves can push the agent into costly failure states',
+          'Exploration deletes all rewards from the environment',
+          'The Q-table no longer stores action values',
+        ],
+        answerIndex: 0,
+        explanation: 'When random moves are frequent, a path close to a cliff has a high chance of catastrophic deviation.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tune-epsilon',
+        title: 'Tune exploration for risk',
+        prompt: 'Compare low and high epsilon in the epsilon and cliff tabs, then choose a setting for fast learning without frequent falls.',
+        successCriteria: 'You can justify the setting using exploration count, exploitation count, falls, and wins.',
+      },
+    ],
+  },
   'policy-gradients': {
     quiz: [
       {
@@ -1711,6 +3527,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'Unlike tabular value methods, policy gradients update policy parameters that control action probabilities.',
+      },
+      {
+        id: 'advantage-guarantee',
+        prompt: 'What is a policy-gradient misconception?',
+        choices: [
+          'Thinking one positive-advantage sample guarantees the globally best policy',
+          'Using advantage sign to push a sampled action up or down',
+          'Updating stochastic action probabilities directly',
+        ],
+        answerIndex: 0,
+        explanation: 'A sampled policy-gradient update is noisy local evidence, not a global guarantee.',
       },
     ],
     labs: [
@@ -1745,6 +3572,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'A negative advantage means the action underperformed the critic baseline, so the actor is pushed away from it.',
+      },
+      {
+        id: 'critic-action-choice',
+        prompt: 'What is an actor-critic misconception?',
+        choices: [
+          'Thinking the critic directly chooses the action instead of estimating value for the actor update',
+          'Using the critic value as a baseline',
+          'Letting the actor own the stochastic policy',
+        ],
+        answerIndex: 0,
+        explanation: 'The actor selects actions; the critic estimates value so the update has a lower-variance advantage signal.',
       },
     ],
     labs: [
@@ -1848,6 +3686,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'Fewer steps can be faster, but each update covers more distance and can amplify denoising mistakes.',
       },
+      {
+        id: 'deterministic-quality-guarantee',
+        prompt: 'What sampling misconception should you avoid?',
+        choices: [
+          'Assuming deterministic or fewer-step sampling is always higher quality',
+          'Comparing stochasticity and step count',
+          'Noting that prediction quality affects the final sample',
+        ],
+        answerIndex: 0,
+        explanation: 'Sampler settings are tradeoffs; speed, diversity, and quality depend on model quality and task.',
+      },
     ],
     labs: [
       {
@@ -1881,6 +3730,17 @@ export const lessonAssessments = {
         ],
         answerIndex: 0,
         explanation: 'High scale can force prompt features harder, but it can also overshoot and create artifacts.',
+      },
+      {
+        id: 'max-guidance-misconception',
+        prompt: 'What is the classifier-free guidance misconception?',
+        choices: [
+          'Assuming the largest guidance scale is always best',
+          'Combining conditional and unconditional predictions',
+          'Tuning scale as a prompt-adherence/diversity tradeoff',
+        ],
+        answerIndex: 0,
+        explanation: 'Very high guidance can reduce diversity and increase artifacts even when prompt match appears stronger.',
       },
     ],
     labs: [
@@ -1916,6 +3776,17 @@ export const lessonAssessments = {
         answerIndex: 0,
         explanation: 'A DiT treats image or latent patches like tokens, which lets transformer attention mix global information.',
       },
+      {
+        id: 'universal-winner-misconception',
+        prompt: 'What architecture-comparison misconception should you avoid?',
+        choices: [
+          'Assuming U-Net or DiT is universally better in every data, scale, and compute regime',
+          'Comparing local inductive bias with global attention',
+          'Tracking token count as patch size changes',
+        ],
+        answerIndex: 0,
+        explanation: 'The useful comparison is tradeoffs: local image bias, scale, global mixing, and compute cost.',
+      },
     ],
     labs: [
       {
@@ -1923,6 +3794,276 @@ export const lessonAssessments = {
         title: 'Inspect patch-token cost',
         prompt: 'Change resolution and patch size and watch token count and attention-pair cost move.',
         successCriteria: 'You can explain why smaller patches improve detail but increase transformer attention cost.',
+      },
+    ],
+  },
+  'model-debugging': {
+    quiz: [
+      {
+        id: 'check-order',
+        prompt: 'What should you verify first when an incident appears only in production?',
+        choices: [
+          'The data and serving stages that changed from validation conditions',
+          'Only the last trained checkpoint',
+          "Only the final confusion matrix on today's batch",
+        ],
+        answerIndex: 0,
+        explanation: 'A disciplined pipeline check is needed to localize whether drift comes from data, serving, or training.',
+      },
+      {
+        id: 'slice-target',
+        prompt: 'If one subgroup has much higher error, the first interpretation is usually:',
+        choices: [
+          'A local failure mode that may be hidden in aggregate metrics',
+          'An unrelated random artifact with no operational impact',
+          'A model architecture mismatch that always requires bigger capacity',
+        ],
+        answerIndex: 0,
+        explanation: 'Slicing often reveals failures that global summaries smooth over.',
+      },
+      {
+        id: 'intervention-safety',
+        prompt: 'Why is a single global threshold tweak risky as a first fix?',
+        choices: [
+          'It can hide a subgroup error and increase inequality across traffic slices',
+          'It is equivalent to changing the data split strategy',
+          'It never affects precision or recall',
+        ],
+        answerIndex: 0,
+        explanation: 'Threshold tuning redistributes errors, so it can fix one slice while worsening others.',
+      },
+    ],
+    labs: [
+      {
+        id: 'debug-loop',
+        title: 'Run a constrained debugging loop',
+        prompt: 'Choose a scenario, run checks by stage, pick the highest-support root-cause, and select one targeted intervention.',
+        successCriteria: 'You should produce one slice with improved recall and describe why the root-cause hypothesis aligned with a later signal.',
+      },
+    ],
+  },
+  'model-interpretability': {
+    quiz: [
+      {
+        id: 'why-ablation',
+        prompt: 'What does a feature ablation-style attribution primarily measure in this lesson?',
+        choices: [
+          'How much predictions degrade when a feature is replaced by a reference value',
+          'The exact causal effect of changing one feature',
+          'How to remove all uncertainty from the model',
+        ],
+        answerIndex: 0,
+        explanation: 'Ablation-style checks are directional and help rank features; they are not proof of causality.',
+      },
+      {
+        id: 'local-meaning',
+        prompt: 'In a local explanation panel, the largest signed contribution is best interpreted as:',
+        choices: [
+          'The strongest directional driver for this example under the toy model',
+          'A guarantee of causal influence in every domain',
+          'Proof that the model has no bias',
+        ],
+        answerIndex: 0,
+        explanation: 'Large local contribution means strong influence in the surrogate, with model-dependent caveats.',
+      },
+      {
+        id: 'counterfactual',
+        prompt: 'What is the purpose of the counterfactual perturbation in this lesson?',
+        choices: [
+          'To test decision stability under a controlled input change',
+          'To tune weights for all future samples',
+          'To prove the explanation is causal',
+        ],
+        answerIndex: 0,
+        explanation: 'Counterfactual checks test whether small input changes materially flip decisions.',
+      },
+    ],
+    labs: [
+      {
+        id: 'compare-modes',
+        title: 'Find an unstable attribution mode',
+        prompt: 'Enable correlation mode and compare top attributions before and after a counterfactual perturbation.',
+        successCriteria: 'You can explain one case where explanation confidence drops when correlation increases.',
+      },
+    ],
+  },
+  'model-monitoring': {
+    quiz: [
+      {
+        id: 'monitor-priority',
+        prompt: 'Which signal in this lesson most directly distinguishes input drift from label drift behavior?',
+        choices: [
+          'Tracking both input drift and precision/recall together',
+          'Precision alone',
+          'Recall alone',
+        ],
+        answerIndex: 0,
+        explanation: 'Input drift and label-quality issues can both hurt scores, so comparing multiple signals avoids false attribution.',
+      },
+      {
+        id: 'alert-meaning',
+        prompt: 'Why can a stricter alert threshold help and hurt at the same time?',
+        choices: [
+          'It reduces late misses but can increase false alerts and intervention noise',
+          'It always improves model quality',
+          'It removes the need to monitor serving metrics',
+        ],
+        answerIndex: 0,
+        explanation: 'Strict alerts catch issues earlier but can fire during normal variance.',
+      },
+      {
+        id: 'playbook-choice',
+        prompt: 'When throughput drops and recall drops together, a first response is usually:',
+        choices: [
+          'Pause rollout, inspect serving contract and upstream sampling, then isolate monitoring signals',
+          'Increase threshold complexity immediately',
+          'Ignore alerts until the trend continues for 3 weeks',
+        ],
+        answerIndex: 0,
+        explanation: 'Parallel degradation in serving and metrics usually needs triage of contract and data before model updates.',
+      },
+    ],
+    labs: [
+      {
+        id: 'configure-playbook',
+        title: 'Tune monitoring and choose a playbook',
+        prompt: 'Set a strictness profile and scenario to create 1-2 active alerts, then choose the best response playbook.',
+        successCriteria: 'You should describe which metric triggered first and why the selected playbook matches that risk.',
+      },
+    ],
+  },
+  'uncertainty-estimation': {
+    quiz: [
+      {
+        id: 'calibration-vs-confidence',
+        prompt: 'What is the distinction between confidence and calibration in this context?',
+        choices: [
+          'Confidence is uncertainty width; calibration is long-run reliability of probabilities or intervals',
+          'They are always equivalent',
+          'Calibration is only for classification, confidence only for regression',
+        ],
+        answerIndex: 0,
+        explanation: 'A model can be highly confident and still poorly calibrated.',
+      },
+      {
+        id: 'wide-interval',
+        prompt: 'A very wide interval should usually be interpreted as:',
+        choices: [
+          'A warning about higher uncertainty or distribution mismatch',
+          'A guaranteed prediction failure',
+          'Proof that the model is overfitting',
+        ],
+        answerIndex: 0,
+        explanation: 'Width is a caution signal; it is useful when interpreted with coverage and abstain policies.',
+      },
+      {
+        id: 'abstain-policy',
+        prompt: 'What is the operational role of abstain or defer in uncertainty-aware systems?',
+        choices: [
+          'Send low-confidence cases to fallback review or broader context',
+          'Drop half the data for free speed gains',
+          'Replace training labels with a prior mean',
+        ],
+        answerIndex: 0,
+        explanation: 'Abstain policies convert uncertain predictions into explicit review cases.',
+      },
+    ],
+    labs: [
+      {
+        id: 'coverage-vs-width',
+        title: 'Balance width and coverage',
+        prompt: 'Increase target coverage and adjust abstain threshold while watching coverage and mean interval width.',
+        successCriteria: 'You can keep coverage stable while preventing too much unnecessary abstention.',
+      },
+    ],
+  },
+  'model-fairness': {
+    quiz: [
+      {
+        id: 'parity-difference',
+        prompt: 'Which objective best focuses on equal selection proportions across groups?',
+        choices: [
+          'Selection-rate parity',
+          'FPR parity',
+          'TPR parity',
+        ],
+        answerIndex: 0,
+        explanation: 'Selection parity compares the share of positive predictions across groups.',
+      },
+      {
+        id: 'conflict-rule',
+        prompt: 'A practical implication of fairness trade-offs is:',
+        choices: [
+          'Satisfying one constraint may worsen another',
+          'Every fairness metric can be optimized simultaneously at full strength',
+          'No threshold changes are needed if one metric is equal',
+        ],
+        answerIndex: 0,
+        explanation: 'Metrics can conflict; governance choices must set priorities.',
+      },
+      {
+        id: 'counterfactual-use',
+        prompt: 'When should group-specific thresholds be considered?',
+        choices: [
+          'When global thresholds cannot meet the chosen fairness and utility trade-off',
+          'Never, because they always invalidate comparisons',
+          'Only when model training accuracy is below 50%',
+        ],
+        answerIndex: 0,
+        explanation: 'Group thresholds are a controlled tool to rebalance operational parity, but they should be policy-driven.',
+      },
+    ],
+    labs: [
+      {
+        id: 'objective-target',
+        title: 'Match one fairness objective',
+        prompt: 'Pick an objective and tune thresholds/shift until your selected objective gap is materially reduced.',
+        successCriteria: 'You can explain which other metric moved and why this reflects a trade-off.',
+      },
+    ],
+  },
+  'bloom-filter': {
+    quiz: [
+      {
+        id: 'false-positive',
+        prompt: 'What kind of mistake can a Bloom filter make?',
+        choices: [
+          'It can say probably present for an item that was never inserted',
+          'It can say definitely absent for an item that was inserted',
+          'It can return the stored item value instead of a membership answer',
+        ],
+        answerIndex: 0,
+        explanation: 'A Bloom filter has false positives because different items can set the same bits, but it should not have false negatives if inserts and queries use the same hashes.',
+      },
+      {
+        id: 'definitely-not',
+        prompt: 'Why does a zero bit prove an item is definitely absent?',
+        choices: [
+          'Every inserted item would have set all of its hash positions to 1',
+          'Zero bits store the original inserted keys',
+          'The filter checks a backing database before answering',
+        ],
+        answerIndex: 0,
+        explanation: 'If any queried hash position is 0, that item could not have been inserted because insertion sets every queried position.',
+      },
+      {
+        id: 'parameter-tradeoff',
+        prompt: 'What usually lowers the false-positive probability for a fixed number of inserted items?',
+        choices: [
+          'More bits with a near-optimal number of hash functions',
+          'Fewer bits and as many hash functions as possible',
+          'Removing hash functions so only one bit is checked',
+        ],
+        answerIndex: 0,
+        explanation: 'The false-positive rate falls when the bit array is less saturated and k is tuned near (m/n) ln 2.',
+      },
+    ],
+    labs: [
+      {
+        id: 'force-collision',
+        title: 'Force and explain a collision',
+        prompt: 'Use the false positive lab to add several words, then query a word that was not added until the filter reports probably present.',
+        successCriteria: 'You can list the queried hash positions and explain which inserted words already set those bits.',
       },
     ],
   },

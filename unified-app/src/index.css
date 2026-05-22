@@ -874,6 +874,18 @@ body {
   background: #1f6f95;
 }
 
+.ua-path-node.locked {
+  border-color: #d3d3d3;
+  background: #f5f5f5;
+  color: var(--ds-faint);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ua-path-node.locked span {
+  background: #c0c0c0;
+}
+
 .ua-path-caption {
   margin: 0;
   line-height: 1.5;

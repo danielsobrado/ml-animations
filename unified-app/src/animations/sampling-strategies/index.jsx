@@ -35,7 +35,7 @@ const STRATEGIES = {
   },
   topP: {
     label: 'Top-p',
-    detail: 'Keep the smallest candidate set whose cumulative probability reaches p.',
+    detail: 'Keep ranked candidates until cumulative probability reaches p, including the token that crosses the threshold.',
     risk: 'The candidate count changes by context, so p controls mass rather than a fixed number of tokens.',
   },
 };
@@ -228,7 +228,7 @@ export default function SamplingStrategiesAnimation() {
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-5">
           <h3 className="text-sm font-black uppercase tracking-wide text-amber-700">Core math</h3>
           <p className="mt-3 text-sm leading-6 text-amber-950">
-            Temperature rescales logits before softmax; top-k and top-p filter the probability distribution; beam search maximizes sequence score.
+            Temperature rescales logits before softmax; top-k filters by rank; top-p filters by cumulative probability mass; beam search maximizes sequence score.
           </p>
         </div>
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-5">

@@ -142,7 +142,8 @@ export default function PolicyGradientsAnimation() {
             </div>
             <div className="mt-1 text-3xl font-bold">{advantage}</div>
             <p className="mt-2 text-sm text-slate-300">
-              Positive advantage increases the sampled action preference; negative advantage lowers it.
+              Toy update: positive advantage increases the sampled action preference before softmax; negative
+              advantage lowers it. Other probabilities move because the distribution is renormalized.
             </p>
           </div>
         </div>

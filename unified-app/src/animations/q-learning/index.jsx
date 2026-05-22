@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Grid, Calculator, PlayCircle } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const TablePanel = lazy(() => import('./TablePanel'));
@@ -67,6 +68,9 @@ export default function QLearningAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="px-8 pb-8">
+                    <AssessmentPanel lessonId="q-learning" title="Q-Learning check" />
+                </div>
             </div>
         </div>
     );

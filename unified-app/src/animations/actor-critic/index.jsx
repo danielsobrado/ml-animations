@@ -118,7 +118,8 @@ export default function ActorCriticAnimation() {
             <div className="text-xs uppercase tracking-wide text-violet-200">Advantage = return - value</div>
             <div className="mt-1 text-3xl font-bold">{advantage}</div>
             <p className="mt-2 text-sm text-slate-300">
-              Advantage is the bridge: it trains the actor while the critic learns a better baseline.
+              Advantage is the bridge: this toy actor uses it as the policy-update sign while the critic moves its
+              value estimate toward the observed return.
             </p>
           </div>
         </div>

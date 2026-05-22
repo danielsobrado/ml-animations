@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Lightbulb, Calculator, Shield } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const ConceptPanel = lazy(() => import('./ConceptPanel'));
@@ -65,6 +66,9 @@ export default function SpearmanCorrelationAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="px-8 pb-8">
+                    <AssessmentPanel lessonId="spearman-correlation" title="Spearman Correlation check" />
+                </div>
             </div>
         </div>
     );

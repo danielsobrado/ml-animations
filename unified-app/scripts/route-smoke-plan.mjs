@@ -1,0 +1,29 @@
+import { allAnimations } from '../src/data/animations.js';
+
+export const APP_BASE_PATH = (process.env.CURRICULUM_SMOKE_BASE || '/ml-animations').replace(/\/+$/, '');
+
+export const EXPLICIT_ROUTES = [
+  '/',
+  '/animation/matrix-multiplication',
+  '/animation/linear-regression',
+  '/animation/cross-validation',
+  '/animation/feature-scaling-preprocessing',
+  '/animation/transformer-token-generation',
+  '/animation/rag-vector-indexing',
+  '/animation/value-iteration',
+  '/animation/diffusion-basics',
+];
+
+export function toUniqueRoutes(animations = allAnimations) {
+  const allAnimationRoutes = animations.map((animation) => `/animation/${animation.id}`);
+  return [...new Set([...EXPLICIT_ROUTES, ...allAnimationRoutes])];
+}
+
+export function normalizeRoute(route, basePath = APP_BASE_PATH) {
+  if (route === '/') {
+    return `${basePath}/`;
+  }
+
+  if (route.startsWith(`${basePath}/`)) return route;
+  return `${basePath}${route.startsWith('/') ? route : `/${route}`}`;
+}

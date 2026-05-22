@@ -11,8 +11,9 @@ The project started as a collection of standalone animations. It is now centered
 ## What is inside
 
 - A unified lesson browser with searchable topics and curriculum tracks.
-- Guided paths for fundamentals, LLMs, RAG, vision and diffusion, and reinforcement learning.
+- Guided paths for fundamentals, LLMs, RAG, model reliability, vision and diffusion, and reinforcement learning.
 - Core ML lessons for splitting data, cross-validation, leakage, scaling, metrics, calibration, PCA, clustering, tree ensembles, and classical classifiers.
+- Model reliability lessons for debugging, interpretability, monitoring, fairness, and uncertainty estimation.
 - Transformer lessons for attention, masks, architecture families, training objectives, token generation, sampling, KV cache, Flash Attention, and fine-tuning.
 - RAG lessons for chunking, vector indexing, reranking, grounding, retrieval evaluation, and failure modes.
 - Neural-network lessons for backpropagation, initialization, optimizers, dropout, batch normalization, and training-loop dynamics.
@@ -66,6 +67,10 @@ The NLP and transformer track starts with bag-of-words, tokenization, and embedd
 ### RAG
 
 The retrieval track covers the RAG pipeline as a system: chunking, embedding search, vector indexing, reranking, context packing, grounding, retrieval metrics, and failure modes.
+
+### Model Reliability
+
+The model reliability track covers post-training and deployed-system concerns: debugging failures, interpreting model behavior, estimating uncertainty, monitoring drift and regressions, and evaluating fairness tradeoffs across slices and groups.
 
 ### Vision and Diffusion
 

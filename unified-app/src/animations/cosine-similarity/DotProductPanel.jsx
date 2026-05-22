@@ -12,14 +12,14 @@ export default function DotProductPanel() {
     const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
 
     // Calculate cosine similarity
-    const cosineSim = dotProduct / (mag1 * mag2);
+    const cosineSim = mag1 === 0 || mag2 === 0 ? 0 : dotProduct / (mag1 * mag2);
 
     // Calculate angle in degrees
     const angleRad = Math.acos(Math.max(-1, Math.min(1, cosineSim)));
     const angleDeg = (angleRad * 180 / Math.PI).toFixed(1);
 
     // Projection of v1 onto v2
-    const projScalar = dotProduct / (mag2 * mag2);
+    const projScalar = mag2 === 0 ? 0 : dotProduct / (mag2 * mag2);
     const proj = { x: projScalar * v2.x, y: projScalar * v2.y };
 
     return (
@@ -100,7 +100,7 @@ export default function DotProductPanel() {
 
                         {/* Angle Arc */}
                         <path
-                            d={`M 30 0 A 30 30 0 0 0 ${30 * Math.cos(-angleRad * Math.PI / 180)} ${30 * Math.sin(-angleRad * Math.PI / 180)}`}
+                            d={`M 30 0 A 30 30 0 0 0 ${30 * Math.cos(-angleRad)} ${30 * Math.sin(-angleRad)}`}
                             fill="none"
                             stroke="#a855f7"
                             strokeWidth="2"

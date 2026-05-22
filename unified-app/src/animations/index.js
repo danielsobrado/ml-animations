@@ -56,6 +56,13 @@ const animationRegistry = {
   'multimodal-llm': lazy(() => import('./multimodal-llm')),
   'fine-tuning': lazy(() => import('./fine-tuning')),
 
+  // Model Reliability
+  'model-debugging': lazy(() => import('./model-debugging')),
+  'model-interpretability': lazy(() => import('./model-interpretability')),
+  'model-monitoring': lazy(() => import('./model-monitoring')),
+  'model-fairness': lazy(() => import('./model-fairness')),
+  'uncertainty-estimation': lazy(() => import('./uncertainty-estimation')),
+
   // Linear Algebra & Math
   'matrix-multiplication': lazy(() => import('./matrix-multiplication')),
   'matrix-decompositions': lazy(() => import('./matrix-decompositions')),

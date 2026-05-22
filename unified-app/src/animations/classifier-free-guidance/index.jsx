@@ -86,7 +86,7 @@ export default function ClassifierFreeGuidanceAnimation() {
           />
 
           <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-            CFG pushes the sampler away from the unconditional prediction and toward the prompt-conditioned prediction.
+            In this toy scalar view, CFG pushes the sampler away from the unconditional prediction and toward the prompt-conditioned prediction.
           </div>
         </div>
 

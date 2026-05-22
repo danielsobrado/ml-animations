@@ -85,7 +85,7 @@ export default function TransformerTokenGeneration() {
     () => buildDistribution({ generated, temperature, topK, topP, strategy }),
     [generated, temperature, topK, topP, strategy],
   );
-  const cacheSavings = Math.max(0, allTokens.length * generated.length - generated.length);
+  const reusedCacheRows = Math.max(0, allTokens.length - 1);
 
   const generateNext = () => {
     if (generated.length >= 6) return;
@@ -129,7 +129,7 @@ export default function TransformerTokenGeneration() {
 
       <div className="grid gap-3 md:grid-cols-3">
         <Stat label="Generated" value={generated.length} detail="tokens appended" />
-        <Stat label="KV cache" value={`${allTokens.length} rows`} detail={`${cacheSavings} recompute units avoided`} />
+        <Stat label="KV cache" value={`${allTokens.length} rows`} detail={`${reusedCacheRows} prior rows reusable next step`} />
         <Stat label="Sampling" value={strategy === 'greedy' ? 'Greedy' : 'Sample'} detail={`top-${topK}, top-p ${topP.toFixed(2)}`} />
       </div>
 
@@ -250,8 +250,9 @@ export default function TransformerTokenGeneration() {
             })}
           </div>
           <p className="mt-4 text-sm leading-6 text-slate-600">
-            Gray candidates are filtered out before selection. Greedy always chooses the largest kept probability;
-            sampling can choose another kept token.
+            Gray candidates are filtered out before selection. Top-p includes ranked tokens until the cumulative
+            probability mass reaches the threshold, including the token that crosses it. Greedy chooses the largest
+            kept probability; this toy sampler can choose another kept token to show stochastic decoding.
           </p>
         </section>
       </div>

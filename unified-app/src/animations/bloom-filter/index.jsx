@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Play, AlertTriangle, Settings } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 // Lazy load panels
 const PlaygroundPanel = lazy(() => import('./PlaygroundPanel'));
@@ -65,6 +66,9 @@ export default function BloomFilterAnimation() {
             {/* Panel Content */}
             <div className="flex-1 overflow-auto">
                 {renderPanel()}
+                <div className="px-8 pb-8">
+                    <AssessmentPanel lessonId="bloom-filter" title="Bloom filter check" />
+                </div>
             </div>
         </div>
     );

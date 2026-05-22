@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useState } from 'react';
 import { FileText, FlaskConical } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 const OneSheetPanel = lazy(() => import('./OneSheetPanel'));
 const PracticePanel = lazy(() => import('./PracticePanel'));
@@ -61,7 +62,12 @@ export default function MatrixDecompositionsAnimation() {
         </div>
       </nav>
 
-      <div className="flex-1 overflow-auto">{renderPanel()}</div>
+      <div className="flex-1 overflow-auto">
+        {renderPanel()}
+        <div className="mx-auto max-w-7xl px-4 pb-6">
+          <AssessmentPanel lessonId="matrix-decompositions" />
+        </div>
+      </div>
     </div>
   );
 }

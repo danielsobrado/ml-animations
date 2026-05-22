@@ -170,12 +170,12 @@ function useable(candidate, strictness) {
 
 function claimDiagnostic(claim, selectedCandidates, strictness) {
   const active = selectedCandidates.filter((candidate) => (
-    candidate.supports.includes(claim.id) || candidate.conflicts.includes(claim.id)
+    candidate.supports.includes(claim.id) || candidate.conflicting.includes(claim.id)
   ));
   if (active.length === 0) {
     const relevantInPool = CANDIDATES.some((candidate) => (
       candidate.supports.includes(claim.id)
-      || candidate.conflicts.includes(claim.id)
+      || candidate.conflicting.includes(claim.id)
     ));
     return {
       state: relevantInPool ? 'missing' : 'irrelevant',
@@ -185,11 +185,11 @@ function claimDiagnostic(claim, selectedCandidates, strictness) {
   }
 
   const usableSupport = active.find((candidate) => candidate.supports.includes(claim.id) && useable(candidate, strictness));
-  const usableConflict = active.find((candidate) => candidate.conflicts.includes(claim.id) && useable(candidate, strictness));
+  const usableConflict = active.find((candidate) => candidate.conflicting.includes(claim.id) && useable(candidate, strictness));
   const hasStaleSupport = active.some((candidate) => (
     candidate.supports.includes(claim.id) && candidate.stale
   ));
-  const hasConflict = active.some((candidate) => candidate.conflicts.includes(claim.id));
+  const hasConflict = active.some((candidate) => candidate.conflicting.includes(claim.id));
 
   if (usableSupport) {
     return {

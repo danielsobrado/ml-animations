@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useState } from 'react';
 import { FlaskConical, Play, SplitSquareHorizontal } from 'lucide-react';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 const AnimationPanel = lazy(() => import('./AnimationPanel'));
 const RankNullityPanel = lazy(() => import('./RankNullityPanel'));
@@ -69,7 +70,12 @@ export default function FundamentalSubspacesAnimation() {
         </div>
       </nav>
 
-      <div className="flex-1 overflow-auto">{renderPanel()}</div>
+      <div className="flex-1 overflow-auto">
+        {renderPanel()}
+        <div className="mx-auto max-w-7xl px-4 pb-6">
+          <AssessmentPanel lessonId="fundamental-subspaces" />
+        </div>
+      </div>
     </div>
   );
 }
