@@ -675,6 +675,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: policy evaluation and policy improvement are separate phases, not one blended update.',
     'Check understanding by predicting which state changes action after an improvement round.',
   ),
+  'q-learning': cardSet(
+    'Q-learning solves the problem of learning action values from sampled experience without needing the full transition model.',
+    'Each step compares what happened with what the Q-table expected, then nudges that state-action value toward the new target.',
+    'The math updates old Q by alpha times the temporal-difference error: reward plus discounted best future Q minus old Q.',
+    'Edit the Bellman update inputs and predict the target, TD error, and new Q-value before reading the result.',
+    'Mistake to avoid: Q-learning backs up toward the greedy future action even when exploration sampled a different action.',
+    'Check understanding by explaining why gamma controls delayed reward while alpha controls update size.',
+  ),
   'policy-gradients': cardSet(
     'Policy gradients solve the problem of learning a stochastic action policy directly from returns.',
     'Good sampled actions become more likely, bad sampled actions become less likely, but exploration can remain.',

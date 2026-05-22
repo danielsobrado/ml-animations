@@ -66,6 +66,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'diffusion-sampling',
   'classifier-free-guidance',
   'unet-vs-dit',
+  'q-learning',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -2755,6 +2756,51 @@ export const lessonAssessments = {
         title: 'Find a policy flip',
         prompt: 'Increase improvement rounds and identify the first state whose action changes from the initial policy.',
         successCriteria: 'You can name the state, the old action, and the improved greedy action.',
+      },
+    ],
+  },
+  'q-learning': {
+    quiz: [
+      {
+        id: 'what-q-means',
+        prompt: 'What does Q(s, a) estimate in Q-learning?',
+        choices: [
+          'Expected discounted return after taking action a in state s and then acting well',
+          'The probability that state s appears in the dataset',
+          'Only the immediate reward before any future value',
+        ],
+        answerIndex: 0,
+        explanation: 'A Q-value is an action-value estimate: immediate reward plus discounted future return from the next state.',
+      },
+      {
+        id: 'td-target',
+        prompt: 'In the update target r + gamma max_a Q(s_prime, a), what does the max over next actions represent?',
+        choices: [
+          'The best estimated future value from the next state',
+          'The action that was definitely sampled in the previous state',
+          'A supervised label assigned by a trainer',
+        ],
+        answerIndex: 0,
+        explanation: 'Q-learning is off-policy: it backs up toward the greedy next action value even if exploration sampled something else.',
+      },
+      {
+        id: 'learning-rate-role',
+        prompt: 'What does the learning rate alpha control in the Q-learning update?',
+        choices: [
+          'How far the old Q-value moves toward the new target',
+          'How many actions the environment has',
+          'Whether rewards are terminal or nonterminal',
+        ],
+        answerIndex: 0,
+        explanation: 'Alpha scales the temporal-difference error, so larger values overwrite old estimates faster.',
+      },
+    ],
+    labs: [
+      {
+        id: 'trace-one-update',
+        title: 'Trace one Q update',
+        prompt: 'Use the Bellman update tab to choose old Q, reward, future Q, alpha, and gamma, then predict the new Q before reading it.',
+        successCriteria: 'You can name the target, TD error, and final nudged Q-value for one transition.',
       },
     ],
   },

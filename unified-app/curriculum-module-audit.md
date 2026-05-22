@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:53:01.845Z
+Generated: 2026-05-22T07:55:46.490Z
 
 ## Review Policy
 
@@ -203,7 +203,7 @@ Generated: 2026-05-22T07:53:01.845Z
 | mdp-formalism | B (good) | auto | 5803 | 0 |  | Review and set explicit manual quality entry. |
 | policy-gradients | B (good) | auto | 6229 | 0 |  | Review and set explicit manual quality entry. |
 | policy-iteration | B (good) | auto | 7866 | 0 |  | Review and set explicit manual quality entry. |
-| q-learning | C (adequate) | auto | 3090 | 3 |  | Review and set explicit manual quality entry. |
+| q-learning | B (good) | manual | 3315 | 3 | stable | Add explicit epsilon control and compare off-policy Q-learning with on-policy SARSA. |
 | reward-shaping | B (good) | auto | 7792 | 0 |  | Review and set explicit manual quality entry. |
 | rl-exploration | C (adequate) | auto | 3085 | 3 |  | Review and set explicit manual quality entry. |
 | rl-foundations | C (adequate) | auto | 3011 | 3 |  | Review and set explicit manual quality entry. |

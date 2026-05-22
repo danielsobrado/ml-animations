@@ -362,6 +362,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Statistical baseline with expectation/variance visualization hooks.',
     nextAction: 'Add finite-sample variability case studies.',
   },
+  'q-learning': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Three-panel tabular RL lesson with editable Q-table, Bellman update controls, live training loop, and persistent assessment coverage.',
+    nextAction: 'Add explicit epsilon control and compare off-policy Q-learning with on-policy SARSA.',
+  },
 };
 
 export const D_TIER_PLACEHOLDERS = Object.entries(MANUAL_LESSON_QUALITY)
