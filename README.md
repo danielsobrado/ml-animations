@@ -90,7 +90,7 @@ Each directory has its own README with setup notes and examples.
 GitHub Pages is published manually from this machine. The deploy script builds the unified app and pushes the generated site to the `gh-pages` branch.
 
 ```bash
-rtk node scripts/deploy-github-pages.mjs
+node scripts/deploy-github-pages.mjs
 ```
 
 The script also publishes static `*-animation/index.html` entry pages with route-specific metadata, so older animation URLs and crawlers land on the current unified lessons.
