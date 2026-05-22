@@ -27,6 +27,7 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'training-loop-dynamics',
   'dropout-batchnorm',
   'relu',
+  'conv-relu',
   'computation-graph-backprop',
   'tokenization',
   'embeddings',
@@ -1727,6 +1728,51 @@ export const lessonAssessments = {
         title: 'Trace one residual write',
         prompt: 'Increase one attention or MLP write, then explain how the before/write/after vectors change.',
         successCriteria: 'You can distinguish adding a component write from replacing the whole token representation.',
+      },
+    ],
+  },
+  'conv-relu': {
+    quiz: [
+      {
+        id: 'preactivation-order',
+        prompt: 'In a Conv + ReLU block, what happens before ReLU is applied?',
+        choices: [
+          'The input window is convolved with the kernel and bias is added',
+          'Negative values are removed before the filter sees the input',
+          'The output is pooled before any feature response is computed',
+        ],
+        answerIndex: 0,
+        explanation: 'ReLU acts on the signed pre-activation produced by convolution plus bias.',
+      },
+      {
+        id: 'negative-response',
+        prompt: 'What does ReLU do to a negative convolution response?',
+        choices: [
+          'It turns that response into zero for the next layer',
+          'It flips the sign so the response becomes positive',
+          'It stores the negative value in the pooling layer',
+        ],
+        answerIndex: 0,
+        explanation: 'ReLU is max(0, z), so negative pre-activations do not pass forward.',
+      },
+      {
+        id: 'dead-filter-risk',
+        prompt: 'Why can a very negative bias be risky in a Conv + ReLU filter?',
+        choices: [
+          'It can push most pre-activations below zero, reducing signal and gradient flow',
+          'It makes the kernel larger than the input image',
+          'It changes valid convolution into matrix transposition',
+        ],
+        answerIndex: 0,
+        explanation: 'If most z values are below zero, ReLU outputs zeros and the filter may contribute little useful signal.',
+      },
+    ],
+    labs: [
+      {
+        id: 'bias-sparsity-sweep',
+        title: 'Find the activation cutoff',
+        prompt: 'Lower the bias until several feature responses disappear, then identify which pre-activation values were clipped.',
+        successCriteria: 'You can explain the difference between the signed convolution map and the sparse ReLU activation map.',
       },
     ],
   },

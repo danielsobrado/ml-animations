@@ -188,6 +188,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Activation behavior is represented with interactive inputs and outputs.',
     nextAction: 'Add gradient-flow edge-case checks across negative saturation.',
   },
+  'conv-relu': {
+    tier: 'B',
+    status: 'stable',
+    reason: 'Custom CNN feature-map workbench showing convolution pre-activations, ReLU gating, sparsity, bias effects, and dead-filter risk.',
+    nextAction: 'Add backward-pass gradient tracing for clipped versus active cells.',
+  },
   'computation-graph-backprop': {
     tier: 'A',
     status: 'stable',

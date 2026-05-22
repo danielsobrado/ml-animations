@@ -50,15 +50,15 @@ function binaryStats(samples, threshold) {
   };
 }
 
-function buildRows(groupData, thresholds) {
+function buildRows(groupData) {
   return {
-    protected: groupData.protected.map((score, index) => ({
+    protected: groupData.protected.scores.map((score, index) => ({
       id: index,
       group: 'protected',
       score,
       label: groupData.protected.labels[index],
     })),
-    unprotected: groupData.unprotected.map((score, index) => ({
+    unprotected: groupData.unprotected.scores.map((score, index) => ({
       id: index,
       group: 'unprotected',
       score,
@@ -134,7 +134,7 @@ export default function ModelFairness() {
   const [objective, setObjective] = useState('selection-rate');
   const [showCounterfactual, setShowCounterfactual] = useState(true);
 
-  const rows = useMemo(() => buildRows(BASE, thresholdsForScores()), [biasShift, thresholdMode, globalThreshold, protectedThreshold, unprotectedThreshold, showCounterfactual]);
+  const rows = useMemo(() => buildRows(BASE), []);
 
   function thresholdsForScores() {
     return {
@@ -380,4 +380,3 @@ export default function ModelFairness() {
     </div>
   );
 }
-

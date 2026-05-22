@@ -1,6 +1,6 @@
 # Curriculum Module Audit
 
-Generated: 2026-05-22T07:17:48.851Z
+Generated: 2026-05-22T07:22:37.820Z
 
 ## Review Policy
 
@@ -98,7 +98,7 @@ Generated: 2026-05-22T07:17:48.851Z
 | Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |
 | --- | --- | --- | ---: | ---: | --- | --- |
 | computation-graph-backprop | A (excellent) | manual | 13122 | 0 | stable | Add chain-rule failure mode examples and exploding-grad examples. |
-| conv-relu | C (adequate) | auto | 2730 | 2 |  | Review and set explicit manual quality entry. |
+| conv-relu | B (good) | manual | 12197 | 2 | stable | Add backward-pass gradient tracing for clipped versus active cells. |
 | conv2d | C (adequate) | auto | 2723 | 2 |  | Review and set explicit manual quality entry. |
 | dropout-batchnorm | B (good) | auto | 8692 | 0 |  | Review and set explicit manual quality entry. |
 | gradient-problems | C (adequate) | auto | 1115 | 3 |  | Review and set explicit manual quality entry. |

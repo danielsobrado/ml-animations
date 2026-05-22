@@ -34,6 +34,7 @@ const CATEGORY_EQUATIONS = {
 const EQUATION_OVERRIDES = {
   relu: 'f(x)=\\max(0,x)',
   'leaky-relu': 'f(x)=\\max(\\alpha x,x)',
+  'conv-relu': 'A=\\max(0, X*K+b)',
   softmax: 'p_i=\\frac{e^{z_i}}{\\sum_j e^{z_j}}',
   'matrix-multiplication': 'C_{ij}=\\sum_k A_{ik}B_{kj}',
   eigenvalue: 'Av=\\lambda v',
@@ -322,6 +323,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the input across zero and watch both output and local slope switch.',
     'Mistake to avoid: a blocked ReLU has zero local gradient for that example.',
     'Check understanding by identifying whether a negative pre-activation can send gradient backward.',
+  ),
+  'conv-relu': cardSet(
+    'Conv + ReLU solves the problem of turning local image patterns into sparse positive feature maps.',
+    'The convolution filter gives signed evidence; ReLU keeps positive detections and blocks negative responses.',
+    'The math applies a kernel and bias first, then a = max(0, z) for each output location.',
+    'Manipulate filter choice, bias, and input contrast to see which feature responses survive.',
+    'Mistake to avoid: ReLU does not create the feature map; it gates the pre-activation made by convolution.',
+    'Check understanding by predicting which cells will become zero before reading the activation map.',
   ),
   'computation-graph-backprop': cardSet(
     'Backpropagation solves the problem of assigning blame to each parameter in a nested computation.',
