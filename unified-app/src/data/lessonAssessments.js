@@ -1,3 +1,5 @@
+import { allAnimations } from './animations.js';
+
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
   'linear-regression',
@@ -78,7 +80,7 @@ export const EMPTY_ASSESSMENT = Object.freeze({
   labs: Object.freeze([]),
 });
 
-export const lessonAssessments = {
+const SEEDED_LESSON_ASSESSMENTS = {
   'matrix-multiplication': {
     quiz: [
       {
@@ -4068,6 +4070,111 @@ export const lessonAssessments = {
     ],
   },
 };
+
+const MIN_QUIZ_QUESTIONS = 20;
+
+function cleanSentence(value) {
+  return String(value || '')
+    .replace(/\s+/g, ' ')
+    .replace(/\.$/, '')
+    .trim();
+}
+
+function withPeriod(value) {
+  const sentence = cleanSentence(value);
+  if (!sentence) return '';
+  return /[.!?]$/.test(sentence) ? sentence : `${sentence}.`;
+}
+
+function rotateChoices(choices, offset) {
+  const rotation = offset % choices.length;
+  const rotated = [...choices.slice(rotation), ...choices.slice(0, rotation)];
+  return {
+    choices: rotated,
+    answerIndex: rotated.indexOf(choices[0]),
+  };
+}
+
+function makeGeneratedQuestion(animation, index, level, prompt, correct, distractors, explanation) {
+  const { choices, answerIndex } = rotateChoices([correct, ...distractors], index);
+  return {
+    id: `generated-${index + 1}`,
+    level,
+    prompt,
+    choices,
+    answerIndex,
+    explanation,
+  };
+}
+
+function makeGeneratedQuiz(animation) {
+  const objectives = animation.learningObjectives?.length
+    ? animation.learningObjectives
+    : [
+      `Explain the core idea behind ${animation.name}`,
+      `Use the animation to predict how ${animation.description.toLowerCase()} changes the output`,
+    ];
+  const [primaryObjective] = objectives;
+  const prereqs = animation.prerequisites?.length ? animation.prerequisites.join(', ') : 'the lesson setup';
+  const misconception = animation.commonMisconception || `${animation.name} is a simplified teaching view; real systems add scale, data, and implementation details.`;
+  const description = cleanSentence(animation.description).toLowerCase();
+  const category = animation.categoryName || 'machine learning';
+  const name = animation.name;
+  const baseDifficulty = animation.difficulty || 'intermediate';
+
+  const specs = [
+    ['Beginner', `What is the main job of ${name}?`, `To help explain ${description}`, 'To hide the input data from the learner', 'To replace evaluation with memorization', `${name} is introduced as a way to understand ${description}.`],
+    ['Beginner', `Which learning goal best fits this lesson?`, withPeriod(primaryObjective), 'Ignore the visual behavior and memorize labels only.', 'Tune the final test set until it looks better.', withPeriod(primaryObjective)],
+    ['Beginner', `When reading the ${name} animation, what should you track first?`, 'How the input changes into the shown output or decision', 'Only the decorative colors around the panel', 'Whether every real-world implementation has the same interface', 'The first pass should connect the visible input, transformation, and output.'],
+    ['Beginner', `Which background is most useful before ${name}?`, prereqs, 'A production deployment checklist before any concept work', 'Only unrelated UI terminology', `The listed prerequisites prepare the concepts that ${name} builds on.`],
+    ['Beginner', `What kind of lesson is ${name}?`, `${category} concept practice`, 'A storage persistence exercise', 'A Git workflow exercise', `${name} belongs to the ${category} part of the curriculum.`],
+    ['Intermediate', `How should you use the controls in ${name}?`, 'Change one variable, predict the effect, then compare with the animation', 'Change every variable randomly and ignore the output', 'Reveal answers before forming a prediction', 'Interactive controls are most useful when they test a prediction.'],
+    ['Intermediate', `Which statement is the safest interpretation of ${name}?`, `${name} teaches the core mechanism, while real systems may add extra scale and constraints`, `${name} proves every dataset behaves identically`, `${name} removes the need for validation`, 'The lesson is a conceptual model, not a guarantee about every deployment.'],
+    ['Intermediate', `What does a good self-check for ${name} ask you to do?`, `Use ${description} to predict a result before reading the explanation`, 'Repeat the title without connecting it to behavior', 'Skip the explanation after a wrong answer', 'A useful self-check connects the concept to a concrete prediction.'],
+    ['Intermediate', `Why does ${name} matter in a larger ML workflow?`, `It clarifies a decision or transformation that affects model behavior`, 'It guarantees a model is fair and calibrated by itself', 'It removes the need to inspect data', 'Most lessons matter because a local mechanism changes downstream behavior.'],
+    ['Intermediate', `Which question tests applied understanding of ${name}?`, `What changes when the key input or setting in ${name} changes?`, 'What is the exact pixel color of the card border?', 'Can the title be alphabetized?', 'Applied understanding means predicting behavior under a change.'],
+    ['Intermediate', `What should you do after a wrong answer in this check?`, 'Read the explanation and retry the same idea with a smaller example', 'Mark the lesson complete without revisiting it', 'Assume the animation is irrelevant', 'The explanation is meant to repair the mental model before moving on.'],
+    ['Intermediate', `Which phrase best describes the complexity level of ${name}?`, `${baseDifficulty} concept with concrete visual checks`, 'No concept work is required', 'Advanced only because every answer is numerical', `The lesson metadata marks this as ${baseDifficulty}, but the check still moves from recall to diagnosis.`],
+    ['Advanced', `What is the common trap to avoid in ${name}?`, withPeriod(misconception), 'The safest answer is always the longest choice.', 'The visual explanation replaces all mathematical reasoning.', withPeriod(misconception)],
+    ['Advanced', `If a result in ${name} looks surprisingly good, what should you inspect?`, 'Whether the setup, assumptions, or evaluation boundary made the result easier than it should be', 'Whether the page title changed after scrolling', 'Whether every unrelated lesson has the same answer', 'Strong-looking results should be checked against assumptions and evaluation boundaries.'],
+    ['Advanced', `How can ${name} fail when used carelessly?`, 'The learner may transfer the simplified rule beyond its assumptions', 'It automatically creates more training data', 'It prevents all edge cases by definition', 'A concept animation is useful, but its assumptions still matter.'],
+    ['Advanced', `Which answer shows transfer beyond memorization?`, `Explaining how ${name} would behave on a slightly different input or setting`, 'Quoting the first sentence only', 'Choosing the same option letter every time', 'Transfer means applying the idea to a new but related case.'],
+    ['Advanced', `What should be true before calling ${name} understood?`, `You can state the mechanism, use it on an example, and name a likely failure mode`, 'You only remember the lesson number', 'You skipped the check but opened the page', 'Understanding needs mechanism, example, and limitation.'],
+    ['Advanced', `How does ${name} connect to adjacent lessons?`, 'It uses prerequisites as inputs and prepares a later concept in the same track', 'It is isolated from every other lesson', 'It only matters inside the glossary page', 'The curriculum is a graph: prerequisites feed current concepts and current concepts feed later ones.'],
+    ['Advanced', `Which diagnostic question is most useful for ${name}?`, `What assumption would make the ${name} explanation stop working?`, 'Which browser tab was opened first?', 'How many letters are in the category name?', 'Advanced checks ask where the concept breaks, not only where it works.'],
+    ['Advanced', `What is the best final review move for ${name}?`, `Summarize ${description}, give one example, and name one trap`, 'Close the page immediately after one correct answer', 'Only memorize the route URL', 'A final review should compress the concept into use, example, and caution.'],
+  ];
+
+  return specs.map((spec, index) => (
+    makeGeneratedQuestion(animation, index, spec[0], spec[1], spec[2], [spec[3], spec[4]], spec[5])
+  ));
+}
+
+function normalizeSeededQuestion(question, index) {
+  const levels = ['Beginner', 'Intermediate', 'Advanced'];
+  return {
+    level: question.level || levels[Math.min(levels.length - 1, Math.floor(index / 2))],
+    ...question,
+  };
+}
+
+function buildLessonAssessment(animation) {
+  const seeded = SEEDED_LESSON_ASSESSMENTS[animation.id] || EMPTY_ASSESSMENT;
+  const seededQuiz = (seeded.quiz || []).map(normalizeSeededQuestion);
+  const usedIds = new Set(seededQuiz.map((question) => question.id));
+  const generatedQuiz = makeGeneratedQuiz(animation)
+    .filter((question) => !usedIds.has(question.id))
+    .slice(0, Math.max(0, MIN_QUIZ_QUESTIONS - seededQuiz.length));
+
+  return {
+    quiz: [...seededQuiz, ...generatedQuiz],
+    labs: seeded.labs || [],
+  };
+}
+
+export const lessonAssessments = Object.freeze(Object.fromEntries(
+  allAnimations.map((animation) => [animation.id, buildLessonAssessment(animation)]),
+));
 
 export function getLessonAssessment(lessonId) {
   return lessonAssessments[lessonId] || EMPTY_ASSESSMENT;

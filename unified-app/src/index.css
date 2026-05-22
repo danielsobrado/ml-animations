@@ -1481,6 +1481,27 @@ body {
   padding: 16px 0;
 }
 
+.ua-quiz-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.ua-question-level {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border: var(--ds-border);
+  padding: 3px 8px;
+  background: #fff8e6;
+  color: #7a4e00;
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .ua-quiz-card h3 {
   margin: 0;
   max-width: 760px;
@@ -1509,6 +1530,63 @@ body {
 .ua-assessment-panel button::before {
   display: none !important;
   content: none !important;
+}
+
+.ua-assessment-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: var(--ds-border);
+  padding: 12px 0;
+}
+
+.ua-assessment-pager.bottom {
+  border-bottom: var(--ds-border);
+}
+
+.ua-assessment-pager > span {
+  color: var(--ds-faint);
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ua-page-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.ua-animation-page .ua-pager-button,
+.ua-page-dots button {
+  min-height: 34px;
+  background: var(--ds-paper) !important;
+}
+
+.ua-animation-page .ua-pager-button {
+  gap: 6px;
+  padding: 7px 10px;
+}
+
+.ua-animation-page .ua-pager-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ua-page-dots button {
+  width: 34px;
+  padding: 0;
+  justify-content: center !important;
+}
+
+.ua-page-dots button.active {
+  border-color: var(--ds-accent) !important;
+  background: #eef8fb !important;
+  color: var(--ds-accent);
 }
 
 .ua-choice-button span {

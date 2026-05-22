@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Circle, Eye, FlaskConical } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, Circle, Eye, FlaskConical } from 'lucide-react';
 import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
 import {
   getLessonProgress,
@@ -7,6 +7,8 @@ import {
   readAssessmentProgress,
   updateLessonProgress,
 } from '../../data/learningProgress';
+
+const QUESTIONS_PER_PAGE = 5;
 
 export default function AssessmentPanel({
   lessonId,
@@ -16,11 +18,14 @@ export default function AssessmentPanel({
   legacyExplanation,
 }) {
   const assessment = useMemo(() => getLessonAssessment(lessonId), [lessonId]);
+  const quizItems = assessment.quiz || [];
+  const [quizPage, setQuizPage] = useState(0);
   const [lessonProgress, setLessonProgress] = useState(() => (
     getLessonProgress(readAssessmentProgress(), lessonId)
   ));
 
   useEffect(() => {
+    setQuizPage(0);
     setLessonProgress(getLessonProgress(readAssessmentProgress(), lessonId));
   }, [lessonId]);
 
@@ -30,6 +35,11 @@ export default function AssessmentPanel({
   if (!hasStructuredAssessment && !hasLegacyCheck) return null;
 
   const complete = isAssessmentComplete(assessment, lessonProgress);
+  const quizPageCount = Math.max(1, Math.ceil(quizItems.length / QUESTIONS_PER_PAGE));
+  const activeQuizPage = Math.min(quizPage, quizPageCount - 1);
+  const pageStart = activeQuizPage * QUESTIONS_PER_PAGE;
+  const pageQuestions = quizItems.slice(pageStart, pageStart + QUESTIONS_PER_PAGE);
+  const answeredCount = quizItems.filter((question) => lessonProgress.quiz?.[question.id]?.correct === true).length;
 
   const persist = (updater) => {
     const nextProgress = updateLessonProgress(lessonId, assessment, updater);
@@ -86,17 +96,61 @@ export default function AssessmentPanel({
       <div className="ua-assessment-head">
         <span>Assessment</span>
         <h2>{title}</h2>
-        <p>{complete ? 'Completed locally.' : 'Answer first, then review the explanation.'}</p>
+        <p>
+          {complete
+            ? 'Completed locally.'
+            : `${answeredCount}/${quizItems.length} correct. Work through beginner, intermediate, and advanced checks.`}
+        </p>
       </div>
 
-      {assessment.quiz?.map((question, questionIndex) => {
+      {quizItems.length > QUESTIONS_PER_PAGE && (
+        <nav className="ua-assessment-pager" aria-label="Lesson check pages">
+          <button
+            type="button"
+            className="ua-pager-button"
+            onClick={() => setQuizPage((value) => Math.max(0, value - 1))}
+            disabled={activeQuizPage === 0}
+          >
+            <ChevronLeft size={15} />
+            Prev
+          </button>
+          <div className="ua-page-dots">
+            {Array.from({ length: quizPageCount }, (_, index) => (
+              <button
+                type="button"
+                key={index}
+                className={index === activeQuizPage ? 'active' : ''}
+                onClick={() => setQuizPage(index)}
+                aria-current={index === activeQuizPage ? 'page' : undefined}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="ua-pager-button"
+            onClick={() => setQuizPage((value) => Math.min(quizPageCount - 1, value + 1))}
+            disabled={activeQuizPage === quizPageCount - 1}
+          >
+            Next
+            <ChevronRight size={15} />
+          </button>
+        </nav>
+      )}
+
+      {pageQuestions.map((question, questionIndex) => {
         const state = lessonProgress.quiz?.[question.id] || {};
         const answered = Number.isInteger(state.selectedIndex);
         const revealed = answered || state.revealed;
+        const absoluteQuestionIndex = pageStart + questionIndex;
 
         return (
           <article className="ua-quiz-card" key={question.id}>
-            <div className="ua-quiz-kicker">Question {questionIndex + 1}</div>
+            <div className="ua-quiz-meta">
+              <span className="ua-quiz-kicker">Question {absoluteQuestionIndex + 1} of {quizItems.length}</span>
+              {question.level && <span className="ua-question-level">{question.level}</span>}
+            </div>
             <h3>{question.prompt}</h3>
             <div className="ua-choice-list">
               {question.choices.map((choice, choiceIndex) => {
@@ -135,6 +189,30 @@ export default function AssessmentPanel({
           </article>
         );
       })}
+
+      {quizItems.length > QUESTIONS_PER_PAGE && (
+        <nav className="ua-assessment-pager bottom" aria-label="Lesson check pages">
+          <button
+            type="button"
+            className="ua-pager-button"
+            onClick={() => setQuizPage((value) => Math.max(0, value - 1))}
+            disabled={activeQuizPage === 0}
+          >
+            <ChevronLeft size={15} />
+            Prev
+          </button>
+          <span>Page {activeQuizPage + 1} of {quizPageCount}</span>
+          <button
+            type="button"
+            className="ua-pager-button"
+            onClick={() => setQuizPage((value) => Math.min(quizPageCount - 1, value + 1))}
+            disabled={activeQuizPage === quizPageCount - 1}
+          >
+            Next
+            <ChevronRight size={15} />
+          </button>
+        </nav>
+      )}
 
       {assessment.labs?.length > 0 && (
         <div className="ua-lab-list">

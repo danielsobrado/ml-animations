@@ -1308,7 +1308,7 @@ test('reward shaping follows actor-critic with sparse-reward guidance', () => {
   );
 });
 
-test('lesson assessments provide backed quiz and lab counts for priority lessons', () => {
+test('lesson assessments provide paginated quiz depth and lab counts for priority lessons', () => {
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const stats = getAssessmentStats(lessonAssessments);
   const expectedStats = Object.values(lessonAssessments).reduce(
@@ -1329,7 +1329,11 @@ test('lesson assessments provide backed quiz and lab counts for priority lessons
     const assessment = lessonAssessments[lessonId];
 
     assert.ok(animationIds.has(lessonId), `${lessonId} should be an active lesson`);
-    assert.ok(assessment.quiz.length >= 2, `${lessonId} needs at least two seeded quiz questions`);
+    assert.ok(assessment.quiz.length >= 20, `${lessonId} needs at least 20 quiz questions`);
+    assert.ok(
+      new Set(assessment.quiz.map((question) => question.level)).size >= 3,
+      `${lessonId} needs beginner, intermediate, and advanced checks`,
+    );
     assert.ok(assessment.labs.length >= 1, `${lessonId} needs at least one seeded lab`);
 
     for (const question of assessment.quiz) {
@@ -1339,6 +1343,7 @@ test('lesson assessments provide backed quiz and lab counts for priority lessons
       assert.ok(question.answerIndex >= 0);
       assert.ok(question.answerIndex < question.choices.length);
       assert.ok(question.explanation);
+      assert.ok(question.level);
     }
 
     for (const lab of assessment.labs) {
@@ -1350,7 +1355,20 @@ test('lesson assessments provide backed quiz and lab counts for priority lessons
   }
 });
 
-test('assessment completion requires all seeded quiz and lab items', () => {
+test('every catalog lesson has enough quiz items for paginated checks', () => {
+  for (const animation of allAnimations) {
+    const assessment = lessonAssessments[animation.id];
+
+    assert.ok(assessment, `${animation.id} needs an assessment`);
+    assert.ok(assessment.quiz.length >= 20, `${animation.id} needs at least 20 quiz questions`);
+    assert.ok(
+      new Set(assessment.quiz.map((question) => question.level)).size >= 3,
+      `${animation.id} needs mixed complexity levels`,
+    );
+  }
+});
+
+test('assessment completion requires all quiz and lab items', () => {
   const assessment = lessonAssessments['logistic-regression'];
   const completedQuiz = Object.fromEntries(assessment.quiz.map((question) => [question.id, { correct: true }]));
   const completedLabs = Object.fromEntries(assessment.labs.map((lab) => [lab.id, true]));
