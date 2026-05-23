@@ -16,15 +16,31 @@ function renderAssessmentTitle(title) {
   if (typeof title !== 'string') return title;
 
   const separatorIndex = title.indexOf(': ');
-  if (separatorIndex < 0) return <InlineMathText>{title}</InlineMathText>;
+  if (separatorIndex >= 0) {
+    return (
+      <>
+        <span className="ua-assessment-title-line">
+          <InlineMathText>{title.slice(0, separatorIndex + 2)}</InlineMathText>
+        </span>
+        <span className="ua-assessment-title-line">
+          <InlineMathText>{title.slice(separatorIndex + 2)}</InlineMathText>
+        </span>
+      </>
+    );
+  }
+
+  const checkSuffix = /\s+check$/i;
+  if (!checkSuffix.test(title)) return <InlineMathText>{title}</InlineMathText>;
+
+  const lessonTitle = title.replace(checkSuffix, '');
 
   return (
     <>
       <span className="ua-assessment-title-line">
-        <InlineMathText>{title.slice(0, separatorIndex + 2)}</InlineMathText>
+        <InlineMathText>{lessonTitle}</InlineMathText>
       </span>
-      <span className="ua-assessment-title-line">
-        <InlineMathText>{title.slice(separatorIndex + 2)}</InlineMathText>
+      <span className="ua-assessment-title-line ua-assessment-title-kicker">
+        <InlineMathText>check</InlineMathText>
       </span>
     </>
   );
@@ -33,6 +49,7 @@ function renderAssessmentTitle(title) {
 export default function AssessmentPanel({
   lessonId,
   title = 'Lesson check',
+  eyebrow = 'Assessment',
   legacyQuestion,
   legacyAnswer,
   legacyExplanation,
@@ -132,8 +149,8 @@ export default function AssessmentPanel({
   return (
     <section className="ua-assessment-panel" aria-label={title}>
       <div className="ua-assessment-head">
-        <span>Assessment</span>
-        <h2>{renderAssessmentTitle(title)}</h2>
+        <span>{eyebrow}</span>
+        <h2 aria-label={typeof title === 'string' ? title : undefined}>{renderAssessmentTitle(title)}</h2>
         <p>
           {complete
             ? 'Completed locally.'

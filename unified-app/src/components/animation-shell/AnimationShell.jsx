@@ -1,6 +1,6 @@
-import React, { Suspense, lazy, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, BookOpen, FileSearch, GitCompare, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, BookOpen, ClipboardCheck, FileSearch, GitCompare, Library, ShieldCheck } from 'lucide-react';
 import Eq from '../../_design-system/Eq';
 import { allAnimations } from '../../data/animations';
 import { createLearningModel } from '../../data/animationLearning';
@@ -308,7 +308,7 @@ function CurriculumDepthPanels({ depth }) {
   );
 }
 
-function MathControls({ model, onReset, onFocusStage }) {
+function MathControls({ model, onReset, onFocusStage, onOpenGlossary }) {
   const [prereq] = model.mindmap.prereqs;
   const [next] = model.mindmap.next;
 
@@ -316,7 +316,7 @@ function MathControls({ model, onReset, onFocusStage }) {
     prereq: prereq ? { as: Link, to: `/animation/${prereq.id}` } : { as: 'button', onClick: onFocusStage },
     reset: { as: 'button', onClick: onReset },
     play: { as: 'button', onClick: onFocusStage },
-    sum: { as: 'a', href: '#math-glossary' },
+    sum: { as: 'button', onClick: onOpenGlossary },
     next: next ? { as: Link, to: `/animation/${next.id}` } : { as: 'button', onClick: onFocusStage },
   };
 
@@ -407,11 +407,92 @@ function Glossary({ terms }) {
   );
 }
 
+function LessonWorkspace({
+  activeTab,
+  assessment,
+  depth,
+  glossaryTerms,
+  lessonId,
+  onTabChange,
+}) {
+  const hasDepth = depth && (
+    depth.comparisons.length > 0
+    || depth.failures.length > 0
+    || depth.paperSignals.length > 0
+    || depth.caveats.length > 0
+  );
+  const tabs = [
+    assessment && {
+      id: 'check',
+      label: 'Lesson check',
+      icon: ClipboardCheck,
+      panel: <AssessmentPanel lessonId={lessonId} eyebrow="Progress" title="Core questions" />,
+    },
+    hasDepth && {
+      id: 'deep-dive',
+      label: 'Deep dive',
+      icon: FileSearch,
+      panel: <CurriculumDepthPanels depth={depth} />,
+    },
+    glossaryTerms?.length > 0 && {
+      id: 'glossary',
+      label: 'Glossary',
+      icon: Library,
+      panel: <Glossary key={lessonId} terms={glossaryTerms} />,
+    },
+  ].filter(Boolean);
+
+  if (tabs.length === 0) return null;
+
+  const selectedTab = tabs.some((tab) => tab.id === activeTab) ? activeTab : tabs[0].id;
+  const selectedPanel = tabs.find((tab) => tab.id === selectedTab)?.panel;
+
+  return (
+    <section id="lesson-workspace" className="ua-lesson-workspace" aria-label="Lesson workspace">
+      <nav className="ua-workspace-tabs ds-tabs" aria-label="Lesson workspace sections" role="tablist">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const selected = tab.id === selectedTab;
+
+          return (
+            <button
+              type="button"
+              key={tab.id}
+              className="ds-tab"
+              role="tab"
+              aria-selected={selected}
+              aria-controls={`workspace-panel-${tab.id}`}
+              id={`workspace-tab-${tab.id}`}
+              onClick={() => onTabChange(tab.id)}
+            >
+              <Icon size={15} />
+              {tab.label}
+            </button>
+          );
+        })}
+      </nav>
+      <div
+        className="ua-workspace-panel"
+        id={`workspace-panel-${selectedTab}`}
+        role="tabpanel"
+        aria-labelledby={`workspace-tab-${selectedTab}`}
+      >
+        {selectedPanel}
+      </div>
+    </section>
+  );
+}
+
 export default function AnimationShell({ animation, children }) {
   const [resetNonce, setResetNonce] = useState(0);
+  const [workspaceTab, setWorkspaceTab] = useState('check');
   const model = useMemo(() => createLearningModel(animation, allAnimations), [animation]);
   const assessment = useMemo(() => getLessonAssessment(animation.id), [animation.id]);
   const showShellAssessment = hasAssessmentContent(assessment) && animation.categoryId !== 'core-ml';
+
+  useEffect(() => {
+    setWorkspaceTab(showShellAssessment ? 'check' : 'deep-dive');
+  }, [animation.id, showShellAssessment]);
 
   const resetStage = () => {
     setResetNonce((value) => value + 1);
@@ -420,6 +501,13 @@ export default function AnimationShell({ animation, children }) {
 
   const focusStage = () => {
     document.getElementById('math-main-stage')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const openWorkspaceTab = (tabId) => {
+    setWorkspaceTab(tabId);
+    requestAnimationFrame(() => {
+      document.getElementById('lesson-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   };
 
   return (
@@ -439,7 +527,12 @@ export default function AnimationShell({ animation, children }) {
         </div>
       </header>
 
-      <MathControls model={model} onReset={resetStage} onFocusStage={focusStage} />
+      <MathControls
+        model={model}
+        onReset={resetStage}
+        onFocusStage={focusStage}
+        onOpenGlossary={() => openWorkspaceTab('glossary')}
+      />
 
       <Suspense fallback={<MindmapFallback />}>
         <ConceptMindmap mindmap={model.mindmap} />
@@ -447,7 +540,7 @@ export default function AnimationShell({ animation, children }) {
 
       <div className="ua-learning-grid">
         <main id="math-main-stage" className="ua-main-stage" aria-label={`${animation.name} animation stage`}>
-          <div key={resetNonce} className="ua-stage-wrap">
+          <div key={resetNonce} className={`ua-stage-wrap ${showShellAssessment ? 'has-shell-assessment' : ''}`}>
             {children}
           </div>
         </main>
@@ -455,13 +548,14 @@ export default function AnimationShell({ animation, children }) {
         <LearningCards cards={model.learningCards} />
       </div>
 
-      {showShellAssessment && (
-        <AssessmentPanel lessonId={animation.id} title={`${animation.name} check`} />
-      )}
-
-      <CurriculumDepthPanels depth={model.depth} />
-
-      <Glossary key={animation.id} terms={model.glossary} />
+      <LessonWorkspace
+        activeTab={workspaceTab}
+        assessment={showShellAssessment}
+        depth={model.depth}
+        glossaryTerms={model.glossary}
+        lessonId={animation.id}
+        onTabChange={openWorkspaceTab}
+      />
     </div>
   );
 }

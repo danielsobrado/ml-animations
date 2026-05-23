@@ -1448,6 +1448,10 @@ body {
   max-width: 100%;
 }
 
+.ua-stage-wrap.has-shell-assessment .ua-assessment-panel {
+  display: none;
+}
+
 /* Legacy animation panels: older lessons used dark app-like Tailwind surfaces.
    Keep their structure, but pull surfaces and chrome back into the Distill palette. */
 #root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-black"],
@@ -1578,6 +1582,44 @@ body {
   line-height: 1.45;
 }
 
+.ua-lesson-workspace {
+  margin-top: var(--ds-gap-5);
+  border-top: var(--ds-border-strong);
+}
+
+.ua-workspace-tabs {
+  margin-bottom: 0;
+}
+
+.ua-workspace-tabs .ds-tab {
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.ua-workspace-tabs .ds-tab[aria-selected="true"] {
+  border-bottom-color: var(--ds-accent);
+  color: var(--ds-ink);
+}
+
+.ua-workspace-panel {
+  min-width: 0;
+  padding-top: 18px;
+}
+
+.ua-workspace-panel .ua-assessment-panel,
+.ua-workspace-panel .ua-curriculum-depth,
+.ua-workspace-panel .ua-glossary-panel {
+  margin-top: 0;
+}
+
+.ua-workspace-panel .ua-assessment-panel,
+.ua-workspace-panel .ua-depth-panel:first-child,
+.ua-workspace-panel .ua-glossary-panel {
+  border-top: 0;
+  padding-top: 0;
+}
+
 .ua-assessment-panel {
   margin: var(--ds-gap-5) 0;
   border-top: 2px solid var(--ds-ink);
@@ -1613,6 +1655,10 @@ body {
 
 .ua-assessment-title-line {
   display: block;
+}
+
+.ua-assessment-title-kicker {
+  font-size: 0.82em;
 }
 
 @media (min-width: 961px) {
