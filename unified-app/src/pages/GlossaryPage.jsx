@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AlertTriangle, ArrowLeft, BookOpen, GitBranch, Lightbulb, Sigma } from 'lucide-react';
+import InlineMathText from '../components/common/InlineMathText';
 import { allAnimations } from '../data/animations.js';
 import { getGlossaryTerm, glossaryTerms } from '../data/glossaryRepository.js';
 
@@ -97,7 +98,7 @@ function RelationshipSection({ title, eyebrow, ids, fallback, excludeIds, prefer
             )}
             <span>{entry.kind}</span>
             <strong>{entry.label}</strong>
-            <p>{entry.description || labelFromId(entry.id)}</p>
+            <p><InlineMathText>{entry.description || labelFromId(entry.id)}</InlineMathText></p>
           </Link>
         ))}
       </div>
@@ -143,7 +144,7 @@ function IntuitionSwitchboard({ intuitions }) {
         {entries.map(([kind, text]) => (
           <article key={kind}>
             <span>{labelFromId(kind)}</span>
-            <p>{text}</p>
+            <p><InlineMathText>{text}</InlineMathText></p>
           </article>
         ))}
       </div>
@@ -166,7 +167,7 @@ function DepthNotes({ term }) {
       {notes.map(([title, body]) => (
         <article key={title}>
           <h2>{title}</h2>
-          <p>{body}</p>
+          <p><InlineMathText>{body}</InlineMathText></p>
         </article>
       ))}
       {term.paperSignals?.length > 0 && (
@@ -223,7 +224,7 @@ export default function GlossaryPage() {
             <span>{term.category}</span>
           </div>
           <h1>{term.term}</h1>
-          <p>{term.definition}</p>
+          <p><InlineMathText>{term.definition}</InlineMathText></p>
           <TermMetadata term={term} />
         </div>
         <img src={term.image.src} alt={term.image.alt} />
@@ -233,22 +234,22 @@ export default function GlossaryPage() {
         <article className="wide">
           <BookOpen size={17} />
           <h2>What it means</h2>
-          <p>{term.explanation}</p>
+          <p><InlineMathText>{term.explanation}</InlineMathText></p>
         </article>
         <article>
           <Lightbulb size={17} />
           <h2>Intuition</h2>
-          <p>{term.intuition}</p>
+          <p><InlineMathText>{term.intuition}</InlineMathText></p>
         </article>
         <article>
           <Sigma size={17} />
           <h2>Example</h2>
-          <p>{term.example}</p>
+          <p><InlineMathText>{term.example}</InlineMathText></p>
         </article>
         <article>
           <AlertTriangle size={17} />
           <h2>Common pitfall</h2>
-          <p>{term.pitfall}</p>
+          <p><InlineMathText>{term.pitfall}</InlineMathText></p>
         </article>
       </section>
 

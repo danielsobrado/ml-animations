@@ -1588,13 +1588,13 @@ body {
 
 .ua-assessment-head {
   display: grid;
-  grid-template-columns: 120px minmax(220px, 0.55fr) minmax(240px, 1fr);
+  grid-template-columns: 120px minmax(440px, 0.9fr) minmax(280px, 0.8fr);
   gap: 18px;
   align-items: baseline;
   margin-bottom: 18px;
 }
 
-.ua-assessment-head span,
+.ua-assessment-head > span,
 .ua-quiz-kicker {
   color: var(--ds-accent);
   font-family: var(--ds-font-mono);
@@ -1606,9 +1606,19 @@ body {
 .ua-assessment-head h2 {
   margin: 0;
   font-family: var(--ds-font-serif);
-  font-size: clamp(25px, 3vw, 36px);
+  font-size: clamp(25px, 2.6vw, 34px);
   font-weight: 400;
   line-height: 1;
+}
+
+.ua-assessment-title-line {
+  display: block;
+}
+
+@media (min-width: 961px) {
+  .ua-assessment-title-line {
+    white-space: nowrap;
+  }
 }
 
 .ua-assessment-head p {
@@ -1817,6 +1827,10 @@ body {
   font-family: var(--ds-font-serif);
   font-size: 15px;
   line-height: 1.5;
+}
+
+.ua-inline-math {
+  white-space: nowrap;
 }
 
 .ua-answer-panel small {
@@ -3409,7 +3423,7 @@ body {
   }
 }
 
-@container (min-width: 721px) and (max-width: 1080px) {
+@container (min-width: 721px) and (max-width: 900px) {
   .ua-learning-strip {
     grid-template-columns: minmax(180px, 0.95fr) minmax(220px, 1.05fr);
   }

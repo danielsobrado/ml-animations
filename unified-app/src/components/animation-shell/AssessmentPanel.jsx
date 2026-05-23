@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight, Circle, Eye, FlaskConical } from 'lucide-react';
+import InlineMathText from '../common/InlineMathText';
 import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
 import {
   getCompletionStatus,
@@ -10,6 +11,24 @@ import {
 } from '../../data/learningProgress';
 
 const QUESTIONS_PER_PAGE = 10;
+
+function renderAssessmentTitle(title) {
+  if (typeof title !== 'string') return title;
+
+  const separatorIndex = title.indexOf(': ');
+  if (separatorIndex < 0) return <InlineMathText>{title}</InlineMathText>;
+
+  return (
+    <>
+      <span className="ua-assessment-title-line">
+        <InlineMathText>{title.slice(0, separatorIndex + 2)}</InlineMathText>
+      </span>
+      <span className="ua-assessment-title-line">
+        <InlineMathText>{title.slice(separatorIndex + 2)}</InlineMathText>
+      </span>
+    </>
+  );
+}
 
 export default function AssessmentPanel({
   lessonId,
@@ -114,7 +133,7 @@ export default function AssessmentPanel({
     <section className="ua-assessment-panel" aria-label={title}>
       <div className="ua-assessment-head">
         <span>Assessment</span>
-        <h2>{title}</h2>
+        <h2>{renderAssessmentTitle(title)}</h2>
         <p>
           {complete
             ? 'Completed locally.'
@@ -139,8 +158,8 @@ export default function AssessmentPanel({
                   <span className="ua-quiz-kicker">Scenario {questionIndex + 1} of {scenarioItems.length}</span>
                   {question.level && <span className="ua-question-level">{question.level}</span>}
                 </div>
-                <p className="ua-scenario-text">{question.scenario}</p>
-                <h3>{question.prompt}</h3>
+                <p className="ua-scenario-text"><InlineMathText>{question.scenario}</InlineMathText></p>
+                <h3><InlineMathText>{question.prompt}</InlineMathText></h3>
                 <div className="ua-choice-list">
                   {question.choices.map((choice, choiceIndex) => {
                     const selected = state.selectedIndex === choiceIndex;
@@ -158,7 +177,7 @@ export default function AssessmentPanel({
                         aria-pressed={selected}
                       >
                         <span>{String.fromCharCode(65 + choiceIndex)}</span>
-                        {choice}
+                        <InlineMathText>{choice}</InlineMathText>
                       </button>
                     );
                   })}
@@ -171,10 +190,14 @@ export default function AssessmentPanel({
                 )}
                 {revealed && (
                   <div className={`ua-answer-panel ${state.correct ? 'correct' : ''}`}>
-                    <strong>{state.correct ? 'Correct.' : `Answer: ${question.choices[question.answerIndex]}`}</strong>
-                    <p>{question.explanation}</p>
+                    <strong>
+                      {state.correct ? 'Correct.' : (
+                        <>Answer: <InlineMathText>{question.choices[question.answerIndex]}</InlineMathText></>
+                      )}
+                    </strong>
+                    <p><InlineMathText>{question.explanation}</InlineMathText></p>
                     {question.misconceptionTested && (
-                      <small>Misconception tested: {question.misconceptionTested}</small>
+                      <small>Misconception tested: <InlineMathText>{question.misconceptionTested}</InlineMathText></small>
                     )}
                   </div>
                 )}
@@ -241,7 +264,7 @@ export default function AssessmentPanel({
               {question.level && <span className="ua-question-level">{question.level}</span>}
               {question.countsForCompletion && <span className="ua-question-level">Core</span>}
             </div>
-            <h3>{question.prompt}</h3>
+            <h3><InlineMathText>{question.prompt}</InlineMathText></h3>
             <div className="ua-choice-list">
               {question.choices.map((choice, choiceIndex) => {
                 const selected = state.selectedIndex === choiceIndex;
@@ -259,7 +282,7 @@ export default function AssessmentPanel({
                     aria-pressed={selected}
                   >
                     <span>{String.fromCharCode(65 + choiceIndex)}</span>
-                    {choice}
+                    <InlineMathText>{choice}</InlineMathText>
                   </button>
                 );
               })}
@@ -272,8 +295,12 @@ export default function AssessmentPanel({
             )}
             {revealed && (
               <div className={`ua-answer-panel ${state.correct ? 'correct' : ''}`}>
-                <strong>{state.correct ? 'Correct.' : `Answer: ${question.choices[question.answerIndex]}`}</strong>
-                <p>{question.explanation}</p>
+                <strong>
+                  {state.correct ? 'Correct.' : (
+                    <>Answer: <InlineMathText>{question.choices[question.answerIndex]}</InlineMathText></>
+                  )}
+                </strong>
+                <p><InlineMathText>{question.explanation}</InlineMathText></p>
               </div>
             )}
           </article>
@@ -383,7 +410,7 @@ export default function AssessmentPanel({
                     <span className="ua-quiz-kicker">Review {reviewPageStart + questionIndex + 1}</span>
                     {question.level && <span className="ua-question-level">{question.level}</span>}
                   </div>
-                  <h3>{question.prompt}</h3>
+                  <h3><InlineMathText>{question.prompt}</InlineMathText></h3>
                   <div className="ua-choice-list">
                     {question.choices.map((choice, choiceIndex) => (
                       <div
@@ -391,7 +418,7 @@ export default function AssessmentPanel({
                         className={`ua-choice-button ${revealed && choiceIndex === question.answerIndex ? 'answer' : ''}`}
                       >
                         <span>{String.fromCharCode(65 + choiceIndex)}</span>
-                        {choice}
+                        <InlineMathText>{choice}</InlineMathText>
                       </div>
                     ))}
                   </div>
@@ -407,8 +434,8 @@ export default function AssessmentPanel({
                   )}
                   {revealed && (
                     <div className="ua-answer-panel correct">
-                      <strong>Review answer: {question.choices[question.answerIndex]}</strong>
-                      <p>{question.explanation}</p>
+                      <strong>Review answer: <InlineMathText>{question.choices[question.answerIndex]}</InlineMathText></strong>
+                      <p><InlineMathText>{question.explanation}</InlineMathText></p>
                     </div>
                   )}
                 </article>
@@ -422,7 +449,7 @@ export default function AssessmentPanel({
       {!hasStructuredAssessment && hasLegacyCheck && (
         <article className="ua-quiz-card">
           <div className="ua-quiz-kicker">Check yourself</div>
-          <h3>{legacyQuestion}</h3>
+          <h3><InlineMathText>{legacyQuestion}</InlineMathText></h3>
           {!lessonProgress.legacyCheck?.revealed && (
             <button type="button" className="ua-reveal-button" onClick={handleLegacyReveal}>
               <Eye size={15} />
@@ -431,8 +458,8 @@ export default function AssessmentPanel({
           )}
           {lessonProgress.legacyCheck?.revealed && (
             <div className="ua-answer-panel correct">
-              <strong>{legacyAnswer}</strong>
-              {legacyExplanation && <p>{legacyExplanation}</p>}
+              <strong><InlineMathText>{legacyAnswer}</InlineMathText></strong>
+              {legacyExplanation && <p><InlineMathText>{legacyExplanation}</InlineMathText></p>}
             </div>
           )}
         </article>
