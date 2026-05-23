@@ -203,10 +203,10 @@ export default function LogisticRegressionAnimation() {
                   key={id}
                   type="button"
                   onClick={() => applyPreset(preset)}
-                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-left text-sm font-black text-slate-700 transition hover:border-cyan-400 hover:bg-cyan-50"
+                  className="ds-btn border border-[var(--ds-rule)] bg-[var(--ds-panel)] hover:bg-[var(--ds-accent-w)] hover:border-[var(--ds-accent)] text-[var(--ds-ink)] rounded p-3 text-left flex flex-col items-start transition-all duration-120"
                 >
                   {preset.label}
-                  <span className="mt-1 block text-xs font-semibold normal-case leading-4 text-slate-500">{preset.detail}</span>
+                  <span className="mt-1 block text-xs font-semibold normal-case leading-4 text-[var(--ds-faint)]">{preset.detail}</span>
                 </button>
               ))}
             </div>
