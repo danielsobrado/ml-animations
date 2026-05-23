@@ -38,6 +38,12 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Comprehensive test-time compute interactive module. Covers training vs inference scaling tradeoffs, Best-of-N sampling with oracle/verifier gap analysis, tree/beam search with PRM walkthrough, adaptive thinking budget policies, tool-augmented ReAct pattern, failure mode diagnostics, and cost-accuracy Pareto frontier comparison.',
     nextAction: 'Add live computation of optimal N using real benchmark data and model-specific cost profiles.',
   },
+  'tool-using-reasoning-models': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Interactive tool-using reasoning loop workbench. Covers need detection, Think-Act-Observe loops, learned search policy turns, Python verifiers, file grounding, browser use, token masking during RL, and failure mode mitigation.',
+    nextAction: 'Incorporate parallel tool execution and multi-node sandboxed Python interpreters.',
+  },
   'ab-testing-foundations': {
     tier: 'A',
     status: 'stable',

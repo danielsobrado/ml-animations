@@ -53,6 +53,7 @@ const animationRegistry = {
   'multi-head-latent-attention': lazy(() => import('./multi-head-latent-attention')),
   'reasoning-rlvr-grpo': lazy(() => import('./reasoning-rlvr-grpo')),
   'test-time-compute-thinking-budgets': lazy(() => import('./test-time-compute-thinking-budgets')),
+  'tool-using-reasoning-models': lazy(() => import('./tool-using-reasoning-models')),
   'moe': lazy(() => import('./moe')),
   'rag': lazy(() => import('./rag')),
   'rag-chunking-context': lazy(() => import('./rag-chunking-context')),

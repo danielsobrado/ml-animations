@@ -83,6 +83,7 @@ export const HUB_LEARNING_PATHS = [
       'multi-head-latent-attention',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
+      'tool-using-reasoning-models',
     ],
   },
   {

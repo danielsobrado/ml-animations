@@ -90,6 +90,7 @@ const EQUATION_OVERRIDES = {
   'multi-head-latent-attention': 'c_t = W_{down} x_t \\quad K_t, V_t \\approx W_{up} c_t',
   'reasoning-rlvr-grpo': 'A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon} \\quad \\Delta \\theta \\propto \\mathbb{E}[\\nabla \\log \\pi_\\theta(y_i|x) A_i]',
   'test-time-compute-thinking-budgets': 'acc(N) \\approx 1 - (1 - p_{correct})^N \\quad cost(N) = N \\cdot L_{avg}',
+  'tool-using-reasoning-models': '\\text{score}(\\text{tool}) = \\text{uncertainty\\_reduction} - \\text{latency} - \\text{cost} - \\text{safety\\_risk}',
   'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
   'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
   'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
@@ -763,6 +764,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Generate 8 candidate solutions, score correctness and format, then watch positive-advantage traces become more likely.',
     'Mistake to avoid: rewarding format or length too heavily can create polished but wrong reasoning (reward hacking) or overthinking.',
     'Check understanding by designing a reward that improves correctness without causing overthinking, language mixing, or reward hacking.'
+  ),
+  'tool-using-reasoning-models': cardSet(
+    'Tool-using reasoning models solve tasks by interleaving internal reasoning with external actions such as search, Python, file reads, browser actions, or structured function calls.',
+    'Read the system as a loop: think about what is missing, call a tool to reduce uncertainty, observe the result, then update the plan.',
+    'A tool policy can be modeled as expected benefit minus latency, cost, and safety risk.',
+    'Run the same task with search, Python, file analysis, and browser tools enabled or disabled, then compare groundedness and latency.',
+    'Mistake to avoid: tool output is not automatically true or safe; it must be checked for relevance, freshness, provenance, and permissions.',
+    'Check understanding by diagnosing whether a failure came from tool overuse, stale evidence, hallucinated observation, or unsafe action.'
   ),
   'test-time-compute-thinking-budgets': cardSet(
     'Test-time compute scaling spends more inference-time tokens on harder queries to raise accuracy without retraining the model.',

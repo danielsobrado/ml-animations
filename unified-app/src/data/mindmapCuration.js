@@ -156,6 +156,12 @@ export const MINDMAP_CURATIONS = {
     'Why does accuracy plateau long before latency plateaus in budget-forcing experiments?',
     'Inference-time compute is not a free lunch — every extra token costs real latency and dollars at serving scale.',
   ],
+  'tool-using-reasoning-models': [
+    'How does a reasoning policy decide if a tool action is worth the cost?',
+    'Select a task, configure tool access, and trace the Think-Act-Observe loop across search, Python, and browser actions.',
+    'What failure metric signals that an agent has entered an infinite tool loop or suffered prompt injection?',
+    'Tools are action policies inside a reinforcement learning loop; safety, latency, cost, and permission gates are core constraints.',
+  ],
 };
 
 export function getMindmapCuration(animationId) {

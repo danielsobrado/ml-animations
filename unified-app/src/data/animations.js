@@ -124,6 +124,12 @@ export const categories = [
         icon: Cpu,
         description: 'Inference-time scaling via sampling strategies, beam search, adaptive budgets, tool augmentation, and cost-accuracy tradeoffs',
       },
+      {
+        id: 'tool-using-reasoning-models',
+        name: 'Tool-Using Reasoning Models',
+        icon: Cpu,
+        description: 'Multi-step reasoning loops with external actions: search policies, Python verifiers, file grounding, browser use, and RL masking',
+      },
     ],
   },
   {
@@ -479,6 +485,7 @@ export const curriculumTracks = [
       'multi-head-latent-attention',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
+      'tool-using-reasoning-models',
     ],
   },
   {
@@ -513,6 +520,7 @@ export const curriculumTracks = [
       'multi-head-latent-attention',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
+      'tool-using-reasoning-models',
     ],
   },
   {
@@ -1223,6 +1231,31 @@ const CURRICULUM_OVERRIDES = {
       'Diagnose overthinking, truncation, and verifier-gap failure modes in deployed reasoning systems',
     ],
     commonMisconception: 'More thinking tokens always help — in reality, diminishing returns appear quickly, and allocating large budgets to trivial queries wastes significant serving cost without accuracy gain.',
+  },
+  'tool-using-reasoning-models': {
+    difficulty: 'advanced',
+    estimatedMinutes: 75,
+    prerequisites: [
+      'rag',
+      'rag-vector-indexing',
+      'rag-reranking-grounding',
+      'rag-failure-modes',
+      'transformer-token-generation',
+      'sampling-strategies',
+      'test-time-compute-thinking-budgets',
+      'reasoning-rlvr-grpo',
+      'model-debugging',
+      'model-monitoring',
+    ],
+    learningObjectives: [
+      'Explain tool-using reasoning loops and the decision policy for choosing external actions',
+      'Describe search as a learned action policy with multi-turn query reformulation and RL training constraints',
+      'Analyze the roles of Python calculators/verifiers and bounded document grounding tools',
+      'Contrast function calling schema matching with dynamic agent planning control loops',
+      'Evaluate tool result masking methods (Search-R1) and RL reward formulations for tool use',
+      'Diagnose agent failure modes (tool overuse, stale search, hallucinated results, prompt injection) and design permission gates',
+    ],
+    commonMisconception: 'Tools are just "plugins" styled as API wrappers — in frontier architectures, tool calling is a learned policy integrated directly into reinforcement learning loops with specific token masking and safety guardrails.',
   },
   bert: {
 
