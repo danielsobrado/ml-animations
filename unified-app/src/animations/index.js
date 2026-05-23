@@ -18,6 +18,8 @@ const animationRegistry = {
   'grouped-query-attention': lazy(() => import('./grouped-query-attention')),
   'kv-cache': lazy(() => import('./kv-cache')),
   'flash-attention': lazy(() => import('./flash-attention')),
+  'recommender-systems-ranking-track': lazy(() => import('./recommender-systems-ranking-track')),
+  'efficient-inference-compression-track': lazy(() => import('./efficient-inference-compression-track')),
   'transformer': lazy(() => import('./transformer')),
   'transformer-architecture-families': lazy(() => import('./transformer-architecture-families')),
   'llm-training-objectives': lazy(() => import('./llm-training-objectives')),
@@ -67,6 +69,7 @@ const animationRegistry = {
   'model-monitoring': lazy(() => import('./model-monitoring')),
   'model-fairness': lazy(() => import('./model-fairness')),
   'uncertainty-estimation': lazy(() => import('./uncertainty-estimation')),
+  'ml-security-robustness-track': lazy(() => import('./ml-security-robustness-track')),
 
   // Linear Algebra & Math
   'matrix-multiplication': lazy(() => import('./matrix-multiplication')),
@@ -103,6 +106,8 @@ const animationRegistry = {
   'regularization': lazy(() => import('./regularization')),
   'knn-naive-bayes-svm': lazy(() => import('./knn-naive-bayes-svm')),
   'tree-ensembles': lazy(() => import('./tree-ensembles')),
+  'time-series-forecasting-track': lazy(() => import('./time-series-forecasting-track')),
+  'data-engineering-for-ml-track': lazy(() => import('./data-engineering-for-ml-track')),
   'computation-graph-backprop': lazy(() => import('./computation-graph-backprop')),
 
   // Probability & Statistics
@@ -113,6 +118,12 @@ const animationRegistry = {
   'hypothesis-testing-intuition': lazy(() => import('./hypothesis-testing-intuition')),
   'ab-testing-foundations': lazy(() => import('./ab-testing-foundations')),
   'power-sample-size': lazy(() => import('./power-sample-size')),
+  'sequential-testing-peeking': lazy(() => import('./sequential-testing-peeking')),
+  'cuped-variance-reduction': lazy(() => import('./cuped-variance-reduction')),
+  'confounding-simpsons-paradox': lazy(() => import('./confounding-simpsons-paradox')),
+  'causal-graphs-dags': lazy(() => import('./causal-graphs-dags')),
+  'treatment-effects': lazy(() => import('./treatment-effects')),
+  'propensity-scores': lazy(() => import('./propensity-scores')),
   'maximum-likelihood-estimation': lazy(() => import('./maximum-likelihood-estimation')),
   'loss-functions-likelihoods': lazy(() => import('./loss-functions-likelihoods')),
   'entropy': lazy(() => import('./entropy')),

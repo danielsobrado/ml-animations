@@ -125,6 +125,12 @@ export const HUB_LEARNING_PATHS = [
       'hypothesis-testing-intuition',
       'ab-testing-foundations',
       'power-sample-size',
+      'sequential-testing-peeking',
+      'cuped-variance-reduction',
+      'confounding-simpsons-paradox',
+      'causal-graphs-dags',
+      'treatment-effects',
+      'propensity-scores',
     ],
   },
   {

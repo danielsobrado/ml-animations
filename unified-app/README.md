@@ -153,7 +153,7 @@ The animations are organized into the following categories:
 5. **Math Fundamentals** - Matrix ops, SVD, Gradient Descent, etc.
 6. **Model Reliability** - Debugging, interpretability, monitoring, fairness, and uncertainty
 7. **Probability & Statistics** - Distributions, entropy, testing, likelihoods, and intervals
-8. **Experimentation & Causal ML** - A/B testing foundations and power analysis plus planned modules for peeking, CUPED, confounding, DAGs, treatment effects, and propensity scores
+8. **Experimentation & Causal ML** - A/B testing, power analysis, peeking, CUPED, confounding, DAGs, treatment effects, and propensity scores
 9. **Reinforcement Learning** - Q-Learning, Markov Chains, etc.
 10. **Algorithms** - Bloom Filter, PageRank
 

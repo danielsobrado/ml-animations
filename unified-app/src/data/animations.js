@@ -79,6 +79,8 @@ export const categories = [
       { id: 'grouped-query-attention', name: 'Grouped-Query Attention', icon: Users, description: 'Efficient attention with grouped queries' },
       { id: 'kv-cache', name: 'KV Cache', icon: Database, description: 'Caching keys and values for fast inference' },
       { id: 'flash-attention', name: 'Flash Attention', icon: Zap, description: 'Hardware-aware tiled attention for efficiency' },
+      { id: 'recommender-systems-ranking-track', name: 'Recommender Systems & Ranking', icon: Target, description: 'Collaborative filtering, learning to rank, ranking metrics, cold start, and exploration' },
+      { id: 'efficient-inference-compression-track', name: 'Efficient Inference & Compression', icon: Cpu, description: 'Quantization, pruning, distillation, batching, decoding, latency, and memory tradeoffs' },
       { id: 'residual-stream', name: 'Residual Stream', icon: GitMerge, description: 'How information flows and accumulates through layers' },
       { id: 'bert', name: 'BERT', icon: BookOpen, description: 'Bidirectional encoder representations' },
       { id: 'gpt2-comprehensive', name: 'GPT-2 Comprehensive', icon: MessageSquare, description: 'Detailed look at GPT-2 architecture' },
@@ -208,6 +210,8 @@ export const categories = [
       { id: 'regularization', name: 'Regularization', icon: ShieldCheck, description: 'Penalizing complexity so models generalize better' },
       { id: 'knn-naive-bayes-svm', name: 'kNN, Naive Bayes, and SVM', icon: Target, description: 'Neighbor voting, probabilistic assumptions, and margin classifiers' },
       { id: 'tree-ensembles', name: 'Tree Ensembles', icon: GitBranch, description: 'Decision trees, random forests, and gradient boosting' },
+      { id: 'time-series-forecasting-track', name: 'Time Series & Forecasting', icon: LineChart, description: 'Rolling splits, lag features, autocorrelation, seasonality, leakage, metrics, and backtesting' },
+      { id: 'data-engineering-for-ml-track', name: 'Data Engineering for ML', icon: Database, description: 'Feature stores, point-in-time correctness, label windows, contracts, and train/serve skew' },
     ],
   },
   {
@@ -221,6 +225,7 @@ export const categories = [
       { id: 'model-monitoring', name: 'Model Monitoring', icon: BarChart3, description: 'Track drift, data quality, performance, latency, and alert thresholds after deployment' },
       { id: 'model-fairness', name: 'Model Fairness', icon: ShieldCheck, description: 'Group metrics, threshold tradeoffs, proxy features, and mitigation strategies' },
       { id: 'uncertainty-estimation', name: 'Uncertainty Estimation', icon: Dice1, description: 'Confidence, calibration, prediction intervals, and out-of-distribution uncertainty' },
+      { id: 'ml-security-robustness-track', name: 'ML Security & Robustness', icon: ShieldCheck, description: 'Prompt injection, poisoning, adversarial examples, privacy leakage, tool safety, and jailbreak evaluation' },
     ],
   },
   {
@@ -231,6 +236,12 @@ export const categories = [
     items: [
       { id: 'ab-testing-foundations', name: 'A/B Testing Foundations', icon: GitBranch, description: 'Randomization, treatment/control groups, metrics, guardrails, and practical significance' },
       { id: 'power-sample-size', name: 'Power & Sample Size', icon: Scale, description: 'Minimum detectable effect, variance, sample size, and false positive/negative tradeoffs' },
+      { id: 'sequential-testing-peeking', name: 'Sequential Testing & Peeking', icon: Activity, description: 'Planned interim looks, alpha spending, stopping rules, and peeking risk' },
+      { id: 'cuped-variance-reduction', name: 'CUPED / Variance Reduction', icon: Scissors, description: 'Use pre-treatment covariates to reduce experiment noise' },
+      { id: 'confounding-simpsons-paradox', name: "Confounding & Simpson's Paradox", icon: Shuffle, description: 'Why aggregate effects can reverse across groups when exposure is confounded' },
+      { id: 'causal-graphs-dags', name: 'Causal Graphs / DAGs', icon: Network, description: 'Confounders, colliders, mediators, and adjustment sets' },
+      { id: 'treatment-effects', name: 'Treatment Effects', icon: Users, description: 'ATE, CATE, heterogeneous effects, and uplift targeting' },
+      { id: 'propensity-scores', name: 'Propensity Scores', icon: Scale, description: 'Matching and weighting intuition for observational comparisons' },
     ],
   },
   {
@@ -357,6 +368,8 @@ export const curriculumTracks = [
       'regularization',
       'knn-naive-bayes-svm',
       'tree-ensembles',
+      'time-series-forecasting-track',
+      'data-engineering-for-ml-track',
       'cross-entropy',
       'loss-functions-likelihoods',
       'softmax',
@@ -403,6 +416,7 @@ export const curriculumTracks = [
       'uncertainty-estimation',
       'model-monitoring',
       'model-fairness',
+      'ml-security-robustness-track',
     ],
   },
   {
@@ -414,6 +428,12 @@ export const curriculumTracks = [
       'sampling-confidence-intervals',
       'ab-testing-foundations',
       'power-sample-size',
+      'sequential-testing-peeking',
+      'cuped-variance-reduction',
+      'confounding-simpsons-paradox',
+      'causal-graphs-dags',
+      'treatment-effects',
+      'propensity-scores',
       'classification-metrics',
       'calibration',
       'data-leakage-deep-dive',
@@ -450,6 +470,8 @@ export const curriculumTracks = [
       'grouped-query-attention',
       'kv-cache',
       'flash-attention',
+      'recommender-systems-ranking-track',
+      'efficient-inference-compression-track',
       'fine-tuning',
       'moe',
       'frontier-llm-architecture-overview',
@@ -514,74 +536,7 @@ export const curriculumTracks = [
   },
 ];
 
-export const curriculumBacklog = [
-  {
-    id: 'sequential-testing-peeking',
-    title: 'Sequential Testing & Peeking',
-    trackId: 'experimentation-causal-ml',
-    description: 'Why repeatedly checking p-values inflates false positives and how sequential designs control error.',
-  },
-  {
-    id: 'cuped-variance-reduction',
-    title: 'CUPED / Variance Reduction',
-    trackId: 'experimentation-causal-ml',
-    description: 'Use pre-treatment covariates to reduce experiment noise without changing the estimand.',
-  },
-  {
-    id: 'confounding-simpsons-paradox',
-    title: "Confounding & Simpson's Paradox",
-    trackId: 'experimentation-causal-ml',
-    description: 'Show how aggregate effects can reverse across groups when assignment or exposure is confounded.',
-  },
-  {
-    id: 'causal-graphs-dags',
-    title: 'Causal Graphs / DAGs',
-    trackId: 'experimentation-causal-ml',
-    description: 'Confounders, colliders, mediators, adjustment sets, and when conditioning creates bias.',
-  },
-  {
-    id: 'treatment-effects',
-    title: 'Treatment Effects',
-    trackId: 'experimentation-causal-ml',
-    description: 'ATE, CATE, heterogeneous effects, uplift, and when average effects hide useful segment behavior.',
-  },
-  {
-    id: 'propensity-scores',
-    title: 'Propensity Scores',
-    trackId: 'experimentation-causal-ml',
-    description: 'Matching and weighting intuition for observational data when randomized assignment is unavailable.',
-  },
-  {
-    id: 'time-series-forecasting-track',
-    title: 'Time Series & Forecasting',
-    trackId: 'core-ml',
-    description: 'Rolling splits, lag features, autocorrelation, seasonality, forecasting metrics, leakage, exogenous variables, and backtesting.',
-  },
-  {
-    id: 'recommender-systems-ranking-track',
-    title: 'Recommender Systems & Ranking',
-    trackId: 'nlp-transformers',
-    description: 'Collaborative filtering, matrix factorization, implicit feedback, cold start, learning to rank, ranking metrics, and exploration.',
-  },
-  {
-    id: 'ml-security-robustness-track',
-    title: 'ML Security & Robustness',
-    trackId: 'model-reliability',
-    description: 'Prompt injection, RAG poisoning, data poisoning, adversarial examples, membership inference, PII leakage, tool safety, and jailbreak evaluation.',
-  },
-  {
-    id: 'efficient-inference-compression-track',
-    title: 'Efficient Inference & Compression',
-    trackId: 'nlp-transformers',
-    description: 'Quantization, pruning, distillation, batching, speculative decoding, paged attention, latency, throughput, and memory bandwidth.',
-  },
-  {
-    id: 'data-engineering-for-ml-track',
-    title: 'Data Engineering for ML',
-    trackId: 'core-ml',
-    description: 'Feature stores, label windows, point-in-time correctness, missing data, categorical encoding, target encoding leakage, data contracts, and train/serve skew.',
-  },
-];
+export const curriculumBacklog = [];
 
 const trackIdsByAnimation = curriculumTracks.reduce((acc, track) => {
   for (const animationId of track.animationIds) {
@@ -930,6 +885,127 @@ const CURRICULUM_OVERRIDES = {
       'Distinguish false positives controlled by alpha from false negatives controlled by power',
     ],
     commonMisconception: 'A non-significant underpowered experiment does not prove there is no useful treatment effect.',
+  },
+  'sequential-testing-peeking': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['ab-testing-foundations', 'power-sample-size'],
+    learningObjectives: [
+      'Explain why repeated unplanned p-value checks inflate false positives',
+      'Connect interim looks to alpha spending and stricter stopping boundaries',
+      'Choose between fixed-horizon decisions and planned sequential monitoring',
+    ],
+    commonMisconception: 'Stopping an experiment the first time p < 0.05 does not preserve a 5 percent false positive rate.',
+  },
+  'cuped-variance-reduction': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['ab-testing-foundations', 'power-sample-size'],
+    learningObjectives: [
+      'Use pre-treatment covariates to reduce outcome variance',
+      'Explain how correlation between pre-period and outcome narrows intervals',
+      'Avoid post-treatment adjustment that changes or biases the estimand',
+    ],
+    commonMisconception: 'CUPED is not a way to adjust for treatment-affected variables; the covariate must be pre-treatment.',
+  },
+  'confounding-simpsons-paradox': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['ab-testing-foundations', 'classification-metrics'],
+    learningObjectives: [
+      'Identify a confounder as a common cause of treatment exposure and outcome',
+      'Explain how aggregate effects can reverse within comparable groups',
+      'Use slicing or adjustment to separate mix shifts from treatment effects',
+    ],
+    commonMisconception: 'An aggregate treatment-control gap is not necessarily causal when exposure was not randomized.',
+  },
+  'causal-graphs-dags': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 20,
+    prerequisites: ['confounding-simpsons-paradox'],
+    learningObjectives: [
+      'Read confounders, colliders, and mediators in a directed acyclic graph',
+      'Choose adjustment variables that close backdoor paths',
+      'Explain why conditioning on colliders can create bias',
+    ],
+    commonMisconception: 'Adding every available variable to a regression is not automatically safer; some variables open biasing paths.',
+  },
+  'treatment-effects': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['ab-testing-foundations', 'causal-graphs-dags'],
+    learningObjectives: [
+      'Distinguish ATE from CATE and uplift',
+      'Recognize when average effects hide segment benefit or harm',
+      'Connect heterogeneous effects to targeting and rollout decisions',
+    ],
+    commonMisconception: 'A positive average treatment effect does not imply every user segment benefits.',
+  },
+  'propensity-scores': {
+    difficulty: 'advanced',
+    estimatedMinutes: 20,
+    prerequisites: ['confounding-simpsons-paradox', 'causal-graphs-dags'],
+    learningObjectives: [
+      'Interpret propensity score as probability of treatment given observed covariates',
+      'Use matching or inverse-propensity weighting to improve observed balance',
+      'Diagnose poor overlap and unobserved-confounding limits',
+    ],
+    commonMisconception: 'Propensity scores cannot fix missing confounders or comparisons with no common support.',
+  },
+  'time-series-forecasting-track': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 22,
+    prerequisites: ['train-validation-test-split', 'data-leakage-deep-dive', 'classification-metrics'],
+    learningObjectives: [
+      'Use rolling train/test splits for chronological evaluation',
+      'Build lag, seasonality, and exogenous features without future leakage',
+      'Choose forecasting metrics and backtests that match deployment',
+    ],
+    commonMisconception: 'A random train/test split is usually not an honest forecasting evaluation because future patterns can leak backward.',
+  },
+  'recommender-systems-ranking-track': {
+    difficulty: 'advanced',
+    estimatedMinutes: 24,
+    prerequisites: ['embeddings', 'cosine-similarity', 'classification-metrics'],
+    learningObjectives: [
+      'Compare collaborative filtering, matrix factorization, and hybrid cold-start strategies',
+      'Connect pointwise, pairwise, and listwise losses to ranking objectives',
+      'Evaluate ranked outputs with MAP, MRR, nDCG, and exploration-aware diagnostics',
+    ],
+    commonMisconception: 'A recommender is not just a predictor; exposure, ranking position, and feedback loops shape the data it learns from.',
+  },
+  'ml-security-robustness-track': {
+    difficulty: 'advanced',
+    estimatedMinutes: 24,
+    prerequisites: ['model-monitoring', 'rag-failure-modes', 'model-debugging'],
+    learningObjectives: [
+      'Map prompt injection, poisoning, adversarial, privacy, and tool-call threats',
+      'Connect defenses to isolation, validation, evaluation, monitoring, and policy gates',
+      'Design robustness checks for RAG and LLM systems before release',
+    ],
+    commonMisconception: 'Model safety is not only a prompt problem; retrieval, tools, data access, and monitoring all affect security.',
+  },
+  'efficient-inference-compression-track': {
+    difficulty: 'advanced',
+    estimatedMinutes: 24,
+    prerequisites: ['kv-cache', 'flash-attention', 'grouped-query-attention'],
+    learningObjectives: [
+      'Balance quantization, pruning, distillation, and batching against quality and latency',
+      'Explain how KV cache, paged attention, and memory bandwidth limit serving',
+      'Track throughput, time-to-first-token, decode latency, and memory together',
+    ],
+    commonMisconception: 'Optimizing for maximum throughput alone can make user latency, quality, or memory behavior unacceptable.',
+  },
+  'data-engineering-for-ml-track': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 22,
+    prerequisites: ['data-leakage-deep-dive', 'feature-scaling-preprocessing', 'model-monitoring'],
+    learningObjectives: [
+      'Design label windows and point-in-time feature joins',
+      'Prevent target encoding leakage and train/serve skew',
+      'Use data contracts to catch schema, freshness, null-rate, and range regressions',
+    ],
+    commonMisconception: 'Feature pipelines are not neutral plumbing; timestamps, label windows, and serving parity determine whether the model is valid.',
   },
   'maximum-likelihood-estimation': {
     difficulty: 'intermediate',

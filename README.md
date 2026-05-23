@@ -75,9 +75,9 @@ The model reliability track covers post-training and deployed-system concerns: d
 
 ### Experimentation and Causal ML
 
-The experimentation track connects hypothesis testing, confidence intervals, metrics, calibration, leakage, fairness, monitoring, and uncertainty to causal decision-making. Active lessons cover A/B testing foundations: randomization, treatment and control groups, primary metrics, guardrails, and practical significance; and power and sample size: MDE, variance, alpha, target power, false positives, and false negatives. Planned lessons cover sequential testing and peeking, CUPED variance reduction, confounding and Simpson's paradox, causal graphs and DAGs, treatment effects, and propensity scores.
+The experimentation track connects hypothesis testing, confidence intervals, metrics, calibration, leakage, fairness, monitoring, and uncertainty to causal decision-making. Active lessons now cover A/B testing foundations, power and sample size, sequential testing and peeking, CUPED variance reduction, confounding and Simpson's paradox, causal graphs and DAGs, treatment effects, and propensity scores.
 
-Next curriculum priorities after causal inference are time series and forecasting, recommender systems and ranking, ML security and robustness, efficient inference and compression, and data engineering for ML.
+The next-priority applied ML pillars are also active as overview lessons: time series and forecasting, recommender systems and ranking, ML security and robustness, efficient inference and compression, and data engineering for ML.
 
 ### Vision and Diffusion
 

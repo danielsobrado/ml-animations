@@ -1564,9 +1564,17 @@ test('assessment core prompts do not repeat exact questions', () => {
   }
 });
 
-test('experimentation and causal ML promotes A/B testing, power analysis, and keeps causal roadmap planned', () => {
+test('experimentation and causal ML promotes the full causal roadmap into active lessons', () => {
   const animation = getAnimationById('ab-testing-foundations');
   const powerAnimation = getAnimationById('power-sample-size');
+  const causalLessonIds = [
+    'sequential-testing-peeking',
+    'cuped-variance-reduction',
+    'confounding-simpsons-paradox',
+    'causal-graphs-dags',
+    'treatment-effects',
+    'propensity-scores',
+  ];
   const track = curriculumTracks.find((candidate) => candidate.id === 'experimentation-causal-ml');
   assert.ok(animation, 'A/B testing foundations should be active');
   assert.equal(animation.categoryId, 'experimentation-causal-ml');
@@ -1578,12 +1586,25 @@ test('experimentation and causal ML promotes A/B testing, power analysis, and ke
   assert.ok(powerAnimation.trackIds.includes('experimentation-causal-ml'));
   assert.ok(isAnimationAvailable('power-sample-size'));
   assert.deepEqual(powerAnimation.prerequisites, ['ab-testing-foundations', 'sampling-confidence-intervals']);
+  for (const lessonId of causalLessonIds) {
+    const causalAnimation = getAnimationById(lessonId);
+    assert.ok(causalAnimation, `${lessonId} should be active`);
+    assert.equal(causalAnimation.categoryId, 'experimentation-causal-ml');
+    assert.ok(causalAnimation.trackIds.includes('experimentation-causal-ml'));
+    assert.ok(isAnimationAvailable(lessonId));
+  }
   assert.ok(track, 'experimentation and causal ML track should exist');
   assert.deepEqual(track.animationIds, [
     'hypothesis-testing-intuition',
     'sampling-confidence-intervals',
     'ab-testing-foundations',
     'power-sample-size',
+    'sequential-testing-peeking',
+    'cuped-variance-reduction',
+    'confounding-simpsons-paradox',
+    'causal-graphs-dags',
+    'treatment-effects',
+    'propensity-scores',
     'classification-metrics',
     'calibration',
     'data-leakage-deep-dive',
@@ -1596,14 +1617,7 @@ test('experimentation and causal ML promotes A/B testing, power analysis, and ke
     .filter((topic) => topic.trackId === 'experimentation-causal-ml')
     .map((topic) => topic.id);
 
-  assert.deepEqual(plannedIds, [
-    'sequential-testing-peeking',
-    'cuped-variance-reduction',
-    'confounding-simpsons-paradox',
-    'causal-graphs-dags',
-    'treatment-effects',
-    'propensity-scores',
-  ]);
+  assert.deepEqual(plannedIds, []);
 });
 
 test('assessment completion requires all quiz and lab items', () => {
