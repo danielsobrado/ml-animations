@@ -19,6 +19,7 @@ export default function AssessmentPanel({
   legacyExplanation,
 }) {
   const assessment = useMemo(() => getLessonAssessment(lessonId), [lessonId]);
+  const scenarioItems = assessment.scenarioQuestions || [];
   const quizItems = assessment.quiz || [];
   const reviewItems = assessment.strategyReview || [];
   const [quizPage, setQuizPage] = useState(0);
@@ -120,6 +121,68 @@ export default function AssessmentPanel({
             : `${completionStatus.correctCoreCount}/${completionStatus.requiredQuestionCount} core correct. ${requiredPercent}% core pass${labRequirement} marks completion; the full ${quizItems.length}-question bank is practice.`}
         </p>
       </div>
+
+      {scenarioItems.length > 0 && (
+        <section className="ua-scenario-deck" aria-label="Scenario questions">
+          <div className="ua-quiz-kicker">
+            <FlaskConical size={15} />
+            Scenario questions
+          </div>
+          {scenarioItems.map((question, questionIndex) => {
+            const state = lessonProgress.quiz?.[question.id] || {};
+            const answered = Number.isInteger(state.selectedIndex);
+            const revealed = answered || state.revealed;
+
+            return (
+              <article className="ua-quiz-card ua-scenario-card" key={question.id}>
+                <div className="ua-quiz-meta">
+                  <span className="ua-quiz-kicker">Scenario {questionIndex + 1} of {scenarioItems.length}</span>
+                  {question.level && <span className="ua-question-level">{question.level}</span>}
+                </div>
+                <p className="ua-scenario-text">{question.scenario}</p>
+                <h3>{question.prompt}</h3>
+                <div className="ua-choice-list">
+                  {question.choices.map((choice, choiceIndex) => {
+                    const selected = state.selectedIndex === choiceIndex;
+                    const correct = question.answerIndex === choiceIndex;
+                    const tone = revealed && selected
+                      ? selected && correct ? 'correct' : 'incorrect'
+                      : revealed && correct ? 'answer' : '';
+
+                    return (
+                      <button
+                        type="button"
+                        key={choice}
+                        className={`ua-choice-button ${selected ? 'selected' : ''} ${tone}`}
+                        onClick={() => handleAnswer(question, choiceIndex)}
+                        aria-pressed={selected}
+                      >
+                        <span>{String.fromCharCode(65 + choiceIndex)}</span>
+                        {choice}
+                      </button>
+                    );
+                  })}
+                </div>
+                {!revealed && (
+                  <button type="button" className="ua-reveal-button" onClick={() => handleReveal(question)}>
+                    <Eye size={15} />
+                    Reveal answer
+                  </button>
+                )}
+                {revealed && (
+                  <div className={`ua-answer-panel ${state.correct ? 'correct' : ''}`}>
+                    <strong>{state.correct ? 'Correct.' : `Answer: ${question.choices[question.answerIndex]}`}</strong>
+                    <p>{question.explanation}</p>
+                    {question.misconceptionTested && (
+                      <small>Misconception tested: {question.misconceptionTested}</small>
+                    )}
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </section>
+      )}
 
       {quizItems.length > QUESTIONS_PER_PAGE && (
         <nav className="ua-assessment-pager" aria-label="Lesson check pages">

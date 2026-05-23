@@ -102,6 +102,28 @@ function DepthList({ title, items }) {
   );
 }
 
+function LessonLinks({ lessonIds }) {
+  if (!lessonIds?.length) return null;
+
+  const lessons = lessonIds
+    .map((lessonId) => allAnimations.find((animation) => animation.id === lessonId))
+    .filter(Boolean)
+    .slice(0, 4);
+
+  if (!lessons.length) return null;
+
+  return (
+    <div>
+      <h4>Lesson links</h4>
+      <div className="ua-depth-link-list">
+        {lessons.map((lesson) => (
+          <Link key={lesson.id} to={`/animation/${lesson.id}`}>{lesson.name}</Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ConceptComparisonCards({ comparisons }) {
   if (!comparisons?.length) return null;
 
@@ -123,8 +145,21 @@ function ConceptComparisonCards({ comparisons }) {
               <strong>{comparison.right}</strong>
               <p>{comparison.rightSummary}</p>
             </div>
+            {comparison.whenToUseLeft && (
+              <p><b>Use {comparison.left} when:</b> {comparison.whenToUseLeft}</p>
+            )}
+            {comparison.whenToUseRight && (
+              <p><b>Use {comparison.right} when:</b> {comparison.whenToUseRight}</p>
+            )}
             <p><b>Common mistake:</b> {comparison.commonMistake}</p>
+            {comparison.failureIfConfused && (
+              <p><b>If confused:</b> {comparison.failureIfConfused}</p>
+            )}
             <p><b>Diagnostic:</b> {comparison.diagnostic}</p>
+            {comparison.tinyScenario && (
+              <p><b>Tiny scenario:</b> {comparison.tinyScenario}</p>
+            )}
+            <LessonLinks lessonIds={comparison.lessonLinks || comparison.lessonIds} />
           </article>
         ))}
       </div>
@@ -146,10 +181,23 @@ function FailureGallery({ failures }) {
           <article key={failure.id} className="ua-depth-card">
             <span>{failure.track}</span>
             <h3>{failure.title}</h3>
+            {(failure.severity || failure.learnerLevel) && (
+              <p><b>Signal:</b> {[failure.severity, failure.learnerLevel].filter(Boolean).join(' / ')}</p>
+            )}
+            {failure.minimalScenario && <p><b>Minimal scenario:</b> {failure.minimalScenario}</p>}
             <p><b>Symptom:</b> {failure.symptom}</p>
             <p><b>Why:</b> {failure.whyItHappens}</p>
             <p><b>Detect:</b> {failure.howToDetect}</p>
             <p><b>Fix:</b> {failure.howToFix}</p>
+            {failure.falseFix && <p><b>False fix:</b> {failure.falseFix}</p>}
+            {failure.tryInLesson?.lessonId && (
+              <p>
+                <b>Try in lesson:</b>{' '}
+                <Link to={`/animation/${failure.tryInLesson.lessonId}`}>
+                  {failure.tryInLesson.control || failure.tryInLesson.lessonId}
+                </Link>
+              </p>
+            )}
           </article>
         ))}
       </div>
@@ -171,6 +219,18 @@ function PaperReadingMode({ signals }) {
           <article key={signal.id} className="ua-depth-card">
             <span>When a paper says</span>
             <h3>{signal.phrase}</h3>
+            {(signal.sourceType || signal.sourceName || signal.sourceYear) && (
+              <p>
+                <b>Provenance:</b>{' '}
+                {[signal.sourceType, signal.sourceName, signal.sourceYear].filter(Boolean).join(' / ')}
+              </p>
+            )}
+            {(signal.claimStatus || signal.freshnessDate || signal.confidence) && (
+              <p>
+                <b>Claim status:</b>{' '}
+                {[signal.claimStatus, signal.freshnessDate, signal.confidence].filter(Boolean).join(' / ')}
+              </p>
+            )}
             <DepthList title="Ask" items={signal.ask} />
             <p><b>Means:</b> {signal.means}</p>
             <p><b>Does not mean:</b> {signal.doesNotMean}</p>
@@ -179,6 +239,28 @@ function PaperReadingMode({ signals }) {
         ))}
       </div>
     </section>
+  );
+}
+
+function ToyModelNotes({ caveat }) {
+  const toyModel = caveat.toyModel || null;
+  const whatIsSimplified = toyModel?.whatIsSimplified || caveat.whatIsSimplified || caveat.proxyMetrics;
+  const whatStillHolds = toyModel?.whatStillHolds || caveat.whatStillHolds;
+  const productionReality = toyModel?.whatWouldChangeInProduction || caveat.productionReality;
+  const toyFormula = toyModel?.toyFormula || caveat.toyFormula;
+
+  if (!toyFormula && !whatIsSimplified?.length && !whatStillHolds?.length && !productionReality?.length) {
+    return null;
+  }
+
+  return (
+    <div className="ua-depth-subsection">
+      <h4>Teaching simplification</h4>
+      {toyFormula && <p><b>Toy formula:</b> {toyFormula}</p>}
+      <DepthList title="What is simplified" items={whatIsSimplified} />
+      <DepthList title="What still holds" items={whatStillHolds} />
+      <DepthList title="Production reality" items={productionReality} />
+    </div>
   );
 }
 
@@ -197,6 +279,7 @@ function CaveatBoxes({ caveats }) {
             <DepthList title="Solves" items={caveat.solves} />
             <DepthList title="Does not solve" items={caveat.doesNotSolve} />
             <DepthList title="Can go wrong" items={caveat.canGoWrong} />
+            <ToyModelNotes caveat={caveat} />
             <DepthList title="How to test it" items={caveat.howToTest} />
           </article>
         ))}

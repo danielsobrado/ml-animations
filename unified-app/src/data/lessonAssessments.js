@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
@@ -5773,6 +5774,7 @@ function buildLessonAssessment(animation) {
 
   return {
     completionPolicy: DEFAULT_COMPLETION_POLICY,
+    scenarioQuestions: seeded.scenarioQuestions || getScenarioQuestionsForLesson(animation.id),
     quiz: [...seededQuiz, ...generatedQuiz]
       .slice(0, TARGET_QUIZ_QUESTIONS)
       .map((question, index) => ({
@@ -5794,7 +5796,7 @@ export function getLessonAssessment(lessonId) {
 }
 
 export function hasAssessmentContent(assessment) {
-  return Boolean(assessment?.quiz?.length || assessment?.labs?.length);
+  return Boolean(assessment?.scenarioQuestions?.length || assessment?.quiz?.length || assessment?.labs?.length);
 }
 
 export function getAssessmentStats(assessments = lessonAssessments) {

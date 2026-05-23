@@ -1819,6 +1819,36 @@ body {
   line-height: 1.5;
 }
 
+.ua-answer-panel small {
+  display: block;
+  margin-top: 8px;
+  color: inherit;
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.ua-scenario-deck {
+  display: grid;
+  gap: 12px;
+  border-top: var(--ds-border);
+  padding-top: 16px;
+  margin-bottom: 12px;
+}
+
+.ua-scenario-card {
+  border-top-style: dashed;
+}
+
+.ua-scenario-text {
+  max-width: 820px;
+  margin: 0;
+  color: var(--ds-faint);
+  font-family: var(--ds-font-serif);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 .ua-lab-list {
   display: grid;
   gap: 10px;
@@ -2603,6 +2633,32 @@ body {
 
 .ua-depth-card li + li {
   margin-top: 4px;
+}
+
+.ua-depth-subsection {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: var(--ds-border);
+  background: #fffdf7;
+}
+
+.ua-depth-link-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ua-depth-link-list a {
+  border: var(--ds-border);
+  padding: 5px 7px;
+  background: #fffdf7;
+  color: var(--ds-accent);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .ua-comparison-card {

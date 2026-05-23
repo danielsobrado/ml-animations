@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { allAnimations } from './animations.js';
 import { getCurriculumDepth, conceptComparisons, failureGalleryItems, paperReadingSignals, caveatBoxes } from './curriculumDepth.js';
 import { glossaryTerms } from './glossaryRepository.js';
+import { SCENARIO_QUESTIONS_BY_LESSON } from './scenarioQuestions.js';
 
 const lessonIds = new Set(allAnimations.map((animation) => animation.id));
 const glossaryIds = new Set(glossaryTerms.map((term) => term.id));
@@ -60,5 +61,23 @@ test('priority depth panels include misconception-resistant fields', () => {
     assert.ok(signal.means, `${signal.id} needs means`);
     assert.ok(signal.doesNotMean, `${signal.id} needs doesNotMean`);
     assert.ok(signal.check?.length > 0, `${signal.id} needs check prompts`);
+  }
+});
+
+test('curated scenario questions target active lessons and valid answers', () => {
+  for (const [lessonId, questions] of Object.entries(SCENARIO_QUESTIONS_BY_LESSON)) {
+    assert.ok(lessonIds.has(lessonId), `scenario questions reference unknown lesson ${lessonId}`);
+    assert.ok(questions.length > 0, `${lessonId} needs at least one scenario question`);
+
+    for (const question of questions) {
+      assert.ok(question.id, `${lessonId} scenario needs an id`);
+      assert.ok(question.scenario, `${question.id} needs a scenario`);
+      assert.ok(question.prompt, `${question.id} needs a prompt`);
+      assert.ok(question.explanation, `${question.id} needs an explanation`);
+      assert.ok(question.misconceptionTested, `${question.id} needs a misconceptionTested field`);
+      assert.ok(Array.isArray(question.choices) && question.choices.length >= 3, `${question.id} needs choices`);
+      assert.ok(Number.isInteger(question.answerIndex), `${question.id} needs answerIndex`);
+      assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} answerIndex is out of range`);
+    }
   }
 });
