@@ -1,4 +1,4 @@
-import { getGlossaryTermsForCategory } from './glossaryRepository.js';
+import { getGlossaryTermsForCategory, GLOSSARY_IDS_BY_CATEGORY, FULL_GLOSSARY_CATEGORY_IDS } from './glossaryRepository.js';
 import { curriculumTracks } from './animations.js';
 import { getMindmapCuration } from './mindmapCuration.js';
 
@@ -19,9 +19,21 @@ export const MATH_CONTROLS = [
   { id: 'next', sigil: '∇', label: 'Next' },
 ];
 
+const CATEGORY_GLOSSARY_LIMITS = Object.fromEntries(
+  FULL_GLOSSARY_CATEGORY_IDS.map((categoryId) => [
+    categoryId,
+    GLOSSARY_IDS_BY_CATEGORY[categoryId].length,
+  ]),
+);
+
+function glossaryLimitForCategory(categoryId) {
+  return CATEGORY_GLOSSARY_LIMITS[categoryId] || 12;
+}
+
 const CATEGORY_EQUATIONS = {
   nlp: 'x_{text} \\rightarrow v \\in \\mathbb{R}^d',
   transformers: '\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}(QK^T/\\sqrt{d_k})V',
+  'frontier-llms': 'token_t \\rightarrow active\\ compute,\\ KV\\ memory,\\ context,\\ generation,\\ modality',
   'neural-networks': 'h_{\\ell}=\\sigma(W_{\\ell}h_{\\ell-1}+b_{\\ell})',
   'advanced-models': 'p_\\theta(y\\mid x,c)=\\int p_\\theta(y,z\\mid x,c)\\,dz',
   'math-fundamentals': 'f(x;\\theta) \\rightarrow \\arg\\min_\\theta \\mathcal{L}(\\theta)',
@@ -73,6 +85,11 @@ const EQUATION_OVERRIDES = {
   'llm-training-objectives': '\\mathcal{L}=-\\log p_\\theta(target\\mid context)',
   'sampling-strategies': 'x_{t+1}\\sim \\operatorname{Sample}(\\operatorname{TopP}(\\operatorname{TopK}(\\operatorname{softmax}(z/\\tau))))',
   'fine-tuning': 'W^{\\prime}=W+BA\\quad or\\quad \\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})',
+  'frontier-llm-architecture-overview': 'KV\\ bytes\\approx L\\cdot T\\cdot H_{kv}\\cdot d_h\\cdot2\\cdot bytes',
+  'frontier-moe-systems': '\\operatorname{MoE}(x)=\\operatorname{SharedExpert}(x) + \\sum_{e\\in E_{selected}} g_e(x) \\cdot \\operatorname{Expert}_e(x)',
+  'multi-head-latent-attention': 'c_t = W_{down} x_t \\quad K_t, V_t \\approx W_{up} c_t',
+  'reasoning-rlvr-grpo': 'A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon} \\quad \\Delta \\theta \\propto \\mathbb{E}[\\nabla \\log \\pi_\\theta(y_i|x) A_i]',
+  'test-time-compute-thinking-budgets': 'acc(N) \\approx 1 - (1 - p_{correct})^N \\quad cost(N) = N \\cdot L_{avg}',
   'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
   'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
   'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
@@ -97,6 +114,8 @@ const EQUATION_OVERRIDES = {
   'bayes-rule-ml': 'P(y\\mid x)=\\frac{P(x\\mid y)P(y)}{P(x)}',
   'sampling-confidence-intervals': '\\hat{p}\\pm z\\sqrt{\\frac{\\hat{p}(1-\\hat{p})}{n}}',
   'hypothesis-testing-intuition': 'z=\\frac{observed\\ effect}{standard\\ error}',
+  'ab-testing-foundations': '\\hat{\\Delta}=\\hat{p}_T-\\hat{p}_C,\\quad z=\\frac{\\hat{\\Delta}}{SE(\\hat{\\Delta})}',
+  'power-sample-size': 'n_{per\\ group}\\approx\\frac{(z_{\\alpha/2}+z_{1-\\beta})^2(\\sigma_C^2+\\sigma_T^2)}{MDE^2}',
   'spearman-correlation': '\\rho_s=1-\\frac{6\\sum_i d_i^2}{n(n^2-1)}',
   'maximum-likelihood-estimation': '\\hat{\\theta}=\\arg\\max_\\theta P(D\\mid\\theta)',
   'loss-functions-likelihoods': '\\mathcal{L}(\\theta)=-\\log P(y\\mid x,\\theta)',
@@ -229,6 +248,22 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate effect size, noise, and sample size to separate statistical evidence from raw difference.',
     'Mistake to avoid: statistical significance does not prove the effect is large, useful, or causal.',
     'Check understanding by identifying when a tiny effect becomes significant only because the sample is huge.',
+  ),
+  'ab-testing-foundations': cardSet(
+    'A/B testing solves the problem of deciding whether a product change caused an outcome difference.',
+    'Random assignment creates comparable treatment and control groups before the change has a chance to act.',
+    'The math estimates treatment minus control, then divides by standard error to judge statistical signal.',
+    'Manipulate allocation, sample size, lift, MDE, and guardrail impact to decide whether the variant should ship.',
+    'Mistake to avoid: a statistically significant metric lift can still be too small or too harmful to act on.',
+    'Check understanding by explaining why a guardrail breach blocks an otherwise positive treatment result.',
+  ),
+  'power-sample-size': cardSet(
+    'Power analysis solves the problem of planning whether an experiment can detect the smallest effect worth acting on.',
+    'Sample size is the resolution of the experiment: too little data makes useful effects blur into noise.',
+    'The math balances detectable effect against variance, alpha, and target power.',
+    'Manipulate baseline rate, MDE, alpha, variance, and planned sample size to see when the design becomes underpowered.',
+    'Mistake to avoid: a non-significant result from an underpowered test is not evidence that the treatment has no useful effect.',
+    'Check understanding by explaining why halving the MDE usually needs about four times more sample.',
   ),
   'spearman-correlation': cardSet(
     'Spearman correlation solves the problem of measuring whether two variables move in the same order, even when the curve is not linear.',
@@ -597,6 +632,46 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate adapter rank, quantization, data quality, and preference margin to compare memory and behavior tradeoffs.',
     'Mistake to avoid: fine-tuning is not retrieval and it is not one fixed method; the data signal decides what behavior can improve.',
     'Check understanding by matching limited GPU memory, demonstration data, and preference pairs to the right method.',
+  ),
+  'frontier-llm-architecture-overview': cardSet(
+    'This lesson maps the major architecture families used in modern frontier LLM systems.',
+    'Read each architecture as a different answer to the same bottleneck: compute, memory, context, generation order, or modality.',
+    'The central comparison is active compute, KV memory, context access, and output generation process.',
+    'Switch from dense to MoE and watch the same token activate only selected experts.',
+    'Mistake to avoid: assuming every frontier model is just a larger dense transformer.',
+    'Pick one paper architecture and classify what changed: expert routing, attention memory, context strategy, recurrence, diffusion, or modality.',
+  ),
+  'frontier-moe-systems': cardSet(
+    'Frontier MoE systems scale model capacity by storing many experts but activating only a small subset for each token.',
+    'Think of an MoE layer as a dispatch system: the router reads a token, sends it to selected experts, then blends their outputs.',
+    'The core equation is MoE(x) = SharedExpert(x) + \\sum w_e Expert_e(x) over selected top-k experts.',
+    'Send a batch of math, code, and general tokens through the router and watch which experts light up.',
+    'Mistake to avoid: sparse active compute does not remove serving complexity; routing, load balance, and communication are now central.',
+    'Check understanding by diagnosing whether poor behavior comes from routing collapse, dead experts, token dropping, or communication bottlenecks.'
+  ),
+  'multi-head-latent-attention': cardSet(
+    'Attention compression solves the problem of KV cache becoming too large and bandwidth-heavy during long-context autoregressive decoding.',
+    'Read the cache as per-request memory: every old token leaves behind K/V memory that the next token must repeatedly read.',
+    'MHA caches K/V per head; GQA/MQA reduce heads by sharing; MLA projects K/V into a compressed latent state to trade bandwidth for extra query projection compute.',
+    'Increase context length and compare how MHA, GQA, and MLA memory layouts grow and consume serving bandwidth.',
+    'Mistake to avoid: smaller KV cache does not mean zero compute; MLA requires query-time low-rank projections (often absorbed into Q projections).',
+    'Check understanding by computing which cache layout fits a memory budget and explaining what quality and latency tradeoffs each design makes.'
+  ),
+  'reasoning-rlvr-grpo': cardSet(
+    'Reasoning post-training teaches a model to produce, check, and improve multi-step solution traces rather than only imitate next-token text.',
+    'Think of the model as trying several solution paths, receiving scores, and increasing the probability of paths that solve the problem cleanly.',
+    'GRPO samples a group of responses, normalizes their rewards within the group, and uses those advantages to update the policy without a separate critic.',
+    'Generate 8 candidate solutions, score correctness and format, then watch positive-advantage traces become more likely.',
+    'Mistake to avoid: rewarding format or length too heavily can create polished but wrong reasoning (reward hacking) or overthinking.',
+    'Check understanding by designing a reward that improves correctness without causing overthinking, language mixing, or reward hacking.'
+  ),
+  'test-time-compute-thinking-budgets': cardSet(
+    'Test-time compute scaling spends more inference-time tokens on harder queries to raise accuracy without retraining the model.',
+    'Tokens equal compute: generating N candidates, running beam search, or extending a thinking trace all trade latency for accuracy.',
+    'Best-of-N expected accuracy approaches the oracle bound as N grows, but cost is O(N × L) and gains are sub-logarithmic.',
+    'Slide the thinking-token budget from 64 to 4096 tokens and observe where accuracy plateaus while latency continues to grow.',
+    'Mistake to avoid: more thinking tokens do not always help; past the plateau, cost rises linearly while accuracy is flat.',
+    'Check understanding by finding the budget where a hard math problem is solved but a trivial query wastes at least 90% of allocated tokens.'
   ),
   'rag-chunking-context': cardSet(
     'RAG chunking and context packing solve the problem of turning long documents into evidence the model can actually use.',
@@ -1019,7 +1094,7 @@ function makeCards(animation, glossary, equation) {
 }
 
 export function createLearningModel(animation, allAnimations) {
-  const glossary = getGlossaryTermsForCategory(animation.categoryId).slice(0, 12);
+  const glossary = getGlossaryTermsForCategory(animation.categoryId).slice(0, glossaryLimitForCategory(animation.categoryId));
   const headlineLatex = EQUATION_OVERRIDES[animation.id] || CATEGORY_EQUATIONS[animation.categoryId] || 'y=f(x)';
   const prereqs = getPrereqNodes(animation, allAnimations);
   const next = getTrackNextNodes(animation, allAnimations);

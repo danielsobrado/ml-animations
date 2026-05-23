@@ -11,9 +11,10 @@ The project started as a collection of standalone animations. It is now centered
 ## What is inside
 
 - A unified lesson browser with searchable topics and curriculum tracks.
-- Guided paths for fundamentals, LLMs, RAG, model reliability, vision and diffusion, and reinforcement learning.
+- Guided paths for fundamentals, experimentation and causal ML, LLMs, RAG, model reliability, vision and diffusion, and reinforcement learning.
 - Core ML lessons for splitting data, cross-validation, leakage, scaling, metrics, calibration, PCA, clustering, tree ensembles, and classical classifiers.
 - Model reliability lessons for debugging, interpretability, monitoring, fairness, and uncertainty estimation.
+- Experimentation and causal ML lessons for A/B testing foundations and power analysis, with planned modules for sequential testing, CUPED, confounding, DAGs, treatment effects, and propensity scores.
 - Transformer lessons for attention, masks, architecture families, training objectives, token generation, sampling, KV cache, Flash Attention, and fine-tuning.
 - RAG lessons for chunking, vector indexing, reranking, grounding, retrieval evaluation, and failure modes.
 - Neural-network lessons for backpropagation, initialization, optimizers, dropout, batch normalization, and training-loop dynamics.
@@ -71,6 +72,12 @@ The retrieval track covers the RAG pipeline as a system: chunking, embedding sea
 ### Model Reliability
 
 The model reliability track covers post-training and deployed-system concerns: debugging failures, interpreting model behavior, estimating uncertainty, monitoring drift and regressions, and evaluating fairness tradeoffs across slices and groups.
+
+### Experimentation and Causal ML
+
+The experimentation track connects hypothesis testing, confidence intervals, metrics, calibration, leakage, fairness, monitoring, and uncertainty to causal decision-making. Active lessons cover A/B testing foundations: randomization, treatment and control groups, primary metrics, guardrails, and practical significance; and power and sample size: MDE, variance, alpha, target power, false positives, and false negatives. Planned lessons cover sequential testing and peeking, CUPED variance reduction, confounding and Simpson's paradox, causal graphs and DAGs, treatment effects, and propensity scores.
+
+Next curriculum priorities after causal inference are time series and forecasting, recommender systems and ranking, ML security and robustness, efficient inference and compression, and data engineering for ML.
 
 ### Vision and Diffusion
 

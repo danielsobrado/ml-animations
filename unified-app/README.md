@@ -5,7 +5,7 @@ A unified React application that consolidates the ML animation visualizations in
 ## Features
 
 - 🎨 **Distill-Style Design System** - Calm typography, equation strips, and paper-like educational panels
-- 🧭 **Guided Curriculum Tracks** - Foundations, Core ML, Neural Networks, NLP to Transformers, Generative AI, and RL/Algorithms paths
+- 🧭 **Guided Curriculum Tracks** - Foundations, Core ML, Neural Networks, Experimentation & Causal ML, NLP to Transformers, Generative AI, and RL/Algorithms paths
 - 🧠 **Learning Shell** - Prerequisites, estimated time, objectives, misconceptions, next steps, and glossary terms around each animation
 - 📱 **Responsive Layout** - Works on desktop, tablet, and mobile
 - 🗂️ **Sidebar Navigation** - Easy navigation through all animation categories
@@ -151,9 +151,11 @@ The animations are organized into the following categories:
 3. **Neural Networks** - ReLU, Softmax, LSTM, Conv2D, etc.
 4. **Advanced Models** - VAE, RAG, Multimodal LLM
 5. **Math Fundamentals** - Matrix ops, SVD, Gradient Descent, etc.
-6. **Probability & Statistics** - Distributions, Entropy, etc.
-7. **Reinforcement Learning** - Q-Learning, Markov Chains, etc.
-8. **Algorithms** - Bloom Filter, PageRank
+6. **Model Reliability** - Debugging, interpretability, monitoring, fairness, and uncertainty
+7. **Probability & Statistics** - Distributions, entropy, testing, likelihoods, and intervals
+8. **Experimentation & Causal ML** - A/B testing foundations and power analysis plus planned modules for peeking, CUPED, confounding, DAGs, treatment effects, and propensity scores
+9. **Reinforcement Learning** - Q-Learning, Markov Chains, etc.
+10. **Algorithms** - Bloom Filter, PageRank
 
 ## Technology Stack
 

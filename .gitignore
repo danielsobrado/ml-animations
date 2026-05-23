@@ -12,3 +12,7 @@ mini-nn/target/release/*
 *.png
 screenshots/theme-audit/
 *.class
+unified-app/dist/
+mini-diffusion-java/target/
+mini-nn-java/target/
+unified-app/*.txt

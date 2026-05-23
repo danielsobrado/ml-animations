@@ -39,7 +39,16 @@ test('hub learning paths define animated chains with active lesson ids', () => {
 
   assert.deepEqual(
     HUB_LEARNING_PATHS.map((path) => path.id),
-    ['start-here', 'probability-bridge', 'llm-path', 'rag-path', 'model-reliability-path', 'vision-path', 'rl-path'],
+    [
+      'start-here',
+      'probability-bridge',
+      'llm-path',
+      'rag-path',
+      'model-reliability-path',
+      'experimentation-causal-path',
+      'vision-path',
+      'rl-path',
+    ],
   );
 
   for (const path of HUB_LEARNING_PATHS) {

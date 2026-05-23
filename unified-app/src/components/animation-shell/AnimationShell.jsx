@@ -132,6 +132,17 @@ function Glossary({ terms }) {
             <h3>
               <Link to={term.href}>{term.term}</Link>
             </h3>
+            {(term.symbol || term.aliases?.length > 0) && (
+              <div className="ua-glossary-card-meta" aria-label={`${term.term} metadata`}>
+                {term.symbol && term.symbol !== term.term.slice(0, 1) && <span>{term.symbol}</span>}
+                {term.aliases?.slice(0, 3).map((alias) => (
+                  <span key={alias}>{alias}</span>
+                ))}
+                {term.aliases?.length > 3 && (
+                  <span>+{term.aliases.length - 3} more</span>
+                )}
+              </div>
+            )}
             <p>{term.definition}</p>
             {term.intuition && <p className="ua-glossary-intuition">{term.intuition}</p>}
           </article>

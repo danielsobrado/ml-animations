@@ -87,6 +87,8 @@ export const MINDMAP_CURATIONS = {
   'bayes-rule-ml': ['Beliefs update with evidence', 'Combine priors, likelihood, and false alarms.', 'Which term changes after seeing evidence?', 'Rare events stay rare unless evidence is strong.'],
   'sampling-confidence-intervals': ['Samples wobble', 'Quantify uncertainty from finite samples.', 'How does sample size shrink the interval?', 'A confidence interval is not a probability that this fixed truth lies inside.'],
   'hypothesis-testing-intuition': ['Signal versus noise', 'Compare effect size to variability and sample size.', 'Is the observed difference practically meaningful?', 'Small p-values do not imply large effects.'],
+  'ab-testing-foundations': ['Randomize before comparing', 'Split users into treatment and control before measuring pre-declared metrics.', 'Did the metric pass signal, size, and guardrails?', 'A dashboard difference is not causal without assignment discipline.'],
+  'power-sample-size': ['Plan sensitivity before launch', 'Power analysis checks whether the test can detect the smallest useful effect.', 'Is planned sample enough for MDE, variance, alpha, and power?', 'Underpowered non-significance is not proof of no effect.'],
   'maximum-likelihood-estimation': ['Choose parameters that explain data', 'Maximize probability assigned to observations.', 'Which parameter makes the data most likely?', 'MLE can overfit without constraints or priors.'],
   'loss-functions-likelihoods': ['Loss as surprise', 'See squared error and cross-entropy as negative log-likelihoods.', 'Which noise assumption creates this loss?', 'A loss function carries modeling assumptions.'],
   'expected-value-variance': ['Average and spread', 'Summarize a random variable by center and variability.', 'Which outcome moves variance most?', 'Same mean can hide very different risk.'],
@@ -118,6 +120,31 @@ export const MINDMAP_CURATIONS = {
   't5-encoder': ['Text as sequence understanding', 'Encode prompts with a text-to-text transformer.', 'Which phrase carries the conditioning signal?', 'Encoder strength affects prompt interpretation.'],
   'joint-attention': ['Modalities attend together', 'Let image and text tokens exchange information.', 'Which visual token should read which text token?', 'Joint attention can mix irrelevant signals too.'],
   dit: ['Denoise with transformer blocks', 'Treat latent patches as tokens for diffusion.', 'Which patch needs global context?', 'Patch transformers need strong positional and conditioning design.'],
+  'frontier-llm-architecture-overview': ['Follow one token', 'Compare architectures by active compute, KV memory, context, generation order, and modality.', 'What changed for this token, and what bottleneck did that buy?', 'Every improvement creates a new failure mode.'],
+  'frontier-moe-systems': [
+    'For this token, which parameters wake up?',
+    'Select a batch of tokens, trace routing, and balance load to optimize active compute versus stored capacity.',
+    'Which dashboard signal suggests expert load imbalance or routing collapse?',
+    'Sparse active compute does not remove serving complexity; routing, balancing, and communication are now central.',
+  ],
+  'multi-head-latent-attention': [
+    'What exactly do we cache for each old token?',
+    'Compare MHA, GQA, and MLA memory footprint and flow capacity over various context lengths.',
+    'Why can memory bandwidth saturate during decoding even when active compute is low?',
+    'KV cache compression is a Pareto tradeoff; storing less cache reduces memory traffic but demands query-time projection work.',
+  ],
+  'reasoning-rlvr-grpo': [
+    'How does a model learn which reasoning traces deserve more probability?',
+    'Generate 8 solutions, score them under various reward weights, and normalize group advantages.',
+    'Why does format reward hacking or overthinking emerge when check weights are unbalanced?',
+    'Verifiable reward optimizes only what the checker can see; rule-based learning is a Pareto tradeoff, not a magic fix.',
+  ],
+  'test-time-compute-thinking-budgets': [
+    'For this query, how many thinking tokens would be wasted if budget is set to maximum?',
+    'Slide N from 1 to 128 in Best-of-N sampling and compare expected accuracy with oracle bound at each step.',
+    'Why does accuracy plateau long before latency plateaus in budget-forcing experiments?',
+    'Inference-time compute is not a free lunch — every extra token costs real latency and dollars at serving scale.',
+  ],
 };
 
 export function getMindmapCuration(animationId) {

@@ -5,5 +5,5 @@ export function toStaticRouteDirectories(animations = allAnimations, terms = glo
   const animationRoutes = animations.map((animation) => ['animation', animation.id]);
   const glossaryRoutes = terms.map((term) => ['glossary', term.slug]);
 
-  return [...animationRoutes, ...glossaryRoutes];
+  return [['glossary'], ...animationRoutes, ...glossaryRoutes];
 }

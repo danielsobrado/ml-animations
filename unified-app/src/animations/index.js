@@ -46,6 +46,11 @@ const animationRegistry = {
 
   // Advanced Models
   'vae': lazy(() => import('./vae')),
+  'frontier-llm-architecture-overview': lazy(() => import('./frontier-llm-architecture-overview')),
+  'frontier-moe-systems': lazy(() => import('./frontier-moe-systems')),
+  'multi-head-latent-attention': lazy(() => import('./multi-head-latent-attention')),
+  'reasoning-rlvr-grpo': lazy(() => import('./reasoning-rlvr-grpo')),
+  'test-time-compute-thinking-budgets': lazy(() => import('./test-time-compute-thinking-budgets')),
   'moe': lazy(() => import('./moe')),
   'rag': lazy(() => import('./rag')),
   'rag-chunking-context': lazy(() => import('./rag-chunking-context')),
@@ -106,6 +111,8 @@ const animationRegistry = {
   'bayes-rule-ml': lazy(() => import('./bayes-rule-ml')),
   'sampling-confidence-intervals': lazy(() => import('./sampling-confidence-intervals')),
   'hypothesis-testing-intuition': lazy(() => import('./hypothesis-testing-intuition')),
+  'ab-testing-foundations': lazy(() => import('./ab-testing-foundations')),
+  'power-sample-size': lazy(() => import('./power-sample-size')),
   'maximum-likelihood-estimation': lazy(() => import('./maximum-likelihood-estimation')),
   'loss-functions-likelihoods': lazy(() => import('./loss-functions-likelihoods')),
   'entropy': lazy(() => import('./entropy')),

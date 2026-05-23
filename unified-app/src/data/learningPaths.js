@@ -78,6 +78,11 @@ export const HUB_LEARNING_PATHS = [
       'sampling-strategies',
       'fine-tuning',
       'gpt2-comprehensive',
+      'frontier-llm-architecture-overview',
+      'frontier-moe-systems',
+      'multi-head-latent-attention',
+      'reasoning-rlvr-grpo',
+      'test-time-compute-thinking-budgets',
     ],
   },
   {
@@ -109,6 +114,17 @@ export const HUB_LEARNING_PATHS = [
       'uncertainty-estimation',
       'model-monitoring',
       'model-fairness',
+    ],
+  },
+  {
+    id: 'experimentation-causal-path',
+    label: 'Experimentation & Causal',
+    description: 'A decision-driven route through sampling uncertainty, hypothesis testing, A/B experiments, and statistical power.',
+    nodes: [
+      'sampling-confidence-intervals',
+      'hypothesis-testing-intuition',
+      'ab-testing-foundations',
+      'power-sample-size',
     ],
   },
   {

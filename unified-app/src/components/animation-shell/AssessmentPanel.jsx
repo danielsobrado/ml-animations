@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, ChevronLeft, ChevronRight, Circle, Eye, FlaskConical } from 'lucide-react';
+import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight, Circle, Eye, FlaskConical } from 'lucide-react';
 import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
 import {
   getLessonProgress,
@@ -19,13 +19,20 @@ export default function AssessmentPanel({
 }) {
   const assessment = useMemo(() => getLessonAssessment(lessonId), [lessonId]);
   const quizItems = assessment.quiz || [];
+  const reviewItems = assessment.strategyReview || [];
   const [quizPage, setQuizPage] = useState(0);
+  const [reviewPage, setReviewPage] = useState(0);
+  const [showReview, setShowReview] = useState(false);
+  const [revealedReview, setRevealedReview] = useState(() => new Set());
   const [lessonProgress, setLessonProgress] = useState(() => (
     getLessonProgress(readAssessmentProgress(), lessonId)
   ));
 
   useEffect(() => {
     setQuizPage(0);
+    setReviewPage(0);
+    setShowReview(false);
+    setRevealedReview(new Set());
     setLessonProgress(getLessonProgress(readAssessmentProgress(), lessonId));
   }, [lessonId]);
 
@@ -39,6 +46,10 @@ export default function AssessmentPanel({
   const activeQuizPage = Math.min(quizPage, quizPageCount - 1);
   const pageStart = activeQuizPage * QUESTIONS_PER_PAGE;
   const pageQuestions = quizItems.slice(pageStart, pageStart + QUESTIONS_PER_PAGE);
+  const reviewPageCount = Math.max(1, Math.ceil(reviewItems.length / QUESTIONS_PER_PAGE));
+  const activeReviewPage = Math.min(reviewPage, reviewPageCount - 1);
+  const reviewPageStart = activeReviewPage * QUESTIONS_PER_PAGE;
+  const pageReviewItems = reviewItems.slice(reviewPageStart, reviewPageStart + QUESTIONS_PER_PAGE);
   const answeredCount = quizItems.filter((question) => lessonProgress.quiz?.[question.id]?.correct === true).length;
   const activeLevel = pageQuestions.find((question) => question.level)?.level;
 
@@ -251,6 +262,91 @@ export default function AssessmentPanel({
             );
           })}
         </div>
+      )}
+
+      {reviewItems.length > 0 && (
+        <section className="ua-review-deck" aria-label="Optional interview review">
+          <button
+            type="button"
+            className="ua-review-toggle"
+            onClick={() => setShowReview((value) => !value)}
+            aria-expanded={showReview}
+          >
+            <BookOpen size={16} />
+            Optional Interview Review
+            <span>{reviewItems.length} strategy prompts</span>
+          </button>
+
+          {showReview && (
+            <>
+              {reviewItems.length > QUESTIONS_PER_PAGE && (
+                <nav className="ua-assessment-pager" aria-label="Interview review pages">
+                  <button
+                    type="button"
+                    className="ua-pager-button"
+                    onClick={() => setReviewPage((value) => Math.max(0, value - 1))}
+                    disabled={activeReviewPage === 0}
+                  >
+                    <ChevronLeft size={15} />
+                    Prev
+                  </button>
+                  <span>Review {reviewPageStart + 1}-{Math.min(reviewItems.length, reviewPageStart + pageReviewItems.length)} of {reviewItems.length}</span>
+                  <button
+                    type="button"
+                    className="ua-pager-button"
+                    onClick={() => setReviewPage((value) => Math.min(reviewPageCount - 1, value + 1))}
+                    disabled={activeReviewPage === reviewPageCount - 1}
+                  >
+                    Next
+                    <ChevronRight size={15} />
+                  </button>
+                </nav>
+              )}
+
+              {pageReviewItems.map((question, questionIndex) => {
+                const reviewKey = `${question.id}-${reviewPageStart + questionIndex}`;
+                const revealed = revealedReview.has(reviewKey);
+
+                return (
+                <article className="ua-quiz-card ua-review-card" key={question.id}>
+                  <div className="ua-quiz-meta">
+                    <span className="ua-quiz-kicker">Review {reviewPageStart + questionIndex + 1}</span>
+                    {question.level && <span className="ua-question-level">{question.level}</span>}
+                  </div>
+                  <h3>{question.prompt}</h3>
+                  <div className="ua-choice-list">
+                    {question.choices.map((choice, choiceIndex) => (
+                      <div
+                        key={choice}
+                        className={`ua-choice-button ${revealed && choiceIndex === question.answerIndex ? 'answer' : ''}`}
+                      >
+                        <span>{String.fromCharCode(65 + choiceIndex)}</span>
+                        {choice}
+                      </div>
+                    ))}
+                  </div>
+                  {!revealed && (
+                    <button
+                      type="button"
+                      className="ua-reveal-button ua-review-reveal"
+                      onClick={() => setRevealedReview((current) => new Set(current).add(reviewKey))}
+                    >
+                      <Eye size={15} />
+                      Reveal answer
+                    </button>
+                  )}
+                  {revealed && (
+                    <div className="ua-answer-panel correct">
+                      <strong>Review answer: {question.choices[question.answerIndex]}</strong>
+                      <p>{question.explanation}</p>
+                    </div>
+                  )}
+                </article>
+                );
+              })}
+            </>
+          )}
+        </section>
       )}
 
       {!hasStructuredAssessment && hasLegacyCheck && (

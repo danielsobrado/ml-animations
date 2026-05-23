@@ -73,6 +73,8 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'rl-exploration',
   'rl-foundations',
   'bloom-filter',
+  'reasoning-rlvr-grpo',
+  'test-time-compute-thinking-budgets',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -4069,6 +4071,320 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
+  'reasoning-rlvr-grpo': {
+    quiz: [
+      {
+        id: 'reasoning-vs-rlvr-grpo',
+        prompt: 'How does Group Relative Policy Optimization (GRPO) reduce GPU memory compared to standard Proximal Policy Optimization (PPO)?',
+        choices: [
+          'By removing the critic network entirely and estimating baselines from the average reward of a group of outputs.',
+          'By running attention weights in 4-bit precision instead of 16-bit.',
+          'By generating all tokens sequentially in a single batch thread.',
+        ],
+        answerIndex: 0,
+        explanation: 'GRPO eliminates the critic network (which is typically as large as the actor) by using the average reward of a group of samples for the same prompt as the baseline.',
+      },
+      {
+        id: 'grpo-advantage-baseline',
+        prompt: 'In the GRPO advantage formula $A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon}$, what represents the dynamic baseline?',
+        choices: [
+          'The standard deviation of the policy outputs.',
+          'The mean reward of all candidate solutions in the current group.',
+          'The clipping parameter used to prevent policy collapse.',
+        ],
+        answerIndex: 1,
+        explanation: 'The mean reward of the group acts as a dynamic baseline. Outputs that perform better than the group average get a positive advantage, while those below average get a negative advantage.',
+      },
+      {
+        id: 'prm-vs-orm',
+        prompt: 'What is the primary operational advantage of Process Reward Models (PRMs) over Outcome Reward Models (ORMs)?',
+        choices: [
+          'PRMs can be computed deterministically using standard regex patterns.',
+          'PRMs require no training data since they use compiler verification.',
+          'PRMs mitigate alignment bugs by assigning credit to individual reasoning steps, reducing reward hacking.',
+        ],
+        answerIndex: 2,
+        explanation: 'PRMs evaluate intermediate steps of reasoning, making it harder for a model to receive a high reward for a wrong trace that happens to output the correct final answer.',
+      },
+      {
+        id: 'verifiable-rewards',
+        prompt: 'Why are verifiable rewards (like compilers or math parsers) preferred over neural reward models for scaling reasoning?',
+        choices: [
+          'They are deterministic, free from reward hacking (no judge exploitation), and cheap to compute.',
+          'They always generalize to creative writing and open-ended chatbot queries.',
+          'They automatically double the context window of the model during training.',
+        ],
+        answerIndex: 0,
+        explanation: 'Verifiable rewards are rule-based checks that cannot be hacked or exploited by style tricks, unlike neural reward models which are vulnerable to adversarial formatting.',
+      },
+      {
+        id: 'cold-start-role',
+        prompt: 'What is the function of cold-start SFT data in the DeepSeek-R1 training pipeline?',
+        choices: [
+          'To compress the KV cache dimension using low-rank projection matrices.',
+          'To seed the model with basic formatting (like using thinking tags) and prevent early RL divergence.',
+          'To optimize the expert routing weights and balance active compute load.',
+        ],
+        answerIndex: 1,
+        explanation: 'Cold-start SFT data provides a template of structured thinking traces so the model does not diverge or produce unreadable streams during early reinforcement learning.',
+      },
+      {
+        id: 'format-reward-hacking',
+        prompt: 'What occurs if the format reward weight is set too high relative to correctness rewards during RL?',
+        choices: [
+          'The model generalizes better to unseen domains.',
+          'The model outputs only Chinese and English code blocks.',
+          'The model learns to generate empty or repetitive thinking tags to exploit the format scorer without solving the task.',
+        ],
+        answerIndex: 2,
+        explanation: 'When formatting rewards dominate, the model exploits the parser by producing long, useless thinking sequences without actually thinking, a classic case of reward hacking.',
+      },
+      {
+        id: 'all-negative-group-issue',
+        prompt: 'What is the training risk when all generated solutions in a GRPO group fail to solve the task (all-negative group)?',
+        choices: [
+          'Normalization will still assign positive advantages to the "least incorrect" solutions, reinforcing flawed reasoning.',
+          'The standard deviation falls to zero, causing the optimizer to divide by zero and crash the training run.',
+          'The actor policy is automatically reset to the reference SFT model.',
+        ],
+        answerIndex: 0,
+        explanation: 'Since GRPO normalizes advantages relative to the group, the "least bad" incorrect solution will receive a positive advantage and its incorrect steps will be reinforced.',
+      },
+      {
+        id: 'length-penalty-tradeoff',
+        prompt: 'What trade-off is introduced by adding a token length penalty to the RL reward function?',
+        choices: [
+          'It reduces model size but increases GPU communication latency.',
+          'It controls overthinking and generation costs but can truncate the long reasoning paths needed for hard problems.',
+          'It increases accuracy on creative tasks but lowers performance on programming tasks.',
+        ],
+        answerIndex: 1,
+        explanation: 'A length penalty keeps traces concise and lowers serving latency, but if it is too strong, it prevents the model from doing the depth of thinking required to solve complex tasks.',
+      },
+      {
+        id: 'overthinking-emergence',
+        prompt: 'Why does "overthinking" (excessively long or circular traces) emerge in models trained with pure RL without length constraints?',
+        choices: [
+          'The tokenizer is biased toward long subword merges.',
+          'The learning rate is too high, causing gradient updates to step past local minima.',
+          'The model learns that longer reasoning paths correlate with a higher probability of stumbling upon a correct answer.',
+        ],
+        answerIndex: 2,
+        explanation: 'Without penalties for verbosity, the policy exploits test-time compute by writing out extensive backtracking and verification loops, which increases its odds of finding the correct answer.',
+      },
+      {
+        id: 'rejection-sampling-ft',
+        prompt: 'How does rejection sampling fine-tuning (RFT) differ from standard reinforcement learning?',
+        choices: [
+          'RFT is offline: it generates multiple outputs, filters the correct ones, and trains on them using standard cross-entropy.',
+          'RFT uses an online critic network to update policy parameters on every token generation.',
+          'RFT uses dynamic learning rates based on the KL divergence penalty.',
+        ],
+        answerIndex: 0,
+        explanation: 'RFT generates multiple completions off-policy, selects the correct ones, and applies supervised learning. RL updates the policy online based on immediate rewards or advantages.',
+      },
+      {
+        id: 'distillation-tradeoffs',
+        prompt: 'When distilling reasoning traces from a large teacher (like R1) into a small student, what is a key limitation?',
+        choices: [
+          'The student parameter count must be identical to the teacher parameter count.',
+          'The student learns the formatting style and tricks but may lack the raw capacity to generalize to harder, unseen reasoning tasks.',
+          'The SFT loss function must use reinforcement learning advantages instead of token predictions.',
+        ],
+        answerIndex: 1,
+        explanation: 'Distillation is highly effective for transfer of formatting style and basic logic, but smaller models often suffer from a "generalization gap" when confronted with hard math beyond their capacity.',
+      },
+      {
+        id: 'kl-divergence-penalty',
+        prompt: 'What is the purpose of adding a KL divergence penalty between the active RL policy and the reference SFT model?',
+        choices: [
+          'To calculate the accuracy difference between training and test sets.',
+          'To encourage the model to explore new languages and formatting tags.',
+          'To prevent the policy from shifting too far from the base model, avoiding language collapse or trace corruption.',
+        ],
+        answerIndex: 2,
+        explanation: 'The KL penalty acts as a regularization constraint, preventing the active policy from drifting too far from the reference model, which keeps the reasoning trace structured and natural.',
+      },
+    ],
+    labs: [
+      {
+        id: 'tune-grpo-rewards',
+        title: 'Balance reasoning rewards',
+        prompt: 'Configure correctness, format, and language weights to achieve 90% accuracy without triggering overthinking or formatting hacks.',
+        successCriteria: 'You can find a reward configuration where accuracy is high, formatting is correct, and trace length remains under 500 tokens.',
+      },
+      {
+        id: 'solve-all-negatives',
+        title: 'Mitigate all-negative groups',
+        prompt: 'Identify a prompt where all initial samples are incorrect, and adjust temperature or group size to discover at least one correct trace.',
+        successCriteria: 'You can explain how increasing group size or temperature helps recover from all-negative training groups.',
+      },
+      {
+        id: 'process-credit',
+        title: 'Step-level credit assignment',
+        prompt: 'Compare outcome-based vs step-based rewards on a multi-step proof and identify which step receives incorrect credit under an ORM.',
+        successCriteria: 'You can pinpoint the exact line where the proof failed but still received a positive score under ORM evaluation.',
+      },
+      {
+        id: 'detect-reward-hacking',
+        title: 'Detect formatting exploitation',
+        prompt: 'Trigger a formatting hack by setting format reward above 1.0, and capture a generated trace that contains empty thinking tags.',
+        successCriteria: 'You can capture a trace where the model outputs `<think></think>` multiple times to collect rewards without reasoning.',
+      },
+      {
+        id: 'distill-student',
+        title: 'Verify student distillation',
+        prompt: 'Train a 1.5B student on teacher traces and evaluate its accuracy vs trace length on a test set of mathematical word problems.',
+        successCriteria: 'You can explain where the student mimics the teacher\'s format but fails to solve the underlying math.',
+      },
+      {
+        id: 'prevent-kl-drift',
+        title: 'Control KL divergence',
+        prompt: 'Tune the KL coefficient during online policy updates and find the threshold where the model\'s language consistency collapses.',
+        successCriteria: 'You can report the KL penalty value that preserves natural language structure while allowing the model to optimize rewards.',
+      },
+    ],
+  },
+  'test-time-compute-thinking-budgets': {
+    quiz: [
+      {
+        id: 'ttc-vs-training',
+        prompt: 'What is the key operational difference between training-time and inference-time compute scaling?',
+        choices: [
+          'Training-time scaling permanently improves the model via retraining; inference-time scaling spends more compute per query at generation time.',
+          'Inference-time scaling permanently changes model weights; training-time scaling only affects sampling temperature.',
+          'Training-time and inference-time scaling are identical in cost structure.',
+        ],
+        answerIndex: 0,
+        explanation: 'Training-time scaling changes model parameters and requires retraining from scratch. Inference-time (test-time) scaling spends additional compute at query time through strategies like more samples or longer reasoning traces.',
+      },
+      {
+        id: 'bon-oracle-bound',
+        prompt: 'In Best-of-N sampling, what is the oracle bound and why is it rarely achieved in practice?',
+        choices: [
+          'The oracle bound is the accuracy achievable when the best sample is always identified; it requires a perfect verifier, which is typically unavailable.',
+          'The oracle bound is the accuracy of the smallest sample N=1, used as a baseline.',
+          'The oracle bound equals training accuracy and is always achieved when N exceeds the number of model parameters.',
+        ],
+        answerIndex: 0,
+        explanation: 'The oracle bound is the theoretical maximum accuracy when the true best answer is always selected from N samples. In practice, verifiers (reward models) are imperfect, so the actual gain falls below the oracle bound.',
+      },
+      {
+        id: 'bon-cost-scaling',
+        prompt: 'How does the cost of Best-of-N sampling scale with the number of samples N?',
+        choices: [
+          'Cost scales linearly as O(N × L) where L is the average completion length.',
+          'Cost scales logarithmically because GPU batch parallelism compresses overhead.',
+          'Cost is constant because all N samples share the same forward pass.',
+        ],
+        answerIndex: 0,
+        explanation: 'Each of the N samples requires an independent forward pass generating approximately L tokens, so total cost is O(N × L). Parallelism can reduce wall-clock time but not total compute.',
+      },
+      {
+        id: 'beam-search-prm',
+        prompt: 'Why does tree search (beam search) require a Process Reward Model (PRM) rather than an Outcome Reward Model (ORM)?',
+        choices: [
+          'Beam search needs to score partial reasoning paths at intermediate nodes, which ORMs cannot do since they only evaluate final answers.',
+          'PRMs are cheaper to train than ORMs and reduce memory requirements for the search tree.',
+          'ORMs require beam search to function correctly since they cannot process token-by-token outputs.',
+        ],
+        answerIndex: 0,
+        explanation: 'Beam search prunes branches at intermediate steps. A PRM can score each reasoning step independently, enabling early pruning of bad paths. An ORM only scores complete answers, which makes it useless for mid-search evaluation.',
+      },
+      {
+        id: 'budget-forcing-tradeoff',
+        prompt: 'What happens when a fixed thinking-token budget is set too low for a complex reasoning task?',
+        choices: [
+          'The reasoning chain is truncated before completion, causing a drop in accuracy on hard problems.',
+          'The model automatically extends the context window to fit the reasoning trace.',
+          'Low budgets always improve accuracy by forcing the model to be more concise.',
+        ],
+        answerIndex: 0,
+        explanation: 'A hard budget cap truncates the reasoning trace mid-chain. For complex multi-step problems that require long thinking, this leads to incomplete reasoning and degraded accuracy.',
+      },
+      {
+        id: 'adaptive-budget-benefit',
+        prompt: 'What is the primary benefit of adaptive thinking budgets over fixed caps?',
+        choices: [
+          'Adaptive budgets allocate short thinking traces to easy queries and long ones to hard queries, reducing total serving cost without sacrificing accuracy.',
+          'Adaptive budgets always use the maximum available context window for every query.',
+          'Adaptive budgets eliminate the need for any verifier or reward model.',
+        ],
+        answerIndex: 0,
+        explanation: 'A fixed cap either wastes tokens on simple queries or truncates complex ones. Adaptive budgets use a difficulty signal to right-size thinking compute per query, improving cost-efficiency.',
+      },
+      {
+        id: 'react-tool-use',
+        prompt: 'In the ReAct (Reason + Act) pattern, how does tool use change the compute profile of a reasoning task?',
+        choices: [
+          'The model externalizes sub-tasks to deterministic tools, saving reasoning tokens at the cost of additional tool-call latency.',
+          'ReAct always increases total token count by adding Observation tokens that duplicate model knowledge.',
+          'Tool calls replace the model entirely; the model generates no tokens in ReAct pipelines.',
+        ],
+        answerIndex: 0,
+        explanation: 'ReAct lets the model delegate fact retrieval, calculation, and code execution to external tools. This can save thousands of reasoning tokens, trading internal compute for real-world API latency.',
+      },
+      {
+        id: 'overthinking-plateau',
+        prompt: 'What is the "overthinking plateau" in test-time compute scaling?',
+        choices: [
+          'The point beyond which additional thinking tokens produce no accuracy improvement, while latency and cost continue to rise.',
+          'The token count at which a model begins producing incorrect answers due to context-window overflow.',
+          'The training checkpoint where RL rewards are maximized at the expense of long-context performance.',
+        ],
+        answerIndex: 0,
+        explanation: 'Beyond a problem-specific token threshold, the model has fully explored its reasoning capacity and additional tokens are wasted on repetitive checks. Accuracy plateaus while serving cost grows linearly.',
+      },
+      {
+        id: 'verifier-gap',
+        prompt: 'What is the "verifier-reasoning gap" failure mode in test-time compute systems?',
+        choices: [
+          'The model learns to produce traces that satisfy the verifier format without correctly solving the underlying problem.',
+          'The verifier runs out of context window space before evaluating the final answer.',
+          'A gap in training data where the verifier was not trained on the same distribution as the model.',
+        ],
+        answerIndex: 0,
+        explanation: 'When models are optimized for verifier scores, they can learn to produce convincing-looking traces that exploit verifier blind spots. This is analogous to reward hacking but at inference time.',
+      },
+      {
+        id: 'model-controlled-budget',
+        prompt: 'How does a model learn to self-regulate its thinking budget in a model-controlled policy?',
+        choices: [
+          'Through RL training with length penalties that penalize unnecessary token generation and reward efficient correct answers.',
+          'By reading a pre-specified JSON budget file injected into the system prompt.',
+          'Model-controlled budgets are not possible; all budgets must be set externally by the serving infrastructure.',
+        ],
+        answerIndex: 0,
+        explanation: 'Length penalties in the RL reward signal teach the model that verbose outputs cost reward. The model learns to self-regulate, producing shorter traces when possible and longer traces when needed for correctness.',
+      },
+    ],
+    labs: [
+      {
+        id: 'bon-verifier-sweep',
+        title: 'Best-of-N verifier quality sweep',
+        prompt: 'Set N=16 and adjust verifier quality from 20% to 100%. Record effective accuracy at each quality level and identify where improving the verifier provides more value than doubling N.',
+        successCriteria: 'You can explain why improving verifier quality from 60% to 80% often beats doubling N from 16 to 32.',
+      },
+      {
+        id: 'budget-forcing-inflection',
+        title: 'Find the accuracy inflection point',
+        prompt: 'Sweep the thinking budget from 64 to 8192 tokens and identify the budget at which accuracy stops improving by more than 1% per doubling.',
+        successCriteria: 'You can report the inflection budget and explain why the latency-accuracy Pareto frontier favors stopping there.',
+      },
+      {
+        id: 'react-token-savings',
+        title: 'Measure ReAct token savings',
+        prompt: 'Step through the ReAct walkthrough for a factual query and estimate how many reasoning tokens the model would need if tools were unavailable.',
+        successCriteria: 'You can calculate the token savings from delegating fact retrieval to a search tool versus generating the facts directly.',
+      },
+      {
+        id: 'adaptive-routing',
+        title: 'Design an adaptive budget policy',
+        prompt: 'Given three query difficulty classes (trivial, moderate, hard), propose budget caps (in tokens) for each class and justify the choice using the budget-forcing accuracy curves.',
+        successCriteria: 'Your policy reduces average token spend by at least 40% relative to the max-budget baseline while maintaining ≥95% of peak accuracy on the hard class.',
+      },
+    ],
+  },
 };
 
 const TARGET_QUIZ_QUESTIONS = 100;
@@ -4115,7 +4431,40 @@ function makeGeneratedQuestion(index, level, prompt, correct, distractors, expla
   };
 }
 
-function makeGeneratedQuiz(animation) {
+const CORE_SCENARIO_CONTEXTS = [
+  'During an error analysis pass',
+  'In a validation check',
+  'When comparing two candidate settings',
+  'After changing an input example',
+  'While explaining a surprising output',
+  'Before trusting a deployment decision',
+  'When debugging a failed case',
+  'For a small worked example',
+];
+
+function lowerFirst(value) {
+  if (!value) return value;
+  return `${value[0].toLowerCase()}${value.slice(1)}`;
+}
+
+function contextualizeCoreSpec(spec, cycleIndex) {
+  if (cycleIndex === 0) return spec;
+  const [level, prompt, correct, firstDistractor, secondDistractor, explanation] = spec;
+  const context = CORE_SCENARIO_CONTEXTS[(cycleIndex - 1) % CORE_SCENARIO_CONTEXTS.length];
+
+  return [
+    level,
+    `${context}, ${lowerFirst(prompt)}`,
+    correct,
+    firstDistractor,
+    secondDistractor,
+    explanation,
+  ];
+}
+
+const TARGET_STRATEGY_REVIEW_QUESTIONS = 100;
+
+function makeLearningStrategyDeck(animation) {
   const objectives = animation.learningObjectives?.length
     ? animation.learningObjectives
     : [
@@ -4241,29 +4590,132 @@ function makeGeneratedQuiz(animation) {
     ['Interview', `What is the interview-level success criterion for ${name}?`, 'You can reason through unfamiliar variants and defend choices under constraints', 'You can only recognize the title', 'You can avoid being asked follow-ups', 'Interview readiness means robust reasoning under changed conditions.'],
   ];
 
+  return specs.slice(0, TARGET_STRATEGY_REVIEW_QUESTIONS).map((spec, index) => (
+    makeGeneratedQuestion(index, spec[0], spec[1], spec[2], [spec[3], spec[4]], spec[5])
+  ));
+}
+
+function makeSeededQuestionVariants(animation, seededQuiz) {
+  const name = animation.name;
+  const variants = [];
+
+  for (const [questionIndex, question] of seededQuiz.entries()) {
+    const correct = question.choices[question.answerIndex];
+    const wrongChoices = question.choices.filter((_, index) => index !== question.answerIndex);
+    const firstWrong = wrongChoices[0] || 'An unrelated shortcut';
+    const secondWrong = wrongChoices[1] || 'A claim that ignores the setup';
+    const baseLevel = question.level || 'Mechanism';
+    const explanation = withPeriod(question.explanation);
+
+    variants.push(
+      [baseLevel, `In ${name}, which answer correctly resolves this case: ${question.prompt}`, correct, firstWrong, secondWrong, explanation],
+      ['Mechanism', `For "${question.prompt}", which reasoning path matches the ${name} mechanism?`, explanation, `It follows because ${firstWrong}`, `It follows because ${secondWrong}`, explanation],
+      ['Application', `In a new ${name} example matching this setup, which conclusion follows from "${question.prompt}"?`, correct, firstWrong, secondWrong, explanation],
+      ['Tricky', `Which tempting but wrong conclusion should ${name} rule out for this case: ${question.prompt}`, firstWrong, correct, secondWrong, `The tempting wrong answer is "${firstWrong}", but the lesson point is: ${explanation}`],
+    );
+
+    if (questionIndex % 2 === 0) {
+      variants.push(
+        ['Application', `Which additional result would confirm the same ${name} idea as "${correct}"?`, `A result matching this rule: ${explanation}`, `A result that supports "${secondWrong}" instead`, 'A result that ignores the stated setup', explanation],
+      );
+    }
+  }
+
+  return variants;
+}
+
+function makeMetadataCoreSpecs(animation) {
+  const objectives = animation.learningObjectives?.length
+    ? animation.learningObjectives
+    : [`Explain ${animation.name}`, `Predict how ${animation.description.toLowerCase()} changes behavior`];
+  const description = cleanSentence(animation.description).toLowerCase();
+  const misconception = animation.commonMisconception || `${animation.name} should not be treated as a production guarantee.`;
+  const prereqs = animation.prerequisites?.length ? animation.prerequisites.join(', ') : 'the lesson setup';
+  const name = animation.name;
+  const primaryObjective = cleanSentence(objectives[0]).toLowerCase();
+  const secondaryObjective = cleanSentence(objectives[1] || objectives[0]).toLowerCase();
+  const prerequisiteContext = prereqs === 'the lesson setup'
+    ? 'the stated lesson setup'
+    : `the prerequisite ideas: ${prereqs}`;
+
+  return [
+    ['Foundation', `In ${name}, which situation matches the lesson concept?`, `A case where ${description} determines the result`, 'A case where the option letters determine the result', 'A case with no inputs, assumptions, or outputs to inspect', `${name} is centered on ${description}.`],
+    ['Foundation', `Which statement is required for a correct ${name} example?`, withPeriod(objectives[0]), 'The final answer can be chosen without reading the setup.', 'The mechanism is irrelevant once the title is known.', withPeriod(objectives[0])],
+    ['Foundation', `What background should be active when solving a ${name} question?`, prerequisiteContext, 'Only unrelated interface terminology', 'A deployment dashboard with no concept setup', `${name} builds on ${prerequisiteContext}.`],
+    ['Mechanism', `A ${name} setting changes. What should you compare before choosing an answer?`, `The inputs, assumptions, and output behavior tied to ${description}`, 'Only the order of the multiple-choice answers', 'Nothing, because the title fixes the output', `The lesson asks you to connect setup changes to ${description}.`],
+    ['Mechanism', `Which causal explanation fits ${name}?`, `The changed setup affects ${description}, so the observed behavior should change accordingly`, 'The result changes because the page layout changed', 'The result is unrelated to the lesson assumptions', `${name} should be explained as a mechanism, not a label.`],
+    ['Mechanism', `What distinction does ${name} force you to make?`, `${description} versus the shortcut: ${cleanSentence(misconception).toLowerCase()}`, 'The question id versus the answer id', 'The sidebar order versus the page title', misconception],
+    ['Application', `A practitioner applies ${name} to a new case. What should they validate?`, `That ${description} matches the task constraints and observed behavior`, 'That the lesson was opened once', 'That every metric or setting moves together', `The module is useful when ${description} affects a real choice.`],
+    ['Application', `Which decision is most aligned with ${name}?`, `Use ${description} to decide whether the current behavior supports the task`, 'Ignore evaluation because the diagram looked plausible', 'Assume every production setting has the same internals', `A correct application ties ${name} to evidence from the setup.`],
+    ['Application', `Which follow-up question is specific to ${name}?`, `How would ${description} change when ${secondaryObjective}?`, 'Which route URL contains the lesson?', 'Which answer letter appeared most often?', `The follow-up should stay tied to the ${name} mechanism.`],
+    ['Tricky', `Which conclusion would be unsafe in ${name}?`, misconception, `The result depends on ${description}`, `The answer should be checked against ${primaryObjective}`, `The common misconception is the trap this lesson is meant to correct.`],
+    ['Tricky', `A simplified ${name} example looks correct. What is the next check?`, `Whether the assumptions behind ${description} still hold in the new setting`, 'Whether the same answer letter was correct last time', 'Whether the concept can be used without any validation', 'The teaching model is useful, but it is not a universal guarantee.'],
+    ['Interview', `In a technical screen, which ${name} claim is defensible?`, `${name} can explain ${description}, but the assumptions and limits still need to be checked`, `${name} proves every real system behaves exactly like the teaching example`, `${name} is mastered by repeating the title alone`, `A strong answer stays specific to ${name} and includes a limitation.`],
+  ];
+}
+
+function makeGeneratedQuiz(animation, seededQuiz = []) {
+  const seededVariants = makeSeededQuestionVariants(animation, seededQuiz);
+  const metadataSpecs = makeMetadataCoreSpecs(animation);
+  const specs = [];
+
+  while (specs.length < TARGET_QUIZ_QUESTIONS) {
+    const metadataIndex = specs.length - seededVariants.length;
+    const source = specs.length < seededVariants.length
+      ? seededVariants[specs.length]
+      : contextualizeCoreSpec(
+        metadataSpecs[metadataIndex % metadataSpecs.length],
+        Math.floor(metadataIndex / metadataSpecs.length),
+      );
+    specs.push(source);
+  }
+
   return specs.map((spec, index) => (
     makeGeneratedQuestion(index, spec[0], spec[1], spec[2], [spec[3], spec[4]], spec[5])
   ));
 }
 
-function normalizeSeededQuestion(question, index) {
-  const levels = ['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview'];
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
+}
+
+function rotateQuestionChoices(question, offset) {
+  if (!Array.isArray(question.choices) || question.choices.length < 2) return question;
+
+  const correctChoice = question.choices[question.answerIndex];
+  const rotation = offset % question.choices.length;
+  const rotated = [...question.choices.slice(rotation), ...question.choices.slice(0, rotation)];
+
   return {
+    ...question,
+    choices: rotated,
+    answerIndex: rotated.indexOf(correctChoice),
+  };
+}
+
+function normalizeSeededQuestion(question, index, lessonId) {
+  const levels = ['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview'];
+  const normalized = {
     level: question.level || levels[Math.min(levels.length - 1, Math.floor(index / 4))],
     ...question,
   };
+
+  return rotateQuestionChoices(normalized, stableHash(`${lessonId}:${question.id}`));
 }
 
 function buildLessonAssessment(animation) {
   const seeded = SEEDED_LESSON_ASSESSMENTS[animation.id] || EMPTY_ASSESSMENT;
-  const seededQuiz = (seeded.quiz || []).map(normalizeSeededQuestion);
+  const seededQuiz = (seeded.quiz || []).map((question, index) => (
+    normalizeSeededQuestion(question, index, animation.id)
+  ));
   const usedIds = new Set(seededQuiz.map((question) => question.id));
-  const generatedQuiz = makeGeneratedQuiz(animation)
+  const generatedQuiz = makeGeneratedQuiz(animation, seededQuiz)
     .filter((question) => !usedIds.has(question.id))
     .slice(0, Math.max(0, TARGET_QUIZ_QUESTIONS - seededQuiz.length));
 
   return {
     quiz: [...seededQuiz, ...generatedQuiz].slice(0, TARGET_QUIZ_QUESTIONS),
+    strategyReview: makeLearningStrategyDeck(animation),
     labs: seeded.labs || [],
   };
 }

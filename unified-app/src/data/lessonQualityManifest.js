@@ -8,6 +8,48 @@ export const MODULE_QUALITY_TIERS = {
 export const AUDIT_REMARK_LIMIT = 100;
 
 export const MANUAL_LESSON_QUALITY = {
+  'frontier-llm-architecture-overview': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Architecture map with dense, MoE, attention memory, long-context, SSM, diffusion, and omni panels plus cross-family comparison controls.',
+    nextAction: 'Add live KV-byte calculator presets tied to published model cards.',
+  },
+  'frontier-moe-systems': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Multi-panel advanced MoE systems lesson with parameter accounting, router visualization, load balancing analysis, parallelism simulation, and student distillation.',
+    nextAction: 'Incorporate hardware-specific FLOP counters and exact interconnect bandwidth calculators.',
+  },
+  'multi-head-latent-attention': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Comprehensive attention compression interactive module exploring KV cache bottlenecks, MQA/GQA sharing, low-rank MLA projection, log-scale comparisons, decode bandwidth, Pareto quality frontiers, and a continuous batching sandbox.',
+    nextAction: 'Incorporate real DeepSeek-V3 RoPE decoupled projection dimensions and multi-node interconnect simulations.',
+  },
+  'reasoning-rlvr-grpo': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Interactive reasoning models post-training workbench. Details transition from SFT tracing to rejection sampling, ORM/PRM step-level credit assignment, GRPO group relative policy gradients, active test-time search trade-offs, format/language hacking failure modes, and student model distillation.',
+    nextAction: 'Add a live Python code sandbox to test custom verifiable outcome regex parsers.',
+  },
+  'test-time-compute-thinking-budgets': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Comprehensive test-time compute interactive module. Covers training vs inference scaling tradeoffs, Best-of-N sampling with oracle/verifier gap analysis, tree/beam search with PRM walkthrough, adaptive thinking budget policies, tool-augmented ReAct pattern, failure mode diagnostics, and cost-accuracy Pareto frontier comparison.',
+    nextAction: 'Add live computation of optimal N using real benchmark data and model-specific cost profiles.',
+  },
+  'ab-testing-foundations': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Interactive A/B experiment workbench with randomization visualization, lift and p-value readout, practical MDE checks, configurable guardrail thresholds, and launch decision synthesis.',
+    nextAction: 'Add sequential testing and peeking warnings with alpha-spending illustration.',
+  },
+  'power-sample-size': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Power planning sandbox with MDE, variance multiplier, alpha, target power, required sample size, and underpowered launch diagnostics.',
+    nextAction: 'Add two-proportion and continuous-metric formula toggles with paired designs.',
+  },
   'bayes-rule-ml': {
     tier: 'B',
     status: 'stable',

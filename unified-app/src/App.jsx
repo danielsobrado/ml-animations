@@ -4,9 +4,12 @@ import Header from './components/layout/Header';
 import KeyboardHintDock from './components/app/KeyboardHintDock';
 import { ACTIVE_LESSON_COUNT } from './data/catalogStats';
 
+import { getGlossaryTerm } from './data/glossaryRepository.js';
+
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AnimationPage = lazy(() => import('./pages/AnimationPage'));
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage'));
+const GlossaryIndexPage = lazy(() => import('./pages/GlossaryIndexPage'));
 const CommandPalette = lazy(() => import('./components/app/CommandPalette'));
 const Sidebar = lazy(() => import('./components/layout/Sidebar'));
 
@@ -90,11 +93,29 @@ function getMetaFromPath(pathname, currentLesson) {
     };
   }
 
+  if (pathname === '/glossary' || pathname === '/glossary/') {
+    return {
+      title: 'Glossary - ML Animations',
+      description:
+        'Browse machine learning glossary terms with definitions, intuition, examples, and links to related lessons.',
+      path: '/glossary/',
+    };
+  }
+
   if (pathname.startsWith('/glossary/')) {
     const slug = decodeURIComponent(pathname.split('/').pop() || '');
+    const term = getGlossaryTerm(slug);
+    if (term) {
+      return {
+        title: `${term.term} - ML Animations Glossary`,
+        description: `${term.definition} Explore intuition, examples, and related concepts.`,
+        path: `${pathname.replace(/\/?$/, '/')}`,
+      };
+    }
+
     return {
-      title: `Glossary: ${slug} - ML Animations`,
-      description: `A concise definition and explanation for ${slug} in the ML Animations glossary.`,
+      title: 'Glossary term not found - ML Animations',
+      description: 'That glossary entry is not in the catalog yet. Browse the full glossary or return to the home page.',
       path: `${pathname.replace(/\/?$/, '/')}`,
     };
   }
@@ -232,6 +253,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/animation/:id" element={<AnimationPage />} />
+            <Route path="/glossary" element={<GlossaryIndexPage />} />
             <Route path="/glossary/:slug" element={<GlossaryPage />} />
           </Routes>
         </Suspense>

@@ -87,6 +87,44 @@ export const categories = [
     ],
   },
   {
+    id: 'frontier-llms',
+    name: 'Frontier LLMs',
+    icon: Cpu,
+    color: 'from-teal-600 to-amber-500',
+    items: [
+      {
+        id: 'frontier-llm-architecture-overview',
+        name: 'Frontier LLM Architecture Overview',
+        icon: Cpu,
+        description: 'Map dense, MoE, compressed attention, long-context, recurrent, diffusion, and omni LLM architectures',
+      },
+      {
+        id: 'frontier-moe-systems',
+        name: 'Mixture of Experts at Frontier Scale',
+        icon: Cpu,
+        description: 'Design, routing, systems communication, load balancing, and distillation in frontier sparse MoE systems',
+      },
+      {
+        id: 'multi-head-latent-attention',
+        name: 'Multi-head Latent Attention',
+        icon: Cpu,
+        description: 'KV cache memory layout, MQA/GQA sharing, and low-rank latent representation compression (MLA)',
+      },
+      {
+        id: 'reasoning-rlvr-grpo',
+        name: 'Reasoning Models: From SFT to RLVR / GRPO',
+        icon: Cpu,
+        description: 'Supervised trace imitation, rejection sampling dataset building, verifiable outcome rewards, and group-relative policy updates',
+      },
+      {
+        id: 'test-time-compute-thinking-budgets',
+        name: 'Test-Time Compute & Thinking Budgets',
+        icon: Cpu,
+        description: 'Inference-time scaling via sampling strategies, beam search, adaptive budgets, tool augmentation, and cost-accuracy tradeoffs',
+      },
+    ],
+  },
+  {
     id: 'neural-networks',
     name: 'Neural Networks',
     icon: Network,
@@ -183,6 +221,16 @@ export const categories = [
       { id: 'model-monitoring', name: 'Model Monitoring', icon: BarChart3, description: 'Track drift, data quality, performance, latency, and alert thresholds after deployment' },
       { id: 'model-fairness', name: 'Model Fairness', icon: ShieldCheck, description: 'Group metrics, threshold tradeoffs, proxy features, and mitigation strategies' },
       { id: 'uncertainty-estimation', name: 'Uncertainty Estimation', icon: Dice1, description: 'Confidence, calibration, prediction intervals, and out-of-distribution uncertainty' },
+    ],
+  },
+  {
+    id: 'experimentation-causal-ml',
+    name: 'Experimentation & Causal ML',
+    icon: GitBranch,
+    color: 'from-emerald-600 to-teal-600',
+    items: [
+      { id: 'ab-testing-foundations', name: 'A/B Testing Foundations', icon: GitBranch, description: 'Randomization, treatment/control groups, metrics, guardrails, and practical significance' },
+      { id: 'power-sample-size', name: 'Power & Sample Size', icon: Scale, description: 'Minimum detectable effect, variance, sample size, and false positive/negative tradeoffs' },
     ],
   },
   {
@@ -358,6 +406,23 @@ export const curriculumTracks = [
     ],
   },
   {
+    id: 'experimentation-causal-ml',
+    title: 'Experimentation & Causal ML',
+    description: 'Move from predictive metrics to causal decisions: experiments, confounding, treatment effects, and observational adjustment.',
+    animationIds: [
+      'hypothesis-testing-intuition',
+      'sampling-confidence-intervals',
+      'ab-testing-foundations',
+      'power-sample-size',
+      'classification-metrics',
+      'calibration',
+      'data-leakage-deep-dive',
+      'model-fairness',
+      'model-monitoring',
+      'uncertainty-estimation',
+    ],
+  },
+  {
     id: 'nlp-transformers',
     title: 'NLP To Transformers',
     description: 'Represent text as vectors, then build up attention, transformer blocks, and inference tools.',
@@ -387,6 +452,11 @@ export const curriculumTracks = [
       'flash-attention',
       'fine-tuning',
       'moe',
+      'frontier-llm-architecture-overview',
+      'frontier-moe-systems',
+      'multi-head-latent-attention',
+      'reasoning-rlvr-grpo',
+      'test-time-compute-thinking-budgets',
     ],
   },
   {
@@ -416,6 +486,11 @@ export const curriculumTracks = [
       'multimodal-llm',
       'fine-tuning',
       'moe',
+      'frontier-llm-architecture-overview',
+      'frontier-moe-systems',
+      'multi-head-latent-attention',
+      'reasoning-rlvr-grpo',
+      'test-time-compute-thinking-budgets',
     ],
   },
   {
@@ -439,7 +514,74 @@ export const curriculumTracks = [
   },
 ];
 
-export const curriculumBacklog = [];
+export const curriculumBacklog = [
+  {
+    id: 'sequential-testing-peeking',
+    title: 'Sequential Testing & Peeking',
+    trackId: 'experimentation-causal-ml',
+    description: 'Why repeatedly checking p-values inflates false positives and how sequential designs control error.',
+  },
+  {
+    id: 'cuped-variance-reduction',
+    title: 'CUPED / Variance Reduction',
+    trackId: 'experimentation-causal-ml',
+    description: 'Use pre-treatment covariates to reduce experiment noise without changing the estimand.',
+  },
+  {
+    id: 'confounding-simpsons-paradox',
+    title: "Confounding & Simpson's Paradox",
+    trackId: 'experimentation-causal-ml',
+    description: 'Show how aggregate effects can reverse across groups when assignment or exposure is confounded.',
+  },
+  {
+    id: 'causal-graphs-dags',
+    title: 'Causal Graphs / DAGs',
+    trackId: 'experimentation-causal-ml',
+    description: 'Confounders, colliders, mediators, adjustment sets, and when conditioning creates bias.',
+  },
+  {
+    id: 'treatment-effects',
+    title: 'Treatment Effects',
+    trackId: 'experimentation-causal-ml',
+    description: 'ATE, CATE, heterogeneous effects, uplift, and when average effects hide useful segment behavior.',
+  },
+  {
+    id: 'propensity-scores',
+    title: 'Propensity Scores',
+    trackId: 'experimentation-causal-ml',
+    description: 'Matching and weighting intuition for observational data when randomized assignment is unavailable.',
+  },
+  {
+    id: 'time-series-forecasting-track',
+    title: 'Time Series & Forecasting',
+    trackId: 'core-ml',
+    description: 'Rolling splits, lag features, autocorrelation, seasonality, forecasting metrics, leakage, exogenous variables, and backtesting.',
+  },
+  {
+    id: 'recommender-systems-ranking-track',
+    title: 'Recommender Systems & Ranking',
+    trackId: 'nlp-transformers',
+    description: 'Collaborative filtering, matrix factorization, implicit feedback, cold start, learning to rank, ranking metrics, and exploration.',
+  },
+  {
+    id: 'ml-security-robustness-track',
+    title: 'ML Security & Robustness',
+    trackId: 'model-reliability',
+    description: 'Prompt injection, RAG poisoning, data poisoning, adversarial examples, membership inference, PII leakage, tool safety, and jailbreak evaluation.',
+  },
+  {
+    id: 'efficient-inference-compression-track',
+    title: 'Efficient Inference & Compression',
+    trackId: 'nlp-transformers',
+    description: 'Quantization, pruning, distillation, batching, speculative decoding, paged attention, latency, throughput, and memory bandwidth.',
+  },
+  {
+    id: 'data-engineering-for-ml-track',
+    title: 'Data Engineering for ML',
+    trackId: 'core-ml',
+    description: 'Feature stores, label windows, point-in-time correctness, missing data, categorical encoding, target encoding leakage, data contracts, and train/serve skew.',
+  },
+];
 
 const trackIdsByAnimation = curriculumTracks.reduce((acc, track) => {
   for (const animationId of track.animationIds) {
@@ -451,6 +593,7 @@ const trackIdsByAnimation = curriculumTracks.reduce((acc, track) => {
 const CATEGORY_CURRICULUM_DEFAULTS = {
   nlp: { difficulty: 'beginner', estimatedMinutes: 12, prerequisites: [] },
   transformers: { difficulty: 'advanced', estimatedMinutes: 22, prerequisites: ['embeddings', 'softmax'] },
+  'frontier-llms': { difficulty: 'advanced', estimatedMinutes: 40, prerequisites: ['transformer', 'self-attention', 'kv-cache'] },
   'neural-networks': { difficulty: 'intermediate', estimatedMinutes: 16, prerequisites: ['linear-regression', 'gradient-descent'] },
   'advanced-models': { difficulty: 'advanced', estimatedMinutes: 24, prerequisites: ['embeddings', 'probability-distributions'] },
   'math-fundamentals': { difficulty: 'intermediate', estimatedMinutes: 15, prerequisites: [] },
@@ -766,6 +909,28 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'A small p-value does not prove an effect is large, useful, or caused by the feature being studied.',
   },
+  'ab-testing-foundations': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['hypothesis-testing-intuition', 'sampling-confidence-intervals'],
+    learningObjectives: [
+      'Explain how randomization makes treatment and control groups comparable',
+      'Separate primary metrics, guardrail metrics, and practical significance',
+      'Diagnose common experiment failures such as imbalance, underpowered tests, and metric tradeoffs',
+    ],
+    commonMisconception: 'An A/B test is not just comparing two dashboards; assignment, metrics, and decision thresholds must be defined before reading results.',
+  },
+  'power-sample-size': {
+    difficulty: 'intermediate',
+    estimatedMinutes: 18,
+    prerequisites: ['ab-testing-foundations', 'sampling-confidence-intervals'],
+    learningObjectives: [
+      'Estimate how sample size, variance, alpha, and target power affect experiment sensitivity',
+      'Explain minimum detectable effect as a practical planning threshold',
+      'Distinguish false positives controlled by alpha from false negatives controlled by power',
+    ],
+    commonMisconception: 'A non-significant underpowered experiment does not prove there is no useful treatment effect.',
+  },
   'maximum-likelihood-estimation': {
     difficulty: 'intermediate',
     estimatedMinutes: 18,
@@ -880,7 +1045,111 @@ const CURRICULUM_OVERRIDES = {
     ],
     commonMisconception: 'Fine-tuning is not a single method and it is not the same as retrieval; it updates model behavior using gradients from demonstrations, adapters, or preference signals.',
   },
+  'frontier-llm-architecture-overview': {
+    difficulty: 'advanced',
+    estimatedMinutes: 40,
+    prerequisites: [
+      'transformer',
+      'self-attention',
+      'attention-masks',
+      'kv-cache',
+      'grouped-query-attention',
+      'moe',
+      'diffusion-basics',
+      'multimodal-llm',
+    ],
+    learningObjectives: [
+      'Classify whether a frontier model is dense, sparse MoE, attention-compressed, long-context, recurrent, diffusion-based, multimodal, or a hybrid',
+      'Compare architectures by active compute, KV memory, context access, generation order, modality support, and failure mode',
+      'Read modern paper architecture signals such as active parameters, MLA, thinking budget, selective state, masked denoising, and omni modalities',
+    ],
+    commonMisconception: 'Frontier LLMs are not just larger dense transformers; each architecture change buys one bottleneck improvement and introduces a new risk.',
+  },
+  'frontier-moe-systems': {
+    difficulty: 'advanced',
+    estimatedMinutes: 50,
+    prerequisites: [
+      'moe',
+      'transformer',
+      'self-attention',
+      'kv-cache',
+      'training-loop-dynamics',
+      'optimizers',
+      'model-monitoring',
+      'frontier-llm-architecture-overview',
+    ],
+    learningObjectives: [
+      'Compare dense parameters and sparse expert routing pathways per token',
+      'Compute active parameter footprint based on top-k and shared experts',
+      'Diagnose expert routing collapse, token dropping, and GPU communication overhead',
+      'Analyze the dynamics of distilling student MoE models from larger teachers',
+    ],
+    commonMisconception: 'Sparse active compute does not remove serving complexity; routing, load balancing, memory footprint, and network communication become the central engineering challenges.',
+  },
+  'multi-head-latent-attention': {
+    difficulty: 'advanced',
+    estimatedMinutes: 45,
+    prerequisites: [
+      'self-attention',
+      'kv-cache',
+      'grouped-query-attention',
+      'flash-attention',
+      'rope',
+      'transformer-token-generation',
+      'frontier-llm-architecture-overview',
+    ],
+    learningObjectives: [
+      'Explain why KV cache memory footprint dominates decode serving efficiency in long-context models',
+      'Contrast the key/value sharing topologies of Multi-Query Attention (MQA) and Grouped-Query Attention (GQA)',
+      'Analyze the compression and up-projection dynamics of Multi-head Latent Attention (MLA) in DeepSeek architectures',
+      'Calculate decode bandwidth constraints, cache reduction ratios, and extra projection FLOPs',
+    ],
+    commonMisconception: 'Attention compression is not a free reduction in memory footprint; caching compressed latent states trades memory bandwidth for extra query-time projection compute.',
+  },
+  'reasoning-rlvr-grpo': {
+    difficulty: 'advanced',
+    estimatedMinutes: 60,
+    prerequisites: [
+      'fine-tuning',
+      'policy-gradients',
+      'actor-critic',
+      'reward-shaping',
+      'llm-training-objectives',
+      'sampling-strategies',
+      'transformer-token-generation',
+      'classification-metrics',
+      'calibration',
+      'model-debugging',
+    ],
+    learningObjectives: [
+      'Explain the transition from imitation learning (SFT) to reinforcement learning with verifiable rewards (RLVR) in reasoning models',
+      'Describe the role of rejection sampling and synthetic trace generation in building reasoning datasets',
+      'Contrast outcome reward models (ORM) and process reward models (PRM) in step-level credit assignment',
+      'Trace group-relative advantage normalization and KL constraints in Group Relative Policy Optimization (GRPO)',
+      'Analyze reasoning failure modes (overthinking, reward hacking, language mixing) and distillation tradeoffs',
+    ],
+    commonMisconception: 'Post-training reasoning capability is not just "adding chain-of-thought examples"; it is an active policy optimization that shifts the model from next-token imitation to test-time search and error-correction under verifier constraints.',
+  },
+  'test-time-compute-thinking-budgets': {
+    difficulty: 'advanced',
+    estimatedMinutes: 50,
+    prerequisites: [
+      'transformer-token-generation',
+      'sampling-strategies',
+      'reasoning-rlvr-grpo',
+      'frontier-llm-architecture-overview',
+      'kv-cache',
+    ],
+    learningObjectives: [
+      'Contrast training-time and inference-time compute scaling and their cost-accuracy tradeoffs',
+      'Explain Best-of-N sampling, beam search, and adaptive budget policies as test-time compute strategies',
+      'Analyze how budget forcing, difficulty-gated routing, and tool augmentation improve reasoning efficiency',
+      'Diagnose overthinking, truncation, and verifier-gap failure modes in deployed reasoning systems',
+    ],
+    commonMisconception: 'More thinking tokens always help — in reality, diminishing returns appear quickly, and allocating large budgets to trivial queries wastes significant serving cost without accuracy gain.',
+  },
   bert: {
+
     difficulty: 'advanced',
     estimatedMinutes: 24,
     prerequisites: ['transformer', 'tokenization'],

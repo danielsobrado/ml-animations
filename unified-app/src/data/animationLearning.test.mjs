@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { allAnimations, curriculumBacklog, curriculumTracks, getAnimationById } from './animations.js';
+import { allAnimations, categories, curriculumBacklog, curriculumTracks, getAnimationById } from './animations.js';
 import { HUB_LEARNING_PATHS } from './learningPaths.js';
 import {
   PRIORITY_ASSESSMENT_LESSON_IDS,
@@ -16,7 +16,7 @@ import {
   MATH_CONTROLS,
   createLearningModel,
 } from './animationLearning.js';
-import { getGlossaryTerm, glossaryTerms } from './glossaryRepository.js';
+import { GLOSSARY_IDS_BY_CATEGORY, getGlossaryTerm, glossaryTerms } from './glossaryRepository.js';
 import { isAnimationAvailable } from '../animations/index.js';
 
 test('createLearningModel gives every animation the uniform learning shell contract', () => {
@@ -80,24 +80,150 @@ test('every active lesson has curated mindmap copy', () => {
 
 test('central glossary repository exposes reusable image-backed term pages', () => {
   assert.ok(glossaryTerms.length >= 30);
+  const slugs = new Set();
+  const aliasOwners = new Map();
 
   for (const term of glossaryTerms) {
     assert.ok(term.id);
     assert.ok(term.slug);
+    assert.ok(!slugs.has(term.slug), `${term.slug} is duplicated`);
+    slugs.add(term.slug);
     assert.equal(term.href, `/glossary/${term.slug}`);
+    assert.match(term.href, /^\/glossary\/[a-z0-9-]+$/);
+    assert.equal(getGlossaryTerm(term.slug)?.id, term.id, `${term.href} should resolve back to ${term.id}`);
     assert.ok(term.definition);
     assert.ok(term.explanation);
     assert.ok(term.intuition);
     assert.ok(term.example);
     assert.ok(term.pitfall);
+    assert.ok(Array.isArray(term.aliases), `${term.id} aliases must be an array`);
+    assert.ok(Array.isArray(term.related), `${term.id} related must be an array`);
+    assert.ok(Array.isArray(term.usedIn), `${term.id} usedIn must be an array`);
+    assert.ok(Array.isArray(term.prerequisiteFor), `${term.id} prerequisiteFor must be an array`);
+    assert.ok(Array.isArray(term.confusedWith), `${term.id} confusedWith must be an array`);
     assert.ok(term.image.src.startsWith('data:image/svg+xml'));
     assert.ok(term.image.alt);
+
+    for (const alias of term.aliases) {
+      const normalizedAlias = String(alias).toLowerCase();
+      assert.ok(!aliasOwners.has(normalizedAlias), `${alias} aliases both ${aliasOwners.get(normalizedAlias)} and ${term.id}`);
+      aliasOwners.set(normalizedAlias, term.id);
+    }
   }
 
   assert.equal(getGlossaryTerm('attention').href, '/glossary/attention');
   assert.equal(getGlossaryTerm('query').category, 'Transformers');
   assert.equal(getGlossaryTerm('logits').category, 'Neural Networks');
   assert.equal(getGlossaryTerm('temperature').category, 'Neural Networks');
+  assert.equal(getGlossaryTerm('tau').id, 'temperature');
+  assert.equal(getGlossaryTerm('τ').id, 'temperature');
+});
+
+test('glossary category maps and graph references stay valid', () => {
+  const glossaryIds = new Set(glossaryTerms.map((term) => term.id));
+  const animationIds = new Set(allAnimations.map((animation) => animation.id));
+  const referenceIds = new Set([...glossaryIds, ...animationIds]);
+
+  for (const category of categories) {
+    assert.ok(
+      GLOSSARY_IDS_BY_CATEGORY[category.id],
+      `${category.id} needs a glossary mapping`,
+    );
+  }
+
+  for (const [categoryId, termIds] of Object.entries(GLOSSARY_IDS_BY_CATEGORY)) {
+    assert.ok(categories.some((category) => category.id === categoryId), `${categoryId} is not a catalog category`);
+    assert.ok(termIds.length >= 1, `${categoryId} needs at least one glossary term`);
+    for (const termId of termIds) {
+      assert.ok(glossaryIds.has(termId), `${categoryId} references unknown glossary term ${termId}`);
+    }
+  }
+
+  for (const term of glossaryTerms) {
+    for (const alias of term.aliases) {
+      assert.equal(getGlossaryTerm(alias)?.id, term.id, `${term.id} has broken alias ${alias}`);
+    }
+
+    for (const field of ['related', 'usedIn', 'prerequisiteFor', 'confusedWith']) {
+      for (const id of term[field]) {
+        assert.ok(referenceIds.has(id), `${term.id}.${field} references unknown id ${id}`);
+        assert.notEqual(id, term.id, `${term.id}.${field} should not reference itself`);
+        const href = glossaryIds.has(id) ? `/glossary/${id}` : `/animation/${id}`;
+        assert.match(href, /^\/(glossary|animation)\/[a-z0-9-]+$/, `${term.id}.${field} produces invalid href ${href}`);
+      }
+    }
+
+    for (const field of ['related', 'confusedWith']) {
+      for (const id of term[field]) {
+        assert.ok(glossaryIds.has(id), `${term.id}.${field} should reference glossary concepts, not lessons: ${id}`);
+      }
+    }
+
+    assert.ok(
+      term.related.length + term.usedIn.length + term.prerequisiteFor.length + term.confusedWith.length > 0,
+      `${term.id} should participate in the glossary concept graph`,
+    );
+  }
+});
+
+test('glossary text does not contain common mojibake sequences', () => {
+  const glossaryText = JSON.stringify(glossaryTerms);
+  for (const mojibake of ['\u00c3', '\u00cf', '\u00e2\u20ac']) {
+    assert.ok(!glossaryText.includes(mojibake), `glossary contains mojibake sequence ${mojibake}`);
+  }
+});
+
+test('model reliability lessons expose the full reliability glossary map', () => {
+  const animation = getAnimationById('model-monitoring');
+  const model = createLearningModel(animation, allAnimations);
+
+  assert.deepEqual(
+    model.glossary.map((term) => term.id),
+    GLOSSARY_IDS_BY_CATEGORY['model-reliability'],
+  );
+});
+
+test('frontier llm lessons expose the full frontier glossary map', () => {
+  const animation = getAnimationById('multi-head-latent-attention');
+  const model = createLearningModel(animation, allAnimations);
+
+  assert.deepEqual(
+    model.glossary.map((term) => term.id),
+    GLOSSARY_IDS_BY_CATEGORY['frontier-llms'],
+  );
+});
+
+test('experimentation lessons expose the full experimentation glossary map', () => {
+  const animation = getAnimationById('ab-testing-foundations');
+  const model = createLearningModel(animation, allAnimations);
+
+  assert.deepEqual(
+    model.glossary.map((term) => term.id),
+    GLOSSARY_IDS_BY_CATEGORY['experimentation-causal-ml'],
+  );
+});
+
+test('advanced model lessons expose the full advanced-models glossary map', () => {
+  const animation = getAnimationById('rag');
+  const model = createLearningModel(animation, allAnimations);
+
+  assert.deepEqual(
+    model.glossary.map((term) => term.id),
+    GLOSSARY_IDS_BY_CATEGORY['advanced-models'],
+  );
+});
+
+test('glossary confusedWith links are bidirectional', () => {
+  for (const term of glossaryTerms) {
+    for (const peerId of term.confusedWith) {
+      const peer = getGlossaryTerm(peerId);
+      assert.ok(peer, `${term.id} confusedWith references missing term ${peerId}`);
+      assert.ok(
+        peer.confusedWith.includes(term.id),
+        `${term.id} -> ${peerId} should be mirrored by ${peerId} -> ${term.id}`,
+      );
+    }
+  }
 });
 
 test('every active animation exposes curriculum metadata', () => {
@@ -127,7 +253,7 @@ test('curriculum tracks reference only active animations and backlog topics stay
   const animationIds = new Set(allAnimations.map((animation) => animation.id));
   const seenTrackIds = new Set();
 
-  assert.equal(curriculumTracks.length, 7);
+  assert.equal(curriculumTracks.length, 8);
   for (const track of curriculumTracks) {
     assert.ok(track.id);
     assert.ok(!seenTrackIds.has(track.id), `${track.id} is duplicated`);
@@ -1330,6 +1456,7 @@ test('lesson assessments provide paginated quiz depth and lab counts for priorit
 
     assert.ok(animationIds.has(lessonId), `${lessonId} should be an active lesson`);
     assert.ok(assessment.quiz.length >= 100, `${lessonId} needs at least 100 quiz questions`);
+    assert.ok(assessment.strategyReview.length >= 20, `${lessonId} needs optional interview review prompts`);
     assert.ok(
       new Set(assessment.quiz.map((question) => question.level)).size >= 3,
       `${lessonId} needs beginner, intermediate, and advanced checks`,
@@ -1361,11 +1488,122 @@ test('every catalog lesson has enough quiz items for paginated checks', () => {
 
     assert.ok(assessment, `${animation.id} needs an assessment`);
     assert.ok(assessment.quiz.length >= 100, `${animation.id} needs at least 100 quiz questions`);
+    assert.ok(assessment.strategyReview.length >= 20, `${animation.id} needs optional strategy review depth`);
     assert.ok(
       new Set(assessment.quiz.map((question) => question.level)).size >= 3,
       `${animation.id} needs mixed complexity levels`,
     );
   }
+});
+
+test('core assessment questions avoid strategy-review filler', () => {
+  const strategyFragments = [
+    'transfer beyond memorization',
+    'conclusion should transfer',
+    'animation and a real system differ',
+    '60-second interview answer',
+    'resume or project explanation',
+    'whiteboard problem',
+    'decorative colors',
+    'route URL from memory',
+    'mainly teaching',
+    'fit in the curriculum',
+    'Which project note',
+    'Which interview answer',
+    'answer option letters',
+  ];
+
+  for (const [lessonId, assessment] of Object.entries(lessonAssessments)) {
+    const coreText = assessment.quiz.map((question) => question.prompt).join('\n');
+    const reviewText = assessment.strategyReview.map((question) => question.prompt).join('\n');
+
+    for (const fragment of strategyFragments) {
+      assert.ok(!coreText.includes(fragment), `${lessonId} core quiz still includes strategy filler: ${fragment}`);
+    }
+
+    assert.ok(
+      strategyFragments.some((fragment) => reviewText.includes(fragment)),
+      `${lessonId} should preserve strategy prompts in optional review`,
+    );
+  }
+});
+
+test('assessment correct-answer positions are distributed across pages', () => {
+  for (const [lessonId, assessment] of Object.entries(lessonAssessments)) {
+    const answerIndexes = assessment.quiz.map((question) => question.answerIndex);
+
+    assert.ok(
+      new Set(answerIndexes).size > 1,
+      `${lessonId} should not put every correct answer in the same option slot`,
+    );
+
+    for (let start = 0; start < answerIndexes.length; start += 10) {
+      const page = answerIndexes.slice(start, start + 10);
+      const maxSameSlot = Math.max(
+        ...[0, 1, 2, 3].map((slot) => page.filter((answerIndex) => answerIndex === slot).length),
+      );
+
+      assert.ok(
+        maxSameSlot <= Math.ceil(page.length * 0.6),
+        `${lessonId} questions ${start + 1}-${start + page.length} overuse one correct option`,
+      );
+    }
+  }
+});
+
+test('assessment core prompts do not repeat exact questions', () => {
+  for (const [lessonId, assessment] of Object.entries(lessonAssessments)) {
+    const prompts = assessment.quiz.map((question) => question.prompt);
+    const uniquePrompts = new Set(prompts);
+
+    assert.equal(
+      uniquePrompts.size,
+      prompts.length,
+      `${lessonId} should not repeat exact core quiz prompts`,
+    );
+  }
+});
+
+test('experimentation and causal ML promotes A/B testing, power analysis, and keeps causal roadmap planned', () => {
+  const animation = getAnimationById('ab-testing-foundations');
+  const powerAnimation = getAnimationById('power-sample-size');
+  const track = curriculumTracks.find((candidate) => candidate.id === 'experimentation-causal-ml');
+  assert.ok(animation, 'A/B testing foundations should be active');
+  assert.equal(animation.categoryId, 'experimentation-causal-ml');
+  assert.ok(animation.trackIds.includes('experimentation-causal-ml'));
+  assert.ok(isAnimationAvailable('ab-testing-foundations'));
+  assert.deepEqual(animation.prerequisites, ['hypothesis-testing-intuition', 'sampling-confidence-intervals']);
+  assert.ok(powerAnimation, 'Power and sample size should be active');
+  assert.equal(powerAnimation.categoryId, 'experimentation-causal-ml');
+  assert.ok(powerAnimation.trackIds.includes('experimentation-causal-ml'));
+  assert.ok(isAnimationAvailable('power-sample-size'));
+  assert.deepEqual(powerAnimation.prerequisites, ['ab-testing-foundations', 'sampling-confidence-intervals']);
+  assert.ok(track, 'experimentation and causal ML track should exist');
+  assert.deepEqual(track.animationIds, [
+    'hypothesis-testing-intuition',
+    'sampling-confidence-intervals',
+    'ab-testing-foundations',
+    'power-sample-size',
+    'classification-metrics',
+    'calibration',
+    'data-leakage-deep-dive',
+    'model-fairness',
+    'model-monitoring',
+    'uncertainty-estimation',
+  ]);
+
+  const plannedIds = curriculumBacklog
+    .filter((topic) => topic.trackId === 'experimentation-causal-ml')
+    .map((topic) => topic.id);
+
+  assert.deepEqual(plannedIds, [
+    'sequential-testing-peeking',
+    'cuped-variance-reduction',
+    'confounding-simpsons-paradox',
+    'causal-graphs-dags',
+    'treatment-effects',
+    'propensity-scores',
+  ]);
 });
 
 test('assessment completion requires all quiz and lab items', () => {
