@@ -1,5 +1,6 @@
 import { getGlossaryTermsForCategory, GLOSSARY_IDS_BY_CATEGORY, FULL_GLOSSARY_CATEGORY_IDS } from './glossaryRepository.js';
 import { curriculumTracks } from './animations.js';
+import { getCurriculumDepth } from './curriculumDepth.js';
 import { getMindmapCuration } from './mindmapCuration.js';
 
 export const CARD_TYPES = [
@@ -1279,6 +1280,7 @@ export function createLearningModel(animation, allAnimations) {
       next,
     },
     learningCards: makeCards(animation, glossary, headlineLatex),
+    depth: getCurriculumDepth(animation),
     controls: MATH_CONTROLS,
     glossary,
   };

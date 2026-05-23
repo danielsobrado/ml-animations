@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen } from 'lucide-react';
+import { AlertTriangle, BookOpen, FileSearch, GitCompare, ShieldCheck } from 'lucide-react';
 import Eq from '../../_design-system/Eq';
 import { allAnimations } from '../../data/animations';
 import { createLearningModel } from '../../data/animationLearning';
@@ -84,6 +84,144 @@ function LearningCards({ cards }) {
         </section>
       ))}
     </aside>
+  );
+}
+
+function DepthList({ title, items }) {
+  if (!items?.length) return null;
+
+  return (
+    <div>
+      <h4>{title}</h4>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ConceptComparisonCards({ comparisons }) {
+  if (!comparisons?.length) return null;
+
+  return (
+    <section className="ua-depth-panel" aria-label="Concept comparisons">
+      <div className="ua-depth-panel-head">
+        <GitCompare size={17} />
+        <span>Concept comparisons</span>
+      </div>
+      <div className="ua-depth-grid">
+        {comparisons.map((comparison) => (
+          <article key={comparison.id} className="ua-depth-card ua-comparison-card">
+            <span>{comparison.title}</span>
+            <div>
+              <strong>{comparison.left}</strong>
+              <p>{comparison.leftSummary}</p>
+            </div>
+            <div>
+              <strong>{comparison.right}</strong>
+              <p>{comparison.rightSummary}</p>
+            </div>
+            <p><b>Common mistake:</b> {comparison.commonMistake}</p>
+            <p><b>Diagnostic:</b> {comparison.diagnostic}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FailureGallery({ failures }) {
+  if (!failures?.length) return null;
+
+  return (
+    <section className="ua-depth-panel" aria-label="Failure gallery">
+      <div className="ua-depth-panel-head">
+        <AlertTriangle size={17} />
+        <span>Failure gallery</span>
+      </div>
+      <div className="ua-depth-grid">
+        {failures.map((failure) => (
+          <article key={failure.id} className="ua-depth-card">
+            <span>{failure.track}</span>
+            <h3>{failure.title}</h3>
+            <p><b>Symptom:</b> {failure.symptom}</p>
+            <p><b>Why:</b> {failure.whyItHappens}</p>
+            <p><b>Detect:</b> {failure.howToDetect}</p>
+            <p><b>Fix:</b> {failure.howToFix}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PaperReadingMode({ signals }) {
+  if (!signals?.length) return null;
+
+  return (
+    <section className="ua-depth-panel" aria-label="Paper reading mode">
+      <div className="ua-depth-panel-head">
+        <FileSearch size={17} />
+        <span>Paper-reading mode</span>
+      </div>
+      <div className="ua-depth-grid">
+        {signals.map((signal) => (
+          <article key={signal.id} className="ua-depth-card">
+            <span>When a paper says</span>
+            <h3>{signal.phrase}</h3>
+            <DepthList title="Ask" items={signal.ask} />
+            <p><b>Means:</b> {signal.means}</p>
+            <p><b>Does not mean:</b> {signal.doesNotMean}</p>
+            <DepthList title="Check" items={signal.check} />
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CaveatBoxes({ caveats }) {
+  if (!caveats?.length) return null;
+
+  return (
+    <section className="ua-depth-panel" aria-label="Caveats and boundaries">
+      <div className="ua-depth-panel-head">
+        <ShieldCheck size={17} />
+        <span>What this does not solve</span>
+      </div>
+      <div className="ua-depth-grid">
+        {caveats.map((caveat) => (
+          <article key={caveat.id} className="ua-depth-card">
+            <DepthList title="Solves" items={caveat.solves} />
+            <DepthList title="Does not solve" items={caveat.doesNotSolve} />
+            <DepthList title="Can go wrong" items={caveat.canGoWrong} />
+            <DepthList title="How to test it" items={caveat.howToTest} />
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CurriculumDepthPanels({ depth }) {
+  const hasDepth = depth && (
+    depth.comparisons.length > 0
+    || depth.failures.length > 0
+    || depth.paperSignals.length > 0
+    || depth.caveats.length > 0
+  );
+
+  if (!hasDepth) return null;
+
+  return (
+    <div className="ua-curriculum-depth">
+      <ConceptComparisonCards comparisons={depth.comparisons} />
+      <CaveatBoxes caveats={depth.caveats} />
+      <FailureGallery failures={depth.failures} />
+      <PaperReadingMode signals={depth.paperSignals} />
+    </div>
   );
 }
 
@@ -237,6 +375,8 @@ export default function AnimationShell({ animation, children }) {
       {showShellAssessment && (
         <AssessmentPanel lessonId={animation.id} title={`${animation.name} check`} />
       )}
+
+      <CurriculumDepthPanels depth={model.depth} />
 
       <Glossary key={animation.id} terms={model.glossary} />
     </div>

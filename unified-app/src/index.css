@@ -2513,6 +2513,113 @@ body {
   text-transform: uppercase;
 }
 
+.ua-curriculum-depth {
+  display: grid;
+  gap: var(--ds-gap-3);
+  margin-top: var(--ds-gap-4);
+}
+
+.ua-depth-panel {
+  border-top: var(--ds-border-strong);
+}
+
+.ua-depth-panel-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0 10px;
+  color: var(--ds-accent);
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ua-depth-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  border-top: var(--ds-border);
+  border-left: var(--ds-border);
+}
+
+.ua-depth-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border-right: var(--ds-border);
+  border-bottom: var(--ds-border);
+  background: var(--ds-paper);
+}
+
+.ua-depth-card > span {
+  color: var(--ds-accent);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ua-depth-card h3 {
+  margin: 0;
+  color: var(--ds-ink);
+  font-family: var(--ds-font-serif);
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+.ua-depth-card h4 {
+  margin: 0 0 5px;
+  color: var(--ds-ink);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ua-depth-card p,
+.ua-depth-card li {
+  color: var(--ds-faint);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.ua-depth-card p,
+.ua-depth-card ul {
+  margin: 0;
+}
+
+.ua-depth-card b,
+.ua-depth-card strong {
+  color: var(--ds-ink);
+  font-weight: 600;
+}
+
+.ua-depth-card ul {
+  padding-left: 17px;
+}
+
+.ua-depth-card li + li {
+  margin-top: 4px;
+}
+
+.ua-comparison-card {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ua-comparison-card > div {
+  min-width: 0;
+  padding: 10px;
+  border: var(--ds-border);
+  background: var(--ds-paper-2);
+}
+
+.ua-comparison-card > div p {
+  margin-top: 4px;
+}
+
 .ua-glossary-page {
   max-width: 1180px;
   margin: 0 auto;
