@@ -206,8 +206,12 @@ export default function PCAAnimation() {
           </section>
           <section className="rounded-lg border border-slate-200 bg-white p-5">
             <h3 className="text-sm font-black uppercase tracking-wide text-slate-600">Formula</h3>
-            <p className="mt-3 rounded-lg bg-slate-950 p-3 font-mono text-sm text-slate-100">
-              X_centered <ArrowRight className="inline" size={14} /> covariance <ArrowRight className="inline" size={14} /> eigenvectors
+            <p className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-900">
+              <span>X_centered</span>
+              <ArrowRight className="inline text-slate-500" size={14} />
+              <span>covariance</span>
+              <ArrowRight className="inline text-slate-500" size={14} />
+              <span>eigenvectors</span>
             </p>
           </section>
         </aside>
