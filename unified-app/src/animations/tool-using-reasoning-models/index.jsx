@@ -1698,7 +1698,7 @@ function TabFunctionVsAgent() {
               <div className="bg-[var(--ds-panel)] border border-[var(--ds-rule)] rounded p-3 font-mono text-[10px] text-[var(--ds-ink)] space-y-1.5">
                 <div>Model Prompt: "Schedule Paris sync."</div>
                 <div className="text-blue-700">Plan: Check timezones, find slot, confirm.</div>
-                <div className="text-amber-600">Call: read_calendar() -> slot conflicts.</div>
+                <div className="text-amber-600">{'Call: read_calendar() -> slot conflicts.'}</div>
                 <div className="text-blue-700">Revision: Propose alternative date.</div>
                 {humanApproval && <div className="text-red-700 font-bold">Prompt: Send invite slot?</div>}
                 <div className="text-green-700">Answer: Calendar invite sent for Tuesday 10AM Paris.</div>

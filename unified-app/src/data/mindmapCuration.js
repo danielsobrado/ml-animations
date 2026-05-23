@@ -156,11 +156,47 @@ export const MINDMAP_CURATIONS = {
     'Why does accuracy plateau long before latency plateaus in budget-forcing experiments?',
     'Inference-time compute is not a free lunch — every extra token costs real latency and dollars at serving scale.',
   ],
+  'long-context-frontier-models': [
+    'Do we need to show the model everything, retrieve the right parts, compress the past, or combine all three?',
+    'Move from 32K to 10M tokens and compare full context, RAG, compression, and hybrid packing.',
+    'Which failure is active: retrieval miss, lost-in-middle, compression loss, distractor confusion, or multi-hop failure?',
+    'Long context is a strategy space, not just a bigger prompt.',
+  ],
+  'omni-multimodal-architectures': [
+    'How does each modality become tokens, and how does reasoning turn back into text or speech?',
+    'Trace text, image patches, video frames, and audio codec tokens through early fusion, late fusion, and Thinker-Talker paths.',
+    'Which failure is active: modality neglect, hallucinated grounding, temporal drift, or audio latency?',
+    'Omni systems are multi-stream token pipelines with grounding and real-time latency constraints.',
+  ],
+  'diffusion-language-models': [
+    'Which token positions are uncertain, and how does the model refine them over time?',
+    'Compare AR, full-sequence diffusion, and block diffusion on generation order, revision behavior, and parallelism.',
+    'Which failure is active: too few steps, premature locking, revision instability, fixed-length friction, or fluency lag?',
+    'Diffusion LMs are discrete token denoising systems, not image diffusion pasted onto words.',
+  ],
+  'efficient-llm-serving': [
+    'What is the bottleneck right now: compute, memory, scheduler, decode seriality, or communication?',
+    'Trace requests through admission, prefill, paged KV allocation, decode, speculation, and streaming.',
+    'Which failure is active: KV fragmentation, decode starvation, low batch utilization, speculation waste, or tail latency spike?',
+    'Serving is a stack of scheduling, memory, decoding, quantization, and parallelism decisions.',
+  ],
+  'frontier-evaluation-safety': [
+    'What is the model being rewarded, allowed, and pressured to do?',
+    'Separate capability, product reliability, agent safety, and frontier-risk evidence before making deployment decisions.',
+    'Which failure is active: prompt injection, unsafe tool action, reward hacking, stale retrieval, scheming risk, or over-refusal?',
+    'A benchmark score is one input to a layered safety case, not the safety case itself.',
+  ],
   'tool-using-reasoning-models': [
     'How does a reasoning policy decide if a tool action is worth the cost?',
     'Select a task, configure tool access, and trace the Think-Act-Observe loop across search, Python, and browser actions.',
     'What failure metric signals that an agent has entered an infinite tool loop or suffered prompt injection?',
     'Tools are action policies inside a reinforcement learning loop; safety, latency, cost, and permission gates are core constraints.',
+  ],
+  'agentic-coding-systems': [
+    'What does the agent know, what changed, and how does it prove the patch is safe?',
+    'Trace an issue through repo search, plan, edit, tests, retry, diff review, checkpoint, and approval.',
+    'Which evidence distinguishes a real fix from a plausible patch that only satisfies visible tests?',
+    'Coding agents are controlled software-engineering loops; scope, regression tests, rollback, and human approval matter as much as code generation.',
   ],
 };
 

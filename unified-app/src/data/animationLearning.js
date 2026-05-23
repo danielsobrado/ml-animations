@@ -90,7 +90,13 @@ const EQUATION_OVERRIDES = {
   'multi-head-latent-attention': 'c_t = W_{down} x_t \\quad K_t, V_t \\approx W_{up} c_t',
   'reasoning-rlvr-grpo': 'A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon} \\quad \\Delta \\theta \\propto \\mathbb{E}[\\nabla \\log \\pi_\\theta(y_i|x) A_i]',
   'test-time-compute-thinking-budgets': 'acc(N) \\approx 1 - (1 - p_{correct})^N \\quad cost(N) = N \\cdot L_{avg}',
+  'long-context-frontier-models': 'score = Q + \\lambda_g G - \\lambda_c C - \\lambda_l L - \\lambda_r R',
+  'omni-multimodal-architectures': 'h = Thinker(x_{text}, x_{image}, x_{audio}, x_{video}) \\quad speech = Talker(h)',
+  'diffusion-language-models': 'q(x_t|x_0)=\\operatorname{mask}(x_0,t) \\quad p_\\theta(x_i|x_t,t)',
+  'efficient-llm-serving': '\\text{goodput}=\\frac{\\text{requests within SLO}}{\\text{second}} \\quad TTFT=q+p+d_1',
+  'frontier-evaluation-safety': '\\text{safe success}=\\text{task success}\\land\\neg\\text{policy violation}\\land\\neg\\text{unsafe action}',
   'tool-using-reasoning-models': '\\text{score}(\\text{tool}) = \\text{uncertainty\\_reduction} - \\text{latency} - \\text{cost} - \\text{safety\\_risk}',
+  'agentic-coding-systems': 'Issue \\rightarrow Search \\rightarrow Plan \\rightarrow Edit \\rightarrow Test \\rightarrow Review \\rightarrow PR',
   'rag-chunking-context': 'chunks=\\operatorname{Split}(D,size,overlap)\\quad pack=\\arg\\max_{token\\ budget}\\sum relevance',
   'rag-vector-indexing': '\\operatorname{ANN}(q,I)\\approx \\arg\\max_{x_i\\in D}\\cos(q,x_i)',
   'rag-reranking-grounding': '\\operatorname{rerank}(\\{x_i\\},r)\\rightarrow \\operatorname{ground}(C,\\tau)',
@@ -772,6 +778,54 @@ export const LEARNING_CARD_OVERRIDES = {
     'Run the same task with search, Python, file analysis, and browser tools enabled or disabled, then compare groundedness and latency.',
     'Mistake to avoid: tool output is not automatically true or safe; it must be checked for relevance, freshness, provenance, and permissions.',
     'Check understanding by diagnosing whether a failure came from tool overuse, stale evidence, hallucinated observation, or unsafe action.'
+  ),
+  'long-context-frontier-models': cardSet(
+    'Long-context systems work with large documents, codebases, histories, and multimodal streams without discarding most information up front.',
+    'Think of context as expensive attention real estate: every included token can help, distract, or add memory and latency cost.',
+    'Full context maximizes direct access; RAG controls evidence; compression saves tokens; hybrid systems retrieve broadly and reason over selected evidence.',
+    'Move a hidden fact through a 1M-token context, then compare full context, RAG, memory compression, and hybrid packing.',
+    'Mistake to avoid: passing a needle test does not prove the model can perform multi-hop reasoning over real long documents.',
+    'Check understanding by choosing the cheapest strategy that still includes all evidence, avoids distractors, and supports citations.'
+  ),
+  'omni-multimodal-architectures': cardSet(
+    'Omni models solve the problem of understanding and generating across text, image, video, and audio in one interactive system.',
+    'Think of each modality as a token stream with its own encoder, timing, and failure modes before the streams meet inside a shared reasoning system.',
+    'Vision encoders produce image tokens; audio systems may produce codec tokens; Thinker-Talker designs separate multimodal reasoning from speech generation.',
+    'Send text, image, audio, and video through different fusion strategies and compare grounding, token budget, and first-audio latency.',
+    'Mistake to avoid: multimodal perception is not the same as grounded multimodal reasoning; the model must link claims to the right modality evidence.',
+    'Check understanding by deciding when early fusion, late fusion, Thinker-Talker, diffusion audio, or codec autoregression is the right design choice.'
+  ),
+  'diffusion-language-models': cardSet(
+    'Diffusion language models generate text by iteratively denoising masked or corrupted token sequences instead of committing to one next token at a time.',
+    'Think of the response as a draft with blanks: the model fills confident blanks first, revises uncertain positions, and gradually turns a noisy sequence into text.',
+    'AR factorizes text left-to-right; masked diffusion learns a reverse process that predicts clean tokens from corrupted token states.',
+    'Start with a fully masked response, change denoising steps and confidence threshold, then watch multiple positions refine in parallel.',
+    'Mistake to avoid: diffusion LMs are not automatically faster or better than AR LMs; schedules, fluency, alignment, and serving stack still matter.',
+    'Check understanding by comparing AR, full-sequence diffusion, and block diffusion on continuation, infilling, and editing tasks.'
+  ),
+  'efficient-llm-serving': cardSet(
+    'Efficient LLM serving solves the problem of turning one expensive autoregressive model into a reliable multi-user service.',
+    'Think of the server as a scheduler plus memory manager: it must keep GPUs busy, allocate KV cache, interleave requests, and stream tokens under latency targets.',
+    'Prefill fills the KV cache; decode grows it one token at a time; PagedAttention manages cache in blocks; speculation tries to accept multiple tokens per target pass.',
+    'Run mixed requests through naive, paged, chunked, speculative, and quantized serving modes and watch throughput, memory, and tail latency change.',
+    'Mistake to avoid: maximizing throughput alone can hurt users if TTFT, TPOT, or P99 latency gets worse.',
+    'Check understanding by diagnosing whether a slowdown is caused by KV fragmentation, long prefill blocking, poor batching, rejected speculation, or communication overhead.'
+  ),
+  'frontier-evaluation-safety': cardSet(
+    'Frontier evaluation measures not just what a model can answer, but how a deployed system behaves under tools, policies, adversaries, uncertainty, and autonomy.',
+    'Think of evaluation as layered gates: capability, product reliability, tool safety, adversarial robustness, and frontier-risk preparedness.',
+    'Safe success requires both task completion and no policy, tool, or action violation.',
+    'Run an agent through prompt injection, stale retrieval, unsafe tool requests, hidden objective conflict, and deployment gates to see which guardrails catch what.',
+    'Mistake to avoid: treating a benchmark score as a deployment decision.',
+    'Check understanding by diagnosing whether a failure came from capability limits, workflow design, prompt injection, reward hacking, autonomy boundary failure, or insufficient preparedness.'
+  ),
+  'agentic-coding-systems': cardSet(
+    'Agentic coding systems solve software tasks by looping over issue understanding, repo navigation, planning, editing, testing, reviewing, rollback, and patch submission.',
+    'Think of the agent as a developer with tools: it must find the right context, make a minimal change, prove it with tests, and ask before risky actions.',
+    'The SWE-bench-style success condition is FAIL_TO_PASS passing after the fix while PASS_TO_PASS behavior remains passing.',
+    'Watch an issue flow through repo search, patch generation, test execution, rejection, retry, and final diff review.',
+    'Mistake to avoid: plausible code can still be unsafe if it edits out of scope, skips regression tests, or runs risky commands.',
+    'Check understanding by diagnosing whether a failed run came from wrong context, bad plan, bad patch, incomplete tests, or approval boundary failure.'
   ),
   'test-time-compute-thinking-budgets': cardSet(
     'Test-time compute scaling spends more inference-time tokens on harder queries to raise accuracy without retraining the model.',

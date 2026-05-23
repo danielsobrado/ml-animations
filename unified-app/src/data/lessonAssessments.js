@@ -88,7 +88,13 @@ export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'bloom-filter',
   'reasoning-rlvr-grpo',
   'test-time-compute-thinking-budgets',
+  'long-context-frontier-models',
+  'omni-multimodal-architectures',
+  'diffusion-language-models',
+  'efficient-llm-serving',
   'tool-using-reasoning-models',
+  'agentic-coding-systems',
+  'frontier-evaluation-safety',
 ];
 
 export const EMPTY_ASSESSMENT = Object.freeze({
@@ -4651,6 +4657,480 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
+  'long-context-frontier-models': {
+    quiz: [
+      {
+        id: 'claimed-vs-effective-context',
+        prompt: 'What is the difference between claimed context and effective context?',
+        choices: [
+          'Claimed context is the maximum input length; effective context is what the model can reliably use for a task.',
+          'Claimed context only describes output tokens, while effective context only describes the system prompt.',
+          'They are identical for any model that advertises a million-token window.',
+        ],
+        answerIndex: 0,
+        explanation: 'A model may accept a long prompt but still fail to retrieve, link, or cite buried evidence for a specific task.',
+      },
+      {
+        id: 'pretraining-vs-extrapolation',
+        prompt: 'Why is long-context pretraining different from extrapolating a shorter-context model?',
+        choices: [
+          'Extrapolation removes KV cache cost, while pretraining only changes tokenization.',
+          'Pretraining exposes the model to long sequences; extrapolation stretches position behavior beyond what training directly covered.',
+          'Both approaches guarantee perfect reasoning over all positions.',
+        ],
+        answerIndex: 1,
+        explanation: 'Inference-time extension can help addressing, but training on long sequences is different from asking a model to generalize far outside its learned regime.',
+      },
+      {
+        id: 'lost-in-the-middle',
+        prompt: 'What does lost-in-the-middle describe?',
+        choices: [
+          'The model cannot use information placed at the start of the prompt.',
+          'Retrieval always fails when documents are sorted chronologically.',
+          'Models may miss relevant evidence placed in the middle of a long context.',
+        ],
+        answerIndex: 2,
+        explanation: 'Long-context models often use beginning and ending evidence more reliably than equally relevant evidence buried in the middle.',
+      },
+      {
+        id: 'needle-limitations',
+        prompt: 'Why are simple needle-in-haystack tests limited?',
+        choices: [
+          'They often test literal retrieval of one fact rather than semantic, multi-needle, conflicting, or multi-hop reasoning.',
+          'They only measure GPU memory allocation.',
+          'They cannot be run on contexts longer than 8K tokens.',
+        ],
+        answerIndex: 0,
+        explanation: 'Real long-context work usually requires disambiguation, synthesis, citations, and linking evidence, not just finding one exact phrase.',
+      },
+      {
+        id: 'rag-risk',
+        prompt: 'What is the main risk of using RAG instead of full context?',
+        choices: [
+          'RAG always prevents citations.',
+          'Retrieval may miss required evidence or include stale and irrelevant chunks.',
+          'RAG always costs more than passing every document directly.',
+        ],
+        answerIndex: 1,
+        explanation: 'RAG controls context size and distractors, but answer quality depends on recall and ranking of the retrieved evidence.',
+      },
+      {
+        id: 'kv-cache-growth',
+        prompt: 'What happens to KV cache requirements as context length grows?',
+        choices: [
+          'They become independent of the number of layers.',
+          'They shrink because long documents share token embeddings.',
+          'They grow with stored tokens, layers, KV heads, head dimensions, and bytes per value.',
+        ],
+        answerIndex: 2,
+        explanation: 'Long context has serving cost because cached keys and values must be stored and read during decoding.',
+      },
+    ],
+    labs: [
+      {
+        id: 'strategy-selection',
+        title: 'Choose a context strategy',
+        prompt: 'Given 200 legal documents, 3 relevant clauses, sparse evidence, and citation requirements, choose full context, RAG, compressed memory, or hybrid.',
+        successCriteria: 'You justify the choice using evidence recall, distractor load, citation quality, cost, and latency.',
+      },
+      {
+        id: 'lost-middle-mitigation',
+        title: 'Mitigate lost-in-the-middle',
+        prompt: 'Move key evidence from the beginning to the middle of a long context, then choose a mitigation such as reranking, reordering, or citation-aware packing.',
+        successCriteria: 'You explain why position matters and how the mitigation improves evidence use.',
+      },
+      {
+        id: 'hybrid-packing',
+        title: 'Tune hybrid packing',
+        prompt: 'Retrieve top-k chunks, rerank them, and pack a long-context prompt for a multi-hop question with distractors.',
+        successCriteria: 'You maximize included relevant evidence while minimizing distractor ratio and cost.',
+      },
+    ],
+  },
+  'omni-multimodal-architectures': {
+    quiz: [
+      {
+        id: 'vision-encoder-role',
+        prompt: 'What does a vision encoder do in a multimodal LLM?',
+        choices: [
+          'It converts image pixels into feature vectors or tokens the model can use.',
+          'It converts text into speech before reasoning starts.',
+          'It deletes image information before the LLM sees it.',
+        ],
+        answerIndex: 0,
+        explanation: 'The vision encoder turns raw pixels into visual features or patch tokens that can be projected into the model hidden space.',
+      },
+      {
+        id: 'projector-bridge',
+        prompt: 'What is the projector or bridge for?',
+        choices: [
+          'It stores the final answer in an external cache.',
+          'It maps vision or audio features into the hidden space expected by the language model.',
+          'It replaces all attention layers with a classifier.',
+        ],
+        answerIndex: 1,
+        explanation: 'A projector aligns modality encoder outputs with the dimensions and representation space used by the shared model.',
+      },
+      {
+        id: 'early-fusion',
+        prompt: 'What is early fusion?',
+        choices: [
+          'Processing every modality separately until after the answer is generated.',
+          'Removing all image and audio tokens from context.',
+          'Combining modality tokens into a shared model stream early.',
+        ],
+        answerIndex: 2,
+        explanation: 'Early fusion lets text, image, audio, or video tokens interact inside a shared backbone from the beginning or near the beginning.',
+      },
+      {
+        id: 'video-temporal-risk',
+        prompt: 'Why is video harder than a single image?',
+        choices: [
+          'Video adds temporal ordering, event timing, and many more visual tokens.',
+          'Video has no visual content to encode.',
+          'Video removes the need for spatial reasoning.',
+        ],
+        answerIndex: 0,
+        explanation: 'Video requires sampling frames, preserving time, aligning events, and managing far more tokens than a single image.',
+      },
+      {
+        id: 'thinker-talker',
+        prompt: 'What is a Thinker-Talker architecture?',
+        choices: [
+          'A design with no audio output path.',
+          'A design where one component reasons over multimodal inputs and another generates speech or audio tokens.',
+          'A design where the model only classifies images.',
+        ],
+        answerIndex: 1,
+        explanation: 'The Thinker handles multimodal understanding and reasoning, while the Talker generates speech or audio tokens from that state.',
+      },
+      {
+        id: 'temporal-drift',
+        prompt: 'What is temporal drift?',
+        choices: [
+          'Choosing the wrong text tokenizer.',
+          'Running out of output tokens.',
+          'Aligning an event to the wrong time or frame in audio or video.',
+        ],
+        answerIndex: 2,
+        explanation: 'Temporal drift occurs when the model connects a spoken or visual event to the wrong point in time.',
+      },
+    ],
+    labs: [
+      {
+        id: 'multimodal-token-stream',
+        title: 'Build a multimodal token stream',
+        prompt: 'Add text, one image, a 10-second video, and a spoken question. Count how many tokens each modality contributes.',
+        successCriteria: 'You explain why video and audio can dominate the token budget.',
+      },
+      {
+        id: 'fusion-strategy',
+        title: 'Choose a fusion strategy',
+        prompt: 'Compare early fusion, late fusion, cross-attention, and Thinker-Talker for chart QA, video QA, and real-time voice chat.',
+        successCriteria: 'You match fusion design to task constraints and latency requirements.',
+      },
+      {
+        id: 'grounding-audit',
+        title: 'Audit grounding',
+        prompt: 'Ask about an object in a cluttered image and compare ungrounded answer, attention heatmap, and bounding-box grounding.',
+        successCriteria: 'You distinguish correct captioning from grounded localization.',
+      },
+      {
+        id: 'audio-codec-streaming',
+        title: 'Compare speech generators',
+        prompt: 'Compare diffusion-style audio generation with codec autoregression, then tune first-packet latency and quality.',
+        successCriteria: 'You explain why codec autoregression can start speech earlier and what quality tradeoff it creates.',
+      },
+    ],
+  },
+  'diffusion-language-models': {
+    quiz: [
+      {
+        id: 'ar-vs-diffusion',
+        prompt: 'What is the main difference between autoregressive and masked diffusion language generation?',
+        choices: [
+          'AR generates left-to-right one token at a time; masked diffusion iteratively refines masked positions.',
+          'AR cannot generate text at all.',
+          'Masked diffusion only works on images and cannot use tokens.',
+        ],
+        answerIndex: 0,
+        explanation: 'Autoregressive models commit to the next token sequentially, while masked diffusion models repeatedly predict and revise many token positions.',
+      },
+      {
+        id: 'forward-process',
+        prompt: 'What does the forward process do in a masked diffusion language model?',
+        choices: [
+          'It generates final text left-to-right.',
+          'It corrupts or masks clean tokens according to a timestep.',
+          'It deletes the vocabulary before training.',
+        ],
+        answerIndex: 1,
+        explanation: 'The forward process turns clean token sequences into corrupted or masked states so the reverse model can learn to reconstruct them.',
+      },
+      {
+        id: 'reverse-process',
+        prompt: 'What does the reverse process learn?',
+        choices: [
+          'To store KV cache only.',
+          'To classify images without text.',
+          'To reconstruct clean tokens from corrupted or masked token states.',
+        ],
+        answerIndex: 2,
+        explanation: 'The reverse model predicts original tokens at masked or corrupted positions, often conditioned on timestep and visible context.',
+      },
+      {
+        id: 'parallel-decoding',
+        prompt: 'Why can diffusion language models support parallel decoding?',
+        choices: [
+          'They can predict multiple masked positions in the same denoising step.',
+          'They always generate exactly one token per pass.',
+          'They never use Transformer-style computation.',
+        ],
+        answerIndex: 0,
+        explanation: 'A diffusion denoising pass can update many token positions at once, so the number of sequential passes can be smaller than the output length.',
+      },
+      {
+        id: 'block-diffusion',
+        prompt: 'What is block diffusion?',
+        choices: [
+          'A method that only generates images.',
+          'A hybrid method that denoises tokens inside blocks while generating sequence blocks over time.',
+          'A standard left-to-right decoder with no changes.',
+        ],
+        answerIndex: 1,
+        explanation: 'Block diffusion advances through sequence chunks while applying diffusion-style parallel refinement within each chunk.',
+      },
+      {
+        id: 'llada2-importance',
+        prompt: 'Why does LLaDA2.0 matter as a frontier anchor?',
+        choices: [
+          'It proves autoregressive models are obsolete in every setting.',
+          'It is only a tokenizer paper.',
+          'It scales diffusion LMs and describes converting AR models with block-level training plus SFT/DPO alignment.',
+        ],
+        answerIndex: 2,
+        explanation: 'LLaDA2.0 is important because it frames diffusion LMs as scalable frontier models that can inherit AR knowledge and still use alignment stages.',
+      },
+    ],
+    labs: [
+      {
+        id: 'ar-diffusion-timeline',
+        title: 'Compare generation timelines',
+        prompt: 'Generate a 16-token response with AR and masked diffusion. Count sequential steps and compare revision behavior.',
+        successCriteria: 'You explain left-to-right commitment versus iterative masked-token refinement.',
+      },
+      {
+        id: 'mask-schedule-tuning',
+        title: 'Tune the mask schedule',
+        prompt: 'Try linear, cosine, and confidence-based schedules. Find which completes a response with fewest contradictions.',
+        successCriteria: 'You connect schedule choice to coherence, latency, and revision instability.',
+      },
+      {
+        id: 'confidence-locking',
+        title: 'Audit confidence locking',
+        prompt: 'Set confidence threshold low, medium, and high. Watch premature locking and slow completion trade off.',
+        successCriteria: 'You explain why too-low and too-high thresholds fail differently.',
+      },
+      {
+        id: 'block-diffusion-lab',
+        title: 'Explore block diffusion',
+        prompt: 'Generate a 64-token answer with 8-token, 16-token, and 32-token blocks. Compare boundary coherence and speed.',
+        successCriteria: 'You explain why block size affects flexibility, KV-cache usefulness, and coherence.',
+      },
+    ],
+  },
+  'efficient-llm-serving': {
+    quiz: [
+      {
+        id: 'prefill-definition',
+        prompt: 'What is prefill?',
+        choices: [
+          'Processing the input prompt and building the initial KV cache.',
+          'Generating one output token at a time after the prompt is processed.',
+          'Compressing model weights only.',
+        ],
+        answerIndex: 0,
+        explanation: 'Prefill processes prompt tokens in parallel and stores key/value activations that decode will reuse.',
+      },
+      {
+        id: 'decode-definition',
+        prompt: 'What is decode?',
+        choices: [
+          'Loading the tokenizer vocabulary.',
+          'Autoregressively generating output tokens using the KV cache.',
+          'Training a model from scratch.',
+        ],
+        answerIndex: 1,
+        explanation: 'Decode is the streaming generation phase where each request repeatedly produces the next token.',
+      },
+      {
+        id: 'pagedattention-problem',
+        prompt: 'What problem does PagedAttention solve?',
+        choices: [
+          'Model pretraining data quality.',
+          'Tokenizer vocabulary mismatch.',
+          'Dynamic KV cache allocation and fragmentation.',
+        ],
+        answerIndex: 2,
+        explanation: 'PagedAttention stores KV cache in fixed-size blocks so dynamic sequences waste less memory and can be scheduled more flexibly.',
+      },
+      {
+        id: 'continuous-batching',
+        prompt: 'Why is continuous batching useful?',
+        choices: [
+          'It keeps GPU capacity filled as requests enter and leave at different decode steps.',
+          'It forces every request to have the same prompt and output length.',
+          'It removes the need for KV cache.',
+        ],
+        answerIndex: 0,
+        explanation: 'Continuous batching admits new requests as old ones finish, reducing idle slots caused by variable output lengths.',
+      },
+      {
+        id: 'speculative-decoding',
+        prompt: 'What is speculative decoding?',
+        choices: [
+          'A server guessing user prompts before they arrive.',
+          'A draft model proposes tokens and the target model verifies them.',
+          'A quantization method for model weights.',
+        ],
+        answerIndex: 1,
+        explanation: 'Speculative decoding uses cheap proposals and target-model verification to advance by multiple accepted tokens per expensive pass.',
+      },
+      {
+        id: 'goodput',
+        prompt: 'What does goodput optimize?',
+        choices: [
+          'Raw tokens per second regardless of user wait time.',
+          'Only prompt length.',
+          'Completed work that satisfies latency objectives.',
+        ],
+        answerIndex: 2,
+        explanation: 'Goodput counts useful completions under latency or SLO constraints, so it better reflects production user experience.',
+      },
+    ],
+    labs: [
+      {
+        id: 'prefill-decode-diagnosis',
+        title: 'Diagnose prefill vs decode',
+        prompt: 'Given requests with different prompt and output lengths, identify whether each stresses TTFT or TPOT more.',
+        successCriteria: 'You distinguish long-prompt prefill pressure from long-answer decode pressure.',
+      },
+      {
+        id: 'paged-kv-allocation',
+        title: 'Allocate paged KV cache',
+        prompt: 'Allocate KV cache for mixed short and long requests using contiguous allocation, then switch to paged allocation.',
+        successCriteria: 'You explain fragmentation, KV blocks, and block-table mapping.',
+      },
+      {
+        id: 'speculation-acceptance',
+        title: 'Tune speculation',
+        prompt: 'Vary draft quality and draft length. Find when speculative decoding speeds up and when it wastes work.',
+        successCriteria: 'You explain acceptance rate, target verification, and draft compute cost.',
+      },
+      {
+        id: 'goodput-slo',
+        title: 'Tune for goodput',
+        prompt: 'Tune max batch tokens, queue timeout, and speculation under a P95 latency SLO.',
+        successCriteria: 'You maximize useful throughput under the latency target, not raw tokens/sec.',
+      },
+    ],
+  },
+  'frontier-evaluation-safety': {
+    quiz: [
+      {
+        id: 'capability-vs-product',
+        prompt: 'What is the key difference between a capability eval and a product eval?',
+        choices: [
+          'Capability evals ask what the model can do; product evals ask whether the deployed workflow succeeds safely.',
+          'Product evals only measure model weights.',
+          'Capability evals always include tool permissioning.',
+        ],
+        answerIndex: 0,
+        explanation: 'Capability evals measure raw task ability, while product evals include tools, policies, users, side effects, and failure recovery.',
+      },
+      {
+        id: 'swe-bench-style-eval',
+        prompt: 'What does SWE-bench-style evaluation test?',
+        choices: [
+          'Whether a model can classify images only.',
+          'Whether an agent can modify a codebase to resolve a real issue without breaking unrelated tests.',
+          'Whether a model can answer trivia without tools.',
+        ],
+        answerIndex: 1,
+        explanation: 'SWE-bench-style evals score whether a repo patch fixes target failures while preserving existing passing behavior.',
+      },
+      {
+        id: 'prompt-injection-definition',
+        prompt: 'What is prompt injection?',
+        choices: [
+          'The model making a spelling error.',
+          'The system using too much context.',
+          'External or user-provided content attempting to override intended instructions.',
+        ],
+        answerIndex: 2,
+        explanation: 'Prompt injection becomes especially risky when untrusted content can steer an agent that has side-effecting tools.',
+      },
+      {
+        id: 'tool-use-safety',
+        prompt: 'Why is tool-use safety different from normal chat safety?',
+        choices: [
+          'Tool use can create side effects such as sending, deleting, exporting, buying, or deploying.',
+          'Tool use never changes the environment.',
+          'Tool safety only concerns grammar.',
+        ],
+        answerIndex: 0,
+        explanation: 'Side-effecting tools require permission boundaries, action risk classification, audit logs, and sometimes human approval.',
+      },
+      {
+        id: 'reward-hacking',
+        prompt: 'What is reward hacking?',
+        choices: [
+          'Refusing all tasks.',
+          'Optimizing a measured objective while violating the intended objective.',
+          'Using too few tokens.',
+        ],
+        answerIndex: 1,
+        explanation: 'Reward hacking occurs when the proxy score is optimized in a way that breaks the real goal or policy.',
+      },
+      {
+        id: 'deployment-gate',
+        prompt: 'What is a deployment gate?',
+        choices: [
+          'A tokenizer setting.',
+          'A fixed benchmark score.',
+          'A decision point that checks capability, reliability, risk, mitigations, and monitoring before deployment.',
+        ],
+        answerIndex: 2,
+        explanation: 'Deployment gates combine capability, product reliability, safety risk, mitigation confidence, monitoring, and reversibility.',
+      },
+    ],
+    labs: [
+      {
+        id: 'capability-product-layer',
+        title: 'Capability vs product eval',
+        prompt: 'Given a model that scores high on a coding benchmark but fails approval rules in a code-agent product, classify which eval layer failed.',
+        successCriteria: 'You separate benchmark capability from product-safe completion.',
+      },
+      {
+        id: 'prompt-injection-defense',
+        title: 'Prompt injection defense',
+        prompt: 'Inject malicious instructions into a retrieved webpage or file. Configure source trust labels, prompt guards, and permission gates.',
+        successCriteria: 'You block the injected instruction while preserving useful task completion.',
+      },
+      {
+        id: 'reward-hacking-simulator',
+        title: 'Reward hacking simulator',
+        prompt: 'Reward a coding agent only for passing one target test. Watch it game the test, then add regression and review checks.',
+        successCriteria: 'You explain measured reward versus intended objective.',
+      },
+      {
+        id: 'deployment-gate-lab',
+        title: 'Deployment gate',
+        prompt: 'A model passes capability evals but fails prompt-injection and unsafe-action evals. Choose launch, limited beta, restricted tools, or delay.',
+        successCriteria: 'You justify deployment mode from residual risk and mitigation confidence.',
+      },
+    ],
+  },
   'tool-using-reasoning-models': {
     quiz: [
       {
@@ -4861,6 +5341,96 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Failure injection',
         prompt: 'Turn on stale search, prompt injection, or hallucinated tool output. Diagnose the failure and choose a mitigation.',
         successCriteria: 'Learner identifies the failure source and applies the right guardrail.',
+      },
+    ],
+  },
+  'agentic-coding-systems': {
+    quiz: [
+      {
+        id: 'coding-agent-loop',
+        prompt: 'What is the basic SWE-bench-style coding-agent task loop?',
+        choices: [
+          'Given an issue and repo, generate a patch that fixes the issue and passes target plus regression tests.',
+          'Generate a file without reading the repository.',
+          'Rewrite the whole project regardless of the issue scope.',
+        ],
+        answerIndex: 0,
+        explanation: 'The agent must use the repository and issue description to produce a patch that resolves the target bug while preserving existing behavior.',
+      },
+      {
+        id: 'fail-to-pass-purpose',
+        prompt: 'What do FAIL_TO_PASS tests check?',
+        choices: [
+          'Tests that should fail before the patch and pass after the fix.',
+          'Tests that always fail forever.',
+          'Only formatting checks for the PR title.',
+        ],
+        answerIndex: 0,
+        explanation: 'FAIL_TO_PASS tests are the direct evidence that the bug was reproduced and then fixed.',
+      },
+      {
+        id: 'pass-to-pass-purpose',
+        prompt: 'What do PASS_TO_PASS tests check?',
+        choices: [
+          'Existing functionality that should pass both before and after the patch.',
+          'Only the new bug reproduction.',
+          'Whether the model used a specific prompt template.',
+        ],
+        answerIndex: 0,
+        explanation: 'PASS_TO_PASS tests protect unrelated behavior from regressions caused by the patch.',
+      },
+      {
+        id: 'repo-navigation-purpose',
+        prompt: 'Why is repo navigation important before editing?',
+        choices: [
+          'The agent must find files, symbols, tests, and dependencies relevant to the issue.',
+          'The agent should edit random files until a visible test passes.',
+          'Repo navigation only matters after the PR is merged.',
+        ],
+        answerIndex: 0,
+        explanation: 'Good patches start with the right context; wrong-file edits are a common coding-agent failure mode.',
+      },
+      {
+        id: 'sandbox-purpose',
+        prompt: 'What does sandboxed execution protect against?',
+        choices: [
+          'Unsafe commands, uncontrolled side effects, and unreproducible environment changes.',
+          'All possible coding mistakes.',
+          'The need to run tests.',
+        ],
+        answerIndex: 0,
+        explanation: 'Sandboxes limit environmental damage and make command results more reproducible, but they do not prove code correctness by themselves.',
+      },
+      {
+        id: 'scope-drift-definition',
+        prompt: 'What is scope drift?',
+        choices: [
+          'Making changes beyond the intended task boundary.',
+          'Fixing exactly the reported issue.',
+          'Running a relevant targeted test.',
+        ],
+        answerIndex: 0,
+        explanation: 'Scope drift increases review burden and regression risk because unrelated files or behavior changed without justification.',
+      },
+    ],
+    labs: [
+      {
+        id: 'swe-bench-loop-trace',
+        title: 'SWE-bench loop trace',
+        prompt: 'Given an issue and repo map, identify likely files, propose a minimal patch plan, and choose target plus regression tests.',
+        successCriteria: 'Learner maps issue to files, patch, tests, and review evidence.',
+      },
+      {
+        id: 'patch-review-lab',
+        title: 'Patch review',
+        prompt: 'Compare three diffs: a minimal fix, an overbroad refactor, and a test-gaming patch.',
+        successCriteria: 'Learner identifies reviewability, scope, and correctness risks.',
+      },
+      {
+        id: 'approval-boundary-lab',
+        title: 'Approval boundary',
+        prompt: 'Configure approval gates for risky edits, shell commands, secrets, package installs, and PR submission.',
+        successCriteria: 'Learner distinguishes safe reads, test execution, side effects, and irreversible actions.',
       },
     ],
   },
