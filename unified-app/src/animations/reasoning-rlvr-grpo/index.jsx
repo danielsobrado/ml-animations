@@ -19,10 +19,12 @@ import {
   FileText,
   Filter,
   CheckCircle,
+  Code2,
   XCircle,
   HelpCircle,
   Maximize2
 } from 'lucide-react';
+import GrpoAdvantageLab from '../../labs/grpo/GrpoAdvantageLab';
 import {
   REASONING_PIPELINE_STAGES,
   SFT_TRACES_EXAMPLES,
@@ -42,6 +44,7 @@ const TABS = [
   { id: 'orm-vs-prm', label: 'ORM vs PRM', icon: Layers },
   { id: 'rlvr-rewards', label: 'RLVR Rewards', icon: Gauge },
   { id: 'grpo-workbench', label: 'GRPO Workbench', icon: Cpu },
+  { id: 'grpo-advantage-lab', label: 'GRPO Lab', icon: Code2 },
   { id: 'cold-start-vs-rl', label: 'Cold Start vs Pure RL', icon: Flame },
   { id: 'failure-modes', label: 'Failure Modes', icon: AlertTriangle },
   { id: 'distillation', label: 'Distillation', icon: Sparkles },
@@ -1010,6 +1013,10 @@ export default function ReasoningRlvrGrpo() {
               </div>
             </div>
           </div>
+        )}
+
+        {activeTab === 'grpo-advantage-lab' && (
+          <GrpoAdvantageLab />
         )}
 
         {activeTab === 'cold-start-vs-rl' && (

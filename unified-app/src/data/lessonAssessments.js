@@ -4481,6 +4481,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
     labs: [
       {
+        id: 'grpo-group-advantage-lab',
+        title: 'Compute GRPO group advantages',
+        prompt: 'Implement total_reward, group_advantages, and update_direction in the browser Python lab.',
+        successCriteria: [
+          'Rewards match the reference formula',
+          'Advantages are group-normalized',
+          'Update directions follow the advantage threshold',
+          'Learner can explain which candidate is reinforced',
+        ],
+      },
+      {
         id: 'tune-grpo-rewards',
         title: 'Balance reasoning rewards',
         prompt: 'Configure correctness, format, and language weights to achieve 90% accuracy without triggering overthinking or formatting hacks.',
