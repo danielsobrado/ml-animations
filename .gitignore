@@ -10,6 +10,7 @@ mini-diffusion/target/
 mini-nn/target/release/*
 *.log
 *.png
+!screenshots/readme/*.png
 screenshots/theme-audit/
 *.class
 unified-app/dist/

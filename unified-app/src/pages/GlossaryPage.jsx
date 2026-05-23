@@ -129,6 +129,60 @@ function TermMetadata({ term }) {
   );
 }
 
+function IntuitionSwitchboard({ intuitions }) {
+  const entries = Object.entries(intuitions || {});
+  if (entries.length === 0) return null;
+
+  return (
+    <section className="ua-intuition-switchboard">
+      <div className="ua-glossary-head">
+        <span>Multiple intuitions</span>
+        <h2>Read it from several angles</h2>
+      </div>
+      <div className="ua-intuition-grid">
+        {entries.map(([kind, text]) => (
+          <article key={kind}>
+            <span>{labelFromId(kind)}</span>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DepthNotes({ term }) {
+  const notes = [
+    term.minimalExample && ['Minimal example', term.minimalExample],
+    term.boundary && ['Boundary of validity', term.boundary],
+    term.comparisonNote && ['Commonly confused with', term.comparisonNote],
+    term.caveat && ['What this simplifies', term.caveat],
+  ].filter(Boolean);
+
+  if (notes.length === 0 && !term.paperSignals?.length) return null;
+
+  return (
+    <section className="ua-depth-notes">
+      {notes.map(([title, body]) => (
+        <article key={title}>
+          <h2>{title}</h2>
+          <p>{body}</p>
+        </article>
+      ))}
+      {term.paperSignals?.length > 0 && (
+        <article>
+          <h2>Paper signals</h2>
+          <ul>
+            {term.paperSignals.map((signal) => (
+              <li key={signal}>{signal}</li>
+            ))}
+          </ul>
+        </article>
+      )}
+    </section>
+  );
+}
+
 export default function GlossaryPage() {
   const { slug } = useParams();
   const term = getGlossaryTerm(slug);
@@ -197,6 +251,9 @@ export default function GlossaryPage() {
           <p>{term.pitfall}</p>
         </article>
       </section>
+
+      <IntuitionSwitchboard intuitions={term.intuitions} />
+      <DepthNotes term={term} />
 
       <section className="ua-concept-graph" aria-label={`${term.term} concept graph`}>
         <div className="ua-concept-graph-head">

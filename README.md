@@ -11,11 +11,12 @@ The project started as a collection of standalone animations. It is now centered
 ## What is inside
 
 - A unified lesson browser with searchable topics and curriculum tracks.
-- Guided paths for fundamentals, experimentation and causal ML, LLMs, RAG, model reliability, vision and diffusion, and reinforcement learning.
+- Guided paths for fundamentals, experimentation and causal ML, LLMs, frontier LLMs and agentic systems, RAG, model reliability, vision and diffusion, and reinforcement learning.
 - Core ML lessons for splitting data, cross-validation, leakage, scaling, metrics, calibration, PCA, clustering, tree ensembles, and classical classifiers.
 - Model reliability lessons for debugging, interpretability, monitoring, fairness, and uncertainty estimation.
 - Experimentation and causal ML lessons for A/B testing foundations and power analysis, with planned modules for sequential testing, CUPED, confounding, DAGs, treatment effects, and propensity scores.
 - Transformer lessons for attention, masks, architecture families, training objectives, token generation, sampling, KV cache, Flash Attention, and fine-tuning.
+- Frontier LLM lessons for MoE at scale, MLA, RLVR/GRPO, test-time compute, long-context systems, omni multimodal models, diffusion language models, efficient serving, frontier evaluation/safety, tool-using reasoners, and agentic coding systems.
 - RAG lessons for chunking, vector indexing, reranking, grounding, retrieval evaluation, and failure modes.
 - Neural-network lessons for backpropagation, initialization, optimizers, dropout, batch normalization, and training-loop dynamics.
 - Diffusion lessons from beginner denoising intuition through sampling, classifier-free guidance, U-Net vs DiT, SD3, DiT, VAE, CLIP, T5, and flow matching.
@@ -36,6 +37,8 @@ Build and test:
 ```bash
 cd unified-app
 npm test
+npm run audit:quality
+npm run test:smoke
 npm run build
 ```
 
@@ -51,6 +54,22 @@ The app uses React, Vite, Tailwind CSS, Three.js, GSAP, and Recharts.
 
 ![Token generation lesson](screenshots/readme/llm-generation.png)
 
+### Frontier LLM Architecture
+
+![Frontier LLM architecture lesson](screenshots/readme/frontier-llm-architecture.png)
+
+### Reasoning RLVR / GRPO
+
+![Reasoning RLVR and GRPO lesson](screenshots/readme/reasoning-rlvr-grpo.png)
+
+### Efficient LLM Serving
+
+![Efficient LLM serving lesson](screenshots/readme/efficient-llm-serving.png)
+
+### Frontier Evaluation and Safety
+
+![Frontier evaluation and safety lesson](screenshots/readme/frontier-evaluation-safety.png)
+
 ### Diffusion Basics Lesson
 
 ![Diffusion basics lesson](screenshots/readme/diffusion-basics.png)
@@ -64,6 +83,10 @@ The foundations track covers linear algebra, probability, statistics, optimizati
 ### Natural Language Processing and Transformers
 
 The NLP and transformer track starts with bag-of-words, tokenization, and embeddings, then moves into attention, self-attention, masks, positional encoding, RoPE, transformer architectures, LLM training objectives, token generation, sampling, KV cache, Flash Attention, and fine-tuning.
+
+### Frontier LLMs and Agentic Systems
+
+The frontier path covers modern architecture and systems topics: dense vs MoE models, MLA and attention compression, reasoning models, RLVR/GRPO, test-time compute, tool-using reasoning, agentic coding, long-context systems, omni multimodal models, diffusion language models, efficient LLM serving, and frontier evaluation/safety.
 
 ### RAG
 

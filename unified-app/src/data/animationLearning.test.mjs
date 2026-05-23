@@ -9,7 +9,7 @@ import {
   lessonAssessments,
 } from './lessonAssessments.js';
 import { MINDMAP_CURATIONS } from './mindmapCuration.js';
-import { isAssessmentComplete } from './learningProgress.js';
+import { getCompletionStatus, isAssessmentComplete } from './learningProgress.js';
 import {
   CARD_TYPES,
   LEARNING_CARD_OVERRIDES,
@@ -1620,11 +1620,20 @@ test('experimentation and causal ML promotes the full causal roadmap into active
   assert.deepEqual(plannedIds, []);
 });
 
-test('assessment completion requires all quiz and lab items', () => {
+test('assessment completion uses core mastery threshold and required labs', () => {
   const assessment = lessonAssessments['logistic-regression'];
-  const completedQuiz = Object.fromEntries(assessment.quiz.map((question) => [question.id, { correct: true }]));
-  const completedLabs = Object.fromEntries(assessment.labs.map((lab) => [lab.id, true]));
+  const status = getCompletionStatus(assessment, {});
+  const requiredQuiz = assessment.quiz
+    .filter((question) => question.countsForCompletion !== false)
+    .slice(0, status.requiredCorrectCount);
+  const completedQuiz = Object.fromEntries(requiredQuiz.map((question) => [question.id, { correct: true }]));
+  const completedLabs = Object.fromEntries(
+    assessment.labs.slice(0, status.requiredLabCount).map((lab) => [lab.id, true]),
+  );
 
+  assert.equal(assessment.completionPolicy.masteryRequired, 12);
+  assert.equal(status.requiredCorrectCount, 10);
+  assert.equal(assessment.quiz.filter((question) => question.countsForCompletion).length, 12);
   assert.equal(isAssessmentComplete(assessment, {}), false);
   assert.equal(
     isAssessmentComplete(assessment, {

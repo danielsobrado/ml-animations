@@ -8,6 +8,7 @@ import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAsse
 import AssessmentPanel from './AssessmentPanel';
 
 const ConceptMindmap = lazy(() => import('./ConceptMindmap'));
+const GLOSSARY_PAGE_SIZE = 15;
 
 function GlossaryTerm({ entry }) {
   const [open, setOpen] = useState(false);
@@ -118,15 +119,27 @@ function MathControls({ model, onReset, onFocusStage }) {
 }
 
 function Glossary({ terms }) {
+  const [page, setPage] = useState(0);
+  const pageCount = Math.max(1, Math.ceil((terms?.length || 0) / GLOSSARY_PAGE_SIZE));
+  const activePage = Math.min(page, pageCount - 1);
+  const start = activePage * GLOSSARY_PAGE_SIZE;
+  const visibleTerms = terms.slice(start, start + GLOSSARY_PAGE_SIZE);
+  const showPagination = terms.length > GLOSSARY_PAGE_SIZE;
+
   return (
     <section id="math-glossary" className="ua-glossary-panel">
       <div className="ua-glossary-head">
         <span>Glossary</span>
         <h2>Terms in this animation</h2>
+        {showPagination && (
+          <p>
+            Showing {start + 1}-{Math.min(start + GLOSSARY_PAGE_SIZE, terms.length)} of {terms.length} terms
+          </p>
+        )}
       </div>
       <div className="ua-glossary-grid">
-        {terms.map((term, index) => (
-          <article key={`${term.id}-${index}`} id={`glossary-${term.slug}`}>
+        {visibleTerms.map((term) => (
+          <article key={term.id} id={`glossary-${term.slug}`}>
             <img src={term.image.src} alt={term.image.alt} />
             <span>{term.category}</span>
             <h3>
@@ -148,6 +161,27 @@ function Glossary({ terms }) {
           </article>
         ))}
       </div>
+      {showPagination && (
+        <nav className="ua-glossary-pagination" aria-label="Lesson glossary pagination">
+          <button
+            type="button"
+            onClick={() => setPage((value) => Math.max(0, value - 1))}
+            disabled={activePage === 0}
+          >
+            Previous
+          </button>
+          <span>
+            Page {activePage + 1} of {pageCount}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPage((value) => Math.min(pageCount - 1, value + 1))}
+            disabled={activePage === pageCount - 1}
+          >
+            Next
+          </button>
+        </nav>
+      )}
     </section>
   );
 }
@@ -178,9 +212,9 @@ export default function AnimationShell({ animation, children }) {
           <Eq tex={model.headlineEquation.latex} />
         </div>
         <div className="ua-chip-row">
-          <span>{model.chips.difficulty}</span>
-          <span>{model.chips.minutes}</span>
-          <span>{model.chips.prereq}</span>
+          <span title={model.chips.difficulty}>{model.chips.difficulty}</span>
+          <span title={model.chips.minutes}>{model.chips.minutes}</span>
+          <span title={model.chips.prereq}>{model.chips.prereq}</span>
         </div>
       </header>
 
@@ -204,7 +238,7 @@ export default function AnimationShell({ animation, children }) {
         <AssessmentPanel lessonId={animation.id} title={`${animation.name} check`} />
       )}
 
-      <Glossary terms={model.glossary} />
+      <Glossary key={animation.id} terms={model.glossary} />
     </div>
   );
 }

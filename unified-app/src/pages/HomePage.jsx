@@ -4,18 +4,44 @@ import { ArrowRight } from 'lucide-react';
 import { allAnimations, categories, curriculumBacklog, curriculumTracks } from '../data/animations';
 import { HUB_LEARNING_PATHS } from '../data/learningPaths';
 import { getAssessmentStats, lessonAssessments } from '../data/lessonAssessments';
+import { LEARNING_PROGRESS_EVENT, readCompletedLessons } from '../data/learningProgress';
 
 const { totalLabs, totalQuizQuestions } = getAssessmentStats(lessonAssessments);
 
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
   const [activePathId, setActivePathId] = React.useState(HUB_LEARNING_PATHS[0].id);
-  const animationById = new Map(allAnimations.map((animation) => [animation.id, animation]));
+  const [completedLessons, setCompletedLessons] = React.useState(() => readCompletedLessons());
+  const animationById = React.useMemo(
+    () => new Map(allAnimations.map((animation) => [animation.id, animation])),
+    [],
+  );
   const activePath = HUB_LEARNING_PATHS.find((path) => path.id === activePathId) || HUB_LEARNING_PATHS[0];
+  const getPathProgress = React.useCallback((path) => {
+    const completedCount = path.nodes.filter((id) => completedLessons.has(id)).length;
+    const nextId = path.nodes.find((id) => !completedLessons.has(id));
+    return {
+      completedCount,
+      totalCount: path.nodes.length,
+      percent: path.nodes.length ? Math.round((completedCount / path.nodes.length) * 100) : 0,
+      nextAnimation: nextId ? animationById.get(nextId) : animationById.get(path.nodes.at(-1)),
+    };
+  }, [animationById, completedLessons]);
+  const activePathProgress = getPathProgress(activePath);
   const backlogByTrack = curriculumBacklog.reduce((acc, topic) => {
     acc[topic.trackId] = [...(acc[topic.trackId] || []), topic];
     return acc;
   }, {});
+
+  React.useEffect(() => {
+    const updateCompletedLessons = () => setCompletedLessons(readCompletedLessons());
+    window.addEventListener(LEARNING_PROGRESS_EVENT, updateCompletedLessons);
+    window.addEventListener('storage', updateCompletedLessons);
+    return () => {
+      window.removeEventListener(LEARNING_PROGRESS_EVENT, updateCompletedLessons);
+      window.removeEventListener('storage', updateCompletedLessons);
+    };
+  }, []);
 
   return (
     <div className="ua-home">
@@ -54,6 +80,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="ua-home-resume" aria-label="Learning progress">
+        <div>
+          <span>Resume</span>
+          <h2>{activePathProgress.nextAnimation ? activePathProgress.nextAnimation.name : activePath.label}</h2>
+          <p>
+            {activePathProgress.completedCount}/{activePathProgress.totalCount} complete in {activePath.label}.
+            {activePathProgress.nextAnimation ? ` Next: ${activePathProgress.nextAnimation.categoryName}.` : ' Path complete.'}
+          </p>
+        </div>
+        <div className="ua-home-resume-meter" aria-label={`${activePathProgress.percent}% complete`}>
+          <span style={{ width: `${activePathProgress.percent}%` }} />
+        </div>
+        {activePathProgress.nextAnimation && (
+          <Link className="ua-home-resume-link" to={`/animation/${activePathProgress.nextAnimation.id}`}>
+            Resume lesson <ArrowRight size={16} />
+          </Link>
+        )}
+      </section>
+
       <section className="ua-hub-map" aria-labelledby="hub-map-title">
         <div className="ua-section-head">
           <span>Mindmap</span>
@@ -70,7 +115,8 @@ export default function HomePage() {
               role="tab"
               aria-selected={path.id === activePath.id}
             >
-              → {path.label}
+              -&gt; {path.label}
+              <small>{getPathProgress(path).completedCount}/{path.nodes.length}</small>
             </button>
           ))}
         </div>
@@ -104,12 +150,18 @@ export default function HomePage() {
 
         <div className="ua-track-grid">
           {curriculumTracks.map((track, trackIndex) => {
-            const firstAnimation = animationById.get(track.animationIds[0]);
             const activeMinutes = track.animationIds.reduce(
               (sum, id) => sum + (animationById.get(id)?.estimatedMinutes || 0),
               0,
             );
             const plannedTopics = backlogByTrack[track.id] || [];
+            const completedCount = track.animationIds.filter((id) => completedLessons.has(id)).length;
+            const progressPercent = track.animationIds.length
+              ? Math.round((completedCount / track.animationIds.length) * 100)
+              : 0;
+            const nextAnimation = animationById.get(
+              track.animationIds.find((id) => !completedLessons.has(id)) || track.animationIds[0],
+            );
 
             return (
               <article className="ua-track-card" key={track.id}>
@@ -122,6 +174,10 @@ export default function HomePage() {
                   <span>{track.animationIds.length} active</span>
                   <span>{activeMinutes} min</span>
                   <span>{plannedTopics.length} planned</span>
+                  <span>{completedCount}/{track.animationIds.length} complete</span>
+                </div>
+                <div className="ua-track-progress" aria-label={`${progressPercent}% complete`}>
+                  <span style={{ width: `${progressPercent}%` }} />
                 </div>
                 <div className="ua-track-sequence">
                   {track.animationIds.slice(0, 4).map((animationId) => {
@@ -135,9 +191,9 @@ export default function HomePage() {
                     Planned: {plannedTopics.slice(0, 2).map((topic) => topic.title).join('; ')}
                   </div>
                 )}
-                {firstAnimation && (
-                  <Link className="ua-track-link" to={`/animation/${firstAnimation.id}`}>
-                    Start track <ArrowRight size={16} />
+                {nextAnimation && (
+                  <Link className="ua-track-link" to={`/animation/${nextAnimation.id}`}>
+                    {completedCount > 0 ? 'Resume track' : 'Start track'} <ArrowRight size={16} />
                   </Link>
                 )}
               </article>

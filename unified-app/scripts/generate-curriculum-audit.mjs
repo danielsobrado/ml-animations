@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 import { allAnimations, categories, getAnimationById } from '../src/data/animations.js';
 import { HUB_LEARNING_PATHS } from '../src/data/learningPaths.js';
+import { lessonAssessments } from '../src/data/lessonAssessments.js';
+import { getGlossaryTermsForCategory } from '../src/data/glossaryRepository.js';
 import {
   MANUAL_LESSON_QUALITY,
   D_TIER_PLACEHOLDERS,
@@ -15,10 +17,7 @@ const APP_ROOT = path.resolve(__dirname, '..');
 const OUTPUT_PATH = path.join(APP_ROOT, 'curriculum-module-audit.md');
 
 const criticalPaths = new Set(
-  ['start-here', 'model-reliability-path'].flatMap((pathId) => {
-    const pathDef = HUB_LEARNING_PATHS.find((learningPath) => learningPath.id === pathId);
-    return pathDef ? pathDef.nodes : [];
-  }),
+  HUB_LEARNING_PATHS.flatMap((learningPath) => learningPath.nodes),
 );
 
 function findIndexFile(dir) {
@@ -103,7 +102,7 @@ function buildCategoryBuckets() {
 
 function toMarkdownTableRow(module) {
   const tierBadge = `${module.tier} (${MODULE_QUALITY_TIERS[module.tier]})`;
-  return `| ${module.id} | ${tierBadge} | ${module.source} | ${module.size} | ${module.childCount} | ${module.status || ''} | ${module.nextAction} |`;
+  return `| ${module.id} | ${tierBadge} | ${module.source} | ${module.size} | ${module.childCount} | ${module.assessmentCount} | ${module.labCount} | ${module.glossaryCount} | ${module.estimatedMinutes || ''} | ${module.status || ''} | ${module.nextAction} |`;
 }
 
 function generateMarkdown() {
@@ -112,9 +111,13 @@ function generateMarkdown() {
   const entries = allAnimations
     .map((animation) => {
       const audit = classifyLesson(animation.id);
+      const assessment = lessonAssessments[animation.id] || {};
       return {
         ...animation,
         ...audit,
+        assessmentCount: assessment.quiz?.length || 0,
+        labCount: assessment.labs?.length || 0,
+        glossaryCount: getGlossaryTermsForCategory(animation.categoryId).length,
       };
     })
     .sort((a, b) => a.id.localeCompare(b.id));
@@ -135,14 +138,16 @@ function generateMarkdown() {
   lines.push('- Tier B: meaningful lesson with reusable controls and working conceptual workflow.');
   lines.push('- Tier C: adequate but currently shallow or shared lesson wrapper.');
   lines.push('- Tier D: placeholder or insufficient quality requiring immediate conversion.');
+  lines.push('- Source `manual` means the lesson quality tier is manifest-claimed; source `auto` means it was inferred from inspected source shape.');
+  lines.push('- Release checklist: `npm test`, `npm run audit:quality`, `npm run test:smoke`, `npm run build`.');
   lines.push('');
   lines.push(`- Total active lessons: ${entries.length}`);
-  lines.push(`- Priority paths covered: ${Array.from(criticalPaths).join(', ')}`);
+  lines.push(`- Priority paths covered: ${HUB_LEARNING_PATHS.map((pathDef) => pathDef.label).join(', ')}`);
   lines.push('');
   lines.push('## Priority Track Coverage');
   lines.push('');
-  lines.push('| Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |');
-  lines.push('| --- | --- | --- | ---: | ---: | --- | --- |');
+  lines.push('| Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Assessment Count | Lab Count | Glossary Count | Est. Min | Status | Next Action |');
+  lines.push('| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |');
   for (const entry of criticalEntries.sort((a, b) => a.id.localeCompare(b.id))) {
     lines.push(toMarkdownTableRow(entry));
   }
@@ -153,8 +158,8 @@ function generateMarkdown() {
   for (const [categoryId, ids] of Object.entries(byCategory)) {
     lines.push(`### ${categoryId}`);
     lines.push('');
-    lines.push('| Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Status | Next Action |');
-    lines.push('| --- | --- | --- | ---: | ---: | --- | --- |');
+    lines.push('| Lesson | Tier | Source | Size (bytes) | Side-Panel Files | Assessment Count | Lab Count | Glossary Count | Est. Min | Status | Next Action |');
+    lines.push('| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |');
     ids
       .map((id) => entries.find((entry) => entry.id === id))
       .sort((a, b) => a.id.localeCompare(b.id))

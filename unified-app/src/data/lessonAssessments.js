@@ -5437,6 +5437,13 @@ const SEEDED_LESSON_ASSESSMENTS = {
 };
 
 const TARGET_QUIZ_QUESTIONS = 100;
+const DEFAULT_COMPLETION_POLICY = Object.freeze({
+  quickCheckRequired: 5,
+  masteryRequired: 12,
+  passThreshold: 0.8,
+  labsRequired: 1,
+  strategyReviewOptional: true,
+});
 
 function cleanSentence(value) {
   return String(value || '')
@@ -5473,6 +5480,8 @@ function makeGeneratedQuestion(index, level, prompt, correct, distractors, expla
   return {
     id: `generated-${index + 1}`,
     level,
+    skill: level === 'Foundation' ? 'recall' : level === 'Mechanism' ? 'mechanism' : 'transfer',
+    countsForCompletion: index < DEFAULT_COMPLETION_POLICY.masteryRequired,
     prompt,
     choices,
     answerIndex,
@@ -5763,7 +5772,14 @@ function buildLessonAssessment(animation) {
     .slice(0, Math.max(0, TARGET_QUIZ_QUESTIONS - seededQuiz.length));
 
   return {
-    quiz: [...seededQuiz, ...generatedQuiz].slice(0, TARGET_QUIZ_QUESTIONS),
+    completionPolicy: DEFAULT_COMPLETION_POLICY,
+    quiz: [...seededQuiz, ...generatedQuiz]
+      .slice(0, TARGET_QUIZ_QUESTIONS)
+      .map((question, index) => ({
+        skill: question.skill || (question.level === 'Foundation' ? 'recall' : question.level === 'Mechanism' ? 'mechanism' : 'transfer'),
+        ...question,
+        countsForCompletion: index < DEFAULT_COMPLETION_POLICY.masteryRequired,
+      })),
     strategyReview: makeLearningStrategyDeck(animation),
     labs: seeded.labs || [],
   };

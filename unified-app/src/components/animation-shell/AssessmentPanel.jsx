@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight, Circle, Eye, FlaskConical } from 'lucide-react';
 import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
 import {
+  getCompletionStatus,
   getLessonProgress,
   isAssessmentComplete,
   readAssessmentProgress,
@@ -42,6 +43,7 @@ export default function AssessmentPanel({
   if (!hasStructuredAssessment && !hasLegacyCheck) return null;
 
   const complete = isAssessmentComplete(assessment, lessonProgress);
+  const completionStatus = getCompletionStatus(assessment, lessonProgress);
   const quizPageCount = Math.max(1, Math.ceil(quizItems.length / QUESTIONS_PER_PAGE));
   const activeQuizPage = Math.min(quizPage, quizPageCount - 1);
   const pageStart = activeQuizPage * QUESTIONS_PER_PAGE;
@@ -52,6 +54,10 @@ export default function AssessmentPanel({
   const pageReviewItems = reviewItems.slice(reviewPageStart, reviewPageStart + QUESTIONS_PER_PAGE);
   const answeredCount = quizItems.filter((question) => lessonProgress.quiz?.[question.id]?.correct === true).length;
   const activeLevel = pageQuestions.find((question) => question.level)?.level;
+  const requiredPercent = Math.round(completionStatus.policy.passThreshold * 100);
+  const labRequirement = completionStatus.requiredLabCount > 0
+    ? ` plus ${completionStatus.requiredLabCount} lab`
+    : '';
 
   const persist = (updater) => {
     const nextProgress = updateLessonProgress(lessonId, assessment, updater);
@@ -111,7 +117,7 @@ export default function AssessmentPanel({
         <p>
           {complete
             ? 'Completed locally.'
-            : `${answeredCount}/${quizItems.length} correct. Build from foundations to interview-level reasoning.`}
+            : `${completionStatus.correctCoreCount}/${completionStatus.requiredQuestionCount} core correct. ${requiredPercent}% core pass${labRequirement} marks completion; the full ${quizItems.length}-question bank is practice.`}
         </p>
       </div>
 
@@ -170,6 +176,7 @@ export default function AssessmentPanel({
             <div className="ua-quiz-meta">
               <span className="ua-quiz-kicker">Question {absoluteQuestionIndex + 1} of {quizItems.length}</span>
               {question.level && <span className="ua-question-level">{question.level}</span>}
+              {question.countsForCompletion && <span className="ua-question-level">Core</span>}
             </div>
             <h3>{question.prompt}</h3>
             <div className="ua-choice-list">

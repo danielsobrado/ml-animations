@@ -3,6 +3,13 @@ import { EMPTY_ASSESSMENT } from './lessonAssessments.js';
 export const ASSESSMENT_PROGRESS_KEY = 'ml-animations:assessment-progress:v1';
 export const COMPLETED_LESSONS_KEY = 'ml-animations:completed-lessons:v1';
 export const LEARNING_PROGRESS_EVENT = 'ml-animations:progress-updated';
+export const DEFAULT_COMPLETION_POLICY = Object.freeze({
+  quickCheckRequired: 5,
+  masteryRequired: 12,
+  passThreshold: 0.8,
+  labsRequired: 1,
+  strategyReviewOptional: true,
+});
 
 function getStorage(storage) {
   if (storage) return storage;
@@ -53,6 +60,42 @@ export function getLessonProgress(progress, lessonId) {
   return progress[lessonId] || { quiz: {}, labs: {}, legacyCheck: null };
 }
 
+export function getCompletionPolicy(assessment = EMPTY_ASSESSMENT) {
+  return {
+    ...DEFAULT_COMPLETION_POLICY,
+    ...(assessment.completionPolicy || {}),
+  };
+}
+
+export function getCompletionStatus(assessment = EMPTY_ASSESSMENT, lessonProgress = {}) {
+  const quizItems = assessment.quiz || [];
+  const labItems = assessment.labs || [];
+  const policy = getCompletionPolicy(assessment);
+  const coreQuestions = quizItems
+    .filter((item) => item.countsForCompletion !== false)
+    .slice(0, policy.masteryRequired);
+  const requiredQuestionCount = Math.min(policy.masteryRequired, coreQuestions.length);
+  const requiredLabCount = Math.min(policy.labsRequired, labItems.length);
+  const correctCoreCount = coreQuestions.filter((item) => lessonProgress.quiz?.[item.id]?.correct === true).length;
+  const completedLabCount = labItems.filter((item) => lessonProgress.labs?.[item.id] === true).length;
+  const requiredCorrectCount = Math.ceil(requiredQuestionCount * policy.passThreshold);
+  const quizComplete = requiredQuestionCount === 0 || correctCoreCount >= requiredCorrectCount;
+  const labsComplete = requiredLabCount === 0 || completedLabCount >= requiredLabCount;
+
+  return {
+    policy,
+    coreQuestions,
+    requiredQuestionCount,
+    requiredCorrectCount,
+    correctCoreCount,
+    requiredLabCount,
+    completedLabCount,
+    quizComplete,
+    labsComplete,
+    complete: quizComplete && labsComplete,
+  };
+}
+
 export function isAssessmentComplete(assessment = EMPTY_ASSESSMENT, lessonProgress = {}) {
   const quizItems = assessment.quiz || [];
   const labItems = assessment.labs || [];
@@ -62,9 +105,7 @@ export function isAssessmentComplete(assessment = EMPTY_ASSESSMENT, lessonProgre
     return Boolean(lessonProgress.legacyCheck?.revealed);
   }
 
-  const quizComplete = quizItems.every((item) => lessonProgress.quiz?.[item.id]?.correct === true);
-  const labsComplete = labItems.every((item) => lessonProgress.labs?.[item.id] === true);
-  return quizComplete && labsComplete;
+  return getCompletionStatus(assessment, lessonProgress).complete;
 }
 
 export function reconcileCompletedLesson(lessonId, assessment, progress, storage) {
