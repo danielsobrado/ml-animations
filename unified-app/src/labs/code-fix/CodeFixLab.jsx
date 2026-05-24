@@ -153,7 +153,7 @@ export default function CodeFixLab({ exercises }) {
               className={`ua-codefix-step ${index === activeIndex ? 'active' : ''} ${exerciseStatus}`}
             >
               <Icon size={15} aria-hidden="true" />
-              <span>{index + 1}. {exercise.title}</span>
+              <span>{exercise.stepLabel || `${index + 1}.`} {exercise.title}</span>
             </button>
           );
         })}
