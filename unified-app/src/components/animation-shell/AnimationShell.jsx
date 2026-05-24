@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, BookOpen, ClipboardCheck, FileSearch, GitCompare, Library, ShieldCheck } from 'lucide-react';
@@ -473,39 +473,67 @@ function WorkspaceTabBar({ activeTab, tabs, onTabChange, className = '' }) {
 }
 
 function findLessonToolbar(stage) {
-  const nav = stage.querySelector('.ua-stage-wrap nav:not(.ds-tabs)');
-  if (!nav) return null;
+  const stageWrap = stage.querySelector('.ua-stage-wrap');
+  const lessonRoot = stageWrap?.firstElementChild;
+  const nav = lessonRoot?.matches('nav') ? lessonRoot : lessonRoot?.querySelector('nav');
+  if (!nav || nav.parentElement?.firstElementChild !== nav) return null;
 
-  return nav.querySelector(':scope > div > div')
+  const toolbar = nav.classList.contains('ds-tabs')
+    ? nav
+    : nav.querySelector(':scope > div > div')
     || nav.querySelector(':scope > div')
     || nav;
+
+  return {
+    contentRoot: nav.parentElement,
+    toolbar,
+  };
+}
+
+function isWorkspaceTabActive(activeTab, tabs) {
+  return tabs.some((tab) => tab.id === activeTab);
+}
+
+function setWorkspaceContentState(contentRoot, active) {
+  if (!contentRoot) return;
+
+  contentRoot.classList.add('ua-workspace-content-root');
+  contentRoot.toggleAttribute('data-workspace-active', active);
 }
 
 function WorkspaceTabPortal({ activeTab, tabs, onTabChange }) {
   const [portalSlot, setPortalSlot] = useState(null);
+  const contentRootRef = useRef(null);
+  const workspaceActive = isWorkspaceTabActive(activeTab, tabs);
 
   useEffect(() => {
     const stage = document.getElementById('math-main-stage');
     if (!stage || tabs.length === 0) return undefined;
 
     let slot = null;
+    const cleanup = () => {
+      slot?.remove();
+      contentRootRef.current?.removeAttribute('data-workspace-active');
+      contentRootRef.current?.classList.remove('ua-workspace-content-root');
+      contentRootRef.current = null;
+      setPortalSlot(null);
+    };
 
     const attach = () => {
-      const toolbar = findLessonToolbar(stage);
-      if (!toolbar || slot?.isConnected) return Boolean(slot?.isConnected);
+      const placement = findLessonToolbar(stage);
+      if (!placement || slot?.isConnected) return Boolean(slot?.isConnected);
 
       slot = document.createElement('div');
       slot.className = 'ua-workspace-portal-slot';
-      toolbar.appendChild(slot);
+      placement.toolbar.appendChild(slot);
+      contentRootRef.current = placement.contentRoot;
+      setWorkspaceContentState(contentRootRef.current, workspaceActive);
       setPortalSlot(slot);
       return true;
     };
 
     if (attach()) {
-      return () => {
-        slot?.remove();
-        setPortalSlot(null);
-      };
+      return cleanup;
     }
 
     const observer = new MutationObserver(() => {
@@ -515,10 +543,18 @@ function WorkspaceTabPortal({ activeTab, tabs, onTabChange }) {
 
     return () => {
       observer.disconnect();
-      slot?.remove();
-      setPortalSlot(null);
+      cleanup();
     };
   }, [tabs.length]);
+
+  useEffect(() => {
+    const stage = document.getElementById('math-main-stage');
+    const placement = stage ? findLessonToolbar(stage) : null;
+    if (placement?.contentRoot) {
+      contentRootRef.current = placement.contentRoot;
+    }
+    setWorkspaceContentState(contentRootRef.current, workspaceActive);
+  }, [workspaceActive]);
 
   if (!portalSlot) {
     return (
@@ -595,7 +631,7 @@ export default function AnimationShell({ animation, children }) {
       if (!(target instanceof Element)) return;
       if (target.closest('.ua-workspace-portal-slot')) return;
       const button = target.closest('button');
-      if (button?.closest('.ua-stage-wrap > :first-child > nav:not(.ds-tabs)')) {
+      if (button?.closest('.ua-stage-wrap nav')) {
         setWorkspaceTab('lesson');
       }
     };

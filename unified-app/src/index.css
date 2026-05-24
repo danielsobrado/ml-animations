@@ -1927,6 +1927,10 @@ body {
   padding-top: 18px;
 }
 
+.ua-workspace-content-root[data-workspace-active] > :not(nav) {
+  display: none !important;
+}
+
 .ua-stage-wrap > .ua-lesson-workspace {
   margin-top: 0;
   border-top: 0;
@@ -3916,6 +3920,45 @@ body {
   color: var(--ds-faint) !important;
   border-color: var(--ds-rule) !important;
   transform: none !important;
+}
+
+#root .ua-animation-page .ds-tabs .ua-workspace-portal-slot {
+  margin-left: 0;
+}
+
+#root .ua-animation-page .ds-tabs .ua-workspace-tabs {
+  gap: 0;
+}
+
+#root .ua-animation-page .ds-tabs .ua-workspace-tab {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: auto;
+  padding: 12px 22px 14px !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ds-faint) !important;
+  font-family: var(--ds-font-sans) !important;
+  font-size: var(--ds-text-sm) !important;
+  font-weight: 400 !important;
+  line-height: 1.15 !important;
+  white-space: nowrap;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+#root .ua-animation-page .ds-tabs .ua-workspace-tab:hover {
+  color: var(--ds-ink) !important;
+  background: transparent !important;
+}
+
+#root .ua-animation-page .ds-tabs .ua-workspace-tab[aria-selected="true"] {
+  color: var(--ds-ink) !important;
+  border-bottom-color: var(--ds-accent) !important;
+  background: transparent !important;
 }
 
 .ua-grpo-lab-panel {
