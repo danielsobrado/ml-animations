@@ -1888,6 +1888,16 @@ body {
   margin-bottom: 0;
 }
 
+.ua-workspace-portal-slot {
+  display: inline-flex;
+  align-items: stretch;
+  margin-left: 10px;
+}
+
+.ua-workspace-portal-slot .ua-workspace-tabs {
+  border-top: 0;
+}
+
 .ua-workspace-tabs .ds-tab {
   align-items: center;
   gap: 8px;

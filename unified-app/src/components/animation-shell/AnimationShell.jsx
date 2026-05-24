@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, BookOpen, ClipboardCheck, FileSearch, GitCompare, Library, ShieldCheck } from 'lucide-react';
 import Eq from '../../_design-system/Eq';
@@ -473,6 +474,76 @@ function WorkspaceTabBar({ activeTab, tabs, onTabChange, className = '' }) {
   );
 }
 
+function findLessonToolbar(stage) {
+  const nav = stage.querySelector('.ua-stage-wrap nav:not(.ds-tabs)');
+  if (!nav) return null;
+
+  return nav.querySelector(':scope > div > div')
+    || nav.querySelector(':scope > div')
+    || nav;
+}
+
+function WorkspaceTabPortal({ activeTab, tabs, onTabChange }) {
+  const [portalSlot, setPortalSlot] = useState(null);
+
+  useEffect(() => {
+    const stage = document.getElementById('math-main-stage');
+    if (!stage || tabs.length === 0) return undefined;
+
+    let slot = null;
+
+    const attach = () => {
+      const toolbar = findLessonToolbar(stage);
+      if (!toolbar || slot?.isConnected) return Boolean(slot?.isConnected);
+
+      slot = document.createElement('div');
+      slot.className = 'ua-workspace-portal-slot';
+      toolbar.appendChild(slot);
+      setPortalSlot(slot);
+      return true;
+    };
+
+    if (attach()) {
+      return () => {
+        slot?.remove();
+        setPortalSlot(null);
+      };
+    }
+
+    const observer = new MutationObserver(() => {
+      if (attach()) observer.disconnect();
+    });
+    observer.observe(stage, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      slot?.remove();
+      setPortalSlot(null);
+    };
+  }, [tabs.length]);
+
+  if (!portalSlot) {
+    return (
+      <WorkspaceTabBar
+        activeTab={activeTab}
+        tabs={tabs}
+        onTabChange={onTabChange}
+        className="ua-workspace-tabs-inline"
+      />
+    );
+  }
+
+  return createPortal(
+    <WorkspaceTabBar
+      activeTab={activeTab}
+      tabs={tabs}
+      onTabChange={onTabChange}
+      className="ua-workspace-tabs-inline"
+    />,
+    portalSlot,
+  );
+}
+
 function LessonWorkspace({
   activeTab,
   tabs,
@@ -563,11 +634,10 @@ export default function AnimationShell({ animation, children }) {
 
       <div className="ua-learning-grid">
         <main id="math-main-stage" className="ua-main-stage" aria-label={`${animation.name} animation stage`}>
-          <WorkspaceTabBar
+          <WorkspaceTabPortal
             activeTab={workspaceTab}
             tabs={workspaceTabs}
             onTabChange={openWorkspaceTab}
-            className="ua-workspace-tabs-inline"
           />
           <div key={resetNonce} className={`ua-stage-wrap ${showShellAssessment ? 'has-shell-assessment' : ''}`}>
             {children}
