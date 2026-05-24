@@ -689,10 +689,14 @@ body {
   padding: clamp(28px, 4vw, 56px) clamp(24px, 5vw, 72px);
 }
 
+.ua-animation-page {
+  padding-top: clamp(22px, 3vw, 42px);
+}
+
 .ua-animation-header {
-  padding-bottom: var(--ds-gap-3);
+  padding-bottom: 10px;
   border-bottom: 0 !important;
-  margin-bottom: var(--ds-gap-4);
+  margin-bottom: var(--ds-gap-2);
 }
 
 #root .ua-animation-page .ua-animation-header {
