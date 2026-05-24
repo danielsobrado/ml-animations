@@ -1599,7 +1599,8 @@ body {
 }
 
 .ua-sigil-button span,
-.ua-stage-wrap button:not([data-math-control])::before {
+.ua-stage-wrap > nav button:not([data-math-control])::before,
+.ua-stage-wrap > :first-child > nav button:not([data-math-control])::before {
   display: inline-grid;
   place-items: center;
   width: 22px;
@@ -1612,7 +1613,8 @@ body {
   line-height: 1;
 }
 
-.ua-stage-wrap button:not([data-math-control])::before {
+.ua-stage-wrap > nav button:not([data-math-control])::before,
+.ua-stage-wrap > :first-child > nav button:not([data-math-control])::before {
   content: var(--math-sigil, "∂");
   flex: 0 0 auto;
 }
@@ -1925,6 +1927,42 @@ body {
 
 .ua-workspace-tabs-inline .ua-workspace-tab {
   min-height: 34px;
+}
+
+#root .ua-animation-page .ua-workspace-tabs-inline {
+  align-items: flex-end;
+  gap: 0;
+  width: 100%;
+}
+
+#root .ua-animation-page .ua-workspace-tabs-inline .ua-workspace-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ds-faint) !important;
+  font-family: var(--ds-font-sans) !important;
+  font-size: var(--ds-text-sm) !important;
+  font-weight: 400 !important;
+  line-height: 1.15 !important;
+  white-space: nowrap;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+#root .ua-animation-page .ua-workspace-tabs-inline .ua-workspace-tab:hover {
+  background: transparent !important;
+  color: var(--ds-ink) !important;
+}
+
+#root .ua-animation-page .ua-workspace-tabs-inline .ua-workspace-tab[aria-selected="true"] {
+  border-bottom-color: var(--ds-accent) !important;
+  color: var(--ds-ink) !important;
 }
 
 .ua-workspace-panel {
