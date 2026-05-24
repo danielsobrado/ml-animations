@@ -1963,9 +1963,9 @@ body {
 
 .ua-assessment-head {
   display: grid;
-  grid-template-columns: 120px minmax(440px, 0.9fr) minmax(280px, 0.8fr);
-  gap: 18px;
-  align-items: baseline;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 8px 18px;
+  align-items: center;
   margin-bottom: 18px;
 }
 
@@ -1984,6 +1984,8 @@ body {
   font-size: clamp(25px, 2.6vw, 34px);
   font-weight: 400;
   line-height: 1;
+  justify-self: center;
+  text-align: center;
 }
 
 .ua-assessment-title-line {
@@ -2000,12 +2002,14 @@ body {
   }
 }
 
-.ua-assessment-head p {
+.ua-assessment-status {
+  grid-column: 1 / -1;
   margin: 0;
   color: var(--ds-faint);
   font-family: var(--ds-font-serif);
-  font-size: 16px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .ua-quiz-card {

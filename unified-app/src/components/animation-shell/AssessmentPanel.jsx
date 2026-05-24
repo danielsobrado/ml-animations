@@ -151,7 +151,7 @@ export default function AssessmentPanel({
       <div className="ua-assessment-head">
         <span>{eyebrow}</span>
         <h2 aria-label={typeof title === 'string' ? title : undefined}>{renderAssessmentTitle(title)}</h2>
-        <p>
+        <p className="ua-assessment-status">
           {complete
             ? 'Completed locally.'
             : `${completionStatus.correctCoreCount}/${completionStatus.requiredQuestionCount} core correct. ${requiredPercent}% core pass${labRequirement} marks completion; the full ${quizItems.length}-question bank is practice.`}
