@@ -446,19 +446,17 @@ function getLessonWorkspaceTabs({
 function WorkspaceTabBar({ activeTab, tabs, onTabChange, className = '' }) {
   if (!tabs.length) return null;
 
-  const selectedTab = tabs.some((tab) => tab.id === activeTab) ? activeTab : tabs[0].id;
-
   return (
-    <nav className={`ua-workspace-tabs ds-tabs ${className}`.trim()} aria-label="Lesson workspace sections" role="tablist">
+    <div className={`ua-workspace-tabs ${className}`.trim()} aria-label="Lesson workspace sections" role="tablist">
       {tabs.map((tab) => {
         const Icon = tab.icon;
-        const selected = tab.id === selectedTab;
+        const selected = tab.id === activeTab;
 
         return (
           <button
             type="button"
             key={tab.id}
-            className="ds-tab"
+            className="ua-workspace-tab"
             role="tab"
             aria-selected={selected}
             aria-controls={`workspace-panel-${tab.id}`}
@@ -470,7 +468,7 @@ function WorkspaceTabBar({ activeTab, tabs, onTabChange, className = '' }) {
           </button>
         );
       })}
-    </nav>
+    </div>
   );
 }
 
@@ -550,7 +548,9 @@ function LessonWorkspace({
 }) {
   if (tabs.length === 0) return null;
 
-  const selectedTab = tabs.some((tab) => tab.id === activeTab) ? activeTab : tabs[0].id;
+  const selectedTab = tabs.some((tab) => tab.id === activeTab) ? activeTab : null;
+  if (!selectedTab) return null;
+
   const selectedPanel = tabs.find((tab) => tab.id === selectedTab)?.panel;
 
   return (
@@ -569,7 +569,7 @@ function LessonWorkspace({
 
 export default function AnimationShell({ animation, children }) {
   const [resetNonce, setResetNonce] = useState(0);
-  const [workspaceTab, setWorkspaceTab] = useState('check');
+  const [workspaceTab, setWorkspaceTab] = useState('lesson');
   const model = useMemo(() => createLearningModel(animation, allAnimations), [animation]);
   const assessment = useMemo(() => getLessonAssessment(animation.id), [animation.id]);
   const showShellAssessment = hasAssessmentContent(assessment);
@@ -580,13 +580,29 @@ export default function AnimationShell({ animation, children }) {
     lessonId: animation.id,
   }), [animation.id, model.depth, model.glossary, showShellAssessment]);
 
+  const hasActiveWorkspaceTab = workspaceTabs.some((tab) => tab.id === workspaceTab);
+
   useEffect(() => {
-    if (showShellAssessment) {
-      setWorkspaceTab('check');
-      return;
-    }
-    setWorkspaceTab(model.glossary?.length > 0 ? 'glossary' : 'deep-dive');
-  }, [animation.id, model.glossary, showShellAssessment]);
+    setWorkspaceTab('lesson');
+  }, [animation.id]);
+
+  useEffect(() => {
+    const stage = document.getElementById('math-main-stage');
+    if (!stage) return undefined;
+
+    const clearWorkspaceTab = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest('.ua-workspace-portal-slot')) return;
+      const button = target.closest('button');
+      if (button?.closest('.ua-stage-wrap > :first-child > nav:not(.ds-tabs)')) {
+        setWorkspaceTab('lesson');
+      }
+    };
+
+    stage.addEventListener('click', clearWorkspaceTab, true);
+    return () => stage.removeEventListener('click', clearWorkspaceTab, true);
+  }, [animation.id]);
 
   const resetStage = () => {
     setResetNonce((value) => value + 1);
@@ -598,10 +614,8 @@ export default function AnimationShell({ animation, children }) {
   };
 
   const openWorkspaceTab = (tabId) => {
+    if (!workspaceTabs.some((tab) => tab.id === tabId)) return;
     setWorkspaceTab(tabId);
-    requestAnimationFrame(() => {
-      document.getElementById('lesson-workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
   };
 
   return (
@@ -639,18 +653,24 @@ export default function AnimationShell({ animation, children }) {
             tabs={workspaceTabs}
             onTabChange={openWorkspaceTab}
           />
-          <div key={resetNonce} className={`ua-stage-wrap ${showShellAssessment ? 'has-shell-assessment' : ''}`}>
+          <div
+            key={resetNonce}
+            className={[
+              'ua-stage-wrap',
+              showShellAssessment && 'has-shell-assessment',
+              hasActiveWorkspaceTab && 'has-workspace-tab',
+            ].filter(Boolean).join(' ')}
+          >
             {children}
+            <LessonWorkspace
+              activeTab={workspaceTab}
+              tabs={workspaceTabs}
+            />
           </div>
         </main>
 
         <LearningCards cards={model.learningCards} />
       </div>
-
-      <LessonWorkspace
-        activeTab={workspaceTab}
-        tabs={workspaceTabs}
-      />
     </div>
   );
 }

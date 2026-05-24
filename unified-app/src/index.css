@@ -1749,6 +1749,10 @@ body {
   display: none;
 }
 
+.ua-stage-wrap.has-shell-assessment > .ua-lesson-workspace .ua-assessment-panel {
+  display: block;
+}
+
 /* Legacy animation panels: older lessons used dark app-like Tailwind surfaces.
    Keep their structure, but pull surfaces and chrome back into the Distill palette. */
 #root .ua-stage-wrap :where(div, section, article, aside)[class*="bg-black"],
@@ -1885,6 +1889,9 @@ body {
 }
 
 .ua-workspace-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 0;
 }
 
@@ -1894,24 +1901,28 @@ body {
   margin-left: 10px;
 }
 
-.ua-workspace-portal-slot .ua-workspace-tabs {
-  border-top: 0;
-}
-
-.ua-workspace-tabs .ds-tab {
+.ua-workspace-tab {
   align-items: center;
   gap: 8px;
   min-height: 44px;
 }
 
-.ua-workspace-tabs .ds-tab[aria-selected="true"] {
-  border-bottom-color: var(--ds-accent);
-  color: var(--ds-ink);
+.ua-workspace-tabs-inline .ua-workspace-tab {
+  min-height: 34px;
 }
 
 .ua-workspace-panel {
   min-width: 0;
   padding-top: 18px;
+}
+
+.ua-stage-wrap > .ua-lesson-workspace {
+  margin-top: 0;
+  border-top: 0;
+}
+
+.ua-stage-wrap.has-workspace-tab > :first-child > nav:first-child ~ * {
+  display: none !important;
 }
 
 .ua-workspace-panel .ua-assessment-panel,
@@ -3863,6 +3874,13 @@ body {
 #root .ua-animation-page nav:not(.ds-tabs) button:not(.ds-tab) svg {
   width: 15px;
   height: 15px;
+}
+
+#root .ua-animation-page .ua-stage-wrap.has-workspace-tab > :first-child > nav:not(.ds-tabs) button:not(.ua-workspace-tab) {
+  background: var(--ds-panel) !important;
+  color: var(--ds-faint) !important;
+  border-color: var(--ds-rule) !important;
+  transform: none !important;
 }
 
 .ua-grpo-lab-panel {
