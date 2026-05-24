@@ -1498,8 +1498,11 @@ body {
   align-items: center;
   padding: 14px 0;
   border-top: var(--ds-border-strong);
-  border-bottom: var(--ds-border);
   margin-bottom: 12px;
+}
+
+#root .ua-animation-page .ua-learning-strip {
+  border-bottom: 0 !important;
 }
 
 .ua-learning-strip > * {
@@ -1559,8 +1562,6 @@ body {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0;
-  border-top: var(--ds-border);
-  border-left: var(--ds-border);
   margin-bottom: 16px;
 }
 
@@ -3843,7 +3844,7 @@ body {
   margin-bottom: var(--ds-gap-3) !important;
   overflow-x: auto;
   background: transparent !important;
-  border-bottom: var(--ds-border) !important;
+  border-bottom: 0 !important;
   scrollbar-width: thin;
   scrollbar-color: var(--ds-hair) transparent;
 }
