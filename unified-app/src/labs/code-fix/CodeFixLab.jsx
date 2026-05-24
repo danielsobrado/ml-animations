@@ -13,9 +13,44 @@ function formatValue(value) {
   return JSON.stringify(value);
 }
 
+const JS_TOKEN_PATTERN = /(\/\/.*|\/\*[\s\S]*?\*\/|(["'`])(?:\\.|(?!\2)[^\\])*\2|\b(?:const|let|var|function|return|if|else|for|while|new|throw|true|false|null|undefined)\b|\b\d+(?:\.\d+)?\b|\b[a-zA-Z_$][\w$]*(?=\s*\())/g;
+
+function highlightJavaScript(code) {
+  const parts = [];
+  let cursor = 0;
+
+  for (const match of code.matchAll(JS_TOKEN_PATTERN)) {
+    if (match.index > cursor) {
+      parts.push(code.slice(cursor, match.index));
+    }
+
+    const token = match[0];
+    let tokenClass = 'plain';
+    if (token.startsWith('//') || token.startsWith('/*')) tokenClass = 'comment';
+    else if (/^["'`]/.test(token)) tokenClass = 'string';
+    else if (/^\d/.test(token)) tokenClass = 'number';
+    else if (/^(const|let|var|function|return|if|else|for|while|new|throw|true|false|null|undefined)$/.test(token)) tokenClass = 'keyword';
+    else tokenClass = 'call';
+
+    parts.push(
+      <span key={`${match.index}-${token}`} className={`ua-code-token-${tokenClass}`}>
+        {token}
+      </span>,
+    );
+    cursor = match.index + token.length;
+  }
+
+  if (cursor < code.length) {
+    parts.push(code.slice(cursor));
+  }
+
+  return parts;
+}
+
 export default function CodeFixLab({ exercises }) {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const activeExercise = exercises[activeIndex];
+  const highlightRef = React.useRef(null);
 
   const [codeById, setCodeById] = React.useState(() => (
     Object.fromEntries(exercises.map((exercise) => [exercise.id, exercise.starterCode]))
@@ -80,6 +115,12 @@ export default function CodeFixLab({ exercises }) {
     setShowSolution(false);
   }
 
+  function syncHighlightScroll(event) {
+    if (!highlightRef.current) return;
+    highlightRef.current.scrollTop = event.currentTarget.scrollTop;
+    highlightRef.current.scrollLeft = event.currentTarget.scrollLeft;
+  }
+
   const passedCount = Object.values(resultById).filter((result) => (
     result?.results?.length && result.results.every((check) => check.passed)
   )).length;
@@ -87,7 +128,7 @@ export default function CodeFixLab({ exercises }) {
   return (
     <section className="ua-codefix-lab">
       <div className="ua-codefix-head">
-        <span>Rustlings-style lab</span>
+        <span>Code Completion-style lab</span>
         <h2>Fix the TODOs, run the tests</h2>
         <p>
           Each exercise is almost complete. Change the smallest piece of code needed
@@ -147,16 +188,22 @@ export default function CodeFixLab({ exercises }) {
             </button>
           </div>
 
-          <textarea
-            className="ua-codefix-editor"
-            value={code}
-            spellCheck={false}
-            aria-label={`${activeExercise.title} code editor`}
-            onChange={(event) => setCodeById((previous) => ({
-              ...previous,
-              [activeExercise.id]: event.target.value,
-            }))}
-          />
+          <div className="ua-codefix-editor-shell">
+            <pre className="ua-codefix-highlight" aria-hidden="true" ref={highlightRef}>
+              {highlightJavaScript(code)}
+            </pre>
+            <textarea
+              className="ua-codefix-editor"
+              value={code}
+              spellCheck={false}
+              aria-label={`${activeExercise.title} code editor`}
+              onScroll={syncHighlightScroll}
+              onChange={(event) => setCodeById((previous) => ({
+                ...previous,
+                [activeExercise.id]: event.target.value,
+              }))}
+            />
+          </div>
 
           <div className="ua-codefix-actions">
             <button type="button" onClick={runTests} disabled={running}>

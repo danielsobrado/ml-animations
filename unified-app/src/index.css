@@ -902,19 +902,73 @@ body {
   cursor: not-allowed;
 }
 
+.ua-codefix-editor-shell {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+  border: 1px solid #d8cfba;
+  border-radius: 12px;
+  background: #fffdf7;
+  overflow: hidden;
+}
+
+.ua-codefix-highlight,
 .ua-codefix-editor {
   width: 100%;
   min-height: 360px;
-  resize: vertical;
-  border: 1px solid #2d2d2d;
-  border-radius: 12px;
+  margin: 0;
   padding: 1rem;
-  background: #151515;
-  color: #f7f1df;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.86rem;
   line-height: 1.55;
   tab-size: 2;
+  white-space: pre-wrap;
+  overflow: auto;
+}
+
+.ua-codefix-highlight {
+  position: absolute;
+  inset: 0;
+  color: #2f2a23;
+  pointer-events: none;
+}
+
+.ua-codefix-editor {
+  position: relative;
+  display: block;
+  resize: vertical;
+  border: 0 !important;
+  background: transparent !important;
+  color: transparent !important;
+  caret-color: #1f1f1f;
+  outline: none;
+  border-radius: 12px !important;
+}
+
+.ua-codefix-editor::selection {
+  background: rgba(38, 66, 115, 0.22);
+}
+
+.ua-code-token-keyword {
+  color: #8a3ffc;
+  font-weight: 700;
+}
+
+.ua-code-token-call {
+  color: #0f6f8f;
+}
+
+.ua-code-token-string {
+  color: #8a4f12;
+}
+
+.ua-code-token-number {
+  color: #b42318;
+}
+
+.ua-code-token-comment {
+  color: #6b7280;
+  font-style: italic;
 }
 
 .ua-codefix-actions {
