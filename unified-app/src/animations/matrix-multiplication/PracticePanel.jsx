@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AlgebraCodeLab from '../../labs/algebra/AlgebraCodeLab';
 
 // Different matrices for practice (different from the animation example)
 const practiceMatrixA = [[1, 2], [3, 1]];
@@ -244,6 +245,10 @@ export default function PracticePanel() {
         >
           ↺ Reset
         </button>
+      </div>
+
+      <div className="mt-8 w-full">
+        <AlgebraCodeLab />
       </div>
     </div>
   );
