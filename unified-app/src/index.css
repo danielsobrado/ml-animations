@@ -689,6 +689,16 @@ body {
   padding: clamp(28px, 4vw, 56px) clamp(24px, 5vw, 72px);
 }
 
+.ua-animation-header {
+  padding-bottom: var(--ds-gap-3);
+  border-bottom: 0 !important;
+  margin-bottom: var(--ds-gap-4);
+}
+
+#root .ua-animation-page .ua-animation-header {
+  border-bottom: 0 !important;
+}
+
 .ua-home-hero {
   border-bottom: var(--ds-border);
   margin-bottom: var(--ds-gap-4);
@@ -1569,6 +1579,7 @@ body {
 }
 
 .ua-sigil-button {
+  box-sizing: border-box;
   border: 0;
   border-right: var(--ds-border);
   border-bottom: var(--ds-border);
@@ -3874,6 +3885,30 @@ body {
 #root .ua-animation-page nav:not(.ds-tabs) button:not(.ds-tab) svg {
   width: 15px;
   height: 15px;
+}
+
+#root .ua-animation-page nav.ua-math-controls .ua-sigil-button {
+  flex: 0 0 auto;
+  min-height: 34px;
+  width: auto;
+  padding: 8px 12px !important;
+  border: 1px solid var(--ds-rule) !important;
+  border-radius: 6px !important;
+  background: var(--ds-panel) !important;
+  color: var(--ds-faint) !important;
+  font-family: var(--ds-font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.15 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+#root .ua-animation-page nav.ua-math-controls .ua-sigil-button:hover {
+  background: var(--ds-accent-w) !important;
+  border-color: var(--ds-hair) !important;
+  color: var(--ds-ink) !important;
 }
 
 #root .ua-animation-page .ua-stage-wrap.has-workspace-tab > :first-child > nav:not(.ds-tabs) button:not(.ua-workspace-tab) {

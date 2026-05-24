@@ -12,7 +12,7 @@ export default function AnimationPage() {
   if (!animation) {
     return (
       <div className="ua-animation-page">
-        <header className="ds-header">
+        <header className="ua-animation-header">
           <div className="ds-eyebrow">Missing entry</div>
           <h1 className="ds-title">Animation not found</h1>
           <p className="ds-subtitle">The animation "{id}" is not registered in the catalog.</p>
@@ -29,7 +29,7 @@ export default function AnimationPage() {
 
   return (
     <div className="ua-animation-page">
-      <header className="ds-header">
+      <header className="ua-animation-header">
         <div className="ds-eyebrow">
           <Link to="/">Catalog</Link>
           <span className="sep">/</span>
