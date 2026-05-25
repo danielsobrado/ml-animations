@@ -13591,6 +13591,14379 @@ export const CONCEPT_MAPS = {
     ],
   },
 
+
+  'ab-testing-foundations': {
+    center: {
+      id: 'ab-testing-foundations',
+      label: "A/B Testing Foundations",
+      type: 'current',
+      tooltip: tip({
+        short: "A/B testing compares treatment and control groups assigned at random to estimate whether a product change caused a metric difference.",
+        intuition: "Randomization balances confounders before the change acts, so post-assignment gaps are more plausibly causal.",
+        formula: "\\hat{\\Delta}=\\hat{p}_T-\\hat{p}_C,\\quad z=\\frac{\\hat{\\Delta}}{SE(\\hat{\\Delta})}",
+        why: "Ship/no-ship decisions for product, growth, and ML features rely on disciplined experiments rather than before-after dashboards.",
+        trap: "A statistically significant lift can still be too small, too noisy, or harmful on guardrails to act on.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'random-assignment-prereq',
+            label: "Random assignment",
+            tooltip: tip({
+              short: "Users are allocated to treatment or control before exposure to the change.",
+              intuition: "Randomization makes groups comparable on average at baseline.",
+              trap: "Self-selection or time-based splits are not randomized experiments.",
+            }),
+          },
+          {
+            id: 'primary-metric-prereq',
+            label: "Primary metric",
+            tooltip: tip({
+              short: "One pre-declared success metric anchors the decision.",
+              intuition: "Choosing the metric after peeking invites cherry-picking.",
+              trap: "Switching the primary metric mid-test invalidates the design.",
+            }),
+          },
+          {
+            id: 'hypothesis-testing-prereq',
+            label: "Hypothesis testing",
+            tooltip: tip({
+              short: "Compare observed lift to sampling noise via a test statistic.",
+              intuition: "Small samples make real effects look like noise and vice versa.",
+              trap: "Statistical significance is not practical importance.",
+              lessonId: "hypothesis-testing-intuition",
+            }),
+          },
+          {
+            id: 'confidence-intervals-prereq',
+            label: "Confidence intervals",
+            tooltip: tip({
+              short: "An interval estimates plausible effect sizes given the sample.",
+              intuition: "Wide intervals mean the experiment lacked resolution.",
+              trap: "A CI that includes zero does not prove zero effect.",
+              lessonId: "sampling-confidence-intervals",
+            }),
+          },
+          {
+            id: 'sample-size-prereq',
+            label: "Sample size",
+            tooltip: tip({
+              short: "More users shrink uncertainty around the estimated lift.",
+              intuition: "Underpowered tests blur useful effects into non-significance.",
+              trap: "Stopping early when p<0.05 inflates false positives.",
+              lessonId: "power-sample-size",
+            }),
+          },
+          {
+            id: 'guardrail-metrics-prereq',
+            label: "Guardrail metrics",
+            tooltip: tip({
+              short: "Secondary metrics protect revenue, latency, fairness, or trust.",
+              intuition: "A winning primary metric can still break the product elsewhere.",
+              trap: "Ignoring guardrails turns a local win into a global loss.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'treatment-control-split',
+            label: "Treatment vs control",
+            tooltip: tip({
+              short: "Treatment sees the change; control sees the status quo.",
+              intuition: "The control group is the counterfactual you cannot observe twice.",
+              trap: "Contamination across arms breaks comparability.",
+            }),
+          },
+          {
+            id: 'lift-estimation',
+            label: "Lift estimation",
+            tooltip: tip({
+              short: "Lift is treatment metric minus control metric.",
+              intuition: "Absolute and relative lift tell different business stories.",
+              formula: "\\hat{\\Delta}=\\bar{y}_T-\\bar{y}_C",
+              trap: "Relative lift on tiny baselines can look huge while absolute gain is negligible.",
+            }),
+          },
+          {
+            id: 'standard-error',
+            label: "Standard error",
+            tooltip: tip({
+              short: "SE measures how much the lift would wobble if you reran the experiment.",
+              intuition: "Noisier metrics or smaller samples widen SE.",
+              trap: "Comparing lifts without SE treats noisy and stable metrics equally.",
+            }),
+          },
+          {
+            id: 'z-test-proportion',
+            label: "Two-proportion z-test",
+            tooltip: tip({
+              short: "For conversion-style metrics, z compares lift to its SE.",
+              intuition: "Large |z| means the gap is unusual under no-effect.",
+              formula: "z=\\frac{\\hat{p}_T-\\hat{p}_C}{SE(\\hat{\\Delta})}",
+              trap: "Using the wrong variance formula for ratios or continuous metrics.",
+            }),
+          },
+          {
+            id: 'mde-planning',
+            label: "MDE planning",
+            tooltip: tip({
+              short: "Minimum detectable effect is the smallest lift worth detecting.",
+              intuition: "Design the sample so plausible business lifts are visible.",
+              trap: "Running without MDE planning often yields inconclusive results.",
+              lessonId: "power-sample-size",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'randomize-before-measure',
+            label: "Randomize before measuring",
+            tooltip: tip({
+              short: "Assignment must precede exposure to treatment.",
+              intuition: "Otherwise pre-existing differences masquerade as treatment impact.",
+              trap: "A dashboard gap without randomization is not an A/B test.",
+            }),
+          },
+          {
+            id: 'counterfactual-intuition',
+            label: "Counterfactual",
+            tooltip: tip({
+              short: "Control estimates what would have happened without the change.",
+              intuition: "You never observe both worlds for the same user simultaneously.",
+              trap: "Before-after comparisons confound seasonality and mix shifts.",
+            }),
+          },
+          {
+            id: 'signal-vs-noise',
+            label: "Signal vs noise",
+            tooltip: tip({
+              short: "Real lift must stand out above sampling variability.",
+              intuition: "Day-to-day metric wobble is normal even with no true effect.",
+              trap: "Celebrating every positive day in a noisy metric.",
+            }),
+          },
+          {
+            id: 'practical-significance',
+            label: "Practical significance",
+            tooltip: tip({
+              short: "Ask whether the lift is large enough to justify rollout cost and risk.",
+              intuition: "Tiny significant lifts may not move business outcomes.",
+              trap: "Equating p<0.05 with automatic ship decisions.",
+            }),
+          },
+          {
+            id: 'guardrail-intuition',
+            label: "Guardrail intuition",
+            tooltip: tip({
+              short: "A variant can win the primary metric while hurting latency, churn, or fairness.",
+              intuition: "Guardrails catch externalities the primary metric ignores.",
+              trap: "Shipping because one headline metric turned green.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'delta-formula',
+            label: "Absolute lift",
+            tooltip: tip({
+              short: "\\hat{\\Delta}=\\hat{p}_T-\\hat{p}_C for proportion metrics.",
+              intuition: "Subtract comparable estimators from independent arms.",
+              formula: "\\hat{\\Delta}=\\hat{p}_T-\\hat{p}_C",
+              trap: "Mixing unequal allocation without weighting.",
+            }),
+          },
+          {
+            id: 'se-proportion-formula',
+            label: "SE for proportions",
+            tooltip: tip({
+              short: "Pooled or unpooled SE formulas depend on metric type and assumptions.",
+              intuition: "Variance shrinks as sample size grows.",
+              trap: "Applying binomial SE to heavy-tailed continuous metrics.",
+            }),
+          },
+          {
+            id: 'python-ab-sketch',
+            label: "Analysis sketch",
+            tooltip: tip({
+              short: "Compute arm means, delta, SE, z, and CI from aggregated counts.",
+              intuition: "Pre-register the analysis before looking at outcomes.",
+              code: "delta = p_t - p_c\nz = delta / se\np_value = 2 * (1 - norm.cdf(abs(z)))",
+              trap: "Peeking and re-running until significance appears.",
+            }),
+          },
+          {
+            id: 'allocation-ratio',
+            label: "Allocation ratio",
+            tooltip: tip({
+              short: "Unequal splits can reduce control variance exposure but change SE.",
+              intuition: "50/50 is common when both arms need equal precision.",
+              trap: "Forgetting to weight arms when allocation is not 50/50.",
+            }),
+          },
+          {
+            id: 'duration-rule',
+            label: "Run length",
+            tooltip: tip({
+              short: "Run through full business cycles to avoid weekday/weekend bias.",
+              intuition: "Short tests can capture transient novelty effects only.",
+              trap: "Stopping the instant p crosses a threshold.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'peeking-trap',
+            label: "Peeking",
+            tooltip: tip({
+              short: "Repeated looks without sequential design inflate false positives.",
+              intuition: "Random walks cross p=0.05 often if you watch long enough.",
+              trap: "Stopping when p first dips below 0.05.",
+              lessonId: "sequential-testing-peeking",
+            }),
+          },
+          {
+            id: 'not-randomized-trap',
+            label: "Not randomized",
+            tooltip: tip({
+              short: "Geographic or time-based rollouts are not A/B tests.",
+              intuition: "External events correlate with who saw the change.",
+              trap: "Calling any before-after comparison an experiment.",
+            }),
+          },
+          {
+            id: 'metric-switch-trap',
+            label: "Metric switching",
+            tooltip: tip({
+              short: "Changing the success metric after seeing results is p-hacking.",
+              intuition: "Many metrics guarantee one will look good by chance.",
+              trap: "Promoting a secondary metric to primary post hoc.",
+            }),
+          },
+          {
+            id: 'underpowered-trap',
+            label: "Underpowered test",
+            tooltip: tip({
+              short: "Non-significance from a small sample is weak evidence of no effect.",
+              intuition: "True lifts can hide inside wide confidence intervals.",
+              trap: "Concluding no impact because p>0.05.",
+              lessonId: "power-sample-size",
+            }),
+          },
+          {
+            id: 'simpson-trap',
+            label: "Simpson reversal",
+            tooltip: tip({
+              short: "Aggregate lift can reverse when segment mix differs across arms.",
+              intuition: "Always inspect segment-level effects alongside overall.",
+              trap: "Trusting one overall delta without stratification.",
+              lessonId: "confounding-simpsons-paradox",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'power-sample-size-lesson',
+            label: "Power & sample size",
+            tooltip: tip({
+              short: "Plan sample before launch to detect MDE with target power.",
+              intuition: "Power analysis connects business lift to experimental resolution.",
+              trap: "Launching experiments with no sample-size plan.",
+              lessonId: "power-sample-size",
+            }),
+          },
+          {
+            id: 'sequential-testing-lesson',
+            label: "Sequential testing",
+            tooltip: tip({
+              short: "Spend alpha budget across planned interim looks.",
+              intuition: "Monitoring is fine when the design accounts for multiple looks.",
+              trap: "Naive daily peeking on a fixed-horizon test.",
+              lessonId: "sequential-testing-peeking",
+            }),
+          },
+          {
+            id: 'cuped-lesson',
+            label: "CUPED",
+            tooltip: tip({
+              short: "Variance reduction with pre-period covariates narrows CIs.",
+              intuition: "Baseline metrics explain noise unrelated to treatment.",
+              trap: "Using post-treatment covariates that bias the effect.",
+              lessonId: "cuped-variance-reduction",
+            }),
+          },
+          {
+            id: 'confounding-lesson',
+            label: "Confounding",
+            tooltip: tip({
+              short: "Observational comparisons need causal care beyond A/B design.",
+              intuition: "When randomization fails, confounders return.",
+              trap: "Extending A/B conclusions to non-randomized data.",
+              lessonId: "confounding-simpsons-paradox",
+            }),
+          },
+          {
+            id: 'causal-graphs-lesson',
+            label: "Causal graphs",
+            tooltip: tip({
+              short: "DAGs clarify what must be blocked when A/B is impossible.",
+              intuition: "Experiments answer one question; graphs organize many.",
+              trap: "Adjusting every available column without a graph.",
+              lessonId: "causal-graphs-dags",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'attention-masks': {
+    center: {
+      id: 'attention-masks',
+      label: "Attention Masks",
+      type: 'current',
+      tooltip: tip({
+        short: "Attention masks block illegal query-key pairs before softmax so each token only reads allowed context.",
+        intuition: "The mask is a visibility gate on the score matrix: allowed pairs stay, blocked pairs become ~0 weight.",
+        formula: "\\operatorname{Attention}=\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V",
+        why: "Causal decoding, padding, bidirectional encoders, and cross-attention all depend on choosing the right mask.",
+        trap: "Masks control visibility; they are not the same as replacing tokens with [MASK] for BERT pretraining.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'self-attention-prereq',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Scores every query against every key, then mixes values.",
+              intuition: "Masking edits which scores enter softmax.",
+              trap: "Masking after softmax cannot remove leaked mass correctly.",
+              lessonId: "self-attention",
+            }),
+          },
+          {
+            id: 'score-matrix-prereq',
+            label: "Score matrix",
+            tooltip: tip({
+              short: "An n×n matrix of query-key dot products before normalization.",
+              intuition: "Mask adds large negative values to forbidden cells.",
+              trap: "Applying mask on values instead of scores.",
+            }),
+          },
+          {
+            id: 'softmax-prereq',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Turns each query row of scores into weights summing to 1.",
+              intuition: "Large negative mask values push blocked keys to ~0 weight.",
+              trap: "Softmax before masking lets blocked keys steal probability mass.",
+              lessonId: "softmax",
+            }),
+          },
+          {
+            id: 'query-key-positions-prereq',
+            label: "Query/key positions",
+            tooltip: tip({
+              short: "Row i is query i; column j is key j.",
+              intuition: "Mask[i][j] decides whether query i may read key j.",
+              trap: "Transposing the mask breaks causal decoding.",
+            }),
+          },
+          {
+            id: 'padding-tokens-prereq',
+            label: "Padding tokens",
+            tooltip: tip({
+              short: "Batch sequences are padded to equal length with dummy positions.",
+              intuition: "Padding mask hides pad keys from every query.",
+              trap: "Letting queries attend to pad pollutes representations.",
+            }),
+          },
+          {
+            id: 'attention-mechanism-prereq',
+            label: "Attention mechanism",
+            tooltip: tip({
+              short: "Query-key-value routing is the substrate masks modify.",
+              intuition: "Cross-attention uses masks between two sequences.",
+              trap: "Treating all attention blocks as self-attention.",
+              lessonId: "attention-mechanism",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'mask-before-softmax',
+            label: "Mask before softmax",
+            tooltip: tip({
+              short: "Add M to scaled scores, then softmax each row.",
+              intuition: "Blocked cells get a large negative additive constant.",
+              formula: "weights=\\operatorname{softmax}(scores+M)",
+              trap: "Multiplying by zero leaves softmax numerically unstable.",
+            }),
+          },
+          {
+            id: 'causal-mask',
+            label: "Causal mask",
+            tooltip: tip({
+              short: "Decoder query i may read keys j≤i only.",
+              intuition: "Future tokens are hidden so next-token training stays honest.",
+              trap: "Using bidirectional masks in autoregressive generation leaks answers.",
+            }),
+          },
+          {
+            id: 'padding-mask',
+            label: "Padding mask",
+            tooltip: tip({
+              short: "Hide pad positions from all queries.",
+              intuition: "Real tokens should not mix information from empty slots.",
+              trap: "Forgetting pad mask in encoder batches.",
+            }),
+          },
+          {
+            id: 'bidirectional-mask',
+            label: "Bidirectional mask",
+            tooltip: tip({
+              short: "Encoder self-attention allows all non-pad pairs.",
+              intuition: "Every token can see full context for representation building.",
+              trap: "Bidirectional visibility during causal generation.",
+            }),
+          },
+          {
+            id: 'cross-attention-mask',
+            label: "Cross-attention mask",
+            tooltip: tip({
+              short: "Decoder queries attend to encoder keys/values with encoder-side visibility.",
+              intuition: "Source padding is masked; decoder causality stays separate.",
+              trap: "Applying causal mask on encoder keys in cross-attention.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'visibility-gate',
+            label: "Visibility gate",
+            tooltip: tip({
+              short: "A mask answers “which keys may this query see?”",
+              intuition: "Think of attention as search with legal results only.",
+              trap: "Confusing visibility with importance weighting.",
+            }),
+          },
+          {
+            id: 'future-hiding',
+            label: "Hide the future",
+            tooltip: tip({
+              short: "Causal LM training pretends later tokens do not exist yet.",
+              intuition: "Each position learns from prefix context only.",
+              trap: "Evaluating a causal model with full-sequence bidirectional context.",
+            }),
+          },
+          {
+            id: 'pad-is-not-content',
+            label: "Pad is not content",
+            tooltip: tip({
+              short: "Padding exists for tensor shape, not semantics.",
+              intuition: "Attending to pad spreads zeros and noise.",
+              trap: "Including pad tokens in loss or attention without masking.",
+            }),
+          },
+          {
+            id: 'mask-vs-token-mask',
+            label: "Mask vs [MASK] token",
+            tooltip: tip({
+              short: "Attention mask is structural; [MASK] is a training input token.",
+              intuition: "BERT replaces tokens for MLM; attention mask still controls visibility.",
+              trap: "Using the words “attention mask” and “masked LM” interchangeably.",
+            }),
+          },
+          {
+            id: 'row-specific-visibility',
+            label: "Row-specific rules",
+            tooltip: tip({
+              short: "Different queries can have different allowed key sets.",
+              intuition: "Decoder row 5 sees fewer keys than encoder row 5 in cross-attention.",
+              trap: "Using one global boolean for all attention types.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'additive-mask-formula',
+            label: "Additive mask",
+            tooltip: tip({
+              short: "Set M[i,j]=0 allowed, M[i,j]=−∞ blocked before softmax.",
+              intuition: "Softmax of −∞ is 0 weight on that key.",
+              formula: "A=\\operatorname{softmax}(QK^T/\\sqrt{d_k}+M)V",
+              trap: "Using −1e9 without checking dtype stability in low precision.",
+            }),
+          },
+          {
+            id: 'causal-triangular',
+            label: "Causal triangle",
+            tooltip: tip({
+              short: "Upper triangle above diagonal is blocked in causal self-attention.",
+              intuition: "Lower triangle including diagonal stays visible.",
+              code: "mask = torch.triu(torch.ones(n,n), diagonal=1) * -1e9",
+              trap: "Blocking the diagonal prevents a token from attending to itself.",
+            }),
+          },
+          {
+            id: 'padding-broadcast',
+            label: "Padding broadcast",
+            tooltip: tip({
+              short: "Pad mask shape broadcasts across query rows.",
+              intuition: "Any query row zeros out pad columns.",
+              trap: "Masking queries instead of keys for padding.",
+            }),
+          },
+          {
+            id: 'boolean-to-additive',
+            label: "Boolean to additive",
+            tooltip: tip({
+              short: "Convert allowed/blocked booleans to 0 / large negative adds.",
+              intuition: "Frameworks hide this inside attention kernels.",
+              trap: "Multiplying scores by 0 instead of adding −∞ before softmax.",
+            }),
+          },
+          {
+            id: 'flash-attention-mask',
+            label: "Masked kernels",
+            tooltip: tip({
+              short: "Efficient attention still applies the same mask semantics.",
+              intuition: "Tiling does not change which pairs are legal.",
+              trap: "Assuming approximate attention removes mask requirements.",
+              lessonId: "flash-attention",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'mask-after-softmax-trap',
+            label: "Mask after softmax",
+            tooltip: tip({
+              short: "Post-softmax zeroing breaks row normalization.",
+              intuition: "Weights no longer sum to 1 on affected rows.",
+              trap: "Zeroing blocked weights without renormalizing.",
+            }),
+          },
+          {
+            id: 'leaky-causal-trap',
+            label: "Leaky causal mask",
+            tooltip: tip({
+              short: "One visible future key leaks labels during LM training.",
+              intuition: "The model can cheat by reading the answer token.",
+              trap: "Off-by-one errors on the causal diagonal.",
+            }),
+          },
+          {
+            id: 'bert-vs-attention-mask-trap',
+            label: "BERT [MASK] confusion",
+            tooltip: tip({
+              short: "[MASK] is an input token; attention mask is pairwise visibility.",
+              intuition: "MLM hides token content; attention mask hides positions.",
+              trap: "Thinking BERT causal because it uses “mask”.",
+              lessonId: "bert",
+            }),
+          },
+          {
+            id: 'cross-self-mask-mixup',
+            label: "Cross/self mix-up",
+            tooltip: tip({
+              short: "Self-attention mask shape differs from cross-attention mask.",
+              intuition: "Cross-attention connects two sequence lengths.",
+              trap: "Reusing decoder causal mask on encoder-encoder block.",
+            }),
+          },
+          {
+            id: 'pad-query-trap',
+            label: "Pad queries active",
+            tooltip: tip({
+              short: "Pad positions should often be excluded from loss and sometimes from querying.",
+              intuition: "Pad queries still run unless masked out downstream.",
+              trap: "Computing loss on padded positions.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'transformer-lesson',
+            label: "Transformer stack",
+            tooltip: tip({
+              short: "Each block combines masked attention, residuals, and MLP.",
+              intuition: "Architecture family chooses default mask pattern.",
+              trap: "One mask type for encoder, decoder, and cross blocks.",
+              lessonId: "transformer",
+            }),
+          },
+          {
+            id: 'transformer-families-lesson',
+            label: "Architecture families",
+            tooltip: tip({
+              short: "Encoder-only, decoder-only, and enc-dec use different masks.",
+              intuition: "Task fit depends on visibility pattern.",
+              trap: "Using BERT-style reading for generation.",
+              lessonId: "transformer-architecture-families",
+            }),
+          },
+          {
+            id: 'gpt-lesson',
+            label: "GPT-style decoding",
+            tooltip: tip({
+              short: "Causal mask plus KV cache during generation.",
+              intuition: "Each new token attends to cached prefix only.",
+              trap: "Bidirectional cache reads during decode.",
+              lessonId: "gpt2-comprehensive",
+            }),
+          },
+          {
+            id: 'kv-cache-lesson',
+            label: "KV cache",
+            tooltip: tip({
+              short: "Cached keys/values must respect the same visibility rules.",
+              intuition: "New query attends over allowed cached positions.",
+              trap: "Assuming cache removes need for causal structure.",
+              lessonId: "kv-cache",
+            }),
+          },
+          {
+            id: 'joint-attention-lesson',
+            label: "Joint attention",
+            tooltip: tip({
+              short: "Multimodal stacks combine modality-specific masks.",
+              intuition: "Text-image pairs need cross-modal visibility design.",
+              trap: "Letting every modality read everything always.",
+              lessonId: "joint-attention",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'attention-mechanism': {
+    center: {
+      id: 'attention-mechanism',
+      label: "Attention Mechanism",
+      type: 'current',
+      tooltip: tip({
+        short: "Attention selects useful context by scoring query-key matches, softmaxing scores, and mixing value vectors.",
+        intuition: "A query asks a question; keys advertise content; values carry the information that gets blended.",
+        formula: "\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}(QK^T/\\sqrt{d_k})V",
+        why: "Attention replaces fixed-size bottlenecks with content-based routing in seq2seq, transformers, and retrieval.",
+        trap: "Attention weights are contextual mixtures, not permanent global importance scores.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'dot-product-prereq',
+            label: "Dot product",
+            tooltip: tip({
+              short: "Query-key compatibility is a dot product over feature dimensions.",
+              intuition: "Aligned vectors score higher.",
+              trap: "Raw dot products grow with dimension without scaling.",
+            }),
+          },
+          {
+            id: 'softmax-attn-prereq',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Each query row becomes a probability distribution over keys.",
+              intuition: "Competitive normalization across keys in the row.",
+              trap: "Softmax on wrong axis breaks interpretation.",
+              lessonId: "softmax",
+            }),
+          },
+          {
+            id: 'embeddings-attn-prereq',
+            label: "Embeddings",
+            tooltip: tip({
+              short: "Items start as vectors before Q/K/V projections.",
+              intuition: "Attention compares learned representations.",
+              trap: "Treating one-hot indices as attention inputs directly.",
+              lessonId: "embeddings",
+            }),
+          },
+          {
+            id: 'matrix-mult-attn-prereq',
+            label: "Matrix multiply",
+            tooltip: tip({
+              short: "Scores and outputs are batched matrix products.",
+              intuition: "QK^T then weights·V are the two main multiplies.",
+              trap: "Elementwise multiply confusion.",
+              lessonId: "matrix-multiplication",
+            }),
+          },
+          {
+            id: 'weighted-sum-prereq',
+            label: "Weighted sum",
+            tooltip: tip({
+              short: "Output is Σ weight_j · value_j.",
+              intuition: "High weight copies more of that value vector.",
+              trap: "Averaging values without softmax weights.",
+            }),
+          },
+          {
+            id: 'sequence-context-prereq',
+            label: "Sequence context",
+            tooltip: tip({
+              short: "Attention builds context vectors over a set of positions.",
+              intuition: "Different queries highlight different keys.",
+              trap: "Assuming one attention map explains the whole model.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'query-role-attn',
+            label: "Query role",
+            tooltip: tip({
+              short: "The query states what information is sought.",
+              intuition: "Each query scans all keys for relevance.",
+              trap: "Queries are not the mixed output.",
+            }),
+          },
+          {
+            id: 'key-role-attn',
+            label: "Key role",
+            tooltip: tip({
+              short: "Keys index what each position offers.",
+              intuition: "Key j is compared against every query.",
+              trap: "Keys are scored, not summed directly into output.",
+            }),
+          },
+          {
+            id: 'value-role-attn',
+            label: "Value role",
+            tooltip: tip({
+              short: "Values hold the content that gets mixed.",
+              intuition: "Weights choose how much of each value to copy.",
+              trap: "High score on wrong value still corrupts output.",
+            }),
+          },
+          {
+            id: 'score-softmax-mix',
+            label: "Score → softmax → mix",
+            tooltip: tip({
+              short: "Dot products, row softmax, weighted value sum.",
+              intuition: "The pipeline is identical in cross- and self-attention.",
+              formula: "context_i=\\sum_j \\alpha_{ij} v_j",
+              trap: "Skipping scale before softmax in long dimensions.",
+            }),
+          },
+          {
+            id: 'cross-vs-self',
+            label: "Cross vs self",
+            tooltip: tip({
+              short: "Self-attention reads same sequence; cross-attention reads another.",
+              intuition: "Decoder queries attend to encoder memory.",
+              trap: "Calling every block self-attention.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'content-based-addressing',
+            label: "Content-based addressing",
+            tooltip: tip({
+              short: "Matches depend on vector content, not fixed positions alone.",
+              intuition: "Similar queries and keys attract even if positions move.",
+              trap: "Ignoring position when order matters.",
+            }),
+          },
+          {
+            id: 'dynamic-routing',
+            label: "Dynamic routing",
+            tooltip: tip({
+              short: "Each query chooses its own mixture of values.",
+              intuition: "Routing adapts per token and per layer.",
+              trap: "One heatmap as universal explanation.",
+            }),
+          },
+          {
+            id: 'softmax-competition',
+            label: "Softmax competition",
+            tooltip: tip({
+              short: "Raising one key score steals mass from others in the row.",
+              intuition: "Attention is zero-sum within each query row.",
+              trap: "Treating weights as independent.",
+            }),
+          },
+          {
+            id: 'alignment-intuition',
+            label: "Soft alignment",
+            tooltip: tip({
+              short: "Attention can mimic soft pointers between sequence parts.",
+              intuition: "Translation aligns source and target tokens softly.",
+              trap: "Alignment weights are not guaranteed correct alignments.",
+            }),
+          },
+          {
+            id: 'bottleneck-escape',
+            label: "Escape fixed bottleneck",
+            tooltip: tip({
+              short: "Old seq2seq compressed to one vector; attention reads widely.",
+              intuition: "Long inputs remain reachable without one summary vector.",
+              trap: "Attention removes compute cost—it does not.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'scaled-dot-product-formula',
+            label: "Scaled dot-product",
+            tooltip: tip({
+              short: "Divide scores by √d_k before softmax.",
+              intuition: "Prevents dot products from saturating softmax.",
+              formula: "\\operatorname{softmax}(QK^T/\\sqrt{d_k})V",
+              trap: "Omitting scale in implementation.",
+            }),
+          },
+          {
+            id: 'scores-code-attn',
+            label: "Score code",
+            tooltip: tip({
+              short: "scores = Q @ K.T / sqrt(d_k)",
+              intuition: "Shape (n_q, n_k) for n_q queries and n_k keys.",
+              code: "scores = torch.matmul(Q, K.transpose(-2,-1)) / math.sqrt(d_k)",
+              trap: "Wrong transpose on K.",
+            }),
+          },
+          {
+            id: 'weights-code-attn',
+            label: "Weight code",
+            tooltip: tip({
+              short: "weights = softmax(scores, dim=-1)",
+              intuition: "Normalize over key dimension.",
+              trap: "Softmax over query dimension.",
+            }),
+          },
+          {
+            id: 'output-code-attn',
+            label: "Output code",
+            tooltip: tip({
+              short: "output = weights @ V",
+              intuition: "Each row is a convex combination of value vectors.",
+              trap: "Mismatched n_k between weights and V.",
+            }),
+          },
+          {
+            id: 'multi-head-preview',
+            label: "Multi-head preview",
+            tooltip: tip({
+              short: "Several parallel attentions concatenate or project.",
+              intuition: "Heads can specialize in different relations.",
+              trap: "Multi-head changes routing rule—it parallelizes it.",
+              lessonId: "self-attention",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'importance-trap',
+            label: "Weight ≠ importance",
+            tooltip: tip({
+              short: "Bright attention cell is query-specific, not globally salient.",
+              intuition: "Interpretation needs more than one map.",
+              trap: "Using attention as sole explanation.",
+            }),
+          },
+          {
+            id: 'lookup-table-trap-attn',
+            label: "Not a lookup table",
+            tooltip: tip({
+              short: "Weights recompute from current Q/K each forward pass.",
+              intuition: "Same word type can attend differently in two sentences.",
+              trap: "Memorizing one example heatmap.",
+            }),
+          },
+          {
+            id: 'uniform-attention-trap',
+            label: "Uniform weights useless",
+            tooltip: tip({
+              short: "If all weights equal, output is average of values.",
+              intuition: "Sharp or structured weights carry selective routing.",
+              trap: "Assuming attention always sparsifies.",
+            }),
+          },
+          {
+            id: 'length-cost-trap',
+            label: "Quadratic cost",
+            tooltip: tip({
+              short: "All-pairs scoring is O(n²) in sequence length.",
+              intuition: "Long contexts need kernels, sparsity, or compression.",
+              trap: "Assuming attention is free at million-token scale.",
+            }),
+          },
+          {
+            id: 'no-mask-trap',
+            label: "Missing mask",
+            tooltip: tip({
+              short: "Illegal pairs must be blocked before softmax.",
+              intuition: "Causal and padding rules live in the mask.",
+              trap: "Running decoder without causal mask.",
+              lessonId: "attention-masks",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'self-attention-lesson',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Q, K, V all come from the same sequence.",
+              intuition: "Every token asks the whole sequence.",
+              trap: "Confusing with cross-attention.",
+              lessonId: "self-attention",
+            }),
+          },
+          {
+            id: 'attention-masks-lesson',
+            label: "Attention masks",
+            tooltip: tip({
+              short: "Masks enforce causal, padding, and cross visibility.",
+              intuition: "Same attention math, different allowed pairs.",
+              trap: "One mask for all architectures.",
+              lessonId: "attention-masks",
+            }),
+          },
+          {
+            id: 'transformer-attn-lesson',
+            label: "Transformer",
+            tooltip: tip({
+              short: "Stack attention with residuals, norms, and MLPs.",
+              intuition: "Attention mixes; MLP transforms per token.",
+              trap: "Transformer = attention only.",
+              lessonId: "transformer",
+            }),
+          },
+          {
+            id: 'rag-attn-lesson',
+            label: "RAG retrieval",
+            tooltip: tip({
+              short: "Retrieved chunks act like extra keys/values or context.",
+              intuition: "Attention-like routing also appears in retrieval fusion.",
+              trap: "Retrieval quality is separate from attention math.",
+              lessonId: "rag",
+            }),
+          },
+          {
+            id: 'multimodal-attn-lesson',
+            label: "Multimodal LLM",
+            tooltip: tip({
+              short: "Cross-modal attention routes text, image, and audio tokens.",
+              intuition: "Queries in one modality read keys in another.",
+              trap: "Assuming alignment implies grounding.",
+              lessonId: "multimodal-llm",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'bert': {
+    center: {
+      id: 'bert',
+      label: "BERT",
+      type: 'current',
+      tooltip: tip({
+        short: "BERT is a bidirectional transformer encoder trained with masked language modeling to build contextual token representations.",
+        intuition: "Every token reads full non-masked context through self-attention, then predicts hidden words or sentence-pair relationships.",
+        trap: "BERT is not an autoregressive generator; left-to-right decoding is the wrong default use.",
+        formula: "H=\\operatorname{TransformerEnc}(X),\\quad \\mathcal{L}=\\mathcal{L}_{MLM}+\\mathcal{L}_{NSP}",
+        why: "BERT-style encoders power classification, retrieval, reranking, and feature extraction across NLP.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'tokenization-bert-prereq',
+            label: "Tokenization",
+            tooltip: tip({
+              short: "Text becomes subword ids with [CLS] and [SEP].",
+              intuition: "Three embedding streams enter the encoder.",
+              trap: "Word-level tokenization mismatches BERT vocab.",
+            }),
+            lessonId: 'tokenization',
+          },
+          {
+            id: 'embeddings-bert-prereq',
+            label: "Embeddings",
+            tooltip: tip({
+              short: "Token, segment, and position embeddings sum before layers.",
+              intuition: "Same word type gets different vectors by context later.",
+              trap: "Using token vectors without position or segment ids.",
+            }),
+            lessonId: 'embeddings',
+          },
+          {
+            id: 'self-attention-bert-prereq',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Bidirectional self-attention mixes all non-pad tokens.",
+              intuition: "Each layer refines contextual representations.",
+              trap: "Causal masking during BERT encoding.",
+            }),
+            lessonId: 'self-attention',
+          },
+          {
+            id: 'attention-masks-bert-prereq',
+            label: "Attention mask",
+            tooltip: tip({
+              short: "Padding is masked; content tokens see each other.",
+              intuition: "Structural mask is not the [MASK] training token.",
+              trap: "Confusing attention mask with MLM corruption.",
+            }),
+            lessonId: 'attention-masks',
+          },
+          {
+            id: 'softmax-bert-prereq',
+            label: "Softmax / logits",
+            tooltip: tip({
+              short: "MLM head outputs vocabulary logits at masked sites.",
+              intuition: "Cross-entropy compares prediction to true token.",
+              trap: "MLM loss on every token including unmasked.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'transformer-bert-prereq',
+            label: "Transformer encoder",
+            tooltip: tip({
+              short: "Self-attention + FFN + residual + norm blocks repeat.",
+              intuition: "Encoder-only stack without causal decoder.",
+              trap: "Expecting open-ended generation from BERT.",
+            }),
+            lessonId: 'transformer',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'mlm-objective',
+            label: "Masked LM",
+            tooltip: tip({
+              short: "Random tokens become [MASK]; model predicts originals.",
+              intuition: "Cloze-style pretraining from surrounding context.",
+              trap: "Masking all tokens leaves nothing to read.",
+            }),
+          },
+          {
+            id: 'nsp-objective',
+            label: "Next sentence prediction",
+            tooltip: tip({
+              short: "Binary task: is sentence B actually after A?",
+              intuition: "Segment embeddings encode pair structure.",
+              trap: "Overweighting NSP for every downstream task.",
+            }),
+          },
+          {
+            id: 'bidirectional-encoding',
+            label: "Bidirectional encoding",
+            tooltip: tip({
+              short: "Each layer attends left and right simultaneously.",
+              intuition: "Better for understanding than autoregressive writing.",
+              trap: "Using BERT for long coherent generation.",
+            }),
+          },
+          {
+            id: 'cls-pooling',
+            label: "[CLS] representation",
+            tooltip: tip({
+              short: "First token vector often summarizes the sequence.",
+              intuition: "[CLS] aggregates context through depth.",
+              trap: "Assuming [CLS] is always best pooling.",
+            }),
+          },
+          {
+            id: 'fine-tune-head',
+            label: "Task head fine-tune",
+            tooltip: tip({
+              short: "Attach classifier on [CLS] or per-token logits.",
+              intuition: "Pretrained body plus small task head.",
+              trap: "Huge learning rate destroying pretrained weights.",
+            }),
+            lessonId: 'fine-tuning',
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'fill-in-blank',
+            label: "Fill-in-the-blank",
+            tooltip: tip({
+              short: "BERT learns by guessing hidden words from context.",
+              intuition: "Large-scale cloze tests build language structure.",
+              trap: "Pretraining as memorized fact database.",
+            }),
+          },
+          {
+            id: 'contextual-token',
+            label: "Contextual tokens",
+            tooltip: tip({
+              short: "Same word type differs by surrounding sentence.",
+              intuition: "Bank near river vs money changes representation.",
+              trap: "Static word2vec intuition on BERT outputs.",
+            }),
+          },
+          {
+            id: 'encoder-not-generator',
+            label: "Encoder not generator",
+            tooltip: tip({
+              short: "BERT reads; GPT-style models write left-to-right.",
+              intuition: "Architecture family must match task direction.",
+              trap: "Token-by-token story continuation from BERT.",
+            }),
+          },
+          {
+            id: 'segment-intuition',
+            label: "Segment pairs",
+            tooltip: tip({
+              short: "Two sentences share one forward pass.",
+              intuition: "QA and NLI fit natural pair encoding.",
+              trap: "Concatenating docs without [SEP] discipline.",
+            }),
+          },
+          {
+            id: 'deep-context',
+            label: "Depth disambiguates",
+            tooltip: tip({
+              short: "Later layers refine syntax and coreference.",
+              intuition: "One layer rarely finishes ambiguity resolution.",
+              trap: "Using only layer 0 for all tasks.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'mlm-loss-formula',
+            label: "MLM loss",
+            tooltip: tip({
+              short: "Cross-entropy on masked positions only.",
+              intuition: "Negative log prob of true token at masked sites.",
+              trap: "Loss on unmasked tokens too.",
+            }),
+          },
+          {
+            id: 'input-format-code',
+            label: "Input format",
+            tooltip: tip({
+              short: "[CLS] sent A [SEP] sent B [SEP] with token_type_ids.",
+              intuition: "Special tokens delimit segments.",
+              trap: "Wrong token_type_ids swap segment meaning.",
+            }),
+          },
+          {
+            id: 'hf-bert-sketch',
+            label: "HuggingFace sketch",
+            tooltip: tip({
+              short: "Tokenizer + AutoModel + task head pipeline.",
+              intuition: "attention_mask required for padded batches.",
+              trap: "Forgetting attention_mask on pads.",
+            }),
+          },
+          {
+            id: 'token-classification',
+            label: "Token classification",
+            tooltip: tip({
+              short: "Per-token logits for NER or tagging.",
+              intuition: "Hidden state at each token position.",
+              trap: "Using [CLS] only for token labels.",
+            }),
+          },
+          {
+            id: 'embedding-export',
+            label: "Embedding export",
+            tooltip: tip({
+              short: "Pooled hidden states for search or clustering.",
+              intuition: "Mean or CLS pooling then similarity.",
+              trap: "No normalization when comparing vectors.",
+            }),
+            lessonId: 'cosine-similarity',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'generation-trap',
+            label: "Generation misuse",
+            tooltip: tip({
+              short: "BERT lacks causal training for long generation.",
+              intuition: "Use decoder models for open-ended text.",
+              trap: "Autoregressive sampling from MLM head.",
+            }),
+          },
+          {
+            id: 'mask-token-trap',
+            label: "[MASK] at fine-tune",
+            tooltip: tip({
+              short: "Downstream inputs should not use random [MASK].",
+              intuition: "MLM corruption is pretraining-only.",
+              trap: "Masking dev data like pretraining.",
+            }),
+          },
+          {
+            id: 'nsp-reliance-trap',
+            label: "Overweighting NSP",
+            tooltip: tip({
+              short: "Many encoders drop NSP with little loss.",
+              intuition: "MLM carries most representation signal.",
+              trap: "Assuming NSP is essential everywhere.",
+            }),
+          },
+          {
+            id: 'static-embedding-trap',
+            label: "Static embedding assumption",
+            tooltip: tip({
+              short: "BERT vectors depend on full sentence.",
+              intuition: "Do not cache one vector per word globally.",
+              trap: "Word-level retrieval without re-encoding.",
+            }),
+          },
+          {
+            id: 'gpt-comparison-trap',
+            label: "BERT vs GPT",
+            tooltip: tip({
+              short: "Bidirectional encoder vs causal decoder differ.",
+              intuition: "Pick family by read vs write task.",
+              trap: "Same prompt style for both.",
+            }),
+            lessonId: 'gpt2-comprehensive',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'transformer-families-bert',
+            label: "Architecture families",
+            tooltip: tip({
+              short: "Encoder-only BERT vs decoder-only GPT.",
+              intuition: "Mask and objective define capability.",
+              trap: "Wrong family for the task.",
+            }),
+            lessonId: 'transformer-architecture-families',
+          },
+          {
+            id: 'fine-tuning-bert',
+            label: "Fine-tuning",
+            tooltip: tip({
+              short: "Adapt with labels or LoRA adapters.",
+              intuition: "Small data can shift behavior if regularized.",
+              trap: "Catastrophic forgetting from huge LR.",
+            }),
+            lessonId: 'fine-tuning',
+          },
+          {
+            id: 'rag-bert',
+            label: "RAG reranking",
+            tooltip: tip({
+              short: "Cross-encoder scores query-passage relevance.",
+              intuition: "Full bidirectional context for reranking.",
+              trap: "Bi-encoder vs cross-encoder confusion.",
+            }),
+            lessonId: 'rag-reranking-grounding',
+          },
+          {
+            id: 'embeddings-bert-lesson',
+            label: "Semantic search",
+            tooltip: tip({
+              short: "Sentence embeddings from pooled states.",
+              intuition: "Dual encoders approximate relevance cheaply.",
+              trap: "No domain fine-tune.",
+            }),
+            lessonId: 'embeddings',
+          },
+          {
+            id: 'multimodal-bert-lineage',
+            label: "Multimodal encoders",
+            tooltip: tip({
+              short: "Encoder idea extends to images and audio.",
+              intuition: "Joint encoders read rather than generate.",
+              trap: "Assuming BERT mechanics unchanged in vision.",
+            }),
+            lessonId: 'multimodal-llm',
+          },
+        ],
+      },
+    ],
+  },
+
+  'bias-variance-tradeoff': {
+    center: {
+      id: 'bias-variance-tradeoff',
+      label: "Bias-Variance Tradeoff",
+      type: 'current',
+      tooltip: tip({
+        short: "Bias-variance analysis separates underfit rigidity from sample-sensitive wiggle in generalization error.",
+        intuition: "Bias is systematic error from too-simple models; variance is instability across training samples.",
+        trap: "High validation error is not always overfitting—high training error signals bias instead.",
+        formula: "\\mathbb{E}[(y-\\hat{f}(x))^2]=Bias^2+Variance+Noise",
+        why: "Diagnosing failure mode guides whether to add data, flexibility, or regularization.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'train-error-prereq',
+            label: "Training error",
+            tooltip: tip({
+              short: "Error on data used to fit parameters.",
+              intuition: "Low train error alone does not prove generalization.",
+              trap: "Optimizing train loss without validation.",
+            }),
+          },
+          {
+            id: 'validation-error-prereq',
+            label: "Validation error",
+            tooltip: tip({
+              short: "Error on held-out data from the same distribution.",
+              intuition: "Validation estimates future performance.",
+              trap: "Tuning on test set leaks information.",
+            }),
+            lessonId: 'train-validation-test-split',
+          },
+          {
+            id: 'overfitting-prereq',
+            label: "Overfitting",
+            tooltip: tip({
+              short: "Train improves while validation worsens.",
+              intuition: "Memorization raises variance.",
+              trap: "Calling every val gap overfitting.",
+            }),
+            lessonId: 'overfitting',
+          },
+          {
+            id: 'model-complexity-prereq',
+            label: "Model complexity",
+            tooltip: tip({
+              short: "More parameters or depth increase flexibility.",
+              intuition: "Flexibility can cut bias but raise variance.",
+              trap: "Complexity alone guarantees learning.",
+            }),
+          },
+          {
+            id: 'noise-prereq',
+            label: "Irreducible noise",
+            tooltip: tip({
+              short: "Even perfect models cannot beat label noise.",
+              intuition: "Noise floor limits achievable error.",
+              trap: "Chasing zero validation error always.",
+            }),
+          },
+          {
+            id: 'expected-value-prereq',
+            label: "Expected error",
+            tooltip: tip({
+              short: "Average performance over datasets and noise.",
+              intuition: "Bias-variance is an expectation decomposition.",
+              trap: "Reading one split as universal truth.",
+            }),
+            lessonId: 'expected-value-variance',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'bias-term',
+            label: "Bias term",
+            tooltip: tip({
+              short: "Systematic error from wrong model class or underfitting.",
+              intuition: "Rigid models miss structure in every sample.",
+              trap: "Fixing bias by regularizing harder.",
+            }),
+          },
+          {
+            id: 'variance-term',
+            label: "Variance term",
+            tooltip: tip({
+              short: "Predictions swing when training sample changes.",
+              intuition: "Flexible models chase sample quirks.",
+              trap: "Fixing variance by adding capacity without data.",
+            }),
+          },
+          {
+            id: 'noise-term',
+            label: "Noise term",
+            tooltip: tip({
+              short: "Randomness in labels or inputs beyond model control.",
+              intuition: "Bayes error sets a floor.",
+              trap: "Blaming noise for fixable bias.",
+            }),
+          },
+          {
+            id: 'complexity-curve',
+            label: "Complexity curve",
+            tooltip: tip({
+              short: "Train error falls as complexity rises; val error U-shapes.",
+              intuition: "Sweet spot balances bias and variance.",
+              trap: "Picking most complex model on train.",
+            }),
+          },
+          {
+            id: 'sample-size-effect',
+            label: "Sample size effect",
+            tooltip: tip({
+              short: "More data reduces variance, not bias from wrong class.",
+              intuition: "Big data helps unstable models most.",
+              trap: "Expecting data alone to fix wrong architecture.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'underfit-intuition',
+            label: "Underfit intuition",
+            tooltip: tip({
+              short: "High train and val error → likely high bias.",
+              intuition: "Model too simple to capture pattern.",
+              trap: "Adding regularization when already underfitting.",
+            }),
+          },
+          {
+            id: 'overfit-intuition',
+            label: "Overfit intuition",
+            tooltip: tip({
+              short: "Low train, high val → likely high variance.",
+              intuition: "Model memorized quirks of the sample.",
+              trap: "Adding capacity when validation already diverges.",
+            }),
+          },
+          {
+            id: 'dartboard-intuition',
+            label: "Dartboard analogy",
+            tooltip: tip({
+              short: "Bias is aim off center; variance is spread of throws.",
+              intuition: "You can miss for systematic or noisy reasons.",
+              trap: "One bullseye run proves stability.",
+            }),
+          },
+          {
+            id: 'ensemble-intuition',
+            label: "Ensemble variance cut",
+            tooltip: tip({
+              short: "Averaging models reduces variance without new data.",
+              intuition: "Random forests and bagging exploit this.",
+              trap: "Ensembles remove bias automatically.",
+            }),
+          },
+          {
+            id: 'regularization-intuition',
+            label: "Regularization trade",
+            tooltip: tip({
+              short: "Penalties shrink wiggly fits toward simpler solutions.",
+              intuition: "λ trades bias for lower variance.",
+              trap: "Maximum regularization always best.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'decomposition-formula',
+            label: "Error decomposition",
+            tooltip: tip({
+              short: "Expected squared error = bias² + variance + noise.",
+              intuition: "Diagnostic identity under squared loss.",
+              trap: "Applying literally to every metric.",
+            }),
+          },
+          {
+            id: 'train-val-gap',
+            label: "Generalization gap",
+            tooltip: tip({
+              short: "Gap = validation error − training error.",
+              intuition: "Large gap suggests variance/overfit.",
+              trap: "Small gap proves good model.",
+            }),
+          },
+          {
+            id: 'learning-curve-code',
+            label: "Learning curves",
+            tooltip: tip({
+              short: "Plot error vs training set size.",
+              intuition: "Val converging above train signals variance.",
+              trap: "One point on curve decides all.",
+            }),
+          },
+          {
+            id: 'k-fold-variance',
+            label: "K-fold variance",
+            tooltip: tip({
+              short: "Cross-fold score spread estimates stability.",
+              intuition: "High spread → high variance model.",
+              trap: "Mean CV score alone ignores spread.",
+            }),
+            lessonId: 'cross-validation',
+          },
+          {
+            id: 'regularization-formula',
+            label: "Regularized loss",
+            tooltip: tip({
+              short: "Total loss = data loss + λ·penalty.",
+              intuition: "λ increases bias, decreases variance.",
+              trap: "Tuning λ on test data.",
+            }),
+            lessonId: 'regularization',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'all-val-error-overfit',
+            label: "All val error = overfit",
+            tooltip: tip({
+              short: "High val with high train points to bias.",
+              intuition: "Underfit also hurts validation.",
+              trap: "Always reducing model size.",
+            }),
+          },
+          {
+            id: 'more-data-fixes-all',
+            label: "More data fixes all",
+            tooltip: tip({
+              short: "Data cuts variance, not wrong model family.",
+              intuition: "Bias persists with infinite bad features.",
+              trap: "Collecting data before fixing representation.",
+            }),
+          },
+          {
+            id: 'single-split-trap',
+            label: "Single split diagnosis",
+            tooltip: tip({
+              short: "One lucky/unlucky split misleads.",
+              intuition: "Use curves and repeated splits.",
+              trap: "One validation number as gospel.",
+            }),
+          },
+          {
+            id: 'flexible-always-better',
+            label: "Flexible always better",
+            tooltip: tip({
+              short: "Flexibility raises variance without enough data.",
+              intuition: "U-shaped validation curve exists.",
+              trap: "Max depth always in trees.",
+            }),
+          },
+          {
+            id: 'metric-mismatch-trap',
+            label: "Wrong metric lens",
+            tooltip: tip({
+              short: "Bias-variance story is clearest for squared loss.",
+              intuition: "Classification needs proper scoring rules.",
+              trap: "Applying regression intuition to ranking blindly.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'regularization-lesson',
+            label: "Regularization",
+            tooltip: tip({
+              short: "Penalties and early stopping tame variance.",
+              intuition: "Choose λ by validation.",
+              trap: "Regularizing an underfit model.",
+            }),
+            lessonId: 'regularization',
+          },
+          {
+            id: 'ensemble-lesson',
+            label: "Tree ensembles",
+            tooltip: tip({
+              short: "Bagging and boosting manage bias-variance differently.",
+              intuition: "Forests cut variance; boosting cuts bias.",
+              trap: "Boosting forever on noisy labels.",
+            }),
+            lessonId: 'tree-ensembles',
+          },
+          {
+            id: 'cross-validation-lesson',
+            label: "Cross-validation",
+            tooltip: tip({
+              short: "Estimate generalization and stability across folds.",
+              intuition: "Rotate validation for robust estimates.",
+              trap: "Random folds that leak groups.",
+            }),
+            lessonId: 'cross-validation',
+          },
+          {
+            id: 'model-debugging-lesson',
+            label: "Model debugging",
+            tooltip: tip({
+              short: "Trace whether failure is data, bias, or variance.",
+              intuition: "Learning curves localize the fix.",
+              trap: "Random hyperparameter guessing.",
+            }),
+            lessonId: 'model-debugging',
+          },
+          {
+            id: 'uncertainty-lesson',
+            label: "Uncertainty estimation",
+            tooltip: tip({
+              short: "Variance-aware predictions need calibration too.",
+              intuition: "Epistemic vs aleatoric uncertainty differ.",
+              trap: "Softmax as full uncertainty story.",
+            }),
+            lessonId: 'uncertainty-estimation',
+          },
+        ],
+      },
+    ],
+  },
+
+  'calibration': {
+    center: {
+      id: 'calibration',
+      label: "Calibration",
+      type: 'current',
+      tooltip: tip({
+        short: "Calibration checks whether predicted probabilities match observed frequencies in each confidence bucket.",
+        intuition: "A score of 0.8 should be positive about 80% of the time when models are well calibrated.",
+        trap: "Sigmoid and softmax outputs are probability-shaped but training does not guarantee calibration.",
+        formula: "P(y=1\\mid \\hat{p}=p)\\approx p",
+        why: "Decision thresholds, risk scoring, and deferral policies need trustworthy probabilities.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'predicted-probability-prereq',
+            label: "Predicted probability",
+            tooltip: tip({
+              short: "Model outputs a score in [0,1] for binary events.",
+              intuition: "Score is a claim about frequency, not just ranking.",
+              trap: "Treating logits as probabilities without sigmoid.",
+            }),
+            lessonId: 'logistic-regression',
+          },
+          {
+            id: 'confusion-matrix-prereq',
+            label: "Confusion matrix",
+            tooltip: tip({
+              short: "Threshold turns probabilities into hard labels.",
+              intuition: "Calibration inspects scores before thresholding.",
+              trap: "Skipping to accuracy without score quality.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+          {
+            id: 'softmax-prereq-cal',
+            label: "Softmax outputs",
+            tooltip: tip({
+              short: "Multiclass probabilities sum to 1.",
+              intuition: "Each class probability can be miscalibrated.",
+              trap: "Argmax alone checks calibration.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'threshold-prereq',
+            label: "Decision threshold",
+            tooltip: tip({
+              short: "Operating point changes precision/recall, not calibration.",
+              intuition: "Calibration is pre-threshold probability quality.",
+              trap: "Fixing calibration by threshold only.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+          {
+            id: 'reliability-diagram-prereq',
+            label: "Reliability diagram",
+            tooltip: tip({
+              short: "Plot predicted prob vs observed rate per bucket.",
+              intuition: "Perfect calibration lies on the diagonal.",
+              trap: "One global accuracy as calibration proxy.",
+            }),
+          },
+          {
+            id: 'brier-prereq',
+            label: "Brier score",
+            tooltip: tip({
+              short: "Squared error between probability and outcome.",
+              intuition: "Penalizes confident wrong predictions.",
+              trap: "Brier only measures ranking, not calibration.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'probability-buckets',
+            label: "Probability buckets",
+            tooltip: tip({
+              short: "Group predictions by predicted confidence bins.",
+              intuition: "Each bin estimates empirical positive rate.",
+              trap: "Too few samples per bin.",
+            }),
+          },
+          {
+            id: 'observed-rate',
+            label: "Observed rate",
+            tooltip: tip({
+              short: "Fraction of positives among examples near score p.",
+              intuition: "Compare to p on reliability plot.",
+              trap: "Using hard labels only, ignoring scores.",
+            }),
+          },
+          {
+            id: 'ece-mechanism',
+            label: "Expected calibration error",
+            tooltip: tip({
+              short: "Weighted average |accuracy − confidence| across bins.",
+              intuition: "Summarizes gap from diagonal.",
+              trap: "ECE without enough bin samples.",
+            }),
+          },
+          {
+            id: 'overconfidence',
+            label: "Overconfidence",
+            tooltip: tip({
+              short: "Predicted prob higher than observed rate.",
+              intuition: "Common with modern neural nets.",
+              trap: "Calling 0.99 score “sure” without check.",
+            }),
+          },
+          {
+            id: 'underconfidence',
+            label: "Underconfidence",
+            tooltip: tip({
+              short: "Predicted prob lower than observed rate.",
+              intuition: "Conservative probabilities still miscalibrated.",
+              trap: "Assuming low scores are always safe.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'weather-forecast-intuition',
+            label: "Weather forecast analogy",
+            tooltip: tip({
+              short: "30% rain should rain ~30% of such days.",
+              intuition: "Calibration is about frequency honesty.",
+              trap: "One rainy day disproves 30% claim.",
+            }),
+          },
+          {
+            id: 'rank-vs-cal',
+            label: "Ranking vs calibration",
+            tooltip: tip({
+              short: "Good ranking can coexist with bad calibration.",
+              intuition: "ROC can look great while buckets lie.",
+              trap: "High AUC means calibrated.",
+            }),
+          },
+          {
+            id: 'threshold-independent',
+            label: "Before threshold",
+            tooltip: tip({
+              short: "Calibration judges scores, not chosen cutoff.",
+              intuition: "Move threshold for costs after calibration check.",
+              trap: "Tuning threshold to “fix” miscalibration plot.",
+            }),
+          },
+          {
+            id: 'confidence-deferral',
+            label: "Deferral intuition",
+            tooltip: tip({
+              short: "Uncalibrated 0.95 may be less trustworthy than calibrated 0.75.",
+              intuition: "Defer or escalate low-quality confidence.",
+              trap: "Always trust highest softmax class.",
+            }),
+          },
+          {
+            id: 'temperature-intuition',
+            label: "Temperature scaling",
+            tooltip: tip({
+              short: "Post-hoc scaling softens overconfident logits.",
+              intuition: "Cheap validation-set recalibration.",
+              trap: "Temperature fixes all model errors.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'brier-formula',
+            label: "Brier score",
+            tooltip: tip({
+              short: "(1/N) Σ (p_i − y_i)² for binary outcomes.",
+              intuition: "Proper scoring rule for probabilities.",
+              trap: "Using Brier on class labels without probs.",
+            }),
+          },
+          {
+            id: 'ece-formula',
+            label: "ECE sketch",
+            tooltip: tip({
+              short: "Σ (n_b/N) |acc(b) − conf(b)| over bins b.",
+              intuition: "Large gaps in any bin hurt ECE.",
+              trap: "One bin dominates small datasets.",
+            }),
+          },
+          {
+            id: 'reliability-plot-code',
+            label: "Reliability plot",
+            tooltip: tip({
+              short: "Bin predictions; plot mean pred vs empirical rate.",
+              intuition: "Diagonal is perfect calibration.",
+              trap: "Bins with n=1.",
+            }),
+          },
+          {
+            id: 'temperature-scaling-code',
+            label: "Temperature scaling",
+            tooltip: tip({
+              short: "p = softmax(logits / T) with T tuned on val.",
+              intuition: "T>1 softens; T<1 sharpens.",
+              trap: "Tuning T on test set.",
+            }),
+          },
+          {
+            id: 'platt-scaling',
+            label: "Platt scaling",
+            tooltip: tip({
+              short: "Logistic regression on validation logits.",
+              intuition: "Maps scores to calibrated probs.",
+              trap: "Platt on train logits overfits calibration.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'softmax-calibrated-trap',
+            label: "Softmax = calibrated",
+            tooltip: tip({
+              short: "Training optimizes loss, not bucket frequencies.",
+              intuition: "Modern nets often overconfident.",
+              trap: "Deploying argmax prob as risk score.",
+            }),
+          },
+          {
+            id: 'accuracy-cal-trap',
+            label: "Accuracy implies calibration",
+            tooltip: tip({
+              short: "90% accuracy with miscalibrated 0.9 scores.",
+              intuition: "Check reliability diagram.",
+              trap: "Single threshold accuracy only.",
+            }),
+          },
+          {
+            id: 'test-calibration-trap',
+            label: "Calibrate on test",
+            tooltip: tip({
+              short: "Recalibration must use held-out validation.",
+              intuition: "Test touch leaks tuning.",
+              trap: "Platt fit on test logits.",
+            }),
+            lessonId: 'train-validation-test-split',
+          },
+          {
+            id: 'class-imbalance-cal-trap',
+            label: "Imbalance hides miscalibration",
+            tooltip: tip({
+              short: "Rare positives need PR and calibration by bucket.",
+              intuition: "Overall accuracy looks fine.",
+              trap: "Ignoring minority class buckets.",
+            }),
+          },
+          {
+            id: 'uncertainty-conflation-trap',
+            label: "Calibration vs uncertainty",
+            tooltip: tip({
+              short: "Calibration is about stated probs; OOD is separate.",
+              intuition: "Well-calibrated on train domain only.",
+              trap: "Calibrated means no OOD failures.",
+            }),
+            lessonId: 'uncertainty-estimation',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'classification-metrics-cal',
+            label: "Classification metrics",
+            tooltip: tip({
+              short: "Choose threshold after understanding score quality.",
+              intuition: "Metrics depend on cutoff.",
+              trap: "Threshold without calibration check.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+          {
+            id: 'roc-pr-cal',
+            label: "ROC / PR curves",
+            tooltip: tip({
+              short: "Ranking curves complement calibration plots.",
+              intuition: "Use PR when positives rare.",
+              trap: "AUC replaces calibration.",
+            }),
+            lessonId: 'roc-pr-curves',
+          },
+          {
+            id: 'model-reliability-cal',
+            label: "Model reliability",
+            tooltip: tip({
+              short: "Production needs calibrated risk and monitoring.",
+              intuition: "Track bucket drift over time.",
+              trap: "Offline calibration once forever.",
+            }),
+            lessonId: 'model-reliability',
+          },
+          {
+            id: 'uncertainty-cal-lesson',
+            label: "Uncertainty estimation",
+            tooltip: tip({
+              short: "Combine calibration with OOD and ensembles.",
+              intuition: "Know when to abstain.",
+              trap: "Softmax max as full uncertainty.",
+            }),
+            lessonId: 'uncertainty-estimation',
+          },
+          {
+            id: 'logistic-cal-lesson',
+            label: "Logistic regression baseline",
+            tooltip: tip({
+              short: "Linear models often reasonably calibrated with enough data.",
+              intuition: "Compare neural net to baseline reliability.",
+              trap: "Assuming linear always perfect.",
+            }),
+            lessonId: 'logistic-regression',
+          },
+        ],
+      },
+    ],
+  },
+
+  'causal-graphs-dags': {
+    center: {
+      id: 'causal-graphs-dags',
+      label: "Causal Graphs / DAGs",
+      type: 'current',
+      tooltip: tip({
+        short: "Causal DAGs make adjustment assumptions explicit by drawing variables and directed causal arrows before estimating effects.",
+        intuition: "Confounders open backdoor paths; colliders can open bias when conditioned; mediators carry part of the effect.",
+        trap: "Adding every available variable is not always safer—wrong adjustment can create bias.",
+        formula: "Backdoor:\\ T\\leftarrow C\\rightarrow Y,\\quad Collider:\\ T\\rightarrow S\\leftarrow U",
+        why: "DAGs guide valid adjustment, instrument choice, and experiment design when A/B is impossible.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'correlation-prereq',
+            label: "Correlation ≠ causation",
+            tooltip: tip({
+              short: "Association does not imply causal direction.",
+              intuition: "DAGs encode causal claims separately.",
+              trap: "Drawing arrows from significant p-values.",
+            }),
+            lessonId: 'conditional-probability',
+          },
+          {
+            id: 'confounding-prereq',
+            label: "Confounding",
+            tooltip: tip({
+              short: "Common cause affects treatment and outcome.",
+              intuition: "Creates non-causal association.",
+              trap: "Ignoring pre-treatment differences.",
+            }),
+            lessonId: 'confounding-simpsons-paradox',
+          },
+          {
+            id: 'adjustment-prereq',
+            label: "Covariate adjustment",
+            tooltip: tip({
+              short: "Regressing or stratifying on variables changes estimates.",
+              intuition: "Only some variables should be adjusted.",
+              trap: "Adjusting everything available.",
+            }),
+          },
+          {
+            id: 'randomization-prereq',
+            label: "Randomization",
+            tooltip: tip({
+              short: "RCTs block confounding by design.",
+              intuition: "DAGs matter most in observational settings.",
+              trap: "DAGs replace experiments when feasible.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'conditional-independence-prereq',
+            label: "Conditional independence",
+            tooltip: tip({
+              short: "Blocking a path can d-separate variables.",
+              intuition: "Graphical rules formalize “holding fixed”.",
+              trap: "Statistical independence equals causal independence always.",
+            }),
+          },
+          {
+            id: 'treatment-outcome-prereq',
+            label: "Treatment & outcome",
+            tooltip: tip({
+              short: "Effect question needs clear T and Y nodes.",
+              intuition: "Ambiguous endpoints blur graph.",
+              trap: "Multiple outcomes without structure.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'nodes-arrows',
+            label: "Nodes and arrows",
+            tooltip: tip({
+              short: "Nodes are variables; arrows are direct causal claims.",
+              intuition: "Missing arrow asserts no direct effect.",
+              trap: "Arrows because variables correlate.",
+            }),
+          },
+          {
+            id: 'backdoor-path',
+            label: "Backdoor path",
+            tooltip: tip({
+              short: "Non-causal path T ← C → Y through confounder C.",
+              intuition: "Must block without blocking causal path.",
+              trap: "Adjusting mediator as confounder wrongly.",
+            }),
+          },
+          {
+            id: 'collider-path',
+            label: "Collider path",
+            tooltip: tip({
+              short: "T → S ← U makes S a collider of T and U.",
+              intuition: "Conditioning on S opens spurious association.",
+              trap: "Adding collider to “control everything”.",
+            }),
+          },
+          {
+            id: 'mediator-path',
+            label: "Mediator path",
+            tooltip: tip({
+              short: "T → M → Y carries part of effect through M.",
+              intuition: "Adjusting M estimates direct effect only.",
+              trap: "Total vs direct effect confusion.",
+            }),
+          },
+          {
+            id: 'd-separation',
+            label: "d-separation",
+            tooltip: tip({
+              short: "Blocked paths imply conditional independencies.",
+              intuition: "Test graph implications against data cautiously.",
+              trap: "One failed test disproves all causal claims.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'draw-first-intuition',
+            label: "Draw before estimating",
+            tooltip: tip({
+              short: "Write assumptions before running regressions.",
+              intuition: "Estimates inherit graph mistakes.",
+              trap: "Let regression choose adjustment set.",
+            }),
+          },
+          {
+            id: 'fork-intuition',
+            label: "Fork (confounder)",
+            tooltip: tip({
+              short: "Common cause creates spurious link.",
+              intuition: "Stratify or adjust on confounder.",
+              trap: "Adjusting effect pathway instead.",
+            }),
+          },
+          {
+            id: 'pipe-intuition',
+            label: "Pipe (mediator)",
+            tooltip: tip({
+              short: "Effect flows through intermediate variable.",
+              intuition: "Do not block if total effect is target.",
+              trap: "Controlling mediator to “reduce bias”.",
+            }),
+          },
+          {
+            id: 'collider-intuition',
+            label: "Collider bias",
+            tooltip: tip({
+              short: "Controlling a common effect induces association.",
+              intuition: "Sample selection on S opens paths.",
+              trap: "More controls always reduce bias.",
+            }),
+          },
+          {
+            id: 'simpson-dag-intuition',
+            label: "Simpson and graphs",
+            tooltip: tip({
+              short: "Aggregate reversal when weights and paths mix.",
+              intuition: "Graph clarifies which strata matter.",
+              trap: "Overall sign always causal.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'backdoor-criterion',
+            label: "Backdoor criterion",
+            tooltip: tip({
+              short: "Adjust set Z blocks all backdoor paths T↔Y.",
+              intuition: "No descendant of T in Z typically.",
+              trap: "Including collider in Z.",
+            }),
+          },
+          {
+            id: 'adjustment-formula',
+            label: "Adjustment formula",
+            tooltip: tip({
+              short: "P(Y|do(T)) from sum over confounder strata.",
+              intuition: "do-operator removes incoming T arrows.",
+              trap: "Conditioning equals do without assumptions.",
+            }),
+          },
+          {
+            id: 'regression-adjustment',
+            label: "Regression adjustment",
+            tooltip: tip({
+              short: "Add covariates claimed to satisfy backdoor.",
+              intuition: "Coeff on T estimates causal effect if graph right.",
+              trap: "Kitchen-sink regression.",
+            }),
+          },
+          {
+            id: 'dag-software-sketch',
+            label: "DAG sketch",
+            tooltip: tip({
+              short: "Draw T, Y, C, M, S with directed edges.",
+              intuition: "Label confounder, collider, mediator roles.",
+              trap: "Bidirected edges without meaning.",
+            }),
+          },
+          {
+            id: 'instrument-preview',
+            label: "Instrument preview",
+            tooltip: tip({
+              short: "Z → T → Y with Z unrelated to Y except through T.",
+              intuition: "Used when confounding unobserved.",
+              trap: "Any correlated Z is valid instrument.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'adjust-all-trap',
+            label: "Adjust everything",
+            tooltip: tip({
+              short: "Colliders and mediators can bias when conditioned.",
+              intuition: "Graph picks adjustment set.",
+              trap: "Kitchen-sink controls.",
+            }),
+          },
+          {
+            id: 'correlation-arrow-trap',
+            label: "Arrow from correlation",
+            tooltip: tip({
+              short: "Statistical link does not prove direction.",
+              intuition: "Domain knowledge builds graph.",
+              trap: "Automatic causal discovery without caution.",
+            }),
+          },
+          {
+            id: 'mediator-as-confounder-trap',
+            label: "Mediator as confounder",
+            tooltip: tip({
+              short: "Blocking mediator kills part of effect.",
+              intuition: "Total vs direct effect choice matters.",
+              trap: "Always “control for” intermediate.",
+            }),
+          },
+          {
+            id: 'selection-collider-trap',
+            label: "Selection collider",
+            tooltip: tip({
+              short: "Filtering on downstream variable opens paths.",
+              intuition: "Survivorship and consent bias.",
+              trap: "Analyzing only “engaged” users without graph.",
+            }),
+          },
+          {
+            id: 'unmeasured-confounding-trap',
+            label: "Unmeasured confounding",
+            tooltip: tip({
+              short: "DAG with missing C remains biased after adjust.",
+              intuition: "Sensitivity analysis needed.",
+              trap: "Propensity scores fix all hidden bias.",
+            }),
+            lessonId: 'propensity-scores',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'confounding-lesson-dag',
+            label: "Confounding & Simpson",
+            tooltip: tip({
+              short: "Aggregate paradoxes make sense with weighted paths.",
+              intuition: "Stratify on right variables.",
+              trap: "Overall effect without segments.",
+            }),
+            lessonId: 'confounding-simpsons-paradox',
+          },
+          {
+            id: 'treatment-effects-lesson',
+            label: "Treatment effects",
+            tooltip: tip({
+              short: "ATE, CATE from causal estimands on graph.",
+              intuition: "Target estimand must match graph.",
+              trap: "Average effect without definition.",
+            }),
+            lessonId: 'treatment-effects',
+          },
+          {
+            id: 'propensity-lesson',
+            label: "Propensity scores",
+            tooltip: tip({
+              short: "Balance observed covariates under measured graph.",
+              intuition: "Overlap required.",
+              trap: "PS fixes unmeasured confounding.",
+            }),
+            lessonId: 'propensity-scores',
+          },
+          {
+            id: 'ab-testing-lesson-dag',
+            label: "A/B testing",
+            tooltip: tip({
+              short: "Randomization blocks backdoor paths by design.",
+              intuition: "DAG explains when obs studies fail.",
+              trap: "Observational dashboard as RCT.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'experimentation-track',
+            label: "Experimentation track",
+            tooltip: tip({
+              short: "Graph + experiment design together.",
+              intuition: "Declare estimand before launch.",
+              trap: "Significant p-value as causal proof.",
+            }),
+            lessonId: 'hypothesis-testing-intuition',
+          },
+        ],
+      },
+    ],
+  },
+
+  'classification-metrics': {
+    center: {
+      id: 'classification-metrics',
+      label: "Classification Metrics",
+      type: 'current',
+      tooltip: tip({
+        short: "Classification metrics describe which mistakes a classifier makes after turning scores into decisions.",
+        intuition: "The confusion matrix counts true/false positives and negatives; derived metrics trade off different error costs.",
+        trap: "High accuracy can hide poor recall when positives are rare.",
+        formula: "F_1=2\\cdot\\frac{precision\\cdot recall}{precision+recall}",
+        why: "Choosing metrics matching business costs prevents silent failure in deployment.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'binary-label-prereq',
+            label: "Binary labels",
+            tooltip: tip({
+              short: "Positive and negative ground-truth classes.",
+              intuition: "Metrics count agreement and errors.",
+              trap: "Multiclass without defining positive class.",
+            }),
+            lessonId: 'logistic-regression',
+          },
+          {
+            id: 'predicted-score-prereq',
+            label: "Predicted score",
+            tooltip: tip({
+              short: "Model outputs probability or logit before threshold.",
+              intuition: "Threshold converts score to label.",
+              trap: "Using hard labels only during training eval.",
+            }),
+          },
+          {
+            id: 'threshold-prereq-cm',
+            label: "Threshold",
+            tooltip: tip({
+              short: "Cutoff maps score to positive prediction.",
+              intuition: "Default 0.5 may be wrong.",
+              trap: "Assuming 0.5 optimal for all costs.",
+            }),
+          },
+          {
+            id: 'confusion-matrix-prereq-cm',
+            label: "Confusion matrix",
+            tooltip: tip({
+              short: "TP, FP, FN, TN accounting table.",
+              intuition: "All metrics derive from these four counts.",
+              trap: "Computing metrics without fixed threshold.",
+            }),
+          },
+          {
+            id: 'class-imbalance-prereq',
+            label: "Class imbalance",
+            tooltip: tip({
+              short: "Rare positives make accuracy misleading.",
+              intuition: "Recall and PR matter more.",
+              trap: "Accuracy alone on 99% negatives.",
+            }),
+          },
+          {
+            id: 'population-base-rate-prereq',
+            label: "Base rate",
+            tooltip: tip({
+              short: "Prevalence affects precision and interpretation.",
+              intuition: "Same model, different deployment prevalence.",
+              trap: "Ignoring prevalence shift at serve time.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'tp-fp-fn-tn',
+            label: "TP / FP / FN / TN",
+            tooltip: tip({
+              short: "Four outcomes from prediction vs truth.",
+              intuition: "Every metric is a function of these counts.",
+              trap: "Swapping positive class definition silently.",
+            }),
+          },
+          {
+            id: 'precision-mechanism',
+            label: "Precision",
+            tooltip: tip({
+              short: "Of predicted positives, fraction truly positive.",
+              intuition: "Answers “when we alarm, are we right?”",
+              trap: "Precision ignores false negatives.",
+            }),
+          },
+          {
+            id: 'recall-mechanism',
+            label: "Recall",
+            tooltip: tip({
+              short: "Of actual positives, fraction caught.",
+              intuition: "Answers “did we find the cases?”",
+              trap: "Recall ignores false positives.",
+            }),
+          },
+          {
+            id: 'f1-mechanism',
+            label: "F1 score",
+            tooltip: tip({
+              short: "Harmonic mean of precision and recall.",
+              intuition: "Penalizes extreme imbalance of the two.",
+              trap: "F1 when accuracy is appropriate.",
+            }),
+          },
+          {
+            id: 'accuracy-mechanism',
+            label: "Accuracy",
+            tooltip: tip({
+              short: "Fraction of all predictions correct.",
+              intuition: "Fine when classes balanced and costs symmetric.",
+              trap: "Accuracy on imbalanced data.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'spam-filter-intuition',
+            label: "Spam filter",
+            tooltip: tip({
+              short: "High precision avoids blocking good mail; high recall catches spam.",
+              intuition: "Cost asymmetry picks metric emphasis.",
+              trap: "Optimizing accuracy only.",
+            }),
+          },
+          {
+            id: 'medical-screening-intuition',
+            label: "Medical screening",
+            tooltip: tip({
+              short: "Missing disease (FN) often costlier than extra test (FP).",
+              intuition: "Recall often prioritized.",
+              trap: "Precision-only when FN deadly.",
+            }),
+          },
+          {
+            id: 'threshold-slide-intuition',
+            label: "Threshold slide",
+            tooltip: tip({
+              short: "Lower threshold raises recall, often lowers precision.",
+              intuition: "Move along precision-recall frontier.",
+              trap: "One threshold fits all deployments.",
+            }),
+          },
+          {
+            id: 'confusion-matrix-story',
+            label: "Matrix story",
+            tooltip: tip({
+              short: "Read who you helped, who you hurt, who you missed.",
+              intuition: "Business narrative from four counts.",
+              trap: "Single number summary without context.",
+            }),
+          },
+          {
+            id: 'prevalence-shift-intuition',
+            label: "Prevalence shift",
+            tooltip: tip({
+              short: "Precision changes when positive rate changes even if model fixed.",
+              intuition: "Recalibrate and re-threshold on serve data.",
+              trap: "Train precision equals serve precision.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'precision-formula',
+            label: "Precision",
+            tooltip: tip({
+              short: "TP / (TP + FP).",
+              intuition: "Undefined if no positive predictions.",
+              trap: "Zero division when TP+FP=0.",
+            }),
+          },
+          {
+            id: 'recall-formula',
+            label: "Recall",
+            tooltip: tip({
+              short: "TP / (TP + FN).",
+              intuition: "Also called sensitivity or TPR.",
+              trap: "Confusing with specificity.",
+            }),
+          },
+          {
+            id: 'f1-formula',
+            label: "F1",
+            tooltip: tip({
+              short: "2PR / (P + R).",
+              intuition: "Zero when P or R is zero.",
+              trap: "Macro vs micro F1 in multiclass.",
+            }),
+          },
+          {
+            id: 'sklearn-metrics-code',
+            label: "sklearn metrics",
+            tooltip: tip({
+              short: "classification_report and confusion_matrix from y_true, y_pred.",
+              intuition: "Set threshold on y_score first.",
+              trap: "Metrics on training labels without val.",
+            }),
+          },
+          {
+            id: 'specificity-formula',
+            label: "Specificity",
+            tooltip: tip({
+              short: "TN / (TN + FP).",
+              intuition: "True negative rate.",
+              trap: "Specificity alone when FN costly.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'accuracy-trap-cm',
+            label: "Accuracy trap",
+            tooltip: tip({
+              short: "99% negatives → 99% accuracy by predicting all negative.",
+              intuition: "Always inspect confusion matrix.",
+              trap: "Accuracy headline on imbalanced data.",
+            }),
+          },
+          {
+            id: 'single-threshold-trap',
+            label: "Single threshold",
+            tooltip: tip({
+              short: "0.5 default rarely optimal.",
+              intuition: "Tune threshold on validation for costs.",
+              trap: "Deploying train threshold on new population.",
+            }),
+          },
+          {
+            id: 'precision-recall-confusion-trap',
+            label: "P vs R confusion",
+            tooltip: tip({
+              short: "Teams ask for “accuracy” but mean recall.",
+              intuition: "Define metric in business language.",
+              trap: "Optimizing wrong metric successfully.",
+            }),
+          },
+          {
+            id: 'leakage-metrics-trap',
+            label: "Leakage inflates metrics",
+            tooltip: tip({
+              short: "Target leakage makes all metrics look great.",
+              intuition: "Audit features before trusting matrix.",
+              trap: "Great metrics without sanity check.",
+            }),
+            lessonId: 'data-leakage-deep-dive',
+          },
+          {
+            id: 'class-definition-trap',
+            label: "Positive class definition",
+            tooltip: tip({
+              short: "Switching which class is “positive” changes metrics.",
+              intuition: "Document positive label.",
+              trap: "Comparing metrics across projects with different defs.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'roc-pr-lesson',
+            label: "ROC / PR curves",
+            tooltip: tip({
+              short: "Evaluate all thresholds, not one.",
+              intuition: "PR better for rare positives.",
+              trap: "ROC alone when positives rare.",
+            }),
+            lessonId: 'roc-pr-curves',
+          },
+          {
+            id: 'calibration-lesson-cm',
+            label: "Calibration",
+            tooltip: tip({
+              short: "Scores must be trustworthy before thresholding.",
+              intuition: "Reliability diagram complements CM.",
+              trap: "Good F1 implies calibrated scores.",
+            }),
+            lessonId: 'calibration',
+          },
+          {
+            id: 'model-fairness-lesson',
+            label: "Model fairness",
+            tooltip: tip({
+              short: "Metrics compared across groups reveal disparate harm.",
+              intuition: "Equal accuracy can hide unequal FN rates.",
+              trap: "One global metric proves fairness.",
+            }),
+            lessonId: 'model-fairness',
+          },
+          {
+            id: 'model-monitoring-lesson',
+            label: "Model monitoring",
+            tooltip: tip({
+              short: "Track precision/recall drift in production.",
+              intuition: "Alert on confusion matrix shift.",
+              trap: "Offline metric once at launch.",
+            }),
+            lessonId: 'model-monitoring',
+          },
+          {
+            id: 'bias-variance-cm',
+            label: "Bias-variance",
+            tooltip: tip({
+              short: "Metric choice interacts with model flexibility.",
+              intuition: "Overfit may inflate train precision.",
+              trap: "Train metric equals production.",
+            }),
+            lessonId: 'bias-variance-tradeoff',
+          },
+        ],
+      },
+    ],
+  },
+
+  'computation-graph-backprop': {
+    center: {
+      id: 'computation-graph-backprop',
+      label: "Computation Graph & Backpropagation",
+      type: 'current',
+      tooltip: tip({
+        short: "Backpropagation assigns credit to each parameter by reversing the chain rule through a computation graph.",
+        intuition: "Forward pass stores local values; backward pass multiplies upstream gradients by local derivatives.",
+        trap: "Backprop is not a separate learning rule—it is automatic differentiation on the graph.",
+        formula: "\\frac{\\partial L}{\\partial w}=\\frac{\\partial L}{\\partial a}\\frac{\\partial a}{\\partial z}\\frac{\\partial z}{\\partial w}",
+        why: "Every deep learning framework trains by building graphs and running reverse-mode autodiff.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'chain-rule-prereq',
+            label: "Chain rule",
+            tooltip: tip({
+              short: "Nested functions multiply local derivatives.",
+              intuition: "Backprop is organized chain rule.",
+              trap: "Adding derivatives instead of multiplying.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+          {
+            id: 'loss-function-prereq',
+            label: "Loss function",
+            tooltip: tip({
+              short: "Scalar objective compares prediction to target.",
+              intuition: "Gradient starts at loss node.",
+              trap: "Multiple losses without weighting.",
+            }),
+          },
+          {
+            id: 'neural-layer-prereq',
+            label: "Neural layer",
+            tooltip: tip({
+              short: "z = Wx + b then activation a = σ(z).",
+              intuition: "Graph nodes for affine and nonlinear steps.",
+              trap: "Skipping activation in graph mental model.",
+            }),
+            lessonId: 'neural-network',
+          },
+          {
+            id: 'partial-derivative-prereq',
+            label: "Partial derivatives",
+            tooltip: tip({
+              short: "Each parameter gets ∂L/∂w holding others fixed.",
+              intuition: "Gradients are vectors of partials.",
+              trap: "Treating all parameters as one scalar.",
+            }),
+          },
+          {
+            id: 'computational-graph-prereq',
+            label: "Computation graph",
+            tooltip: tip({
+              short: "Nodes are ops; edges carry tensors and grads.",
+              intuition: "Structure mirrors forward computation.",
+              trap: "Graph only for visualization not math.",
+            }),
+          },
+          {
+            id: 'gradient-descent-prereq-bp',
+            label: "Gradient descent",
+            tooltip: tip({
+              short: "Parameters move opposite loss gradient.",
+              intuition: "Backprop supplies the gradient.",
+              trap: "Updating without gradients.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'forward-pass',
+            label: "Forward pass",
+            tooltip: tip({
+              short: "Compute outputs and cache intermediates.",
+              intuition: "Each node stores values for backward.",
+              trap: "Recomputing without cache in backward.",
+            }),
+          },
+          {
+            id: 'reverse-topological',
+            label: "Reverse order",
+            tooltip: tip({
+              short: "Visit nodes from loss back to inputs.",
+              intuition: "Dependencies flow opposite forward edges.",
+              trap: "Backward before forward completes.",
+            }),
+          },
+          {
+            id: 'local-derivative',
+            label: "Local derivative",
+            tooltip: tip({
+              short: "Each op knows ∂output/∂input for its inputs.",
+              intuition: "ReLU, matmul, loss each contribute factor.",
+              trap: "Wrong local Jacobian for broadcast ops.",
+            }),
+          },
+          {
+            id: 'gradient-accumulation',
+            label: "Gradient accumulation",
+            tooltip: tip({
+              short: "Fan-in sums gradients from multiple children.",
+              intuition: "Shared parameters accumulate contributions.",
+              trap: "Overwriting instead of summing shared grad.",
+            }),
+          },
+          {
+            id: 'parameter-update',
+            label: "Parameter update",
+            tooltip: tip({
+              short: "w ← w − η ∂L/∂w after full backward.",
+              intuition: "Optimizer may modify raw gradient.",
+              trap: "Updating mid-backward through graph.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'blame-assignment',
+            label: "Blame assignment",
+            tooltip: tip({
+              short: "Each parameter asks how much it moved the loss.",
+              intuition: "Credit flows backward along used paths.",
+              trap: "Blaming input data instead of weights.",
+            }),
+          },
+          {
+            id: 'reuse-forward-cache',
+            label: "Reuse forward cache",
+            tooltip: tip({
+              short: "Backward needs forward values (e.g., pre-activation for ReLU).",
+              intuition: "Memory trades for speed.",
+              trap: "Backward without saved activations.",
+            }),
+          },
+          {
+            id: 'path-multiplication',
+            label: "Path multiplication",
+            tooltip: tip({
+              short: "Deep chains multiply many small/large factors.",
+              intuition: "Explains vanish/explode intuitively.",
+              trap: "Depth never affects gradient scale.",
+            }),
+          },
+          {
+            id: 'branching-flow',
+            label: "Branching flow",
+            tooltip: tip({
+              short: "Split paths duplicate upstream gradient to branches.",
+              intuition: "Sum at merge points.",
+              trap: "Gradient disappears at branch incorrectly.",
+            }),
+          },
+          {
+            id: 'scalar-loss-start',
+            label: "Start at scalar loss",
+            tooltip: tip({
+              short: "Single starting gradient ∂L/∂L = 1.",
+              intuition: "Vector losses need reduction first.",
+              trap: "Backward from vector without reduction.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'chain-rule-formula',
+            label: "Chain rule on graph",
+            tooltip: tip({
+              short: "∂L/∂x = (∂L/∂y)(∂y/∂x) along path x→y.",
+              intuition: "Product of local factors.",
+              trap: "Breaking chain at nonlinearities incorrectly.",
+            }),
+          },
+          {
+            id: 'relu-local-grad',
+            label: "ReLU local grad",
+            tooltip: tip({
+              short: "∂a/∂z = 1 if z>0 else 0.",
+              intuition: "Blocked ReLU stops grad to weights.",
+              trap: "Expecting grad through negative z.",
+            }),
+            lessonId: 'relu',
+          },
+          {
+            id: 'affine-local-grad',
+            label: "Affine local grad",
+            tooltip: tip({
+              short: "∂z/∂w = x for z=Wx+b.",
+              intuition: "Input activations scale weight grad.",
+              trap: "Using output instead of input activations.",
+            }),
+          },
+          {
+            id: 'pytorch-autograd-sketch',
+            label: "Autograd sketch",
+            tooltip: tip({
+              short: "loss.backward() triggers reverse autodiff.",
+              intuition: "requires_grad marks learnable tensors.",
+              trap: "Zero grad not called between steps.",
+            }),
+            lessonId: 'optimizers',
+          },
+          {
+            id: 'manual-backprop-sketch',
+            label: "Manual two-layer sketch",
+            tooltip: tip({
+              short: "Compute δ at output, propagate to W2, hidden, W1.",
+              intuition: "Hand trace builds intuition.",
+              trap: "Skipping transpose on weight grad.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'backprop-magic-trap',
+            label: "Backprop magic",
+            tooltip: tip({
+              short: "It is chain rule bookkeeping, not new optimization.",
+              intuition: "Frameworks automate Jacobians.",
+              trap: "Tuning “backprop hyperparameter”.",
+            }),
+          },
+          {
+            id: 'dead-relu-trap',
+            label: "Dead ReLU",
+            tooltip: tip({
+              short: "Negative pre-activation gives zero weight grad.",
+              intuition: "Units can stop learning.",
+              trap: "Leaky ReLU fixes all scaling issues.",
+            }),
+            lessonId: 'leaky-relu',
+          },
+          {
+            id: 'detach-trap',
+            label: "Forgotten detach",
+            tooltip: tip({
+              short: "Stopping grad through part of graph unintentionally.",
+              intuition: "Check requires_grad and no_grad blocks.",
+              trap: "Training frozen module accidentally.",
+            }),
+          },
+          {
+            id: 'inplace-op-trap',
+            label: "In-place ops",
+            tooltip: tip({
+              short: "In-place may break autograd history.",
+              intuition: "Version counters detect corruption.",
+              trap: "Silent wrong grads from in-place ReLU.",
+            }),
+          },
+          {
+            id: 'graph-vs-eager-trap',
+            label: "Static vs eager",
+            tooltip: tip({
+              short: "Eager builds graph dynamically each forward.",
+              intuition: "Same math, different implementation.",
+              trap: "Assuming no graph in PyTorch eager mode.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'optimizers-lesson-bp',
+            label: "Optimizers",
+            tooltip: tip({
+              short: "SGD, Adam consume .grad from backprop.",
+              intuition: "Optimizer state separate from autograd.",
+              trap: "Optimizer replaces need for gradients.",
+            }),
+          },
+          {
+            id: 'gradient-problems-lesson',
+            label: "Gradient problems",
+            tooltip: tip({
+              short: "Vanish/explode from long Jacobian chains.",
+              intuition: "Residuals and init help flow.",
+              trap: "Clipping alone restores vanished signal.",
+            }),
+            lessonId: 'gradient-problems',
+          },
+          {
+            id: 'training-loop-lesson',
+            label: "Training loop",
+            tooltip: tip({
+              short: "Forward → loss → backward → step → zero_grad.",
+              intuition: "Order matters each iteration.",
+              trap: "step before backward.",
+            }),
+          },
+          {
+            id: 'initialization-lesson',
+            label: "Initialization",
+            tooltip: tip({
+              short: "Scale affects gradient magnitudes at start.",
+              intuition: "Bad init breaks backprop before data helps.",
+              trap: "Random init always safe.",
+            }),
+            lessonId: 'initialization',
+          },
+          {
+            id: 'computation-in-transformers',
+            label: "Deep stacks",
+            tooltip: tip({
+              short: "Transformers repeat attention+MLP with residuals.",
+              intuition: "Same backprop through deep graphs.",
+              trap: "Attention exempt from chain rule.",
+            }),
+            lessonId: 'transformer',
+          },
+        ],
+      },
+    ],
+  },
+
+  'confounding-simpsons-paradox': {
+    center: {
+      id: 'confounding-simpsons-paradox',
+      label: "Confounding & Simpson's Paradox",
+      type: 'current',
+      tooltip: tip({
+        short: "Confounding makes treatment and control groups differ before treatment acts; Simpson's paradox reverses aggregate effects when segment mix differs.",
+        intuition: "An overall comparison mixes true effect with who ended up in each group or stratum.",
+        trap: "An aggregate dashboard gap is not causal when exposure was not randomized.",
+        formula: "Effect_{agg}=\\sum_g w_g\\,Effect_g+\\sum_g \\Delta w_g\\,Baseline_g",
+        why: "Stratified analysis and causal design prevent reversed or inflated conclusions.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'treatment-control-prereq',
+            label: "Treatment vs control",
+            tooltip: tip({
+              short: "Compare outcomes under two exposures or policies.",
+              intuition: "Groups must be comparable at baseline.",
+              trap: "Observational arms with different mix.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'confounder-prereq-cs',
+            label: "Confounder",
+            tooltip: tip({
+              short: "Variable affects both exposure and outcome.",
+              intuition: "Creates spurious aggregate association.",
+              trap: "Adjusting collider instead.",
+            }),
+            lessonId: 'causal-graphs-dags',
+          },
+          {
+            id: 'stratification-prereq',
+            label: "Stratification",
+            tooltip: tip({
+              short: "Analyze within homogeneous subgroups.",
+              intuition: "Within-group effect may differ from aggregate.",
+              trap: "One overall average only.",
+            }),
+          },
+          {
+            id: 'weighted-average-prereq',
+            label: "Weighted average",
+            tooltip: tip({
+              short: "Overall effect mixes segment effects with weights.",
+              intuition: "Weight shift can reverse sign.",
+              trap: "Unweighted average of segment rates always valid.",
+            }),
+          },
+          {
+            id: 'randomization-prereq-cs',
+            label: "Randomization",
+            tooltip: tip({
+              short: "RCT balances confounders in expectation.",
+              intuition: "Observational studies need extra care.",
+              trap: "Large sample fixes confounding without design.",
+            }),
+          },
+          {
+            id: 'correlation-prereq-cs',
+            label: "Correlation",
+            tooltip: tip({
+              short: "Association alone lacks causal direction.",
+              intuition: "Paradox is about aggregation logic.",
+              trap: "Significant correlation implies causation.",
+            }),
+            lessonId: 'conditional-probability',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'confounding-mechanism',
+            label: "Confounding mechanism",
+            tooltip: tip({
+              short: "C drives T and Y creating non-causal T–Y link.",
+              intuition: "Adjust or randomize on C.",
+              trap: "Ignore C in observational study.",
+            }),
+          },
+          {
+            id: 'simpson-reversal',
+            label: "Simpson reversal",
+            tooltip: tip({
+              short: "Effect sign positive in every stratum but negative overall.",
+              intuition: "Segment weights differ across comparison arms.",
+              trap: "Trust aggregate without stratification.",
+            }),
+          },
+          {
+            id: 'mix-shift',
+            label: "Mix shift",
+            tooltip: tip({
+              short: "Treatment arm has different segment proportions.",
+              intuition: "Weighted average hides within-stratum truth.",
+              trap: "Equal segment sizes assumed.",
+            }),
+          },
+          {
+            id: 'collider-mechanism-cs',
+            label: "Selection bias",
+            tooltip: tip({
+              short: "Conditioning on collider induces association.",
+              intuition: "Filtered sample reverses patterns.",
+              trap: "Analyze engaged users only without caution.",
+            }),
+          },
+          {
+            id: 'stratified-estimate',
+            label: "Stratified estimate",
+            tooltip: tip({
+              short: "Combine stratum effects with correct weights.",
+              intuition: "Standardized effect targets population.",
+              trap: "Wrong weights recreate paradox.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'hospital-intuition',
+            label: "Hospital example",
+            tooltip: tip({
+              short: "Better survival in every hospital but worse overall if sicker patients go to better hospitals.",
+              intuition: "Severity confounds hospital choice and outcome.",
+              trap: "Overall rate tells full story.",
+            }),
+          },
+          {
+            id: 'compare-like-with-like',
+            label: "Compare like with like",
+            tooltip: tip({
+              short: "Match or stratify on confounders before comparing T vs C.",
+              intuition: "Apples to apples within strata.",
+              trap: "Raw dashboard gap as causal.",
+            }),
+          },
+          {
+            id: 'weight-intuition',
+            label: "Who is in the bucket",
+            tooltip: tip({
+              short: "Aggregate answers for mixture population.",
+              intuition: "Changing mix changes aggregate without changing biology.",
+              trap: "One number for all segments.",
+            }),
+          },
+          {
+            id: 'experiment-vs-obs',
+            label: "Experiment vs observation",
+            tooltip: tip({
+              short: "Randomization breaks confounding paths.",
+              intuition: "Obs studies need DAG or design.",
+              trap: "Big data removes need for randomization.",
+            }),
+          },
+          {
+            id: 'paradox-not-magic',
+            label: "Paradox not magic",
+            tooltip: tip({
+              short: "Math of weighted averages explains reversal.",
+              intuition: "No contradiction in stratum-level truth.",
+              trap: "Paradox means data is wrong.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'aggregate-formula-cs',
+            label: "Aggregate effect",
+            tooltip: tip({
+              short: "Overall = weighted sum of stratum effects plus mix terms.",
+              intuition: "Weights and baselines matter.",
+              trap: "Simple difference of overall rates always causal.",
+            }),
+          },
+          {
+            id: 'standardization-formula',
+            label: "Direct standardization",
+            tooltip: tip({
+              short: "Apply stratum-specific effects to reference population mix.",
+              intuition: "Removes mix difference.",
+              trap: "Wrong reference population.",
+            }),
+          },
+          {
+            id: 'regression-adjustment-cs',
+            label: "Regression adjustment",
+            tooltip: tip({
+              short: "Include confounders if backdoor satisfied.",
+              intuition: "Coeff on T estimates adjusted effect.",
+              trap: "Kitchen-sink controls open colliders.",
+            }),
+          },
+          {
+            id: 'simpson-table-code',
+            label: "Simpson table",
+            tooltip: tip({
+              short: "Build 2×2 per stratum then aggregate.",
+              intuition: "Watch sign per cell and weights.",
+              trap: "Hide strata with inconvenient signs.",
+            }),
+          },
+          {
+            id: 'randomization-check',
+            label: "Balance check",
+            tooltip: tip({
+              short: "Compare covariate means across arms pre-treatment.",
+              intuition: "Large imbalance warns confounding risk.",
+              trap: "Post-hoc balance on outcomes.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'aggregate-causal-trap',
+            label: "Aggregate = causal",
+            tooltip: tip({
+              short: "Dashboard gap without randomization or adjustment.",
+              intuition: "Stratify or experiment.",
+              trap: "Ship policy from observational uplift.",
+            }),
+          },
+          {
+            id: 'ignore-strata-trap',
+            label: "Ignore strata",
+            tooltip: tip({
+              short: "Overall reversal hides consistent stratum effects.",
+              intuition: "Always inspect segments.",
+              trap: "Simpson only in textbooks.",
+            }),
+          },
+          {
+            id: 'wrong-adjustment-trap',
+            label: "Wrong adjustment",
+            tooltip: tip({
+              short: "Control mediators or colliders.",
+              intuition: "Use DAG for adjustment set.",
+              trap: "More variables always safer.",
+            }),
+          },
+          {
+            id: 'simpson-rare-trap',
+            label: "“Rare” paradox",
+            tooltip: tip({
+              short: "Mix shifts common in product and health data.",
+              intuition: "Check weights whenever arms differ.",
+              trap: "Never happens in our metrics.",
+            }),
+          },
+          {
+            id: 'p-value-confounding-trap',
+            label: "Significant but confounded",
+            tooltip: tip({
+              short: "Large n makes confounded gap significant.",
+              intuition: "Significance ≠ causal effect.",
+              trap: "p<0.05 proves treatment caused lift.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'causal-graphs-cs-lesson',
+            label: "Causal graphs",
+            tooltip: tip({
+              short: "Draw confounders and colliders before estimating.",
+              intuition: "Graph picks valid adjustment.",
+              trap: "Regress first, graph later.",
+            }),
+            lessonId: 'causal-graphs-dags',
+          },
+          {
+            id: 'ab-testing-cs-lesson',
+            label: "A/B testing",
+            tooltip: tip({
+              short: "Randomization prevents confounding by design.",
+              intuition: "Gold standard when feasible.",
+              trap: "Obs uplift equals experiment.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'propensity-cs-lesson',
+            label: "Propensity scores",
+            tooltip: tip({
+              short: "Balance observed confounders in observational data.",
+              intuition: "Cannot fix unmeasured C.",
+              trap: "PS removes all Simpson risk.",
+            }),
+            lessonId: 'propensity-scores',
+          },
+          {
+            id: 'treatment-effects-cs-lesson',
+            label: "Treatment effects",
+            tooltip: tip({
+              short: "Define ATE vs CATE on correct population.",
+              intuition: "Targeting needs segment effects.",
+              trap: "Average effect for everyone.",
+            }),
+            lessonId: 'treatment-effects',
+          },
+          {
+            id: 'model-fairness-cs-lesson',
+            label: "Model fairness",
+            tooltip: tip({
+              short: "Disparate segment mix affects outcome metrics.",
+              intuition: "Report group-stratified performance.",
+              trap: "Overall fairness number enough.",
+            }),
+            lessonId: 'model-fairness',
+          },
+        ],
+      },
+    ],
+  },
+
+  'cosine-similarity': {
+    center: {
+      id: 'cosine-similarity',
+      label: "Cosine Similarity",
+      type: 'current',
+      tooltip: tip({
+        short: "Cosine similarity measures how aligned two vectors are by dividing their dot product by both norms—it compares direction, not length.",
+        intuition: "Two vectors pointing the same way score 1 even if one is longer; perpendicular vectors score 0.",
+        formula: "\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}",
+        why: "Cosine similarity ranks embeddings in search, RAG retrieval, recommenders, and clustering without letting magnitude dominate.",
+        trap: "High cosine is a learned ranking signal—not proof that two items mean the same thing.",
+        example: "Query “river bank” and doc “financial bank” may score high if embeddings conflate senses.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'dot-product-cs',
+            label: "Dot product",
+            tooltip: tip({
+              short: "u·v sums elementwise products—large when vectors align and have magnitude.",
+              intuition: "Dot product mixes direction and length; cosine removes length.",
+              example: "[1,2]·[3,4]=11.",
+              trap: "Comparing raw dot products across different vector scales is misleading.",
+            }),
+            lessonId: 'matrix-multiplication',
+          },
+          {
+            id: 'vector-norm-cs',
+            label: "Vector norm",
+            tooltip: tip({
+              short: "||u|| is the length of u—Euclidean norm sqrt(u·u).",
+              intuition: "Normalization divides out scale so only angle remains.",
+              example: "||[3,4]||=5.",
+              trap: "Zero vectors have undefined cosine—division by zero.",
+            }),
+          },
+          {
+            id: 'embeddings-preview-cs',
+            label: "Embeddings",
+            tooltip: tip({
+              short: "Items live as dense vectors in R^d before similarity is computed.",
+              intuition: "Cosine operates on whatever representation you choose.",
+              example: "Word, sentence, or chunk embeddings all use the same formula.",
+              trap: "Bad embeddings produce bad rankings regardless of correct cosine math.",
+            }),
+            lessonId: 'embeddings',
+          },
+          {
+            id: 'angle-geometry-cs',
+            label: "Angle geometry",
+            tooltip: tip({
+              short: "Cosine equals cos θ between vectors in the plane they span.",
+              intuition: "θ=0° → 1; θ=90° → 0; θ=180° → −1.",
+              example: "Parallel doc and query embeddings → cosine near 1.",
+              trap: "High-dimensional angles are harder to visualize—trust the algebra.",
+            }),
+          },
+          {
+            id: 'scale-invariance-cs',
+            label: "Scale invariance",
+            tooltip: tip({
+              short: "Multiplying u or v by a positive scalar leaves cosine unchanged.",
+              intuition: "Only direction matters after normalization.",
+              example: "2u and u have cosine 1 with themselves and each other.",
+              trap: "Adding a constant to all dimensions changes direction—not scale invariant.",
+            }),
+          },
+          {
+            id: 'ranking-not-probability-cs',
+            label: "Ranking not probability",
+            tooltip: tip({
+              short: "Cosine scores are not calibrated probabilities.",
+              intuition: "Use them to order candidates, not as literal confidence.",
+              example: "Top-1 cosine 0.82 does not mean 82% chance of relevance.",
+              trap: "Treating cosine as a probability breaks threshold calibration.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'compute-dot-cs',
+            label: "Compute dot product",
+            tooltip: tip({
+              short: "Sum u_i v_i across dimensions.",
+              intuition: "Alignment plus magnitude before normalization.",
+              formula: "u\\cdot v=\\sum_i u_i v_i",
+              example: "[1,0]·[0,1]=0 before norms.",
+              trap: "Sparse vectors need consistent dimension ordering.",
+            }),
+          },
+          {
+            id: 'compute-norms-cs',
+            label: "Compute norms",
+            tooltip: tip({
+              short: "||u|| and ||v|| scale the denominator.",
+              intuition: "Each vector is unit-normalized implicitly by division.",
+              formula: "\\lVert u\\rVert=\\sqrt{u\\cdot u}",
+              example: "Unit vectors have norm 1—cosine equals dot product.",
+              trap: "Near-zero vectors explode or become undefined.",
+            }),
+          },
+          {
+            id: 'divide-cs',
+            label: "Divide dot by product of norms",
+            tooltip: tip({
+              short: "cos(u,v) = (u·v) / (||u|| ||v||).",
+              intuition: "Removes length so only angle remains.",
+              formula: "\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}",
+              example: "Identical direction → 1; opposite → −1.",
+              trap: "Using L1 norm or other metrics changes the measure—not cosine.",
+            }),
+          },
+          {
+            id: 'rank-candidates-cs',
+            label: "Rank candidates",
+            tooltip: tip({
+              short: "Sort corpus vectors by cosine to query for nearest neighbors.",
+              intuition: "Higher cosine → more aligned direction with query.",
+              example: "Search panel ranks docs by cosine to query embedding.",
+              trap: "Linear scan is slow at scale—ANN indexes approximate ranking.",
+            }),
+          },
+          {
+            id: 'recommender-cs',
+            label: "User–item similarity",
+            tooltip: tip({
+              short: "Recommend items whose embedding direction matches user profile vector.",
+              intuition: "Collaborative or content vectors use the same cosine machinery.",
+              example: "User vector from history; score items by cosine.",
+              trap: "Popularity bias is not removed by cosine alone.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'compass-intuition-cs',
+            label: "Compass not ruler",
+            tooltip: tip({
+              short: "Cosine asks which way vectors point, not how long they are.",
+              intuition: "A short and long vector in the same direction tie on cosine.",
+              example: "Scaling a document embedding does not change its rank vs a fixed query.",
+              trap: "When magnitude carries signal, cosine throws it away.",
+            }),
+          },
+          {
+            id: 'orthogonal-intuition-cs',
+            label: "Orthogonal = unrelated direction",
+            tooltip: tip({
+              short: "Perpendicular vectors have cosine 0—no directional overlap.",
+              intuition: "Zero dot means no shared axis contribution.",
+              example: "One-hot basis vectors are mutually orthogonal.",
+              trap: "Cosine 0 does not mean statistically independent features.",
+            }),
+          },
+          {
+            id: 'negative-cosine-cs',
+            label: "Negative cosine",
+            tooltip: tip({
+              short: "Opposite directions yield cosine −1.",
+              intuition: "Anti-aligned vectors are maximally dissimilar by angle.",
+              example: "Contrastive training pushes negatives apart in embedding space.",
+              trap: "Many NLP embeddings rarely use negative cosines for ranking cutoffs.",
+            }),
+          },
+          {
+            id: 'semantic-not-guaranteed-cs',
+            label: "Semantic not guaranteed",
+            tooltip: tip({
+              short: "High cosine reflects training objective geometry, not truth.",
+              intuition: "Similarity is learned from co-occurrence or labels.",
+              example: "“King” and “queen” may be close; “bank” senses may collide.",
+              trap: "Treating cosine as ground-truth semantics causes retrieval errors.",
+            }),
+          },
+          {
+            id: 'unit-sphere-cs',
+            label: "Unit sphere picture",
+            tooltip: tip({
+              short: "Normalizing vectors maps them to the unit sphere; cosine is dot on that sphere.",
+              intuition: "Retrieval becomes nearest-neighbor on a curved surface.",
+              example: "L2-normalize embeddings then dot product equals cosine.",
+              trap: "Some pipelines normalize once; others rely on explicit cosine—be consistent.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'cosine-formula-cs',
+            label: "Cosine formula",
+            tooltip: tip({
+              short: "cos(u,v) = (u·v) / (||u|| ||v||).",
+              intuition: "Equivalent to dot product of L2-normalized vectors.",
+              formula: "\\cos(\\theta)=\\frac{u\\cdot v}{\\lVert u\\rVert\\lVert v\\rVert}",
+              example: "u=[1,1], v=[1,0] → cos ≈ 0.707.",
+              trap: "Forgetting to normalize both vectors when using dot alone.",
+            }),
+          },
+          {
+            id: 'numpy-cosine-cs',
+            label: "NumPy sketch",
+            tooltip: tip({
+              short: "Use dot and norms or normalize then dot.",
+              intuition: "clip norms with epsilon for stability.",
+              code: "cos = np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v) + 1e-12)",
+              example: "Normalize rows of embedding matrix for fast retrieval.",
+              trap: "NaN if either vector is all zeros.",
+            }),
+          },
+          {
+            id: 'sklearn-cosine-cs',
+            label: "sklearn cosine_similarity",
+            tooltip: tip({
+              short: "Pairwise cosine for rows of a matrix.",
+              intuition: "Efficient for batch query–document matrices.",
+              code: "from sklearn.metrics.pairwise import cosine_similarity\nscores = cosine_similarity(query, docs)",
+              example: "One query row against 10k doc rows.",
+              trap: "Assumes rows are vectors—check shape orientation.",
+            }),
+          },
+          {
+            id: 'distance-from-cosine-cs',
+            label: "Cosine distance",
+            tooltip: tip({
+              short: "Some libraries use 1 − cos as a distance.",
+              intuition: "Identical direction → distance 0; orthogonal → 1.",
+              formula: "d_{cos}=1-\\cos(u,v)",
+              example: "Clustering with cosine distance on normalized embeddings.",
+              trap: "Distance is not a metric in all edge cases for arbitrary vectors.",
+            }),
+          },
+          {
+            id: 'euclidean-vs-cosine-cs',
+            label: "Euclidean vs cosine",
+            tooltip: tip({
+              short: "Euclidean distance on raw vectors mixes angle and magnitude.",
+              intuition: "Normalize first if only direction should matter.",
+              example: "Long and short parallel vectors are far in L2 but close in cosine.",
+              trap: "Using L2 on unnormalized embeddings when magnitude is noise.",
+            }),
+            lessonId: 'feature-scaling-preprocessing',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'magnitude-trap-cs',
+            label: "Ignoring magnitude when it matters",
+            tooltip: tip({
+              short: "Cosine drops vector length—sometimes length is signal.",
+              intuition: "TF-IDF-style weights or confidence may live in norm.",
+              example: "Popular items with large norms rank oddly after normalization.",
+              trap: "Blind L2-normalize everything without checking the representation.",
+            }),
+          },
+          {
+            id: 'zero-vector-trap-cs',
+            label: "Zero vector",
+            tooltip: tip({
+              short: "All-zero embeddings make cosine undefined.",
+              intuition: "Division by zero norms yields NaN.",
+              example: "Empty text chunk → zero embedding from some encoders.",
+              trap: "Not filtering NaN scores before top-k retrieval.",
+            }),
+          },
+          {
+            id: 'semantic-trap-cs',
+            label: "Cosine = same meaning",
+            tooltip: tip({
+              short: "High score means aligned representation, not guaranteed paraphrase.",
+              intuition: "Polysemy and training bias create false neighbors.",
+              example: "Homonyms retrieve wrong passages in RAG.",
+              trap: "Skipping reranking because cosine top-1 “looks close”.",
+            }),
+            lessonId: 'rag-reranking-grounding',
+          },
+          {
+            id: 'uncalibrated-trap-cs',
+            label: "Uncalibrated threshold",
+            tooltip: tip({
+              short: "Fixed cosine cutoff (e.g. 0.8) rarely transfers across models.",
+              intuition: "Score scale depends on embedding model and domain.",
+              example: "0.75 on model A ≠ 0.75 on model B.",
+              trap: "Deploying hard thresholds tuned on one dev set only.",
+            }),
+          },
+          {
+            id: 'dot-without-norm-trap-cs',
+            label: "Dot without normalization",
+            tooltip: tip({
+              short: "Raw dot product favors longer vectors.",
+              intuition: "Longer docs accumulate larger dot products.",
+              example: "Chunk size bias in retrieval without cosine.",
+              trap: "Calling it “similarity” when only dot is used.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'rag-retrieval-cs',
+            label: "RAG retrieval",
+            tooltip: tip({
+              short: "First-pass vector search ranks chunks by cosine to query embedding.",
+              intuition: "ANN indexes approximate the same ranking.",
+              trap: "Missing evidence if ANN recall is low.",
+            }),
+            lessonId: 'rag-vector-indexing',
+          },
+          {
+            id: 'word2vec-cs',
+            label: "Word2Vec neighbors",
+            tooltip: tip({
+              short: "Word similarity is often cosine between learned word vectors.",
+              intuition: "Training shapes the space; cosine reads it out.",
+              trap: "Rare words have noisier vectors.",
+            }),
+            lessonId: 'word2vec',
+          },
+          {
+            id: 'recommender-track-cs',
+            label: "Recommender systems",
+            tooltip: tip({
+              short: "User and item embeddings scored by cosine or dot after normalization.",
+              intuition: "Ranking objectives align directions, not raw logits.",
+              trap: "Exposure bias in logs distorts learned directions.",
+            }),
+            lessonId: 'recommender-systems-ranking-track',
+          },
+          {
+            id: 'fasttext-cs',
+            label: "FastText subwords",
+            tooltip: tip({
+              short: "Subword embeddings still compared with cosine in nearest-neighbor lookup.",
+              intuition: "OOV words get vectors from subword sum.",
+              trap: "Subword averaging can blur fine distinctions.",
+            }),
+            lessonId: 'fasttext',
+          },
+          {
+            id: 'pca-cs',
+            label: "PCA directions",
+            tooltip: tip({
+              short: "Principal components are directions—cosine compares loading vectors.",
+              intuition: "Geometry in feature space parallels embedding geometry.",
+              trap: "PCA components are orthogonal; embedding dims are not.",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'cross-entropy': {
+    center: {
+      id: 'cross-entropy',
+      label: "Cross-Entropy",
+      type: 'current',
+      tooltip: tip({
+        short: "Cross-entropy H(p,q) measures average surprise when true distribution p is encoded with predicted distribution q—lower when q puts mass on true outcomes.",
+        intuition: "Confident wrong predictions are punished heavily because −log q(x) blows up as q(x)→0.",
+        formula: "H(p,q)=-\\sum_x p(x)\\log q(x)",
+        why: "Softmax + cross-entropy is the default multiclass objective; it equals negative log-likelihood for one-hot labels.",
+        trap: "Cross-entropy expects probabilities in q—raw logits need softmax first.",
+        example: "True class probability q=0.01 on correct label → loss −log(0.01) ≈ 4.6 nats.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'entropy-prereq-ce',
+            label: "Entropy",
+            tooltip: tip({
+              short: "H(p) measures uncertainty in distribution p alone.",
+              intuition: "Cross-entropy adds a reference distribution q to encode p.",
+              example: "Certain one-hot p has H(p)=0.",
+              trap: "Calling cross-entropy “entropy” confuses two quantities.",
+            }),
+            lessonId: 'entropy',
+          },
+          {
+            id: 'softmax-prereq-ce',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Maps logits to a probability simplex summing to 1.",
+              intuition: "Cross-entropy consumes softmax outputs as q.",
+              example: "Three logits → [0.7, 0.2, 0.1].",
+              trap: "Applying CE to logits without log-softmax numerics can overflow.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'log-surprise-prereq-ce',
+            label: "Log surprise",
+            tooltip: tip({
+              short: "Surprise of outcome x under q is −log q(x).",
+              intuition: "Rare predicted mass on true class → huge loss.",
+              example: "q(y)=1 → surprise 0; q(y)=0.001 → surprise ≈ 6.9 nats.",
+              trap: "log(0) is undefined—need epsilon or log-softmax.",
+            }),
+          },
+          {
+            id: 'one-hot-labels-prereq-ce',
+            label: "One-hot labels",
+            tooltip: tip({
+              short: "Hard classification uses p=1 on true class, 0 elsewhere.",
+              intuition: "CE reduces to −log q(true class).",
+              example: "Label “cat” → only cat term survives the sum.",
+              trap: "Label smoothing spreads p—changes the objective.",
+            }),
+          },
+          {
+            id: 'probability-mass-prereq-ce',
+            label: "Valid probabilities",
+            tooltip: tip({
+              short: "q(x) must be non-negative and sum to 1.",
+              intuition: "Invalid q breaks the information interpretation.",
+              example: "Softmax guarantees a proper q.",
+              trap: "Using unnormalized scores as if they were probabilities.",
+            }),
+            lessonId: 'probability-distributions',
+          },
+          {
+            id: 'expected-value-prereq-ce',
+            label: "Expected value",
+            tooltip: tip({
+              short: "Cross-entropy is E_p[−log q(X)]—average under true p.",
+              intuition: "One-hot p picks one term; soft p averages several.",
+              example: "Mini-batch averages CE over examples.",
+              trap: "Confusing batch mean with population expectation without enough samples.",
+            }),
+            lessonId: 'expected-value-variance',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'true-distribution-ce',
+            label: "True distribution p",
+            tooltip: tip({
+              short: "p(x) is the target—one-hot or soft labels.",
+              intuition: "Only classes with p(x)>0 contribute to the sum.",
+              formula: "p(x)\\in[0,1],\\ \\sum_x p(x)=1",
+              example: "Hard label: p=[0,1,0] for three classes.",
+              trap: "Wrong label in dataset dominates gradient forever.",
+            }),
+          },
+          {
+            id: 'predicted-q-ce',
+            label: "Predicted q from model",
+            tooltip: tip({
+              short: "Model outputs logits → softmax → q(x).",
+              intuition: "Every logit shift changes all q(x)—not independent.",
+              example: "Linear head + softmax on final layer.",
+              trap: "Evaluating CE on logits without softmax is invalid.",
+            }),
+          },
+          {
+            id: 'sum-negative-log-ce',
+            label: "Sum −p log q",
+            tooltip: tip({
+              short: "H(p,q) = −Σ p(x) log q(x).",
+              intuition: "Penalizes low q on high-p outcomes.",
+              formula: "H(p,q)=-\\sum_x p(x)\\log q(x)",
+              example: "One-hot: loss = −log q(correct).",
+              trap: "Forgetting the negative sign when reading loss curves.",
+            }),
+          },
+          {
+            id: 'gradient-push-ce',
+            label: "Gradient push",
+            tooltip: tip({
+              short: "Gradient increases logit of true class, decreases others (one-hot case).",
+              intuition: "Softmax coupling means all logits receive updates.",
+              example: "Wrong confident prediction → large gradient magnitude.",
+              trap: "Class imbalance can dominate gradients toward frequent classes.",
+            }),
+          },
+          {
+            id: 'batch-average-ce',
+            label: "Batch average",
+            tooltip: tip({
+              short: "Training loss averages CE over mini-batch examples.",
+              intuition: "Stochastic estimate of full-dataset objective.",
+              example: "mean(reduction=\"batchmean\") in PyTorch.",
+              trap: "sum vs mean reduction changes learning rate sensitivity.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'surprise-intuition-ce',
+            label: "Surprise under wrong code",
+            tooltip: tip({
+              short: "CE counts how many nats needed if you use q to encode p.",
+              intuition: "Extra bits when q misses mass on true outcomes.",
+              example: "Uniform q on 1000 classes → high CE for any single true class.",
+              trap: "Low CE requires peaked q on truth—not just low entropy of q.",
+            }),
+          },
+          {
+            id: 'confident-wrong-ce',
+            label: "Confident and wrong hurts most",
+            tooltip: tip({
+              short: "q(wrong)≈1 drives loss toward infinity.",
+              intuition: "−log curve is steep near zero.",
+              example: "99% on wrong class → loss ≈ 4.6 nats.",
+              trap: "Outliers with mislabels create huge gradients.",
+            }),
+          },
+          {
+            id: 'kl-link-ce',
+            label: "KL divergence link",
+            tooltip: tip({
+              short: "H(p,q) = H(p) + D_KL(p||q).",
+              intuition: "When p is fixed, minimizing CE minimizes KL to p.",
+              example: "One-hot p: H(p)=0 so CE equals KL.",
+              trap: "KL is asymmetric—D_KL(p||q) ≠ D_KL(q||p).",
+            }),
+          },
+          {
+            id: 'mle-intuition-ce',
+            label: "Maximum likelihood view",
+            tooltip: tip({
+              short: "Minimizing CE on one-hot labels maximizes log-likelihood.",
+              intuition: "Probabilistic modeling and CE loss align.",
+              example: "Categorical NLL in PyTorch is CE.",
+              trap: "MLE does not guarantee calibrated probabilities.",
+            }),
+            lessonId: 'maximum-likelihood-estimation',
+          },
+          {
+            id: 'binary-vs-multiclass-ce',
+            label: "Binary vs multiclass",
+            tooltip: tip({
+              short: "Binary CE is two-class CE; multiclass sums over K classes.",
+              intuition: "Sigmoid + BCE for multi-label differs from softmax CE.",
+              example: "Multi-label: independent sigmoids per class.",
+              trap: "Using softmax CE when labels are multi-label independent.",
+            }),
+            lessonId: 'logistic-regression',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'ce-formula-ce',
+            label: "Cross-entropy formula",
+            tooltip: tip({
+              short: "H(p,q) = −Σ p(x) log q(x).",
+              intuition: "Natural log → nats; log₂ → bits.",
+              formula: "H(p,q)=-\\sum_x p(x)\\log q(x)",
+              example: "p one-hot on class 2, q=[0.1,0.7,0.2] → −log(0.7).",
+              trap: "Mixing log bases when comparing reported losses.",
+            }),
+          },
+          {
+            id: 'one-hot-simplification-ce',
+            label: "One-hot simplification",
+            tooltip: tip({
+              short: "Hard label c: loss = −log q(c).",
+              intuition: "Only the true class term survives.",
+              formula: "\\mathcal{L}=-\\log q(y_{true})",
+              example: "CrossEntropyLoss in PyTorch with class indices.",
+              trap: "Wrong class index silently optimizes wrong objective.",
+            }),
+          },
+          {
+            id: 'pytorch-ce-code',
+            label: "PyTorch CrossEntropyLoss",
+            tooltip: tip({
+              short: "Combines log-softmax and NLL for numerical stability.",
+              intuition: "Pass logits, not probabilities, to nn.CrossEntropyLoss.",
+              code: "loss = F.cross_entropy(logits, target)\n# internally log_softmax + nll_loss",
+              example: "logits shape [batch, classes], target [batch].",
+              trap: "Double-applying softmax before CE.",
+            }),
+          },
+          {
+            id: 'binary-ce-formula-ce',
+            label: "Binary cross-entropy",
+            tooltip: tip({
+              short: "BCE = −[y log q + (1−y) log(1−q)].",
+              intuition: "Two-term Bernoulli surprise.",
+              formula: "BCE=-[y\\log q+(1-y)\\log(1-q)]",
+              example: "Spam detection with sigmoid output.",
+              trap: "Using BCE with mutually exclusive multiclass labels.",
+            }),
+          },
+          {
+            id: 'label-smoothing-ce',
+            label: "Label smoothing",
+            tooltip: tip({
+              short: "Replace one-hot p with softened p on non-target classes.",
+              intuition: "Reduces overconfidence; changes effective CE.",
+              example: "p(true)=0.9, others share 0.1/(K−1).",
+              trap: "Too much smoothing hurts accuracy on clean data.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'logits-trap-ce',
+            label: "Logits not probabilities",
+            tooltip: tip({
+              short: "Plugging raw scores into −log q without softmax.",
+              intuition: "q must live on the simplex.",
+              example: "Logit 10 is not probability 10.",
+              trap: "Manual loss bugs when framework expects logits.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'entropy-vs-ce-trap',
+            label: "Entropy vs cross-entropy",
+            tooltip: tip({
+              short: "Minimizing label entropy alone is meaningless for training.",
+              intuition: "CE compares p and q; entropy describes one distribution.",
+              example: "Certain labels have H(p)=0 but CE can still be large.",
+              trap: "Saying “minimize entropy” when you mean CE.",
+            }),
+            lessonId: 'entropy',
+          },
+          {
+            id: 'class-imbalance-trap-ce',
+            label: "Class imbalance",
+            tooltip: tip({
+              short: "Frequent classes dominate average CE.",
+              intuition: "Model can look good on loss while failing minorities.",
+              example: "99% negative class → low loss from always predicting negative.",
+              trap: "Reporting loss without per-class metrics.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+          {
+            id: 'overconfidence-trap-ce',
+            label: "Overconfidence",
+            tooltip: tip({
+              short: "Low CE on train does not mean calibrated probabilities.",
+              intuition: "Model can be sharp and wrong on new data.",
+              example: "99% wrong class still had low training CE on other examples.",
+              trap: "Deploying without calibration checks.",
+            }),
+            lessonId: 'calibration',
+          },
+          {
+            id: 'wrong-loss-trap-ce',
+            label: "Wrong loss for task",
+            tooltip: tip({
+              short: "MSE on classification targets ≠ cross-entropy.",
+              intuition: "CE matches probabilistic classification assumptions.",
+              example: "Using MSE on one-hot labels gives weak gradients.",
+              trap: "Copying regression loss into classifier head.",
+            }),
+            lessonId: 'loss-functions-likelihoods',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'gradient-descent-ce',
+            label: "Gradient descent training",
+            tooltip: tip({
+              short: "CE loss drives backprop through softmax and earlier layers.",
+              intuition: "Default loop for image and text classifiers.",
+              trap: "Learning rate interacts with sharp CE landscapes.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+          {
+            id: 'llm-objectives-ce',
+            label: "LLM next-token CE",
+            tooltip: tip({
+              short: "Language modeling minimizes CE over vocabulary at each position.",
+              intuition: "Softmax over huge vocab each step.",
+              trap: "Perplexity is exp(average CE)—not linear in CE.",
+            }),
+            lessonId: 'llm-training-objectives',
+          },
+          {
+            id: 'tree-impurity-ce',
+            label: "Tree impurity contrast",
+            tooltip: tip({
+              short: "Trees use entropy/Gini splits—not softmax CE training.",
+              intuition: "Same information ideas, different optimization.",
+              trap: "Confusing split impurity with neural CE training.",
+            }),
+            lessonId: 'tree-ensembles',
+          },
+          {
+            id: 'fine-tuning-ce',
+            label: "Fine-tuning losses",
+            tooltip: tip({
+              short: "SFT still uses CE on tokens; preference methods add other terms.",
+              intuition: "CE remains core for imitation learning.",
+              trap: "Preference tuning alone does not replace CE pretraining.",
+            }),
+            lessonId: 'fine-tuning',
+          },
+          {
+            id: 'calibration-used-ce',
+            label: "Calibration",
+            tooltip: tip({
+              short: "Post-hoc scaling adjusts softmax sharpness after CE training.",
+              intuition: "Low CE ≠ well-calibrated probabilities.",
+              trap: "Skipping reliability diagrams at deployment.",
+            }),
+            lessonId: 'calibration',
+          },
+        ],
+      },
+    ],
+  },
+
+  'cuped-variance-reduction': {
+    center: {
+      id: 'cuped-variance-reduction',
+      label: "CUPED / Variance Reduction",
+      type: 'current',
+      tooltip: tip({
+        short: "CUPED adjusts post-treatment outcomes by subtracting predictable pre-treatment covariate noise, shrinking experiment metric variance without changing expected treatment effect.",
+        intuition: "Users high before treatment tend to stay partly high after—remove that predictable part to see cleaner lift.",
+        formula: "Y_{cuped}=Y-\\theta(X-\\bar{X}),\\quad Var(Y_{cuped})\\approx Var(Y)(1-\\rho^2)",
+        why: "Tighter confidence intervals mean smaller samples or clearer ship/no-ship decisions in A/B tests.",
+        trap: "Post-treatment covariates for adjustment bias the causal estimate—they encode future information.",
+        example: "Pre-week spend predicts post-week spend; CUPED on spend metric narrows CI when ρ is high.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'ab-testing-prereq-cuped',
+            label: "A/B testing",
+            tooltip: tip({
+              short: "Randomized treatment vs control comparison.",
+              intuition: "CUPED post-processes the same randomized estimate.",
+              example: "Treatment lift = mean(Y|T) − mean(Y|C).",
+              trap: "CUPED cannot fix broken randomization.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'variance-prereq-cuped',
+            label: "Variance",
+            tooltip: tip({
+              short: "Spread of metric noise across users.",
+              intuition: "High variance widens confidence intervals.",
+              example: "Noisy revenue per user needs larger n.",
+              trap: "Confusing variance with bias.",
+            }),
+            lessonId: 'expected-value-variance',
+          },
+          {
+            id: 'ci-prereq-cuped',
+            label: "Confidence intervals",
+            tooltip: tip({
+              short: "Interval width scales with standard error.",
+              intuition: "Lower variance → narrower CI at same n.",
+              example: "SE = s/√n shrinks with sample size.",
+              trap: "Peeking without alpha spending invalidates CI interpretation.",
+            }),
+            lessonId: 'sampling-confidence-intervals',
+          },
+          {
+            id: 'covariance-prereq-cuped',
+            label: "Covariance / correlation",
+            tooltip: tip({
+              short: "Pre X and post Y correlation ρ drives variance reduction.",
+              intuition: "Strong pre/post link → more CUPED gain.",
+              example: "ρ=0.7 → variance roughly halved.",
+              trap: "Low ρ means CUPED helps little—still valid if pre is pre-treatment.",
+            }),
+          },
+          {
+            id: 'causal-timing-prereq-cuped',
+            label: "Pre-treatment timing",
+            tooltip: tip({
+              short: "Covariate X must be measured before assignment or treatment.",
+              intuition: "Causal adjustment requires no treatment leakage into X.",
+              example: "Last-week activity before experiment start.",
+              trap: "Using during-experiment behavior as X.",
+            }),
+            lessonId: 'causal-graphs-dags',
+          },
+          {
+            id: 'randomization-prereq-cuped',
+            label: "Randomization",
+            tooltip: tip({
+              short: "Treatment independent of potential outcomes and pre-period X.",
+              intuition: "CUPED preserves unbiased ATE under randomization.",
+              example: "X balanced across arms by design.",
+              trap: "Observational adjustment needs different methods than CUPED on experiments.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'choose-covariate-cuped',
+            label: "Choose pre-period X",
+            tooltip: tip({
+              short: "Pick a baseline metric correlated with post-period Y.",
+              intuition: "Same metric pre/post often works best.",
+              example: "Pre-week purchases predicting post-week purchases.",
+              trap: "X affected by treatment invalidates adjustment.",
+            }),
+          },
+          {
+            id: 'estimate-theta-cuped',
+            label: "Estimate θ",
+            tooltip: tip({
+              short: "θ ≈ Cov(Y,X)/Var(X) from pooled or control data.",
+              intuition: "Slope of Y on centered X.",
+              formula: "\\theta=\\frac{Cov(Y,X)}{Var(X)}",
+              example: "Fit on pre-period paired (X,Y) pilot or control arm.",
+              trap: "Overfitting θ on the same test metric inflates apparent gains.",
+            }),
+          },
+          {
+            id: 'center-x-cuped',
+            label: "Center X",
+            tooltip: tip({
+              short: "Use X − X̄ so adjustment has zero mean impact.",
+              intuition: "Preserves overall mean of adjusted metric.",
+              example: "Subtract grand mean pre-period covariate.",
+              trap: "Forgetting to center can shift absolute means.",
+            }),
+          },
+          {
+            id: 'adjust-y-cuped',
+            label: "Adjust Y",
+            tooltip: tip({
+              short: "Y_cuped = Y − θ(X − X̄).",
+              intuition: "Remove predictable component from each user’s outcome.",
+              formula: "Y_{cuped}=Y-\\theta(X-\\bar{X})",
+              example: "High pre-spender with high post-spend gets downward adjustment if above trend.",
+              trap: "Applying different θ per arm without care can introduce bias.",
+            }),
+          },
+          {
+            id: 'compare-arms-cuped',
+            label: "Compare arms on adjusted Y",
+            tooltip: tip({
+              short: "Treatment effect on Y_cuped has same expectation as on Y but lower variance.",
+              intuition: "Run standard t-test or CI on adjusted metric.",
+              example: "Narrower CI at same sample size.",
+              trap: "Reporting variance reduction without showing ATE unchanged in expectation.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'noise-removal-cuped',
+            label: "Remove predictable noise",
+            tooltip: tip({
+              short: "Part of Y was predictable from X before treatment ever happened.",
+              intuition: "Subtracting that part leaves cleaner treatment signal.",
+              example: "Heavy users stay heavy—CUPED removes “always heavy” component.",
+              trap: "Thinking CUPED adds information—it reweights existing noise.",
+            }),
+          },
+          {
+            id: 'rho-squared-cuped',
+            label: "1 − ρ² rule of thumb",
+            tooltip: tip({
+              short: "Variance scales roughly by (1 − ρ²) when X predicts Y well.",
+              intuition: "ρ=0 → no gain; ρ→1 → huge gain.",
+              example: "ρ=0.5 → ~25% variance left (~75% reduction).",
+              trap: "Exact gain depends on design and estimation of θ.",
+            }),
+          },
+          {
+            id: 'same-expected-lift-cuped',
+            label: "Same expected lift",
+            tooltip: tip({
+              short: "Under randomization, E[ATE on Y_cuped] = E[ATE on Y].",
+              intuition: "CUPED is variance reduction, not magic lift inflation.",
+              example: "Point estimate may move slightly; expectation stays unbiased.",
+              trap: "Data-dredging θ to maximize observed lift.",
+            }),
+          },
+          {
+            id: 'pre-post-same-metric-cuped',
+            label: "Pre/post same metric",
+            tooltip: tip({
+              short: "Using the same KPI pre and post is the classic CUPED pattern.",
+              intuition: "Maximizes correlation when behavior is stable.",
+              example: "Pre-week and post-week revenue per user.",
+              trap: "Seasonality breaks pre/post comparability if windows misaligned.",
+            }),
+          },
+          {
+            id: 'free-power-cuped',
+            label: "Free power when ρ high",
+            tooltip: tip({
+              short: "Same experiment detects smaller lifts with tighter CIs.",
+              intuition: "Like increasing n without recruiting more users.",
+              example: "Ship decision possible weeks earlier on noisy metrics.",
+              trap: "Low ρ experiments gain little—do not force CUPED everywhere.",
+            }),
+            lessonId: 'power-sample-size',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'cuped-formula',
+            label: "CUPED adjustment",
+            tooltip: tip({
+              short: "Y_cuped = Y − θ(X − X̄).",
+              intuition: "Linear control variate style adjustment.",
+              formula: "Y_{cuped}=Y-\\theta(X-\\bar{X})",
+              example: "Apply per user after experiment ends.",
+              trap: "X must not include post-treatment information.",
+            }),
+          },
+          {
+            id: 'theta-formula-cuped',
+            label: "Theta estimation",
+            tooltip: tip({
+              short: "θ = Cov(Y,X)/Var(X) estimated from data.",
+              intuition: "OLS slope of Y on X when X centered.",
+              formula: "\\theta=\\frac{Cov(Y,X)}{Var(X)}",
+              example: "Use control arm only for conservative θ estimation.",
+              trap: "Peeking to re-estimate θ each day without sequential plan.",
+            }),
+          },
+          {
+            id: 'variance-reduction-formula-cuped',
+            label: "Variance reduction",
+            tooltip: tip({
+              short: "Var(Y_cuped) ≈ Var(Y)(1 − ρ²) under ideal conditions.",
+              intuition: "Higher pre/post correlation → more reduction.",
+              formula: "Var(Y_{cuped})\\approx Var(Y)(1-\\rho^2)",
+              example: "Animation slider on ρ narrows CI band.",
+              trap: "Assuming ρ from pilot equals production ρ.",
+            }),
+          },
+          {
+            id: 'python-sketch-cuped',
+            label: "Python sketch",
+            tooltip: tip({
+              short: "Center X, estimate θ, subtract adjustment from Y.",
+              intuition: "Three-line numpy mirrors the paper adjustment before arm comparison.",
+              code: "x_c = x - x.mean()\ntheta = np.cov(y, x)[0,1] / np.var(x)\ny_cuped = y - theta * x_c",
+              example: "Then compare means by treatment arm on y_cuped.",
+              trap: "Estimating θ on treatment arm affected by effect heterogeneity.",
+            }),
+          },
+          {
+            id: 'ttest-after-cuped',
+            label: "Test after adjustment",
+            tooltip: tip({
+              short: "Standard two-sample test on Y_cuped with adjusted variance.",
+              intuition: "Use analytical SE formulas for CUPED estimators.",
+              example: "t-stat on adjusted metric vs raw metric.",
+              trap: "Using raw SE formula ignoring adjustment can mis-state significance.",
+            }),
+            lessonId: 'hypothesis-testing-intuition',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'post-treatment-x-trap-cuped',
+            label: "Post-treatment X",
+            tooltip: tip({
+              short: "Covariates measured after treatment can absorb treatment effect.",
+              intuition: "Adjustment path includes causal effect—biases ATE.",
+              example: "Post-week sessions as X when treatment changes sessions.",
+              trap: "“More predictive” X that is post-treatment is invalid.",
+            }),
+          },
+          {
+            id: 'target-leakage-trap-cuped',
+            label: "Target leakage into X",
+            tooltip: tip({
+              short: "X must not encode the outcome label or future target.",
+              intuition: "Same leakage rules as feature engineering.",
+              example: "Using partial post-period revenue as pre covariate by mistake.",
+              trap: "Amazing variance reduction with biased effect.",
+            }),
+            lessonId: 'data-leakage-deep-dive',
+          },
+          {
+            id: 'nonrandom-trap-cuped',
+            label: "Non-randomized studies",
+            tooltip: tip({
+              short: "CUPED variance math assumes randomized experiment context.",
+              intuition: "Observational confounding needs propensity or DAG reasoning.",
+              example: "Applying CUPED to observational cohort without balance.",
+              trap: "Treating adjusted observational effect as causal ATE.",
+            }),
+            lessonId: 'propensity-scores',
+          },
+          {
+            id: 'overfit-theta-trap-cuped',
+            label: "Overfit θ",
+            tooltip: tip({
+              short: "Tuning θ on the same experiment inflates significance.",
+              intuition: "Data-dependent adjustment needs cross-validation or holdout.",
+              example: "Trying many X until CI clears zero.",
+              trap: "Multiple covariate tries without multiplicity control.",
+            }),
+            lessonId: 'sequential-testing-peeking',
+          },
+          {
+            id: 'low-rho-trap-cuped',
+            label: "Low correlation covariate",
+            tooltip: tip({
+              short: "Weak X–Y link gives negligible variance reduction.",
+              intuition: "Engineering cost may exceed benefit.",
+              example: "Demographics weakly correlated with revenue KPI.",
+              trap: "Mandating CUPED when pilot ρ≈0.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'sequential-used-cuped',
+            label: "Sequential testing",
+            tooltip: tip({
+              short: "Tighter metrics pair with planned interim looks and alpha spending.",
+              intuition: "CUPED does not replace sequential design.",
+              trap: "Peeking on CUPED-adjusted p-values without plan.",
+            }),
+            lessonId: 'sequential-testing-peeking',
+          },
+          {
+            id: 'power-used-cuped',
+            label: "Power analysis",
+            tooltip: tip({
+              short: "Effective sample size increases when variance drops.",
+              intuition: "Plan MDE with anticipated ρ.",
+              example: "Halve required n when ρ≈0.7 on metric.",
+              trap: "Power calculations ignoring CUPED leave money on table.",
+            }),
+            lessonId: 'power-sample-size',
+          },
+          {
+            id: 'guardrails-used-cuped',
+            label: "Guardrail metrics",
+            tooltip: tip({
+              short: "Apply CUPED separately to primary and guardrail KPIs.",
+              intuition: "Each metric needs its own valid pre-period X.",
+              trap: "Using one θ across unrelated metrics.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'stratification-used-cuped',
+            label: "Stratified experiments",
+            tooltip: tip({
+              short: "CUPED complements stratified randomization on baseline covariates.",
+              intuition: "Both attack imbalance and noise—different mechanisms.",
+              trap: "Double-counting same covariate without understanding.",
+            }),
+          },
+          {
+            id: 'monitoring-used-cuped',
+            label: "Experiment monitoring",
+            tooltip: tip({
+              short: "Stable pre-period data quality checks before trusting CUPED.",
+              intuition: "Broken logging in pre-period breaks X.",
+              trap: "Holiday shifts in pre window distort X−X̄.",
+            }),
+            lessonId: 'model-monitoring',
+          },
+        ],
+      },
+    ],
+  },
+
+  'data-leakage-deep-dive': {
+    center: {
+      id: 'data-leakage-deep-dive',
+      label: "Data Leakage Deep Dive",
+      type: 'current',
+      tooltip: tip({
+        short: "Data leakage is evaluation information from the test or future leaking into training, preprocessing, splits, or decisions—scores look valid while the model learned forbidden shortcuts.",
+        intuition: "The independence promise D_eval ∩ Information(D_train) = ∅ breaks when duplicates, targets, time, or test tuning sneak in.",
+        formula: "D_{eval}\\cap Information(D_{train})=\\varnothing",
+        why: "Leakage is the silent killer of ML credibility—amazing offline metrics that collapse in production.",
+        trap: "Leakage often looks like amazing performance, not like a bug.",
+        example: "Including “is_fraud_confirmed” as a feature when predicting fraud at transaction time.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'train-test-split-prereq-dl',
+            label: "Train/validation/test split",
+            tooltip: tip({
+              short: "Hold out data never used for training or tuning.",
+              intuition: "Leakage breaks the holdout promise.",
+              example: "Test set touched only once for final report.",
+              trap: "Repeated test tuning is leakage.",
+            }),
+            lessonId: 'train-validation-test-split',
+          },
+          {
+            id: 'cross-validation-prereq-dl',
+            label: "Cross-validation",
+            tooltip: tip({
+              short: "CV folds must not share leaked information across folds.",
+              intuition: "Duplicate users in train and val fold = leakage.",
+              example: "GroupKFold by user_id.",
+              trap: "Random row splits with repeated entities.",
+            }),
+            lessonId: 'cross-validation',
+          },
+          {
+            id: 'feature-pipeline-prereq-dl',
+            label: "Feature pipelines",
+            tooltip: tip({
+              short: "Fit scalers and encoders on training data only.",
+              intuition: "Validation statistics in fit scope leak information.",
+              example: "StandardScaler fit on train, transform val.",
+              trap: "fit_transform on full dataframe before split.",
+            }),
+            lessonId: 'feature-scaling-preprocessing',
+          },
+          {
+            id: 'prediction-time-prereq-dl',
+            label: "Prediction-time availability",
+            tooltip: tip({
+              short: "Every feature must exist at the moment you predict.",
+              intuition: "Future fields are not features—they are targets in disguise.",
+              example: "Days_until_churn unavailable for live retention score.",
+              trap: "Training on post-outcome admin fields.",
+            }),
+          },
+          {
+            id: 'metrics-prereq-dl',
+            label: "Classification metrics",
+            tooltip: tip({
+              short: "Inflated metrics signal possible leakage before deployment.",
+              intuition: "Too-good AUC warrants audit.",
+              example: "AUC 0.99 on messy real data → suspicious.",
+              trap: "Celebrating metrics without leakage checklist.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+          {
+            id: 'time-order-prereq-dl',
+            label: "Time ordering",
+            tooltip: tip({
+              short: "Future rows must not predict past in temporal problems.",
+              intuition: "Random split on time series leaks future.",
+              example: "Train on 2024, test on 2023 rows mixed in train.",
+              trap: "Shuffling time-ordered data before split.",
+            }),
+            lessonId: 'time-series-forecasting-track',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'target-leakage-dl',
+            label: "Target leakage",
+            tooltip: tip({
+              short: "Features that encode the label or post-label outcomes.",
+              intuition: "Model learns the answer key, not causal precursors.",
+              example: "“Refund_issued” predicting “will_request_refund”.",
+              trap: "Proxy columns highly correlated with target by construction.",
+            }),
+          },
+          {
+            id: 'duplicate-entity-dl',
+            label: "Duplicate users / entities",
+            tooltip: tip({
+              short: "Same user in train and test shares latent behavior.",
+              intuition: "Test performance measures memorization of seen users.",
+              example: "User 42 rows in both folds.",
+              trap: "Random split on rows not groups.",
+            }),
+          },
+          {
+            id: 'time-leakage-dl',
+            label: "Time leakage",
+            tooltip: tip({
+              short: "Future information enters features or split boundaries.",
+              intuition: "Model sees tomorrow when predicting today.",
+              example: "Aggregate stats computed over full dataset including test period.",
+              trap: "Point-in-time feature tables built incorrectly.",
+            }),
+          },
+          {
+            id: 'pipeline-leakage-dl',
+            label: "Pipeline leakage",
+            tooltip: tip({
+              short: "Preprocessing fit on all data before split.",
+              intuition: "Test rows influence scaler, imputer, or feature selection.",
+              example: "SelectKBest on full X including test labels indirectly.",
+              trap: "Notebook order: split after preprocessing.",
+            }),
+          },
+          {
+            id: 'test-tuning-dl',
+            label: "Repeated test tuning",
+            tooltip: tip({
+              short: "Each peek at test metrics adapts choices to test noise.",
+              intuition: "Test set becomes a training set for decisions.",
+              example: "Try 20 architectures; report best test score.",
+              trap: "Hidden multiple comparisons on same test set.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'too-good-dl',
+            label: "Too good to be true",
+            tooltip: tip({
+              short: "Suspiciously high offline metrics trigger leakage audit.",
+              intuition: "Real noise usually prevents perfect separation.",
+              example: "100% accuracy on imbalanced fraud data.",
+              trap: "Assuming leakage only happens to beginners.",
+            }),
+          },
+          {
+            id: 'availability-dl',
+            label: "Would I have this feature live?",
+            tooltip: tip({
+              short: "Ask if the feature exists at decision time in production.",
+              intuition: "Best single question in leakage review.",
+              example: "Support ticket text after fraud label—no.",
+              trap: "Batch ETL lag hides timing bugs until deploy.",
+            }),
+          },
+          {
+            id: 'information-boundary-dl',
+            label: "Information boundary",
+            tooltip: tip({
+              short: "Draw a wall between what training may know and what eval represents.",
+              intuition: "Anything crossing the wall is leakage.",
+              example: "Global mean imputation using test rows crosses wall.",
+              trap: "Leakage through graph neighbors or duplicates is subtle.",
+            }),
+          },
+          {
+            id: 'group-split-dl',
+            label: "Split by group not row",
+            tooltip: tip({
+              short: "Users, patients, sessions often need group-level splits.",
+              intuition: "Rows are not independent.",
+              example: "GroupKFold on customer_id.",
+              trap: "i.i.d. assumption from textbook on grouped data.",
+            }),
+          },
+          {
+            id: 'peeking-test-dl',
+            label: "Test peeking intuition",
+            tooltip: tip({
+              short: "Each test peek is like training on test noise.",
+              intuition: "Same spirit as sequential peeking in A/B tests.",
+              example: "Pick hyperparams by test AUC repeatedly.",
+              trap: "Validation set forgotten; test used for every decision.",
+            }),
+            lessonId: 'sequential-testing-peeking',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'independence-formula-dl',
+            label: "Independence promise",
+            tooltip: tip({
+              short: "Eval information must not influence training pipeline.",
+              intuition: "Set intersection should be empty.",
+              formula: "D_{eval}\\cap Information(D_{train})=\\varnothing",
+              example: "Audit each pipeline stage for boundary crossing.",
+              trap: "Information includes hyperparam choices tuned on test.",
+            }),
+          },
+          {
+            id: 'sklearn-pipeline-dl',
+            label: "sklearn Pipeline + CV",
+            tooltip: tip({
+              short: "Fit transformers inside CV folds only on train folds.",
+              intuition: "Pipeline prevents manual fit on full data.",
+              code: "Pipeline([(\"scaler\", StandardScaler()), (\"clf\", LogisticRegression())])\ngrid_search = GridSearchCV(pipe, param_grid, cv=GroupKFold(...))",
+              example: "GroupKFold passes groups=user_id.",
+              trap: "Pipeline outside CV but fit on concatenated train+val incorrectly.",
+            }),
+          },
+          {
+            id: 'point-in-time-dl',
+            label: "Point-in-time join",
+            tooltip: tip({
+              short: "Features joined as-of prediction timestamp, not latest row.",
+              intuition: "Temporal SQL as-of joins prevent future fields.",
+              example: "feature_value at t_pred only uses rows with time ≤ t_pred.",
+              trap: "Using MAX(timestamp) feature without as-of constraint.",
+            }),
+          },
+          {
+            id: 'holdout-once-dl',
+            label: "Single final test",
+            tooltip: tip({
+              short: "Tune on train/val; touch test once for unbiased estimate.",
+              intuition: "Nested CV for hyperparams; outer test pristine.",
+              example: "Inner CV on train for C; val for early stop; test once.",
+              trap: "Reporting best of many test runs.",
+            }),
+            lessonId: 'cross-validation',
+          },
+          {
+            id: 'leakage-checklist-dl',
+            label: "Audit checklist",
+            tooltip: tip({
+              short: "Target, duplicate, time, pipeline, test tuning—in that order.",
+              intuition: "Lesson animation modes map to these leak types.",
+              example: "Walk each feature: available at predict time?",
+              trap: "Skipping duplicate-entity check on user-generated data.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'random-rows-trap-dl',
+            label: "Random rows = independent",
+            tooltip: tip({
+              short: "Repeated entities break i.i.d. assumption.",
+              intuition: "Same user in train and test inflates scores.",
+              example: "Multiple purchases per user without group split.",
+              trap: "Default train_test_split shuffle=True on user data.",
+            }),
+          },
+          {
+            id: 'aggregate-trap-dl',
+            label: "Global aggregates",
+            tooltip: tip({
+              short: "Dataset-wide means/stds include test rows.",
+              intuition: "Global stats leak eval distribution into train.",
+              example: "normalize using full column before split.",
+              trap: "Leakage through subtle ETL jobs run nightly on all data.",
+            }),
+            lessonId: 'feature-scaling-preprocessing',
+          },
+          {
+            id: 'proxy-target-trap-dl',
+            label: "Proxy of target",
+            tooltip: tip({
+              short: "Features engineered from outcome or downstream workflow.",
+              intuition: "High mutual information with label for wrong reason.",
+              example: "Customer service notes after cancellation predicting churn.",
+              trap: "Automated feature tools picking post-outcome columns.",
+            }),
+          },
+          {
+            id: 'cv-wrong-trap-dl',
+            label: "Wrong CV strategy",
+            tooltip: tip({
+              short: "KFold on time series or grouped data without adaptation.",
+              intuition: "Validation score optimistic.",
+              example: "KFold on stock prices with future in train fold.",
+              trap: "Trusting CV score without checking split logic.",
+            }),
+          },
+          {
+            id: 'deployment-surprise-trap-dl',
+            label: "Deployment collapse",
+            tooltip: tip({
+              short: "Leaked models fail when forbidden features disappear live.",
+              intuition: "Production lacks the cheat code feature.",
+              example: "Model relied on post-resolution flag.",
+              trap: "No shadow deploy or point-in-time replay before launch.",
+            }),
+            lessonId: 'model-monitoring',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'monitoring-used-dl',
+            label: "Model monitoring",
+            tooltip: tip({
+              short: "Track feature availability and drift vs training assumptions.",
+              intuition: "Missing live features expose training shortcuts.",
+              trap: "Monitoring accuracy only, not feature schema.",
+            }),
+            lessonId: 'model-monitoring',
+          },
+          {
+            id: 'debugging-used-dl',
+            label: "Model debugging",
+            tooltip: tip({
+              short: "Slice analysis finds segments where leakage masks failure.",
+              intuition: "New users vs returning may diverge if duplicates leaked.",
+              trap: "Aggregate metrics hide segment collapse.",
+            }),
+            lessonId: 'model-debugging',
+          },
+          {
+            id: 'rag-leakage-used-dl',
+            label: "RAG evaluation leakage",
+            tooltip: tip({
+              short: "Test questions in index or train corpus inflate retrieval scores.",
+              intuition: "Same information boundary in retrieval benchmarks.",
+              trap: "Eval queries seen during embedding index build.",
+            }),
+            lessonId: 'rag-retrieval-evaluation',
+          },
+          {
+            id: 'recommender-leakage-used-dl',
+            label: "Recommender leakage",
+            tooltip: tip({
+              short: "Future clicks in training labels for past recommendations.",
+              intuition: "Temporal split and exposure logging matter.",
+              trap: "Random split on implicit feedback matrices.",
+            }),
+            lessonId: 'recommender-systems-ranking-track',
+          },
+          {
+            id: 'security-used-dl',
+            label: "ML security track",
+            tooltip: tip({
+              short: "Leakage overlaps with train-test contamination in robustness work.",
+              intuition: "Strict pipelines also defend against subtle overfitting.",
+              trap: "Confusing adversarial examples with leakage—they differ.",
+            }),
+            lessonId: 'ml-security-robustness-track',
+          },
+        ],
+      },
+    ],
+  },
+
+  'dropout-batchnorm': {
+    center: {
+      id: 'dropout-batchnorm',
+      label: "Dropout & BatchNorm",
+      type: 'current',
+      tooltip: tip({
+        short: "Dropout randomly drops units during training to prevent co-adaptation; BatchNorm normalizes batch activations then rescales with learned γ and β to stabilize deep network training.",
+        intuition: "BatchNorm fixes scale drift; dropout breaks fragile co-dependent paths—both change behavior between train and eval modes.",
+        formula: "\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}},\\quad y=\\gamma\\hat{x}+\\beta",
+        why: "Modern CNNs and early transformers relied on these tricks before LayerNorm dominated many LLM stacks.",
+        trap: "Using train mode at inference—or eval mode during training—silently changes predictions and statistics.",
+        example: "Dropout p=0.5 zeros half the activations each forward pass in training only.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'neural-net-prereq-db',
+            label: "Neural network",
+            tooltip: tip({
+              short: "Stacked layers with nonlinear activations.",
+              intuition: "Dropout and BatchNorm insert into this stack.",
+              example: "Linear → BatchNorm → ReLU → Dropout.",
+              trap: "Order of ops matters for each method.",
+            }),
+            lessonId: 'neural-network',
+          },
+          {
+            id: 'backprop-prereq-db',
+            label: "Backpropagation",
+            tooltip: tip({
+              short: "Gradients flow through normalization and dropped units.",
+              intuition: "Dropout masks stop gradient to dropped units.",
+              example: "BatchNorm has learnable γ, β gradients.",
+              trap: "Forgetting to scale dropout at inference.",
+            }),
+            lessonId: 'computation-graph-backprop',
+          },
+          {
+            id: 'overfitting-prereq-db',
+            label: "Overfitting",
+            tooltip: tip({
+              short: "Model memorizes train set; dropout targets this.",
+              intuition: "Randomness forces redundant representations.",
+              example: "Train acc high, val acc low → try dropout.",
+              trap: "Dropout is not the only regularizer.",
+            }),
+            lessonId: 'overfitting',
+          },
+          {
+            id: 'initialization-prereq-db',
+            label: "Weight initialization",
+            tooltip: tip({
+              short: "Starting scale affects activation statistics BatchNorm sees.",
+              intuition: "Bad init + no norm can explode or vanish.",
+              example: "He init for ReLU conv nets.",
+              trap: "Assuming BatchNorm removes need for sensible init entirely.",
+            }),
+            lessonId: 'initialization',
+          },
+          {
+            id: 'optimizers-prereq-db',
+            label: "Optimizers",
+            tooltip: tip({
+              short: "SGD/Adam update γ, β and all weights.",
+              intuition: "BatchNorm changes effective landscape smoothness.",
+              example: "Often higher LR possible with BatchNorm.",
+              trap: "Tiny batch sizes make BatchNorm stats very noisy.",
+            }),
+            lessonId: 'optimizers',
+          },
+          {
+            id: 'train-eval-prereq-db',
+            label: "Train vs eval mode",
+            tooltip: tip({
+              short: "Framework flag switches dropout off and BatchNorm to running stats.",
+              intuition: "model.train() vs model.eval() in PyTorch.",
+              example: "Forgotten eval() → random dropout at serve time.",
+              trap: "BatchNorm in tiny batch eval batches still unstable.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'batchnorm-normalize-db',
+            label: "BatchNorm normalize",
+            tooltip: tip({
+              short: "Subtract batch mean μ_B, divide by batch std σ_B per channel.",
+              intuition: "Forces each mini-batch layer inputs to stable scale.",
+              formula: "\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}}",
+              example: "Conv feature map channels normalized across batch×spatial.",
+              trap: "Batch size 1 makes variance estimate meaningless.",
+            }),
+          },
+          {
+            id: 'batchnorm-affines-db',
+            label: "Learn γ and β",
+            tooltip: tip({
+              short: "y = γ x̂ + β restores representational capacity.",
+              intuition: "Network can undo normalization if needed.",
+              formula: "y=\\gamma\\hat{x}+\\beta",
+              example: "γ=1, β=0 starts as identity on normalized x.",
+              trap: "Thinking BatchNorm removes need for any scale learning.",
+            }),
+          },
+          {
+            id: 'running-stats-db',
+            label: "Running statistics",
+            tooltip: tip({
+              short: "Eval uses EMA of μ and σ² from training batches.",
+              intuition: "Stable inference without batch peers.",
+              example: "momentum=0.1 updates running_mean in PyTorch.",
+              trap: "Train/eval stat mismatch if running stats poorly estimated.",
+            }),
+          },
+          {
+            id: 'dropout-mask-db',
+            label: "Dropout mask",
+            tooltip: tip({
+              short: "Each unit kept with prob (1−p); dropped units set to 0.",
+              intuition: "Different random mask every forward pass in training.",
+              example: "p=0.5 → half units zeroed on average.",
+              trap: "Dropout on input layer may remove too much signal.",
+            }),
+          },
+          {
+            id: 'inference-scale-db',
+            label: "Inference scaling",
+            tooltip: tip({
+              short: "At eval, dropout off; activations scaled by (1−p) or inverted dropout training.",
+              intuition: "Expected activation magnitude matches train average.",
+              example: "PyTorch inverted dropout scales during train.",
+              trap: "Manual dropout without scaling breaks magnitude.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'ensemble-intuition-db',
+            label: "Dropout as ensemble",
+            tooltip: tip({
+              short: "Each mask trains a thinned sub-network; inference averages implicit ensemble.",
+              intuition: "Randomness prevents one path carrying everything.",
+              example: "2^100 possible masks in wide layer—never all trained explicitly.",
+              trap: "Dropout rate too high destroys capacity.",
+            }),
+          },
+          {
+            id: 'covariate-shift-db',
+            label: "Internal covariate shift",
+            tooltip: tip({
+              short: "BatchNorm keeps layer input distribution stable as weights change.",
+              intuition: "Lower layers do not constantly rescale for upper layers.",
+              example: "Smoother loss curve early in training.",
+              trap: "Term is intuition—debated how much BN helps via this alone.",
+            }),
+          },
+          {
+            id: 'different-jobs-db',
+            label: "Different jobs",
+            tooltip: tip({
+              short: "BatchNorm stabilizes scale; dropout regularizes co-adaptation.",
+              intuition: "Not interchangeable techniques.",
+              example: "Can use both in same block.",
+              trap: "Using BatchNorm hoping it replaces all regularization.",
+            }),
+          },
+          {
+            id: 'mode-switch-db',
+            label: "Mode switch matters",
+            tooltip: tip({
+              short: "Train uses batch stats + dropout; eval uses frozen stats, no dropout.",
+              intuition: "Same weights, different forward behavior.",
+              example: "Bug: eval forgotten → noisy predictions.",
+              trap: "Exporting model without eval() trace.",
+            }),
+          },
+          {
+            id: 'layernorm-contrast-db',
+            label: "LayerNorm contrast",
+            tooltip: tip({
+              short: "Transformers often use LayerNorm per token, not BatchNorm across batch.",
+              intuition: "Batch size 1 friendly; no batch statistic dependency.",
+              example: "BERT/GPT blocks: LayerNorm not BatchNorm.",
+              trap: "Dropping BatchNorm into transformer without understanding norm choice.",
+            }),
+            lessonId: 'layer-normalization',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'bn-formula-db',
+            label: "BatchNorm forward",
+            tooltip: tip({
+              short: "x̂ = (x−μ_B)/√(σ²_B+ε); y = γx̂ + β.",
+              intuition: "Per-feature or per-channel over mini-batch.",
+              formula: "\\hat{x}=\\frac{x-\\mu_B}{\\sqrt{\\sigma_B^2+\\epsilon}},\\ y=\\gamma\\hat{x}+\\beta",
+              example: "BatchNorm2d on conv output [N,C,H,W].",
+              trap: "ε prevents divide-by-zero.",
+            }),
+          },
+          {
+            id: 'dropout-formula-db',
+            label: "Dropout training",
+            tooltip: tip({
+              short: "m ~ Bernoulli(1−p); output = (x ⊙ m) / (1−p) inverted variant.",
+              intuition: "Expectation preserved under inverted dropout.",
+              formula: "y=\\frac{x\\odot m}{1-p}",
+              example: "nn.Dropout(p=0.5) in PyTorch.",
+              trap: "Double dropout layers with compounded shrinkage.",
+            }),
+          },
+          {
+            id: 'pytorch-bn-code-db',
+            label: "PyTorch BatchNorm",
+            tooltip: tip({
+              short: "BatchNorm1d/2d tracks running_mean, running_var.",
+              intuition: "train() vs eval() switches which statistics drive normalization.",
+              code: "self.bn = nn.BatchNorm2d(channels)\n# model.train() uses batch stats\n# model.eval() uses running stats",
+              example: "Place after conv, before activation often.",
+              trap: "SyncBatchNorm needed for small per-GPU batches in distributed train.",
+            }),
+          },
+          {
+            id: 'pytorch-dropout-code-db',
+            label: "PyTorch Dropout",
+            tooltip: tip({
+              short: "nn.Dropout active only in training mode.",
+              intuition: "Dropout layer becomes identity pass-through when eval() is set.",
+              code: "self.drop = nn.Dropout(p=0.5)\nx = self.drop(x)  # no-op in eval",
+              example: "Often after fully connected layers.",
+              trap: "Dropout before softmax can distort probability calibration.",
+            }),
+          },
+          {
+            id: 'placement-db',
+            label: "Typical placement",
+            tooltip: tip({
+              short: "Conv blocks: Conv→BN→ReLU; FC: Linear→ReLU→Dropout.",
+              intuition: "Practice varies—ablation still needed.",
+              example: "ResNet v1: BN before activation.",
+              trap: "Copying CNN recipe into RNN/Transformer without adaptation.",
+            }),
+            lessonId: 'conv-relu',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'eval-forgotten-trap-db',
+            label: "Forgot model.eval()",
+            tooltip: tip({
+              short: "Dropout randomness and wrong BN stats at inference.",
+              intuition: "Predictions change run-to-run.",
+              example: "API server left in train mode.",
+              trap: "Non-deterministic production bugs hard to trace.",
+            }),
+          },
+          {
+            id: 'small-batch-bn-trap-db',
+            label: "Tiny batch BatchNorm",
+            tooltip: tip({
+              short: "Batch stats with n=1 or 2 are extremely noisy.",
+              intuition: "Running stats help eval but train still unstable.",
+              example: "Batch size 2 on large model.",
+              trap: "Using BatchNorm with batch 1 inference on edge devices.",
+            }),
+          },
+          {
+            id: 'dropout-bn-same-trap-db',
+            label: "Dropout = BatchNorm?",
+            tooltip: tip({
+              short: "They solve different problems—do not substitute blindly.",
+              intuition: "BN is not a random mask.",
+              example: "BN without dropout may still overfit.",
+              trap: "Removing dropout because BN was added.",
+            }),
+          },
+          {
+            id: 'high-dropout-trap-db',
+            label: "Dropout too high",
+            tooltip: tip({
+              short: "Large p removes too much signal; underfits.",
+              intuition: "Typical FC dropout 0.2–0.5—not 0.9.",
+              example: "p=0.9 on narrow layer → dead network.",
+              trap: "Copying NLP dropout rates into tiny MLPs.",
+            }),
+          },
+          {
+            id: 'bn-replaces-init-trap-db',
+            label: "BN fixes everything",
+            tooltip: tip({
+              short: "BatchNorm helps but does not replace depth, data, or architecture choices.",
+              intuition: "Very deep nets still need residuals, good LR, etc.",
+              example: "ResNet uses BN + skip connections together.",
+              trap: "Stacking depth assuming BN alone stabilizes any graph.",
+            }),
+            lessonId: 'gradient-problems',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'conv-stack-used-db',
+            label: "CNN stacks",
+            tooltip: tip({
+              short: "Classic image pipelines pair Conv, BatchNorm, ReLU, pooling.",
+              intuition: "BatchNorm standard in ResNet-era vision.",
+              trap: "Vision transformer paths skip BatchNorm.",
+            }),
+            lessonId: 'conv-relu',
+          },
+          {
+            id: 'layernorm-used-db',
+            label: "LayerNorm in LLMs",
+            tooltip: tip({
+              short: "Transformers prefer LayerNorm over BatchNorm for sequence batching.",
+              intuition: "Variable length and small batches favor per-token norm.",
+              trap: "Applying BatchNorm to transformer tokens incorrectly.",
+            }),
+            lessonId: 'layer-normalization',
+          },
+          {
+            id: 'regularization-used-db',
+            label: "Regularization suite",
+            tooltip: tip({
+              short: "Dropout complements weight decay, early stopping, data aug.",
+              intuition: "No single regularizer covers all overfitting modes.",
+              trap: "Only dropout on huge data may hurt underfitting.",
+            }),
+            lessonId: 'regularization',
+          },
+          {
+            id: 'training-dynamics-used-db',
+            label: "Training loop dynamics",
+            tooltip: tip({
+              short: "Mode flags and batch size interact with loss curves.",
+              intuition: "Monitor train vs val with correct eval() each epoch.",
+              trap: "Validating in train mode inflates val noise.",
+            }),
+            lessonId: 'training-loop-dynamics',
+          },
+          {
+            id: 'fine-tuning-used-db',
+            label: "Fine-tuning",
+            tooltip: tip({
+              short: "Often disable or reduce dropout when fine-tuning large pretrained models.",
+              intuition: "Different regularization needs on small task data.",
+              trap: "Heavy dropout destroying pretrained features.",
+            }),
+            lessonId: 'fine-tuning',
+          },
+        ],
+      },
+    ],
+  },
+
+  'efficient-llm-serving': {
+    center: {
+      id: 'efficient-llm-serving',
+      label: "Efficient LLM Serving",
+      type: 'current',
+      tooltip: tip({
+        short: "LLM serving turns one autoregressive model into a multi-user system by scheduling prefill/decode, managing KV cache memory, batching requests, and trading latency against throughput.",
+        intuition: "The server is a memory manager plus scheduler—GPUs must stay busy while meeting TTFT, TPOT, and tail latency SLOs.",
+        formula: "\\text{goodput}=\\frac{\\text{requests within SLO}}{\\text{second}}",
+        why: "Production LLMs fail on cost and latency if serving treats generation like a single-notebook forward pass.",
+        trap: "Maximizing throughput alone can destroy user experience when TTFT or P99 latency spikes.",
+        example: "Long prefill from one request blocks decode slots → tail latency spike for everyone.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'token-gen-prereq-serve',
+            label: "Token generation",
+            tooltip: tip({
+              short: "Autoregressive loop: one token at a time with growing context.",
+              intuition: "Serving optimizes this loop at scale.",
+              example: "Append token → extend KV → next step.",
+              trap: "Treating generation as one-shot forward pass.",
+            }),
+            lessonId: 'transformer-token-generation',
+          },
+          {
+            id: 'kv-cache-prereq-serve',
+            label: "KV cache",
+            tooltip: tip({
+              short: "Store past keys/values to avoid recomputing on each decode step.",
+              intuition: "Memory grows with context × batch × heads.",
+              example: "Each new token appends K/V rows.",
+              trap: "Cache does not skip attention reads.",
+            }),
+            lessonId: 'kv-cache',
+          },
+          {
+            id: 'flash-attn-prereq-serve',
+            label: "Flash Attention",
+            tooltip: tip({
+              short: "Tiled exact attention reduces memory traffic on long prefill.",
+              intuition: "Prefill is attention-heavy; decode is memory-bandwidth-heavy.",
+              example: "Long prompts benefit from flash kernels.",
+              trap: "Flash does not remove KV cache footprint.",
+            }),
+            lessonId: 'flash-attention',
+          },
+          {
+            id: 'gqa-prereq-serve',
+            label: "Grouped-query attention",
+            tooltip: tip({
+              short: "Fewer KV heads shrink cache for long contexts.",
+              intuition: "Serving memory often scales with KV head count.",
+              example: "8 Q heads share 2 KV heads in GQA.",
+              trap: "Confusing GQA with removing query heads.",
+            }),
+            lessonId: 'grouped-query-attention',
+          },
+          {
+            id: 'sampling-prereq-serve',
+            label: "Sampling strategies",
+            tooltip: tip({
+              short: "Temperature, top-k, top-p change decode work slightly—not core bottleneck.",
+              intuition: "Still one forward per accepted token unless speculative.",
+              example: "Top-p filters softmax candidates each step.",
+              trap: "Blaming sampling for KV memory limits.",
+            }),
+            lessonId: 'sampling-strategies',
+          },
+          {
+            id: 'quant-preview-serve',
+            label: "Quantization preview",
+            tooltip: tip({
+              short: "INT8/INT4 weights and KV reduce memory and bandwidth.",
+              intuition: "Quality-latency-memory triangle.",
+              example: "Weight-only quant for decode bandwidth.",
+              trap: "Quantizing without calibration on target hardware.",
+            }),
+            lessonId: 'efficient-inference-compression-track',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'prefill-decode-serve',
+            label: "Prefill vs decode",
+            tooltip: tip({
+              short: "Prefill processes prompt in parallel; decode adds one token per step serially.",
+              intuition: "Different compute/memory profiles need different scheduling.",
+              example: "TTFT dominated by prefill; TPOT by decode.",
+              trap: "One queue policy for both phases leaves GPUs idle.",
+            }),
+          },
+          {
+            id: 'paged-kv-serve',
+            label: "PagedAttention / blocks",
+            tooltip: tip({
+              short: "KV stored in fixed blocks like OS pages to reduce fragmentation.",
+              intuition: "Non-contiguous sequences share physical GPU memory efficiently.",
+              example: "vLLM block table maps logical tokens to blocks.",
+              trap: "Naive contiguous cache wastes memory on variable lengths.",
+            }),
+          },
+          {
+            id: 'continuous-batching-serve',
+            label: "Continuous batching",
+            tooltip: tip({
+              short: "Add/remove requests from batch between decode steps.",
+              intuition: "Avoid waiting for longest sequence to finish whole batch.",
+              example: "Iteration-level scheduling in vLLM-style systems.",
+              trap: "Static batching underutilizes GPU on mixed lengths.",
+            }),
+          },
+          {
+            id: 'speculative-decode-serve',
+            label: "Speculative decoding",
+            tooltip: tip({
+              short: "Draft model proposes tokens; target verifies in parallel.",
+              intuition: "Accept multiple tokens per target forward when draft agrees.",
+              example: "Small draft + large target verification.",
+              trap: "Rejected drafts waste compute—draft quality matters.",
+            }),
+          },
+          {
+            id: 'streaming-serve',
+            label: "Streaming responses",
+            tooltip: tip({
+              short: "Emit tokens as generated; user sees partial output before finish.",
+              intuition: "Perceived latency improves even if total time fixed.",
+              example: "SSE/WebSocket token stream.",
+              trap: "Streaming does not reduce total FLOPs.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'scheduler-intuition-serve',
+            label: "Scheduler as traffic cop",
+            tooltip: tip({
+              short: "Admits requests, prioritizes prefill vs decode, enforces fairness.",
+              intuition: "Bad scheduling → idle GPU or starved users.",
+              example: "Chunked prefill interleaves long prompts with decode.",
+              trap: "FIFO only when priorities differ wildly.",
+            }),
+          },
+          {
+            id: 'memory-wall-serve',
+            label: "KV memory wall",
+            tooltip: tip({
+              short: "Long context × many concurrent users exhaust GPU RAM before FLOPs.",
+              intuition: "Decode reads full cache each step—bandwidth bound.",
+              example: "32k context × batch 64 may OOM before compute saturates.",
+              trap: "Buying faster GPU without paging or GQA/MLA.",
+            }),
+            lessonId: 'multi-head-latent-attention',
+          },
+          {
+            id: 'goodput-serve',
+            label: "Goodput not raw throughput",
+            tooltip: tip({
+              short: "Count only requests meeting latency SLOs.",
+              intuition: "Tokens/sec meaningless if users timeout.",
+              example: "goodput drops when P99 TTFT breaches 2s target.",
+              trap: "Benchmarking offline batch only.",
+            }),
+          },
+          {
+            id: 'tail-latency-serve',
+            label: "Tail latency spikes",
+            tooltip: tip({
+              short: "One long prefill or huge batch hurts P99 for everyone.",
+              intuition: "Shared GPU = shared fate.",
+              example: "Head-of-line blocking in naive queue.",
+              trap: "Reporting mean latency only.",
+            }),
+          },
+          {
+            id: 'parallelism-serve',
+            label: "Tensor / pipeline parallel",
+            tooltip: tip({
+              short: "Split model across GPUs for size; adds communication overhead.",
+              intuition: "Needed for models that do not fit one device.",
+              example: "Pipeline bubbles if batch too small.",
+              trap: "Over-sharding tiny batches kills efficiency.",
+            }),
+            lessonId: 'frontier-moe-systems',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'ttft-formula-serve',
+            label: "Time to first token",
+            tooltip: tip({
+              short: "TTFT ≈ queue + prefill + first decode step.",
+              intuition: "User waits for any visible output.",
+              formula: "TTFT=q+p+d_1",
+              example: "Long prompt prefill dominates TTFT.",
+              trap: "Ignoring queue wait in UX estimates.",
+            }),
+          },
+          {
+            id: 'tpot-formula-serve',
+            label: "Time per output token",
+            tooltip: tip({
+              short: "TPOT averages decode step latency after first token.",
+              intuition: "Streaming smoothness metric.",
+              example: "50 ms/token → 20 tokens/sec perceived stream.",
+              trap: "Confusing TPOT with total generation time only.",
+            }),
+          },
+          {
+            id: 'goodput-formula-serve',
+            label: "Goodput",
+            tooltip: tip({
+              short: "Successful requests per second within SLO bounds.",
+              intuition: "Quality-of-service aware throughput.",
+              formula: "\\text{goodput}=\\frac{\\text{requests within SLO}}{\\text{second}}",
+              example: "Drop requests exceeding 5s total from numerator.",
+              trap: "Raw tokens/sec as sole KPI.",
+            }),
+          },
+          {
+            id: 'kv-memory-sketch-serve',
+            label: "KV memory sketch",
+            tooltip: tip({
+              short: "Cache bytes scale with layers × heads × dim × context × batch.",
+              intuition: "Halving KV heads halves cache roughly in GQA.",
+              code: "# rough: bytes ~ 2 * L * H_kv * D * seq * batch * dtype_bytes",
+              example: "MLA compresses KV further at cost of extra Q proj.",
+              trap: "Forgetting 2 for K and V.",
+            }),
+          },
+          {
+            id: 'batching-policy-serve',
+            label: "Batching policy",
+            tooltip: tip({
+              short: "max_batch_tokens caps prefill; max_num_seqs caps concurrent decodes.",
+              intuition: "Knobs trade latency vs utilization.",
+              example: "Raise token cap → higher throughput, worse TTFT.",
+              trap: "Same knobs for prefill-heavy vs decode-heavy workloads.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'throughput-only-trap-serve',
+            label: "Throughput-only optimization",
+            tooltip: tip({
+              short: "Packing GPU without latency guards hurts real users.",
+              intuition: "SLO-aware scheduling required.",
+              example: "Max batch → 30s TTFT for short queries.",
+              trap: "Publishing tokens/sec from synthetic uniform prompts.",
+            }),
+          },
+          {
+            id: 'kv-fragment-trap-serve',
+            label: "KV fragmentation",
+            tooltip: tip({
+              short: "Contiguous allocation fails despite “enough” free bytes.",
+              intuition: "Paged blocks fix external fragmentation.",
+              example: "Cannot serve new user despite 20% free memory.",
+              trap: "No block pool or preemption policy.",
+            }),
+          },
+          {
+            id: 'spec-waste-trap-serve',
+            label: "Speculative waste",
+            tooltip: tip({
+              short: "Low draft acceptance rate adds compute without speedup.",
+              intuition: "Draft must match target distribution reasonably.",
+              example: "Random draft → 0% acceptance.",
+              trap: "Spec decode always on without monitoring accept rate.",
+            }),
+          },
+          {
+            id: 'cold-start-trap-serve',
+            label: "Cold start ignored",
+            tooltip: tip({
+              short: "Model load, compilation, cache warmup affect first requests.",
+              intuition: "Autoscaling adds queue delay.",
+              example: "New replica TTFT includes weight load.",
+              trap: "Benchmarking warm GPU only.",
+            }),
+          },
+          {
+            id: 'long-context-trap-serve',
+            label: "Long context surprise",
+            tooltip: tip({
+              short: "One 128k prompt can evict or block many short chats.",
+              intuition: "Admission control and chunking required.",
+              example: "No max prompt policy → OOM for all.",
+              trap: "Marketing context length without serving plan.",
+            }),
+            lessonId: 'long-context-frontier-models',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'compression-track-serve',
+            label: "Inference compression",
+            tooltip: tip({
+              short: "Quantization, pruning, distillation stack with serving schedulers.",
+              intuition: "Same SLO triangle at system level.",
+              trap: "Quant model without kernel support on GPU.",
+            }),
+            lessonId: 'efficient-inference-compression-track',
+          },
+          {
+            id: 'moe-serve',
+            label: "MoE serving",
+            tooltip: tip({
+              short: "Expert routing adds load balance and communication constraints.",
+              intuition: "Active params ≠ memory footprint of all experts.",
+              trap: "Assuming MoE is free compute at serve time.",
+            }),
+            lessonId: 'frontier-moe-systems',
+          },
+          {
+            id: 'test-time-compute-serve',
+            label: "Test-time compute",
+            tooltip: tip({
+              short: "Thinking budgets multiply tokens per request—serving load scales linearly.",
+              intuition: "Reasoning models need capacity planning.",
+              trap: "Same capacity plan as chat without reasoning.",
+            }),
+            lessonId: 'test-time-compute-thinking-budgets',
+          },
+          {
+            id: 'agent-serve',
+            label: "Tool-using agents",
+            tooltip: tip({
+              short: "Multi-turn tool loops multiply prefill/decode cycles and KV lifetime.",
+              intuition: "Session length and tool latency dominate.",
+              trap: "Agent timeout from serial tool + LLM steps.",
+            }),
+            lessonId: 'tool-using-reasoning-models',
+          },
+          {
+            id: 'eval-safety-serve',
+            label: "Evaluation & safety",
+            tooltip: tip({
+              short: "Serving gates, rate limits, and monitoring part of deployment safety.",
+              intuition: "Capacity denial is also a failure mode.",
+              trap: "Launch without overload behavior tested.",
+            }),
+            lessonId: 'frontier-evaluation-safety',
+          },
+        ],
+      },
+    ],
+  },
+
+  'embeddings': {
+    center: {
+      id: 'embeddings',
+      label: "Embeddings",
+      type: 'current',
+      tooltip: tip({
+        short: "Embeddings map discrete items—words, tokens, users—to dense vectors in R^d so similarity, arithmetic, and neural layers can operate on them.",
+        intuition: "Things become coordinates; useful relations from training data become geometric neighbors, not guaranteed universal meaning.",
+        formula: "e_i\\in\\mathbb{R}^d",
+        why: "Embeddings are the input interface for transformers, RAG, recommenders, and clustering.",
+        trap: "Nearness reflects training signal and objective—not ground-truth semantics.",
+        example: "“King” − “Man” + “Woman” ≈ “Queen” in classic Word2Vec demos—objective-dependent.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'tokenization-prereq-emb',
+            label: "Tokenization",
+            tooltip: tip({
+              short: "Text becomes token ids before embedding lookup.",
+              intuition: "Embedding table indexed by id.",
+              example: "BPE splits “playing” → play + ing.",
+              trap: "Tokens ≠ words.",
+            }),
+            lessonId: 'tokenization',
+          },
+          {
+            id: 'vectors-prereq-emb',
+            label: "Vectors in R^d",
+            tooltip: tip({
+              short: "Each item is a d-dimensional real vector.",
+              intuition: "d trades capacity vs compute.",
+              example: "d=768 common in BERT-base.",
+              trap: "Higher d not always better on small data.",
+            }),
+            lessonId: 'matrix-multiplication',
+          },
+          {
+            id: 'lookup-prereq-emb',
+            label: "Embedding lookup",
+            tooltip: tip({
+              short: "One-hot id selects a row from matrix E.",
+              intuition: "Table of learnable vectors.",
+              example: "nn.Embedding(vocab_size, d).",
+              trap: "OOV tokens need subword or UNK handling.",
+            }),
+          },
+          {
+            id: 'similarity-prereq-emb',
+            label: "Similarity measures",
+            tooltip: tip({
+              short: "Cosine or dot compare vectors after training.",
+              intuition: "Geometry encodes co-occurrence or labels.",
+              example: "Nearest neighbors in embedding space.",
+              trap: "Similarity depends on chosen metric.",
+            }),
+            lessonId: 'cosine-similarity',
+          },
+          {
+            id: 'gradient-prereq-emb',
+            label: "Gradient descent",
+            tooltip: tip({
+              short: "Embedding rows updated by backprop through downstream loss.",
+              intuition: "Sparse updates—only seen ids move each step.",
+              example: "Word2Vec skip-gram updates target and context rows.",
+              trap: "Rare tokens get few updates—noisy vectors.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+          {
+            id: 'discrete-to-dense-prereq-emb',
+            label: "Discrete to dense",
+            tooltip: tip({
+              short: "Neural nets need continuous inputs—not raw categorical strings.",
+              intuition: "Embedding is the first differentiable layer.",
+              example: "User id 4521 → vector for collaborative filtering.",
+              trap: "One-hot huge vocab without embedding is impractical.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'embedding-table-emb',
+            label: "Embedding table",
+            tooltip: tip({
+              short: "Matrix E ∈ R^{V×d}; row i is vector for id i.",
+              intuition: "Learned dictionary of item vectors.",
+              example: "V=50k tokens, d=512 → 25M params in table alone.",
+              trap: "Huge vocab × large d dominates memory.",
+            }),
+          },
+          {
+            id: 'lookup-forward-emb',
+            label: "Forward lookup",
+            tooltip: tip({
+              short: "Input ids gather rows: h = E[id].",
+              intuition: "No matrix multiply with one-hot—direct index.",
+              example: "Sequence [12, 45, 45] → three vectors.",
+              trap: "Padding id should not contribute gradient—mask needed.",
+            }),
+          },
+          {
+            id: 'training-signal-emb',
+            label: "Training signal shapes space",
+            tooltip: tip({
+              short: "Objective pulls related items close, pushes unrelated apart.",
+              intuition: "Skip-gram, contrastive, softmax next-token all differ.",
+              example: "CLIP aligns image and text embeddings.",
+              trap: "Same architecture, different data → different geometry.",
+            }),
+          },
+          {
+            id: 'contextual-emb',
+            label: "Contextual embeddings",
+            tooltip: tip({
+              short: "Transformer layers produce token vectors depending on context.",
+              intuition: "Not one static vector per word sense.",
+              example: "“Bank” vector differs in river vs money sentence.",
+              trap: "Confusing static Word2Vec with BERT layer outputs.",
+            }),
+            lessonId: 'transformer',
+          },
+          {
+            id: 'query-neighbors-emb',
+            label: "Nearest neighbors",
+            tooltip: tip({
+              short: "Retrieve items with highest cosine/dot to query vector.",
+              intuition: "Core RAG and recommender primitive.",
+              example: "Query embedding vs chunk index.",
+              trap: "ANN index approximate—not exact ranking.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'coordinates-intuition-emb',
+            label: "Things become coordinates",
+            tooltip: tip({
+              short: "Each item gets an address in d-dimensional space.",
+              intuition: "ML operates on geometry instead of strings.",
+              example: "Cluster users by embedding k-means.",
+              trap: "Coordinates are opaque—not human-readable axes.",
+            }),
+          },
+          {
+            id: 'analogy-intuition-emb',
+            label: "Vector arithmetic folklore",
+            tooltip: tip({
+              short: "Linear offsets sometimes capture relations in static embeddings.",
+              intuition: "Works when training objective encodes those relations.",
+              example: "Gender direction demos on Word2Vec.",
+              trap: "Analogies fail widely—do not treat as truth.",
+            }),
+            lessonId: 'word2vec',
+          },
+          {
+            id: 'frequency-intuition-emb',
+            label: "Frequency affects quality",
+            tooltip: tip({
+              short: "Rare tokens get fewer gradient updates—noisier vectors.",
+              intuition: "Subword tokenization helps OOV and rare words.",
+              example: "FastText sums subword vectors for rare forms.",
+              trap: "Trusting nearest neighbor for hapax legomena.",
+            }),
+            lessonId: 'fasttext',
+          },
+          {
+            id: 'not-semantics-intuition-emb',
+            label: "Not guaranteed semantics",
+            tooltip: tip({
+              short: "Distance reflects training objective, not ontology.",
+              intuition: "Bias and spurious correlations embed too.",
+              example: "Occupation-gender bias in historical corpora.",
+              trap: "Using embeddings as fairness-neutral ground truth.",
+            }),
+            lessonId: 'model-fairness',
+          },
+          {
+            id: 'dim-intuition-emb',
+            label: "Dimension tradeoff",
+            tooltip: tip({
+              short: "Higher d captures more nuance but needs more data and compute.",
+              intuition: "Underfitting geometry when d too small for vocab complexity.",
+              example: "Tiny d on large vocab → crowded space.",
+              trap: "Copying frontier d=4096 for tiny tabular entity embeddings.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'lookup-formula-emb',
+            label: "Lookup",
+            tooltip: tip({
+              short: "e_i ∈ R^d is row i of embedding matrix E.",
+              intuition: "Gather operation on indices.",
+              formula: "e_i=E[i,:]",
+              example: "Batch of ids → [batch, seq, d] tensor.",
+              trap: "Embedding dim mismatch with next layer.",
+            }),
+          },
+          {
+            id: 'pytorch-embedding-emb',
+            label: "PyTorch nn.Embedding",
+            tooltip: tip({
+              short: "Learnable table with optional padding_idx frozen at zero.",
+              intuition: "Integer ids index rows; padding_idx stops padding from updating.",
+              code: "emb = nn.Embedding(vocab_size, d, padding_idx=0)\nh = emb(input_ids)",
+              example: "Weight shape [vocab_size, d].",
+              trap: "Forgetting to tie weights with output softmax in LM.",
+            }),
+          },
+          {
+            id: 'normalize-emb',
+            label: "L2 normalize for cosine",
+            tooltip: tip({
+              short: "Unit vectors make dot product equal cosine similarity.",
+              intuition: "Common in retrieval pipelines.",
+              code: "e = F.normalize(e, p=2, dim=-1)",
+              example: "Index stores normalized chunk embeddings.",
+              trap: "Normalizing twice or mixing normalized with raw dot.",
+            }),
+            lessonId: 'cosine-similarity',
+          },
+          {
+            id: 'contrastive-loss-emb',
+            label: "Contrastive objective",
+            tooltip: tip({
+              short: "Pull positive pairs together, push negatives apart in embedding space.",
+              intuition: "InfoNCE / triplet losses shape geometry.",
+              example: "Sentence-BERT fine-tuning on NLI pairs.",
+              trap: "Random negatives too easy—no learning signal.",
+            }),
+          },
+          {
+            id: 'mean-pool-emb',
+            label: "Mean pooling",
+            tooltip: tip({
+              short: "Sentence embedding = mean of token vectors (simple baseline).",
+              intuition: "Better pooling uses attention or CLS token.",
+              code: "sent_emb = token_embs.mean(dim=1)",
+              example: "Baseline before dedicated sentence encoders.",
+              trap: "Mean pool ignores word order completely.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'semantic-trap-emb',
+            label: "Distance = meaning",
+            tooltip: tip({
+              short: "Neighbors are correlation artifacts from training data and loss.",
+              intuition: "Always validate on task-specific eval.",
+              example: "Retrieval recall@k on your corpus.",
+              trap: "Publishing cosine neighbors as “semantic truth”.",
+            }),
+          },
+          {
+            id: 'static-contextual-trap-emb',
+            label: "Static vs contextual",
+            tooltip: tip({
+              short: "One vector per word misses polysemy; contextual models fix this.",
+              intuition: "Pick embedding type for task.",
+              example: "Word2Vec for analogies demo; BERT for contextual NLU.",
+              trap: "Indexing static vectors for sense-heavy queries.",
+            }),
+          },
+          {
+            id: 'cold-start-trap-emb',
+            label: "Cold start ids",
+            tooltip: tip({
+              short: "New users/items absent from training table at serve time.",
+              intuition: "Need default, content features, or fast adaptation.",
+              example: "New product id with random init embedding.",
+              trap: "Collaborative filtering with no fallback for new ids.",
+            }),
+            lessonId: 'recommender-systems-ranking-track',
+          },
+          {
+            id: 'domain-shift-trap-emb',
+            label: "Domain shift",
+            tooltip: tip({
+              short: "Embeddings trained on news may fail on medical text.",
+              intuition: "Fine-tune or pick in-domain encoder.",
+              example: "RAG on legal docs with general web embeddings.",
+              trap: "Zero-shot assume universal embedding space.",
+            }),
+          },
+          {
+            id: 'bias-trap-emb',
+            label: "Embedded bias",
+            tooltip: tip({
+              short: "Historical stereotypes can appear as geometric directions.",
+              intuition: "Fairness audits needed on embedding use.",
+              example: "Biased analogies in debiasing research demos.",
+              trap: "Using embeddings for hiring without audit.",
+            }),
+            lessonId: 'model-fairness',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'word2vec-used-emb',
+            label: "Word2Vec",
+            tooltip: tip({
+              short: "Skip-gram/CBOW learn static word embeddings from co-occurrence.",
+              intuition: "Classic introduction to embedding geometry.",
+              trap: "Outdated alone for modern NLU but pedagogically core.",
+            }),
+            lessonId: 'word2vec',
+          },
+          {
+            id: 'transformer-used-emb',
+            label: "Transformer input",
+            tooltip: tip({
+              short: "Token embeddings + positional info feed first block.",
+              intuition: "Contextualization happens in layers above.",
+              trap: "Confusing input embedding with final hidden state.",
+            }),
+            lessonId: 'transformer',
+          },
+          {
+            id: 'rag-used-emb',
+            label: "RAG indexing",
+            tooltip: tip({
+              short: "Chunk embeddings power vector retrieval before generation.",
+              intuition: "Same table mechanics at document scale.",
+              trap: "Chunking strategy dominates embedding choice.",
+            }),
+            lessonId: 'rag-vector-indexing',
+          },
+          {
+            id: 'glove-used-emb',
+            label: "GloVe",
+            tooltip: tip({
+              short: "Global co-occurrence counts factor into static vectors.",
+              intuition: "Another static embedding family.",
+              trap: "Treating GloVe and Word2Vec as interchangeable quality.",
+            }),
+            lessonId: 'glove',
+          },
+          {
+            id: 'fasttext-used-emb',
+            label: "FastText",
+            tooltip: tip({
+              short: "Subword sums handle morphology and OOV.",
+              intuition: "Extends embedding idea to character n-grams.",
+              trap: "Subword blur on short strings.",
+            }),
+            lessonId: 'fasttext',
+          },
+        ],
+      },
+    ],
+  },
+
+  'fine-tuning': {
+    center: {
+      id: 'fine-tuning',
+      label: "Fine-Tuning Methods",
+      type: 'current',
+      tooltip: tip({
+        short: "Fine-tuning adapts a pretrained model to new behavior with task data—full updates, low-rank adapters (LoRA), quantized LoRA (QLoRA), supervised fine-tuning (SFT), or preference optimization (DPO-style).",
+        intuition: "Pretraining teaches general prediction; fine-tuning steers format, domain, or preferences without always retraining all weights.",
+        formula: "W^{\\prime}=W+BA\\quad or\\quad \\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})",
+        why: "Alignment, instruction following, and domain adaptation rely on fine-tuning—not retrieval alone.",
+        trap: "Small fine-tunes can overfit, erase useful behavior (catastrophic forgetting), or optimize format over truth.",
+        example: "LoRA rank 8 on attention projections adapts chat style with ~1% trainable params.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'llm-objectives-prereq-ft',
+            label: "LLM training objectives",
+            tooltip: tip({
+              short: "Pretraining uses next-token prediction; fine-tuning changes targets and data.",
+              intuition: "Same backbone, different loss and labels.",
+              example: "SFT on (instruction, response) pairs.",
+              trap: "Confusing pretrain CE with preference losses.",
+            }),
+            lessonId: 'llm-training-objectives',
+          },
+          {
+            id: 'transformer-prereq-ft',
+            label: "Transformer",
+            tooltip: tip({
+              short: "Fine-tuning usually updates some or all transformer weights.",
+              intuition: "Adapter layers insert into attention/MLP blocks.",
+              example: "LoRA on W_q, W_v projections.",
+              trap: "Fine-tuning embedding table alone rarely enough for behavior shift.",
+            }),
+            lessonId: 'transformer',
+          },
+          {
+            id: 'sampling-prereq-ft',
+            label: "Sampling / generation",
+            tooltip: tip({
+              short: "Evaluate fine-tunes by generating responses, not just loss.",
+              intuition: "Perplexity can miss instruction quality.",
+              example: "Human or model-based eval of answers.",
+              trap: "Training loss down but outputs unusable.",
+            }),
+            lessonId: 'sampling-strategies',
+          },
+          {
+            id: 'gd-prereq-ft',
+            label: "Gradient descent",
+            tooltip: tip({
+              short: "Fine-tuning is continued optimization with smaller LR often.",
+              intuition: "Too large LR destroys pretrained features.",
+              example: "1e-5 to 1e-4 common for full FT.",
+              trap: "Same LR as pretraining on small adapter data.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+          {
+            id: 'overfitting-prereq-ft',
+            label: "Overfitting",
+            tooltip: tip({
+              short: "Small demonstration sets memorize quickly.",
+              intuition: "LoRA rank and epochs need control.",
+              example: "100 examples, 10 epochs → verbatim memorization.",
+              trap: "Celebrating zero training loss on tiny SFT set.",
+            }),
+            lessonId: 'overfitting',
+          },
+          {
+            id: 'ce-prereq-ft',
+            label: "Cross-entropy",
+            tooltip: tip({
+              short: "SFT minimizes CE on demonstration tokens.",
+              intuition: "Preference methods compare log-probs of pairs.",
+              example: "Mask loss on user prompt tokens only on assistant part.",
+              trap: "Computing loss on prompt tokens unintentionally.",
+            }),
+            lessonId: 'cross-entropy',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'full-ft-mechanism',
+            label: "Full fine-tuning",
+            tooltip: tip({
+              short: "Update all (or most) pretrained weights on task data.",
+              intuition: "Maximum capacity, highest memory.",
+              example: "Fine-tune all layers on medical QA.",
+              trap: "Catastrophic forgetting of general capabilities.",
+            }),
+          },
+          {
+            id: 'lora-mechanism',
+            label: "LoRA adapters",
+            tooltip: tip({
+              short: "Freeze W; train low-rank ΔW = BA with small rank r.",
+              intuition: "Only A,B matrices get gradients.",
+              formula: "W^{\\prime}=W+BA",
+              example: "r=8 on q_proj and v_proj.",
+              trap: "Rank too low for complex behavior change.",
+            }),
+          },
+          {
+            id: 'qlora-mechanism',
+            label: "QLoRA",
+            tooltip: tip({
+              short: "Quantize frozen weights to 4-bit; train LoRA in higher precision.",
+              intuition: "Fits large models on consumer GPUs.",
+              example: "NF4 storage + bf16 adapter grads.",
+              trap: "Quant noise + small rank limits quality ceiling.",
+            }),
+          },
+          {
+            id: 'sft-mechanism',
+            label: "Supervised fine-tuning",
+            tooltip: tip({
+              short: "Imitate high-quality (prompt, response) demonstrations via CE.",
+              intuition: "Teaches format, tone, and task patterns.",
+              example: "Instruction-tuning datasets.",
+              trap: "Garbage demonstrations teach garbage behavior.",
+            }),
+          },
+          {
+            id: 'preference-mechanism',
+            label: "Preference optimization",
+            tooltip: tip({
+              short: "Increase log-prob of chosen vs rejected responses (DPO-style).",
+              intuition: "No separate reward model needed in simple DPO setup.",
+              formula: "\\max_\\theta\\log p_\\theta(y_{chosen})-\\log p_\\theta(y_{rejected})",
+              example: "Human preference pairs after SFT.",
+              trap: "Preferences encode style not factuality.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'adapt-not-rebuild-ft',
+            label: "Adapt not rebuild",
+            tooltip: tip({
+              short: "Start from pretrained weights—not random init.",
+              intuition: "Sample efficiency comes from pretraining.",
+              example: "7B base + small SFT beats training 7B from scratch on small data.",
+              trap: "Trying to SFT a randomly initialized “same architecture”.",
+            }),
+          },
+          {
+            id: 'data-signal-ft',
+            label: "Data signal decides behavior",
+            tooltip: tip({
+              short: "Demonstrations teach what to imitate; preferences teach what to prefer.",
+              intuition: "Cannot SFT knowledge that is not in data or pretraining.",
+              example: "No math examples → weak math after SFT.",
+              trap: "Expecting fine-tune to replace retrieval for facts.",
+            }),
+          },
+          {
+            id: 'memory-budget-ft',
+            label: "Memory budget drives method",
+            tooltip: tip({
+              short: "Full FT needs most VRAM; LoRA/QLoRA trade rank vs quality.",
+              intuition: "Pick method from GPU and data size.",
+              example: "QLoRA on 1×24GB for 7B adaptation.",
+              trap: "Full FT attempted on inadequate hardware with huge accum steps hiding instability.",
+            }),
+          },
+          {
+            id: 'forgetting-ft',
+            label: "Catastrophic forgetting",
+            tooltip: tip({
+              short: "Aggressive fine-tune can degrade general skills.",
+              intuition: "Regularization, mixed general data, lower LR help.",
+              example: "Narrow SQL fine-tune hurts creative writing.",
+              trap: "Eval only on fine-tune task—not base capabilities.",
+            }),
+          },
+          {
+            id: 'alignment-not-facts-ft',
+            label: "Alignment ≠ new facts",
+            tooltip: tip({
+              short: "Preference and SFT mostly change how model responds.",
+              intuition: "Factual updates need data, RAG, or continued pretrain.",
+              example: "Polite refusals without adding medical knowledge.",
+              trap: "DPO as knowledge injection.",
+            }),
+            lessonId: 'rag',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'lora-formula-ft',
+            label: "LoRA update",
+            tooltip: tip({
+              short: "W′ = W + BA with B ∈ R^{d×r}, A ∈ R^{r×k}, r ≪ min(d,k).",
+              intuition: "Low-rank delta on linear layers.",
+              formula: "W^{\\prime}=W+BA",
+              example: "Merge adapters into W for deployment.",
+              trap: "Forgetting to merge or load adapter weights at serve.",
+            }),
+          },
+          {
+            id: 'sft-loss-ft',
+            label: "SFT loss mask",
+            tooltip: tip({
+              short: "CE only on assistant/completion tokens.",
+              intuition: "Prompt tokens masked in loss.",
+              code: "labels[labels==pad] = -100\nloss = model(input_ids, labels=labels).loss",
+              example: "Chat template marks assistant span.",
+              trap: "Training on user prompt tokens shifts model wrongly.",
+            }),
+          },
+          {
+            id: 'dpo-sketch-ft',
+            label: "DPO sketch",
+            tooltip: tip({
+              short: "Preference loss compares log-ratios to reference model.",
+              intuition: "Implicit reward from log-prob differences.",
+              code: "# pi_theta chosen vs rejected vs pi_ref\n# loss = -log sigmoid(beta * (log_ratio_chosen - log_ratio_rejected))",
+              example: "Beta controls deviation from reference.",
+              trap: "Reference model missing or stale.",
+            }),
+          },
+          {
+            id: 'peft-library-ft',
+            label: "PEFT / LoRA config",
+            tooltip: tip({
+              short: "Libraries attach adapters to named modules.",
+              intuition: "Config names which layers receive low-rank A and B matrices.",
+              code: "LoraConfig(r=8, lora_alpha=16, target_modules=[\"q_proj\",\"v_proj\"])",
+              example: "HuggingFace peft + transformers.",
+              trap: "target_modules mismatch architecture names.",
+            }),
+          },
+          {
+            id: 'lr-schedule-ft',
+            label: "LR for fine-tune",
+            tooltip: tip({
+              short: "Smaller LR and fewer epochs than pretraining.",
+              intuition: "Warmup still helps large models.",
+              example: "cosine decay over 3 epochs SFT.",
+              trap: "Copying pretrain schedule verbatim.",
+            }),
+            lessonId: 'optimizers',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'overfit-small-ft',
+            label: "Overfit tiny SFT",
+            tooltip: tip({
+              short: "Memorizes demos; fails on paraphrase.",
+              intuition: "Need diverse data or early stopping.",
+              example: "Exact copy of training answers on eval.",
+              trap: "Single-digit example count without regularization.",
+            }),
+          },
+          {
+            id: 'preference-truth-ft',
+            label: "Preferences vs truth",
+            tooltip: tip({
+              short: "Chosen answers can be fluent but wrong.",
+              intuition: "Preference data needs quality control.",
+              example: "Users prefer longer wrong answers.",
+              trap: "Optimizing preference alone for factual QA.",
+            }),
+          },
+          {
+            id: 'rank-too-low-ft',
+            label: "LoRA rank too low",
+            tooltip: tip({
+              short: "Complex behavior change needs higher r or more targets.",
+              intuition: "Underfitting task despite low loss.",
+              example: "r=1 on hard multi-domain adapt.",
+              trap: "Assuming r=8 always sufficient.",
+            }),
+          },
+          {
+            id: 'eval-loss-only-ft',
+            label: "Loss-only eval",
+            tooltip: tip({
+              short: "Low CE does not mean good chat or reasoning.",
+              intuition: "Generate and judge outputs.",
+              example: "Model repeats training prompts verbatim with low loss.",
+              trap: "Shipping after training loss curve looks flat.",
+            }),
+            lessonId: 'frontier-evaluation-safety',
+          },
+          {
+            id: 'no-base-compare-ft',
+            label: "No base model comparison",
+            tooltip: tip({
+              short: "Always compare fine-tuned vs base on target and guardrail tasks.",
+              intuition: "Detect forgetting and regressions.",
+              example: "MMLU drop after narrow fine-tune.",
+              trap: "Only eval on fine-tune benchmark.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'rlhf-used-ft',
+            label: "RLHF / GRPO",
+            tooltip: tip({
+              short: "Reinforcement stages further shape reasoning and tool use after SFT.",
+              intuition: "Reward design critical.",
+              trap: "Reward hacking on format alone.",
+            }),
+            lessonId: 'reasoning-rlvr-grpo',
+          },
+          {
+            id: 'rag-used-ft',
+            label: "RAG + fine-tune",
+            tooltip: tip({
+              short: "Fine-tune teaches citation format; RAG supplies facts.",
+              intuition: "Complementary—not either/or.",
+              trap: "Fine-tune instead of fixing retrieval.",
+            }),
+            lessonId: 'rag-reranking-grounding',
+          },
+          {
+            id: 'serving-used-ft',
+            label: "Serving adapters",
+            tooltip: tip({
+              short: "LoRA adapters can swap per tenant without full weight reload.",
+              intuition: "Multi-LoRA serving emerging in vLLM etc.",
+              trap: "Merged weights needed if serving stack lacks adapter support.",
+            }),
+            lessonId: 'efficient-llm-serving',
+          },
+          {
+            id: 'diffusion-lm-used-ft',
+            label: "Diffusion LM fine-tune",
+            tooltip: tip({
+              short: "Non-AR models also adapt with task-specific denoising data.",
+              intuition: "Objective differs from next-token SFT.",
+              trap: "Applying AR SFT recipe blindly.",
+            }),
+            lessonId: 'diffusion-language-models',
+          },
+          {
+            id: 'agent-used-ft',
+            label: "Agentic systems",
+            tooltip: tip({
+              short: "Tool-use fine-tunes teach when to call APIs.",
+              intuition: "Behavior policy not just text style.",
+              trap: "Fine-tune without sandboxed tool eval.",
+            }),
+            lessonId: 'tool-using-reasoning-models',
+          },
+        ],
+      },
+    ],
+  },
+
+  'flash-attention': {
+    center: {
+      id: 'flash-attention',
+      label: "Flash Attention",
+      type: 'current',
+      tooltip: tip({
+        short: "Flash Attention computes exact scaled dot-product attention in tiles streamed through fast SRAM, using online softmax—same math as naive attention, far less HBM traffic.",
+        intuition: "The bottleneck is moving the full N×N score matrix to memory; tiling keeps partial results local and fuses softmax with matmuls.",
+        formula: "O_i\\leftarrow \\operatorname{OnlineSoftmaxTile}(Q_i,K_j,V_j)",
+        why: "Long-context prefill and training become feasible without approximate attention.",
+        trap: "Flash Attention is not sparse or approximate—it optimizes implementation, not the attention formula.",
+        example: "Sequence 8k: materialized scores need GB; tile working set stays in KB-scale SRAM.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'self-attn-prereq-fa',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "softmax(QK^T/√d)V mixes values by query-key scores.",
+              intuition: "Flash implements this exactly.",
+              example: "Each head runs same pipeline.",
+              trap: "Changing formula when using flash kernels.",
+            }),
+            lessonId: 'self-attention',
+          },
+          {
+            id: 'softmax-prereq-fa',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Row-wise normalization of attention scores.",
+              intuition: "Online softmax merges tile partials.",
+              example: "Scores scaled by 1/√d_k.",
+              trap: "Softmax over wrong dimension.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'matmul-prereq-fa',
+            label: "Matrix multiply",
+            tooltip: tip({
+              short: "QK^T and AV are batched GEMMs.",
+              intuition: "Tiling splits GEMMs to fit SRAM.",
+              example: "Tensor cores on GPU accelerate tiles.",
+              trap: "Ignoring head and batch dimensions in complexity.",
+            }),
+            lessonId: 'matrix-multiplication',
+          },
+          {
+            id: 'memory-hierarchy-prereq-fa',
+            label: "Memory hierarchy",
+            tooltip: tip({
+              short: "HBM large/slow; SRAM small/fast—minimize HBM round trips.",
+              intuition: "Flash is an IO-aware algorithm.",
+              example: "Naive attention reads/writes full S matrix.",
+              trap: "Counting FLOPs only, ignoring bandwidth.",
+            }),
+          },
+          {
+            id: 'kv-cache-prereq-fa',
+            label: "KV cache context",
+            tooltip: tip({
+              short: "Decode still stores KV; flash mainly helps prefill/long QK matmul.",
+              intuition: "Different phase bottlenecks.",
+              example: "Long prompt prefill uses flash; decode memory-bound.",
+              trap: "Expecting flash to remove KV RAM.",
+            }),
+            lessonId: 'kv-cache',
+          },
+          {
+            id: 'causal-mask-prereq-fa',
+            label: "Causal masks",
+            tooltip: tip({
+              short: "Decoder attention masks future keys.",
+              intuition: "Flash kernels support mask patterns.",
+              example: "Causal flash for GPT-style models.",
+              trap: "Bidirectional flash kernel on autoregressive model.",
+            }),
+            lessonId: 'attention-masks',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'tile-qkv-fa',
+            label: "Tile Q, K, V blocks",
+            tooltip: tip({
+              short: "Load Br×d and Bc×d blocks into SRAM repeatedly.",
+              intuition: "Never form full N×N matrix in HBM.",
+              example: "Block sizes Br, Bc tuned to GPU shared mem.",
+              trap: "Tiles too large → spill to slow memory.",
+            }),
+          },
+          {
+            id: 'online-softmax-fa',
+            label: "Online softmax",
+            tooltip: tip({
+              short: "Track running max and sum per row across tiles for numerically stable softmax.",
+              intuition: "Merge partial softmax stats when next tile arrives.",
+              formula: "O_i\\leftarrow \\operatorname{OnlineSoftmaxTile}(Q_i,K_j,V_j)",
+              example: "Stable softmax without two full passes over N.",
+              trap: "Assuming softmax needs full row in memory at once.",
+            }),
+          },
+          {
+            id: 'fuse-matmul-softmax-fa',
+            label: "Fused matmul + softmax",
+            tooltip: tip({
+              short: "Combine score matmul, scaling, mask, softmax, and V weighted sum in fused kernels.",
+              intuition: "Fewer round trips to HBM.",
+              example: "CUDA kernel chains QK^T → softmax → AV.",
+              trap: "Custom mask outside kernel breaks fusion benefits.",
+            }),
+          },
+          {
+            id: 'exact-output-fa',
+            label: "Exact output",
+            tooltip: tip({
+              short: "Bitwise (up to numerics) same as standard attention.",
+              intuition: "Not low-rank or sparse approximation.",
+              example: "Compare flash vs reference on small N.",
+              trap: "Marketing “fast attention” as approximate.",
+            }),
+          },
+          {
+            id: 'backward-fa',
+            label: "FlashAttention-2 backward",
+            tooltip: tip({
+              short: "Recomputation strategy in backward pass avoids storing full S matrix.",
+              intuition: "Trade extra compute for memory in training too.",
+              example: "Training long sequences with flash backward.",
+              trap: "Assuming forward-only flash sufficient for training memory.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'memory-not-math-fa',
+            label: "Memory not math",
+            tooltip: tip({
+              short: "Flash saves HBM traffic, not attention FLOPs count.",
+              intuition: "Modern GPUs often bandwidth-bound on attention.",
+              example: "Same big-O FLOPs, faster wall clock.",
+              trap: "Expecting lower algorithmic complexity class.",
+            }),
+          },
+          {
+            id: 'sram-workspace-fa',
+            label: "SRAM workspace",
+            tooltip: tip({
+              short: "Think small fast scratchpad holding one tile of the problem.",
+              intuition: "Like blocking for cache in classical HPC.",
+              example: "Tile fits on-chip; full S does not.",
+              trap: "Wrong tile size for head_dim or GPU gen.",
+            }),
+          },
+          {
+            id: 'long-seq-fa',
+            label: "Long sequence relief",
+            tooltip: tip({
+              short: "Benefits grow with sequence length N.",
+              intuition: "Naive memory O(N²); flash IO much lower.",
+              example: "8k–128k context prefill feasible.",
+              trap: "Short N: overhead may dominate.",
+            }),
+          },
+          {
+            id: 'not-sparse-fa',
+            label: "Not sparse attention",
+            tooltip: tip({
+              short: "Every allowed key still attended—no pattern skipping.",
+              intuition: "Different from local/sparse approximations.",
+              example: "Full causal attention still O(N²) FLOPs.",
+              trap: "Confusing with Flash vs sparse research papers.",
+            }),
+          },
+          {
+            id: 'hardware-coupled-fa',
+            label: "Hardware coupled",
+            tooltip: tip({
+              short: "Kernel tuned for specific GPU SRAM sizes and tensor cores.",
+              intuition: "FlashAttention-2/3 evolve with hardware.",
+              example: "Hopper-specific variants.",
+              trap: "Portable naive attention on unsupported hardware only path.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'attention-formula-fa',
+            label: "Standard attention",
+            tooltip: tip({
+              short: "Attention(Q,K,V)=softmax(QK^T/√d)V—unchanged semantically.",
+              intuition: "Flash is an implementation strategy.",
+              formula: "\\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V",
+              example: "Reference impl materializes S=QK^T.",
+              trap: "Changing scale factor when swapping kernels.",
+            }),
+          },
+          {
+            id: 'online-softmax-formula-fa',
+            label: "Online softmax merge",
+            tooltip: tip({
+              short: "Update row max m and sum l as tiles added; rescale previous output accumulator.",
+              intuition: "Numerically stable streaming softmax.",
+              example: "Flash paper Algorithm 1 style tiling.",
+              trap: "Mixing fp16 tiles without loss scaling in training.",
+            }),
+          },
+          {
+            id: 'memory-complexity-fa',
+            label: "Memory complexity",
+            tooltip: tip({
+              short: "Naive O(N²) HBM for scores; Flash O(N) extra state per row/block.",
+              intuition: "Dominant win on long N.",
+              example: "Animation compares full matrix GB vs tile KB.",
+              trap: "Still need O(N) KV storage for decode cache.",
+            }),
+          },
+          {
+            id: 'pytorch-sdpa-fa',
+            label: "PyTorch SDPA",
+            tooltip: tip({
+              short: "scaled_dot_product_attention may dispatch to flash kernels when available.",
+              intuition: "Framework picks flash, mem-efficient, or math backend from dtype and shape.",
+              code: "out = F.scaled_dot_product_attention(q, k, v, is_causal=True)",
+              example: "Enable flash backend in PyTorch 2.x.",
+              trap: "Fallback to math backend silently on unsupported shapes.",
+            }),
+          },
+          {
+            id: 'head-dim-constraint-fa',
+            label: "Head dim constraints",
+            tooltip: tip({
+              short: "Kernels support specific head dims and dtypes.",
+              intuition: "Check GPU + library compatibility.",
+              example: "head_dim 64, 128 common; odd sizes may fall back.",
+              trap: "Assuming flash for every custom architecture.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'approx-trap-fa',
+            label: "Flash = approximate",
+            tooltip: tip({
+              short: "Flash is exact attention up to floating-point associativity.",
+              intuition: "Different from Linformer, Performer, etc.",
+              example: "Quality match reference on small N.",
+              trap: "Skipping eval because “approximate attention”.",
+            }),
+          },
+          {
+            id: 'kv-trap-fa',
+            label: "Fixes all memory",
+            tooltip: tip({
+              short: "KV cache and model weights still dominate decode memory.",
+              intuition: "Flash ≠ unlimited context alone.",
+              example: "OOM on decode despite flash prefill.",
+              trap: "No GQA/MLA/paging plan for serving.",
+            }),
+            lessonId: 'grouped-query-attention',
+          },
+          {
+            id: 'short-seq-trap-fa',
+            label: "Short seq overhead",
+            tooltip: tip({
+              short: "Kernel launch and tiling overhead on tiny N.",
+              intuition: "Benefits weakest on small prompts.",
+              example: "N=128 may see modest gain.",
+              trap: "Benchmarking only on length 512.",
+            }),
+          },
+          {
+            id: 'unsupported-trap-fa',
+            label: "Unsupported config fallback",
+            tooltip: tip({
+              short: "Odd head dims, dtypes, or CPUs fall back to slow path silently.",
+              intuition: "Verify backend in profiling traces.",
+              example: "bf16 vs fp16 support differs by GPU.",
+              trap: "Production deploy without perf validation.",
+            }),
+          },
+          {
+            id: 'bandwidth-ignore-trap-fa',
+            label: "FLOPs-only thinking",
+            tooltip: tip({
+              short: "Attention often memory-bound—FLOP count misleads.",
+              intuition: "Profile HBM throughput.",
+              example: "Same FLOPs, 2× speed from IO reduction.",
+              trap: "Buying more FLOPs GPU without memory bandwidth.",
+            }),
+            lessonId: 'efficient-llm-serving',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'serving-used-fa',
+            label: "LLM serving",
+            tooltip: tip({
+              short: "Long prefill batches use flash in vLLM, TensorRT-LLM, etc.",
+              intuition: "Pairs with paged KV and continuous batching.",
+              trap: "Flash without scheduler still slow.",
+            }),
+            lessonId: 'efficient-llm-serving',
+          },
+          {
+            id: 'long-context-used-fa',
+            label: "Long context models",
+            tooltip: tip({
+              short: "128k+ training and inference rely on IO-efficient attention.",
+              intuition: "With GQA/MLA for cache.",
+              trap: "Context length marketing without kernel path.",
+            }),
+            lessonId: 'long-context-frontier-models',
+          },
+          {
+            id: 'mla-used-fa',
+            label: "MLA compression",
+            tooltip: tip({
+              short: "Attention compression stacks with flash matmul patterns.",
+              intuition: "Different axis: cache vs score materialization.",
+              trap: "Treating MLA as replacement for flash.",
+            }),
+            lessonId: 'multi-head-latent-attention',
+          },
+          {
+            id: 'training-used-fa',
+            label: "Long sequence training",
+            tooltip: tip({
+              short: "Flash backward enables longer context in training without OOM.",
+              intuition: "Recompute tiles instead of store S.",
+              trap: "Forgetting activation checkpoint interaction.",
+            }),
+            lessonId: 'llm-training-objectives',
+          },
+          {
+            id: 'dit-used-fa',
+            label: "DiT / vision transformers",
+            tooltip: tip({
+              short: "High-res patch sequences use flash-style attention kernels.",
+              intuition: "Same IO issue in image tokens.",
+              trap: "2D patch count makes N huge quickly.",
+            }),
+            lessonId: 'dit',
+          },
+        ],
+      },
+    ],
+  },
+
+  'flow-matching': {
+    center: {
+      id: 'flow-matching',
+      label: "Flow Matching",
+      type: 'current',
+      tooltip: tip({
+        short: "Flow matching trains a velocity field v_θ(x,t) that transports samples along a continuous path from a simple source distribution (noise) to data—often simpler than classic DDPM noise prediction.",
+        intuition: "Learn which direction each point should move over time t∈[0,1] to land on real data; integrate the field to generate.",
+        formula: "\\frac{dx}{dt}=v_\\theta(x,t)",
+        why: "Modern generative models (image, audio) adopt flow matching and rectified flows for stable training and fast sampling.",
+        trap: "Flow matching is not the same objective as classic DDPM ε-prediction—schedules and targets differ.",
+        example: "Linear path x_t=(1−t)x_0+t x_1 gives target velocity x_1−x_0 along straight lines.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'diffusion-basics-prereq-fm',
+            label: "Diffusion basics",
+            tooltip: tip({
+              short: "Diffusion corrupts data with noise then denoises—flow matching shares generative goal.",
+              intuition: "Different path and objective, related sampling intuition.",
+              example: "Both start from noise-like state.",
+              trap: "Plugging DDPM sampler into flow model without conversion.",
+            }),
+            lessonId: 'diffusion-basics',
+          },
+          {
+            id: 'ode-prereq-fm',
+            label: "ODE intuition",
+            tooltip: tip({
+              short: "Flow integrates dx/dt = v_θ(x,t) over time.",
+              intuition: "Generation is numerical integration from t=0 to 1.",
+              example: "Euler steps update x ← x + Δt v_θ.",
+              trap: "Too few steps → incomplete transport.",
+            }),
+          },
+          {
+            id: 'neural-net-prereq-fm',
+            label: "Neural network",
+            tooltip: tip({
+              short: "U-Net or DiT predicts velocity field conditioned on t.",
+              intuition: "Same backbone families as diffusion.",
+              example: "DiT blocks with timestep embedding.",
+              trap: "Undercapacity network fails on complex data manifolds.",
+            }),
+            lessonId: 'neural-network',
+          },
+          {
+            id: 'grad-descent-prereq-fm',
+            label: "Gradient descent",
+            tooltip: tip({
+              short: "Train v_θ to match target velocity along chosen paths.",
+              intuition: "Regression loss on vector field.",
+              example: "MSE between v_θ and u_t target.",
+              trap: "Bad path design makes targets noisy.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+          {
+            id: 'probability-path-prereq-fm',
+            label: "Source and data distributions",
+            tooltip: tip({
+              short: "Simple p_0 (Gaussian) paired with data p_1.",
+              intuition: "Flow connects the two distributions.",
+              example: "x_0 ~ N(0,I), x_1 ~ data.",
+              trap: "Mismatch between train path and sample integrator.",
+            }),
+            lessonId: 'probability-distributions',
+          },
+          {
+            id: 'vae-latent-prereq-fm',
+            label: "Latent space preview",
+            tooltip: tip({
+              short: "Flows often run in VAE latent space for images.",
+              intuition: "Lower dimension than pixels.",
+              example: "Stable Diffusion 3 uses flow in latent space.",
+              trap: "Decoder artifacts limit final quality.",
+            }),
+            lessonId: 'diffusion-vae',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'conditional-path-fm',
+            label: "Conditional path x_t",
+            tooltip: tip({
+              short: "Define path between noise x_0 and data x_1, e.g. linear interpolation.",
+              intuition: "Each pair (x_0,x_1) defines a trajectory.",
+              formula: "x_t=(1-t)x_0+t x_1",
+              example: "t=0 noise; t=1 data.",
+              trap: "Path choice changes target velocity field.",
+            }),
+          },
+          {
+            id: 'target-velocity-fm',
+            label: "Target velocity u_t",
+            tooltip: tip({
+              short: "Along linear path, u_t = x_1 − x_0 (constant in t for straight line).",
+              intuition: "Network learns to predict this vector field.",
+              formula: "u_t=x_1-x_0",
+              example: "Supervise v_θ(x_t,t) ≈ x_1−x_0.",
+              trap: "Using DDPM ε target in flow loss without conversion.",
+            }),
+          },
+          {
+            id: 'train-velocity-fm',
+            label: "Train velocity network",
+            tooltip: tip({
+              short: "Minimize ||v_θ(x_t,t) − u_t||² averaged over t, x_0, x_1.",
+              intuition: "Conditional flow matching objective.",
+              example: "Sample t uniform; build x_t; regress velocity.",
+              trap: "Poor t sampling coverage weakens some times.",
+            }),
+          },
+          {
+            id: 'integrate-sample-fm',
+            label: "Integrate to sample",
+            tooltip: tip({
+              short: "Start x from p_0; Euler/Heun steps using v_θ until t=1.",
+              intuition: "Fewer steps possible with rectified flows.",
+              example: "10–50 steps vs hundreds in DDPM.",
+              trap: "Large step size without solver order → blur.",
+            }),
+          },
+          {
+            id: 'time-conditioning-fm',
+            label: "Time conditioning",
+            tooltip: tip({
+              short: "Network input includes t so velocity depends on progress along path.",
+              intuition: "Same as diffusion timestep embedding role.",
+              example: "Sinusoidal t embedding in DiT.",
+              trap: "Missing t → field cannot vary across integration.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'river-flow-fm',
+            label: "River flow field",
+            tooltip: tip({
+              short: "Every point in space gets an arrow telling it where to drift over time.",
+              intuition: "Integrate arrows from noise riverhead to data delta.",
+              example: "Visualization of velocity arrows on 2D toy data.",
+              trap: "Arrows must form consistent field—not arbitrary per point without training.",
+            }),
+          },
+          {
+            id: 'straight-paths-fm',
+            label: "Straight paths",
+            tooltip: tip({
+              short: "Linear paths give simple constant velocity targets.",
+              intuition: "Rectified flow encourages nearly straight transport.",
+              example: "Reflow distillation straightens paths further.",
+              trap: "Curved data manifolds may need curved paths or more capacity.",
+            }),
+          },
+          {
+            id: 'not-ddpm-fm',
+            label: "Not DDPM objective",
+            tooltip: tip({
+              short: "Flow matching regresses velocity; DDPM often predicts noise ε.",
+              intuition: "Convert formulas before mixing codebases.",
+              example: "Different sampler schedules.",
+              trap: "Copy-paste DDPM training loop for flow model.",
+            }),
+            lessonId: 'diffusion-basics',
+          },
+          {
+            id: 'fewer-steps-fm',
+            label: "Fewer integration steps",
+            tooltip: tip({
+              short: "Well-trained flows can sample in 10–50 steps.",
+              intuition: "Straight paths reduce integration error accumulation.",
+              example: "Euler scheduler panel in lesson.",
+              trap: "Too few steps still blurs—need step ablation.",
+            }),
+          },
+          {
+            id: 'sigma-schedule-fm',
+            label: "Schedules and noise scales",
+            tooltip: tip({
+              short: "Lesson explores σ schedules and logit-normal time sampling.",
+              intuition: "Which t are emphasized during training matters.",
+              example: "Logit-normal t focuses mid-times.",
+              trap: "Uniform t not always optimal for all datasets.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'ode-formula-fm',
+            label: "Flow ODE",
+            tooltip: tip({
+              short: "dx/dt = v_θ(x,t) with x(0)∼p_0.",
+              intuition: "Forward integration generates samples.",
+              formula: "\\frac{dx}{dt}=v_\\theta(x,t)",
+              example: "Reverse from data to noise possible with invertible flows.",
+              trap: "Non-invertible numerical error in long integration.",
+            }),
+          },
+          {
+            id: 'linear-path-formula-fm',
+            label: "Linear path",
+            tooltip: tip({
+              short: "x_t = (1−t)x_0 + t x_1; u_t = x_1 − x_0.",
+              intuition: "Conditional flow matching target.",
+              formula: "x_t=(1-t)x_0+t x_1",
+              example: "Sample x_0~N(0,I), x_1 from dataset.",
+              trap: "Using wrong u_t for nonlinear path.",
+            }),
+          },
+          {
+            id: 'cfm-loss-fm',
+            label: "CFM loss",
+            tooltip: tip({
+              short: "L = E[||v_θ(x_t,t) − u_t||²].",
+              intuition: "Simple MSE on vector field.",
+              code: "loss = F.mse_loss(model(x_t, t), x_1 - x_0)",
+              example: "t ~ Uniform(0,1) or logit-normal.",
+              trap: "Forgetting to construct x_t from paired (x_0,x_1).",
+            }),
+          },
+          {
+            id: 'euler-step-fm',
+            label: "Euler sampler",
+            tooltip: tip({
+              short: "x ← x + Δt v_θ(x,t) for steps t_k to t_{k+1}.",
+              intuition: "First-order ODE integrator—simple but step-sensitive.",
+              code: "x = torch.randn_like(shape)\nfor t in torch.linspace(0, 1, steps):\n    v = model(x, t)\n    x = x + dt * v",
+              example: "Lesson Euler scheduler panel.",
+              trap: "Large dt without Heun/RK → artifact blur.",
+            }),
+          },
+          {
+            id: 'dit-backbone-fm',
+            label: "DiT backbone",
+            tooltip: tip({
+              short: "Transformer predicts v_θ(x,t) on patch tokens.",
+              intuition: "Scales flow models like diffusion transformers.",
+              example: "SD3-class architectures.",
+              trap: "Conv U-Net assumptions ported blindly to DiT shapes.",
+            }),
+            lessonId: 'dit',
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'ddpm-confusion-trap-fm',
+            label: "DDPM confusion",
+            tooltip: tip({
+              short: "Noise prediction ε training ≠ velocity matching.",
+              intuition: "Different target and sampler algebra.",
+              example: "Importing DDPM scheduler into flow checkpoint.",
+              trap: "Assuming any generative checkpoint is diffusion.",
+            }),
+            lessonId: 'diffusion-sampling',
+          },
+          {
+            id: 'step-count-trap-fm',
+            label: "Too few steps",
+            tooltip: tip({
+              short: "Under-integration leaves noise structure in sample.",
+              intuition: "Step count ablation required.",
+              example: "5 steps blurry; 50 sharp on same model.",
+              trap: "Marketing N-step without quality curve.",
+            }),
+          },
+          {
+            id: 'path-mismatch-trap-fm',
+            label: "Path mismatch",
+            tooltip: tip({
+              short: "Train on linear paths but sample with wrong integrator assumptions.",
+              intuition: "Train/test consistency for ODE.",
+              example: "Changed σ schedule at sample without retrain.",
+              trap: "Reflow needed after major path change.",
+            }),
+          },
+          {
+            id: 'latent-decode-trap-fm',
+            label: "Latent decode bottleneck",
+            tooltip: tip({
+              short: "Perfect latent flow still limited by VAE decoder blur.",
+              intuition: "Two-stage error: flow + decode.",
+              example: "Sharp latent but soft pixels.",
+              trap: "Blaming flow model for VAE limits.",
+            }),
+            lessonId: 'diffusion-vae',
+          },
+          {
+            id: 'time-sampling-trap-fm',
+            label: "Bad t sampling",
+            tooltip: tip({
+              short: "Never training certain t regions weakens integration there.",
+              intuition: "Logit-normal vs uniform changes curriculum.",
+              example: "Always t≈0.5 → bad endpoints.",
+              trap: "Copying t schedule from unrelated paper.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'sd3-used-fm',
+            label: "SD3 / modern image gen",
+            tooltip: tip({
+              short: "Production stacks combine flow matching, DiT, and VAE latents.",
+              intuition: "Successor path to DDPM-dominated era.",
+              trap: "Legacy DDPM tooling on flow weights.",
+            }),
+            lessonId: 'sd3-overview',
+          },
+          {
+            id: 'dit-used-fm',
+            label: "DiT",
+            tooltip: tip({
+              short: "Transformer backbones for velocity fields at scale.",
+              intuition: "Patchify image like tokens.",
+              trap: "Attention cost on huge resolutions.",
+            }),
+            lessonId: 'dit',
+          },
+          {
+            id: 'diffusion-sampling-used-fm',
+            label: "Diffusion sampling contrast",
+            tooltip: tip({
+              short: "DDPM/DDIM samplers differ from ODE integration samplers.",
+              intuition: "Pick sampler matching training objective.",
+              trap: "Cross-wiring schedulers.",
+            }),
+            lessonId: 'diffusion-sampling',
+          },
+          {
+            id: 'cfg-used-fm',
+            label: "Guidance",
+            tooltip: tip({
+              short: "Classifier-free guidance adapts to conditional flow models too.",
+              intuition: "Blend conditional and unconditional velocity fields.",
+              trap: "Extreme guidance breaks flow trajectories.",
+            }),
+            lessonId: 'classifier-free-guidance',
+          },
+          {
+            id: 'unet-dit-used-fm',
+            label: "U-Net vs DiT",
+            tooltip: tip({
+              short: "Architecture choice for v_θ independent of flow objective.",
+              intuition: "Conv vs transformer tradeoffs persist.",
+              trap: "Equating flow matching with DiT only.",
+            }),
+            lessonId: 'unet-vs-dit',
+          },
+        ],
+      },
+    ],
+  },
+
+  'frontier-evaluation-safety': {
+    center: {
+      id: 'frontier-evaluation-safety',
+      label: "Frontier Evaluation & Safety",
+      type: 'current',
+      tooltip: tip({
+        short: "Frontier evaluation measures capability, reliability, tool safety, adversarial robustness, and preparedness—not just benchmark accuracy.",
+        intuition: "Think in layered gates: what the model can do, how the product behaves, and what happens under attack or autonomy.",
+        formula: "\\text{safe success}=\\text{task success}\\land\\neg\\text{policy violation}\\land\\neg\\text{unsafe action}",
+        why: "Deployment decisions need evidence beyond leaderboard scores when tools, policies, and adversaries shape real behavior.",
+        trap: "A benchmark score is one input to a layered safety case, not the safety case itself.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'transformer-prereq-fes',
+            label: "Transformer stack",
+            tooltip: tip({
+              short: "Modern eval targets LLM and agent systems built on attention blocks.",
+              intuition: "Capability baselines assume fluency, reasoning, and tool interfaces.",
+              trap: "Evaluating raw logits without the serving stack misses real failure modes.",
+            }),
+            lessonId: 'transformer',
+          },
+          {
+            id: 'rag-prereq-fes',
+            label: "RAG grounding",
+            tooltip: tip({
+              short: "Many agents retrieve external evidence before answering.",
+              intuition: "Eval must test retrieval quality and citation behavior.",
+              trap: "Capability benchmarks ignore stale or missing evidence paths.",
+            }),
+            lessonId: 'rag',
+          },
+          {
+            id: 'tool-reasoning-prereq-fes',
+            label: "Tool-using loops",
+            tooltip: tip({
+              short: "Agents interleave reasoning with search, code, and browser actions.",
+              intuition: "Safety eval must trace Think-Act-Observe cycles.",
+              trap: "Text-only benchmarks miss unsafe tool calls.",
+            }),
+            lessonId: 'tool-using-reasoning-models',
+          },
+          {
+            id: 'classification-metrics-prereq-fes',
+            label: "Metrics literacy",
+            tooltip: tip({
+              short: "Precision, recall, and guardrails matter for harm detection.",
+              intuition: "Rare unsafe events need metric choices beyond accuracy.",
+              trap: "High accuracy on easy prompts hides tail-risk failures.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+          {
+            id: 'model-monitoring-prereq-fes',
+            label: "Production monitoring",
+            tooltip: tip({
+              short: "Live systems need drift, latency, and incident signals.",
+              intuition: "Offline eval does not replace online observability.",
+              trap: "Shipping after one static eval snapshot.",
+            }),
+            lessonId: 'model-monitoring',
+          },
+          {
+            id: 'uncertainty-prereq-fes',
+            label: "Uncertainty & deferral",
+            tooltip: tip({
+              short: "Systems should know when to abstain or escalate.",
+              intuition: "Confidence and OOD cues gate high-risk actions.",
+              trap: "Treating softmax as calibrated uncertainty.",
+            }),
+            lessonId: 'uncertainty-estimation',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'capability-layer-fes',
+            label: "Capability layer",
+            tooltip: tip({
+              short: "Measure whether the model can solve benchmark tasks at target difficulty.",
+              intuition: "Skills tests establish baseline competence.",
+              trap: "Strong capability alone does not imply safe deployment.",
+            }),
+          },
+          {
+            id: 'reliability-layer-fes',
+            label: "Product reliability layer",
+            tooltip: tip({
+              short: "Test instruction following, formatting, regressions, and latency under load.",
+              intuition: "Users experience reliability, not leaderboard rank.",
+              trap: "Cherry-picking demo prompts for stakeholder reviews.",
+            }),
+          },
+          {
+            id: 'agent-safety-layer-fes',
+            label: "Agent & tool safety layer",
+            tooltip: tip({
+              short: "Exercise permissions, sandboxing, and unsafe action refusal.",
+              intuition: "Each tool expands the attack and harm surface.",
+              trap: "Allow-listing tools without monitoring outcomes.",
+            }),
+          },
+          {
+            id: 'adversarial-layer-fes',
+            label: "Adversarial robustness layer",
+            tooltip: tip({
+              short: "Red-team prompt injection, jailbreaks, and data exfiltration attempts.",
+              intuition: "Attackers optimize inputs the average user never tries.",
+              trap: "Single-turn red-teaming only.",
+            }),
+          },
+          {
+            id: 'preparedness-layer-fes',
+            label: "Frontier-risk preparedness",
+            tooltip: tip({
+              short: "Track misuse, autonomy escalation, and dual-use capability trends.",
+              intuition: "Some risks appear only at scale or with new affordances.",
+              trap: "Waiting for public incidents before defining probes.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'layered-gates-fes',
+            label: "Layered gates",
+            tooltip: tip({
+              short: "Passing one layer does not clear the next.",
+              intuition: "A safe chatbot can still be an unsafe coding agent.",
+              trap: "Assuming one eval suite covers all deployment modes.",
+            }),
+          },
+          {
+            id: 'reward-pressure-fes',
+            label: "Reward pressure picture",
+            tooltip: tip({
+              short: "Ask what behavior training and product metrics incentivize.",
+              intuition: "Models optimize what is scored—format, length, tool use, speed.",
+              trap: "Optimizing user satisfaction without harm guardrails.",
+            }),
+          },
+          {
+            id: 'failure-mode-menu-fes',
+            label: "Failure mode menu",
+            tooltip: tip({
+              short: "Diagnose injection, stale RAG, reward hacking, over-refusal, or scheming.",
+              intuition: "Name the active failure before picking a fix.",
+              trap: "Blaming “the model is dumb” without classifying the failure.",
+            }),
+          },
+          {
+            id: 'evidence-not-verdict-fes',
+            label: "Evidence not verdict",
+            tooltip: tip({
+              short: "Eval produces structured evidence for a human decision.",
+              intuition: "Scores inform risk acceptance; they do not replace it.",
+              trap: "Automating ship/no-ship from one number.",
+            }),
+          },
+          {
+            id: 'defense-in-depth-fes',
+            label: "Defense in depth",
+            tooltip: tip({
+              short: "Combine policy, filters, tools limits, human review, and monitoring.",
+              intuition: "No single guardrail catches every path to harm.",
+              trap: "Replacing engineering controls with prompt pleading.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'safe-success-formula-fes',
+            label: "Safe success definition",
+            tooltip: tip({
+              short: "Success requires task completion without policy or unsafe action violations.",
+              intuition: "Decompose metrics instead of one aggregate pass rate.",
+              formula: "\\text{safe}=\\text{task}\\land\\neg\\text{policy}\\land\\neg\\text{unsafe}",
+              trap: "Counting task success while ignoring guardrail breaches.",
+            }),
+          },
+          {
+            id: 'eval-harness-sketch-fes',
+            label: "Eval harness sketch",
+            tooltip: tip({
+              short: "Run scenario → log actions → score rubric → aggregate by slice.",
+              intuition: "Reproducible harnesses beat ad-hoc manual chats.",
+              code: "for scenario in suite:\n  trace = agent.run(scenario)\n  scores.append(rubric(trace))",
+              trap: "Non-deterministic runs without seed and logging.",
+            }),
+          },
+          {
+            id: 'guardrail-metrics-fes',
+            label: "Guardrail metrics",
+            tooltip: tip({
+              short: "Track violation rate, over-refusal rate, and escalation rate separately.",
+              intuition: "Tradeoffs appear when tightening safety filters.",
+              trap: "Only reporting aggregate win rate.",
+            }),
+          },
+          {
+            id: 'red-team-protocol-fes',
+            label: "Red-team protocol",
+            tooltip: tip({
+              short: "Document attacker budget, tools, and success criteria before runs.",
+              intuition: "Structured attacks find regressions faster than vibes.",
+              trap: "Unbounded adversarial search without prioritization.",
+            }),
+          },
+          {
+            id: 'regression-suite-fes',
+            label: "Regression suite",
+            tooltip: tip({
+              short: "Pin known failure fixes so new releases cannot silently reopen holes.",
+              intuition: "Safety is also about not backsliding.",
+              trap: "Replacing fixed cases each release without retention.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'benchmark-as-safety-fes',
+            label: "Benchmark = safety",
+            tooltip: tip({
+              short: "Leaderboard skill does not prove safe tool or agent behavior.",
+              intuition: "Capabilities and safety constraints diverge under autonomy.",
+              trap: "Shipping because MMLU improved.",
+            }),
+          },
+          {
+            id: 'prompt-only-defense-fes',
+            label: "Prompt-only defense",
+            tooltip: tip({
+              short: "System prompts do not stop determined injection or tool misuse alone.",
+              intuition: "Attackers adapt; controls need enforcement layers.",
+              trap: "“Do not do harmful things” as the whole plan.",
+            }),
+          },
+          {
+            id: 'over-refusal-blindspot-fes',
+            label: "Ignoring over-refusal",
+            tooltip: tip({
+              short: "Excessive blocking harms product value and trust.",
+              intuition: "Safety metrics include false positives on benign requests.",
+              trap: "Maximizing block rate without usability checks.",
+            }),
+          },
+          {
+            id: 'static-eval-trap-fes',
+            label: "Static eval only",
+            tooltip: tip({
+              short: "One-time eval misses drift, new tools, and emerging attacks.",
+              intuition: "Continuous eval mirrors continuous deployment.",
+              trap: "No regression suite after fine-tunes.",
+            }),
+          },
+          {
+            id: 'capability-scheming-trap-fes',
+            label: "Capability without preparedness",
+            tooltip: tip({
+              short: "Stronger models can enable misuse paths eval did not probe.",
+              intuition: "Preparedness tracks scaling trends, not just today’s demos.",
+              trap: "Assuming small model failures predict large model limits.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'tool-using-used-fes',
+            label: "Tool-using reasoning models",
+            tooltip: tip({
+              short: "Deep dive on Think-Act-Observe safety loops.",
+              intuition: "Connect eval layers to concrete agent traces.",
+              trap: "Evaluating tools without permission models.",
+            }),
+            lessonId: 'tool-using-reasoning-models',
+          },
+          {
+            id: 'agentic-coding-used-fes',
+            label: "Agentic coding systems",
+            tooltip: tip({
+              short: "SWE-style agents need patch safety and test evidence gates.",
+              intuition: "Code agents combine file access with execution risk.",
+              trap: "Trusting diffs without regression tests.",
+            }),
+            lessonId: 'agentic-coding-systems',
+          },
+          {
+            id: 'ml-security-used-fes',
+            label: "ML security track",
+            tooltip: tip({
+              short: "Broader attack surfaces across data, retrieval, and serving.",
+              intuition: "Safety eval sits inside system security.",
+              trap: "Model-only threat modeling.",
+            }),
+            lessonId: 'ml-security-robustness-track',
+          },
+          {
+            id: 'model-fairness-used-fes',
+            label: "Model fairness",
+            tooltip: tip({
+              short: "Harm can differ by group even when average metrics look fine.",
+              intuition: "Slice eval complements aggregate safety scores.",
+              trap: "Reporting only global refusal rates.",
+            }),
+            lessonId: 'model-fairness',
+          },
+          {
+            id: 'frontier-arch-used-fes',
+            label: "Frontier architecture overview",
+            tooltip: tip({
+              short: "Architecture choices change eval focus—MoE routing, long context, omni.",
+              intuition: "New affordances need new probes.",
+              trap: "Reusing dense-transformer eval for MoE agents.",
+            }),
+            lessonId: 'frontier-llm-architecture-overview',
+          },
+        ],
+      },
+    ],
+  },
+
+  'frontier-llm-architecture-overview': {
+    center: {
+      id: 'frontier-llm-architecture-overview',
+      label: "Frontier LLM Architecture Overview",
+      type: 'current',
+      tooltip: tip({
+        short: "Compare frontier architectures by following one token through active compute, KV memory, context access, generation order, and modality support.",
+        intuition: "Each design buys one bottleneck improvement—and introduces a new failure mode.",
+        why: "Paper reading and system design require mapping dense, MoE, compressed attention, long-context, recurrent, diffusion, and omni stacks to concrete tradeoffs.",
+        trap: "Assuming every frontier model is just a larger dense transformer.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'transformer-prereq-flao',
+            label: "Transformer blocks",
+            tooltip: tip({
+              short: "Attention, MLP, residuals, and normalization repeat per layer.",
+              intuition: "Architectural families remix the same primitives.",
+              trap: "Treating “transformer” as one fixed recipe.",
+            }),
+            lessonId: 'transformer',
+          },
+          {
+            id: 'self-attention-prereq-flao',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Token mixing via Q/K/V scores drives most frontier variants.",
+              intuition: "Attention memory dominates many serving costs.",
+              trap: "Ignoring KV footprint when comparing models.",
+            }),
+            lessonId: 'self-attention',
+          },
+          {
+            id: 'kv-cache-prereq-flao',
+            label: "KV cache",
+            tooltip: tip({
+              short: "Decode reuses stored keys and values from prior tokens.",
+              intuition: "Context length multiplies cache memory and bandwidth.",
+              trap: "Confusing prefill compute with decode cache reads.",
+            }),
+            lessonId: 'kv-cache',
+          },
+          {
+            id: 'gqa-prereq-flao',
+            label: "Grouped-query attention",
+            tooltip: tip({
+              short: "Fewer KV heads shrink cache while keeping many query heads.",
+              intuition: "Compression is a first-class architecture axis.",
+              trap: "Assuming MHA is the only production pattern.",
+            }),
+            lessonId: 'grouped-query-attention',
+          },
+          {
+            id: 'moe-prereq-flao',
+            label: "Mixture of experts",
+            tooltip: tip({
+              short: "Sparse routing activates a subset of MLP experts per token.",
+              intuition: "Total params ≠ active params per token.",
+              trap: "Equating parameter count with FLOPs per token.",
+            }),
+            lessonId: 'moe',
+          },
+          {
+            id: 'multimodal-prereq-flao',
+            label: "Multimodal alignment",
+            tooltip: tip({
+              short: "Vision, audio, and text streams meet inside shared transformers.",
+              intuition: "Modality tokenization changes the stack.",
+              trap: "Evaluating text-only behavior of omni systems.",
+            }),
+            lessonId: 'multimodal-llm',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'follow-one-token-flao',
+            label: "Follow one token",
+            tooltip: tip({
+              short: "Trace embeddings → layers → logits for a single forward/decode step.",
+              intuition: "Concrete traces beat abstract “scale” talk.",
+              trap: "Comparing models without holding context length fixed.",
+            }),
+          },
+          {
+            id: 'active-compute-flao',
+            label: "Active compute",
+            tooltip: tip({
+              short: "Count FLOPs and matmuls actually executed for this token.",
+              intuition: "MoE and sparsity change active vs stored capacity.",
+              trap: "Using total parameter count as compute proxy.",
+            }),
+          },
+          {
+            id: 'kv-memory-flao',
+            label: "KV memory footprint",
+            tooltip: tip({
+              short: "Estimate cache bytes from layers, heads, dim, and sequence length.",
+              intuition: "Long context and batching hit memory before FLOPs.",
+              trap: "Forgetting GQA/MLA compression in cache math.",
+            }),
+          },
+          {
+            id: 'context-access-flao',
+            label: "Context access strategy",
+            tooltip: tip({
+              short: "Full attention, sliding window, recurrence, RAG, or hybrid packing.",
+              intuition: "Not every token attends to every prior token in frontier stacks.",
+              trap: "Needle tests alone prove long-context quality.",
+            }),
+          },
+          {
+            id: 'generation-order-flao',
+            label: "Generation order",
+            tooltip: tip({
+              short: "Autoregressive left-to-right vs diffusion or block refinement over tokens.",
+              intuition: "Order changes parallelism and revision behavior.",
+              trap: "Applying AR serving assumptions to diffusion LMs.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'bottleneck-tradeoff-flao',
+            label: "One bottleneck at a time",
+            tooltip: tip({
+              short: "MoE buys capacity; GQA/MLA buys memory; long-context buys recall cost.",
+              intuition: "Improvements are Pareto moves, not free lunch.",
+              trap: "Expecting every axis to improve together.",
+            }),
+          },
+          {
+            id: 'paper-signal-flao',
+            label: "Read paper signals",
+            tooltip: tip({
+              short: "Look for active params, cache layout, context length, and routing rules.",
+              intuition: "Marketing “trillion params” hides sparsity details.",
+              trap: "Skipping the methods section figures.",
+            }),
+          },
+          {
+            id: 'failure-mode-shift-flao',
+            label: "Failure mode shifts",
+            tooltip: tip({
+              short: "Routing collapse, cache OOM, lost-in-middle, or modality neglect follow design choices.",
+              intuition: "New architecture → new dominant failure.",
+              trap: "Debugging MoE issues with dense-transformer intuition only.",
+            }),
+          },
+          {
+            id: 'hybrid-systems-flao',
+            label: "Hybrid systems",
+            tooltip: tip({
+              short: "Production stacks combine compression, retrieval, speculation, and quantization.",
+              intuition: "Architecture overview is the map; serving is the territory.",
+              trap: "Evaluating base weights without the inference stack.",
+            }),
+          },
+          {
+            id: 'modality-lens-flao',
+            label: "Modality lens",
+            tooltip: tip({
+              short: "Ask how each modality becomes tokens and re-enters outputs.",
+              intuition: "Omni models are multi-stream pipelines.",
+              trap: "Treating image tokens like text tokens without encoder bias.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'kv-bytes-flao',
+            label: "KV cache bytes sketch",
+            tooltip: tip({
+              short: "Bytes ≈ 2 × layers × seq × kv_heads × head_dim × dtype_bytes.",
+              intuition: "Linear in context length and head layout.",
+              formula: "M_{KV}\\approx 2L\\cdot T\\cdot H_{kv}\\cdot d_h\\cdot b",
+              trap: "Using query head count instead of KV head count.",
+            }),
+          },
+          {
+            id: 'moe-active-flao',
+            label: "MoE active compute",
+            tooltip: tip({
+              short: "Active experts ≈ top-k routed plus shared expert per MoE layer.",
+              intuition: "Capacity scales with expert count; compute scales with k.",
+              trap: "Ignoring router overhead and all-to-all comms.",
+            }),
+          },
+          {
+            id: 'gqa-ratio-flao',
+            label: "GQA sharing ratio",
+            tooltip: tip({
+              short: "KV head reduction factor = query_heads / kv_heads.",
+              intuition: "Higher sharing → smaller cache, less head diversity.",
+              formula: "H_q/H_{kv}",
+              trap: "Confusing GQA with MQA one-head extreme.",
+            }),
+          },
+          {
+            id: 'compare-checklist-flao',
+            label: "Comparison checklist",
+            tooltip: tip({
+              short: "Tabulate family, active params, cache, context, gen order, modalities.",
+              intuition: "Forces apples-to-apples reading.",
+              code: "rows = [dense, moe, mla, long_ctx, dlm, omni]",
+              trap: "Single-metric leaderboard comparisons.",
+            }),
+          },
+          {
+            id: 'latency-budget-flao',
+            label: "Latency budget",
+            tooltip: tip({
+              short: "Prefill ∝ context; decode ∝ output length × cache read bandwidth.",
+              intuition: "Architecture and serving co-design set TTFT and TPOT.",
+              trap: "Benchmarking prefill-only throughput for chat apps.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'dense-default-trap-flao',
+            label: "Dense default thinking",
+            tooltip: tip({
+              short: "Many frontier models are sparse, compressed, or hybrid—not vanilla dense.",
+              intuition: "Parameter totals mislead without active compute.",
+              trap: "Capacity planning from dense FLOP models.",
+            }),
+          },
+          {
+            id: 'context-hype-trap-flao',
+            label: "Context length hype",
+            tooltip: tip({
+              short: "Claimed window ≠ usable attention quality over the whole span.",
+              intuition: "Needle ≠ reasoning over messy long docs.",
+              trap: "Product promises from marketing context numbers.",
+            }),
+          },
+          {
+            id: 'modality-sticker-trap-flao',
+            label: "Modality sticker shock",
+            tooltip: tip({
+              short: "Adding vision/audio encoders does not guarantee grounded reasoning.",
+              intuition: "Alignment and eval must be modality-specific.",
+              trap: "Demo screenshots as proof of omni quality.",
+            }),
+          },
+          {
+            id: 'single-paper-trap-flao',
+            label: "Single-paper generalization",
+            tooltip: tip({
+              short: "One architecture win may not transfer across data scale and hardware.",
+              intuition: "Design choices interact with training and serving.",
+              trap: "Copying MLA because a blog post said so.",
+            }),
+          },
+          {
+            id: 'eval-mismatch-trap-flao',
+            label: "Eval mismatch",
+            tooltip: tip({
+              short: "Text benchmarks under-test tool, agent, and multimodal stacks.",
+              intuition: "Match eval to deployment shape.",
+              trap: "Leaderboard tuning without system eval.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'frontier-moe-used-flao',
+            label: "Frontier MoE systems",
+            tooltip: tip({
+              short: "Deep dive routing, load balance, and comms at scale.",
+              intuition: "MoE is the main capacity lever in many frontier stacks.",
+              trap: "Ignoring expert imbalance dashboards.",
+            }),
+            lessonId: 'frontier-moe-systems',
+          },
+          {
+            id: 'mla-used-flao',
+            label: "Multi-head latent attention",
+            tooltip: tip({
+              short: "Compressed cache with query-time projection tradeoffs.",
+              intuition: "Next step on the attention memory axis.",
+              trap: "Assuming MLA is identical to GQA.",
+            }),
+            lessonId: 'multi-head-latent-attention',
+          },
+          {
+            id: 'long-context-used-flao',
+            label: "Long-context frontier models",
+            tooltip: tip({
+              short: "RAG, compression, and hybrid context strategies.",
+              intuition: "Context is a system design space.",
+              trap: "Only scaling prompt length.",
+            }),
+            lessonId: 'long-context-frontier-models',
+          },
+          {
+            id: 'efficient-serving-used-flao',
+            label: "Efficient LLM serving",
+            tooltip: tip({
+              short: "Schedulers, paging, and speculation implement architecture limits.",
+              intuition: "Hardware turns architecture into latency.",
+              trap: "Ignoring batching when comparing models.",
+            }),
+            lessonId: 'efficient-llm-serving',
+          },
+          {
+            id: 'eval-safety-used-flao',
+            label: "Frontier evaluation & safety",
+            tooltip: tip({
+              short: "Architecture affordances change safety probes.",
+              intuition: "Tools and long context expand risk surface.",
+              trap: "Static text safety eval for agents.",
+            }),
+            lessonId: 'frontier-evaluation-safety',
+          },
+        ],
+      },
+    ],
+  },
+
+  'frontier-moe-systems': {
+    center: {
+      id: 'frontier-moe-systems',
+      label: "Frontier MoE Systems",
+      type: 'current',
+      tooltip: tip({
+        short: "Frontier MoE layers store many expert MLPs but activate only top-k plus shared experts per token—scaling capacity without dense FLOPs.",
+        intuition: "For each token ask: which parameters wake up, how balanced is load, and what communication did routing cost?",
+        formula: "y=\\mathrm{Shared}(x)+\\sum_{e\\in\\mathrm{TopK}} w_e\\,\\mathrm{Expert}_e(x)",
+        why: "MoE is a central frontier lever for capacity, but routing, balancing, and all-to-all dominate serving engineering.",
+        trap: "Sparse active compute does not remove serving complexity; routing and communication become central.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'moe-prereq-fms',
+            label: "MoE basics",
+            tooltip: tip({
+              short: "Router scores experts; top-k experts process each token.",
+              intuition: "Sparse activation is the core idea.",
+              trap: "Treating MoE as “just more MLP params”.",
+            }),
+            lessonId: 'moe',
+          },
+          {
+            id: 'transformer-prereq-fms',
+            label: "Transformer MLP block",
+            tooltip: tip({
+              short: "Experts usually replace dense feed-forward sublayers.",
+              intuition: "Attention stays dense; MLP may be sparse.",
+              trap: "MoE-ing attention without meaning to.",
+            }),
+            lessonId: 'transformer',
+          },
+          {
+            id: 'training-loop-prereq-fms',
+            label: "Training dynamics",
+            tooltip: tip({
+              short: "Load-balancing aux losses and capacity factors shape routing.",
+              intuition: "Routing is learned, not hand-designed.",
+              trap: "Assuming uniform expert usage emerges for free.",
+            }),
+            lessonId: 'training-loop-dynamics',
+          },
+          {
+            id: 'optimizers-prereq-fms',
+            label: "Optimizers",
+            tooltip: tip({
+              short: "Adam-style updates apply to router and expert weights.",
+              intuition: "Router gradients can be noisy early in training.",
+              trap: "Freezing router while experts move.",
+            }),
+            lessonId: 'optimizers',
+          },
+          {
+            id: 'monitoring-prereq-fms',
+            label: "Model monitoring",
+            tooltip: tip({
+              short: "Track expert utilization, dropped tokens, and latency slices.",
+              intuition: "MoE failures show up in dashboards first.",
+              trap: "Aggregate loss hiding routing collapse.",
+            }),
+            lessonId: 'model-monitoring',
+          },
+          {
+            id: 'flao-prereq-fms',
+            label: "Architecture overview",
+            tooltip: tip({
+              short: "Place MoE among other frontier capacity strategies.",
+              intuition: "Compare active vs total parameters.",
+              trap: "Capacity planning from total param count alone.",
+            }),
+            lessonId: 'frontier-llm-architecture-overview',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'token-batch-fms',
+            label: "Token batch arrives",
+            tooltip: tip({
+              short: "MoE decisions happen per token (or token group) in the batch.",
+              intuition: "Different tokens may hit different experts.",
+              trap: "Assuming one expert path for the whole sequence.",
+            }),
+          },
+          {
+            id: 'router-scores-fms',
+            label: "Router scores experts",
+            tooltip: tip({
+              short: "Linear gate maps hidden state to expert logits.",
+              intuition: "Router reads token representation to dispatch.",
+              trap: "Router with too few features to specialize.",
+            }),
+          },
+          {
+            id: 'topk-select-fms',
+            label: "Top-k selection",
+            tooltip: tip({
+              short: "Pick k experts with highest scores; optionally renormalize weights.",
+              intuition: "k controls capacity vs compute tradeoff.",
+              trap: "k=1 without shared expert can be brittle.",
+            }),
+          },
+          {
+            id: 'expert-compute-fms',
+            label: "Expert MLP compute",
+            tooltip: tip({
+              short: "Each selected expert runs its own up/down projection.",
+              intuition: "Experts specialize by training signal and routing.",
+              trap: "Dead experts that never receive tokens.",
+            }),
+          },
+          {
+            id: 'combine-output-fms',
+            label: "Combine outputs",
+            tooltip: tip({
+              short: "Weighted sum of expert outputs plus shared expert contribution.",
+              intuition: "Shared expert stabilizes common patterns.",
+              trap: "Forgetting shared expert in active FLOP estimates.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'dispatch-system-fms',
+            label: "Dispatch system",
+            tooltip: tip({
+              short: "MoE is a learned parcel router over MLP warehouses.",
+              intuition: "Math tokens and code tokens may prefer different experts.",
+              trap: "Expecting random routing to stay balanced.",
+            }),
+          },
+          {
+            id: 'capacity-vs-compute-fms',
+            label: "Capacity vs compute",
+            tooltip: tip({
+              short: "Store N experts; pay for k active paths per token.",
+              intuition: "Memorization capacity can exceed dense FLOPs.",
+              trap: "VRAM for all experts still scales with N.",
+            }),
+          },
+          {
+            id: 'load-balance-fms',
+            label: "Load balance picture",
+            tooltip: tip({
+              short: "Hot experts saturate; cold experts waste capacity.",
+              intuition: "Aux losses push uniform utilization.",
+              trap: "Over-strong balance loss hurting specialization.",
+            }),
+          },
+          {
+            id: 'comm-bottleneck-fms',
+            label: "Communication bottleneck",
+            tooltip: tip({
+              short: "Expert parallelism ships tokens across devices.",
+              intuition: "All-to-all can dominate step time.",
+              trap: "Ignoring network when celebrating sparse FLOPs.",
+            }),
+          },
+          {
+            id: 'specialization-fms',
+            label: "Specialization",
+            tooltip: tip({
+              short: "Experts can capture domains if routing and data support it.",
+              intuition: "Watch expert activation heatmaps by token type.",
+              trap: "Reading specialization from one cherry-picked batch.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'moe-equation-fms',
+            label: "MoE layer equation",
+            tooltip: tip({
+              short: "y = Shared(x) + Σ w_e Expert_e(x) over top-k.",
+              intuition: "Shared path handles common computation.",
+              formula: "y=\\mathrm{Shared}(x)+\\sum_{e\\in K} w_e E_e(x)",
+              trap: "Omitting shared expert from equations.",
+            }),
+          },
+          {
+            id: 'active-params-fms',
+            label: "Active parameters",
+            tooltip: tip({
+              short: "Active ≈ dense attn + k expert MLPs (+ shared) per layer.",
+              intuition: "Compare to dense MLP param count.",
+              trap: "Using total expert count as per-token cost.",
+            }),
+          },
+          {
+            id: 'load-balance-loss-fms',
+            label: "Load-balance auxiliary loss",
+            tooltip: tip({
+              short: "Penalize skewed expert fraction f_e away from uniform 1/E.",
+              intuition: "Stops router collapse to one expert.",
+              trap: "Balance loss so strong experts never specialize.",
+            }),
+          },
+          {
+            id: 'capacity-factor-fms',
+            label: "Capacity factor",
+            tooltip: tip({
+              short: "Limit tokens per expert per batch to avoid overload.",
+              intuition: "Drops or queues tokens when expert full.",
+              trap: "Token dropping silently hurting quality.",
+            }),
+          },
+          {
+            id: 'expert-parallel-sketch-fms',
+            label: "Expert parallel sketch",
+            tooltip: tip({
+              short: "Shard experts across GPUs; all-to-all permute tokens.",
+              intuition: "Layout affects comm volume.",
+              code: "tokens = all_to_all(tokens, expert_map)",
+              trap: "Single-GPU thinking on multi-node MoE.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'routing-collapse-fms',
+            label: "Routing collapse",
+            tooltip: tip({
+              short: "Router sends almost everything to one expert.",
+              intuition: "Looks like dense MLP with extra overhead.",
+              trap: "Not logging per-expert token counts.",
+            }),
+          },
+          {
+            id: 'dead-expert-fms',
+            label: "Dead experts",
+            tooltip: tip({
+              short: "Some experts receive near-zero tokens for long spans.",
+              intuition: "Wasted capacity and unstable grads.",
+              trap: "Increasing expert count without fixing routing.",
+            }),
+          },
+          {
+            id: 'token-drop-fms',
+            label: "Token dropping",
+            tooltip: tip({
+              short: "Capacity limits discard tokens instead of queuing fairly.",
+              intuition: "Quality hits may be silent in aggregate loss.",
+              trap: "No metric on dropped-token rate.",
+            }),
+          },
+          {
+            id: 'comm-ignore-fms',
+            label: "Ignoring communication",
+            tooltip: tip({
+              short: "Sparse math FLOPs hide all-to-all latency.",
+              intuition: "Serving MoE is a systems problem.",
+              trap: "Benchmarking single-device microbatches only.",
+            }),
+          },
+          {
+            id: 'distill-trap-fms',
+            label: "Naive distillation",
+            tooltip: tip({
+              short: "Student MoE may need routing-aware distillation—not logits only.",
+              intuition: "Teacher routing patterns carry structure.",
+              trap: "Dense teacher → MoE student without router supervision.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'efficient-serving-used-fms',
+            label: "Efficient LLM serving",
+            tooltip: tip({
+              short: "Batching and expert placement set real latency.",
+              intuition: "MoE multiplies scheduling complexity.",
+              trap: "Same scheduler as dense without expert awareness.",
+            }),
+            lessonId: 'efficient-llm-serving',
+          },
+          {
+            id: 'flao-used-fms',
+            label: "Architecture overview",
+            tooltip: tip({
+              short: "Compare MoE against dense and hybrid stacks.",
+              intuition: "MoE is one axis in the frontier map.",
+              trap: "MoE as the only scaling story.",
+            }),
+            lessonId: 'frontier-llm-architecture-overview',
+          },
+          {
+            id: 'training-dynamics-used-fms',
+            label: "Training loop dynamics",
+            tooltip: tip({
+              short: "Watch loss, grad norms, and expert stats jointly.",
+              intuition: "Routing instability shows in curves.",
+              trap: "Tuning LR from dense runs unchanged.",
+            }),
+            lessonId: 'training-loop-dynamics',
+          },
+          {
+            id: 'reasoning-rlvr-used-fms',
+            label: "Reasoning RLVR",
+            tooltip: tip({
+              short: "Post-training can shift which experts activate.",
+              intuition: "Specialization evolves after SFT/RL.",
+              trap: "Frozen routing assumptions after fine-tune.",
+            }),
+            lessonId: 'reasoning-rlvr-grpo',
+          },
+          {
+            id: 'eval-safety-used-fms',
+            label: "Frontier evaluation",
+            tooltip: tip({
+              short: "Probe tool and agent failures under MoE serving.",
+              intuition: "Capacity ≠ reliability.",
+              trap: "Capability eval without load-balance checks.",
+            }),
+            lessonId: 'frontier-evaluation-safety',
+          },
+        ],
+      },
+    ],
+  },
+
+  'glove': {
+    center: {
+      id: 'glove',
+      label: "GloVe",
+      type: 'current',
+      tooltip: tip({
+        short: "GloVe learns word vectors by factorizing a weighted global word–word co-occurrence matrix so dot products match log co-occurrence ratios.",
+        intuition: "Use corpus-wide counts to shape geometry; rare meaningful pairs need weighting so frequent words do not dominate.",
+        formula: "w_{ij}(w_i^\\top w_j + b_i + b_j - \\log X_{ij})^2",
+        why: "GloVe connects count-based distributional semantics with dense embeddings used in search, classifiers, and early NLP stacks.",
+        trap: "Raw counts without weighting let common words like “the” dominate the objective.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'word2vec-prereq-gv',
+            label: "Word2Vec context",
+            tooltip: tip({
+              short: "Both learn dense vectors from co-occurrence statistics.",
+              intuition: "GloVe is global counts; Word2Vec is local prediction.",
+              trap: "Assuming they optimize identical objectives.",
+            }),
+            lessonId: 'word2vec',
+          },
+          {
+            id: 'embeddings-prereq-gv',
+            label: "Embeddings",
+            tooltip: tip({
+              short: "Words map to vectors in R^d for similarity and downstream models.",
+              intuition: "Geometry encodes distributional meaning.",
+              trap: "Vectors are not dictionary definitions.",
+            }),
+            lessonId: 'embeddings',
+          },
+          {
+            id: 'cooccurrence-prereq-gv',
+            label: "Co-occurrence counts",
+            tooltip: tip({
+              short: "X_ij counts how often words i and j appear near each other.",
+              intuition: "Global matrix summarizes corpus statistics.",
+              trap: "Window size and symmetry choices change X.",
+            }),
+          },
+          {
+            id: 'log-linear-prereq-gv',
+            label: "Log-linear modeling",
+            tooltip: tip({
+              short: "Log counts turn products into sums in the objective.",
+              intuition: "Dot product approximates log co-occurrence.",
+              trap: "Zeros in X need handling via weighting or smoothing.",
+            }),
+          },
+          {
+            id: 'dot-product-prereq-gv',
+            label: "Dot product",
+            tooltip: tip({
+              short: "w_i · w_j scores association strength between words.",
+              intuition: "Similar words rise together in co-occurrence.",
+              trap: "Confusing dot with cosine if norms drift.",
+            }),
+          },
+          {
+            id: 'gradient-descent-prereq-gv',
+            label: "Gradient descent",
+            tooltip: tip({
+              short: "Weighted least squares on non-zero matrix entries is minimized iteratively.",
+              intuition: "Only observed pairs contribute each step.",
+              trap: "Learning rate too high destabilizes vector norms.",
+            }),
+            lessonId: 'gradient-descent',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'build-matrix-gv',
+            label: "Build co-occurrence matrix",
+            tooltip: tip({
+              short: "Slide a context window; increment X_ij for word pairs.",
+              intuition: "Corpus preprocessing fixes vocabulary and window.",
+              trap: "Different window sizes change analogies learned.",
+            }),
+          },
+          {
+            id: 'weight-function-gv',
+            label: "Weighting function f(X_ij)",
+            tooltip: tip({
+              short: "Down-weight very common pairs; cap influence of huge counts.",
+              intuition: "Stop “the” from swamping rare informative pairs.",
+              trap: "Using raw X_ij in the loss.",
+            }),
+          },
+          {
+            id: 'dot-plus-bias-gv',
+            label: "Dot product plus biases",
+            tooltip: tip({
+              short: "Predict log X_ij with w_i·w_j + b_i + b_j.",
+              intuition: "Biases absorb frequency effects per word.",
+              trap: "Forgetting bias terms when inspecting dot products only.",
+            }),
+          },
+          {
+            id: 'weighted-squared-loss-gv',
+            label: "Weighted squared error",
+            tooltip: tip({
+              short: "Minimize f(X_ij) times squared prediction error on nonzeros.",
+              intuition: "Weighted least squares on observed cells.",
+              trap: "Training on full dense matrix explicitly—too huge.",
+            }),
+          },
+          {
+            id: 'vector-geometry-gv',
+            label: "Emergent geometry",
+            tooltip: tip({
+              short: "Analogies appear as consistent offset directions.",
+              intuition: "Co-occurrence ratios encode relational structure.",
+              trap: "Expecting perfect linear analogies on all relations.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'global-map-gv',
+            label: "Global co-occurrence map",
+            tooltip: tip({
+              short: "Whole-corpus statistics set vector directions before downstream use.",
+              intuition: "Rare but informative pairs matter when weighted.",
+              trap: "Tiny corpora produce noisy geometry.",
+            }),
+          },
+          {
+            id: 'ratio-intuition-gv',
+            label: "Log ratio intuition",
+            tooltip: tip({
+              short: "Word vectors capture log probability ratios across contexts.",
+              intuition: "Related words share context distribution shifts.",
+              trap: "Polysemy merges senses into one vector.",
+            }),
+          },
+          {
+            id: 'window-context-gv',
+            label: "Context window",
+            tooltip: tip({
+              short: "Nearby words define “co-occur”; distant words do not.",
+              intuition: "Syntax vs semantics depends on window width.",
+              trap: "Huge windows blur topical co-occurrence only.",
+            }),
+          },
+          {
+            id: 'vs-word2vec-gv',
+            label: "Global vs local",
+            tooltip: tip({
+              short: "GloVe uses aggregated counts; Word2Vec skips explicit matrix factorization.",
+              intuition: "Both harvest distributional signal differently.",
+              trap: "Declaring one universally superior on all tasks.",
+            }),
+          },
+          {
+            id: 'static-embeddings-gv',
+            label: "Static embeddings",
+            tooltip: tip({
+              short: "One vector per word type—no context sensitivity.",
+              intuition: "Fast and simple for baselines.",
+              trap: "Using GloVe where contextual embeddings are required.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'glove-loss-gv',
+            label: "GloVe objective",
+            tooltip: tip({
+              short: "Weighted squared error on log co-occurrence reconstruction.",
+              intuition: "Only non-zero X_ij cells are visited.",
+              formula: "J=\\sum_{i,j} f(X_{ij})(w_i^\\top w_j+b_i+b_j-\\log X_{ij})^2",
+              trap: "Applying loss to zero cells without sparsity structure.",
+            }),
+          },
+          {
+            id: 'weight-cap-gv',
+            label: "Weight cap",
+            tooltip: tip({
+              short: "f(x) rises then flatlines after x_max to limit huge counts.",
+              intuition: "Prevents extremely frequent pairs from dominating.",
+              trap: "x_max too low erases useful frequent collocations.",
+            }),
+          },
+          {
+            id: 'cooccurrence-code-gv',
+            label: "Build X sketch",
+            tooltip: tip({
+              short: "Count pairs within window w over tokenized corpus.",
+              intuition: "Symmetrize with X_ij += count and X_ji += count.",
+              code: "for t,i in enumerate(tokens):\n  for j in range(t-w,t+w+1):\n    if i!=j: X[i,j]+=1",
+              trap: "Off-by-one window boundaries.",
+            }),
+          },
+          {
+            id: 'similarity-query-gv',
+            label: "Similarity query",
+            tooltip: tip({
+              short: "Nearest neighbors by cosine on trained word vectors.",
+              intuition: "Evaluate geometry on analogies and retrieval.",
+              code: "cosine(w_king - w_man + w_woman, w_*)",
+              trap: "Not normalizing when comparing dot products across words.",
+            }),
+          },
+          {
+            id: 'downstream-gv',
+            label: "Downstream use",
+            tooltip: tip({
+              short: "Initialize classifier or RNN embeddings with GloVe vectors.",
+              intuition: "Transfer static semantics into supervised models.",
+              trap: "Freezing bad vectors on domain mismatch.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'raw-count-trap-gv',
+            label: "Raw count dominance",
+            tooltip: tip({
+              short: "Unweighted frequent pairs swamp learning.",
+              intuition: "Function f exists to fix this.",
+              trap: "Skipping f(X) in reproductions.",
+            }),
+          },
+          {
+            id: 'small-corpus-trap-gv',
+            label: "Tiny corpus",
+            tooltip: tip({
+              short: "Rare words and pairs have unreliable statistics.",
+              intuition: "Embeddings need scale for stable geometry.",
+              trap: "Trusting analogies from 1M tokens.",
+            }),
+          },
+          {
+            id: 'polysemy-trap-gv',
+            label: "Polysemy collapse",
+            tooltip: tip({
+              short: "One vector per word merges senses.",
+              intuition: "“Bank” river vs money shares one point.",
+              trap: "Blaming GloVe for tasks needing contextual models.",
+            }),
+          },
+          {
+            id: 'oov-trap-gv',
+            label: "Out-of-vocabulary",
+            tooltip: tip({
+              short: "Unknown words have no row in X or embedding table.",
+              intuition: "Subword models handle OOV better.",
+              trap: "Deploying GloVe on noisy user text with typos.",
+            }),
+            lessonId: 'fasttext',
+          },
+          {
+            id: 'global-stale-trap-gv',
+            label: "Stale global stats",
+            tooltip: tip({
+              short: "Corpus from 2014 misses new entities and usages.",
+              intuition: "Static vectors age with language drift.",
+              trap: "No refresh pipeline in production search.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'word2vec-used-gv',
+            label: "Word2Vec comparison",
+            tooltip: tip({
+              short: "Contrast local prediction with global factorization.",
+              intuition: "Choose baseline by data scale and tooling.",
+              trap: "Mixing training corpora unfairly in benchmarks.",
+            }),
+            lessonId: 'word2vec',
+          },
+          {
+            id: 'fasttext-used-gv',
+            label: "FastText subwords",
+            tooltip: tip({
+              short: "Character n-grams handle OOV and morphology.",
+              intuition: "Next step when vocabulary coverage matters.",
+              trap: "Ignoring subwords on inflected languages.",
+            }),
+            lessonId: 'fasttext',
+          },
+          {
+            id: 'cosine-used-gv',
+            label: "Cosine similarity",
+            tooltip: tip({
+              short: "Rank neighbors and document vectors with cosine.",
+              intuition: "Direction compares semantics after scaling.",
+              trap: "Dot product ranking without norm control.",
+            }),
+            lessonId: 'cosine-similarity',
+          },
+          {
+            id: 'rag-used-gv',
+            label: "RAG retrieval",
+            tooltip: tip({
+              short: "Static embeddings can index chunks in early RAG stacks.",
+              intuition: "Modern stacks often use contextual encoders instead.",
+              trap: "Confident retrieval from outdated GloVe index.",
+            }),
+            lessonId: 'rag-vector-indexing',
+          },
+          {
+            id: 'bert-used-gv',
+            label: "Contextual models",
+            tooltip: tip({
+              short: "BERT and successors replace one-vector-per-word for many tasks.",
+              intuition: "GloVe remains useful for teaching and baselines.",
+              trap: "Using static vectors where context disambiguation is required.",
+            }),
+            lessonId: 'bert',
+          },
+        ],
+      },
+    ],
+  },
+
+  'gpt2-comprehensive': {
+    center: {
+      id: 'gpt2-comprehensive',
+      label: "GPT-2 Comprehensive",
+      type: 'current',
+      tooltip: tip({
+        short: "GPT-2 is a decoder-only transformer trained with causal self-attention to predict the next token left-to-right at every position.",
+        intuition: "Follow one token through embeddings, position signal, masked attention, MLP, residuals, layer norm, and repeated blocks to logits.",
+        why: "GPT-style stacks power modern LLMs; understanding GPT-2 clarifies generation, caching, and training objectives in frontier systems.",
+        trap: "GPT-style models cannot read future tokens during training—the causal mask enforces left-to-right visibility.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'tokenization-prereq-g2',
+            label: "Tokenization",
+            tooltip: tip({
+              short: "BPE splits text into subword token ids before embedding lookup.",
+              intuition: "Tokenizer defines the model vocabulary.",
+              trap: "Confusing bytes with tokens at inference.",
+            }),
+            lessonId: 'tokenization',
+          },
+          {
+            id: 'embeddings-prereq-g2',
+            label: "Token embeddings",
+            tooltip: tip({
+              short: "Each token id maps to a learned vector in R^d.",
+              intuition: "Embedding table is the first representation.",
+              trap: "Embedding alone lacks order information.",
+            }),
+            lessonId: 'embeddings',
+          },
+          {
+            id: 'self-attention-prereq-g2',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Tokens mix via Q/K/V dot-product attention.",
+              intuition: "Core information routing inside each block.",
+              trap: "Bidirectional attention in a decoder-only stack.",
+            }),
+            lessonId: 'self-attention',
+          },
+          {
+            id: 'causal-mask-prereq-g2',
+            label: "Causal attention mask",
+            tooltip: tip({
+              short: "Future positions are hidden before softmax.",
+              intuition: "Enables next-token training and generation.",
+              trap: "Accidentally using bidirectional masks.",
+            }),
+            lessonId: 'attention-masks',
+          },
+          {
+            id: 'softmax-prereq-g2',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Final logits become a probability distribution over vocabulary.",
+              intuition: "Training maximizes log prob of true next token.",
+              trap: "Confusing logits with probabilities before softmax.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'layer-norm-prereq-g2',
+            label: "Layer normalization",
+            tooltip: tip({
+              short: "Stabilizes activations inside each block.",
+              intuition: "Pre-norm vs post-norm changes gradient flow.",
+              trap: "Applying BatchNorm assumptions to GPT blocks.",
+            }),
+            lessonId: 'layer-normalization',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'token-embed-g2',
+            label: "Token + position",
+            tooltip: tip({
+              short: "Sum or combine token embedding with positional information.",
+              intuition: "Order enters before the first transformer block.",
+              trap: "Swapping tokens without changing positions.",
+            }),
+          },
+          {
+            id: 'causal-attn-g2',
+            label: "Causal multi-head attention",
+            tooltip: tip({
+              short: "Each head runs masked self-attention then concatenates.",
+              intuition: "Multiple heads capture different relation types.",
+              trap: "Peeking at future keys during training.",
+            }),
+          },
+          {
+            id: 'ffn-g2',
+            label: "Position-wise FFN",
+            tooltip: tip({
+              short: "Two linear layers with GELU expand and contract per token.",
+              intuition: "MLP transforms each position after mixing.",
+              trap: "Thinking FFN mixes across sequence positions.",
+            }),
+          },
+          {
+            id: 'residual-norm-g2',
+            label: "Residual + LayerNorm",
+            tooltip: tip({
+              short: "Sub-layer outputs add back into the residual stream with norm.",
+              intuition: "Highway carries features across depth.",
+              trap: "Removing residuals and expecting deep trainability.",
+            }),
+          },
+          {
+            id: 'lm-head-g2',
+            label: "Language modeling head",
+            tooltip: tip({
+              short: "Final hidden states project to vocab logits for next-token loss.",
+              intuition: "Same weights may tie with input embeddings.",
+              trap: "Forgetting weight tying when counting parameters.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'decoder-only-g2',
+            label: "Decoder-only stack",
+            tooltip: tip({
+              short: "One tower reads prefix and predicts continuation.",
+              intuition: "No encoder cross-attention in pure GPT.",
+              trap: "Using GPT for bidirectional classification without adaptation.",
+            }),
+          },
+          {
+            id: 'next-token-loop-g2',
+            label: "Next-token loop",
+            tooltip: tip({
+              short: "Training asks “what comes next?” at every position simultaneously.",
+              intuition: "Teacher forcing uses ground-truth prefix during training.",
+              trap: "Assuming the model sees the full answer during training forward pass—it only sees past tokens.",
+            }),
+          },
+          {
+            id: 'depth-mixing-g2',
+            label: "Depth builds context",
+            tooltip: tip({
+              short: "Early layers local; deeper layers more global and predictive.",
+              intuition: "Probing shows feature evolution down the stack.",
+              trap: "One layer’s attention map explaining whole model.",
+            }),
+          },
+          {
+            id: 'weight-tying-g2',
+            label: "Weight tying",
+            tooltip: tip({
+              short: "Input embedding matrix may share weights with LM head.",
+              intuition: "Reduces params and ties input/output geometry.",
+              trap: "Double-counting params when tied.",
+            }),
+          },
+          {
+            id: 'scale-story-g2',
+            label: "Scale matters",
+            tooltip: tip({
+              short: "GPT-2 sizes (124M–1.5B) show emergent fluency trends.",
+              intuition: "Architecture is simple; data and scale do heavy lifting.",
+              trap: "Expecting small GPT-2 to match frontier chat behavior.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'causal-attn-formula-g2',
+            label: "Masked attention",
+            tooltip: tip({
+              short: "Attention with −∞ on future keys before softmax.",
+              intuition: "Lower triangular visibility pattern.",
+              formula: "A=\\mathrm{softmax}(\\frac{QK^\\top}{\\sqrt{d_k}}+M)V",
+              trap: "Mask applied after softmax.",
+            }),
+          },
+          {
+            id: 'block-equation-g2',
+            label: "Transformer block",
+            tooltip: tip({
+              short: "x ← x + Attn(LN(x)); x ← x + FFN(LN(x)) in pre-norm form.",
+              intuition: "Two sublayers per block.",
+              trap: "Post-norm vs pre-norm swapped silently.",
+            }),
+          },
+          {
+            id: 'lm-loss-g2',
+            label: "Cross-entropy loss",
+            tooltip: tip({
+              short: "Average −log p(true next token) over positions.",
+              intuition: "Multiclass classification at each step.",
+              formula: "\\mathcal{L}=-\\sum_t \\log p(x_t|x_{<t})",
+              trap: "Averaging wrong axis (batch vs sequence).",
+            }),
+          },
+          {
+            id: 'generate-loop-g2',
+            label: "Autoregressive decode",
+            tooltip: tip({
+              short: "Append sampled token; forward again on extended prefix.",
+              intuition: "KV cache avoids recomputing old keys/values.",
+              code: "for _ in range(max_new):\n  logits = model(context)\n  context += sample(logits[-1])",
+              trap: "Recomputing full sequence each step at scale.",
+            }),
+          },
+          {
+            id: 'param-count-g2',
+            label: "Parameter sketch",
+            tooltip: tip({
+              short: "Embeddings + L×(attn+ffn) + (optional untied head).",
+              intuition: "FFN often dominates parameter count.",
+              trap: "Ignoring tied weights in FLOP estimates.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'bidirectional-trap-g2',
+            label: "Bidirectional leakage",
+            tooltip: tip({
+              short: "Wrong mask lets model cheat on next-token prediction.",
+              intuition: "Causal LM eval requires causal visibility.",
+              trap: "Fine-tuning with padding masks that peek forward.",
+            }),
+          },
+          {
+            id: 'bert-confusion-g2',
+            label: "BERT confusion",
+            tooltip: tip({
+              short: "GPT is not masked-language BERT; generation objective differs.",
+              intuition: "Encoder-only vs decoder-only families.",
+              trap: "Using GPT embeddings like BERT [CLS] without adaptation.",
+            }),
+            lessonId: 'bert',
+          },
+          {
+            id: 'context-limit-trap-g2',
+            label: "Context limit",
+            tooltip: tip({
+              short: "GPT-2 1024 context cannot attend beyond window.",
+              intuition: "Long prompts truncate or need sliding windows.",
+              trap: "Assuming unlimited context from architecture name.",
+            }),
+          },
+          {
+            id: 'training-inference-trap-g2',
+            label: "Train vs inference mismatch",
+            tooltip: tip({
+              short: "Teacher forcing during train; autoregressive exposure at inference.",
+              intuition: "Exposure bias affects long rollouts.",
+              trap: "Evaluating only teacher-forced perplexity for chat quality.",
+            }),
+          },
+          {
+            id: 'tokenizer-trap-g2',
+            label: "Tokenizer sensitivity",
+            tooltip: tip({
+              short: "Same string can tokenize differently across versions.",
+              intuition: "BPE merges affect length and meaning splits.",
+              trap: "Hard-coding token ids from one tokenizer on another.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'token-gen-used-g2',
+            label: "Transformer token generation",
+            tooltip: tip({
+              short: "Sampling, temperature, and KV cache in production decode.",
+              intuition: "Bridge from GPT-2 block to serving loops.",
+              trap: "Greedy decode only in user-facing apps.",
+            }),
+            lessonId: 'transformer-token-generation',
+          },
+          {
+            id: 'llm-objectives-used-g2',
+            label: "LLM training objectives",
+            tooltip: tip({
+              short: "Pretrain CE loss extends to SFT and preference tuning.",
+              intuition: "GPT-2 is the pretrain chapter.",
+              trap: "Assuming CE alone produces instruction following.",
+            }),
+            lessonId: 'llm-training-objectives',
+          },
+          {
+            id: 'kv-cache-used-g2',
+            label: "KV cache",
+            tooltip: tip({
+              short: "Store past K/V for efficient incremental decoding.",
+              intuition: "Essential for long outputs at scale.",
+              trap: "O(n²) recompute each step in production.",
+            }),
+            lessonId: 'kv-cache',
+          },
+          {
+            id: 'fine-tuning-used-g2',
+            label: "Fine-tuning",
+            tooltip: tip({
+              short: "Adapt GPT-style weights to tasks and chat behavior.",
+              intuition: "Same backbone, new data signal.",
+              trap: "Full fine-tune on tiny data without regularization.",
+            }),
+            lessonId: 'fine-tuning',
+          },
+          {
+            id: 'frontier-arch-used-g2',
+            label: "Frontier architecture overview",
+            tooltip: tip({
+              short: "Modern LLMs extend GPT-style decoders with MoE, long context, tools.",
+              intuition: "GPT-2 is the pedagogical core.",
+              trap: "Assuming frontier models differ in basic block math.",
+            }),
+            lessonId: 'frontier-llm-architecture-overview',
+          },
+        ],
+      },
+    ],
+  },
+
+  'gradient-descent': {
+    center: {
+      id: 'gradient-descent',
+      label: "Gradient Descent",
+      type: 'current',
+      tooltip: tip({
+        short: "Gradient descent updates parameters by stepping opposite the loss gradient: θ ← θ − η∇L(θ).",
+        intuition: "Feel the local slope and walk downhill—step size decides whether you converge or overshoot.",
+        formula: "\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)",
+        why: "GD and its variants train essentially all ML models—from linear regression to deep networks and LLMs.",
+        trap: "The gradient is local; one step does not guarantee reaching the global minimum.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'derivative-prereq-gd',
+            label: "Derivative / gradient",
+            tooltip: tip({
+              short: "Gradient points uphill; negative gradient points downhill.",
+              intuition: "Partial derivatives stack into ∇L for many parameters.",
+              trap: "Confusing zero gradient with global optimum (could be saddle).",
+            }),
+          },
+          {
+            id: 'loss-prereq-gd',
+            label: "Loss function",
+            tooltip: tip({
+              short: "Scalar objective L(θ) measures prediction error.",
+              intuition: "Training minimizes expected loss on data.",
+              trap: "Optimizing train loss while ignoring validation.",
+            }),
+          },
+          {
+            id: 'linear-reg-prereq-gd',
+            label: "Linear regression loss",
+            tooltip: tip({
+              short: "MSE gives smooth convex bowl in simple cases.",
+              intuition: "GD on linear MSE is the introductory picture.",
+              trap: "Assuming all losses are convex.",
+            }),
+            lessonId: 'linear-regression',
+          },
+          {
+            id: 'learning-rate-prereq-gd',
+            label: "Learning rate η",
+            tooltip: tip({
+              short: "Scalar step size scales the update vector.",
+              intuition: "Too big oscillates; too small crawls.",
+              trap: "Using one η for every parameter without tuning.",
+            }),
+          },
+          {
+            id: 'vector-update-prereq-gd',
+            label: "Vector update",
+            tooltip: tip({
+              short: "Each parameter θ_i moves by −η ∂L/∂θ_i.",
+              intuition: "Update is simultaneous across all weights.",
+              trap: "Updating one weight at a time (coordinate descent confusion).",
+            }),
+          },
+          {
+            id: 'batch-prereq-gd',
+            label: "Mini-batch",
+            tooltip: tip({
+              short: "Gradients estimated from a subset of data each step.",
+              intuition: "Noise trades off speed and stability.",
+              trap: "Single-example batches on tiny data only without regularization.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'forward-pass-gd',
+            label: "Forward pass",
+            tooltip: tip({
+              short: "Compute predictions and loss L for current θ.",
+              intuition: "Forward builds the graph values for backprop.",
+              trap: "Evaluating loss on wrong split (test leakage).",
+            }),
+          },
+          {
+            id: 'backward-pass-gd',
+            label: "Backward pass",
+            tooltip: tip({
+              short: "Backprop computes ∇L(θ) via chain rule.",
+              intuition: "Each parameter gets a blame signal.",
+              trap: "Forgotten detach on constant targets.",
+            }),
+            lessonId: 'computation-graph-backprop',
+          },
+          {
+            id: 'gradient-step-gd',
+            label: "Gradient step",
+            tooltip: tip({
+              short: "θ ← θ − η∇L with chosen optimizer variant.",
+              intuition: "One iteration of learning.",
+              trap: "Sign error adding gradient instead of subtracting.",
+            }),
+          },
+          {
+            id: 'repeat-until-gd',
+            label: "Repeat until stop",
+            tooltip: tip({
+              short: "Loop until epoch budget, convergence, or early stopping.",
+              intuition: "Many steps compose the training trajectory.",
+              trap: "Stopping only on train loss.",
+            }),
+          },
+          {
+            id: 'monitor-val-gd',
+            label: "Monitor validation",
+            tooltip: tip({
+              short: "Track val loss to detect overfitting and bad η.",
+              intuition: "Generalization matters more than train descent.",
+              trap: "Tuning hyperparams on test set.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'ball-on-hill-gd',
+            label: "Ball on a hill",
+            tooltip: tip({
+              short: "Roll downhill following steepest local slope.",
+              intuition: "Curvature can make valleys zigzag.",
+              trap: "Expecting straight path to minimum in high dimensions.",
+            }),
+          },
+          {
+            id: 'lr-too-big-gd',
+            label: "Learning rate too big",
+            tooltip: tip({
+              short: "Overshoot bounces across the valley.",
+              intuition: "Oscillation or divergence.",
+              trap: "Increasing η when loss plateaus without checking noise.",
+            }),
+          },
+          {
+            id: 'lr-too-small-gd',
+            label: "Learning rate too small",
+            tooltip: tip({
+              short: "Tiny steps take forever in flat regions.",
+              intuition: "May stall in saddle-like areas.",
+              trap: "Assuming more epochs always fixes bad η.",
+            }),
+          },
+          {
+            id: 'local-vs-global-gd',
+            label: "Local vs global",
+            tooltip: tip({
+              short: "GD finds nearby downhill move, not guaranteed global min.",
+              intuition: "Non-convex nets have many basins.",
+              trap: "Believing zero train loss implies best model.",
+            }),
+          },
+          {
+            id: 'stochastic-noise-gd',
+            label: "Stochastic noise",
+            tooltip: tip({
+              short: "Mini-batch gradients jitter around full-batch truth.",
+              intuition: "Noise can help escape sharp minima sometimes.",
+              trap: "Reading too much into one noisy step.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'gd-update-gd',
+            label: "GD update rule",
+            tooltip: tip({
+              short: "θ_{t+1} = θ_t − η∇L(θ_t).",
+              intuition: "Foundation for SGD, momentum, Adam.",
+              formula: "\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)",
+              trap: "Using validation gradient for updates.",
+            }),
+          },
+          {
+            id: 'mse-gradient-gd',
+            label: "MSE gradient sketch",
+            tooltip: tip({
+              short: "For linear model, ∇w MSE involves residual times features.",
+              intuition: "Error drives direction and magnitude.",
+              formula: "\\nabla_w \\propto X^\\top(Xw-y)",
+              trap: "Forgetting feature scale affects step effectiveness.",
+            }),
+          },
+          {
+            id: 'python-loop-gd',
+            label: "Python loop sketch",
+            tooltip: tip({
+              short: "for epoch: for batch: loss.backward(); opt.step(); opt.zero_grad()",
+              intuition: "Frameworks automate backprop.",
+              code: "loss.backward()\noptimizer.step()\noptimizer.zero_grad()",
+              trap: "Forgetting zero_grad accumulates gradients.",
+            }),
+          },
+          {
+            id: 'sgd-variant-gd',
+            label: "SGD variant",
+            tooltip: tip({
+              short: "∇L approximated on mini-batch B instead of full data.",
+              intuition: "Cheaper per step, noisier direction.",
+              trap: "Batch size 1 on large noisy data without LR tuning.",
+            }),
+          },
+          {
+            id: 'convergence-criteria-gd',
+            label: "Stopping criteria",
+            tooltip: tip({
+              short: "Max epochs, patience on val loss, or gradient norm threshold.",
+              intuition: "Early stopping is regularization.",
+              trap: "Stopping on train loss minimum only.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'global-min-trap-gd',
+            label: "Chasing global minimum",
+            tooltip: tip({
+              short: "Deep nets rarely need global optimum for good generalization.",
+              intuition: "Many good local basins exist.",
+              trap: "Over-tuning to memorize train set.",
+            }),
+          },
+          {
+            id: 'lr-copy-trap-gd',
+            label: "Copy-paste learning rate",
+            tooltip: tip({
+              short: "η from one model/data rarely transfers unchanged.",
+              intuition: "Scale depends on loss curvature and batch size.",
+              trap: "Using default 1e-3 everywhere.",
+            }),
+          },
+          {
+            id: 'test-tune-trap-gd',
+            label: "Tune on test",
+            tooltip: tip({
+              short: "Hyperparameter search on test inflates reported performance.",
+              intuition: "Validation is the tuning split.",
+              trap: "Repeated peeking at test loss.",
+            }),
+            lessonId: 'train-validation-test-split',
+          },
+          {
+            id: 'unscaled-features-trap-gd',
+            label: "Unscaled features",
+            tooltip: tip({
+              short: "Different feature scales skew gradient steps across weights.",
+              intuition: "Normalize inputs for smoother descent.",
+              trap: "Huge learning rate on raw pixel + tiny numeric features.",
+            }),
+            lessonId: 'feature-scaling-preprocessing',
+          },
+          {
+            id: 'batch-norm-confusion-gd',
+            label: "Confusing GD with optimizer",
+            tooltip: tip({
+              short: "Adam/momentum change the effective step—not the loss.",
+              intuition: "Optimizer is how gradient is applied.",
+              trap: "Blaming loss function when optimizer is wrong.",
+            }),
+            lessonId: 'optimizers',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'optimizers-used-gd',
+            label: "Optimizers",
+            tooltip: tip({
+              short: "Momentum, Adam, and adaptive methods build on GD.",
+              intuition: "Same gradient, smarter step.",
+              trap: "Adam without LR sweep.",
+            }),
+            lessonId: 'optimizers',
+          },
+          {
+            id: 'backprop-used-gd',
+            label: "Backpropagation",
+            tooltip: tip({
+              short: "Efficient ∇L for neural networks.",
+              intuition: "Makes deep GD feasible.",
+              trap: "Manual gradients for deep nets.",
+            }),
+            lessonId: 'computation-graph-backprop',
+          },
+          {
+            id: 'nn-used-gd',
+            label: "Neural networks",
+            tooltip: tip({
+              short: "Stack layers; GD trains all weights jointly.",
+              intuition: "Non-convex but works in practice.",
+              trap: "Linear stack without activations.",
+            }),
+            lessonId: 'neural-network',
+          },
+          {
+            id: 'training-loop-used-gd',
+            label: "Training loop dynamics",
+            tooltip: tip({
+              short: "Connect batches, LR, and curves over time.",
+              intuition: "GD in the full loop context.",
+              trap: "Single-step demos as whole training story.",
+            }),
+            lessonId: 'training-loop-dynamics',
+          },
+          {
+            id: 'regularization-used-gd',
+            label: "Regularization",
+            tooltip: tip({
+              short: "Weight decay modifies effective GD objective.",
+              intuition: "Penalties change descent target.",
+              trap: "Huge weights when L2 is off.",
+            }),
+            lessonId: 'regularization',
+          },
+        ],
+      },
+    ],
+  },
+
+  'gradient-problems': {
+    center: {
+      id: 'gradient-problems',
+      label: "Gradient Problems",
+      type: 'current',
+      tooltip: tip({
+        short: "Vanishing and exploding gradients happen when backprop multiplies many local derivatives—early layers get too little or too much signal.",
+        intuition: "Trace the product chain from output to input; repeated factors below 1 shrink signal, above 1 amplify it.",
+        formula: "\\frac{\\partial L}{\\partial h_0}=\\frac{\\partial L}{\\partial h_L}\\prod_{\\ell=1}^{L}\\frac{\\partial h_\\ell}{\\partial h_{\\ell-1}}",
+        why: "Depth, activation choice, initialization, and architecture (residuals, norm) determine whether deep networks learn.",
+        trap: "Gradient clipping fixes explosions but does not automatically restore vanished signal in early layers.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'backprop-prereq-gp',
+            label: "Backpropagation",
+            tooltip: tip({
+              short: "Gradients flow backward multiplying local derivatives.",
+              intuition: "Chain rule on the computation graph.",
+              trap: "Thinking gradients teleport without local factors.",
+            }),
+            lessonId: 'computation-graph-backprop',
+          },
+          {
+            id: 'chain-rule-prereq-gp',
+            label: "Chain rule product",
+            tooltip: tip({
+              short: "∂L/∂h_0 equals product of layer Jacobians times upstream grad.",
+              intuition: "Many layers → many multiplications.",
+              trap: "Adding derivatives instead of multiplying.",
+            }),
+          },
+          {
+            id: 'activation-prereq-gp',
+            label: "Activation derivatives",
+            tooltip: tip({
+              short: "Sigmoid/tanh saturate; ReLU has zero derivative when off.",
+              intuition: "Activation choice scales local factors.",
+              trap: "Dead ReLU units blocking flow.",
+            }),
+            lessonId: 'relu',
+          },
+          {
+            id: 'init-prereq-gp',
+            label: "Initialization",
+            tooltip: tip({
+              short: "Weight scale sets typical magnitude of layer Jacobians.",
+              intuition: "Bad start amplifies vanish/explode before data helps.",
+              trap: "Default small constants for all depths.",
+            }),
+            lessonId: 'initialization',
+          },
+          {
+            id: 'depth-prereq-gp',
+            label: "Network depth",
+            tooltip: tip({
+              short: "More layers mean longer derivative products.",
+              intuition: "Depth multiplies risk.",
+              trap: "Depth alone guaranteeing representational power.",
+            }),
+            lessonId: 'neural-network',
+          },
+          {
+            id: 'loss-scale-prereq-gp',
+            label: "Loss scale",
+            tooltip: tip({
+              short: "Upstream ∂L/∂h_L sets starting magnitude for backprop.",
+              intuition: "Huge loss gradients explode early steps.",
+              trap: "Unnormalized targets causing giant initial grads.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'forward-saturate-gp',
+            label: "Forward saturation",
+            tooltip: tip({
+              short: "Sigmoid/tanh flat regions have near-zero derivative.",
+              intuition: "Local factor ≈ 0 kills backward signal.",
+              trap: "Saturated units everywhere at init.",
+            }),
+          },
+          {
+            id: 'product-shrink-gp',
+            label: "Product shrinks (vanish)",
+            tooltip: tip({
+              short: "Many factors < 1 compound to ~0 early-layer grad.",
+              intuition: "Early weights update glacially.",
+              trap: "Blaming dataset when activations saturate.",
+            }),
+          },
+          {
+            id: 'product-grow-gp',
+            label: "Product grows (explode)",
+            tooltip: tip({
+              short: "Factors > 1 repeatedly yield huge grads.",
+              intuition: "Weights jump unstably; NaNs appear.",
+              trap: "Only watching loss, not grad norm.",
+            }),
+          },
+          {
+            id: 'dead-neuron-gp',
+            label: "Dead neurons (ReLU)",
+            tooltip: tip({
+              short: "Negative pre-activations give zero local derivative.",
+              intuition: "Unit never wakes if always negative.",
+              trap: "High LR killing units permanently.",
+            }),
+          },
+          {
+            id: 'clip-mitigate-gp',
+            label: "Gradient clipping",
+            tooltip: tip({
+              short: "Cap global norm to tame explosions.",
+              intuition: "Stabilizes updates at output-side layers.",
+              trap: "Clipping as fix for vanishing.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'telephone-game-gp',
+            label: "Telephone game",
+            tooltip: tip({
+              short: "Message fades passing through many whisperers (layers).",
+              intuition: "Vanishing is whisper decay.",
+              trap: "Expecting perfect message at layer 1 from deep stack without help.",
+            }),
+          },
+          {
+            id: 'snowball-gp',
+            label: "Snowball amplification",
+            tooltip: tip({
+              short: "Small gain per layer compounds into avalanche.",
+              intuition: "Exploding is runaway feedback.",
+              trap: "Assuming weight decay alone prevents NaNs.",
+            }),
+          },
+          {
+            id: 'credit-assignment-gp',
+            label: "Credit assignment",
+            tooltip: tip({
+              short: "Early layers need usable grad to learn useful features.",
+              intuition: "Vanishing = early layers frozen randomly.",
+              trap: "Only tuning last layer forever.",
+            }),
+          },
+          {
+            id: 'residual-highway-gp',
+            label: "Residual highway",
+            tooltip: tip({
+              short: "Skip connections add identity path for gradients.",
+              intuition: "Grad can flow around blocks.",
+              trap: "Resnets still need good init and LR.",
+            }),
+            lessonId: 'residual-stream',
+          },
+          {
+            id: 'norm-stabilize-gp',
+            label: "Normalization stabilizes scale",
+            tooltip: tip({
+              short: "LayerNorm/BatchNorm keep activations in healthier range.",
+              intuition: "Reduces extreme Jacobians.",
+              trap: "Norm without addressing dead ReLUs.",
+            }),
+            lessonId: 'layer-normalization',
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'chain-product-gp',
+            label: "Chain product formula",
+            tooltip: tip({
+              short: "∂L/∂h_0 = (∂L/∂h_L) Π ∂h_l/∂h_{l-1}.",
+              intuition: "Diagnose by estimating factor magnitudes.",
+              formula: "\\frac{\\partial L}{\\partial h_0}=\\frac{\\partial L}{\\partial h_L}\\prod_{\\ell}\\frac{\\partial h_\\ell}{\\partial h_{\\ell-1}}",
+              trap: "Inspecting only final-layer grad norm.",
+            }),
+          },
+          {
+            id: 'sigmoid-deriv-gp',
+            label: "Sigmoid derivative",
+            tooltip: tip({
+              short: "σ′(z)=σ(z)(1−σ(z)) ≤ 0.25.",
+              intuition: "Always shrinks signal at most 4× per sigmoid.",
+              trap: "Deep sigmoid nets without careful init.",
+            }),
+          },
+          {
+            id: 'relu-deriv-gp',
+            label: "ReLU derivative",
+            tooltip: tip({
+              short: "1 if z>0 else 0.",
+              intuition: "Binary gate on gradient path.",
+              trap: "All-negative region → zero grad forever.",
+            }),
+          },
+          {
+            id: 'grad-norm-monitor-gp',
+            label: "Grad norm monitoring",
+            tooltip: tip({
+              short: "Track ||∇|| per layer during training.",
+              intuition: "Spikes flag explode; flatlines flag vanish.",
+              code: "for p in model.parameters():\n  log(p.grad.norm())",
+              trap: "Only logging total loss.",
+            }),
+          },
+          {
+            id: 'clip-code-gp',
+            label: "Clip by global norm",
+            tooltip: tip({
+              short: "Scale grad if ||g|| > threshold.",
+              intuition: "Preserves direction, caps step.",
+              code: "torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)",
+              trap: "Clip so aggressive learning stops.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'clip-vanish-trap-gp',
+            label: "Clipping for vanishing",
+            tooltip: tip({
+              short: "Clip caps large grads; tiny grads stay tiny.",
+              intuition: "Different failure modes need different fixes.",
+              trap: "clip_grad on vanishing RNN without architecture change.",
+            }),
+          },
+          {
+            id: 'deeper-always-trap-gp',
+            label: "Deeper always better",
+            tooltip: tip({
+              short: "Vanishing can make depth untrainable without residuals/norm.",
+              intuition: "Depth trades off with optimizability.",
+              trap: "50-layer MLP with sigmoids and no skips.",
+            }),
+          },
+          {
+            id: 'lr-only-trap-gp',
+            label: "LR-only diagnosis",
+            tooltip: tip({
+              short: "Tiny LR masks explode slowly; huge LR worsens NaNs.",
+              intuition: "Check per-layer grad histograms.",
+              trap: "Random LR grid without grad stats.",
+            }),
+          },
+          {
+            id: 'init-ignore-trap-gp',
+            label: "Ignore initialization",
+            tooltip: tip({
+              short: "Bad variance at start determines early product behavior.",
+              intuition: "He/Xavier exist to tame products.",
+              trap: "Gaussian(0,1) on 100-layer ReLU.",
+            }),
+            lessonId: 'initialization',
+          },
+          {
+            id: 'activation-mismatch-trap-gp',
+            label: "Wrong activation era",
+            tooltip: tip({
+              short: "Sigmoid-heavy stacks are vanish-prone vs ReLU+residual modern stacks.",
+              intuition: "Architecture evolution responded to grad pathologies.",
+              trap: "Teaching vanishing only with sigmoid demos then deploying transformers.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'init-used-gp',
+            label: "Initialization",
+            tooltip: tip({
+              short: "Set initial Jacobian scale via weight variance.",
+              intuition: "Prevent explode/vanish at step 0.",
+              trap: "Same init for RNN and CNN without thought.",
+            }),
+            lessonId: 'initialization',
+          },
+          {
+            id: 'residual-used-gp',
+            label: "Residual stream",
+            tooltip: tip({
+              short: "Transformers rely on residual highways.",
+              intuition: "Grad paths through depth.",
+              trap: "Removing residuals in custom blocks.",
+            }),
+            lessonId: 'residual-stream',
+          },
+          {
+            id: 'lstm-used-gp',
+            label: "LSTM gates",
+            tooltip: tip({
+              short: "Gated recurrence mitigates vanishing in sequences.",
+              intuition: "Additive cell state path.",
+              trap: "LSTM eliminates all long-range limits.",
+            }),
+            lessonId: 'lstm',
+          },
+          {
+            id: 'optimizers-used-gp',
+            label: "Optimizers",
+            tooltip: tip({
+              short: "Adam adapts per-parameter steps when grad scale varies.",
+              intuition: "Helps but does not fix dead units.",
+              trap: "Adam hiding vanishing early layers.",
+            }),
+            lessonId: 'optimizers',
+          },
+          {
+            id: 'training-dynamics-used-gp',
+            label: "Training loop dynamics",
+            tooltip: tip({
+              short: "Watch grad norms alongside loss curves.",
+              intuition: "Operational diagnosis during training.",
+              trap: "Loss-only dashboards.",
+            }),
+            lessonId: 'training-loop-dynamics',
+          },
+        ],
+      },
+    ],
+  },
+
+  'grouped-query-attention': {
+    center: {
+      id: 'grouped-query-attention',
+      label: "Grouped-Query Attention",
+      type: 'current',
+      tooltip: tip({
+        short: "GQA uses fewer key/value heads than query heads—query heads share KV heads to shrink KV cache while keeping multi-head expressivity.",
+        intuition: "Many queries can look through the same memory lens; bandwidth savings dominate long-context decode.",
+        formula: "H_{kv}<H_q,\\quad \\mathrm{group}=\\lfloor h_q/(H_q/H_{kv})\\rfloor",
+        why: "GQA is the production sweet spot between full MHA quality and MQA memory savings in LLaMA-class and frontier models.",
+        trap: "GQA reduces stored K/V heads—not the number of query heads.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'mha-prereq-gqa',
+            label: "Multi-head attention",
+            tooltip: tip({
+              short: "Each head has its own Q, K, V projections.",
+              intuition: "Baseline with H_q = H_kv = H.",
+              trap: "Assuming heads must always be independent in KV.",
+            }),
+            lessonId: 'self-attention',
+          },
+          {
+            id: 'kv-cache-prereq-gqa',
+            label: "KV cache",
+            tooltip: tip({
+              short: "Decode stores past K and V tensors per layer.",
+              intuition: "Cache size drives memory and bandwidth.",
+              trap: "Ignoring cache when comparing attention variants.",
+            }),
+            lessonId: 'kv-cache',
+          },
+          {
+            id: 'decode-bandwidth-prereq-gqa',
+            label: "Decode bandwidth",
+            tooltip: tip({
+              short: "Each new token reads entire cached K/V.",
+              intuition: "Memory traffic can bottleneck before FLOPs.",
+              trap: "FLOP-only performance models.",
+            }),
+          },
+          {
+            id: 'tensor-shapes-prereq-gqa',
+            label: "Head shapes",
+            tooltip: tip({
+              short: "Q: (batch, H_q, seq, d_h); K/V: (batch, H_kv, seq, d_h).",
+              intuition: "Broadcast/repeat maps queries to shared KV.",
+              trap: "Mixing head counts in cache byte math.",
+            }),
+          },
+          {
+            id: 'softmax-prereq-gqa',
+            label: "Softmax attention",
+            tooltip: tip({
+              short: "Scores still normalized per query head row.",
+              intuition: "Mixing rule unchanged; memory layout changes.",
+              trap: "Thinking GQA approximates attention sparsely.",
+            }),
+            lessonId: 'softmax',
+          },
+          {
+            id: 'rope-prereq-gqa',
+            label: "RoPE (optional)",
+            tooltip: tip({
+              short: "Position encoding applies to Q and K before scoring.",
+              intuition: "Sharing KV does not remove position need.",
+              trap: "Applying RoPE inconsistently across heads.",
+            }),
+            lessonId: 'rope',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'project-q-gqa',
+            label: "Project queries (H_q heads)",
+            tooltip: tip({
+              short: "Full query head count retained.",
+              intuition: "Each query head can specialize queries.",
+              trap: "Reducing query heads when meaning to compress KV.",
+            }),
+          },
+          {
+            id: 'project-kv-gqa',
+            label: "Project K/V (H_kv heads)",
+            tooltip: tip({
+              short: "Fewer KV heads than query heads.",
+              intuition: "Stored cache uses H_kv not H_q.",
+              trap: "Projecting K/V with H_q then dropping heads wrongly.",
+            }),
+          },
+          {
+            id: 'group-map-gqa',
+            label: "Group mapping",
+            tooltip: tip({
+              short: "Query head g maps to KV head floor(g / group_size).",
+              intuition: "Adjacent query heads share one KV head.",
+              trap: "Off-by-one group assignment bugs.",
+            }),
+          },
+          {
+            id: 'attend-broadcast-gqa',
+            label: "Attention with shared KV",
+            tooltip: tip({
+              short: "Each query head attends using its assigned K/V head.",
+              intuition: "Same keys/values, different queries.",
+              trap: "Accidentally duplicating KV in cache instead of sharing.",
+            }),
+          },
+          {
+            id: 'cache-layout-gqa',
+            label: "Cache layout",
+            tooltip: tip({
+              short: "Persist only H_kv heads per token per layer.",
+              intuition: "Bytes scale with H_kv.",
+              trap: "Sizing cache for H_q in GQA models.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'shared-memory-gqa',
+            label: "Shared memory lens",
+            tooltip: tip({
+              short: "Multiple queries read the same stored memory slice.",
+              intuition: "Like many readers, fewer librarians.",
+              trap: "Too much sharing collapses head diversity.",
+            }),
+          },
+          {
+            id: 'mha-mqa-spectrum-gqa',
+            label: "MHA–GQA–MQA spectrum",
+            tooltip: tip({
+              short: "MHA H_kv=H; GQA 1<H_kv<H; MQA H_kv=1.",
+              intuition: "Tune compression vs quality.",
+              trap: "MQA always best because smallest cache.",
+            }),
+          },
+          {
+            id: 'decode-dominated-gqa',
+            label: "Decode-dominated regime",
+            tooltip: tip({
+              short: "Long context + batch inference makes KV bandwidth king.",
+              intuition: "GQA targets serving economics.",
+              trap: "Training FLOPs story alone for prod choice.",
+            }),
+          },
+          {
+            id: 'quality-bandwidth-gqa',
+            label: "Quality vs bandwidth trade",
+            tooltip: tip({
+              short: "Less KV diversity may slightly hurt rare attention patterns.",
+              intuition: "Empirical eval at target context lengths.",
+              trap: "Extrapolating from 512-token train to 128k serve without test.",
+            }),
+          },
+          {
+            id: 'frontier-default-gqa',
+            label: "Frontier default",
+            tooltip: tip({
+              short: "Many open-weight LLMs standardize on GQA layouts.",
+              intuition: "Industry convergence signal.",
+              trap: "Assuming all checkpoints document H_kv clearly.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'gqa-ratio-formula-gqa',
+            label: "Sharing ratio",
+            tooltip: tip({
+              short: "group_size = H_q / H_kv (integer division assumed).",
+              intuition: "Higher ratio → smaller cache.",
+              formula: "H_q/H_{kv}",
+              trap: "Non-divisible head counts without explicit mapping table.",
+            }),
+          },
+          {
+            id: 'kv-bytes-gqa',
+            label: "KV cache bytes",
+            tooltip: tip({
+              short: "∝ layers × seq × H_kv × d_h × 2 × bytes.",
+              intuition: "Halving H_kv roughly halves KV memory.",
+              formula: "M_{KV}\\propto H_{kv}",
+              trap: "Using H_q in formula.",
+            }),
+          },
+          {
+            id: 'repeat-kv-code-gqa',
+            label: "Repeat/broadcast KV",
+            tooltip: tip({
+              short: "Implement by repeating KV heads along query groups.",
+              intuition: "Logical share vs physical layout.",
+              code: "K = K.repeat_interleave(group_size, dim=1)",
+              trap: "Physically storing repeated copies in cache.",
+            }),
+          },
+          {
+            id: 'config-check-gqa',
+            label: "Config check",
+            tooltip: tip({
+              short: "Read num_attention_heads vs num_key_value_heads in config.",
+              intuition: "HF models expose both fields.",
+              trap: "Loading weights with wrong head split.",
+            }),
+          },
+          {
+            id: 'mla-contrast-gqa',
+            label: "Contrast MLA",
+            tooltip: tip({
+              short: "MLA compresses latent cache further with projection tradeoffs.",
+              intuition: "GQA is head sharing; MLA is low-rank compression.",
+              trap: "Treating MLA as identical to GQA.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'query-head-trap-gqa',
+            label: "Confusing query vs KV heads",
+            tooltip: tip({
+              short: "GQA keeps H_q; savings are in H_kv only.",
+              intuition: "Query expressivity largely preserved.",
+              trap: "Documentation saying “8-head GQA” without specifying which.",
+            }),
+          },
+          {
+            id: 'cache-size-trap-gqa',
+            label: "Wrong cache provisioning",
+            tooltip: tip({
+              short: "Provisioning H_q cache breaks memory plans.",
+              intuition: "Serving capacity planning uses H_kv.",
+              trap: "OOM at long context despite “GQA enabled”.",
+            }),
+          },
+          {
+            id: 'over-sharing-trap-gqa',
+            label: "Over-sharing",
+            tooltip: tip({
+              short: "H_kv too small hurts quality on some tasks.",
+              intuition: "Extreme MQA not free.",
+              trap: "Picking H_kv=1 because paper said MQA once.",
+            }),
+          },
+          {
+            id: 'train-serve-mismatch-gqa',
+            label: "Train/serve head mismatch",
+            tooltip: tip({
+              short: "Checkpoint head layout must match inference kernel.",
+              intuition: "Custom CUDA kernels assume grouping.",
+              trap: "Converting weights between MHA and GQA naively.",
+            }),
+          },
+          {
+            id: 'approx-attention-trap-gqa',
+            label: "Approximate attention confusion",
+            tooltip: tip({
+              short: "GQA is exact attention with shared KV—not sparse/linear approx.",
+              intuition: "Different from FlashAttention tiling or sparse patterns.",
+              trap: "Equating GQA with “approximate transformer”.",
+            }),
+            lessonId: 'flash-attention',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'kv-cache-used-gqa',
+            label: "KV cache lesson",
+            tooltip: tip({
+              short: "Quantized and paged KV builds on GQA layouts.",
+              intuition: "Memory math starts with H_kv.",
+              trap: "PagedAttention sizing with wrong heads.",
+            }),
+            lessonId: 'kv-cache',
+          },
+          {
+            id: 'mla-used-gqa',
+            label: "Multi-head latent attention",
+            tooltip: tip({
+              short: "Next compression step beyond GQA.",
+              intuition: "Frontier DeepSeek-style designs.",
+              trap: "Ignoring projection FLOPs in MLA.",
+            }),
+            lessonId: 'multi-head-latent-attention',
+          },
+          {
+            id: 'efficient-serving-used-gqa',
+            label: "Efficient LLM serving",
+            tooltip: tip({
+              short: "Batching and paging assume specific cache shapes.",
+              intuition: "GQA enables larger batch at same VRAM.",
+              trap: "Throughput claims without H_kv spec.",
+            }),
+            lessonId: 'efficient-llm-serving',
+          },
+          {
+            id: 'flao-used-gqa',
+            label: "Frontier architecture overview",
+            tooltip: tip({
+              short: "GQA is one axis in frontier comparison tables.",
+              intuition: "Situate among MoE and long context.",
+              trap: "Single-knob thinking.",
+            }),
+            lessonId: 'frontier-llm-architecture-overview',
+          },
+          {
+            id: 'flash-used-gqa',
+            label: "FlashAttention",
+            tooltip: tip({
+              short: "Exact attention kernels work with GQA grouping.",
+              intuition: "IO-aware math unchanged; layout differs.",
+              trap: "Kernel unsupported head combo silently slow path.",
+            }),
+            lessonId: 'flash-attention',
+          },
+        ],
+      },
+    ],
+  },
+
+  'hypothesis-testing-intuition': {
+    center: {
+      id: 'hypothesis-testing-intuition',
+      label: "Hypothesis Testing Intuition",
+      type: 'current',
+      tooltip: tip({
+        short: "Hypothesis testing asks whether an observed effect is surprising under a no-effect baseline—compare effect size to variability and sample size.",
+        intuition: "Signal must stand out from noise; larger samples detect smaller effects.",
+        formula: "z=\\frac{\\mathrm{observed\\ effect}}{\\mathrm{standard\\ error}}",
+        why: "Testing intuition underlies A/B tests, clinical trials, and scientific claims before diving into p-values and protocols.",
+        trap: "Statistical significance does not prove the effect is large, useful, or causal.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'sampling-prereq-ht',
+            label: "Sampling variability",
+            tooltip: tip({
+              short: "Different samples give different estimates.",
+              intuition: "Noise is inherent, not a bug.",
+              trap: "Treating one sample as ground truth.",
+            }),
+            lessonId: 'sampling-confidence-intervals',
+          },
+          {
+            id: 'mean-variance-prereq-ht',
+            label: "Mean and variance",
+            tooltip: tip({
+              short: "Effect and spread describe data summaries.",
+              intuition: "SE scales with variance and sample size.",
+              trap: "Ignoring variance when comparing means.",
+            }),
+            lessonId: 'expected-value-variance',
+          },
+          {
+            id: 'null-hypothesis-prereq-ht',
+            label: "Null hypothesis H₀",
+            tooltip: tip({
+              short: "Baseline world of no effect or no difference.",
+              intuition: "Test asks how extreme data is if H₀ true.",
+              trap: "Believing H₀ must be literally true.",
+            }),
+          },
+          {
+            id: 'effect-size-prereq-ht',
+            label: "Effect size",
+            tooltip: tip({
+              short: "Magnitude of difference, not just existence.",
+              intuition: "Tiny effects can be “significant” with huge n.",
+              trap: "Equating significance with importance.",
+            }),
+          },
+          {
+            id: 'standard-error-prereq-ht',
+            label: "Standard error",
+            tooltip: tip({
+              short: "Typical wobble of an estimate across samples.",
+              intuition: "Denominator of signal-to-noise.",
+              trap: "Using population σ instead of SE of estimator.",
+            }),
+          },
+          {
+            id: 'distribution-prereq-ht',
+            label: "Reference distribution",
+            tooltip: tip({
+              short: "Test statistic compared to null sampling distribution.",
+              intuition: "Tail area → p-value intuition.",
+              trap: "Applying wrong distribution for the estimator.",
+            }),
+            lessonId: 'probability-distributions',
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'state-hypotheses-ht',
+            label: "State H₀ and H₁",
+            tooltip: tip({
+              short: "Null vs alternative about effect direction/size.",
+              intuition: "Framework before seeing data (ideally).",
+              trap: "Choosing H₁ after peeking at data.",
+            }),
+          },
+          {
+            id: 'compute-effect-ht',
+            label: "Compute observed effect",
+            tooltip: tip({
+              short: "Treatment minus control, slope, difference in rates.",
+              intuition: "Point estimate from sample.",
+              trap: "Wrong estimand for the business question.",
+            }),
+          },
+          {
+            id: 'estimate-se-ht',
+            label: "Estimate standard error",
+            tooltip: tip({
+              short: "Quantify sampling uncertainty of the effect.",
+              intuition: "Smaller SE → stronger evidence for same effect.",
+              trap: "SE formulas that ignore clustering or time.",
+            }),
+          },
+          {
+            id: 'test-statistic-ht',
+            label: "Form test statistic",
+            tooltip: tip({
+              short: "Effect / SE (z or t in simple cases).",
+              intuition: "Signal-to-noise ratio.",
+              trap: "Comparing raw difference without SE.",
+            }),
+          },
+          {
+            id: 'compare-tail-ht',
+            label: "Compare to null distribution",
+            tooltip: tip({
+              short: "How extreme is statistic if H₀ true?",
+              intuition: "Far tail → unlikely under null.",
+              trap: "One-sided vs two-sided confusion.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'signal-noise-ht',
+            label: "Signal vs noise",
+            tooltip: tip({
+              short: "Big effect with tight SE is strong evidence.",
+              intuition: "Both numerator and denominator matter.",
+              trap: "Huge effect with huge SE → inconclusive.",
+            }),
+          },
+          {
+            id: 'sample-size-ht',
+            label: "Sample size lens",
+            tooltip: tip({
+              short: "More data shrinks SE; tiny effects become detectable.",
+              intuition: "Significance ≠ meaningful effect.",
+              trap: "Significant but 0.01% lift in business terms.",
+            }),
+          },
+          {
+            id: 'practical-significance-ht',
+            label: "Practical significance",
+            tooltip: tip({
+              short: "Ask if effect size matters for decisions.",
+              intuition: "Stats answer surprise, not ROI alone.",
+              trap: "Shipping because p<0.05 regardless of lift size.",
+            }),
+          },
+          {
+            id: 'not-causal-ht',
+            label: "Not causal by default",
+            tooltip: tip({
+              short: "Significance without randomization does not prove causation.",
+              intuition: "Confounding can create significant associations.",
+              trap: "Observational dashboard diffs as experiments.",
+            }),
+            lessonId: 'confounding-simpsons-paradox',
+          },
+          {
+            id: 'uncertainty-communication-ht',
+            label: "Communicate uncertainty",
+            tooltip: tip({
+              short: "Intervals and effect sizes beat binary yes/no.",
+              intuition: "Decision-makers need magnitude and wiggle.",
+              trap: "Hiding CI width in executive summaries.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'z-stat-ht',
+            label: "z statistic",
+            tooltip: tip({
+              short: "z = observed effect / SE.",
+              intuition: "Standardized surprise measure.",
+              formula: "z=\\frac{\\hat\\theta-\\theta_0}{\\mathrm{SE}(\\hat\\theta)}",
+              trap: "Using z when n small and σ unknown—t may apply.",
+            }),
+          },
+          {
+            id: 'se-mean-ht',
+            label: "SE of mean difference",
+            tooltip: tip({
+              short: "SE depends on variances and group sizes.",
+              intuition: "Pooled vs unpooled formulas differ.",
+              formula: "\\mathrm{SE}=\\sqrt{\\frac{s_1^2}{n_1}+\\frac{s_2^2}{n_2}}",
+              trap: "Equal-variance assumption unchecked.",
+            }),
+          },
+          {
+            id: 'pvalue-intuition-ht',
+            label: "p-value intuition",
+            tooltip: tip({
+              short: "Probability of statistic at least this extreme if H₀ true.",
+              intuition: "Not P(H₀ true | data).",
+              trap: "Inverse conditional probability fallacy.",
+            }),
+          },
+          {
+            id: 'ci-link-ht',
+            label: "CI link",
+            tooltip: tip({
+              short: "95% CI excludes null ↔ two-sided α=0.05 test in simple setups.",
+              intuition: "Interval shows plausible effect sizes.",
+              trap: "Over-generalizing equivalence beyond normal means.",
+            }),
+            lessonId: 'sampling-confidence-intervals',
+          },
+          {
+            id: 'simulate-null-ht',
+            label: "Simulate null",
+            tooltip: tip({
+              short: "Bootstrap or permutation builds null without formulas.",
+              intuition: "When assumptions are messy.",
+              code: "effects = [permute_test(data) for _ in range(B)]",
+              trap: "Permutation without exchangeability under H₀.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'pvalue-only-trap-ht',
+            label: "p-value only reporting",
+            tooltip: tip({
+              short: "Significance without effect size misleads.",
+              intuition: "Always pair with estimate and CI.",
+              trap: "“p=0.04 therefore big win”.",
+            }),
+          },
+          {
+            id: 'tiny-effect-trap-ht',
+            label: "Tiny effect huge n",
+            tooltip: tip({
+              short: "Massive samples detect trivial differences.",
+              intuition: "Statistical ≠ practical significance.",
+              trap: "Launching costly features for negligible lift.",
+            }),
+          },
+          {
+            id: 'multiple-testing-trap-ht',
+            label: "Multiple testing",
+            tooltip: tip({
+              short: "Many metrics → inflated false positives without correction.",
+              intuition: "First significant among 20 metrics is suspicious.",
+              trap: "Metric fishing until one passes.",
+            }),
+            lessonId: 'sequential-testing-peeking',
+          },
+          {
+            id: 'causal-leap-trap-ht',
+            label: "Causal leap",
+            tooltip: tip({
+              short: "Significant association ≠ treatment caused outcome.",
+              intuition: "Need design or assumptions for causality.",
+              trap: "Before-after without control.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'neg-result-trap-ht',
+            label: "Non-significant ≠ no effect",
+            tooltip: tip({
+              short: "Underpowered tests cannot distinguish small effects from zero.",
+              intuition: "Absence of evidence is not evidence of absence.",
+              trap: "Stopping experiment early with wide CI.",
+            }),
+            lessonId: 'power-sample-size',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'ab-testing-used-ht',
+            label: "A/B testing foundations",
+            tooltip: tip({
+              short: "Randomized experiments operationalize hypothesis tests.",
+              intuition: "Causal estimands with testing discipline.",
+              trap: "Peeking without alpha spending.",
+            }),
+            lessonId: 'ab-testing-foundations',
+          },
+          {
+            id: 'power-used-ht',
+            label: "Power & sample size",
+            tooltip: tip({
+              short: "Plan n to detect meaningful effects.",
+              intuition: "Connect MDE to test sensitivity.",
+              trap: "Post-hoc power misinterpretation.",
+            }),
+            lessonId: 'power-sample-size',
+          },
+          {
+            id: 'sequential-used-ht',
+            label: "Sequential testing",
+            tooltip: tip({
+              short: "Interim looks need adjusted boundaries.",
+              intuition: "Peeking inflates false positives.",
+              trap: "Stop when p<0.05 anytime.",
+            }),
+            lessonId: 'sequential-testing-peeking',
+          },
+          {
+            id: 'bayes-used-ht',
+            label: "Bayes rule in ML",
+            tooltip: tip({
+              short: "Alternative framing: update beliefs with evidence.",
+              intuition: "Frequentist vs Bayesian lenses coexist.",
+              trap: "Conflicting conclusions without clear framework.",
+            }),
+            lessonId: 'bayes-rule-ml',
+          },
+          {
+            id: 'classification-used-ht',
+            label: "Classification metrics",
+            tooltip: tip({
+              short: "Thresholded decisions relate to error types, not just p-values.",
+              intuition: "Business costs asymmetry.",
+              trap: "Accuracy-only decisions on imbalanced outcomes.",
+            }),
+            lessonId: 'classification-metrics',
+          },
+        ],
+      },
+    ],
+  },
+
+  'initialization': {
+    center: {
+      id: 'initialization',
+      label: "Initialization",
+      type: 'current',
+      tooltip: tip({
+        short: "Weight initialization sets starting scales so activations and gradients stay usable as signals pass through many layers.",
+        intuition: "Choose variance from fan-in/fan-out so layer outputs do not shrink to zero or explode before training updates help.",
+        why: "Bad initialization breaks deep training before data-driven learning can fix scale—ReLU nets favor He; tanh/sigmoid favor Xavier.",
+        trap: "Random initialization is not automatically safe; variance choice matters as much as randomness.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'linear-layer-prereq-init',
+            label: "Linear layer",
+            tooltip: tip({
+              short: "y = Wx + b transforms vectors each layer.",
+              intuition: "W scale multiplies signal magnitude.",
+              trap: "Ignoring bias init separate from weights.",
+            }),
+            lessonId: 'neural-network',
+          },
+          {
+            id: 'activation-prereq-init',
+            label: "Activation function",
+            tooltip: tip({
+              short: "ReLU, tanh, sigmoid change variance propagation rules.",
+              intuition: "He vs Xavier depends on nonlinearity.",
+              trap: "Xavier on deep ReLU without adjustment.",
+            }),
+            lessonId: 'relu',
+          },
+          {
+            id: 'fan-in-out-prereq-init',
+            label: "Fan-in and fan-out",
+            tooltip: tip({
+              short: "Count inputs to a neuron (fan-in) and outputs (fan-out).",
+              intuition: "More connections aggregate more terms.",
+              trap: "Using wrong fan count for conv layers.",
+            }),
+          },
+          {
+            id: 'variance-prereq-init',
+            label: "Variance propagation",
+            tooltip: tip({
+              short: "Var(output) relates to Var(input) and weight variance.",
+              intuition: "Keep variance stable layer to layer.",
+              trap: "Assuming mean zero is enough without variance control.",
+            }),
+          },
+          {
+            id: 'gradient-flow-prereq-init',
+            label: "Gradient flow",
+            tooltip: tip({
+              short: "Init affects backprop product magnitudes from the start.",
+              intuition: "Bad init causes immediate vanish/explode.",
+              trap: "Waiting for optimizer to fix broken initial scale.",
+            }),
+            lessonId: 'gradient-problems',
+          },
+          {
+            id: 'random-seed-prereq-init',
+            label: "Randomness",
+            tooltip: tip({
+              short: "Draw weights from zero-mean distributions.",
+              intuition: "Break symmetry so units differentiate.",
+              trap: "All-zero weights—no learning symmetry break.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'draw-weights-init',
+            label: "Draw initial weights",
+            tooltip: tip({
+              short: "Sample W ~ N(0, σ²) or uniform with chosen variance.",
+              intuition: "σ² set by fan-in/out rule.",
+              trap: "Fixed σ for every layer regardless of width.",
+            }),
+          },
+          {
+            id: 'xavier-rule-init',
+            label: "Xavier / Glorot",
+            tooltip: tip({
+              short: "Var(W) ≈ 2 / (fan_in + fan_out) for linear + tanh/sigmoid.",
+              intuition: "Balance forward and backward variance.",
+              trap: "Applying Xavier to ReLU stacks verbatim.",
+            }),
+          },
+          {
+            id: 'he-rule-init',
+            label: "He initialization",
+            tooltip: tip({
+              short: "Var(W) ≈ 2 / fan_in for ReLU (accounts for zeroing negatives).",
+              intuition: "Compensates ReLU halving variance.",
+              trap: "He init with sigmoid output layer unthinkingly.",
+            }),
+          },
+          {
+            id: 'forward-check-init',
+            label: "Forward activation check",
+            tooltip: tip({
+              short: "Monitor layer output std across depth at step 0.",
+              intuition: "Healthy stack keeps std ~ O(1).",
+              trap: "Only checking final output.",
+            }),
+          },
+          {
+            id: 'backward-check-init',
+            label: "Backward grad check",
+            tooltip: tip({
+              short: "Monitor grad norm per layer after one backward.",
+              intuition: "Catch vanish/explode before long training.",
+              trap: "Training 100 epochs with dead first layers.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'signal-highway-init',
+            label: "Signal highway",
+            tooltip: tip({
+              short: "Init sets traffic speed before green lights (updates) arrive.",
+              intuition: "Empty highway vs jam at start.",
+              trap: "Assuming SGD always finds scale eventually cheaply.",
+            }),
+          },
+          {
+            id: 'fan-in-intuition-init',
+            label: "More wires, more aggregation",
+            tooltip: tip({
+              short: "Large fan-in sums many terms—variance adds.",
+              intuition: "Shrink per-weight variance when fan-in grows.",
+              trap: "Same σ for width 64 and 4096 layers.",
+            }),
+          },
+          {
+            id: 'relu-halving-init',
+            label: "ReLU halves (roughly)",
+            tooltip: tip({
+              short: "Negative half zeroed → variance roughly halved each layer without fix.",
+              intuition: "He factor 2 in denominator compensates.",
+              trap: "Deep ReLU with Xavier shrinking to zero.",
+            }),
+          },
+          {
+            id: 'symmetry-break-init',
+            label: "Break symmetry",
+            tooltip: tip({
+              short: "Random init lets units learn different features.",
+              intuition: "Identical weights stay identical under GD.",
+              trap: "Zero init on hidden layers.",
+            }),
+          },
+          {
+            id: 'depth-amplifies-init',
+            label: "Depth amplifies mistakes",
+            tooltip: tip({
+              short: "Per-layer 10% shrink compounds to zero over 50 layers.",
+              intuition: "Init rules exist for depth.",
+              trap: "MNIST-scale init habits on 80-layer nets.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'xavier-formula-init',
+            label: "Xavier variance",
+            tooltip: tip({
+              short: "Var(W)=2/(n_in+n_out).",
+              intuition: "Uniform variant uses bounded range sqrt(6/(n_in+n_out)).",
+              formula: "\\mathrm{Var}(W)=\\frac{2}{n_{in}+n_{out}}",
+              trap: "Using n_out only in denominator.",
+            }),
+          },
+          {
+            id: 'he-formula-init',
+            label: "He variance",
+            tooltip: tip({
+              short: "Var(W)=2/n_in for ReLU.",
+              intuition: "Kaiming normal/uniform variants.",
+              formula: "\\mathrm{Var}(W)=\\frac{2}{n_{in}}",
+              trap: "He on final linear layer without checking activation.",
+            }),
+          },
+          {
+            id: 'pytorch-init-init',
+            label: "PyTorch init calls",
+            tooltip: tip({
+              short: "nn.init.kaiming_normal_, xavier_uniform_, etc.",
+              intuition: "Match nonlinearity argument.",
+              code: "nn.init.kaiming_normal_(layer.weight, nonlinearity=\"relu\")",
+              trap: "Default Linear init may not match activation.",
+            }),
+          },
+          {
+            id: 'bias-zero-init',
+            label: "Bias init",
+            tooltip: tip({
+              short: "Usually b=0 unless special cases (e.g., forget gate).",
+              intuition: "Offsets can shift saturation.",
+              trap: "Large random biases pushing all ReLU on.",
+            }),
+          },
+          {
+            id: 'gain-scalar-init',
+            label: "Gain parameter",
+            tooltip: tip({
+              short: "Some inits accept gain for leaky ReLU, tanh.",
+              intuition: "Adjusts effective variance for activation slope.",
+              trap: "Wrong gain for chosen activation.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'default-small-trap-init',
+            label: "Too small constants",
+            tooltip: tip({
+              short: "0.01 everywhere vanishes in deep ReLU.",
+              intuition: "Meant for shallow nets decades ago.",
+              trap: "Copying 2012 blog init into deep transformers without check.",
+            }),
+          },
+          {
+            id: 'xavier-relu-trap-init',
+            label: "Xavier on ReLU",
+            tooltip: tip({
+              short: "Undershoots variance; activations shrink with depth.",
+              intuition: "Use He for ReLU hidden layers.",
+              trap: "Vanishing activations blamed on data.",
+            }),
+          },
+          {
+            id: 'no-monitor-trap-init',
+            label: "No init diagnostics",
+            tooltip: tip({
+              short: "Train without checking activation/grad histograms at step 0.",
+              intuition: "One plot saves days.",
+              trap: "Hyperparam grid search with broken init.",
+            }),
+          },
+          {
+            id: 'transfer-trap-init',
+            label: "Wrong init on transfer",
+            tooltip: tip({
+              short: "Pretrained weights replace init—random init rules apply to fresh layers only.",
+              intuition: "New head layers still need proper scale.",
+              trap: "Random giant head on frozen backbone.",
+            }),
+            lessonId: 'fine-tuning',
+          },
+          {
+            id: 'norm-cure-all-trap-init',
+            label: "Norm fixes everything",
+            tooltip: tip({
+              short: "LayerNorm helps but does not replace thoughtful init.",
+              intuition: "Norm + bad init can still train poorly early.",
+              trap: "Skipping init because “we have LayerNorm”.",
+            }),
+            lessonId: 'layer-normalization',
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'grad-problems-used-init',
+            label: "Gradient problems",
+            tooltip: tip({
+              short: "Init sets starting point of product chain.",
+              intuition: "Vanish/explode diagnosis starts at step 0.",
+              trap: "Only clipping late in training.",
+            }),
+            lessonId: 'gradient-problems',
+          },
+          {
+            id: 'optimizers-used-init',
+            label: "Optimizers",
+            tooltip: tip({
+              short: "Adam step sizes interact with initial weight scale.",
+              intuition: "Tune LR relative to init magnitude.",
+              trap: "Huge LR compensating for bad init temporarily.",
+            }),
+            lessonId: 'optimizers',
+          },
+          {
+            id: 'training-loop-used-init',
+            label: "Training loop dynamics",
+            tooltip: tip({
+              short: "First-epoch loss spikes often trace to init/LR mismatch.",
+              intuition: "Healthy curves start stable.",
+              trap: "Ignoring first 100 steps.",
+            }),
+            lessonId: 'training-loop-dynamics',
+          },
+          {
+            id: 'dropout-bn-used-init',
+            label: "Dropout & BatchNorm",
+            tooltip: tip({
+              short: "BatchNorm stats depend on initial activation distribution.",
+              intuition: "Init affects early batch statistics.",
+              trap: "BatchNorm masking broken init briefly.",
+            }),
+            lessonId: 'dropout-batchnorm',
+          },
+          {
+            id: 'transformer-used-init',
+            label: "Transformer stacks",
+            tooltip: tip({
+              short: "Modern LLMs use careful init + norm + residuals.",
+              intuition: "Init rules extend to attention projections.",
+              trap: "Treating transformer blocks like shallow MLP init folklore.",
+            }),
+            lessonId: 'transformer',
+          },
+        ],
+      },
+    ],
+  },
+
+  'joint-attention': {
+    center: {
+      id: 'joint-attention',
+      label: "Joint Attention",
+      type: 'current',
+      tooltip: tip({
+        short: "Joint attention lets tokens from different modalities—image patches and text tokens—attend to each other in one shared score matrix, mixing visual and linguistic context.",
+        intuition: "Each position asks a question; keys and values can come from either modality, so a caption token can read relevant pixels and vice versa.",
+        formula: "Attention(Q,K,V)=softmax(QK^T/\\sqrt{d_k})V",
+        why: "Joint attention powers vision-language models, multimodal LLMs, and cross-modal fusion where alignment between text and image regions matters.",
+        trap: "Joint attention can over-mix irrelevant cross-modal pairs if alignment or masking is weak.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'self-attention-ja',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Each token scores all keys and mixes values.",
+              intuition: "Joint attention extends the same Q/K/V pattern across modalities.",
+              trap: "Self-attention alone does not fuse separate encoders without shared layers.",
+              lessonId: "self-attention",
+            }),
+          },
+          {
+            id: 'embeddings-ja',
+            label: "Embeddings",
+            tooltip: tip({
+              short: "Text and image patches start as vectors in a shared dimension.",
+              intuition: "Projections map each modality into one attention space.",
+              trap: "Mismatched embedding dims break Q/K/V alignment.",
+              lessonId: "embeddings",
+            }),
+          },
+          {
+            id: 'linear-projections-ja',
+            label: "Q / K / V projections",
+            tooltip: tip({
+              short: "Learned matrices create query, key, and value views.",
+              intuition: "Same token can ask, be searched, and carry information.",
+              trap: "Sharing weights across modalities can blur specialized features.",
+            }),
+          },
+          {
+            id: 'softmax-ja',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Scores become nonnegative weights summing to 1 per query row.",
+              intuition: "Each query distributes attention budget across all visible keys.",
+              trap: "One huge score steals weight from every other key.",
+              lessonId: "softmax",
+            }),
+          },
+          {
+            id: 'attention-masks-ja',
+            label: "Attention masks",
+            tooltip: tip({
+              short: "Masks block illegal query-key pairs before softmax.",
+              intuition: "Padding, causal, or modality-specific visibility rules apply.",
+              trap: "Wrong mask lets text peek at future tokens or padded slots.",
+              lessonId: "attention-masks",
+            }),
+          },
+          {
+            id: 'positional-encoding-ja',
+            label: "Positional encoding",
+            tooltip: tip({
+              short: "Order information is added to patch and token embeddings.",
+              intuition: "Spatial layout and text order both affect which keys match.",
+              trap: "Permuting patches or tokens changes attention patterns.",
+              lessonId: "positional-encoding",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'unified-sequence-ja',
+            label: "Unified token sequence",
+            tooltip: tip({
+              short: "Concatenate image patches and text tokens into one sequence.",
+              intuition: "Attention runs over the combined length n_image + n_text.",
+              trap: "Different sequence lengths change memory and compute cost.",
+            }),
+          },
+          {
+            id: 'cross-modal-scores-ja',
+            label: "Cross-modal scores",
+            tooltip: tip({
+              short: "Text queries can score image keys and image queries can score text keys.",
+              intuition: "Off-diagonal blocks of the score matrix are cross-modal links.",
+              trap: "Treating modalities as isolated blocks defeats joint fusion.",
+            }),
+          },
+          {
+            id: 'within-modal-scores-ja',
+            label: "Within-modal scores",
+            tooltip: tip({
+              short: "Text-to-text and image-to-image attention still occur.",
+              intuition: "Local context within each modality is preserved.",
+              trap: "Over-strong cross-modal weights can ignore within-modal context.",
+            }),
+          },
+          {
+            id: 'weighted-value-mix-ja',
+            label: "Weighted value mix",
+            tooltip: tip({
+              short: "Output is a convex combination of value vectors from all attended keys.",
+              intuition: "High-weight keys pull their value information into the query output.",
+              trap: "Values from wrong modality can dominate if alignment is poor.",
+            }),
+          },
+          {
+            id: 'multi-head-ja',
+            label: "Multi-head attention",
+            tooltip: tip({
+              short: "Several heads run parallel attention with split dimensions.",
+              intuition: "One head may track objects; another tracks syntax.",
+              trap: "Too few heads collapse diverse alignment patterns.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'caption-to-region-ja',
+            label: "Caption reads regions",
+            tooltip: tip({
+              short: "Word “dog” may attend strongly to dog-shaped patches.",
+              intuition: "Language grounds in visual evidence through attention weights.",
+              trap: "High weight does not prove causal importance or correctness.",
+            }),
+          },
+          {
+            id: 'region-to-word-ja',
+            label: "Regions read words",
+            tooltip: tip({
+              short: "Visual tokens can attend to descriptive text for disambiguation.",
+              intuition: "Text can resolve which object is “the small one”.",
+              trap: "Ambiguous captions can misdirect visual attention.",
+            }),
+          },
+          {
+            id: 'shared-workspace-ja',
+            label: "Shared workspace",
+            tooltip: tip({
+              short: "One attention layer is a meeting room for modalities.",
+              intuition: "Information exchange happens before downstream heads decide.",
+              trap: "Early fusion differs from late fusion via separate encoders only.",
+            }),
+          },
+          {
+            id: 'alignment-intuition-ja',
+            label: "Soft alignment",
+            tooltip: tip({
+              short: "Attention implements differentiable soft matching between tokens and patches.",
+              intuition: "Hard object boxes are not required for cross-modal links.",
+              trap: "Soft alignment can latch onto spurious correlations.",
+            }),
+          },
+          {
+            id: 'modality-gap-ja',
+            label: "Modality gap",
+            tooltip: tip({
+              short: "Raw image and text embeddings live in different statistical regimes.",
+              intuition: "Training aligns them so dot products become meaningful.",
+              trap: "Frozen unaligned encoders weaken joint attention.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'score-formula-ja',
+            label: "Attention formula",
+            tooltip: tip({
+              short: "scores = QK^T / sqrt(d_k); weights = softmax(scores); out = weights V.",
+              intuition: "Same math as self-attention on a longer concatenated sequence.",
+              formula: "softmax(QK^T/\\sqrt{d_k})V",
+              trap: "Forgetting scaling lets softmax saturate on one key.",
+            }),
+          },
+          {
+            id: 'concat-layout-ja',
+            label: "Sequence layout",
+            tooltip: tip({
+              short: "[image_tokens; text_tokens] or interleaved layouts vary by architecture.",
+              intuition: "Order affects which keys are nearby in the matrix.",
+              code: "x = concat(image_embeds, text_embeds, dim=1)",
+              trap: "Layout choice is not interchangeable across model families.",
+            }),
+          },
+          {
+            id: 'cross-block-ja',
+            label: "Cross-modal block",
+            tooltip: tip({
+              short: "Text row i attending image column j is score[i][j] in the cross block.",
+              intuition: "Inspect off-diagonal blocks to debug grounding.",
+              trap: "Averaging all weights hides sparse useful peaks.",
+            }),
+          },
+          {
+            id: 'mask-code-ja',
+            label: "Mask application",
+            tooltip: tip({
+              short: "Add large negative values to blocked score cells before softmax.",
+              intuition: "Padding and causal rules apply per query row.",
+              code: "scores = scores.masked_fill(mask == 0, -1e9)",
+              trap: "Mask dtype or shape bugs leak forbidden connections.",
+            }),
+          },
+          {
+            id: 'layer-stack-ja',
+            label: "Stacked layers",
+            tooltip: tip({
+              short: "Repeat joint attention blocks with MLP and residuals.",
+              intuition: "Deeper stacks refine cross-modal bindings.",
+              trap: "One shallow joint layer may not align fine details.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'importance-trap-ja',
+            label: "Attention ≠ importance",
+            tooltip: tip({
+              short: "High cross-modal weight is not a certified causal attribution.",
+              intuition: "Weights are contextual mixtures, not ground truth.",
+              trap: "Using attention maps alone as explanation or safety proof.",
+            }),
+          },
+          {
+            id: 'spurious-alignment-trap-ja',
+            label: "Spurious alignment",
+            tooltip: tip({
+              short: "Models can align text to wrong regions that correlate in training.",
+              intuition: "Background cues can steal attention from objects.",
+              trap: "Assuming joint attention always finds the correct object.",
+            }),
+          },
+          {
+            id: 'modality-collapse-trap-ja',
+            label: "Modality collapse",
+            tooltip: tip({
+              short: "One modality can dominate value mixing if scales differ.",
+              intuition: "Normalization and balanced losses help both modalities speak.",
+              trap: "Text-heavy pretraining can ignore weak visual gradients.",
+            }),
+          },
+          {
+            id: 'length-trap-ja',
+            label: "Quadratic cost",
+            tooltip: tip({
+              short: "Full joint attention is O((n_img + n_txt)^2) in sequence length.",
+              intuition: "High-resolution images explode memory.",
+              trap: "Deploying full joint attention on long multimodal contexts without compression.",
+            }),
+          },
+          {
+            id: 'frozen-encoder-trap-ja',
+            label: "Frozen encoder trap",
+            tooltip: tip({
+              short: "Frozen vision backbones limit what joint layers can align.",
+              intuition: "End-to-end tuning often improves cross-modal scores.",
+              trap: "Expecting perfect grounding with mismatched frozen features.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'multimodal-llm-ja',
+            label: "Multimodal LLM",
+            tooltip: tip({
+              short: "Modern VLMs stack joint or cross-attention fusion layers.",
+              intuition: "Same principle scales to video, audio, and documents.",
+              trap: "Architecture names differ but fusion problem remains.",
+              lessonId: "multimodal-llm",
+            }),
+          },
+          {
+            id: 'rag-multimodal-ja',
+            label: "Multimodal RAG",
+            tooltip: tip({
+              short: "Retrieved images and text both enter the joint sequence.",
+              intuition: "Attention decides which evidence supports the answer.",
+              trap: "Irrelevant retrieved images can hijack attention.",
+              lessonId: "rag",
+            }),
+          },
+          {
+            id: 'transformer-ja',
+            label: "Transformer",
+            tooltip: tip({
+              short: "Joint attention is one block inside the transformer recipe.",
+              intuition: "Residuals, LayerNorm, and MLPs surround attention.",
+              trap: "Attention alone is not the full multimodal stack.",
+              lessonId: "transformer",
+            }),
+          },
+          {
+            id: 'flash-attention-ja',
+            label: "Flash Attention",
+            tooltip: tip({
+              short: "Tiled exact attention reduces memory for long joint sequences.",
+              intuition: "Implementation trick; math unchanged.",
+              trap: "Flash Attention does not fix bad cross-modal alignment.",
+              lessonId: "flash-attention",
+            }),
+          },
+          {
+            id: 'self-attention-used-ja',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Unimodal stacks reuse the same attention primitive.",
+              intuition: "Joint attention generalizes self-attention across modalities.",
+              trap: "Confusing cross-attention-only encoders with full joint fusion.",
+              lessonId: "self-attention",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'k-means': {
+    center: {
+      id: 'k-means',
+      label: "K-Means Clustering",
+      type: 'current',
+      tooltip: tip({
+        short: "K-means partitions unlabeled points into k clusters by alternating assignment to nearest centroids and recomputing each centroid as the cluster mean.",
+        intuition: "Centroids act like magnets—points join the closest one, then each magnet moves to the average of its group.",
+        formula: "\\min_C \\sum_i \\lVert x_i - c_{a_i}\\rVert^2",
+        why: "K-means is a fast baseline for clustering, customer segmentation, embedding visualization, and initialization for deeper models.",
+        trap: "Lower inertia from larger k does not automatically mean a better or interpretable clustering.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'vector-km',
+            label: "Vector",
+            tooltip: tip({
+              short: "Each data point is a numeric vector in feature space.",
+              intuition: "Distance is computed coordinate-wise.",
+              trap: "Categorical features need encoding before k-means.",
+              lessonId: "embeddings",
+            }),
+          },
+          {
+            id: 'euclidean-km',
+            label: "Euclidean distance",
+            tooltip: tip({
+              short: "Default metric is squared L2 distance to centroids.",
+              intuition: "Nearest centroid wins the point.",
+              trap: "Unscaled features make large-scale dimensions dominate.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+          {
+            id: 'mean-km',
+            label: "Mean",
+            tooltip: tip({
+              short: "Centroid update averages all assigned points.",
+              intuition: "The mean minimizes sum of squared distances within the cluster.",
+              trap: "Outliers pull centroids away from the bulk of the cluster.",
+            }),
+          },
+          {
+            id: 'unsupervised-km',
+            label: "Unsupervised learning",
+            tooltip: tip({
+              short: "No labels—structure is inferred from geometry alone.",
+              intuition: "Clusters are hypotheses about groupings.",
+              trap: "Clusters are not guaranteed to match human categories.",
+            }),
+          },
+          {
+            id: 'k-hyperparam-km',
+            label: "Choice of k",
+            tooltip: tip({
+              short: "k is set before running the algorithm.",
+              intuition: "Different k values yield different partitions.",
+              trap: "There is no universal correct k without domain goals.",
+            }),
+          },
+          {
+            id: 'inertia-km',
+            label: "Inertia",
+            tooltip: tip({
+              short: "Sum of squared distances from points to their assigned centroids.",
+              intuition: "Inertia decreases as k increases.",
+              trap: "Inertia alone cannot pick k—you need elbow or domain judgment.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'init-centroids-km',
+            label: "Initialize centroids",
+            tooltip: tip({
+              short: "Pick k starting centers—random points or k-means++.",
+              intuition: "Bad starts can trap the algorithm in poor local minima.",
+              trap: "Single random restart may yield unstable clusters.",
+            }),
+          },
+          {
+            id: 'assign-step-km',
+            label: "Assignment step",
+            tooltip: tip({
+              short: "Each point joins the nearest centroid.",
+              intuition: "Hard assignment: every point belongs to exactly one cluster.",
+              trap: "Ties in distance require a consistent tie-break rule.",
+            }),
+          },
+          {
+            id: 'update-step-km',
+            label: "Update step",
+            tooltip: tip({
+              short: "Recompute each centroid as the mean of its assigned points.",
+              intuition: "Empty clusters need reinitialization or removal.",
+              trap: "An empty cluster leaves a centroid with no data support.",
+            }),
+          },
+          {
+            id: 'iterate-km',
+            label: "Iterate until convergence",
+            tooltip: tip({
+              short: "Repeat assign and update until assignments stop changing.",
+              intuition: "Each iteration lowers or maintains inertia.",
+              trap: "Convergence to a local minimum, not global optimum.",
+            }),
+          },
+          {
+            id: 'multiple-restarts-km',
+            label: "Multiple restarts",
+            tooltip: tip({
+              short: "Run k-means several times with different seeds; keep best inertia.",
+              intuition: "Reduces sensitivity to unlucky initialization.",
+              trap: "Still no guarantee of globally optimal partition.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'magnets-km',
+            label: "Magnets picture",
+            tooltip: tip({
+              short: "Centroids pull points; points pull centroids toward their mass.",
+              intuition: "The dance stops at a stable assignment.",
+              trap: "Stable does not mean semantically meaningful.",
+            }),
+          },
+          {
+            id: 'voronoi-km',
+            label: "Voronoi regions",
+            tooltip: tip({
+              short: "Each centroid owns the region of points closest to it.",
+              intuition: "Cluster boundaries are hyperplanes between centroids.",
+              trap: "Boundaries are axis-aligned only in distance geometry, not feature importance.",
+            }),
+          },
+          {
+            id: 'spherical-km',
+            label: "Spherical clusters",
+            tooltip: tip({
+              short: "K-means prefers roughly equal-variance blob-shaped groups.",
+              intuition: "Elongated or nested shapes are a poor fit.",
+              trap: "Forcing k-means on crescent moons yields awkward splits.",
+            }),
+          },
+          {
+            id: 'scale-intuition-km',
+            label: "Feature scale",
+            tooltip: tip({
+              short: "Large-magnitude features dominate distance.",
+              intuition: "Standardize when units differ.",
+              trap: "Clustering raw income and age without scaling.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+          {
+            id: 'elbow-km',
+            label: "Elbow intuition",
+            tooltip: tip({
+              short: "Plot inertia vs k; look for diminishing returns.",
+              intuition: "Elbow is a heuristic, not a theorem.",
+              trap: "Elbows are often subjective on real data.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'objective-km',
+            label: "Objective",
+            tooltip: tip({
+              short: "Minimize sum of squared distances to assigned centroids.",
+              intuition: "Assignment and mean update greedily reduce this objective.",
+              formula: "J=\\sum_{i=1}^{n}\\lVert x_i-c_{a_i}\\rVert^2",
+              trap: "Objective value depends on scaling of x.",
+            }),
+          },
+          {
+            id: 'assign-formula-km',
+            label: "Assignment rule",
+            tooltip: tip({
+              short: "a_i = argmin_j ||x_i - c_j||^2.",
+              intuition: "Each point picks the closest center.",
+              trap: "Using L1 distance changes the algorithm entirely.",
+            }),
+          },
+          {
+            id: 'update-formula-km',
+            label: "Centroid update",
+            tooltip: tip({
+              short: "c_j = mean of all x_i with a_i = j.",
+              intuition: "Mean is the L2 minimizer for fixed assignments.",
+              trap: "Empty cluster breaks the mean formula.",
+            }),
+          },
+          {
+            id: 'sklearn-km',
+            label: "sklearn sketch",
+            tooltip: tip({
+              short: "KMeans(n_clusters=k, n_init=10).fit(X).",
+              intuition: "Library handles restarts and empty-cluster handling.",
+              code: "from sklearn.cluster import KMeans\nkm = KMeans(n_clusters=3, n_init=10).fit(X)",
+              trap: "Forgetting to scale X before clustering.",
+            }),
+          },
+          {
+            id: 'inertia-code-km',
+            label: "Inertia check",
+            tooltip: tip({
+              short: "km.inertia_ reports final within-cluster sum of squares.",
+              intuition: "Compare across restarts with same k.",
+              trap: "Comparing inertia across different k without context.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'k-too-large-km',
+            label: "k too large",
+            tooltip: tip({
+              short: "Every point can become its own cluster when k = n.",
+              intuition: "Inertia goes to zero but structure is lost.",
+              trap: "Chasing zero inertia with huge k.",
+            }),
+          },
+          {
+            id: 'local-min-km',
+            label: "Local minima",
+            tooltip: tip({
+              short: "Different seeds yield different partitions.",
+              intuition: "Always compare multiple restarts.",
+              trap: "Trusting one run without checking stability.",
+            }),
+          },
+          {
+            id: 'non-spherical-km',
+            label: "Non-spherical data",
+            tooltip: tip({
+              short: "K-means splits elongated clusters awkwardly.",
+              intuition: "Use spectral, GMM, or density methods when shapes differ.",
+              trap: "Forcing k-means on clearly non-convex manifolds.",
+            }),
+          },
+          {
+            id: 'outlier-trap-km',
+            label: "Outliers",
+            tooltip: tip({
+              short: "Outliers distort centroids and assignments.",
+              intuition: "Robust clustering or trimming may help.",
+              trap: "One bad point can define a whole cluster.",
+            }),
+          },
+          {
+            id: 'label-confusion-km',
+            label: "Clusters ≠ classes",
+            tooltip: tip({
+              short: "Unsupervised groups need not align with true labels.",
+              intuition: "Evaluate with domain sense, not only silhouette scores.",
+              trap: "Assuming cluster id maps to ground-truth category.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'pca-km',
+            label: "PCA",
+            tooltip: tip({
+              short: "Reduce dimension before clustering high-D embeddings.",
+              intuition: "Cluster in a variance-preserving subspace.",
+              trap: "PCA removes signal along low-variance but predictive directions.",
+              lessonId: "pca",
+            }),
+          },
+          {
+            id: 'feature-scaling-km',
+            label: "Feature scaling",
+            tooltip: tip({
+              short: "Standardize features so distance is fair across columns.",
+              intuition: "Preprocessing is part of the clustering pipeline.",
+              trap: "Fitting scaler on test data leaks information.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+          {
+            id: 'model-debugging-km',
+            label: "Model debugging",
+            tooltip: tip({
+              short: "Cluster embedding errors or users to find failure modes.",
+              intuition: "Exploratory clustering supports ML ops workflows.",
+              trap: "Treating exploratory clusters as production labels.",
+              lessonId: "model-debugging",
+            }),
+          },
+          {
+            id: 'recommender-km',
+            label: "Recommender systems",
+            tooltip: tip({
+              short: "User/item segmentation often starts with centroid clustering.",
+              intuition: "Centroids summarize behavior prototypes.",
+              trap: "Cold-start users do not sit near any centroid.",
+              lessonId: "recommender-systems-ranking-track",
+            }),
+          },
+          {
+            id: 'gmm-later-km',
+            label: "Mixture models",
+            tooltip: tip({
+              short: "Soft assignments generalize hard k-means partitions.",
+              intuition: "Gaussian mixtures allow elliptical clusters.",
+              trap: "Assuming k-means outputs are probabilities.",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'knn-naive-bayes-svm': {
+    center: {
+      id: 'knn-naive-bayes-svm',
+      label: "kNN, Naive Bayes, and SVM",
+      type: 'current',
+      tooltip: tip({
+        short: "Three classic classifiers: kNN votes from local neighbors, Naive Bayes multiplies class-conditional feature likelihoods under independence, and SVM finds a maximum-margin separating hyperplane.",
+        intuition: "Same feature space, three different bets—local geometry, probabilistic independence, or global margin geometry.",
+        formula: "\\hat{y}=\\mathrm{vote}_k(x)\\;|\\;\\arg\\max_y p(y)\\prod_j p(x_j|y)\\;|\\;\\mathrm{sign}(w^Tx+b)",
+        why: "These models remain strong baselines, teaching assumptions, and components in ensembles and text pipelines.",
+        trap: "They are not plug-compatible—scaling, independence, and margin geometry each change when a model wins.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'vector-knbs',
+            label: "Feature vectors",
+            tooltip: tip({
+              short: "Each example is a point in feature space.",
+              intuition: "Distance, likelihood, and margin all read the same coordinates.",
+              trap: "Mixed feature types need encoding first.",
+            }),
+          },
+          {
+            id: 'classification-knbs',
+            label: "Classification",
+            tooltip: tip({
+              short: "Predict a discrete label from inputs.",
+              intuition: "Each model outputs class scores differently.",
+              trap: "Regression variants exist but this lesson focuses on labels.",
+              lessonId: "logistic-regression",
+            }),
+          },
+          {
+            id: 'distance-knbs',
+            label: "Distance",
+            tooltip: tip({
+              short: "kNN relies on how far query points are from stored examples.",
+              intuition: "Nearest neighbors dominate the vote.",
+              trap: "Unscaled features distort neighbor search.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+          {
+            id: 'probability-knbs',
+            label: "Probability",
+            tooltip: tip({
+              short: "Naive Bayes outputs class posteriors from priors and likelihoods.",
+              intuition: "Bayes rule combines evidence with base rates.",
+              trap: "Independence assumption is almost always approximate.",
+              lessonId: "bayes-rule-ml",
+            }),
+          },
+          {
+            id: 'hyperplane-knbs',
+            label: "Hyperplane",
+            tooltip: tip({
+              short: "SVM separates classes with a linear boundary w·x + b = 0.",
+              intuition: "Support vectors anchor the margin.",
+              trap: "Linear boundary fails when classes are not linearly separable without kernels.",
+            }),
+          },
+          {
+            id: 'train-test-knbs',
+            label: "Train / test split",
+            tooltip: tip({
+              short: "kNN stores training points; others learn parameters on train.",
+              intuition: "Evaluation must be on held-out data.",
+              trap: "kNN “memorizes” train set—test leakage inflates scores.",
+              lessonId: "train-validation-test-split",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'knn-vote-knbs',
+            label: "kNN voting",
+            tooltip: tip({
+              short: "Find k closest training points; majority label wins.",
+              intuition: "Small k is flexible; large k is smoother.",
+              trap: "Even k ties need a tie-break rule.",
+            }),
+          },
+          {
+            id: 'nb-likelihood-knbs',
+            label: "Naive Bayes likelihood",
+            tooltip: tip({
+              short: "Multiply P(x_j|y) across features assuming independence given y.",
+              intuition: "Log domain prevents numeric underflow.",
+              formula: "\\hat{y}=\\arg\\max_y \\log p(y)+\\sum_j \\log p(x_j|y)",
+              trap: "Zero likelihoods from unseen feature values.",
+            }),
+          },
+          {
+            id: 'nb-variants-knbs',
+            label: "NB variants",
+            tooltip: tip({
+              short: "Gaussian for continuous; multinomial for counts; Bernoulli for binary.",
+              intuition: "Pick the likelihood model matching feature type.",
+              trap: "Using Bernoulli NB on raw word counts.",
+            }),
+          },
+          {
+            id: 'svm-margin-knbs',
+            label: "Maximum margin",
+            tooltip: tip({
+              short: "Choose w,b that maximize distance to nearest points of each class.",
+              intuition: "Support vectors lie on the margin boundary.",
+              formula: "\\min \\frac{1}{2}\\lVert w\\rVert^2 \\text{ s.t. } y_i(w^Tx_i+b)\\geq 1",
+              trap: "Outliers can dominate the margin without slack.",
+            }),
+          },
+          {
+            id: 'svm-kernel-knbs',
+            label: "Kernel trick",
+            tooltip: tip({
+              short: "Implicitly map x to higher dimensions where separation is easier.",
+              intuition: "K(x,x') replaces dot products in feature space.",
+              trap: "Wrong kernel or gamma overfits small data.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'local-vs-global-knbs',
+            label: "Local vs global",
+            tooltip: tip({
+              short: "kNN is local; linear SVM is global; NB is generative per class.",
+              intuition: "Disagreement on a query reveals assumption mismatch.",
+              trap: "Picking the winner on one point without task context.",
+            }),
+          },
+          {
+            id: 'curse-dim-knbs',
+            label: "Curse of dimensionality",
+            tooltip: tip({
+              short: "In high dimensions all points look equally far—kNN suffers.",
+              intuition: "Distance concentration hurts neighbor meaning.",
+              trap: "Applying kNN to raw high-dimensional text without reduction.",
+            }),
+          },
+          {
+            id: 'nb-sparsity-knbs',
+            label: "NB for text",
+            tooltip: tip({
+              short: "Word counts with multinomial NB remain strong spam baselines.",
+              intuition: "Independence is wrong but often good enough.",
+              trap: "Ignoring stopwords and smoothing still hurts.",
+            }),
+          },
+          {
+            id: 'svm-support-knbs',
+            label: "Support vectors",
+            tooltip: tip({
+              short: "Only border points matter for the SVM boundary.",
+              intuition: "Interior points could be removed without changing the margin.",
+              trap: "Assuming all training points equally influence SVM.",
+            }),
+          },
+          {
+            id: 'scale-intuition-knbs',
+            label: "Scaling matters",
+            tooltip: tip({
+              short: "kNN and SVM with RBF kernels need comparable feature scales.",
+              intuition: "One large column dominates distance or margin.",
+              trap: "Training SVM on unscaled mixed-unit data.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'knn-formula-knbs',
+            label: "kNN rule",
+            tooltip: tip({
+              short: "ŷ = mode of labels among k nearest training points.",
+              intuition: "Distance metric defines “nearest”.",
+              trap: "L2 on unscaled data is not neutral.",
+            }),
+          },
+          {
+            id: 'nb-log-formula-knbs',
+            label: "Log NB score",
+            tooltip: tip({
+              short: "score(y) = log p(y) + Σ_j log p(x_j|y).",
+              intuition: "Argmax over y picks the class.",
+              trap: "Forgetting Laplace smoothing on zeros.",
+            }),
+          },
+          {
+            id: 'svm-hinge-knbs',
+            label: "Hinge loss view",
+            tooltip: tip({
+              short: "Soft-margin SVM penalizes margin violations.",
+              intuition: "C trades margin width vs misclassification.",
+              trap: "Huge C overfits noise; tiny C underfits.",
+            }),
+          },
+          {
+            id: 'sklearn-knn-knbs',
+            label: "sklearn kNN",
+            tooltip: tip({
+              short: "KNeighborsClassifier(n_neighbors=k).fit(X,y).",
+              intuition: "Each prediction looks up the k nearest training rows in feature space and votes by label.",
+              code: "from sklearn.neighbors import KNeighborsClassifier\nclf = KNeighborsClassifier(n_neighbors=5).fit(X, y)",
+              trap: "Not scaling X before neighbors.",
+            }),
+          },
+          {
+            id: 'sklearn-svm-knbs',
+            label: "sklearn SVM",
+            tooltip: tip({
+              short: "SVC(kernel=\"rbf\", C=1.0, gamma=\"scale\").",
+              intuition: "The RBF kernel measures similarity in a lifted space; C trades margin width against slack violations.",
+              code: "from sklearn.svm import SVC\nclf = SVC(kernel=\"rbf\").fit(X, y)",
+              trap: "Grid search on test set instead of validation.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'knn-storage-knbs',
+            label: "kNN storage cost",
+            tooltip: tip({
+              short: "Prediction scans or indexes the entire training set.",
+              intuition: "Latency grows with train size.",
+              trap: "Deploying kNN on millions of points without ANN index.",
+            }),
+          },
+          {
+            id: 'nb-independence-knbs',
+            label: "Independence violation",
+            tooltip: tip({
+              short: "Correlated features double-count evidence in NB.",
+              intuition: "Still works surprisingly often for text.",
+              trap: "Treating NB probabilities as well calibrated.",
+              lessonId: "calibration",
+            }),
+          },
+          {
+            id: 'svm-slow-knbs',
+            label: "SVM scale",
+            tooltip: tip({
+              short: "Kernel SVM training can be slow on large n.",
+              intuition: "Linear SVM or deep models may scale better.",
+              trap: "Default RBF SVM on 1M rows without approximation.",
+            }),
+          },
+          {
+            id: 'class-imbalance-knbs',
+            label: "Class imbalance",
+            tooltip: tip({
+              short: "Majority class wins kNN votes and NB priors.",
+              intuition: "Class weights or resampling may be needed.",
+              trap: "Reporting accuracy alone on imbalanced data.",
+              lessonId: "classification-metrics",
+            }),
+          },
+          {
+            id: 'data-leakage-knbs',
+            label: "Leakage in kNN",
+            tooltip: tip({
+              short: "Duplicates in train and test make neighbors cheat.",
+              intuition: "Near duplicates inflate kNN accuracy.",
+              trap: "Random split when users or documents repeat.",
+              lessonId: "data-leakage-deep-dive",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'classification-metrics-knbs',
+            label: "Classification metrics",
+            tooltip: tip({
+              short: "Precision, recall, and F1 evaluate these classifiers beyond accuracy.",
+              intuition: "Threshold-free scores differ by model.",
+              trap: "One metric hides expensive false negatives.",
+              lessonId: "classification-metrics",
+            }),
+          },
+          {
+            id: 'roc-pr-knbs',
+            label: "ROC / PR curves",
+            tooltip: tip({
+              short: "Score-ranked evaluation compares models across thresholds.",
+              intuition: "SVM and NB produce scores; kNN can use neighbor vote fractions.",
+              trap: "Using ROC alone when positives are rare.",
+              lessonId: "roc-pr-curves",
+            }),
+          },
+          {
+            id: 'regularization-knbs',
+            label: "Regularization",
+            tooltip: tip({
+              short: "Modern linear models use penalized logistic regression instead of plain linear SVM in many pipelines.",
+              intuition: "C in SVM plays a similar role to inverse λ.",
+              trap: "Assuming regularization removes need for scaling.",
+              lessonId: "regularization",
+            }),
+          },
+          {
+            id: 'tree-ensembles-knbs',
+            label: "Tree ensembles",
+            tooltip: tip({
+              short: "Nonlinear boundaries without explicit kernels or neighbors.",
+              intuition: "Compare classic baselines before jumping to forests.",
+              trap: "Skipping simple baselines on tabular data.",
+              lessonId: "tree-ensembles",
+            }),
+          },
+          {
+            id: 'embeddings-knbs',
+            label: "Embeddings",
+            tooltip: tip({
+              short: "kNN retrieval in embedding space powers RAG and recommenders.",
+              intuition: "Neighbor search returns semantically similar items.",
+              trap: "Cosine neighbors are not guaranteed truth.",
+              lessonId: "embeddings",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'kv-cache': {
+    center: {
+      id: 'kv-cache',
+      label: "KV Cache",
+      type: 'current',
+      tooltip: tip({
+        short: "The KV cache stores previously computed key and value vectors during autoregressive decoding so each new token only projects fresh K/V and attends over cached history.",
+        intuition: "Old tokens keep the same keys and values—only the new token adds rows; queries still attend over the full visible context.",
+        formula: "K_{cache}, V_{cache} \\leftarrow [K_{old}, K_t], [V_{old}, V_t]",
+        why: "KV caching is essential for fast LLM inference, cutting redundant computation from quadratic reprojection to incremental appends.",
+        trap: "The cache does not skip attention—it skips repeated K/V projection for previous tokens.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'self-attention-kvc',
+            label: "Self-attention",
+            tooltip: tip({
+              short: "Attention mixes values using query-key scores.",
+              intuition: "Cache stores K and V from past steps.",
+              trap: "Confusing cache with skipping attention entirely.",
+              lessonId: "self-attention",
+            }),
+          },
+          {
+            id: 'token-generation-kvc',
+            label: "Token generation loop",
+            tooltip: tip({
+              short: "Generate one token, append, repeat.",
+              intuition: "Each step adds one new query position.",
+              trap: "Batch prefills differ from single-token decode steps.",
+              lessonId: "transformer-token-generation",
+            }),
+          },
+          {
+            id: 'qkv-projections-kvc',
+            label: "Q / K / V projections",
+            tooltip: tip({
+              short: "Linear maps create query, key, and value vectors per token.",
+              intuition: "Only the newest token needs new projections each decode step.",
+              trap: "Reprojecting all history every step wastes compute.",
+            }),
+          },
+          {
+            id: 'causal-mask-kvc',
+            label: "Causal mask",
+            tooltip: tip({
+              short: "Decoder queries may not attend to future tokens.",
+              intuition: "Cache grows with past tokens only.",
+              trap: "Bidirectional caches differ from autoregressive caches.",
+              lessonId: "attention-masks",
+            }),
+          },
+          {
+            id: 'multi-head-kvc',
+            label: "Multi-head attention",
+            tooltip: tip({
+              short: "Each head has its own K/V tensors in the cache.",
+              intuition: "Memory scales with num_heads × context × head_dim.",
+              trap: "Forgetting head dimension when estimating memory.",
+            }),
+          },
+          {
+            id: 'softmax-kvc',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Current query scores all cached keys then mixes values.",
+              intuition: "Attention math is unchanged—inputs are cached.",
+              trap: "Assuming softmax disappears with caching.",
+              lessonId: "softmax",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'prefill-kvc',
+            label: "Prefill phase",
+            tooltip: tip({
+              short: "Process the prompt in parallel; fill cache with all prompt K/V.",
+              intuition: "Prefill is compute-heavy but runs once per sequence.",
+              trap: "Treating long prefill like many decode steps for latency planning.",
+            }),
+          },
+          {
+            id: 'decode-step-kvc',
+            label: "Decode step",
+            tooltip: tip({
+              short: "Append one token; compute Q,K,V for it; extend cache.",
+              intuition: "Attention reads full cached K/V with the new query row.",
+              trap: "Forgetting to update cache length metadata.",
+            }),
+          },
+          {
+            id: 'cache-append-kvc',
+            label: "Cache append",
+            tooltip: tip({
+              short: "K_cache = concat(K_cache, K_new); same for V.",
+              intuition: "Append-only structure suits incremental generation.",
+              formula: "K_{cache} \\leftarrow [K_{cache}, K_t]",
+              trap: "In-place bugs when batch slots differ in length.",
+            }),
+          },
+          {
+            id: 'attention-over-cache-kvc',
+            label: "Attention over cache",
+            tooltip: tip({
+              short: "New query attends over all cached keys up to current length.",
+              intuition: "Score matrix row length equals context so far.",
+              trap: "Windowed caches truncate history unless sliding logic is explicit.",
+            }),
+          },
+          {
+            id: 'per-layer-cache-kvc',
+            label: "Per-layer cache",
+            tooltip: tip({
+              short: "Each transformer layer maintains separate K/V storage.",
+              intuition: "Total memory ≈ layers × heads × context × dim.",
+              trap: "Counting only one layer when budgeting GPU memory.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'reuse-kvc',
+            label: "Reuse past work",
+            tooltip: tip({
+              short: "Previous tokens’ K/V are frozen after their step.",
+              intuition: "Like keeping solved subproblems on a memo pad.",
+              trap: "Cache invalidation when model weights change mid-session.",
+            }),
+          },
+          {
+            id: 'memory-growth-kvc',
+            label: "Memory grows with context",
+            tooltip: tip({
+              short: "Longer conversations need larger caches.",
+              intuition: "Memory bandwidth can dominate at long context.",
+              trap: "Assuming constant memory per generated token.",
+            }),
+          },
+          {
+            id: 'latency-tradeoff-kvc',
+            label: "Latency tradeoff",
+            tooltip: tip({
+              short: "Less matmul work per step; more data to read for attention.",
+              intuition: "Very long contexts shift bottleneck to memory IO.",
+              trap: "Ignoring bandwidth when celebrating fewer FLOPs.",
+            }),
+          },
+          {
+            id: 'batch-padding-kvc',
+            label: "Batch padding",
+            tooltip: tip({
+              short: "Batched sequences cache to different lengths with padding masks.",
+              intuition: "Serving batches heterogeneous prompts needs careful slot management.",
+              trap: "Padding leaks into attention without masks.",
+            }),
+          },
+          {
+            id: 'window-intuition-kvc',
+            label: "Sliding window",
+            tooltip: tip({
+              short: "Some models cache only the last W tokens.",
+              intuition: "Bounded memory trades away full history.",
+              trap: "Assuming infinite context when window is W.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'cache-update-formula-kvc',
+            label: "Cache update",
+            tooltip: tip({
+              short: "Append new K,V along sequence dimension each decode step.",
+              formula: "K_{cache} \\leftarrow \\mathrm{concat}(K_{cache}, K_t)",
+              intuition: "Same for V and for every layer/head.",
+              trap: "Wrong concat axis corrupts head layout.",
+            }),
+          },
+          {
+            id: 'memory-formula-kvc',
+            label: "Memory estimate",
+            tooltip: tip({
+              short: "Bytes ≈ 2 × layers × heads × context × head_dim × dtype_bytes.",
+              intuition: "Factor 2 for K and V.",
+              trap: "Forgetting GQA shares fewer KV heads.",
+              lessonId: "grouped-query-attention",
+            }),
+          },
+          {
+            id: 'decode-code-kvc',
+            label: "Decode sketch",
+            tooltip: tip({
+              short: "Forward new token with past_key_values; receive extended cache.",
+              intuition: "Each decode step appends one token's K/V to the cache and only computes attention for the new query.",
+              code: "out, cache = model(token, past_key_values=cache)\nnext = sample(out.logits[:, -1])",
+              trap: "Not passing cache between steps recomputes everything.",
+            }),
+          },
+          {
+            id: 'gqa-reduction-kvc',
+            label: "GQA memory savings",
+            tooltip: tip({
+              short: "Grouped-query attention stores fewer KV heads than query heads.",
+              intuition: "Queries share KV heads to shrink cache.",
+              trap: "Using MHA memory formulas on GQA models.",
+              lessonId: "grouped-query-attention",
+            }),
+          },
+          {
+            id: 'flash-decode-kvc',
+            label: "Flash decode",
+            tooltip: tip({
+              short: "Fused kernels still read cache for attention over history.",
+              intuition: "Kernel fusion changes schedule, not cached semantics.",
+              trap: "Thinking Flash Attention removes KV storage.",
+              lessonId: "flash-attention",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'skip-attention-trap-kvc',
+            label: "“Skips attention” trap",
+            tooltip: tip({
+              short: "Cache skips K/V recomputation, not the attention reduction.",
+              intuition: "Softmax over cached keys still runs.",
+              trap: "Marketing language that implies attention is avoided.",
+            }),
+          },
+          {
+            id: 'unbounded-context-trap-kvc',
+            label: "Unbounded context fantasy",
+            tooltip: tip({
+              short: "Cache memory and bandwidth scale linearly with length.",
+              intuition: "Long-context models need compression or windows.",
+              trap: "Promising infinite chat without memory cost.",
+            }),
+          },
+          {
+            id: 'dtype-trap-kvc',
+            label: "KV dtype",
+            tooltip: tip({
+              short: "Quantized KV (INT8/FP8) saves memory but can harm quality.",
+              intuition: "Calibration matters for low-bit caches.",
+              trap: "Aggressive quantization without perplexity checks.",
+            }),
+          },
+          {
+            id: 'cache-invalidation-trap-kvc',
+            label: "Cache invalidation",
+            tooltip: tip({
+              short: "Editing prompt mid-stream or swapping LoRA adapters invalidates cache.",
+              intuition: "K/V depend on weights and prefix tokens.",
+              trap: "Reusing cache after weight update.",
+            }),
+          },
+          {
+            id: 'prefill-decode-trap-kvc',
+            label: "Prefill vs decode confusion",
+            tooltip: tip({
+              short: "Latency models differ: prefill is parallel; decode is sequential.",
+              intuition: "TTFT vs TPOT measure different phases.",
+              trap: "Benchmarking only one phase.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'token-gen-kvc',
+            label: "Token generation",
+            tooltip: tip({
+              short: "Generation loop appends tokens and extends cache each step.",
+              intuition: "Sampling and cache updates interleave.",
+              trap: "Forgetting cache when implementing greedy decode.",
+              lessonId: "transformer-token-generation",
+            }),
+          },
+          {
+            id: 'gqa-kvc',
+            label: "Grouped-query attention",
+            tooltip: tip({
+              short: "GQA reduces KV footprint for long contexts.",
+              intuition: "Serving stacks combine GQA + cache quantization.",
+              trap: "Over-sharing KV heads hurts quality.",
+              lessonId: "grouped-query-attention",
+            }),
+          },
+          {
+            id: 'efficient-inference-kvc',
+            label: "Efficient inference track",
+            tooltip: tip({
+              short: "Batching, paging, and speculative decoding interact with cache layout.",
+              intuition: "Production serving optimizes cache slots.",
+              trap: "Prototype ignores multi-tenant cache fragmentation.",
+              lessonId: "efficient-inference-compression-track",
+            }),
+          },
+          {
+            id: 'flash-attention-kvc',
+            label: "Flash Attention",
+            tooltip: tip({
+              short: "IO-aware attention kernels pair with cached decode.",
+              intuition: "Training uses flash; inference uses cache-aware flash.",
+              trap: "Assuming one kernel fits all phases.",
+              lessonId: "flash-attention",
+            }),
+          },
+          {
+            id: 'transformer-kvc',
+            label: "Transformer",
+            tooltip: tip({
+              short: "KV cache is an inference optimization atop the transformer block.",
+              intuition: "Architecture unchanged—serving adds cache state.",
+              trap: "Training code paths without cache awareness.",
+              lessonId: "transformer",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'layer-normalization': {
+    center: {
+      id: 'layer-normalization',
+      label: "Layer Normalization",
+      type: 'current',
+      tooltip: tip({
+        short: "LayerNorm normalizes each token’s feature vector to zero mean and unit variance across features, then applies learned scale γ and shift β per dimension.",
+        intuition: "Stabilize activations inside one example before the next sublayer—each token is normalized on its own feature axis.",
+        formula: "\\mathrm{LN}(x)=\\gamma\\odot\\frac{x-\\mu_x}{\\sqrt{\\sigma_x^2+\\epsilon}}+\\beta",
+        why: "LayerNorm stabilizes transformer training and inference, pairing with residual streams in GPT, BERT, and diffusion transformers.",
+        trap: "LayerNorm is not BatchNorm—it does not use statistics from other examples in the batch.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'vector-ln',
+            label: "Vector",
+            tooltip: tip({
+              short: "Each token hidden state is a vector in ℝ^d.",
+              intuition: "Normalization runs across the d features of one token.",
+              trap: "Normalizing the wrong axis mixes tokens.",
+            }),
+          },
+          {
+            id: 'mean-variance-ln',
+            label: "Mean and variance",
+            tooltip: tip({
+              short: "Compute μ and σ² across features of one token.",
+              intuition: "Subtract mean; divide by std.",
+              trap: "Using batch statistics instead of token statistics.",
+            }),
+          },
+          {
+            id: 'residual-ln',
+            label: "Residual stream",
+            tooltip: tip({
+              short: "Transformers add sublayer outputs into a running hidden state.",
+              intuition: "Norm often wraps sublayers to control scale.",
+              trap: "Uncontrolled residual growth destabilizes deep stacks.",
+              lessonId: "residual-stream",
+            }),
+          },
+          {
+            id: 'affine-ln',
+            label: "Affine parameters",
+            tooltip: tip({
+              short: "Learnable γ and β restore representational capacity after normalization.",
+              intuition: "Without γ,β the layer could not recover useful scale.",
+              trap: "Assuming normalization always shrinks signal permanently.",
+            }),
+          },
+          {
+            id: 'transformer-ln',
+            label: "Transformer block",
+            tooltip: tip({
+              short: "Attention and MLP sublayers repeat with norms between them.",
+              intuition: "Pre-LN vs post-LN changes gradient paths.",
+              trap: "Swapping placement without retuning learning rate.",
+              lessonId: "transformer",
+            }),
+          },
+          {
+            id: 'epsilon-ln',
+            label: "Epsilon stabilizer",
+            tooltip: tip({
+              short: "Small ε in denominator prevents divide-by-zero.",
+              intuition: "Numerical guard in sqrt(σ² + ε).",
+              trap: "ε too large flattens activations excessively.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'compute-stats-ln',
+            label: "Compute μ, σ per token",
+            tooltip: tip({
+              short: "Aggregate mean and variance across feature dimension d.",
+              intuition: "Each token gets its own normalization stats.",
+              trap: "Accidentally normalizing across batch dimension.",
+            }),
+          },
+          {
+            id: 'standardize-ln',
+            label: "Standardize",
+            tooltip: tip({
+              short: "x_hat = (x - μ) / sqrt(σ² + ε).",
+              intuition: "Centers and scales the token vector.",
+              formula: "\\hat{x}=\\frac{x-\\mu_x}{\\sqrt{\\sigma_x^2+\\epsilon}}",
+              trap: "Forgetting ε when variance is tiny.",
+            }),
+          },
+          {
+            id: 'affine-transform-ln',
+            label: "Apply γ and β",
+            tooltip: tip({
+              short: "Output = γ ⊙ x_hat + β elementwise.",
+              intuition: "Model learns useful scale and shift after norm.",
+              trap: "Initializing γ to zero kills signal.",
+            }),
+          },
+          {
+            id: 'placement-ln',
+            label: "Pre-LN vs post-LN",
+            tooltip: tip({
+              short: "Norm before or after sublayer inside the residual path.",
+              intuition: "Pre-LN often trains deeper models more easily.",
+              trap: "Copying post-LN recipes onto pre-LN stacks without adjustment.",
+            }),
+          },
+          {
+            id: 'inference-ln',
+            label: "Inference behavior",
+            tooltip: tip({
+              short: "LayerNorm uses only the current token’s features—no batch stats.",
+              intuition: "Train and eval formulas match.",
+              trap: "Expecting running mean buffers like BatchNorm.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'per-token-ln',
+            label: "Per-token thermostat",
+            tooltip: tip({
+              short: "Each token adjusts its own temperature before the next transform.",
+              intuition: "Prevents one token’s features from exploding.",
+              trap: "Thinking neighbors in the batch affect this token’s norm.",
+            }),
+          },
+          {
+            id: 'not-batch-ln',
+            label: "Not batch normalization",
+            tooltip: tip({
+              short: "BatchNorm normalizes across batch for each feature separately.",
+              intuition: "LayerNorm swaps the normalized axis.",
+              trap: "Dropping BatchNorm running stats logic into LayerNorm code.",
+            }),
+          },
+          {
+            id: 'scale-control-ln',
+            label: "Scale control in residuals",
+            tooltip: tip({
+              short: "Norm keeps residual additions from drifting magnitude.",
+              intuition: "Deep stacks accumulate writes; norm recenters.",
+              trap: "Removing norm in very deep models without replacement.",
+            }),
+          },
+          {
+            id: 'shift-invariance-ln',
+            label: "Shift sensitivity",
+            tooltip: tip({
+              short: "Adding constant to all features changes μ and cancels in x_hat.",
+              intuition: "LayerNorm removes shared offset across features.",
+              trap: "Expecting norm to fix bad input scaling from upstream.",
+            }),
+          },
+          {
+            id: 'rms-norm-ln',
+            label: "RMSNorm cousin",
+            tooltip: tip({
+              short: "Some models skip mean centering and scale by RMS only.",
+              intuition: "Simpler norm still controls magnitude.",
+              trap: "Assuming all transformers use full LayerNorm.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'ln-formula-ln',
+            label: "LayerNorm formula",
+            tooltip: tip({
+              short: "LN(x) = γ * (x-μ)/sqrt(σ²+ε) + β.",
+              formula: "\\mathrm{LN}(x)=\\gamma\\frac{x-\\mu_x}{\\sqrt{\\sigma_x^2+\\epsilon}}+\\beta",
+              intuition: "μ,σ computed over feature dim.",
+              trap: "Applying over sequence length by mistake.",
+            }),
+          },
+          {
+            id: 'pytorch-ln',
+            label: "PyTorch LayerNorm",
+            tooltip: tip({
+              short: "nn.LayerNorm(normalized_shape=d_model).",
+              intuition: "Each token vector is normalized across its feature dimension before the next sublayer runs.",
+              code: "import torch.nn as nn\nln = nn.LayerNorm(d_model)\ny = ln(x)  # x shape [batch, seq, d_model]",
+              trap: "normalized_shape must match last dims.",
+            }),
+          },
+          {
+            id: 'pre-ln-code-ln',
+            label: "Pre-LN block",
+            tooltip: tip({
+              short: "x = x + attn(ln(x)); x = x + mlp(ln(x)).",
+              intuition: "Norm inside residual branch is common in GPT-style stacks.",
+              trap: "Post-LN code copied verbatim.",
+            }),
+          },
+          {
+            id: 'stats-dim-ln',
+            label: "Axis choice",
+            tooltip: tip({
+              short: "Normalize over hidden dimension, not batch or sequence.",
+              intuition: "Shape [B,T,D] → stats over D.",
+              trap: "Normalizing over T mixes token information.",
+            }),
+          },
+          {
+            id: 'gamma-init-ln',
+            label: "γ initialization",
+            tooltip: tip({
+              short: "Often initialize γ to 1 and β to 0.",
+              intuition: "Starts near identity then learns deviation.",
+              trap: "Zero γ initialization blocks learning.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'batchnorm-confusion-ln',
+            label: "BatchNorm confusion",
+            tooltip: tip({
+              short: "BatchNorm needs batch statistics; LayerNorm does not.",
+              intuition: "Small batch BatchNorm is noisy; LayerNorm is batch-size agnostic.",
+              trap: "Using BatchNorm in variable-length NLP without care.",
+              lessonId: "dropout-batchnorm",
+            }),
+          },
+          {
+            id: 'wrong-axis-ln',
+            label: "Wrong axis",
+            tooltip: tip({
+              short: "Normalizing over sequence mixes tokens illegally.",
+              intuition: "Each token must keep private stats.",
+              trap: "LayerNorm over time dimension in transformers.",
+            }),
+          },
+          {
+            id: 'eval-mode-ln',
+            label: "Eval mode myth",
+            tooltip: tip({
+              short: "LayerNorm has no running stats to freeze unlike BatchNorm.",
+              intuition: "Dropout still changes train vs eval.",
+              trap: "Searching for running_mean in LayerNorm modules.",
+            }),
+          },
+          {
+            id: 'over-normalizing-ln',
+            label: "Over-normalizing",
+            tooltip: tip({
+              short: "Too many norm layers without need can slow learning.",
+              intuition: "Architecture recipes balance depth and norm placement.",
+              trap: "Adding norm everywhere as a generic fix.",
+            }),
+          },
+          {
+            id: 'scale-upstream-ln',
+            label: "Upstream scale",
+            tooltip: tip({
+              short: "LayerNorm does not replace sensible weight init or LR.",
+              intuition: "Bad initialization still hurts before first norm.",
+              trap: "Assuming norm alone prevents all explosion.",
+              lessonId: "initialization",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'transformer-used-ln',
+            label: "Transformer",
+            tooltip: tip({
+              short: "Norm is part of every standard transformer block.",
+              intuition: "Works with attention and MLP residuals.",
+              trap: "Removing norm without alternative stabilization.",
+              lessonId: "transformer",
+            }),
+          },
+          {
+            id: 'gpt2-ln',
+            label: "GPT-2",
+            tooltip: tip({
+              short: "Decoder-only stacks rely on pre-LN in modern variants.",
+              intuition: "Generation stability depends on norm placement.",
+              trap: "Confusing legacy post-LN GPT with current recipes.",
+              lessonId: "gpt2-comprehensive",
+            }),
+          },
+          {
+            id: 'dropout-bn-ln',
+            label: "Dropout vs BatchNorm",
+            tooltip: tip({
+              short: "Regularization and batch norm behave differently from LayerNorm.",
+              intuition: "Training mode toggles affect dropout, not LN stats.",
+              trap: "Applying BatchNorm train/eval rules to LayerNorm.",
+              lessonId: "dropout-batchnorm",
+            }),
+          },
+          {
+            id: 'dit-ln',
+            label: "DiT",
+            tooltip: tip({
+              short: "Diffusion transformers use adaptive norm conditioned on timestep.",
+              intuition: "Conditioning injects t into scale/shift.",
+              trap: "Plain LayerNorm code on adaptive norm blocks.",
+              lessonId: "dit",
+            }),
+          },
+          {
+            id: 'training-dynamics-ln',
+            label: "Training loop dynamics",
+            tooltip: tip({
+              short: "Norm interacts with LR and warmup in deep training.",
+              intuition: "Watch activation scale across layers.",
+              trap: "Huge LR with post-LN can still diverge.",
+              lessonId: "training-loop-dynamics",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'leaky-relu': {
+    center: {
+      id: 'leaky-relu',
+      label: "Leaky ReLU",
+      type: 'current',
+      tooltip: tip({
+        short: "Leaky ReLU passes positive inputs unchanged and applies a small slope α to negative inputs: f(z) = max(αz, z).",
+        intuition: "Negative pre-activations keep a tiny gradient path instead of dying completely like ReLU at z < 0.",
+        formula: "f(z)=\\max(\\alpha z, z)",
+        why: "Leaky ReLU reduces dead-neuron problems in deep nets while staying almost as cheap as ReLU.",
+        trap: "Leaky ReLU does not flip negative evidence positive—it only avoids a fully flat negative branch.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'relu-lr',
+            label: "ReLU",
+            tooltip: tip({
+              short: "ReLU zeroes negative inputs; slope 0 below zero.",
+              intuition: "Leaky ReLU modifies only the negative branch.",
+              trap: "Assuming Leaky ReLU fixes all dead-neuron issues.",
+              lessonId: "relu",
+            }),
+          },
+          {
+            id: 'preactivation-lr',
+            label: "Pre-activation z",
+            tooltip: tip({
+              short: "z = w·x + b before the activation function.",
+              intuition: "Activation gates what signal passes.",
+              trap: "Confusing z with activated output a.",
+            }),
+          },
+          {
+            id: 'gradient-lr',
+            label: "Gradient",
+            tooltip: tip({
+              short: "Backprop multiplies upstream gradient by local derivative.",
+              intuition: "Slope below zero is α instead of 0.",
+              trap: "Forgetting chain rule through bias and weights.",
+              lessonId: "computation-graph-backprop",
+            }),
+          },
+          {
+            id: 'neural-network-lr',
+            label: "Neural network layer",
+            tooltip: tip({
+              short: "Activations sit between linear transforms.",
+              intuition: "Nonlinearity enables depth.",
+              trap: "Stacking linear layers without activation.",
+              lessonId: "neural-network",
+            }),
+          },
+          {
+            id: 'alpha-lr',
+            label: "Leak parameter α",
+            tooltip: tip({
+              short: "Small positive α (e.g. 0.01) scales negative branch.",
+              intuition: "Tradeoff between flow and noise on negatives.",
+              trap: "α too large behaves unlike ReLU; α=0 is ReLU.",
+            }),
+          },
+          {
+            id: 'piecewise-lr',
+            label: "Piecewise linear",
+            tooltip: tip({
+              short: "Two linear pieces meet at z = 0.",
+              intuition: "Simple derivative almost everywhere.",
+              trap: "Undefined second derivative at 0 rarely matters in practice.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'forward-positive-lr',
+            label: "Forward z ≥ 0",
+            tooltip: tip({
+              short: "Output equals z; slope 1.",
+              intuition: "Identical to ReLU on active units.",
+              trap: "Assuming different positive behavior.",
+            }),
+          },
+          {
+            id: 'forward-negative-lr',
+            label: "Forward z < 0",
+            tooltip: tip({
+              short: "Output equals αz; still negative if α > 0.",
+              intuition: "Small magnitude preserves sign.",
+              trap: "Thinking negatives become positive.",
+            }),
+          },
+          {
+            id: 'derivative-positive-lr',
+            label: "Derivative z > 0",
+            tooltip: tip({
+              short: "Local slope is 1.",
+              intuition: "Full gradient passes through active units.",
+              trap: "Using derivative at exactly z=0 without convention.",
+            }),
+          },
+          {
+            id: 'derivative-negative-lr',
+            label: "Derivative z < 0",
+            tooltip: tip({
+              short: "Local slope is α.",
+              intuition: "Nonzero gradient can update weights that caused negative z.",
+              trap: "Expecting α=1 on negative side unless PReLU.",
+            }),
+          },
+          {
+            id: 'parametric-lr',
+            label: "PReLU variant",
+            tooltip: tip({
+              short: "Learn α per channel instead of fixed scalar.",
+              intuition: "More flexibility, more parameters.",
+              trap: "Overfitting α on tiny data.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'dead-neuron-lr',
+            label: "Dead neuron relief",
+            tooltip: tip({
+              short: "ReLU neurons stuck at z<0 get zero gradient forever.",
+              intuition: "Leak allows slow recovery from negative region.",
+              trap: "Leak does not guarantee neurons become active.",
+            }),
+          },
+          {
+            id: 'negative-evidence-lr',
+            label: "Negative evidence",
+            tooltip: tip({
+              short: "Leaky outputs remain negative for negative z.",
+              intuition: "Downstream layers still see inhibitory signal.",
+              trap: "Expecting Leaky ReLU to emulate tanh symmetry.",
+            }),
+          },
+          {
+            id: 'scale-intuition-lr',
+            label: "Scale of negatives",
+            tooltip: tip({
+              short: "α shrinks negative activations toward zero.",
+              intuition: "Magnitude is |α| times smaller than z.",
+              trap: "Large negative z still propagates scaled signal.",
+            }),
+          },
+          {
+            id: 'vs-elu-lr',
+            label: "vs ELU",
+            tooltip: tip({
+              short: "ELU smooths near zero; Leaky ReLU stays piecewise linear.",
+              intuition: "Different inductive biases for negative region.",
+              trap: "Treating all activations as interchangeable.",
+            }),
+          },
+          {
+            id: 'init-interaction-lr',
+            label: "Init interaction",
+            tooltip: tip({
+              short: "Bad init still produces many negative z values early.",
+              intuition: "Leak helps gradients exist during recovery.",
+              trap: "Skipping good initialization because of leak.",
+              lessonId: "initialization",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'formula-lr',
+            label: "Definition",
+            tooltip: tip({
+              short: "f(z) = z if z>0 else αz.",
+              formula: "f(z)=\\max(\\alpha z, z)",
+              intuition: "Equivalent piecewise form.",
+              trap: "Using max(z, αz) with wrong α sign.",
+            }),
+          },
+          {
+            id: 'derivative-formula-lr',
+            label: "Derivative",
+            tooltip: tip({
+              short: "f'(z) = 1 for z>0; α for z<0.",
+              intuition: "Subgradient at 0 often taken as 1 or α.",
+              trap: "Backprop through z=0 batch without convention.",
+            }),
+          },
+          {
+            id: 'numpy-lr',
+            label: "NumPy sketch",
+            tooltip: tip({
+              short: "np.where(z > 0, z, alpha * z).",
+              intuition: "Positive inputs pass through unchanged; negative inputs keep a small slope instead of hard zero.",
+              code: "def leaky_relu(z, alpha=0.01):\n    return np.where(z > 0, z, alpha * z)",
+              trap: "Forgetting alpha on negative branch.",
+            }),
+          },
+          {
+            id: 'pytorch-lr',
+            label: "PyTorch",
+            tooltip: tip({
+              short: "F.leaky_relu(x, negative_slope=0.01).",
+              intuition: "PyTorch applies the same piecewise rule on tensors during forward and autograd backward passes.",
+              code: "import torch.nn.functional as F\ny = F.leaky_relu(x, negative_slope=0.01)",
+              trap: "negative_slope must be small positive.",
+            }),
+          },
+          {
+            id: 'backward-lr',
+            label: "Backward sketch",
+            tooltip: tip({
+              short: "grad_z = grad_out * (1 if z>0 else alpha).",
+              intuition: "Mask replaces ReLU zero mask.",
+              trap: "Using ReLU backward on Leaky ReLU forward.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'not-positive-trap-lr',
+            label: "Not making negatives positive",
+            tooltip: tip({
+              short: "Leaky ReLU still outputs negative values for z<0.",
+              intuition: "Only slope changes, not sign flip.",
+              trap: "Expecting all activations nonnegative.",
+            }),
+          },
+          {
+            id: 'alpha-too-large-lr',
+            label: "α too large",
+            tooltip: tip({
+              short: "Large α weakens sparsity benefits of ReLU.",
+              intuition: "Negative branch carries more signal.",
+              trap: "α=0.5 behaves very unlike standard ReLU.",
+            }),
+          },
+          {
+            id: 'dead-still-possible-lr',
+            label: "Still can saturate",
+            tooltip: tip({
+              short: "Very negative z with tiny α gives near-zero gradient effect.",
+              intuition: "Leak helps but does not eliminate all stagnation.",
+              trap: "Claiming zero dead units ever.",
+            }),
+          },
+          {
+            id: 'confuse-prelu-lr',
+            label: "PReLU confusion",
+            tooltip: tip({
+              short: "Learned α needs regularization and monitoring.",
+              intuition: "Different hyperparameter story than fixed leak.",
+              trap: "Using PReLU defaults on tiny CNNs without need.",
+            }),
+          },
+          {
+            id: 'activation-only-trap-lr',
+            label: "Activation-only fix",
+            tooltip: tip({
+              short: "Bad LR, init, or normalization still break training.",
+              intuition: "Activation is one piece of the stack.",
+              trap: "Swapping ReLU→Leaky ReLU expecting magic convergence.",
+              lessonId: "training-loop-dynamics",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'conv-relu-lr',
+            label: "Conv + ReLU",
+            tooltip: tip({
+              short: "CNNs often use ReLU family activations after conv.",
+              intuition: "Leaky variants appear in GAN discriminators historically.",
+              trap: "Forgetting activation when stacking conv layers.",
+              lessonId: "conv-relu",
+            }),
+          },
+          {
+            id: 'relu-used-lr',
+            label: "ReLU",
+            tooltip: tip({
+              short: "Compare baseline ReLU when diagnosing dead units.",
+              intuition: "Start simple; add leak if needed.",
+              trap: "Defaulting to Leaky everywhere without ablation.",
+              lessonId: "relu",
+            }),
+          },
+          {
+            id: 'gan-lr',
+            label: "GAN training",
+            tooltip: tip({
+              short: "Leaky ReLU common in discriminator architectures.",
+              intuition: "Gradient flow matters in adversarial games.",
+              trap: "Activation choice alone does not stabilize GANs.",
+            }),
+          },
+          {
+            id: 'backprop-lr',
+            label: "Backpropagation",
+            tooltip: tip({
+              short: "Piecewise derivatives plug into autograd graphs.",
+              intuition: "Same chain rule as ReLU with different mask.",
+              trap: "Manual backward inconsistent with framework.",
+              lessonId: "computation-graph-backprop",
+            }),
+          },
+          {
+            id: 'neural-net-used-lr',
+            label: "Neural network",
+            tooltip: tip({
+              short: "Activation choice sits inside general deep learning design.",
+              intuition: "Depth, width, and data matter more than α alone.",
+              trap: "Over-tuning α while ignoring architecture.",
+              lessonId: "neural-network",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'least-squares-projection': {
+    center: {
+      id: 'least-squares-projection',
+      label: "Least Squares Projection",
+      type: 'current',
+      tooltip: tip({
+        short: "Least squares finds the point in a subspace—often Col(A)—closest to target b by orthogonal projection; the residual b − p is perpendicular to the subspace.",
+        intuition: "Drop a perpendicular from b to the subspace; that foot is the best fit in squared-error sense.",
+        formula: "\\hat{x}=(A^TA)^{-1}A^Tb,\\quad p=A\\hat{x},\\quad b-p\\perp\\mathrm{Col}(A)",
+        why: "Projection and normal equations underpin linear regression, QR/SVD solvers, and geometric understanding of Ax≈b.",
+        trap: "Least squares minimizes squared error—it is not the same as minimizing absolute error or guaranteeing causality.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'vector-lsp',
+            label: "Vector",
+            tooltip: tip({
+              short: "b and columns of A are vectors in ℝ^m.",
+              intuition: "Subspace is span of columns.",
+              trap: "Mixing up row and column spaces.",
+              lessonId: "matrix-multiplication",
+            }),
+          },
+          {
+            id: 'dot-product-lsp',
+            label: "Dot product",
+            tooltip: tip({
+              short: "Orthogonality means u·v = 0.",
+              intuition: "Residual perpendicular to every column of A.",
+              trap: "Using angle intuition without checking orthogonality.",
+            }),
+          },
+          {
+            id: 'subspace-lsp',
+            label: "Subspace Col(A)",
+            tooltip: tip({
+              short: "All linear combinations of columns of A.",
+              intuition: "Projection lands inside this column space.",
+              trap: "Projecting onto wrong subspace.",
+              lessonId: "fundamental-subspaces",
+            }),
+          },
+          {
+            id: 'matrix-mult-lsp',
+            label: "Matrix multiplication",
+            tooltip: tip({
+              short: "p = Ax combines columns with coefficients x.",
+              intuition: "Projection point is some Ax in Col(A).",
+              trap: "Thinking Ax is always exact solution to Ax=b.",
+              lessonId: "matrix-multiplication",
+            }),
+          },
+          {
+            id: 'rank-lsp',
+            label: "Rank",
+            tooltip: tip({
+              short: "Independent columns define subspace dimension.",
+              intuition: "Rank-deficient A needs pseudoinverse or constraints.",
+              trap: "Invertible A^TA fails when columns are dependent.",
+              lessonId: "fundamental-subspaces",
+            }),
+          },
+          {
+            id: 'normal-equations-prereq-lsp',
+            label: "Transpose A^T",
+            tooltip: tip({
+              short: "A^T maps residuals back into coefficient space.",
+              intuition: "Normal equations use A^T(b − Ax) = 0.",
+              trap: "Forming A^TA can square condition number.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'residual-lsp',
+            label: "Residual r = b − p",
+            tooltip: tip({
+              short: "Error vector from projection to target.",
+              intuition: "Least squares minimizes ||r||².",
+              trap: "Large residual means b is far from Col(A).",
+            }),
+          },
+          {
+            id: 'orthogonality-lsp',
+            label: "Orthogonality condition",
+            tooltip: tip({
+              short: "A^T(b − Ax) = 0.",
+              intuition: "Residual orthogonal to every column.",
+              formula: "A^T(b-A\\hat{x})=0",
+              trap: "Stopping before checking orthogonality visually.",
+            }),
+          },
+          {
+            id: 'normal-eq-lsp',
+            label: "Normal equations",
+            tooltip: tip({
+              short: "A^T A x = A^T b.",
+              intuition: "Square system in n unknowns when A is m×n.",
+              trap: "A^TA singular when columns dependent.",
+            }),
+          },
+          {
+            id: 'projection-point-lsp',
+            label: "Projection p = Ax̂",
+            tooltip: tip({
+              short: "Closest point in Col(A) to b.",
+              intuition: "Geometric foot of perpendicular drop.",
+              trap: "Confusing p with original b.",
+            }),
+          },
+          {
+            id: 'qr-solve-lsp',
+            label: "QR solve",
+            tooltip: tip({
+              short: "A=QR gives stable least squares via R x = Q^T b.",
+              intuition: "Avoids forming A^TA explicitly.",
+              trap: "Classical normal equations on ill-conditioned A.",
+              lessonId: "qr-decomposition",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'perpendicular-lsp',
+            label: "Shortest distance",
+            tooltip: tip({
+              short: "Any non-orthogonal component of error could still be reduced.",
+              intuition: "Pythagoras on right triangle b-p-r.",
+              trap: "Oblique “close” points are not least squares optimal.",
+            }),
+          },
+          {
+            id: 'line-fit-lsp',
+            label: "Line fit picture",
+            tooltip: tip({
+              short: "Many points b_i; fit line in column space of design matrix.",
+              intuition: "Regression is projection in disguise.",
+              trap: "Outliers pull projection aggressively in L2.",
+            }),
+          },
+          {
+            id: 'overdetermined-lsp',
+            label: "Overdetermined systems",
+            tooltip: tip({
+              short: "More equations than unknowns—usually no exact solution.",
+              intuition: "Projection picks best compromise.",
+              trap: "Expecting Ax=b exactly when inconsistent.",
+            }),
+          },
+          {
+            id: 'component-lsp',
+            label: "Decompose b",
+            tooltip: tip({
+              short: "b = p + r with p in Col(A), r orthogonal to Col(A).",
+              intuition: "p is explainable part; r is leftover.",
+              trap: "Adding non-orthogonal parts twice.",
+            }),
+          },
+          {
+            id: 'weighted-lsp',
+            label: "Weighted least squares",
+            tooltip: tip({
+              short: "Diagonal weights change inner product geometry.",
+              intuition: "Heteroscedastic errors use W.",
+              trap: "Unweighted LS when noise variance differs.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'normal-formula-lsp',
+            label: "Normal equations",
+            tooltip: tip({
+              short: "x̂ = (A^T A)^{-1} A^T b when invertible.",
+              formula: "\\hat{x}=(A^TA)^{-1}A^Tb",
+              intuition: "Comes from setting gradient of ||b−Ax||² to zero.",
+              trap: "Invert A^TA without checking condition number.",
+              lessonId: "condition-number",
+            }),
+          },
+          {
+            id: 'proj-matrix-lsp',
+            label: "Projection matrix",
+            tooltip: tip({
+              short: "P = A(A^T A)^{-1} A^T projects onto Col(A).",
+              formula: "P=A(A^TA)^{-1}A^T",
+              intuition: "P² = P idempotent.",
+              trap: "Using P when A is rank deficient without pseudoinverse.",
+              lessonId: "projection-matrices",
+            }),
+          },
+          {
+            id: 'residual-norm-lsp',
+            label: "Objective",
+            tooltip: tip({
+              short: "Minimize ||b − Ax||₂².",
+              formula: "\\min_x \\lVert b-Ax\\rVert_2^2",
+              intuition: "Squared L2 penalizes large errors heavily.",
+              trap: "Outliers dominate squared loss.",
+            }),
+          },
+          {
+            id: 'numpy-lstsq-lsp',
+            label: "NumPy lstsq",
+            tooltip: tip({
+              short: "np.linalg.lstsq(A, b, rcond=None).",
+              intuition: "SVD-backed least squares finds coefficients that minimize ||Ax − b||₂ even when A is rank-deficient.",
+              code: "x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)",
+              trap: "Using normal equations by hand on bad data.",
+            }),
+          },
+          {
+            id: 'sklearn-linear-lsp',
+            label: "Linear regression link",
+            tooltip: tip({
+              short: "OLS coefficients solve same normal equations.",
+              intuition: "Stats view adds noise modeling.",
+              trap: "Ignoring intercept column in A.",
+              lessonId: "linear-regression",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'causation-lsp',
+            label: "Correlation trap",
+            tooltip: tip({
+              short: "Best linear projection does not prove causal effect.",
+              intuition: "Geometry fits associations.",
+              trap: "Interpreting coefficients as causal.",
+              lessonId: "linear-regression",
+            }),
+          },
+          {
+            id: 'outlier-lsp',
+            label: "Outlier sensitivity",
+            tooltip: tip({
+              short: "L2 squares large errors—outliers dominate.",
+              intuition: "Robust regression uses different losses.",
+              trap: "One bad point tilts entire hyperplane.",
+            }),
+          },
+          {
+            id: 'rank-deficient-lsp',
+            label: "Rank deficiency",
+            tooltip: tip({
+              short: "Infinite many x give same projection when columns dependent.",
+              intuition: "Need pseudoinverse or regularization.",
+              trap: "Unique x̂ assumed always.",
+              lessonId: "pseudoinverse",
+            }),
+          },
+          {
+            id: 'condition-lsp',
+            label: "Ill-conditioned A^TA",
+            tooltip: tip({
+              short: "Squaring singular values worsens numerics.",
+              intuition: "Prefer QR or SVD solvers.",
+              trap: "Naive matrix inverse on noisy design matrices.",
+              lessonId: "condition-number",
+            }),
+          },
+          {
+            id: 'rowspace-confusion-lsp',
+            label: "Row vs column space",
+            tooltip: tip({
+              short: "Projection here is onto Col(A), not Row(A).",
+              intuition: "Different subspaces answer different questions.",
+              trap: "Mixing up fundamental subspaces.",
+              lessonId: "fundamental-subspaces",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'linear-reg-lsp',
+            label: "Linear regression",
+            tooltip: tip({
+              short: "OLS is least squares with design matrix of features.",
+              intuition: "Same projection story with statistical interpretation.",
+              trap: "Forgetting intercept term.",
+              lessonId: "linear-regression",
+            }),
+          },
+          {
+            id: 'qr-lsp',
+            label: "QR decomposition",
+            tooltip: tip({
+              short: "Stable computational route to least squares.",
+              intuition: "Q columns orthonormalize design matrix.",
+              trap: "Gram-Schmidt without pivoting on bad data.",
+              lessonId: "qr-decomposition",
+            }),
+          },
+          {
+            id: 'svd-lsp',
+            label: "SVD",
+            tooltip: tip({
+              short: "Pseudoinverse solves rank-deficient least squares.",
+              intuition: "Truncated SVD also does low-rank approximation.",
+              trap: "Keeping noisy singular values.",
+              lessonId: "svd",
+            }),
+          },
+          {
+            id: 'pseudoinverse-lsp',
+            label: "Pseudoinverse",
+            tooltip: tip({
+              short: "Moore–Penrose gives minimum-norm least squares solution.",
+              intuition: "When many x work, pick smallest ||x||.",
+              trap: "Confusing inverse with pseudoinverse.",
+              lessonId: "pseudoinverse",
+            }),
+          },
+          {
+            id: 'pca-lsp',
+            label: "PCA",
+            tooltip: tip({
+              short: "PCA projection minimizes reconstruction error in subspace.",
+              intuition: "Different subspace—variance not labels.",
+              trap: "Calling PCA the same as regression projection.",
+              lessonId: "pca",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'linear-regression': {
+    center: {
+      id: 'linear-regression',
+      label: "Linear Regression",
+      type: 'current',
+      tooltip: tip({
+        short: "Linear regression fits coefficients β so predicted ŷ = Xβ + ε closely matches continuous targets by minimizing squared residual error.",
+        intuition: "The fitted line (or hyperplane) is a compromise—moving to reduce all residuals, not to hit every point.",
+        formula: "\\hat{y}=X\\beta+\\epsilon,\\quad \\hat{\\beta}=(X^TX)^{-1}X^Ty",
+        why: "Linear regression is the baseline for prediction, interpretability, feature effects, and gateway to regularized and generalized linear models.",
+        trap: "Lower training error alone does not prove the line generalizes; correlation does not prove causation.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'vector-lr2',
+            label: "Feature vector",
+            tooltip: tip({
+              short: "Each row of X is one example’s features.",
+              intuition: "β weights combine features into prediction.",
+              trap: "Unscaled features make coefficients incomparable.",
+            }),
+          },
+          {
+            id: 'least-squares-lr2',
+            label: "Least squares",
+            tooltip: tip({
+              short: "OLS minimizes sum of squared residuals.",
+              intuition: "Same projection geometry as Ax≈y.",
+              trap: "Using wrong loss for count or binary targets.",
+              lessonId: "least-squares-projection",
+            }),
+          },
+          {
+            id: 'residual-lr2',
+            label: "Residual",
+            tooltip: tip({
+              short: "e = y − ŷ measures prediction error per point.",
+              intuition: "Large residuals pull the fit.",
+              trap: "Ignoring heteroscedastic residuals.",
+            }),
+          },
+          {
+            id: 'intercept-lr2',
+            label: "Intercept",
+            tooltip: tip({
+              short: "Column of ones in X sets baseline prediction.",
+              intuition: "Without intercept, line forced through origin.",
+              trap: "Forgetting bias term when data offset from zero.",
+            }),
+          },
+          {
+            id: 'train-test-lr2',
+            label: "Train / test split",
+            tooltip: tip({
+              short: "Evaluate on held-out data for generalization.",
+              intuition: "Training MSE can keep improving while test worsens.",
+              trap: "Tuning on test set.",
+              lessonId: "train-validation-test-split",
+            }),
+          },
+          {
+            id: 'correlation-lr2',
+            label: "Correlation",
+            tooltip: tip({
+              short: "Linear fit captures linear association, not causation.",
+              intuition: "Confounders can create misleading slopes.",
+              trap: "Interpreting β as causal effect without design.",
+              lessonId: "confounding-simpsons-paradox",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'design-matrix-lr2',
+            label: "Design matrix X",
+            tooltip: tip({
+              short: "Stack features (and intercept column) for all n samples.",
+              intuition: "Each column is one feature across data.",
+              trap: "Leakage if future information enters X.",
+            }),
+          },
+          {
+            id: 'coefficients-lr2',
+            label: "Estimate β̂",
+            tooltip: tip({
+              short: "Normal equations or QR solve for best β.",
+              intuition: "β̂ balances competing point pulls.",
+              formula: "\\hat{\\beta}=(X^TX)^{-1}X^Ty",
+              trap: "Singular X^TX when features collinear.",
+            }),
+          },
+          {
+            id: 'prediction-lr2',
+            label: "Predict ŷ",
+            tooltip: tip({
+              short: "ŷ = Xβ̂ for train or new rows.",
+              intuition: "Linear combination of features.",
+              trap: "Applying β trained on unscaled data to raw new rows.",
+            }),
+          },
+          {
+            id: 'mse-lr2',
+            label: "MSE loss",
+            tooltip: tip({
+              short: "Mean squared error averages squared residuals.",
+              intuition: "Differentiable convex objective for OLS.",
+              trap: "MSE in original units vs RMSE interpretability.",
+            }),
+          },
+          {
+            id: 'influence-lr2',
+            label: "Influential points",
+            tooltip: tip({
+              short: "Outliers in y or leverage in X tilt the plane.",
+              intuition: "Cook’s distance flags influential rows.",
+              trap: "Blindly fitting without residual diagnostics.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'line-of-best-fit-lr2',
+            label: "Line of best fit",
+            tooltip: tip({
+              short: "Balance pulls from points above and below.",
+              intuition: "Not a line through most points—through best compromise.",
+              trap: "Expecting zero training error with noise.",
+            }),
+          },
+          {
+            id: 'slope-intercept-lr2',
+            label: "Slope and intercept",
+            tooltip: tip({
+              short: "β_j is expected change in y per unit x_j holding others fixed.",
+              intuition: "Multivariate β differs from bivariate scatter slope.",
+              trap: "Ignoring interaction and collinearity when reading β.",
+            }),
+          },
+          {
+            id: 'noise-lr2',
+            label: "Irreducible noise",
+            tooltip: tip({
+              short: "ε captures what features cannot explain.",
+              intuition: "Even perfect β leaves residual variance.",
+              trap: "Assuming low R² means model is useless always.",
+            }),
+          },
+          {
+            id: 'extrapolation-lr2',
+            label: "Extrapolation risk",
+            tooltip: tip({
+              short: "Linear trend outside data range may fail.",
+              intuition: "Model only learned within observed x support.",
+              trap: "Predicting far beyond training x.",
+            }),
+          },
+          {
+            id: 'feature-scale-lr2',
+            label: "Feature scale",
+            tooltip: tip({
+              short: "Large units shrink coefficients—not less important.",
+              intuition: "Standardize before comparing |β_j| magnitudes.",
+              trap: "Ranking raw coefficients on mixed units.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'model-formula-lr2',
+            label: "Model",
+            tooltip: tip({
+              short: "y = Xβ + ε.",
+              formula: "y=X\\beta+\\epsilon",
+              intuition: "Vector y is n×1; X is n×p.",
+              trap: "Using same notation for single-feature scalar case only.",
+            }),
+          },
+          {
+            id: 'ols-formula-lr2',
+            label: "OLS solution",
+            tooltip: tip({
+              short: "β̂ = (X^T X)^{-1} X^T y.",
+              formula: "\\hat{\\beta}=(X^TX)^{-1}X^Ty",
+              intuition: "Requires full rank or pseudoinverse.",
+              trap: "Inverse when collinear features exist.",
+            }),
+          },
+          {
+            id: 'rmse-lr2',
+            label: "RMSE",
+            tooltip: tip({
+              short: "sqrt(mean(e²)) in target units.",
+              formula: "\\mathrm{RMSE}=\\sqrt{\\frac{1}{n}\\sum_i (y_i-\\hat{y}_i)^2}",
+              intuition: "Penalizes large errors.",
+              trap: "Comparing RMSE across differently scaled targets.",
+            }),
+          },
+          {
+            id: 'sklearn-lr2',
+            label: "sklearn LinearRegression",
+            tooltip: tip({
+              short: "LinearRegression().fit(X, y).",
+              intuition: "sklearn solves for weights that minimize squared error on the training design matrix.",
+              code: "from sklearn.linear_model import LinearRegression\nreg = LinearRegression().fit(X_train, y_train)",
+              trap: "No automatic regularization—collinearity hurts.",
+            }),
+          },
+          {
+            id: 'r2-lr2',
+            label: "R² score",
+            tooltip: tip({
+              short: "Fraction of variance explained relative to mean baseline.",
+              intuition: "Can rise with more features even if generalization worsens.",
+              trap: "High R² on train with overfitting.",
+              lessonId: "overfitting",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'causation-trap-lr2',
+            label: "Causation trap",
+            tooltip: tip({
+              short: "Regression coefficients describe association in observational data.",
+              intuition: "Need experiment or causal design for effect claims.",
+              trap: "“β₁ is the causal effect of x₁”.",
+              lessonId: "confounding-simpsons-paradox",
+            }),
+          },
+          {
+            id: 'collinearity-trap-lr2',
+            label: "Collinearity",
+            tooltip: tip({
+              short: "Correlated features make individual β unstable.",
+              intuition: "Joint prediction may still work.",
+              trap: "Dropping features based on unstable coefficients alone.",
+            }),
+          },
+          {
+            id: 'overfit-trap-lr2',
+            label: "Overfitting with many features",
+            tooltip: tip({
+              short: "High p relative to n can fit noise.",
+              intuition: "Regularization or dimension reduction helps.",
+              trap: "Perfect train fit celebrated.",
+              lessonId: "overfitting",
+            }),
+          },
+          {
+            id: 'heteroscedastic-trap-lr2',
+            label: "Heteroscedasticity",
+            tooltip: tip({
+              short: "Non-constant error variance breaks OLS efficiency assumptions.",
+              intuition: "Weighted least squares or transforms may help.",
+              trap: "Ignoring funnel-shaped residual plots.",
+            }),
+          },
+          {
+            id: 'leakage-trap-lr2',
+            label: "Target leakage",
+            tooltip: tip({
+              short: "Features that encode the answer inflate metrics.",
+              intuition: "Pipeline must respect time and causality.",
+              trap: "Including post-outcome variables.",
+              lessonId: "data-leakage-deep-dive",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'logistic-lr2',
+            label: "Logistic regression",
+            tooltip: tip({
+              short: "Generalized linear model for binary outcomes.",
+              intuition: "Same linear score, different link function.",
+              trap: "Using OLS on 0/1 labels.",
+              lessonId: "logistic-regression",
+            }),
+          },
+          {
+            id: 'regularization-lr2',
+            label: "Regularization",
+            tooltip: tip({
+              short: "Ridge and lasso shrink coefficients for generalization.",
+              intuition: "Penalty replaces pure OLS when p large.",
+              trap: "Unregularized OLS on wide data.",
+              lessonId: "regularization",
+            }),
+          },
+          {
+            id: 'gradient-descent-lr2',
+            label: "Gradient descent",
+            tooltip: tip({
+              short: "Large-scale regression solved iteratively.",
+              intuition: "Same MSE, different optimizer path.",
+              trap: "Assuming closed form always required.",
+              lessonId: "gradient-descent",
+            }),
+          },
+          {
+            id: 'cross-val-lr2',
+            label: "Cross-validation",
+            tooltip: tip({
+              short: "Pick models and λ using rotated validation.",
+              intuition: "Single split can mislead.",
+              trap: "Leakage in CV pipeline.",
+              lessonId: "cross-validation",
+            }),
+          },
+          {
+            id: 'calibration-lr2',
+            label: "Calibration",
+            tooltip: tip({
+              short: "Probabilistic predictions need calibration checks.",
+              intuition: "Linear scores ≠ calibrated probabilities except logistic link.",
+              trap: "Treating ŷ as probability for classification.",
+              lessonId: "calibration",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'llm-training-objectives': {
+    center: {
+      id: 'llm-training-objectives',
+      label: "LLM Training Objectives",
+      type: 'current',
+      tooltip: tip({
+        short: "LLM training objectives map raw text, demonstrations, and preference pairs into different loss signals—pretraining predicts tokens, SFT matches demonstrations, preference methods reward chosen over rejected responses.",
+        intuition: "The objective is the teacher: it defines what “good” model behavior means at each stage.",
+        formula: "\\mathcal{L}=-\\log p_\\theta(\\mathrm{target}\\mid\\mathrm{context})",
+        why: "Choosing and staging objectives separates base capability, instruction following, alignment, and safety-relevant behavior in modern LLM pipelines.",
+        trap: "Alignment objectives do not simply add factual knowledge—they mostly change how the model responds.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'transformer-lto',
+            label: "Transformer",
+            tooltip: tip({
+              short: "Autoregressive stack predicts next token from context.",
+              intuition: "Objectives train the same backbone differently.",
+              trap: "Confusing architecture with training signal.",
+              lessonId: "transformer",
+            }),
+          },
+          {
+            id: 'cross-entropy-lto',
+            label: "Cross-entropy loss",
+            tooltip: tip({
+              short: "Negative log probability of the correct next token.",
+              intuition: "Maximum likelihood on token sequences.",
+              trap: "Treating loss as accuracy directly.",
+            }),
+          },
+          {
+            id: 'softmax-lto',
+            label: "Softmax",
+            tooltip: tip({
+              short: "Logits become probabilities over vocabulary.",
+              intuition: "Loss pushes mass onto target token.",
+              trap: "Huge vocab makes tail tokens rare.",
+              lessonId: "softmax",
+            }),
+          },
+          {
+            id: 'tokenization-lto',
+            label: "Tokenization",
+            tooltip: tip({
+              short: "Text becomes token ids the model predicts.",
+              intuition: "Objective is over tokens, not raw characters.",
+              trap: "Token boundaries change what “word” means in loss.",
+              lessonId: "tokenization",
+            }),
+          },
+          {
+            id: 'masking-lto',
+            label: "Causal vs masked",
+            tooltip: tip({
+              short: "Decoder-only uses causal LM; encoders use masked objectives.",
+              intuition: "Visibility rules must match objective.",
+              trap: "Bidirectional pretraining on causal-only inference stack.",
+              lessonId: "attention-masks",
+            }),
+          },
+          {
+            id: 'fine-tuning-lto',
+            label: "Fine-tuning",
+            tooltip: tip({
+              short: "Later stages adapt weights with smaller specialized datasets.",
+              intuition: "Same model, different supervision target.",
+              trap: "Tiny fine-tune cannot replace missing pretrain knowledge.",
+              lessonId: "fine-tuning",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'pretrain-clm-lto',
+            label: "Causal LM pretraining",
+            tooltip: tip({
+              short: "Predict next token on large unlabeled corpora.",
+              intuition: "Learns grammar, facts, and reasoning patterns statistically.",
+              formula: "\\mathcal{L}_{CLM}=-\\sum_t \\log p_\\theta(x_t|x_{<t})",
+              trap: "Memorization vs generalization not separated by loss alone.",
+            }),
+          },
+          {
+            id: 'mlm-lto',
+            label: "Masked LM",
+            tooltip: tip({
+              short: "Predict masked tokens with bidirectional context.",
+              intuition: "BERT-style objective for encoders.",
+              trap: "Using MLM weights directly for left-to-right generation.",
+            }),
+          },
+          {
+            id: 'sft-lto',
+            label: "Supervised fine-tuning",
+            tooltip: tip({
+              short: "Train on (prompt, reference answer) pairs.",
+              intuition: "Teaches format, tone, and task following.",
+              trap: "Small SFT set overfits style not facts.",
+            }),
+          },
+          {
+            id: 'preference-lto',
+            label: "Preference optimization",
+            tooltip: tip({
+              short: "Increase probability of chosen vs rejected completion.",
+              intuition: "RLHF/DPO/IPO reshape responses without full reward model at inference.",
+              trap: "Preferences can encode bias or missing knowledge.",
+            }),
+          },
+          {
+            id: 'rlhf-pipeline-lto',
+            label: "RLHF pipeline",
+            tooltip: tip({
+              short: "Reward model + policy optimization (often PPO).",
+              intuition: "Human rankings become scalar reward signal.",
+              trap: "Reward hacking and distribution shift.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'teacher-signal-lto',
+            label: "Teacher signal",
+            tooltip: tip({
+              short: "Loss tells the model what to imitate or prefer.",
+              intuition: "Garbage supervision → garbage behavior.",
+              trap: "Assuming bigger model fixes bad labels.",
+            }),
+          },
+          {
+            id: 'stage-recipe-lto',
+            label: "Stage recipe",
+            tooltip: tip({
+              short: "Pretrain → SFT → preference is common stack.",
+              intuition: "Each stage fixes different failure mode.",
+              trap: "Skipping SFT before preferences.",
+            }),
+          },
+          {
+            id: 'knowledge-vs-style-lto',
+            label: "Knowledge vs style",
+            tooltip: tip({
+              short: "Pretrain stores broad knowledge; alignment shifts response policy.",
+              intuition: "Preference loss won’t inject unseen facts reliably.",
+              trap: "Expecting RLHF to teach new encyclopedic facts.",
+            }),
+          },
+          {
+            id: 'distribution-shift-lto',
+            label: "Distribution shift",
+            tooltip: tip({
+              short: "Chat fine-tune data differs from web pretrain.",
+              intuition: "Model must adapt without catastrophic forgetting.",
+              trap: "Over-alignment erasing useful base capabilities.",
+            }),
+          },
+          {
+            id: 'eval-mismatch-lto',
+            label: "Eval mismatch",
+            tooltip: tip({
+              short: "Perplexity on web ≠ helpful chat quality.",
+              intuition: "Match metrics to objective stage.",
+              trap: "Reporting only pretrain loss after alignment.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'clm-formula-lto',
+            label: "CLM loss",
+            tooltip: tip({
+              short: "Sum of −log p_θ(token_t | context).",
+              formula: "\\mathcal{L}=-\\sum_t \\log p_\\theta(x_t|x_{<t})",
+              intuition: "Teacher forcing during training.",
+              trap: "Exposure bias at inference without scheduled sampling.",
+            }),
+          },
+          {
+            id: 'sft-formula-lto',
+            label: "SFT loss",
+            tooltip: tip({
+              short: "CLM loss only on answer tokens; prompt masked in loss.",
+              intuition: "Do not penalize model for prompt tokens.",
+              code: "loss = ce(logits[answer_mask], labels[answer_mask])",
+              trap: "Accidentally training loss on user prompt tokens.",
+            }),
+          },
+          {
+            id: 'dpo-sketch-lto',
+            label: "DPO sketch",
+            tooltip: tip({
+              short: "Preference loss compares log ratios of chosen vs rejected.",
+              intuition: "Implicit reward without separate RM at inference.",
+              trap: "Stale reference model in DPO distorts signal.",
+            }),
+          },
+          {
+            id: 'label-masking-lto',
+            label: "Label masking",
+            tooltip: tip({
+              short: "Ignore padding and prompt positions in loss.",
+              intuition: "Only train on supervised positions.",
+              trap: "Padding tokens contributing to loss.",
+            }),
+          },
+          {
+            id: 'perplexity-lto',
+            label: "Perplexity",
+            tooltip: tip({
+              short: "exp(average NLL)—lower is better language modeling.",
+              formula: "\\mathrm{PPL}=\\exp(-\\frac{1}{T}\\sum_t \\log p_\\theta(x_t|x_{<t}))",
+              intuition: "Summarizes pretrain quality.",
+              trap: "Low PPL does not guarantee truthful answers.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'alignment-knowledge-trap-lto',
+            label: "Alignment adds knowledge myth",
+            tooltip: tip({
+              short: "Preference tuning mostly changes response policy.",
+              intuition: "Factual gaps need data or retrieval.",
+              trap: "RLHF as fact injection.",
+              lessonId: "rag",
+            }),
+          },
+          {
+            id: 'overfitting-sft-lto',
+            label: "SFT overfitting",
+            tooltip: tip({
+              short: "Memorizing small demo set hurts diversity.",
+              intuition: "Regularize, mix pretrain data, or early stop.",
+              trap: "1000 examples assumed sufficient for all skills.",
+            }),
+          },
+          {
+            id: 'reward-hacking-lto',
+            label: "Reward hacking",
+            tooltip: tip({
+              short: "Policy exploits reward model weaknesses.",
+              intuition: "Verbose, sycophantic, or evasive outputs.",
+              trap: "Optimizing proxy reward without human eval.",
+            }),
+          },
+          {
+            id: 'catastrophic-forgetting-lto',
+            label: "Catastrophic forgetting",
+            tooltip: tip({
+              short: "Aggressive fine-tune erases pretrain skills.",
+              intuition: "Balance data mixtures and learning rate.",
+              trap: "Huge LR on tiny alignment set.",
+            }),
+          },
+          {
+            id: 'eval-leakage-lto',
+            label: "Benchmark contamination",
+            tooltip: tip({
+              short: "Test examples in pretrain inflate scores.",
+              intuition: "Hold out clean eval sets.",
+              trap: "Training on benchmark text then claiming SOTA.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'token-gen-lto',
+            label: "Token generation",
+            tooltip: tip({
+              short: "Inference samples from model trained by these objectives.",
+              intuition: "Decoding uses CLM probabilities.",
+              trap: "Training teacher forcing vs free-run generation gap.",
+              lessonId: "transformer-token-generation",
+            }),
+          },
+          {
+            id: 'sampling-lto',
+            label: "Sampling strategies",
+            tooltip: tip({
+              short: "Temperature and top-p shape outputs after training.",
+              intuition: "Objective sets logits; sampling sets behavior.",
+              trap: "Blaming sampling for fundamental knowledge gaps.",
+              lessonId: "sampling-strategies",
+            }),
+          },
+          {
+            id: 'rag-lto',
+            label: "RAG",
+            tooltip: tip({
+              short: "Retrieval augments models when parametric knowledge insufficient.",
+              intuition: "Complements pretrain, not replaces it.",
+              trap: "Expecting objectives alone to ground all facts.",
+              lessonId: "rag",
+            }),
+          },
+          {
+            id: 'fine-tuning-used-lto',
+            label: "Fine-tuning",
+            tooltip: tip({
+              short: "LoRA and adapters implement SFT cheaply.",
+              intuition: "Low-rank updates preserve base weights.",
+              trap: "Adapter not trained for target domain.",
+              lessonId: "fine-tuning",
+            }),
+          },
+          {
+            id: 'arch-families-lto',
+            label: "Architecture families",
+            tooltip: tip({
+              short: "Encoder vs decoder objectives differ.",
+              intuition: "Match objective to model family.",
+              trap: "GPT-style chat on pure encoder pretrain.",
+              lessonId: "transformer-architecture-families",
+            }),
+          },
+        ],
+      },
+    ],
+  },
+
+  'logistic-regression': {
+    center: {
+      id: 'logistic-regression',
+      label: "Logistic Regression",
+      type: 'current',
+      tooltip: tip({
+        short: "Logistic regression models binary class probability as p(y=1|x) = σ(w·x + b), learning weights that linearly separate classes in feature space after sigmoid squashing.",
+        intuition: "A straight score boundary becomes a smooth S-curve probability; threshold turns probability into class decisions.",
+        formula: "p(y=1\\mid x)=\\sigma(w^Tx+b)=\\frac{1}{1+e^{-w^Tx-b}}",
+        why: "Logistic regression is the interpretable baseline for classification, calibration analysis, and gateway to neural classifiers and GLMs.",
+        trap: "Sigmoid output is not automatically well calibrated—training optimizes log loss, not calibration directly.",
+      }),
+    },
+    branches: [
+      {
+        id: 'prerequisites',
+        label: "Prerequisites",
+        type: 'prerequisite',
+        children: [
+          {
+            id: 'linear-score-lr3',
+            label: "Linear score",
+            tooltip: tip({
+              short: "z = w·x + b is a real-valued logit.",
+              intuition: "Same linear part as linear regression.",
+              trap: "Expecting z to be a probability.",
+              lessonId: "linear-regression",
+            }),
+          },
+          {
+            id: 'sigmoid-lr3',
+            label: "Sigmoid",
+            tooltip: tip({
+              short: "Maps (−∞,∞) to (0,1).",
+              intuition: "Monotonic—higher score → higher probability.",
+              trap: "Outputs need not match empirical frequencies.",
+              lessonId: "calibration",
+            }),
+          },
+          {
+            id: 'binary-label-lr3',
+            label: "Binary labels",
+            tooltip: tip({
+              short: "y ∈ {0,1} indicates class membership.",
+              intuition: "Multi-class extends via softmax.",
+              trap: "Using OLS on 0/1 targets.",
+            }),
+          },
+          {
+            id: 'log-loss-lr3',
+            label: "Log loss",
+            tooltip: tip({
+              short: "Cross-entropy penalizes confident wrong predictions.",
+              intuition: "Maximum likelihood for Bernoulli model.",
+              trap: "MSE on probabilities is wrong objective.",
+            }),
+          },
+          {
+            id: 'threshold-lr3',
+            label: "Decision threshold",
+            tooltip: tip({
+              short: "Predict class 1 if p ≥ τ (often 0.5).",
+              intuition: "Threshold trades precision vs recall.",
+              trap: "Default 0.5 ignores class imbalance costs.",
+              lessonId: "classification-metrics",
+            }),
+          },
+          {
+            id: 'feature-scale-lr3',
+            label: "Feature scaling",
+            tooltip: tip({
+              short: "Gradient descent converges faster on scaled features.",
+              intuition: "Regularization penalties are scale-sensitive.",
+              trap: "Unpenalized unscaled coefficients misleading.",
+              lessonId: "feature-scaling-preprocessing",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'mechanism',
+        label: "Core mechanism",
+        type: 'mechanism',
+        children: [
+          {
+            id: 'logit-lr3',
+            label: "Logit",
+            tooltip: tip({
+              short: "logit(p) = log(p/(1−p)) = w·x + b.",
+              intuition: "Linear model in log-odds space.",
+              formula: "\\mathrm{logit}(p)=w^Tx+b",
+              trap: "Extrapolating probabilities near 0 or 1.",
+            }),
+          },
+          {
+            id: 'probability-lr3',
+            label: "Probability",
+            tooltip: tip({
+              short: "p = σ(w·x + b).",
+              intuition: "S-shaped curve over feature space.",
+              formula: "p=\\sigma(w^Tx+b)",
+              trap: "Perfect separation pushes weights to infinity without regularization.",
+            }),
+          },
+          {
+            id: 'loss-lr3',
+            label: "Binary cross-entropy",
+            tooltip: tip({
+              short: "−[y log p + (1−y) log(1−p)].",
+              intuition: "Penalizes confident mistakes heavily.",
+              trap: "Numerical issues at p=0 or 1 without clipping.",
+            }),
+          },
+          {
+            id: 'gradient-lr3',
+            label: "Gradient descent fit",
+            tooltip: tip({
+              short: "Iteratively update w,b to reduce average log loss.",
+              intuition: "No closed form like OLS in general.",
+              trap: "Learning rate too large oscillates.",
+            }),
+          },
+          {
+            id: 'regularized-lr3',
+            label: "L2 regularization",
+            tooltip: tip({
+              short: "Penalty λ||w||² improves generalization.",
+              intuition: "Shrinks extreme weights from separation.",
+              trap: "Too much λ underfits decision boundary.",
+              lessonId: "regularization",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'intuitions',
+        label: "Intuitions",
+        type: 'intuition',
+        children: [
+          {
+            id: 'linear-boundary-lr3',
+            label: "Linear boundary",
+            tooltip: tip({
+              short: "Decision surface is a hyperplane in feature space.",
+              intuition: "Nonlinear problems need features or different models.",
+              trap: "Expecting circles to separate with plain logistic.",
+            }),
+          },
+          {
+            id: 'odds-multiplier-lr3',
+            label: "Odds multiplier",
+            tooltip: tip({
+              short: "exp(w_j) is multiplicative change in odds per unit x_j.",
+              intuition: "Interpret coefficients in log-odds units.",
+              trap: "Reading w as probability change directly.",
+            }),
+          },
+          {
+            id: 'imbalance-lr3',
+            label: "Class imbalance",
+            tooltip: tip({
+              short: "Rare positives need threshold or class weights.",
+              intuition: "0.5 threshold may predict all negatives.",
+              trap: "High accuracy with useless all-negative classifier.",
+              lessonId: "classification-metrics",
+            }),
+          },
+          {
+            id: 'calibration-intuition-lr3',
+            label: "Calibration intuition",
+            tooltip: tip({
+              short: "Among examples scored 0.8, ~80% should be positive if calibrated.",
+              intuition: "Log loss does not guarantee calibration.",
+              trap: "Trusting raw scores as frequencies.",
+              lessonId: "calibration",
+            }),
+          },
+          {
+            id: 'feature-engineering-lr3',
+            label: "Feature engineering",
+            tooltip: tip({
+              short: "Polynomial or interaction features lift linear model capacity.",
+              intuition: "Still linear in parameters if features expanded.",
+              trap: "Exploding dimension without regularization.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'formula-code',
+        label: "Formula / Code",
+        type: 'formula',
+        children: [
+          {
+            id: 'sigmoid-formula-lr3',
+            label: "Sigmoid",
+            tooltip: tip({
+              short: "σ(z) = 1/(1+e^{−z}).",
+              formula: "\\sigma(z)=\\frac{1}{1+e^{-z}}",
+              intuition: "Maps logit to probability.",
+              trap: "Overflow for large |z| in naive code.",
+            }),
+          },
+          {
+            id: 'bce-formula-lr3',
+            label: "Log loss",
+            tooltip: tip({
+              short: "L = −Σ [y log p + (1−y) log(1−p)].",
+              formula: "\\mathcal{L}=-\\sum_i [y_i\\log p_i+(1-y_i)\\log(1-p_i)]",
+              intuition: "Average for mini-batches.",
+              trap: "Using MSE instead.",
+            }),
+          },
+          {
+            id: 'sklearn-logistic-lr3',
+            label: "sklearn LogisticRegression",
+            tooltip: tip({
+              short: "LogisticRegression(penalty=\"l2\", C=1.0).fit(X,y).",
+              intuition: "The solver finds weights that maximize regularized log-likelihood for binary labels.",
+              code: "from sklearn.linear_model import LogisticRegression\nclf = LogisticRegression(max_iter=1000).fit(X, y)",
+              trap: "C is inverse regularization strength.",
+            }),
+          },
+          {
+            id: 'predict-proba-lr3',
+            label: "predict_proba",
+            tooltip: tip({
+              short: "Returns p(y=1|x) for each row.",
+              intuition: "Threshold separately for decisions.",
+              trap: "Using hard predictions when ranking needed.",
+            }),
+          },
+          {
+            id: 'threshold-code-lr3',
+            label: "Custom threshold",
+            tooltip: tip({
+              short: "y_hat = (p >= tau).astype(int).",
+              intuition: "Changing tau moves the precision–recall tradeoff without retraining the underlying scorer.",
+              code: "proba = clf.predict_proba(X)[:, 1]\ny_hat = (proba >= 0.3).astype(int)",
+              trap: "Tuning tau on test set.",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'traps',
+        label: "Common traps",
+        type: 'trap',
+        children: [
+          {
+            id: 'calibration-trap-lr3',
+            label: "Calibration trap",
+            tooltip: tip({
+              short: "Low log loss ≠ calibrated probabilities.",
+              intuition: "Platt scaling or isotonic may help.",
+              trap: "Using scores as literal frequencies.",
+              lessonId: "calibration",
+            }),
+          },
+          {
+            id: 'separation-trap-lr3',
+            label: "Perfect separation",
+            tooltip: tip({
+              short: "Weights diverge without penalty.",
+              intuition: "Regularization or early stopping needed.",
+              trap: "Huge coefficients interpreted as strong evidence.",
+            }),
+          },
+          {
+            id: 'linear-trap-lr3',
+            label: "Nonlinear data",
+            tooltip: tip({
+              short: "Plain logistic fails on XOR-like patterns.",
+              intuition: "Need feature maps or neural nets.",
+              trap: "Forcing logistic on visibly nonlinear boundaries.",
+            }),
+          },
+          {
+            id: 'imbalance-trap-lr3',
+            label: "Imbalance trap",
+            tooltip: tip({
+              short: "Accuracy looks fine while recall collapses.",
+              intuition: "Adjust threshold, weights, or metrics.",
+              trap: "Reporting accuracy only.",
+              lessonId: "roc-pr-curves",
+            }),
+          },
+          {
+            id: 'leakage-trap-lr3',
+            label: "Leakage",
+            tooltip: tip({
+              short: "Future or target-derived features inflate AUC.",
+              intuition: "Same pipeline discipline as regression.",
+              trap: "Including outcome proxies in X.",
+              lessonId: "data-leakage-deep-dive",
+            }),
+          },
+        ],
+      },
+      {
+        id: 'used-later',
+        label: "Used later",
+        type: 'application',
+        children: [
+          {
+            id: 'classification-metrics-lr3',
+            label: "Classification metrics",
+            tooltip: tip({
+              short: "Precision, recall, F1 evaluate decisions from scores.",
+              intuition: "Metrics depend on threshold.",
+              trap: "One threshold hides tradeoffs.",
+              lessonId: "classification-metrics",
+            }),
+          },
+          {
+            id: 'roc-lr3',
+            label: "ROC / PR curves",
+            tooltip: tip({
+              short: "Sweep thresholds to compare ranking quality.",
+              intuition: "Score ranking vs fixed τ.",
+              trap: "ROC alone when positives rare.",
+              lessonId: "roc-pr-curves",
+            }),
+          },
+          {
+            id: 'neural-lr3',
+            label: "Neural classifier head",
+            tooltip: tip({
+              short: "Final linear+sigmoid/softmax layer is logistic generalized.",
+              intuition: "Deep nets learn features; last layer is GLM.",
+              trap: "Assuming logits are interpretable like sparse logistic.",
+              lessonId: "neural-network",
+            }),
+          },
+          {
+            id: 'regularization-used-lr3',
+            label: "Regularization",
+            tooltip: tip({
+              short: "L1 gives sparse features; L2 stabilizes weights.",
+              intuition: "Penalty chosen on validation.",
+              trap: "Unregularized high-dimensional logistic.",
+              lessonId: "regularization",
+            }),
+          },
+          {
+            id: 'knn-nb-lr3',
+            label: "kNN / Naive Bayes / SVM",
+            tooltip: tip({
+              short: "Compare classic classifiers on same tabular task.",
+              intuition: "Logistic when linear boundary and probabilities needed.",
+              trap: "Always picking logistic without baselines.",
+              lessonId: "knn-naive-bayes-svm",
+            }),
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export function getConceptMap(animationId) {
