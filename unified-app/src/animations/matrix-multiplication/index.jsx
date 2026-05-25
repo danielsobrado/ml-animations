@@ -32,7 +32,7 @@ export default function MatrixMultiplicationAnimation() {
             case 'practice':
                 return <Suspense fallback={<LoadingPanel />}><PracticePanel /></Suspense>;
             case 'codefix':
-                return <Suspense fallback={<LoadingPanel />}><AlgebraCodeLab /></Suspense>;
+                return <Suspense fallback={<LoadingPanel />}><AlgebraCodeLab lessonId="matrix-multiplication" /></Suspense>;
             default:
                 return <Suspense fallback={<LoadingPanel />}><AnimationPanel /></Suspense>;
         }

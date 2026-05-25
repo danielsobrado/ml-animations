@@ -3524,7 +3524,7 @@ export const CONCEPT_MAPS = {
               example: 'Train great, val bad → overfit or leakage; all splits bad → data or label bug.',
               trap: 'Tuning on the test set hides evaluation bugs.',
             }),
-            lessonId: 'train-test-split',
+            lessonId: 'train-validation-test-split',
           },
           {
             id: 'classification-metrics-prereq',
@@ -4216,7 +4216,6 @@ export const CONCEPT_MAPS = {
               intuition: 'Ops metrics plus responsible-ML metrics form trust.',
               trap: 'Silos between ML and platform on-call.',
             }),
-            lessonId: 'model-reliability',
           },
           {
             id: 'roc-pr-monitoring',
@@ -4602,7 +4601,6 @@ export const CONCEPT_MAPS = {
               intuition: 'Connect metrics to escalation, documentation, and appeals.',
               trap: 'Fairness team isolated from model owners.',
             }),
-            lessonId: 'model-reliability',
           },
         ],
       },
@@ -4958,7 +4956,6 @@ export const CONCEPT_MAPS = {
               intuition: 'Uncertainty is one pillar of reliability, not an optional add-on.',
               trap: 'Shipping point predictions without an escalation path.',
             }),
-            lessonId: 'model-reliability',
           },
           {
             id: 'rag-uncertainty',
@@ -6863,7 +6860,6 @@ export const CONCEPT_MAPS = {
               intuition: 'Each candidate λ evaluated by mean CV metric.',
               trap: 'Wide search + same test peeking overfits selection.',
             }),
-            lessonId: 'hyperparameter-tuning',
           },
           {
             id: 'bias-variance-used-cv',
@@ -13586,7 +13582,7 @@ export const CONCEPT_MAPS = {
               example: 'Policy with great mean but occasional huge negative spikes.',
               trap: 'Benchmarking RL with mean return only on stochastic domains.',
             }),
-            lessonId: 'reinforcement-learning',
+            lessonId: 'reward-shaping',
           },
         ],
       },
@@ -16525,7 +16521,6 @@ export const CONCEPT_MAPS = {
               intuition: "Track bucket drift over time.",
               trap: "Offline calibration once forever.",
             }),
-            lessonId: 'model-reliability',
           },
           {
             id: 'uncertainty-cal-lesson',

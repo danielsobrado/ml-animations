@@ -5,6 +5,10 @@ import { LANGUAGE_MODEL_CODE_LABS } from '../language-models/languageModelCodeLa
 import { RAG_CODE_LABS } from '../rag/ragCodeLabs.js';
 import { EVALUATION_CODE_LABS } from '../evaluation/evaluationCodeLabs.js';
 import { EXPERIMENTATION_CODE_LABS } from '../experimentation/experimentationCodeLabs.js';
+export {
+  ALGEBRA_CODE_LAB_GROUPS_BY_LESSON,
+  getAlgebraCodeLabsForLesson,
+} from './algebraLessonCodeLabs.js';
 
 export const ALGEBRA_CODE_LABS = [
   ...LINEAR_ALGEBRA_CODE_LABS,
