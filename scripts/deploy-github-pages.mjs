@@ -16,7 +16,7 @@ const deployDir = path.join(repoRoot, '.deploy', 'gh-pages');
 const retainedAssetsDir = path.join(repoRoot, '.deploy', 'retained-assets');
 const branch = process.env.PAGES_BRANCH || 'gh-pages';
 const installMode = process.env.PAGES_INSTALL || 'auto';
-const assetRetentionCommits = Number.parseInt(process.env.PAGES_ASSET_RETENTION_COMMITS || '3', 10);
+const assetRetentionCommits = Number.parseInt(process.env.PAGES_ASSET_RETENTION_COMMITS || '8', 10);
 const siteBaseUrl = 'https://danielsobrado.github.io/ml-animations';
 const appBasePath = '/ml-animations';
 
