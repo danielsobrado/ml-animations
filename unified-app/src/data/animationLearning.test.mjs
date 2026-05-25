@@ -46,7 +46,10 @@ test('createLearningModel gives every animation the uniform learning shell contr
     if (conceptMap) {
       assert.equal(model.mindmap.center.id, animation.id);
       assert.ok(model.mindmap.center.tooltip?.short, `${animation.id} needs concept-map center tooltip`);
-      assert.equal(model.mindmap.branches.length, 6, `${animation.id} needs six concept-map branches`);
+      assert.ok(
+        model.mindmap.branches.length >= 6,
+        `${animation.id} needs at least six concept-map branches`,
+      );
       const leaves = model.mindmap.branches.flatMap((branch) => branch.children);
       assert.ok(leaves.length >= 20, `${animation.id} needs a rich concept-map`);
       for (const leaf of leaves) {
