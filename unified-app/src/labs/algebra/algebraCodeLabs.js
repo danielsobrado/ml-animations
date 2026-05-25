@@ -1739,4 +1739,2358 @@ return results;`,
 }`,
     explanation: 'Least squares minimizes RSS, the squared length of the error vector b - Ax.',
   },
+
+  {
+    id: 'orthogonality-dot-zero',
+    stepLabel: '12.1',
+    group: 'Orthogonality',
+    title: 'Zero dot product',
+    concept: 'Two vectors are orthogonal when their dot product is zero.',
+    objective: 'Complete the boolean check for zero dot product.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function hasZeroDot(a, b) {
+  // TODO: return true when the dot product is exactly zero.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('standard basis vectors', hasZeroDot([1, 0], [0, 1]), true);
+check('non-orthogonal vectors', hasZeroDot([1, 2], [3, 4]), false);
+check('integer orthogonal pair', hasZeroDot([2, -1], [1, 2]), true);
+
+return results;`,
+    hints: [
+      'Orthogonal means dot(a, b) equals zero.',
+      'Use the dot helper.',
+      'return dot(a, b) === 0;',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function hasZeroDot(a, b) {
+  return dot(a, b) === 0;
+}`,
+    explanation: 'Orthogonality is the geometric meaning of a zero dot product.',
+  },
+
+  {
+    id: 'orthogonality-tolerance',
+    stepLabel: '12.2',
+    group: 'Orthogonality',
+    title: 'Orthogonal with tolerance',
+    concept: 'Floating-point computations often need a tolerance instead of exact equality.',
+    objective: 'Check whether the absolute dot product is small enough.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function areOrthogonal(a, b, tolerance = 1e-9) {
+  // TODO: return true if |dot(a, b)| is at most tolerance.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('standard basis vectors', areOrthogonal([1, 0], [0, 1]), true);
+check('opposite diagonal pair', areOrthogonal([1, 1], [1, -1]), true);
+check('non-orthogonal vectors', areOrthogonal([1, 2], [3, 4]), false);
+check('nearly zero dot product', areOrthogonal([1, 0], [1e-10, 1]), true);
+
+return results;`,
+    hints: [
+      'Use Math.abs.',
+      'Check whether the absolute dot product is <= tolerance.',
+      'return Math.abs(dot(a, b)) <= tolerance;',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function areOrthogonal(a, b, tolerance = 1e-9) {
+  return Math.abs(dot(a, b)) <= tolerance;
+}`,
+    explanation: 'In real numerical code, zero often means close enough to zero.',
+  },
+
+  {
+    id: 'projection-residual-orthogonal',
+    stepLabel: '12.3',
+    group: 'Orthogonality',
+    title: 'Projection residual is orthogonal',
+    concept: 'After projecting v onto b, the leftover residual is orthogonal to b.',
+    objective: 'Return the dot product between the residual and b.',
+    difficulty: 'challenge',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function projectOnto(v, b) {
+  const scale = dot(v, b) / dot(b, b);
+  return b.map((entry) => scale * entry);
+}
+
+function residualAfterProjection(v, b) {
+  const projection = projectOnto(v, b);
+  return v.map((entry, i) => entry - projection[i]);
+}
+
+function residualDotBasis(v, b) {
+  const residual = residualAfterProjection(v, b);
+
+  // TODO: return residual dotted with b.
+  return 999;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('x-axis projection residual', residualDotBasis([3, 4], [1, 0]), 0);
+check('diagonal projection residual', residualDotBasis([2, 0], [1, 1]), 0);
+check('non-unit projection residual', residualDotBasis([5, 2], [2, 1]), 0);
+
+return results;`,
+    hints: [
+      'The residual is already computed.',
+      'Use dot(residual, b).',
+      'return dot(residual, b);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function projectOnto(v, b) {
+  const scale = dot(v, b) / dot(b, b);
+  return b.map((entry) => scale * entry);
+}
+
+function residualAfterProjection(v, b) {
+  const projection = projectOnto(v, b);
+  return v.map((entry, i) => entry - projection[i]);
+}
+
+function residualDotBasis(v, b) {
+  const residual = residualAfterProjection(v, b);
+  return dot(residual, b);
+}`,
+    explanation: 'Projection leaves behind an error vector that is perpendicular to the projection direction.',
+  },
+
+  {
+    id: 'projection-matrix-outer-product',
+    stepLabel: '13.1',
+    group: 'Projection matrix',
+    title: 'Outer product',
+    concept: 'For a unit vector u, the projection matrix onto u is u times u^T.',
+    objective: 'Compute one entry of the outer product.',
+    difficulty: 'core',
+    starterCode: `function outerEntry(u, row, col) {
+  // TODO: return u[row] times u[col].
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('x-axis top-left', outerEntry([1, 0], 0, 0), 1);
+check('x-axis off diagonal', outerEntry([1, 0], 0, 1), 0);
+check('y-axis bottom-right', outerEntry([0, 1], 1, 1), 1);
+check('diagonal unit vector', outerEntry([0.6, 0.8], 0, 1), 0.48);
+
+return results;`,
+    hints: [
+      'Outer product combines one coordinate from the row and one from the column.',
+      'Use u[row] and u[col].',
+      'return u[row] * u[col];',
+    ],
+    solution: `function outerEntry(u, row, col) {
+  return u[row] * u[col];
+}`,
+    explanation: 'The outer product builds a matrix from a vector by multiplying every pair of coordinates.',
+  },
+
+  {
+    id: 'projection-matrix-unit',
+    stepLabel: '13.2',
+    group: 'Projection matrix',
+    title: 'Projection matrix onto unit vector',
+    concept: 'A projection matrix onto a unit vector u is P = u times u^T.',
+    objective: 'Push the correct outer-product entry into each row.',
+    difficulty: 'core',
+    starterCode: `function projectionMatrixUnit(u) {
+  const P = [];
+
+  for (let row = 0; row < u.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < u.length; col++) {
+      // TODO: push the projection matrix entry.
+      values.push(0);
+    }
+
+    P.push(values);
+  }
+
+  return P;
+}`,
+    testCode: `const results = [];
+
+function approxMatrix(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((row, i) => (
+    row.length === b[i].length && row.every((value, j) => Math.abs(value - b[i][j]) <= tolerance)
+  ));
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxMatrix(actual, expected),
+  });
+}
+
+check('x-axis projection matrix', projectionMatrixUnit([1, 0]), [[1, 0], [0, 0]]);
+check('y-axis projection matrix', projectionMatrixUnit([0, 1]), [[0, 0], [0, 1]]);
+check('diagonal unit projection matrix', projectionMatrixUnit([0.6, 0.8]), [[0.36, 0.48], [0.48, 0.64]]);
+
+return results;`,
+    hints: [
+      'Use the outer product rule.',
+      'Each entry is u[row] * u[col].',
+      'values.push(u[row] * u[col]);',
+    ],
+    solution: `function projectionMatrixUnit(u) {
+  const P = [];
+
+  for (let row = 0; row < u.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < u.length; col++) {
+      values.push(u[row] * u[col]);
+    }
+
+    P.push(values);
+  }
+
+  return P;
+}`,
+    explanation: 'A projection matrix stores the projection operation as a matrix.',
+  },
+
+  {
+    id: 'projection-matrix-apply',
+    stepLabel: '13.3',
+    group: 'Projection matrix',
+    title: 'Apply projection matrix',
+    concept: 'Applying a projection matrix means matrix-vector multiplication.',
+    objective: 'Use matvec to apply P to v.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  const y = [];
+
+  for (let row = 0; row < A.length; row++) {
+    y.push(dot(A[row], x));
+  }
+
+  return y;
+}
+
+function applyProjectionMatrix(P, v) {
+  // TODO: return P times v.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('project with x-axis matrix', applyProjectionMatrix([[1,0],[0,0]], [3,4]), [3,0]);
+check('project with y-axis matrix', applyProjectionMatrix([[0,0],[0,1]], [3,4]), [0,4]);
+check('project with diagonal matrix', applyProjectionMatrix([[0.5,0.5],[0.5,0.5]], [2,0]), [1,1]);
+
+return results;`,
+    hints: [
+      'Projection matrix application is just matrix-vector multiplication.',
+      'Use the matvec helper.',
+      'return matvec(P, v);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  const y = [];
+
+  for (let row = 0; row < A.length; row++) {
+    y.push(dot(A[row], x));
+  }
+
+  return y;
+}
+
+function applyProjectionMatrix(P, v) {
+  return matvec(P, v);
+}`,
+    explanation: 'Projection matrices turn geometric projection into a normal matrix-vector operation.',
+  },
+
+  {
+    id: 'projection-matrix-idempotent',
+    stepLabel: '13.4',
+    group: 'Projection matrix',
+    title: 'Projecting twice changes nothing',
+    concept: 'Projection matrices satisfy P squared = P.',
+    objective: 'Return P applied twice to v.',
+    difficulty: 'challenge',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function projectTwice(P, v) {
+  const once = matvec(P, v);
+
+  // TODO: apply P to once.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('project twice onto x-axis', projectTwice([[1,0],[0,0]], [3,4]), [3,0]);
+check('project twice onto y-axis', projectTwice([[0,0],[0,1]], [3,4]), [0,4]);
+check('project twice onto diagonal', projectTwice([[0.5,0.5],[0.5,0.5]], [2,0]), [1,1]);
+
+return results;`,
+    hints: [
+      'The variable once is already P times v.',
+      'Apply P to once using matvec.',
+      'return matvec(P, once);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function projectTwice(P, v) {
+  const once = matvec(P, v);
+  return matvec(P, once);
+}`,
+    explanation: 'After a vector is already projected onto a subspace, projecting it again does not move it.',
+  },
+
+  {
+    id: 'normal-equations-left',
+    stepLabel: '14.1',
+    group: 'Normal equations',
+    title: 'Compute A^T A',
+    concept: 'The left side of the normal equations is A^T A.',
+    objective: 'Return transpose(A) times A.',
+    difficulty: 'challenge',
+    starterCode: `function transpose(A) {
+  const rows = A.length;
+  const cols = A[0].length;
+  const T = [];
+
+  for (let j = 0; j < cols; j++) {
+    const row = [];
+    for (let i = 0; i < rows; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+
+  return T;
+}
+
+function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+  for (let i = 0; i < A.length; i++) {
+    const row = [];
+    for (let j = 0; j < B[0].length; j++) {
+      row.push(matrixCell(A, B, i, j));
+    }
+    C.push(row);
+  }
+  return C;
+}
+
+function normalLeft(A) {
+  // TODO: return A^T A.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameMatrix(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameMatrix(actual, expected),
+  });
+}
+
+check('line design matrix normal left', normalLeft([[1, 1], [1, 2], [1, 3]]), [[3, 6], [6, 14]]);
+check('identity normal left', normalLeft([[1, 0], [0, 1]]), [[1, 0], [0, 1]]);
+
+return results;`,
+    hints: [
+      'First compute transpose(A).',
+      'Then multiply transpose(A) by A.',
+      'return matmul(transpose(A), A);',
+    ],
+    solution: `function transpose(A) {
+  const rows = A.length;
+  const cols = A[0].length;
+  const T = [];
+
+  for (let j = 0; j < cols; j++) {
+    const row = [];
+    for (let i = 0; i < rows; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+
+  return T;
+}
+
+function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+  for (let i = 0; i < A.length; i++) {
+    const row = [];
+    for (let j = 0; j < B[0].length; j++) {
+      row.push(matrixCell(A, B, i, j));
+    }
+    C.push(row);
+  }
+  return C;
+}
+
+function normalLeft(A) {
+  return matmul(transpose(A), A);
+}`,
+    explanation: 'Normal equations use A^T A to summarize how columns of A interact with each other.',
+  },
+
+  {
+    id: 'normal-equations-right',
+    stepLabel: '14.2',
+    group: 'Normal equations',
+    title: 'Compute A^T b',
+    concept: 'The right side of the normal equations is A^T b.',
+    objective: 'Return transpose(A) times b.',
+    difficulty: 'challenge',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function transpose(A) {
+  const T = [];
+  for (let j = 0; j < A[0].length; j++) {
+    const row = [];
+    for (let i = 0; i < A.length; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+  return T;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function normalRight(A, b) {
+  // TODO: return A^T b.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('line design matrix normal right', normalRight([[1, 1], [1, 2], [1, 3]], [2, 3, 5]), [10, 23]);
+check('identity normal right', normalRight([[1, 0], [0, 1]], [7, 8]), [7, 8]);
+
+return results;`,
+    hints: [
+      'The right side is A transpose times b.',
+      'Use transpose(A) and matvec.',
+      'return matvec(transpose(A), b);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function transpose(A) {
+  const T = [];
+  for (let j = 0; j < A[0].length; j++) {
+    const row = [];
+    for (let i = 0; i < A.length; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+  return T;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function normalRight(A, b) {
+  return matvec(transpose(A), b);
+}`,
+    explanation: 'A^T b measures how each column of A aligns with the target vector b.',
+  },
+
+  {
+    id: 'solve-2x2-system',
+    stepLabel: '14.3',
+    group: 'Normal equations',
+    title: 'Solve 2x2 system',
+    concept: 'A small normal equation can be solved with the 2x2 inverse formula.',
+    objective: 'Complete the determinant formula.',
+    difficulty: 'challenge',
+    starterCode: `function solve2x2(M, y) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  // TODO: compute the determinant ad - bc.
+  const det = 1;
+
+  const x0 = (d * y[0] - b * y[1]) / det;
+  const x1 = (-c * y[0] + a * y[1]) / det;
+
+  return [x0, x1];
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('identity system', solve2x2([[1,0],[0,1]], [7,8]), [7,8]);
+check('diagonal system', solve2x2([[2,0],[0,4]], [6,8]), [3,2]);
+check('full 2x2 system', solve2x2([[3,1],[1,2]], [9,8]), [2,3]);
+
+return results;`,
+    hints: [
+      'The determinant of [[a,b],[c,d]] is ad - bc.',
+      'Use the variables already assigned.',
+      'const det = a * d - b * c;',
+    ],
+    solution: `function solve2x2(M, y) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  const det = a * d - b * c;
+
+  const x0 = (d * y[0] - b * y[1]) / det;
+  const x1 = (-c * y[0] + a * y[1]) / det;
+
+  return [x0, x1];
+}`,
+    explanation: 'For tiny least-squares examples, a 2x2 solver lets learners see the whole normal-equation pipeline.',
+  },
+
+  {
+    id: 'line-fit-design-matrix',
+    stepLabel: '15.1',
+    group: 'Least-squares line fit',
+    title: 'Design matrix for a line',
+    concept: 'A line y = b + mx can be written with rows [1, x].',
+    objective: 'Push [1, x] for each input value.',
+    difficulty: 'core',
+    starterCode: `function designMatrix(xs) {
+  const A = [];
+
+  for (let i = 0; i < xs.length; i++) {
+    const x = xs[i];
+
+    // TODO: push the row for intercept + slope.
+    A.push([]);
+  }
+
+  return A;
+}`,
+    testCode: `const results = [];
+
+function sameMatrix(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameMatrix(actual, expected),
+  });
+}
+
+check('three x values', designMatrix([1, 2, 3]), [[1,1],[1,2],[1,3]]);
+check('two x values', designMatrix([0, 5]), [[1,0],[1,5]]);
+
+return results;`,
+    hints: [
+      'The first entry is always 1 for the intercept.',
+      'The second entry is x for the slope.',
+      'A.push([1, x]);',
+    ],
+    solution: `function designMatrix(xs) {
+  const A = [];
+
+  for (let i = 0; i < xs.length; i++) {
+    const x = xs[i];
+    A.push([1, x]);
+  }
+
+  return A;
+}`,
+    explanation: 'The column of 1s lets the model learn an intercept; the x column lets it learn a slope.',
+  },
+
+  {
+    id: 'line-fit-predict-one',
+    stepLabel: '15.2',
+    group: 'Least-squares line fit',
+    title: 'Predict with intercept and slope',
+    concept: 'A fitted line predicts yHat = intercept + slope * x.',
+    objective: 'Complete the prediction formula.',
+    difficulty: 'warmup',
+    starterCode: `function predictLine(params, x) {
+  const intercept = params[0];
+  const slope = params[1];
+
+  // TODO: return intercept + slope * x.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('intercept only at x=0', predictLine([2, 3], 0), 2);
+check('positive slope', predictLine([2, 3], 4), 14);
+check('fractional slope', predictLine([-1, 0.5], 6), 2);
+
+return results;`,
+    hints: [
+      'params[0] is intercept.',
+      'params[1] is slope.',
+      'return intercept + slope * x;',
+    ],
+    solution: `function predictLine(params, x) {
+  const intercept = params[0];
+  const slope = params[1];
+  return intercept + slope * x;
+}`,
+    explanation: 'This is the simplest linear regression prediction formula.',
+  },
+
+  {
+    id: 'line-fit-normal-equations',
+    stepLabel: '15.3',
+    group: 'Least-squares line fit',
+    title: 'Fit line with normal equations',
+    concept: 'Least squares solves (A^T A)w = A^T y.',
+    objective: 'Return the solved parameter vector.',
+    difficulty: 'challenge',
+    starterCode: `function fitLineFromNormalEquations(left, right) {
+  // left is A^T A and right is A^T y.
+  // TODO: solve the 2x2 system.
+  return [0, 0];
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('line y = x', fitLineFromNormalEquations([[3, 6], [6, 14]], [6, 14]), [0, 1]);
+check('line y = 1 + x', fitLineFromNormalEquations([[3, 6], [6, 14]], [9, 20]), [1, 1]);
+
+return results;`,
+    hints: [
+      'Reuse the 2x2 solve formula.',
+      'Let a, b, c, d be the entries of left, and y be right.',
+      'Return [(d*y0 - b*y1)/det, (-c*y0 + a*y1)/det].',
+    ],
+    solution: `function fitLineFromNormalEquations(left, right) {
+  const a = left[0][0];
+  const b = left[0][1];
+  const c = left[1][0];
+  const d = left[1][1];
+  const det = a * d - b * c;
+
+  return [
+    (d * right[0] - b * right[1]) / det,
+    (-c * right[0] + a * right[1]) / det,
+  ];
+}`,
+    explanation: 'This completes the algebra bridge from matrix multiplication to linear regression.',
+  },
+
+  {
+    id: 'mean-basic',
+    stepLabel: '16.1',
+    group: 'Centering and covariance',
+    title: 'Mean',
+    concept: 'The mean is the average value.',
+    objective: 'Divide the sum by the number of entries.',
+    difficulty: 'warmup',
+    starterCode: `function mean(values) {
+  let total = 0;
+
+  for (let i = 0; i < values.length; i++) {
+    total += values[i];
+  }
+
+  // TODO: return the average.
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('mean of three values', mean([1,2,3]), 2);
+check('mean of two values', mean([10,20]), 15);
+check('mean around zero', mean([-1,1]), 0);
+
+return results;`,
+    hints: [
+      'Average means total divided by count.',
+      'The count is values.length.',
+      'return total / values.length;',
+    ],
+    solution: `function mean(values) {
+  let total = 0;
+
+  for (let i = 0; i < values.length; i++) {
+    total += values[i];
+  }
+
+  return total / values.length;
+}`,
+    explanation: 'Centering and covariance both start by finding the mean.',
+  },
+
+  {
+    id: 'center-vector',
+    stepLabel: '16.2',
+    group: 'Centering and covariance',
+    title: 'Center a vector',
+    concept: 'Centering subtracts the mean so the values have average zero.',
+    objective: 'Push value minus mean into the centered vector.',
+    difficulty: 'core',
+    starterCode: `function mean(values) {
+  return values.reduce((total, value) => total + value, 0) / values.length;
+}
+
+function center(values) {
+  const mu = mean(values);
+  const centered = [];
+
+  for (let i = 0; i < values.length; i++) {
+    // TODO: subtract the mean from the current value.
+    centered.push(0);
+  }
+
+  return centered;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('center [1,2,3]', center([1,2,3]), [-1,0,1]);
+check('center [10,20]', center([10,20]), [-5,5]);
+check('center [-1,1]', center([-1,1]), [-1,1]);
+
+return results;`,
+    hints: [
+      'The mean is stored in mu.',
+      'Centered value = original value - mean.',
+      'centered.push(values[i] - mu);',
+    ],
+    solution: `function mean(values) {
+  return values.reduce((total, value) => total + value, 0) / values.length;
+}
+
+function center(values) {
+  const mu = mean(values);
+  const centered = [];
+
+  for (let i = 0; i < values.length; i++) {
+    centered.push(values[i] - mu);
+  }
+
+  return centered;
+}`,
+    explanation: 'Centering moves the data cloud so its average lies at zero.',
+  },
+
+  {
+    id: 'covariance-basic',
+    stepLabel: '16.3',
+    group: 'Centering and covariance',
+    title: 'Covariance',
+    concept: 'Covariance measures whether two centered variables move together.',
+    objective: 'Accumulate the product of centered coordinates.',
+    difficulty: 'challenge',
+    starterCode: `function mean(values) {
+  return values.reduce((total, value) => total + value, 0) / values.length;
+}
+
+function covariance(x, y) {
+  const meanX = mean(x);
+  const meanY = mean(y);
+  let total = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    const centeredX = x[i] - meanX;
+    const centeredY = y[i] - meanY;
+
+    // TODO: add the product of the centered values.
+    total += 0;
+  }
+
+  return total / x.length;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('positive covariance', covariance([1,2,3], [1,2,3]), 2 / 3);
+check('negative covariance', covariance([1,2,3], [3,2,1]), -2 / 3);
+check('zero covariance with constant y', covariance([1,2,3], [5,5,5]), 0);
+
+return results;`,
+    hints: [
+      'Covariance multiplies centered values.',
+      'Add centeredX * centeredY.',
+      'total += centeredX * centeredY;',
+    ],
+    solution: `function mean(values) {
+  return values.reduce((total, value) => total + value, 0) / values.length;
+}
+
+function covariance(x, y) {
+  const meanX = mean(x);
+  const meanY = mean(y);
+  let total = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    const centeredX = x[i] - meanX;
+    const centeredY = y[i] - meanY;
+    total += centeredX * centeredY;
+  }
+
+  return total / x.length;
+}`,
+    explanation: 'Positive covariance means variables tend to move together; negative covariance means they move in opposite directions.',
+  },
+
+  {
+    id: 'column-mean',
+    stepLabel: '17.1',
+    group: 'PCA bridge',
+    title: 'Column mean',
+    concept: 'PCA centers each feature column before measuring variance directions.',
+    objective: 'Compute the mean of one matrix column.',
+    difficulty: 'core',
+    starterCode: `function columnMean(X, col) {
+  let total = 0;
+
+  for (let row = 0; row < X.length; row++) {
+    // TODO: add the value from this row and column.
+    total += 0;
+  }
+
+  return total / X.length;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('first column mean', columnMean([[1,2],[3,4],[5,6]], 0), 3);
+check('second column mean', columnMean([[1,2],[3,4],[5,6]], 1), 4);
+check('single column mean', columnMean([[10], [20]], 0), 15);
+
+return results;`,
+    hints: [
+      'Use X[row][col].',
+      'Add the selected column value for each row.',
+      'total += X[row][col];',
+    ],
+    solution: `function columnMean(X, col) {
+  let total = 0;
+
+  for (let row = 0; row < X.length; row++) {
+    total += X[row][col];
+  }
+
+  return total / X.length;
+}`,
+    explanation: 'Column means are feature means. PCA centers features, not individual rows.',
+  },
+
+  {
+    id: 'center-matrix-columns',
+    stepLabel: '17.2',
+    group: 'PCA bridge',
+    title: 'Center matrix columns',
+    concept: 'Centering a data matrix subtracts each feature column mean.',
+    objective: 'Push the centered value for each cell.',
+    difficulty: 'challenge',
+    starterCode: `function columnMean(X, col) {
+  let total = 0;
+  for (let row = 0; row < X.length; row++) {
+    total += X[row][col];
+  }
+  return total / X.length;
+}
+
+function centerColumns(X) {
+  const rows = X.length;
+  const cols = X[0].length;
+  const centered = [];
+
+  for (let row = 0; row < rows; row++) {
+    const values = [];
+
+    for (let col = 0; col < cols; col++) {
+      const mu = columnMean(X, col);
+
+      // TODO: push X[row][col] minus the column mean.
+      values.push(0);
+    }
+
+    centered.push(values);
+  }
+
+  return centered;
+}`,
+    testCode: `const results = [];
+
+function approxMatrix(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((row, i) => (
+    row.length === b[i].length && row.every((value, j) => Math.abs(value - b[i][j]) <= tolerance)
+  ));
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxMatrix(actual, expected),
+  });
+}
+
+check('center 3x2 matrix', centerColumns([[1,2],[3,4],[5,6]]), [[-2,-2],[0,0],[2,2]]);
+check('center 2x1 matrix', centerColumns([[10],[20]]), [[-5],[5]]);
+
+return results;`,
+    hints: [
+      'Each feature column gets its own mean.',
+      'Subtract mu from the current cell.',
+      'values.push(X[row][col] - mu);',
+    ],
+    solution: `function columnMean(X, col) {
+  let total = 0;
+  for (let row = 0; row < X.length; row++) {
+    total += X[row][col];
+  }
+  return total / X.length;
+}
+
+function centerColumns(X) {
+  const rows = X.length;
+  const cols = X[0].length;
+  const centered = [];
+
+  for (let row = 0; row < rows; row++) {
+    const values = [];
+
+    for (let col = 0; col < cols; col++) {
+      const mu = columnMean(X, col);
+      values.push(X[row][col] - mu);
+    }
+
+    centered.push(values);
+  }
+
+  return centered;
+}`,
+    explanation: 'PCA looks for directions of spread after removing the average feature values.',
+  },
+
+  {
+    id: 'pca-project-row',
+    stepLabel: '17.3',
+    group: 'PCA bridge',
+    title: 'Project onto a component',
+    concept: 'A PCA score is a dot product between a centered data row and a component direction.',
+    objective: 'Return the dot product between row and component.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function pcaScore(centeredRow, component) {
+  // TODO: return the score along this component.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('score on first axis', pcaScore([3, 4], [1, 0]), 3);
+check('score on second axis', pcaScore([3, 4], [0, 1]), 4);
+check('score on diagonal component', pcaScore([2, 2], [1 / Math.sqrt(2), 1 / Math.sqrt(2)]), 2 * Math.sqrt(2));
+
+return results;`,
+    hints: [
+      'A component is a direction vector.',
+      'The coordinate along that direction is a dot product.',
+      'return dot(centeredRow, component);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function pcaScore(centeredRow, component) {
+  return dot(centeredRow, component);
+}`,
+    explanation: 'PCA projection turns high-dimensional centered data into coordinates along chosen directions.',
+  },
+
+  {
+    id: 'gram-schmidt-subtract-projection',
+    stepLabel: '18.1',
+    group: 'Orthonormal bases',
+    title: 'Subtract the projection',
+    concept: 'Gram-Schmidt removes the part of a vector that points in a previous basis direction.',
+    objective: 'Complete u = v - projection.',
+    difficulty: 'core',
+    starterCode: `function subtractVectors(a, b) {
+  const result = [];
+
+  for (let i = 0; i < a.length; i++) {
+    // TODO: push a[i] minus b[i].
+    result.push(0);
+  }
+
+  return result;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('subtract [3, 4] - [3, 0]', subtractVectors([3, 4], [3, 0]), [0, 4]);
+check('subtract [2, 2] - [1, 1]', subtractVectors([2, 2], [1, 1]), [1, 1]);
+check('subtract [-1, 5] - [2, 1]', subtractVectors([-1, 5], [2, 1]), [-3, 4]);
+
+return results;`,
+    hints: [
+      'Subtract coordinate by coordinate.',
+      'The residual keeps what is left after removing the projection.',
+      'result.push(a[i] - b[i]);',
+    ],
+    solution: `function subtractVectors(a, b) {
+  const result = [];
+
+  for (let i = 0; i < a.length; i++) {
+    result.push(a[i] - b[i]);
+  }
+
+  return result;
+}`,
+    explanation: 'Gram-Schmidt repeatedly subtracts projections so the remaining vector is orthogonal to earlier basis vectors.',
+  },
+
+  {
+    id: 'normalize-vector',
+    stepLabel: '18.2',
+    group: 'Orthonormal bases',
+    title: 'Normalize a vector',
+    concept: 'Normalizing turns a vector into a unit vector without changing its direction.',
+    objective: 'Divide each coordinate by the vector norm.',
+    difficulty: 'core',
+    starterCode: `function norm(v) {
+  let total = 0;
+
+  for (let i = 0; i < v.length; i++) {
+    total += v[i] * v[i];
+  }
+
+  return Math.sqrt(total);
+}
+
+function normalize(v) {
+  const length = norm(v);
+  const result = [];
+
+  for (let i = 0; i < v.length; i++) {
+    // TODO: push the normalized coordinate.
+    result.push(0);
+  }
+
+  return result;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('normalize [3, 4]', normalize([3, 4]), [0.6, 0.8]);
+check('normalize [0, 5]', normalize([0, 5]), [0, 1]);
+check('normalize [-6, 8]', normalize([-6, 8]), [-0.6, 0.8]);
+
+return results;`,
+    hints: [
+      'The vector length is already stored in length.',
+      'Each coordinate should be divided by length.',
+      'result.push(v[i] / length);',
+    ],
+    solution: `function norm(v) {
+  let total = 0;
+
+  for (let i = 0; i < v.length; i++) {
+    total += v[i] * v[i];
+  }
+
+  return Math.sqrt(total);
+}
+
+function normalize(v) {
+  const length = norm(v);
+  const result = [];
+
+  for (let i = 0; i < v.length; i++) {
+    result.push(v[i] / length);
+  }
+
+  return result;
+}`,
+    explanation: 'A unit vector has length 1. Orthonormal bases are made of unit vectors that are mutually perpendicular.',
+  },
+
+  {
+    id: 'gram-schmidt-one-step',
+    stepLabel: '18.3',
+    group: 'Orthonormal bases',
+    title: 'One Gram-Schmidt step',
+    concept: 'To make a new vector orthogonal to q, subtract its projection onto q.',
+    objective: 'Return v minus its projection onto unit vector q.',
+    difficulty: 'challenge',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function gramSchmidtResidual(v, q) {
+  // q is already a unit vector.
+  const scale = dot(v, q);
+  const projection = q.map((entry) => scale * entry);
+
+  // TODO: return v minus projection.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('remove x-axis part', gramSchmidtResidual([3, 4], [1, 0]), [0, 4]);
+check('remove y-axis part', gramSchmidtResidual([3, 4], [0, 1]), [3, 0]);
+check('remove diagonal part', gramSchmidtResidual([2, 0], [1 / Math.sqrt(2), 1 / Math.sqrt(2)]), [1, -1]);
+
+return results;`,
+    hints: [
+      'The projection has already been computed.',
+      'Subtract projection[i] from v[i].',
+      'return v.map((entry, i) => entry - projection[i]);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function gramSchmidtResidual(v, q) {
+  const scale = dot(v, q);
+  const projection = q.map((entry) => scale * entry);
+  return v.map((entry, i) => entry - projection[i]);
+}`,
+    explanation: 'This is the heart of Gram-Schmidt: remove the component already explained by a previous basis direction.',
+  },
+
+  {
+    id: 'qr-extract-column',
+    stepLabel: '19.1',
+    group: 'QR bridge',
+    title: 'Extract a column',
+    concept: 'QR works with columns of a matrix, so first you need to read a column as a vector.',
+    objective: 'Push A[row][col] for every row.',
+    difficulty: 'warmup',
+    starterCode: `function column(A, col) {
+  const values = [];
+
+  for (let row = 0; row < A.length; row++) {
+    // TODO: push the entry from this row and selected column.
+    values.push(0);
+  }
+
+  return values;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+const A = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+
+check('column 0', column(A, 0), [1, 4, 7]);
+check('column 1', column(A, 1), [2, 5, 8]);
+check('column 2', column(A, 2), [3, 6, 9]);
+
+return results;`,
+    hints: [
+      'A[row][col] picks one entry from the selected column.',
+      'Loop over rows while col stays fixed.',
+      'values.push(A[row][col]);',
+    ],
+    solution: `function column(A, col) {
+  const values = [];
+
+  for (let row = 0; row < A.length; row++) {
+    values.push(A[row][col]);
+  }
+
+  return values;
+}`,
+    explanation: 'QR decomposition turns matrix columns into orthonormal directions.',
+  },
+
+  {
+    id: 'qr-r-entry',
+    stepLabel: '19.2',
+    group: 'QR bridge',
+    title: 'One R entry',
+    concept: 'In QR, R[i][j] measures how much column j of A points along q_i.',
+    objective: 'Return q_i dot a_j.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function rEntry(qi, aj) {
+  // TODO: return the alignment between qi and aj.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('x-axis with [3,4]', rEntry([1, 0], [3, 4]), 3);
+check('y-axis with [3,4]', rEntry([0, 1], [3, 4]), 4);
+check('diagonal with [2,0]', rEntry([1 / Math.sqrt(2), 1 / Math.sqrt(2)], [2, 0]), Math.sqrt(2));
+
+return results;`,
+    hints: [
+      'R stores dot products between Q columns and A columns.',
+      'Use dot(qi, aj).',
+      'return dot(qi, aj);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function rEntry(qi, aj) {
+  return dot(qi, aj);
+}`,
+    explanation: 'R tells how to combine the orthonormal Q columns to reconstruct A.',
+  },
+
+  {
+    id: 'qr-reconstruct',
+    stepLabel: '19.3',
+    group: 'QR bridge',
+    title: 'Reconstruct with QR',
+    concept: 'If A = QR, multiplying Q and R should recover A.',
+    objective: 'Return Q times R.',
+    difficulty: 'challenge',
+    starterCode: `function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+
+  for (let row = 0; row < A.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < B[0].length; col++) {
+      values.push(matrixCell(A, B, row, col));
+    }
+
+    C.push(values);
+  }
+
+  return C;
+}
+
+function reconstructFromQR(Q, R) {
+  // TODO: return Q times R.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameMatrix(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameMatrix(actual, expected),
+  });
+}
+
+check('identity Q', reconstructFromQR([[1, 0], [0, 1]], [[3, 4], [0, 5]]), [[3, 4], [0, 5]]);
+check('simple Q and R', reconstructFromQR([[1, 0], [0, 1]], [[1, 2, 3], [4, 5, 6]]), [[1, 2, 3], [4, 5, 6]]);
+
+return results;`,
+    hints: [
+      'QR reconstruction is ordinary matrix multiplication.',
+      'Use the matmul helper.',
+      'return matmul(Q, R);',
+    ],
+    solution: `function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+
+  for (let row = 0; row < A.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < B[0].length; col++) {
+      values.push(matrixCell(A, B, row, col));
+    }
+
+    C.push(values);
+  }
+
+  return C;
+}
+
+function reconstructFromQR(Q, R) {
+  return matmul(Q, R);
+}`,
+    explanation: 'QR is useful because Q is geometrically nice and R is easy to solve with, but together they still represent the original matrix.',
+  },
+
+  {
+    id: 'determinant-2x2',
+    stepLabel: '20.1',
+    group: 'Determinant and invertibility',
+    title: '2x2 determinant',
+    concept: 'The determinant of [[a,b],[c,d]] is ad - bc.',
+    objective: 'Complete the determinant formula.',
+    difficulty: 'core',
+    starterCode: `function det2(M) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  // TODO: return ad - bc.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('identity determinant', det2([[1, 0], [0, 1]]), 1);
+check('scale determinant', det2([[2, 0], [0, 3]]), 6);
+check('shear determinant', det2([[1, 2], [3, 4]]), -2);
+check('singular determinant', det2([[1, 2], [2, 4]]), 0);
+
+return results;`,
+    hints: [
+      'Use the variables a, b, c, and d.',
+      'Multiply the diagonal a*d, then subtract the off-diagonal b*c.',
+      'return a * d - b * c;',
+    ],
+    solution: `function det2(M) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  return a * d - b * c;
+}`,
+    explanation: 'For 2D matrices, determinant measures signed area scaling.',
+  },
+
+  {
+    id: 'determinant-invertible',
+    stepLabel: '20.2',
+    group: 'Determinant and invertibility',
+    title: 'Is the matrix invertible?',
+    concept: 'A square matrix is invertible only if its determinant is nonzero.',
+    objective: 'Return whether the 2x2 matrix is invertible.',
+    difficulty: 'core',
+    starterCode: `function det2(M) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  return a * d - b * c;
+}
+
+function isInvertible2(M) {
+  // TODO: return true when det2(M) is not zero.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('identity is invertible', isInvertible2([[1, 0], [0, 1]]), true);
+check('scale is invertible', isInvertible2([[2, 0], [0, 3]]), true);
+check('rank-deficient is not invertible', isInvertible2([[1, 2], [2, 4]]), false);
+check('zero matrix is not invertible', isInvertible2([[0, 0], [0, 0]]), false);
+
+return results;`,
+    hints: [
+      'A zero determinant means area collapses to zero.',
+      'Check det2(M) !== 0.',
+      'return det2(M) !== 0;',
+    ],
+    solution: `function det2(M) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  return a * d - b * c;
+}
+
+function isInvertible2(M) {
+  return det2(M) !== 0;
+}`,
+    explanation: 'If the determinant is zero, the transformation collapses area and cannot be reversed.',
+  },
+
+  {
+    id: 'inverse-2x2',
+    stepLabel: '20.3',
+    group: 'Determinant and invertibility',
+    title: '2x2 inverse',
+    concept: 'The inverse of [[a,b],[c,d]] is 1/det times [[d,-b],[-c,a]].',
+    objective: 'Complete the inverse matrix entries.',
+    difficulty: 'challenge',
+    starterCode: `function inverse2(M) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  const det = a * d - b * c;
+
+  // TODO: return the 2x2 inverse.
+  return [
+    [0, 0],
+    [0, 0],
+  ];
+}`,
+    testCode: `const results = [];
+
+function approxMatrix(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((row, i) =>
+    row.length === b[i].length &&
+    row.every((value, j) => Math.abs(value - b[i][j]) <= tolerance)
+  );
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxMatrix(actual, expected),
+  });
+}
+
+check('inverse identity', inverse2([[1, 0], [0, 1]]), [[1, 0], [0, 1]]);
+check('inverse diagonal', inverse2([[2, 0], [0, 4]]), [[0.5, 0], [0, 0.25]]);
+check('inverse [[1,2],[3,4]]', inverse2([[1, 2], [3, 4]]), [[-2, 1], [1.5, -0.5]]);
+
+return results;`,
+    hints: [
+      'Use the formula 1/det times [[d, -b], [-c, a]].',
+      'Each entry should be divided by det.',
+      'return [[d / det, -b / det], [-c / det, a / det]];',
+    ],
+    solution: `function inverse2(M) {
+  const a = M[0][0];
+  const b = M[0][1];
+  const c = M[1][0];
+  const d = M[1][1];
+
+  const det = a * d - b * c;
+
+  return [
+    [d / det, -b / det],
+    [-c / det, a / det],
+  ];
+}`,
+    explanation: 'The inverse reverses a linear transformation when the determinant is nonzero.',
+  },
+
+  {
+    id: 'change-basis-one-coordinate',
+    stepLabel: '21.1',
+    group: 'Change of basis',
+    title: 'One coordinate in a new basis',
+    concept: 'For an orthonormal basis, a coordinate is a dot product with the basis vector.',
+    objective: 'Return v dot basisVector.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function coordinateInBasis(v, basisVector) {
+  // TODO: return the coordinate of v along basisVector.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('x-coordinate', coordinateInBasis([3, 4], [1, 0]), 3);
+check('y-coordinate', coordinateInBasis([3, 4], [0, 1]), 4);
+check('diagonal coordinate', coordinateInBasis([2, 0], [1 / Math.sqrt(2), 1 / Math.sqrt(2)]), Math.sqrt(2));
+
+return results;`,
+    hints: [
+      'In an orthonormal basis, projection coordinates are dot products.',
+      'Use the dot helper.',
+      'return dot(v, basisVector);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function coordinateInBasis(v, basisVector) {
+  return dot(v, basisVector);
+}`,
+    explanation: 'A coordinate says how much of the vector points along a basis direction.',
+  },
+
+  {
+    id: 'change-basis-all-coordinates',
+    stepLabel: '21.2',
+    group: 'Change of basis',
+    title: 'All coordinates in a new basis',
+    concept: 'Coordinates in an orthonormal basis come from dotting with every basis vector.',
+    objective: 'Push each basis coordinate into the result.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function coordinatesInBasis(v, basisVectors) {
+  const coords = [];
+
+  for (let i = 0; i < basisVectors.length; i++) {
+    // TODO: push the coordinate along this basis vector.
+    coords.push(0);
+  }
+
+  return coords;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('standard basis', coordinatesInBasis([3, 4], [[1, 0], [0, 1]]), [3, 4]);
+check('swapped basis', coordinatesInBasis([3, 4], [[0, 1], [1, 0]]), [4, 3]);
+check('diagonal basis', coordinatesInBasis([2, 0], [[1 / Math.sqrt(2), 1 / Math.sqrt(2)], [1 / Math.sqrt(2), -1 / Math.sqrt(2)]]), [Math.sqrt(2), Math.sqrt(2)]);
+
+return results;`,
+    hints: [
+      'Loop over every basis vector.',
+      'Each coordinate is dot(v, basisVectors[i]).',
+      'coords.push(dot(v, basisVectors[i]));',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function coordinatesInBasis(v, basisVectors) {
+  const coords = [];
+
+  for (let i = 0; i < basisVectors.length; i++) {
+    coords.push(dot(v, basisVectors[i]));
+  }
+
+  return coords;
+}`,
+    explanation: 'Changing to an orthonormal basis is measuring the vector along each new direction.',
+  },
+
+  {
+    id: 'change-basis-reconstruct',
+    stepLabel: '21.3',
+    group: 'Change of basis',
+    title: 'Reconstruct from coordinates',
+    concept: 'A vector can be rebuilt by adding coordinate-scaled basis vectors.',
+    objective: 'Add coords[j] times basisVectors[j][i] to each output coordinate.',
+    difficulty: 'challenge',
+    starterCode: `function reconstructFromBasis(coords, basisVectors) {
+  const dimension = basisVectors[0].length;
+  const v = Array(dimension).fill(0);
+
+  for (let j = 0; j < basisVectors.length; j++) {
+    for (let i = 0; i < dimension; i++) {
+      // TODO: add this coordinate-scaled basis entry.
+      v[i] += 0;
+    }
+  }
+
+  return v;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('standard basis', reconstructFromBasis([3, 4], [[1, 0], [0, 1]]), [3, 4]);
+check('swapped basis', reconstructFromBasis([4, 3], [[0, 1], [1, 0]]), [3, 4]);
+check('diagonal basis', reconstructFromBasis([Math.sqrt(2), Math.sqrt(2)], [[1 / Math.sqrt(2), 1 / Math.sqrt(2)], [1 / Math.sqrt(2), -1 / Math.sqrt(2)]]), [2, 0]);
+
+return results;`,
+    hints: [
+      'Each coordinate scales one basis vector.',
+      'Add coords[j] * basisVectors[j][i] into v[i].',
+      'v[i] += coords[j] * basisVectors[j][i];',
+    ],
+    solution: `function reconstructFromBasis(coords, basisVectors) {
+  const dimension = basisVectors[0].length;
+  const v = Array(dimension).fill(0);
+
+  for (let j = 0; j < basisVectors.length; j++) {
+    for (let i = 0; i < dimension; i++) {
+      v[i] += coords[j] * basisVectors[j][i];
+    }
+  }
+
+  return v;
+}`,
+    explanation: 'Coordinates are not the vector itself; they are instructions for combining basis directions.',
+  },
+
+  {
+    id: 'eigen-rayleigh-numerator',
+    stepLabel: '22.1',
+    group: 'Eigenvalues',
+    title: 'Rayleigh numerator',
+    concept: 'The Rayleigh quotient estimates how much A scales a direction v.',
+    objective: 'Return v dot Av.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function rayleighNumerator(v, Av) {
+  // TODO: return v dotted with Av.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('v dot Av', rayleighNumerator([1, 0], [3, 0]), 3);
+check('v dot Av 2d', rayleighNumerator([1, 2], [5, 6]), 17);
+check('negative', rayleighNumerator([-1, 2], [3, 5]), 7);
+
+return results;`,
+    hints: [
+      'The dot helper is already available.',
+      'Rayleigh numerator is dot(v, Av).',
+      'return dot(v, Av);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function rayleighNumerator(v, Av) {
+  return dot(v, Av);
+}`,
+    explanation: 'If v is an eigenvector, Av points in the same direction and the Rayleigh quotient returns its eigenvalue.',
+  },
+
+  {
+    id: 'eigen-rayleigh-quotient',
+    stepLabel: '22.2',
+    group: 'Eigenvalues',
+    title: 'Rayleigh quotient',
+    concept: 'The Rayleigh quotient is (v dot Av) / (v dot v).',
+    objective: 'Complete the quotient formula.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function rayleighQuotient(v, Av) {
+  const numerator = dot(v, Av);
+  const denominator = dot(v, v);
+
+  // TODO: return numerator divided by denominator.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('eigen direction scale 3', rayleighQuotient([1, 0], [3, 0]), 3);
+check('eigen direction scale 2', rayleighQuotient([0, 2], [0, 4]), 2);
+check('general vector', rayleighQuotient([1, 1], [3, 5]), 4);
+
+return results;`,
+    hints: [
+      'The numerator and denominator are already computed.',
+      'The quotient is numerator / denominator.',
+      'return numerator / denominator;',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function rayleighQuotient(v, Av) {
+  const numerator = dot(v, Av);
+  const denominator = dot(v, v);
+  return numerator / denominator;
+}`,
+    explanation: 'The Rayleigh quotient estimates the scaling factor of A along the direction v.',
+  },
+
+  {
+    id: 'eigen-power-step',
+    stepLabel: '22.3',
+    group: 'Eigenvalues',
+    title: 'One power iteration step',
+    concept: 'Power iteration repeatedly applies A and normalizes to find a dominant eigenvector.',
+    objective: 'Return the normalized version of Av.',
+    difficulty: 'challenge',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function norm(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function powerStep(A, v) {
+  const Av = matvec(A, v);
+  const length = norm(Av);
+
+  // TODO: return Av normalized to unit length.
+  return Av;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('diagonal matrix favors x', powerStep([[3, 0], [0, 1]], [1, 0]), [1, 0]);
+check('diagonal matrix favors y', powerStep([[1, 0], [0, 4]], [0, 1]), [0, 1]);
+check('scale vector', powerStep([[2, 0], [0, 2]], [3, 4]), [0.6, 0.8]);
+
+return results;`,
+    hints: [
+      'Av and length are already computed.',
+      'Normalize by dividing each entry of Av by length.',
+      'return Av.map((entry) => entry / length);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function norm(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function powerStep(A, v) {
+  const Av = matvec(A, v);
+  const length = norm(Av);
+  return Av.map((entry) => entry / length);
+}`,
+    explanation: 'Power iteration applies the matrix, then rescales the result so the vector does not explode in length.',
+  },
+
+  {
+    id: 'low-rank-scaled-outer-entry',
+    stepLabel: '23.1',
+    group: 'Low-rank approximation',
+    title: 'Scaled outer product entry',
+    concept: 'A rank-1 matrix can be written as sigma times u v^T.',
+    objective: 'Return sigma times u[row] times v[col].',
+    difficulty: 'core',
+    starterCode: `function rankOneEntry(sigma, u, v, row, col) {
+  // TODO: return sigma * u[row] * v[col].
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('entry 0,0', rankOneEntry(2, [1, 0], [3, 4], 0, 0), 6);
+check('entry 0,1', rankOneEntry(2, [1, 0], [3, 4], 0, 1), 8);
+check('entry 1,0 zero', rankOneEntry(2, [1, 0], [3, 4], 1, 0), 0);
+check('fractional', rankOneEntry(5, [0.6, 0.8], [1, 0], 1, 0), 4);
+
+return results;`,
+    hints: [
+      'A rank-1 approximation uses one singular value and two direction vectors.',
+      'Use sigma, u[row], and v[col].',
+      'return sigma * u[row] * v[col];',
+    ],
+    solution: `function rankOneEntry(sigma, u, v, row, col) {
+  return sigma * u[row] * v[col];
+}`,
+    explanation: 'A rank-1 matrix is the outer product u v^T scaled by sigma.',
+  },
+
+  {
+    id: 'low-rank-build-rank-one',
+    stepLabel: '23.2',
+    group: 'Low-rank approximation',
+    title: 'Build a rank-1 matrix',
+    concept: 'A rank-1 approximation fills every cell with sigma * u_i * v_j.',
+    objective: 'Push the scaled outer-product entry into each row.',
+    difficulty: 'core',
+    starterCode: `function rankOneMatrix(sigma, u, v) {
+  const A = [];
+
+  for (let row = 0; row < u.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < v.length; col++) {
+      // TODO: push sigma * u[row] * v[col].
+      values.push(0);
+    }
+
+    A.push(values);
+  }
+
+  return A;
+}`,
+    testCode: `const results = [];
+
+function approxMatrix(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((row, i) =>
+    row.length === b[i].length &&
+    row.every((value, j) => Math.abs(value - b[i][j]) <= tolerance)
+  );
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxMatrix(actual, expected),
+  });
+}
+
+check('simple rank one', rankOneMatrix(2, [1, 0], [3, 4]), [[6, 8], [0, 0]]);
+check('column rank one', rankOneMatrix(3, [1, 2], [1]), [[3], [6]]);
+check('identity-like direction', rankOneMatrix(1, [1, 1], [1, -1]), [[1, -1], [1, -1]]);
+
+return results;`,
+    hints: [
+      'This is the same formula for every row and column.',
+      'Use sigma * u[row] * v[col].',
+      'values.push(sigma * u[row] * v[col]);',
+    ],
+    solution: `function rankOneMatrix(sigma, u, v) {
+  const A = [];
+
+  for (let row = 0; row < u.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < v.length; col++) {
+      values.push(sigma * u[row] * v[col]);
+    }
+
+    A.push(values);
+  }
+
+  return A;
+}`,
+    explanation: 'Low-rank approximation builds a matrix by adding a few simple rank-1 patterns.',
+  },
+
+  {
+    id: 'low-rank-frobenius-error',
+    stepLabel: '23.3',
+    group: 'Low-rank approximation',
+    title: 'Approximation error',
+    concept: 'The Frobenius error is the sum of squared entrywise differences between a matrix and its approximation.',
+    objective: 'Add the squared difference for each cell.',
+    difficulty: 'challenge',
+    starterCode: `function frobeniusErrorSquared(A, Ahat) {
+  let total = 0;
+
+  for (let row = 0; row < A.length; row++) {
+    for (let col = 0; col < A[0].length; col++) {
+      const diff = A[row][col] - Ahat[row][col];
+
+      // TODO: add squared difference.
+      total += 0;
+    }
+  }
+
+  return total;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('zero error', frobeniusErrorSquared([[1, 2], [3, 4]], [[1, 2], [3, 4]]), 0);
+check('single difference', frobeniusErrorSquared([[1, 2], [3, 4]], [[1, 2], [3, 5]]), 1);
+check('multiple differences', frobeniusErrorSquared([[1, 2], [3, 4]], [[0, 0], [0, 0]]), 30);
+
+return results;`,
+    hints: [
+      'Frobenius error squares every entry difference.',
+      'The difference is already stored in diff.',
+      'total += diff * diff;',
+    ],
+    solution: `function frobeniusErrorSquared(A, Ahat) {
+  let total = 0;
+
+  for (let row = 0; row < A.length; row++) {
+    for (let col = 0; col < A[0].length; col++) {
+      const diff = A[row][col] - Ahat[row][col];
+      total += diff * diff;
+    }
+  }
+
+  return total;
+}`,
+    explanation: 'Low-rank approximation keeps the most important patterns and measures what was lost with reconstruction error.',
+  },
 ];
