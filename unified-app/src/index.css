@@ -1681,11 +1681,122 @@ body {
   padding: 12px 0 16px;
 }
 
+.ua-concept-map-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ua-concept-map-head-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ua-map-expand-toggle,
+.ua-map-expand-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  border: var(--ds-border);
+  background: var(--ds-paper);
+  color: var(--ds-ink);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.ua-map-expand-back {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+.ua-map-expand-toggle:hover,
+.ua-map-expand-back:hover {
+  background: var(--ds-accent-w);
+  color: var(--ds-accent);
+}
+
+.ua-map-expand-esc {
+  margin-left: auto;
+  color: var(--ds-faint);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .ua-concept-map-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.95fr);
   gap: 12px;
   align-items: stretch;
+}
+
+html.ua-concept-map-expanded {
+  overflow: hidden;
+}
+
+html.ua-concept-map-expanded .ua-animation-header,
+html.ua-concept-map-expanded .ua-animation-footer,
+html.ua-concept-map-expanded .ua-learning-shell > :not(.ua-concept-map) {
+  display: none !important;
+}
+
+html.ua-concept-map-expanded .ua-animation-page {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html.ua-concept-map-expanded .ua-learning-shell {
+  margin: 0;
+}
+
+html.ua-concept-map-expanded .ua-concept-map--expanded {
+  position: fixed;
+  top: 64px;
+  left: var(--ua-map-expand-left, 288px);
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 12px clamp(12px, 2vw, 24px) 16px;
+  border-top: 0;
+  border-bottom: 0;
+  background: var(--ds-paper);
+  overflow: hidden;
+}
+
+html.ua-concept-map-expanded .ua-concept-map--expanded .ua-concept-map-layout {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+  gap: 16px;
+}
+
+html.ua-concept-map-expanded .ua-concept-map--expanded .ua-map-shell,
+html.ua-concept-map-expanded .ua-concept-map--expanded .ua-map-detail {
+  min-height: 0;
+  height: 100%;
+}
+
+html.ua-concept-map-expanded .ua-concept-map--expanded .ua-map-canvas {
+  height: 100%;
+}
+
+html.ua-concept-map-expanded .ua-concept-map--expanded:not(.ua-concept-map--curated) .ua-map-shell {
+  height: 100%;
 }
 
 .ua-concept-map--curated .ua-map-canvas::before,
@@ -4044,8 +4155,14 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .ua-concept-map-layout {
+  .ua-concept-map-layout,
+  html.ua-concept-map-expanded .ua-concept-map--expanded .ua-concept-map-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  html.ua-concept-map-expanded .ua-concept-map--expanded {
+    left: 0;
+    padding: 10px 12px 12px;
   }
 
   .ua-map-canvas {

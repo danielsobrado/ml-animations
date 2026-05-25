@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FlaskConical, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, FlaskConical, Maximize2, Minus, Plus } from 'lucide-react';
 import MindElixir, { SIDE } from 'mind-elixir';
 import 'mind-elixir/style.css';
 import { isConceptMap, NODE_TYPES } from '../../data/conceptMaps';
@@ -273,8 +273,48 @@ export default function ConceptMindmap({ mindmap }) {
     curated ? selectionFromNode(data.nodeData) : null
   ));
   const [zoomPercent, setZoomPercent] = useState(100);
+  const [expanded, setExpanded] = useState(false);
 
   const currentLessonId = curated ? mindmap.center.id : mindmap.current.id;
+
+  const exitExpanded = useCallback(() => setExpanded(false), []);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [currentLessonId]);
+
+  useEffect(() => {
+    if (!expanded) return undefined;
+
+    const syncMainOffset = () => {
+      const main = document.querySelector('.ua-main');
+      const left = main?.getBoundingClientRect().left ?? 0;
+      document.documentElement.style.setProperty('--ua-map-expand-left', `${left}px`);
+    };
+
+    document.documentElement.classList.add('ua-concept-map-expanded');
+    syncMainOffset();
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setExpanded(false);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', syncMainOffset);
+
+    const frame = requestAnimationFrame(() => {
+      instanceRef.current?.scaleFit();
+      instanceRef.current?.toCenter();
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', syncMainOffset);
+      document.documentElement.classList.remove('ua-concept-map-expanded');
+      document.documentElement.style.removeProperty('--ua-map-expand-left');
+    };
+  }, [expanded]);
 
   const handleZoomIn = useCallback(() => {
     const mind = instanceRef.current;
@@ -429,12 +469,42 @@ export default function ConceptMindmap({ mindmap }) {
 
   return (
     <section
-      className={['ua-concept-map', curated && 'ua-concept-map--curated'].filter(Boolean).join(' ')}
+      className={[
+        'ua-concept-map',
+        curated && 'ua-concept-map--curated',
+        expanded && 'ua-concept-map--expanded',
+      ].filter(Boolean).join(' ')}
       aria-label="Concept map"
     >
-      <div className="ua-learning-rail-head">
-        <FlaskConical size={15} />
-        <span>{curated ? 'Concept map' : 'Mindmap'}</span>
+      <div className="ua-learning-rail-head ua-concept-map-head">
+        {expanded ? (
+          <button
+            type="button"
+            className="ua-map-expand-back"
+            onClick={exitExpanded}
+            aria-label="Exit big screen mode"
+          >
+            <ArrowLeft size={15} aria-hidden />
+            <span>Back</span>
+          </button>
+        ) : null}
+        <div className="ua-concept-map-head-title">
+          <FlaskConical size={15} aria-hidden />
+          <span>{curated ? 'Concept map' : 'Mindmap'}</span>
+        </div>
+        {expanded ? (
+          <span className="ua-map-expand-esc">Esc to exit</span>
+        ) : (
+          <button
+            type="button"
+            className="ua-map-expand-toggle"
+            onClick={() => setExpanded(true)}
+            aria-label="Open concept map in big screen mode"
+          >
+            <Maximize2 size={14} aria-hidden />
+            <span>Big screen</span>
+          </button>
+        )}
       </div>
       <div className={curated ? 'ua-concept-map-layout' : undefined}>
         <div className="ua-map-shell">
