@@ -1663,15 +1663,20 @@ test('assessment completion uses core mastery threshold and required labs', () =
 test('createLearningModel uses curriculum metadata for one-click navigation context', () => {
   const animation = getAnimationById('self-attention');
   const model = createLearningModel(animation, allAnimations);
+  const conceptMap = getConceptMap('self-attention');
 
-  assert.equal(model.mindmap.current.label, 'Self-Attention');
+  assert.ok(conceptMap);
+  assert.equal(model.mindmap.center.label, 'Self-Attention');
+  assert.match(model.mindmap.center.tooltip.short, /query/i);
+  assert.ok(model.mindmap.branches.some((branch) => branch.id === 'used-later'));
+  assert.ok(
+    model.mindmap.branches
+      .flatMap((branch) => branch.children)
+      .some((node) => node.lessonId === 'attention-masks'),
+  );
   assert.ok(model.mindmap.prereqs.some((node) => node.id === 'matrix-multiplication'));
   assert.ok(model.mindmap.prereqs.some((node) => node.id === 'softmax'));
   assert.ok(model.mindmap.next.some((node) => node.id === 'attention-masks'));
-  assert.ok(model.mindmap.insights.some((node) => node.tag === 'Model'));
-  assert.ok(model.mindmap.insights.some((node) => node.tag === 'Check'));
-  assert.ok(model.mindmap.insights.some((node) => node.tag === 'Trap'));
-  assert.match(model.mindmap.current.explanation, /Self-Attention/);
   assert.match(
     model.mindmap.prereqs.find((node) => node.id === 'softmax').explanation,
     /useful background/,
