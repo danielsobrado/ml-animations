@@ -4093,4 +4093,2287 @@ return results;`,
 }`,
     explanation: 'Low-rank approximation keeps the most important patterns and measures what was lost with reconstruction error.',
   },
+
+  {
+    id: 'absolute-error',
+    stepLabel: '24.1',
+    group: 'Numerical stability',
+    title: 'Absolute error',
+    concept: 'Absolute error measures how far an approximation is from the true value.',
+    objective: 'Return the absolute difference between trueValue and approxValue.',
+    difficulty: 'warmup',
+    starterCode: `function absoluteError(trueValue, approxValue) {
+  // TODO: return the absolute difference.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('error 10 vs 8', absoluteError(10, 8), 2);
+check('error 8 vs 10', absoluteError(8, 10), 2);
+check('error 5 vs 5', absoluteError(5, 5), 0);
+check('error -3 vs 2', absoluteError(-3, 2), 5);
+
+return results;`,
+    hints: [
+      'Use Math.abs.',
+      'The difference is trueValue - approxValue.',
+      'return Math.abs(trueValue - approxValue);',
+    ],
+    solution: `function absoluteError(trueValue, approxValue) {
+  return Math.abs(trueValue - approxValue);
+}`,
+    explanation: 'Absolute error is the raw distance between a true value and an approximation.',
+  },
+
+  {
+    id: 'relative-error',
+    stepLabel: '24.2',
+    group: 'Numerical stability',
+    title: 'Relative error',
+    concept: 'Relative error compares error to the size of the true value.',
+    objective: 'Return absolute error divided by absolute true value.',
+    difficulty: 'core',
+    starterCode: `function relativeError(trueValue, approxValue) {
+  const error = Math.abs(trueValue - approxValue);
+
+  // TODO: divide error by the size of trueValue.
+  return error;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('10 vs 9', relativeError(10, 9), 0.1);
+check('100 vs 99', relativeError(100, 99), 0.01);
+check('-50 vs -45', relativeError(-50, -45), 0.1);
+
+return results;`,
+    hints: [
+      'Relative error asks: how large is the error compared with the true value?',
+      'Use Math.abs(trueValue) in the denominator.',
+      'return error / Math.abs(trueValue);',
+    ],
+    solution: `function relativeError(trueValue, approxValue) {
+  const error = Math.abs(trueValue - approxValue);
+  return error / Math.abs(trueValue);
+}`,
+    explanation: 'A raw error of 1 is huge if the true value is 2, but tiny if the true value is 1,000,000.',
+  },
+
+  {
+    id: 'condition-number-from-singular-values',
+    stepLabel: '24.3',
+    group: 'Numerical stability',
+    title: 'Condition number',
+    concept: 'A condition number compares the largest and smallest singular values.',
+    objective: 'Return max singular value divided by min singular value.',
+    difficulty: 'core',
+    starterCode: `function conditionNumber(singularValues) {
+  const largest = Math.max(...singularValues);
+  const smallest = Math.min(...singularValues);
+
+  // TODO: return largest divided by smallest.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('well-conditioned', conditionNumber([5, 4, 2]), 2.5);
+check('identity-like', conditionNumber([1, 1, 1]), 1);
+check('ill-conditioned', conditionNumber([100, 1, 0.01]), 10000);
+
+return results;`,
+    hints: [
+      'Condition number is largest scale divided by smallest scale.',
+      'The largest and smallest variables are already computed.',
+      'return largest / smallest;',
+    ],
+    solution: `function conditionNumber(singularValues) {
+  const largest = Math.max(...singularValues);
+  const smallest = Math.min(...singularValues);
+  return largest / smallest;
+}`,
+    explanation: 'A high condition number means some directions are stretched much more than others, making solutions sensitive to noise.',
+  },
+
+  {
+    id: 'detect-ill-conditioning',
+    stepLabel: '24.4',
+    group: 'Numerical stability',
+    title: 'Detect ill-conditioning',
+    concept: 'A large condition number warns that small input noise may become large output error.',
+    objective: 'Return true when condition number exceeds the threshold.',
+    difficulty: 'core',
+    starterCode: `function isIllConditioned(singularValues, threshold = 1000) {
+  const largest = Math.max(...singularValues);
+  const smallest = Math.min(...singularValues);
+  const condition = largest / smallest;
+
+  // TODO: return whether condition is greater than threshold.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('identity-like not ill-conditioned', isIllConditioned([1, 1, 1]), false);
+check('moderate not ill-conditioned by default', isIllConditioned([100, 2]), false);
+check('large condition is ill-conditioned', isIllConditioned([100, 0.01]), true);
+check('custom threshold', isIllConditioned([20, 1], 10), true);
+
+return results;`,
+    hints: [
+      'The condition number is already computed.',
+      'Compare condition with threshold.',
+      'return condition > threshold;',
+    ],
+    solution: `function isIllConditioned(singularValues, threshold = 1000) {
+  const largest = Math.max(...singularValues);
+  const smallest = Math.min(...singularValues);
+  const condition = largest / smallest;
+
+  return condition > threshold;
+}`,
+    explanation: 'Ill-conditioned systems can produce unstable answers even when the formula is mathematically correct.',
+  },
+
+  {
+    id: 'pseudoinverse-invert-singular-values',
+    stepLabel: '25.1',
+    group: 'Pseudoinverse bridge',
+    title: 'Invert singular values',
+    concept: 'The pseudoinverse inverts nonzero singular values.',
+    objective: 'Return 1 / sigma for a nonzero singular value.',
+    difficulty: 'warmup',
+    starterCode: `function invertSingularValue(sigma) {
+  // TODO: return the reciprocal of sigma.
+  return sigma;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('invert 2', invertSingularValue(2), 0.5);
+check('invert 4', invertSingularValue(4), 0.25);
+check('invert 0.5', invertSingularValue(0.5), 2);
+
+return results;`,
+    hints: [
+      'The reciprocal of sigma is one divided by sigma.',
+      'Use 1 / sigma.',
+      'return 1 / sigma;',
+    ],
+    solution: `function invertSingularValue(sigma) {
+  return 1 / sigma;
+}`,
+    explanation: 'The pseudoinverse reverses directions that the matrix scales, but only where the scale is not zero.',
+  },
+
+  {
+    id: 'pseudoinverse-threshold-singular-values',
+    stepLabel: '25.2',
+    group: 'Pseudoinverse bridge',
+    title: 'Threshold tiny singular values',
+    concept: 'Very small singular values can amplify noise, so pseudoinverses often threshold them.',
+    objective: 'Return 0 when sigma is too small, otherwise return 1 / sigma.',
+    difficulty: 'core',
+    starterCode: `function safeInvertSingularValue(sigma, tolerance = 1e-6) {
+  // TODO: return 0 if sigma is below tolerance; otherwise return 1 / sigma.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('invert 2', safeInvertSingularValue(2), 0.5);
+check('invert 4', safeInvertSingularValue(4), 0.25);
+check('tiny value becomes zero', safeInvertSingularValue(1e-9), 0);
+check('custom tolerance', safeInvertSingularValue(0.01, 0.1), 0);
+
+return results;`,
+    hints: [
+      'Use an if statement or ternary expression.',
+      'If sigma < tolerance, return 0.',
+      'return sigma < tolerance ? 0 : 1 / sigma;',
+    ],
+    solution: `function safeInvertSingularValue(sigma, tolerance = 1e-6) {
+  return sigma < tolerance ? 0 : 1 / sigma;
+}`,
+    explanation: 'Thresholding prevents tiny singular values from exploding into huge inverse scales.',
+  },
+
+  {
+    id: 'pseudoinverse-sigma-plus',
+    stepLabel: '25.3',
+    group: 'Pseudoinverse bridge',
+    title: 'Build Sigma-plus diagonal',
+    concept: 'Sigma-plus contains inverted singular values on the diagonal.',
+    objective: 'Push the safe inverted value on the diagonal and 0 elsewhere.',
+    difficulty: 'challenge',
+    starterCode: `function safeInvertSingularValue(sigma, tolerance = 1e-6) {
+  return sigma < tolerance ? 0 : 1 / sigma;
+}
+
+function sigmaPlus(singularValues) {
+  const Splus = [];
+
+  for (let row = 0; row < singularValues.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < singularValues.length; col++) {
+      // TODO: push inverted singular value on diagonal, 0 otherwise.
+      values.push(999);
+    }
+
+    Splus.push(values);
+  }
+
+  return Splus;
+}`,
+    testCode: `const results = [];
+
+function approxMatrix(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((row, i) =>
+    row.length === b[i].length &&
+    row.every((value, j) => Math.abs(value - b[i][j]) <= tolerance)
+  );
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxMatrix(actual, expected),
+  });
+}
+
+check('two singular values', sigmaPlus([2, 4]), [[0.5, 0], [0, 0.25]]);
+check('three singular values', sigmaPlus([1, 2, 5]), [[1,0,0],[0,0.5,0],[0,0,0.2]]);
+check('tiny singular value', sigmaPlus([2, 1e-9]), [[0.5, 0], [0, 0]]);
+
+return results;`,
+    hints: [
+      'Use row === col to detect the diagonal.',
+      'On the diagonal, use safeInvertSingularValue(singularValues[row]).',
+      'values.push(row === col ? safeInvertSingularValue(singularValues[row]) : 0);',
+    ],
+    solution: `function safeInvertSingularValue(sigma, tolerance = 1e-6) {
+  return sigma < tolerance ? 0 : 1 / sigma;
+}
+
+function sigmaPlus(singularValues) {
+  const Splus = [];
+
+  for (let row = 0; row < singularValues.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < singularValues.length; col++) {
+      values.push(row === col ? safeInvertSingularValue(singularValues[row]) : 0);
+    }
+
+    Splus.push(values);
+  }
+
+  return Splus;
+}`,
+    explanation: 'Sigma-plus is the diagonal scaling matrix used inside the SVD formula for the pseudoinverse.',
+  },
+
+  {
+    id: 'pseudoinverse-apply',
+    stepLabel: '25.4',
+    group: 'Pseudoinverse bridge',
+    title: 'Apply pseudoinverse',
+    concept: 'A pseudoinverse solution is x = Aplus b.',
+    objective: 'Return Aplus times b.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function solveWithPseudoinverse(Aplus, b) {
+  // TODO: return Aplus times b.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('identity pseudoinverse', solveWithPseudoinverse([[1,0],[0,1]], [7,8]), [7,8]);
+check('diagonal pseudoinverse', solveWithPseudoinverse([[0.5,0],[0,0.25]], [6,8]), [3,2]);
+check('rectangular-like Aplus', solveWithPseudoinverse([[1,0,0],[0,0.5,0]], [3,8,10]), [3,4]);
+
+return results;`,
+    hints: [
+      'Solving with a pseudoinverse is matrix-vector multiplication.',
+      'Use the matvec helper.',
+      'return matvec(Aplus, b);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function matvec(A, x) {
+  return A.map((row) => dot(row, x));
+}
+
+function solveWithPseudoinverse(Aplus, b) {
+  return matvec(Aplus, b);
+}`,
+    explanation: 'The pseudoinverse gives a least-squares or minimum-norm solution when an ordinary inverse is unavailable.',
+  },
+
+  {
+    id: 'gd-prediction-error',
+    stepLabel: '26.1',
+    group: 'Gradient descent least squares',
+    title: 'Prediction error',
+    concept: 'Gradient descent updates parameters using prediction error.',
+    objective: 'Return prediction minus target.',
+    difficulty: 'warmup',
+    starterCode: `function predictionError(prediction, target) {
+  // TODO: return prediction minus target.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('overprediction', predictionError(10, 7), 3);
+check('underprediction', predictionError(4, 9), -5);
+check('perfect prediction', predictionError(5, 5), 0);
+
+return results;`,
+    hints: [
+      'Error is signed: prediction - target.',
+      'Positive means prediction was too high.',
+      'return prediction - target;',
+    ],
+    solution: `function predictionError(prediction, target) {
+  return prediction - target;
+}`,
+    explanation: 'Signed error tells gradient descent which direction the prediction is wrong.',
+  },
+
+  {
+    id: 'gd-one-weight-gradient',
+    stepLabel: '26.2',
+    group: 'Gradient descent least squares',
+    title: 'One weight gradient',
+    concept: 'For squared error, the gradient contribution is error times feature value.',
+    objective: 'Return error * feature.',
+    difficulty: 'core',
+    starterCode: `function oneWeightGradient(error, feature) {
+  // TODO: return this feature's gradient contribution.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('positive error, positive feature', oneWeightGradient(3, 2), 6);
+check('negative error, positive feature', oneWeightGradient(-5, 2), -10);
+check('positive error, zero feature', oneWeightGradient(3, 0), 0);
+check('negative feature', oneWeightGradient(4, -2), -8);
+
+return results;`,
+    hints: [
+      'The gradient scales with how much this feature contributed.',
+      'Multiply error by feature.',
+      'return error * feature;',
+    ],
+    solution: `function oneWeightGradient(error, feature) {
+  return error * feature;
+}`,
+    explanation: 'If a feature is large, the weight connected to it gets a larger update signal.',
+  },
+
+  {
+    id: 'gd-gradient-vector',
+    stepLabel: '26.3',
+    group: 'Gradient descent least squares',
+    title: 'Gradient vector',
+    concept: 'Each weight receives error times its matching feature.',
+    objective: 'Push error * x[i] for every feature.',
+    difficulty: 'core',
+    starterCode: `function gradientForExample(error, x) {
+  const gradient = [];
+
+  for (let i = 0; i < x.length; i++) {
+    // TODO: push the gradient for weight i.
+    gradient.push(0);
+  }
+
+  return gradient;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('error 3', gradientForExample(3, [1, 2, 3]), [3, 6, 9]);
+check('error -2', gradientForExample(-2, [1, 0, 4]), [-2, 0, -8]);
+check('zero error', gradientForExample(0, [5, 6]), [0, 0]);
+
+return results;`,
+    hints: [
+      'The same error multiplies every feature.',
+      'For weight i, use error * x[i].',
+      'gradient.push(error * x[i]);',
+    ],
+    solution: `function gradientForExample(error, x) {
+  const gradient = [];
+
+  for (let i = 0; i < x.length; i++) {
+    gradient.push(error * x[i]);
+  }
+
+  return gradient;
+}`,
+    explanation: 'The gradient vector tells every weight how to move to reduce squared error.',
+  },
+
+  {
+    id: 'gd-weight-update',
+    stepLabel: '26.4',
+    group: 'Gradient descent least squares',
+    title: 'One gradient descent update',
+    concept: 'Gradient descent subtracts learningRate times gradient.',
+    objective: 'Update one weight coordinate.',
+    difficulty: 'core',
+    starterCode: `function updateWeights(weights, gradient, learningRate) {
+  const updated = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    // TODO: subtract learningRate times gradient[i].
+    updated.push(weights[i]);
+  }
+
+  return updated;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('simple update', updateWeights([1, 2], [3, 4], 0.1), [0.7, 1.6]);
+check('negative gradient', updateWeights([1, 2], [-1, 2], 0.5), [1.5, 1]);
+check('zero gradient', updateWeights([5, 6], [0, 0], 0.1), [5, 6]);
+
+return results;`,
+    hints: [
+      'Gradient descent moves opposite the gradient.',
+      'New weight = old weight - learningRate * gradient.',
+      'updated.push(weights[i] - learningRate * gradient[i]);',
+    ],
+    solution: `function updateWeights(weights, gradient, learningRate) {
+  const updated = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    updated.push(weights[i] - learningRate * gradient[i]);
+  }
+
+  return updated;
+}`,
+    explanation: 'The learning rate controls the size of the step downhill.',
+  },
+
+  {
+    id: 'logistic-logit-dot',
+    stepLabel: '27.1',
+    group: 'Logistic regression bridge',
+    title: 'Logit is a dot product',
+    concept: 'Logistic regression first computes a linear score: w dot x + b.',
+    objective: 'Return dot(weights, x) plus bias.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function logit(weights, x, bias) {
+  // TODO: return w dot x + bias.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('simple logit', logit([1, 2], [3, 4], 0), 11);
+check('with bias', logit([1, 2], [3, 4], -1), 10);
+check('negative weight', logit([-1, 2], [3, 5], 1), 8);
+
+return results;`,
+    hints: [
+      'Use the dot helper.',
+      'The linear score is dot(weights, x) + bias.',
+      'return dot(weights, x) + bias;',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function logit(weights, x, bias) {
+  return dot(weights, x) + bias;
+}`,
+    explanation: 'Logistic regression is linear algebra plus a sigmoid. The dot product creates the score.',
+  },
+
+  {
+    id: 'logistic-sigmoid',
+    stepLabel: '27.2',
+    group: 'Logistic regression bridge',
+    title: 'Sigmoid',
+    concept: 'Sigmoid turns any real-valued logit into a value between 0 and 1.',
+    objective: 'Complete the sigmoid formula.',
+    difficulty: 'core',
+    starterCode: `function sigmoid(z) {
+  // TODO: return 1 / (1 + exp(-z)).
+  return z;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('sigmoid(0)', sigmoid(0), 0.5);
+check('sigmoid(log 3)', sigmoid(Math.log(3)), 0.75);
+check('sigmoid(-log 3)', sigmoid(-Math.log(3)), 0.25);
+
+return results;`,
+    hints: [
+      'Use Math.exp.',
+      'The formula is 1 / (1 + Math.exp(-z)).',
+      'return 1 / (1 + Math.exp(-z));',
+    ],
+    solution: `function sigmoid(z) {
+  return 1 / (1 + Math.exp(-z));
+}`,
+    explanation: 'Sigmoid converts a linear score into a probability-like value.',
+  },
+
+  {
+    id: 'logistic-predict-probability',
+    stepLabel: '27.3',
+    group: 'Logistic regression bridge',
+    title: 'Predict probability',
+    concept: 'A logistic model predicts sigmoid(w dot x + b).',
+    objective: 'Apply sigmoid to the logit.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function sigmoid(z) {
+  return 1 / (1 + Math.exp(-z));
+}
+
+function predictProbability(weights, x, bias) {
+  const z = dot(weights, x) + bias;
+
+  // TODO: return sigmoid of z.
+  return z;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('probability 0.5', predictProbability([0, 0], [3, 4], 0), 0.5);
+check('probability 0.75', predictProbability([1], [Math.log(3)], 0), 0.75);
+check('probability with bias', predictProbability([1], [0], Math.log(3)), 0.75);
+
+return results;`,
+    hints: [
+      'z is already the linear score.',
+      'Apply sigmoid(z).',
+      'return sigmoid(z);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function sigmoid(z) {
+  return 1 / (1 + Math.exp(-z));
+}
+
+function predictProbability(weights, x, bias) {
+  const z = dot(weights, x) + bias;
+  return sigmoid(z);
+}`,
+    explanation: 'Logistic regression turns feature-weight alignment into a probability.',
+  },
+
+  {
+    id: 'logistic-binary-cross-entropy',
+    stepLabel: '27.4',
+    group: 'Logistic regression bridge',
+    title: 'Binary cross-entropy',
+    concept: 'Binary cross-entropy penalizes confident wrong probabilities heavily.',
+    objective: 'Complete the loss formula for one label and probability.',
+    difficulty: 'challenge',
+    starterCode: `function binaryCrossEntropy(y, p) {
+  // TODO: return -(y log p + (1-y) log(1-p)).
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('positive label p=0.5', binaryCrossEntropy(1, 0.5), -Math.log(0.5));
+check('negative label p=0.5', binaryCrossEntropy(0, 0.5), -Math.log(0.5));
+check('positive label p=0.8', binaryCrossEntropy(1, 0.8), -Math.log(0.8));
+check('negative label p=0.2', binaryCrossEntropy(0, 0.2), -Math.log(0.8));
+
+return results;`,
+    hints: [
+      'Use Math.log.',
+      'The formula is negative of y log p plus (1-y) log(1-p).',
+      'return -(y * Math.log(p) + (1 - y) * Math.log(1 - p));',
+    ],
+    solution: `function binaryCrossEntropy(y, p) {
+  return -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
+}`,
+    explanation: 'Cross-entropy rewards high probability on the true class and punishes confident wrong predictions.',
+  },
+
+  {
+    id: 'attention-one-score',
+    stepLabel: '28.1',
+    group: 'Attention algebra bridge',
+    title: 'One attention score',
+    concept: 'One attention score is a query vector dotted with a key vector.',
+    objective: 'Return query dot key.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function attentionScore(query, key) {
+  // TODO: return query dot key.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('score 1', attentionScore([1, 2], [3, 4]), 11);
+check('orthogonal score', attentionScore([1, 0], [0, 1]), 0);
+check('negative score', attentionScore([-1, 2], [3, 5]), 7);
+
+return results;`,
+    hints: [
+      'Attention starts with similarity scores.',
+      'Similarity here is dot product.',
+      'return dot(query, key);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function attentionScore(query, key) {
+  return dot(query, key);
+}`,
+    explanation: 'In transformer attention, QK^T is a matrix of query-key dot products.',
+  },
+
+  {
+    id: 'attention-scale-score',
+    stepLabel: '28.2',
+    group: 'Attention algebra bridge',
+    title: 'Scale attention score',
+    concept: 'Attention scores are divided by sqrt(d) to keep logits from growing too large.',
+    objective: 'Divide the raw score by Math.sqrt(d).',
+    difficulty: 'core',
+    starterCode: `function scaleAttentionScore(rawScore, d) {
+  // TODO: return rawScore divided by sqrt(d).
+  return rawScore;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('scale by sqrt 4', scaleAttentionScore(8, 4), 4);
+check('scale by sqrt 9', scaleAttentionScore(12, 9), 4);
+check('scale by sqrt 1', scaleAttentionScore(7, 1), 7);
+
+return results;`,
+    hints: [
+      'Use Math.sqrt(d).',
+      'Scaled dot-product attention divides by the square root of dimension.',
+      'return rawScore / Math.sqrt(d);',
+    ],
+    solution: `function scaleAttentionScore(rawScore, d) {
+  return rawScore / Math.sqrt(d);
+}`,
+    explanation: 'Scaling keeps attention logits numerically stable before softmax.',
+  },
+
+  {
+    id: 'attention-softmax-denominator',
+    stepLabel: '28.3',
+    group: 'Attention algebra bridge',
+    title: 'Softmax denominator',
+    concept: 'Softmax normalizes exponentiated scores so weights sum to 1.',
+    objective: 'Accumulate Math.exp(score) for every score.',
+    difficulty: 'core',
+    starterCode: `function softmaxDenominator(scores) {
+  let total = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    // TODO: add exp of this score.
+    total += 0;
+  }
+
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual,
+    expected,
+    passed: approxEqual(actual, expected),
+  });
+}
+
+check('zeros', softmaxDenominator([0, 0]), 2);
+check('one zero', softmaxDenominator([0]), 1);
+check('mixed', softmaxDenominator([0, Math.log(3)]), 4);
+
+return results;`,
+    hints: [
+      'Softmax uses exponentials.',
+      'Use Math.exp(scores[i]).',
+      'total += Math.exp(scores[i]);',
+    ],
+    solution: `function softmaxDenominator(scores) {
+  let total = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    total += Math.exp(scores[i]);
+  }
+
+  return total;
+}`,
+    explanation: 'Softmax turns raw attention scores into normalized attention weights.',
+  },
+
+  {
+    id: 'attention-softmax-weights',
+    stepLabel: '28.4',
+    group: 'Attention algebra bridge',
+    title: 'Softmax weights',
+    concept: 'Each softmax weight is exp(score) divided by the sum of all exp(scores).',
+    objective: 'Push one normalized softmax weight per score.',
+    difficulty: 'challenge',
+    starterCode: `function softmax(scores) {
+  let denominator = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    denominator += Math.exp(scores[i]);
+  }
+
+  const weights = [];
+
+  for (let i = 0; i < scores.length; i++) {
+    // TODO: push the normalized softmax weight.
+    weights.push(0);
+  }
+
+  return weights;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('two equal scores', softmax([0, 0]), [0.5, 0.5]);
+check('one option', softmax([0]), [1]);
+check('log ratio', softmax([0, Math.log(3)]), [0.25, 0.75]);
+
+return results;`,
+    hints: [
+      'The denominator is already computed.',
+      'Weight i is exp(scores[i]) / denominator.',
+      'weights.push(Math.exp(scores[i]) / denominator);',
+    ],
+    solution: `function softmax(scores) {
+  let denominator = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    denominator += Math.exp(scores[i]);
+  }
+
+  const weights = [];
+
+  for (let i = 0; i < scores.length; i++) {
+    weights.push(Math.exp(scores[i]) / denominator);
+  }
+
+  return weights;
+}`,
+    explanation: 'Attention weights are a probability distribution over which values to read.',
+  },
+
+  {
+    id: 'attention-weighted-value-sum',
+    stepLabel: '28.5',
+    group: 'Attention algebra bridge',
+    title: 'Weighted value sum',
+    concept: 'The attention output is a weighted sum of value vectors.',
+    objective: 'Add weight times value coordinate into the output.',
+    difficulty: 'challenge',
+    starterCode: `function weightedValueSum(weights, values) {
+  const dimension = values[0].length;
+  const output = Array(dimension).fill(0);
+
+  for (let token = 0; token < values.length; token++) {
+    for (let dim = 0; dim < dimension; dim++) {
+      // TODO: add this token's weighted value coordinate.
+      output[dim] += 0;
+    }
+  }
+
+  return output;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('choose first value', weightedValueSum([1, 0], [[3, 4], [10, 20]]), [3, 4]);
+check('average two values', weightedValueSum([0.5, 0.5], [[2, 4], [6, 8]]), [4, 6]);
+check('weighted mix', weightedValueSum([0.25, 0.75], [[0, 4], [8, 0]]), [6, 1]);
+
+return results;`,
+    hints: [
+      'Each token contributes weight[token] times its value vector.',
+      'For each coordinate, add weights[token] * values[token][dim].',
+      'output[dim] += weights[token] * values[token][dim];',
+    ],
+    solution: `function weightedValueSum(weights, values) {
+  const dimension = values[0].length;
+  const output = Array(dimension).fill(0);
+
+  for (let token = 0; token < values.length; token++) {
+    for (let dim = 0; dim < dimension; dim++) {
+      output[dim] += weights[token] * values[token][dim];
+    }
+  }
+
+  return output;
+}`,
+    explanation: 'Attention does not return the most-attended token; it returns a mixture of value vectors.',
+  },
+
+  {
+    id: 'derivative-line-slope',
+    stepLabel: '29.1',
+    group: 'Derivative basics',
+    title: 'Slope of a line',
+    concept: 'The derivative of f(x) = mx + b is the constant slope m.',
+    objective: 'Return the slope m.',
+    difficulty: 'warmup',
+    starterCode: `function derivativeOfLine(m, b, x) {
+  // f(x) = m*x + b
+  // TODO: return the derivative with respect to x.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('slope 2', derivativeOfLine(2, 5, 10), 2);
+check('slope -3', derivativeOfLine(-3, 1, 7), -3);
+check('slope 0', derivativeOfLine(0, 100, 4), 0);
+
+return results;`,
+    hints: [
+      'The derivative of m*x + b is m.',
+      'b disappears because constants do not change with x.',
+      'return m;',
+    ],
+    solution: `function derivativeOfLine(m, b, x) {
+  return m;
+}`,
+    explanation: 'A derivative measures local change. For a straight line, the local change is the same everywhere.',
+  },
+
+  {
+    id: 'derivative-square',
+    stepLabel: '29.2',
+    group: 'Derivative basics',
+    title: 'Derivative of x^2',
+    concept: 'The derivative of x^2 is 2x.',
+    objective: 'Return 2 * x.',
+    difficulty: 'warmup',
+    starterCode: `function derivativeSquare(x) {
+  // f(x) = x*x
+  // TODO: return f'(x).
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('x=0', derivativeSquare(0), 0);
+check('x=3', derivativeSquare(3), 6);
+check('x=-4', derivativeSquare(-4), -8);
+check('x=10', derivativeSquare(10), 20);
+
+return results;`,
+    hints: [
+      'Power rule: d/dx x^2 = 2x.',
+      'The slope grows as x gets farther from 0.',
+      'return 2 * x;',
+    ],
+    solution: `function derivativeSquare(x) {
+  return 2 * x;
+}`,
+    explanation: 'For squared loss, gradients grow with the size of the error.',
+  },
+
+  {
+    id: 'derivative-squared-error',
+    stepLabel: '29.3',
+    group: 'Derivative basics',
+    title: 'Squared-error derivative',
+    concept: 'For loss L = (prediction - target)^2, the derivative with respect to prediction is 2(prediction - target).',
+    objective: 'Return the gradient of squared error with respect to prediction.',
+    difficulty: 'core',
+    starterCode: `function squaredErrorGradient(prediction, target) {
+  const error = prediction - target;
+
+  // TODO: return d/dprediction of error^2.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('prediction too high', squaredErrorGradient(10, 7), 6);
+check('prediction too low', squaredErrorGradient(4, 9), -10);
+check('perfect prediction', squaredErrorGradient(5, 5), 0);
+
+return results;`,
+    hints: [
+      'Squared error is error^2.',
+      'Derivative of error^2 with respect to prediction is 2 * error.',
+      'return 2 * error;',
+    ],
+    solution: `function squaredErrorGradient(prediction, target) {
+  const error = prediction - target;
+  return 2 * error;
+}`,
+    explanation: 'The gradient is positive when prediction is too high, negative when too low, and zero when perfect.',
+  },
+
+  {
+    id: 'numerical-derivative',
+    stepLabel: '29.4',
+    group: 'Derivative basics',
+    title: 'Numerical derivative',
+    concept: 'A derivative can be approximated by measuring a tiny change in function output.',
+    objective: 'Complete the finite-difference formula.',
+    difficulty: 'core',
+    starterCode: `function numericalDerivative(f, x, h = 1e-5) {
+  // TODO: return (f(x + h) - f(x)) / h.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-3) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('derivative of x^2 at 3', numericalDerivative((x) => x * x, 3), 6);
+check('derivative of 2x+1 at 5', numericalDerivative((x) => 2 * x + 1, 5), 2);
+check('derivative of x^3 at 2', numericalDerivative((x) => x * x * x, 2), 12);
+
+return results;`,
+    hints: [
+      'Look at how much f changes after a tiny step h.',
+      'Divide output change by input change.',
+      'return (f(x + h) - f(x)) / h;',
+    ],
+    solution: `function numericalDerivative(f, x, h = 1e-5) {
+  return (f(x + h) - f(x)) / h;
+}`,
+    explanation: 'Numerical derivatives are useful for checking gradients, though exact backprop is usually more efficient.',
+  },
+
+  {
+    id: 'chain-rule-two-links',
+    stepLabel: '30.1',
+    group: 'Chain rule',
+    title: 'Two-link chain rule',
+    concept: 'The chain rule multiplies local derivatives along a path.',
+    objective: 'Return outerGradient * innerGradient.',
+    difficulty: 'warmup',
+    starterCode: `function chainTwo(outerGradient, innerGradient) {
+  // TODO: return the product of the two local gradients.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('2 then 3', chainTwo(2, 3), 6);
+check('-1 then 5', chainTwo(-1, 5), -5);
+check('zero stops gradient', chainTwo(10, 0), 0);
+
+return results;`,
+    hints: [
+      'Chain rule multiplies derivatives.',
+      'If one local derivative is zero, the path gradient is zero.',
+      'return outerGradient * innerGradient;',
+    ],
+    solution: `function chainTwo(outerGradient, innerGradient) {
+  return outerGradient * innerGradient;
+}`,
+    explanation: 'Backprop is repeated chain rule: gradients flow backward by multiplying local derivatives.',
+  },
+
+  {
+    id: 'chain-through-square',
+    stepLabel: '30.2',
+    group: 'Chain rule',
+    title: 'Chain through square',
+    concept: 'If y = z^2 and z depends on x, then dy/dx = 2z * dz/dx.',
+    objective: 'Return 2 * z * dzdx.',
+    difficulty: 'core',
+    starterCode: `function chainThroughSquare(z, dzdx) {
+  // y = z^2
+  // TODO: return dy/dx.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('z=3 dzdx=2', chainThroughSquare(3, 2), 12);
+check('z=-4 dzdx=1', chainThroughSquare(-4, 1), -8);
+check('z=5 dzdx=0', chainThroughSquare(5, 0), 0);
+
+return results;`,
+    hints: [
+      'Derivative of z^2 with respect to z is 2z.',
+      'Then multiply by dz/dx.',
+      'return 2 * z * dzdx;',
+    ],
+    solution: `function chainThroughSquare(z, dzdx) {
+  return 2 * z * dzdx;
+}`,
+    explanation: 'The outer function contributes 2z; the inner function contributes dz/dx.',
+  },
+
+  {
+    id: 'chain-through-sigmoid',
+    stepLabel: '30.3',
+    group: 'Chain rule',
+    title: 'Chain through sigmoid',
+    concept: 'The derivative of sigmoid output s with respect to its input is s(1-s).',
+    objective: 'Return upstreamGradient * s * (1 - s).',
+    difficulty: 'core',
+    starterCode: `function chainThroughSigmoid(sigmoidOutput, upstreamGradient) {
+  // TODO: return the downstream gradient.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('s=0.5 upstream=1', chainThroughSigmoid(0.5, 1), 0.25);
+check('s=0.8 upstream=2', chainThroughSigmoid(0.8, 2), 0.32);
+check('s=0.1 upstream=3', chainThroughSigmoid(0.1, 3), 0.27);
+
+return results;`,
+    hints: [
+      'Sigmoid derivative uses the output: s * (1 - s).',
+      'Multiply by upstreamGradient.',
+      'return upstreamGradient * sigmoidOutput * (1 - sigmoidOutput);',
+    ],
+    solution: `function chainThroughSigmoid(sigmoidOutput, upstreamGradient) {
+  return upstreamGradient * sigmoidOutput * (1 - sigmoidOutput);
+}`,
+    explanation: 'Sigmoid gradients shrink near 0 and 1, which is one reason saturated sigmoids can learn slowly.',
+  },
+
+  {
+    id: 'chain-rule-add-paths',
+    stepLabel: '30.4',
+    group: 'Chain rule',
+    title: 'Add gradients from multiple paths',
+    concept: 'When one variable affects loss through multiple paths, gradients add.',
+    objective: 'Return pathA + pathB.',
+    difficulty: 'core',
+    starterCode: `function addGradientPaths(pathA, pathB) {
+  // TODO: return the total gradient from both paths.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('two positive paths', addGradientPaths(2, 3), 5);
+check('opposing paths', addGradientPaths(10, -4), 6);
+check('one path zero', addGradientPaths(7, 0), 7);
+
+return results;`,
+    hints: [
+      'Gradients from different downstream branches add together.',
+      'This happens in computation graphs with reused values.',
+      'return pathA + pathB;',
+    ],
+    solution: `function addGradientPaths(pathA, pathB) {
+  return pathA + pathB;
+}`,
+    explanation: 'Backprop sums contributions when a value is used by more than one downstream operation.',
+  },
+
+  {
+    id: 'neuron-weighted-input',
+    stepLabel: '31.1',
+    group: 'One neuron',
+    title: 'Weighted input',
+    concept: 'A neuron first computes a dot product between weights and inputs.',
+    objective: 'Return dot(weights, x).',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function weightedInput(weights, x) {
+  // TODO: return the weighted sum.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('simple weighted input', weightedInput([1, 2], [3, 4]), 11);
+check('zero weight', weightedInput([0, 5], [10, 2]), 10);
+check('negative weight', weightedInput([-1, 2], [3, 5]), 7);
+
+return results;`,
+    hints: [
+      'A neuron uses the same dot product you learned earlier.',
+      'Use the dot helper.',
+      'return dot(weights, x);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function weightedInput(weights, x) {
+  return dot(weights, x);
+}`,
+    explanation: 'Every dense neuron starts as a dot product.',
+  },
+
+  {
+    id: 'neuron-add-bias',
+    stepLabel: '31.2',
+    group: 'One neuron',
+    title: 'Add bias',
+    concept: 'A bias shifts the neuron before activation.',
+    objective: 'Return weighted sum plus bias.',
+    difficulty: 'warmup',
+    starterCode: `function preActivation(weightedSum, bias) {
+  // TODO: return weightedSum plus bias.
+  return weightedSum;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('positive bias', preActivation(10, 2), 12);
+check('negative bias', preActivation(10, -3), 7);
+check('zero bias', preActivation(5, 0), 5);
+
+return results;`,
+    hints: [
+      'Bias is added after the weighted sum.',
+      'Return weightedSum + bias.',
+      'return weightedSum + bias;',
+    ],
+    solution: `function preActivation(weightedSum, bias) {
+  return weightedSum + bias;
+}`,
+    explanation: 'Bias lets the neuron shift its decision boundary or activation threshold.',
+  },
+
+  {
+    id: 'neuron-relu-forward',
+    stepLabel: '31.3',
+    group: 'One neuron',
+    title: 'ReLU activation',
+    concept: 'ReLU keeps positive values and turns negative values into zero.',
+    objective: 'Return max(0, z).',
+    difficulty: 'warmup',
+    starterCode: `function relu(z) {
+  // TODO: return max(0, z).
+  return z;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('positive', relu(3), 3);
+check('negative', relu(-4), 0);
+check('zero', relu(0), 0);
+
+return results;`,
+    hints: [
+      'Use Math.max.',
+      'ReLU is max(0, z).',
+      'return Math.max(0, z);',
+    ],
+    solution: `function relu(z) {
+  return Math.max(0, z);
+}`,
+    explanation: 'ReLU adds nonlinearity by gating off negative pre-activations.',
+  },
+
+  {
+    id: 'neuron-forward-full',
+    stepLabel: '31.4',
+    group: 'One neuron',
+    title: 'Full neuron forward pass',
+    concept: 'A simple neuron computes ReLU(w dot x + b).',
+    objective: 'Return relu(dot(weights, x) + bias).',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function relu(z) {
+  return Math.max(0, z);
+}
+
+function neuronForward(weights, x, bias) {
+  // TODO: return ReLU of weighted input plus bias.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('positive neuron', neuronForward([1, 2], [3, 4], -5), 6);
+check('negative clipped', neuronForward([1, 1], [1, 1], -5), 0);
+check('zero boundary', neuronForward([1, 1], [1, 1], -2), 0);
+
+return results;`,
+    hints: [
+      'First compute dot(weights, x) + bias.',
+      'Then pass it through relu.',
+      'return relu(dot(weights, x) + bias);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function relu(z) {
+  return Math.max(0, z);
+}
+
+function neuronForward(weights, x, bias) {
+  return relu(dot(weights, x) + bias);
+}`,
+    explanation: 'Dense neural networks are built from many versions of this pattern.',
+  },
+
+  {
+    id: 'backprop-bias-gradient',
+    stepLabel: '32.1',
+    group: 'One-neuron backprop',
+    title: 'Bias gradient',
+    concept: 'For z = w dot x + b, the derivative of z with respect to b is 1.',
+    objective: 'Return upstreamGradient.',
+    difficulty: 'warmup',
+    starterCode: `function biasGradient(upstreamGradient) {
+  // TODO: return dL/db.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('upstream 3', biasGradient(3), 3);
+check('upstream -2', biasGradient(-2), -2);
+check('upstream 0', biasGradient(0), 0);
+
+return results;`,
+    hints: [
+      'Bias is added directly.',
+      'dz/db = 1, so dL/db = upstreamGradient * 1.',
+      'return upstreamGradient;',
+    ],
+    solution: `function biasGradient(upstreamGradient) {
+  return upstreamGradient;
+}`,
+    explanation: 'Bias receives the same upstream gradient because it shifts z by one unit per one unit of bias.',
+  },
+
+  {
+    id: 'backprop-one-weight',
+    stepLabel: '32.2',
+    group: 'One-neuron backprop',
+    title: 'One weight gradient',
+    concept: 'For z = w dot x + b, dL/dw_i = upstreamGradient * x_i.',
+    objective: 'Return upstreamGradient * inputValue.',
+    difficulty: 'core',
+    starterCode: `function weightGradient(upstreamGradient, inputValue) {
+  // TODO: return dL/dw for one weight.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('input 2 upstream 3', weightGradient(3, 2), 6);
+check('input 0 upstream 3', weightGradient(3, 0), 0);
+check('negative upstream', weightGradient(-2, 5), -10);
+
+return results;`,
+    hints: [
+      'A weight is multiplied by its input.',
+      'The input scales the gradient for that weight.',
+      'return upstreamGradient * inputValue;',
+    ],
+    solution: `function weightGradient(upstreamGradient, inputValue) {
+  return upstreamGradient * inputValue;
+}`,
+    explanation: 'Weights connected to larger inputs receive larger gradient signals.',
+  },
+
+  {
+    id: 'backprop-weight-vector',
+    stepLabel: '32.3',
+    group: 'One-neuron backprop',
+    title: 'Weight-gradient vector',
+    concept: 'Each weight gradient is upstreamGradient times the matching input.',
+    objective: 'Push upstreamGradient * x[i] for each weight.',
+    difficulty: 'core',
+    starterCode: `function weightGradients(upstreamGradient, x) {
+  const gradients = [];
+
+  for (let i = 0; i < x.length; i++) {
+    // TODO: push the gradient for weight i.
+    gradients.push(0);
+  }
+
+  return gradients;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('upstream 3', weightGradients(3, [1, 2, 3]), [3, 6, 9]);
+check('upstream -2', weightGradients(-2, [1, 0, 4]), [-2, 0, -8]);
+check('upstream 0', weightGradients(0, [5, 6]), [0, 0]);
+
+return results;`,
+    hints: [
+      'Loop over the input vector.',
+      'Each gradient is upstreamGradient times x[i].',
+      'gradients.push(upstreamGradient * x[i]);',
+    ],
+    solution: `function weightGradients(upstreamGradient, x) {
+  const gradients = [];
+
+  for (let i = 0; i < x.length; i++) {
+    gradients.push(upstreamGradient * x[i]);
+  }
+
+  return gradients;
+}`,
+    explanation: 'Backprop through a dense neuron produces one gradient per weight.',
+  },
+
+  {
+    id: 'backprop-input-gradient',
+    stepLabel: '32.4',
+    group: 'One-neuron backprop',
+    title: 'Input gradients',
+    concept: 'The gradient into each input is upstreamGradient times the matching weight.',
+    objective: 'Push upstreamGradient * weights[i].',
+    difficulty: 'core',
+    starterCode: `function inputGradients(upstreamGradient, weights) {
+  const gradients = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    // TODO: push the gradient for input i.
+    gradients.push(0);
+  }
+
+  return gradients;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('upstream 3', inputGradients(3, [1, 2, 3]), [3, 6, 9]);
+check('upstream -2', inputGradients(-2, [1, 0, 4]), [-2, 0, -8]);
+check('upstream 0', inputGradients(0, [5, 6]), [0, 0]);
+
+return results;`,
+    hints: [
+      'Inputs receive gradients through weights.',
+      'Each input gradient is upstreamGradient times weights[i].',
+      'gradients.push(upstreamGradient * weights[i]);',
+    ],
+    solution: `function inputGradients(upstreamGradient, weights) {
+  const gradients = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    gradients.push(upstreamGradient * weights[i]);
+  }
+
+  return gradients;
+}`,
+    explanation: 'This is how gradients flow backward from one layer into the previous layer.',
+  },
+
+  {
+    id: 'relu-derivative',
+    stepLabel: '33.1',
+    group: 'Activation gradients',
+    title: 'ReLU derivative',
+    concept: 'ReLU passes gradient only when the input was positive.',
+    objective: 'Return 1 for positive z, otherwise 0.',
+    difficulty: 'warmup',
+    starterCode: `function reluDerivative(z) {
+  // TODO: return 1 if z > 0, otherwise 0.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('positive', reluDerivative(3), 1);
+check('negative', reluDerivative(-4), 0);
+check('zero', reluDerivative(0), 0);
+
+return results;`,
+    hints: [
+      'ReLU is active only when z > 0.',
+      'Use a ternary expression.',
+      'return z > 0 ? 1 : 0;',
+    ],
+    solution: `function reluDerivative(z) {
+  return z > 0 ? 1 : 0;
+}`,
+    explanation: 'A negative ReLU input blocks gradient, which can create dead units.',
+  },
+
+  {
+    id: 'relu-backprop',
+    stepLabel: '33.2',
+    group: 'Activation gradients',
+    title: 'Backprop through ReLU',
+    concept: 'The upstream gradient is kept only if ReLU was active.',
+    objective: 'Multiply upstreamGradient by the ReLU derivative.',
+    difficulty: 'core',
+    starterCode: `function reluDerivative(z) {
+  return z > 0 ? 1 : 0;
+}
+
+function reluBackward(upstreamGradient, z) {
+  // TODO: return upstreamGradient times reluDerivative(z).
+  return upstreamGradient;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('active ReLU', reluBackward(5, 3), 5);
+check('inactive ReLU', reluBackward(5, -3), 0);
+check('zero ReLU', reluBackward(5, 0), 0);
+check('negative upstream active', reluBackward(-2, 4), -2);
+
+return results;`,
+    hints: [
+      'Backprop multiplies by local derivative.',
+      'reluDerivative(z) is either 1 or 0.',
+      'return upstreamGradient * reluDerivative(z);',
+    ],
+    solution: `function reluDerivative(z) {
+  return z > 0 ? 1 : 0;
+}
+
+function reluBackward(upstreamGradient, z) {
+  return upstreamGradient * reluDerivative(z);
+}`,
+    explanation: 'ReLU either passes the gradient through unchanged or blocks it entirely.',
+  },
+
+  {
+    id: 'sigmoid-derivative-output',
+    stepLabel: '33.3',
+    group: 'Activation gradients',
+    title: 'Sigmoid derivative',
+    concept: 'If s = sigmoid(z), then ds/dz = s(1-s).',
+    objective: 'Return s * (1 - s).',
+    difficulty: 'core',
+    starterCode: `function sigmoidDerivativeFromOutput(s) {
+  // TODO: return s * (1 - s).
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('s=0.5', sigmoidDerivativeFromOutput(0.5), 0.25);
+check('s=0.8', sigmoidDerivativeFromOutput(0.8), 0.16);
+check('s=0.1', sigmoidDerivativeFromOutput(0.1), 0.09);
+
+return results;`,
+    hints: [
+      'Use the sigmoid output s directly.',
+      'Derivative is s times one minus s.',
+      'return s * (1 - s);',
+    ],
+    solution: `function sigmoidDerivativeFromOutput(s) {
+  return s * (1 - s);
+}`,
+    explanation: 'Sigmoid gradients are largest near 0.5 and small near saturated outputs 0 or 1.',
+  },
+
+  {
+    id: 'sigmoid-backprop',
+    stepLabel: '33.4',
+    group: 'Activation gradients',
+    title: 'Backprop through sigmoid',
+    concept: 'Sigmoid backprop multiplies upstream gradient by s(1-s).',
+    objective: 'Return upstreamGradient * s * (1 - s).',
+    difficulty: 'core',
+    starterCode: `function sigmoidBackward(upstreamGradient, sigmoidOutput) {
+  // TODO: apply the sigmoid local derivative.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('s=0.5 upstream=1', sigmoidBackward(1, 0.5), 0.25);
+check('s=0.8 upstream=2', sigmoidBackward(2, 0.8), 0.32);
+check('s=0.1 upstream=3', sigmoidBackward(3, 0.1), 0.27);
+
+return results;`,
+    hints: [
+      'Local derivative is sigmoidOutput * (1 - sigmoidOutput).',
+      'Multiply by upstreamGradient.',
+      'return upstreamGradient * sigmoidOutput * (1 - sigmoidOutput);',
+    ],
+    solution: `function sigmoidBackward(upstreamGradient, sigmoidOutput) {
+  return upstreamGradient * sigmoidOutput * (1 - sigmoidOutput);
+}`,
+    explanation: 'Sigmoid saturation can shrink gradients during backprop.',
+  },
+
+  {
+    id: 'one-hot-target',
+    stepLabel: '34.1',
+    group: 'Softmax cross-entropy',
+    title: 'One-hot target',
+    concept: 'Classification targets are often represented as one-hot vectors.',
+    objective: 'Return 1 at targetIndex and 0 elsewhere.',
+    difficulty: 'warmup',
+    starterCode: `function oneHot(numClasses, targetIndex) {
+  const y = [];
+
+  for (let i = 0; i < numClasses; i++) {
+    // TODO: push 1 for the target index, otherwise 0.
+    y.push(0);
+  }
+
+  return y;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('class 0 of 3', oneHot(3, 0), [1, 0, 0]);
+check('class 1 of 3', oneHot(3, 1), [0, 1, 0]);
+check('class 2 of 4', oneHot(4, 2), [0, 0, 1, 0]);
+
+return results;`,
+    hints: [
+      'Compare i with targetIndex.',
+      'Push 1 if they match, otherwise 0.',
+      'y.push(i === targetIndex ? 1 : 0);',
+    ],
+    solution: `function oneHot(numClasses, targetIndex) {
+  const y = [];
+
+  for (let i = 0; i < numClasses; i++) {
+    y.push(i === targetIndex ? 1 : 0);
+  }
+
+  return y;
+}`,
+    explanation: 'A one-hot vector says which class is the true class.',
+  },
+
+  {
+    id: 'cross-entropy-one-hot',
+    stepLabel: '34.2',
+    group: 'Softmax cross-entropy',
+    title: 'Cross-entropy from true class probability',
+    concept: 'For a one-hot label, cross-entropy is -log(probability of the true class).',
+    objective: 'Return -Math.log(probabilities[targetIndex]).',
+    difficulty: 'core',
+    starterCode: `function crossEntropyFromTarget(probabilities, targetIndex) {
+  // TODO: return negative log probability of the true class.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('p=0.5', crossEntropyFromTarget([0.5, 0.5], 0), -Math.log(0.5));
+check('p=0.8', crossEntropyFromTarget([0.1, 0.8, 0.1], 1), -Math.log(0.8));
+check('p=0.25', crossEntropyFromTarget([0.25, 0.25, 0.5], 0), -Math.log(0.25));
+
+return results;`,
+    hints: [
+      'Only the probability assigned to the true class matters for one-hot cross-entropy.',
+      'Use probabilities[targetIndex].',
+      'return -Math.log(probabilities[targetIndex]);',
+    ],
+    solution: `function crossEntropyFromTarget(probabilities, targetIndex) {
+  return -Math.log(probabilities[targetIndex]);
+}`,
+    explanation: 'Cross-entropy strongly penalizes assigning low probability to the true class.',
+  },
+
+  {
+    id: 'softmax-cross-entropy-gradient',
+    stepLabel: '34.3',
+    group: 'Softmax cross-entropy',
+    title: 'Softmax + CE gradient',
+    concept: 'For softmax followed by cross-entropy, the logit gradient is probabilities minus one-hot target.',
+    objective: 'Push probabilities[i] - target[i].',
+    difficulty: 'challenge',
+    starterCode: `function softmaxCrossEntropyGradient(probabilities, targetIndex) {
+  const gradient = [];
+
+  for (let i = 0; i < probabilities.length; i++) {
+    const target = i === targetIndex ? 1 : 0;
+
+    // TODO: push probability minus target.
+    gradient.push(0);
+  }
+
+  return gradient;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('binary target 0', softmaxCrossEntropyGradient([0.7, 0.3], 0), [-0.3, 0.3]);
+check('binary target 1', softmaxCrossEntropyGradient([0.7, 0.3], 1), [0.7, -0.7]);
+check('three classes', softmaxCrossEntropyGradient([0.1, 0.8, 0.1], 1), [0.1, -0.2, 0.1]);
+
+return results;`,
+    hints: [
+      'This is the famous simplification: gradient = p - y.',
+      'target is already 1 for the true class and 0 otherwise.',
+      'gradient.push(probabilities[i] - target);',
+    ],
+    solution: `function softmaxCrossEntropyGradient(probabilities, targetIndex) {
+  const gradient = [];
+
+  for (let i = 0; i < probabilities.length; i++) {
+    const target = i === targetIndex ? 1 : 0;
+    gradient.push(probabilities[i] - target);
+  }
+
+  return gradient;
+}`,
+    explanation: 'The true class gets pushed up when its probability is too low; other classes get pushed down.',
+  },
+
+  {
+    id: 'softmax-gradient-sum-zero',
+    stepLabel: '34.4',
+    group: 'Softmax cross-entropy',
+    title: 'Softmax gradient sums to zero',
+    concept: 'Softmax logits compete: increasing one class decreases others, so gradients sum to zero.',
+    objective: 'Return the sum of the gradient entries.',
+    difficulty: 'core',
+    starterCode: `function gradientSum(gradient) {
+  let total = 0;
+
+  for (let i = 0; i < gradient.length; i++) {
+    // TODO: add the current gradient entry.
+    total += 0;
+  }
+
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('binary gradient', gradientSum([-0.3, 0.3]), 0);
+check('three-class gradient', gradientSum([0.1, -0.2, 0.1]), 0);
+check('general sum', gradientSum([0.25, 0.25, -0.5]), 0);
+
+return results;`,
+    hints: [
+      'Loop over the gradient entries.',
+      'Add each entry into total.',
+      'total += gradient[i];',
+    ],
+    solution: `function gradientSum(gradient) {
+  let total = 0;
+
+  for (let i = 0; i < gradient.length; i++) {
+    total += gradient[i];
+  }
+
+  return total;
+}`,
+    explanation: 'Softmax probabilities are coupled; probability mass shifts between classes.',
+  },
+
+  {
+    id: 'batch-size',
+    stepLabel: '35.1',
+    group: 'Batch matrix shapes',
+    title: 'Batch size',
+    concept: 'A batch matrix has one row per example.',
+    objective: 'Return the number of examples in X.',
+    difficulty: 'warmup',
+    starterCode: `function batchSize(X) {
+  // TODO: return the number of rows.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('two examples', batchSize([[1, 2], [3, 4]]), 2);
+check('three examples', batchSize([[1], [2], [3]]), 3);
+check('one example', batchSize([[5, 6, 7]]), 1);
+
+return results;`,
+    hints: [
+      'Rows are examples.',
+      'The number of rows is X.length.',
+      'return X.length;',
+    ],
+    solution: `function batchSize(X) {
+  return X.length;
+}`,
+    explanation: 'In many ML libraries, a data batch X has shape batch x features.',
+  },
+
+  {
+    id: 'feature-count',
+    stepLabel: '35.2',
+    group: 'Batch matrix shapes',
+    title: 'Feature count',
+    concept: 'A batch matrix has one column per input feature.',
+    objective: 'Return the number of columns in X.',
+    difficulty: 'warmup',
+    starterCode: `function featureCount(X) {
+  // TODO: return the number of features.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('two features', featureCount([[1, 2], [3, 4]]), 2);
+check('one feature', featureCount([[1], [2], [3]]), 1);
+check('three features', featureCount([[5, 6, 7]]), 3);
+
+return results;`,
+    hints: [
+      'Features are columns.',
+      'The first row length gives the number of features.',
+      'return X[0].length;',
+    ],
+    solution: `function featureCount(X) {
+  return X[0].length;
+}`,
+    explanation: 'The feature count determines how many input weights each neuron needs.',
+  },
+
+  {
+    id: 'dense-output-shape',
+    stepLabel: '35.3',
+    group: 'Batch matrix shapes',
+    title: 'Dense layer output shape',
+    concept: 'If X is batch x inputDim and W is inputDim x outputDim, then XW is batch x outputDim.',
+    objective: 'Return [batchSize, outputDim].',
+    difficulty: 'core',
+    starterCode: `function denseOutputShape(X, W) {
+  const batch = X.length;
+  const outputDim = W[0].length;
+
+  // TODO: return the output shape.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('2x3 times 3x4', denseOutputShape([[1,2,3],[4,5,6]], [[1,2,3,4],[5,6,7,8],[9,10,11,12]]), [2, 4]);
+check('1x2 times 2x3', denseOutputShape([[1,2]], [[1,2,3],[4,5,6]]), [1, 3]);
+check('3x1 times 1x2', denseOutputShape([[1],[2],[3]], [[4,5]]), [3, 2]);
+
+return results;`,
+    hints: [
+      'Rows come from X.',
+      'Output columns come from W.',
+      'return [batch, outputDim];',
+    ],
+    solution: `function denseOutputShape(X, W) {
+  const batch = X.length;
+  const outputDim = W[0].length;
+  return [batch, outputDim];
+}`,
+    explanation: 'Dense layers are matrix multiplication with a batch dimension.',
+  },
+
+  {
+    id: 'dense-shape-compatible',
+    stepLabel: '35.4',
+    group: 'Batch matrix shapes',
+    title: 'Dense layer shape check',
+    concept: 'The feature count of X must match the input dimension of W.',
+    objective: 'Return whether X and W can multiply.',
+    difficulty: 'core',
+    starterCode: `function denseShapesCompatible(X, W) {
+  const inputFeatures = X[0].length;
+  const weightInputDim = W.length;
+
+  // TODO: return whether the inner dimensions match.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('2x3 and 3x4 compatible', denseShapesCompatible([[1,2,3],[4,5,6]], [[1,2,3,4],[5,6,7,8],[9,10,11,12]]), true);
+check('2x2 and 3x4 incompatible', denseShapesCompatible([[1,2],[3,4]], [[1,2,3,4],[5,6,7,8],[9,10,11,12]]), false);
+check('1x2 and 2x1 compatible', denseShapesCompatible([[1,2]], [[3],[4]]), true);
+
+return results;`,
+    hints: [
+      'The inner dimensions must match.',
+      'Compare X[0].length with W.length.',
+      'return inputFeatures === weightInputDim;',
+    ],
+    solution: `function denseShapesCompatible(X, W) {
+  const inputFeatures = X[0].length;
+  const weightInputDim = W.length;
+  return inputFeatures === weightInputDim;
+}`,
+    explanation: 'Many neural-network bugs are shape bugs. This check catches the most common dense-layer mismatch.',
+  },
+
+  {
+    id: 'dense-add-bias-each-row',
+    stepLabel: '35.5',
+    group: 'Batch matrix shapes',
+    title: 'Add bias to each row',
+    concept: 'Dense-layer bias is added to every example in the batch.',
+    objective: 'Add bias[col] to each output cell.',
+    difficulty: 'challenge',
+    starterCode: `function addBias(Y, bias) {
+  const result = [];
+
+  for (let row = 0; row < Y.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < Y[0].length; col++) {
+      // TODO: add the bias for this output feature.
+      values.push(Y[row][col]);
+    }
+
+    result.push(values);
+  }
+
+  return result;
+}`,
+    testCode: `const results = [];
+
+function sameMatrix(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameMatrix(actual, expected),
+  });
+}
+
+check('add bias to two rows', addBias([[1,2],[3,4]], [10,20]), [[11,22],[13,24]]);
+check('zero bias', addBias([[1,2,3]], [0,0,0]), [[1,2,3]]);
+check('negative bias', addBias([[5,5]], [-1,2]), [[4,7]]);
+
+return results;`,
+    hints: [
+      'Bias has one value per output column.',
+      'Use bias[col].',
+      'values.push(Y[row][col] + bias[col]);',
+    ],
+    solution: `function addBias(Y, bias) {
+  const result = [];
+
+  for (let row = 0; row < Y.length; row++) {
+    const values = [];
+
+    for (let col = 0; col < Y[0].length; col++) {
+      values.push(Y[row][col] + bias[col]);
+    }
+
+    result.push(values);
+  }
+
+  return result;
+}`,
+    explanation: 'Bias broadcasts across the batch: every example gets the same output-feature offsets.',
+  },
 ];
