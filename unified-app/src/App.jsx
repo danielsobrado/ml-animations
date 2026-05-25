@@ -3,12 +3,19 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/layout/Header';
 import KeyboardHintDock from './components/app/KeyboardHintDock';
 import { ACTIVE_LESSON_COUNT } from './data/catalogStats';
+import { CODE_LAB_PROGRESS_EVENT } from './data/codeLabProgress.js';
+import {
+  readGitHubSyncSettings,
+  syncCodeLabProgressToGitHub,
+  writeGitHubSyncSettings,
+} from './data/githubProgressSync.js';
 
 import { getGlossaryTerm } from './data/glossaryRepository.js';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AnimationPage = lazy(() => import('./pages/AnimationPage'));
 const LabsPage = lazy(() => import('./pages/LabsPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage'));
 const GlossaryIndexPage = lazy(() => import('./pages/GlossaryIndexPage'));
 const CommandPalette = lazy(() => import('./components/app/CommandPalette'));
@@ -100,6 +107,15 @@ function getMetaFromPath(pathname, currentLesson) {
       description:
         'Rustlings-style JavaScript implementation exercises for every active ML Animations lesson.',
       path: '/labs/',
+    };
+  }
+
+  if (pathname === '/settings' || pathname === '/settings/') {
+    return {
+      title: 'Progress Settings - ML Animations',
+      description:
+        'Configure local code-lab progress and optional GitHub sync for ML Animations practice evidence.',
+      path: '/settings/',
     };
   }
 
@@ -236,6 +252,40 @@ export default function App() {
     setHeadMeta(pageMeta);
   }, [location.pathname, currentLessonId, currentLesson]);
 
+  useEffect(() => {
+    let timeoutId = null;
+    let syncing = false;
+
+    const scheduleAutoSync = () => {
+      const settings = readGitHubSyncSettings();
+      if (!settings.enabled || !settings.autoSync || !settings.brokerUrl) return;
+      if (timeoutId || syncing) return;
+
+      timeoutId = window.setTimeout(async () => {
+        timeoutId = null;
+        syncing = true;
+        try {
+          await syncCodeLabProgressToGitHub({ settings: readGitHubSyncSettings() });
+        } catch (error) {
+          const current = readGitHubSyncSettings();
+          writeGitHubSyncSettings({
+            ...current,
+            lastStatus: 'Auto-sync failed',
+            lastError: error.message || 'Auto-sync failed.',
+          });
+        } finally {
+          syncing = false;
+        }
+      }, 45_000);
+    };
+
+    window.addEventListener(CODE_LAB_PROGRESS_EVENT, scheduleAutoSync);
+    return () => {
+      window.removeEventListener(CODE_LAB_PROGRESS_EVENT, scheduleAutoSync);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <div className="ua-app">
       <Header
@@ -264,6 +314,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/animation/:id" element={<AnimationPage />} />
             <Route path="/labs" element={<LabsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/glossary" element={<GlossaryIndexPage />} />
             <Route path="/glossary/:slug" element={<GlossaryPage />} />
           </Routes>

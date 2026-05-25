@@ -27,6 +27,7 @@ test('route smoke plan preserves critical explicit routes', () => {
 test('route smoke paths are normalized under the GitHub Pages base path', () => {
   assert.equal(normalizeRoute('/'), '/ml-animations/');
   assert.equal(normalizeRoute('/labs'), '/ml-animations/labs/');
+  assert.equal(normalizeRoute('/settings'), '/ml-animations/settings/');
   assert.equal(normalizeRoute('/animation/linear-regression'), '/ml-animations/animation/linear-regression/');
   assert.equal(normalizeRoute('/ml-animations/animation/softmax'), '/ml-animations/animation/softmax/');
 });
@@ -35,6 +36,7 @@ test('GitHub Pages static route plan materializes every SPA detail route', () =>
   const staticRoutes = new Set(toStaticRouteDirectories().map((routeParts) => routeParts.join('/')));
 
   assert.ok(staticRoutes.has('labs'), 'labs should have a static SPA route');
+  assert.ok(staticRoutes.has('settings'), 'settings should have a static SPA route');
 
   for (const animation of allAnimations) {
     assert.ok(staticRoutes.has(`animation/${animation.id}`), `${animation.id} should have a static SPA route`);

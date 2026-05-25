@@ -126,9 +126,216 @@ html {
   margin: 0;
 }
 
+.ua-settings-page {
+  max-width: 1240px;
+}
+
+.ua-settings-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  padding: 20px;
+}
+
+.ua-settings-main,
+.ua-settings-summary {
+  min-width: 0;
+}
+
+.ua-settings-section-head {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--ds-rule);
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+}
+
+.ua-settings-section-head h2,
+.ua-settings-summary h2 {
+  color: var(--ds-ink);
+  font-family: var(--ds-serif);
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.ua-settings-section-head p,
+.ua-settings-summary p {
+  color: var(--ds-muted);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 6px 0 0;
+}
+
+.ua-settings-form {
+  display: grid;
+  gap: 14px;
+}
+
+.ua-settings-field {
+  display: grid;
+  gap: 6px;
+}
+
+.ua-settings-field > span,
+.ua-settings-check span {
+  color: var(--ds-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ua-settings-field input,
+.ua-settings-field select {
+  background: var(--ds-panel);
+  border: 1px solid var(--ds-rule);
+  border-radius: 8px;
+  color: var(--ds-ink);
+  min-height: 42px;
+  min-width: 0;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+.ua-settings-inline,
+.ua-settings-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ua-settings-inline input {
+  flex: 1 1 220px;
+}
+
+.ua-settings-two {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+}
+
+.ua-settings-check {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.ua-settings-check input {
+  accent-color: var(--ds-accent);
+}
+
+.ua-settings-actions {
+  border-top: 1px solid var(--ds-rule);
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.ua-settings-actions + .ua-settings-actions {
+  border-top: 0;
+  margin-top: 4px;
+  padding-top: 0;
+}
+
+.ua-settings-actions button,
+.ua-settings-inline button {
+  align-items: center;
+  background: var(--ds-panel);
+  border: 1px solid var(--ds-rule);
+  border-radius: 8px;
+  color: var(--ds-ink);
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 800;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 10px;
+}
+
+.ua-settings-actions button:hover:not(:disabled),
+.ua-settings-inline button:hover:not(:disabled) {
+  background: var(--ds-accent-w);
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.ua-settings-actions button:disabled,
+.ua-settings-inline button:disabled {
+  color: var(--ds-faint);
+  cursor: not-allowed;
+}
+
+.ua-settings-local-actions {
+  border-top: 1px solid var(--ds-rule);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.ua-settings-hidden-input {
+  display: none;
+}
+
+.ua-settings-status {
+  border: 1px solid var(--ds-rule);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+}
+
+.ua-settings-status.success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.ua-settings-status.error {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.25);
+}
+
+.ua-settings-summary {
+  border-left: 1px solid var(--ds-rule);
+  padding-left: 20px;
+}
+
+.ua-settings-summary dl {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.ua-settings-summary dl > div {
+  align-items: baseline;
+  border-bottom: 1px solid var(--ds-rule);
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 8px;
+}
+
+.ua-settings-summary dt {
+  color: var(--ds-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ua-settings-summary dd {
+  color: var(--ds-ink);
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .ua-labs-controls,
-  .ua-labs-layout {
+  .ua-labs-layout,
+  .ua-settings-grid,
+  .ua-settings-two {
     grid-template-columns: 1fr;
   }
 
@@ -139,6 +346,13 @@ html {
   .ua-labs-selected-head {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .ua-settings-summary {
+    border-left: 0;
+    border-top: 1px solid var(--ds-rule);
+    padding-left: 0;
+    padding-top: 16px;
   }
 }
 
