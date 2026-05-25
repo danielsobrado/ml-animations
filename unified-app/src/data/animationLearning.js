@@ -1,6 +1,7 @@
 import { getGlossaryTermsForCategory, GLOSSARY_IDS_BY_CATEGORY, FULL_GLOSSARY_CATEGORY_IDS } from './glossaryRepository.js';
 import { curriculumTracks } from './animations.js';
 import { getCurriculumDepth } from './curriculumDepth.js';
+import { getConceptMap } from './conceptMaps.js';
 import { getMindmapCuration } from './mindmapCuration.js';
 
 export const CARD_TYPES = [
@@ -1261,6 +1262,15 @@ export function createLearningModel(animation, allAnimations) {
   const headlineLatex = EQUATION_OVERRIDES[animation.id] || CATEGORY_EQUATIONS[animation.categoryId] || 'y=f(x)';
   const prereqs = getPrereqNodes(animation, allAnimations);
   const next = getTrackNextNodes(animation, allAnimations);
+  const conceptMap = getConceptMap(animation.id);
+  const mindmap = conceptMap
+    ? { ...conceptMap, prereqs, next }
+    : {
+        prereqs,
+        current: toNode(animation, 'current'),
+        insights: makeInsightNodes(animation),
+        next,
+      };
 
   return {
     conceptName: animation.name,
@@ -1273,12 +1283,7 @@ export function createLearningModel(animation, allAnimations) {
       category: animation.categoryName,
       minutes: `${animation.estimatedMinutes || 15} min`,
     },
-    mindmap: {
-      prereqs,
-      current: toNode(animation, 'current'),
-      insights: makeInsightNodes(animation),
-      next,
-    },
+    mindmap,
     learningCards: makeCards(animation, glossary, headlineLatex),
     depth: getCurriculumDepth(animation),
     controls: MATH_CONTROLS,

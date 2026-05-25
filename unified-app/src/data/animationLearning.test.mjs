@@ -8,6 +8,7 @@ import {
   getAssessmentStats,
   lessonAssessments,
 } from './lessonAssessments.js';
+import { getConceptMap } from './conceptMaps.js';
 import { MINDMAP_CURATIONS } from './mindmapCuration.js';
 import { getCompletionStatus, isAssessmentComplete } from './learningProgress.js';
 import {
@@ -38,19 +39,34 @@ test('createLearningModel gives every animation the uniform learning shell contr
       MATH_CONTROLS.map((control) => control.sigil),
     );
 
-    assert.equal(model.mindmap.current.id, animation.id);
-    assert.ok(model.mindmap.current.explanation, `${animation.id} needs current mindmap explanation`);
+    const conceptMap = getConceptMap(animation.id);
     assert.ok(model.mindmap.prereqs.length >= 1);
     assert.ok(model.mindmap.next.length >= 1);
-    assert.ok(model.mindmap.insights.length >= 4, `${animation.id} needs filled mindmap insight leaves`);
-    for (const node of [
-      model.mindmap.current,
-      ...model.mindmap.prereqs,
-      ...model.mindmap.next,
-      ...model.mindmap.insights,
-    ]) {
-      assert.ok(node.explanation, `${animation.id} mindmap node ${node.id} needs tooltip explanation`);
-      assert.ok(node.explanation.length >= 24, `${animation.id} mindmap node ${node.id} explanation is too thin`);
+
+    if (conceptMap) {
+      assert.equal(model.mindmap.center.id, animation.id);
+      assert.ok(model.mindmap.center.tooltip?.short, `${animation.id} needs concept-map center tooltip`);
+      assert.equal(model.mindmap.branches.length, 6, `${animation.id} needs six concept-map branches`);
+      const leaves = model.mindmap.branches.flatMap((branch) => branch.children);
+      assert.ok(leaves.length >= 20, `${animation.id} needs a rich concept-map`);
+      for (const leaf of leaves) {
+        assert.ok(leaf.tooltip?.short, `${animation.id} concept ${leaf.id} needs short meaning`);
+        assert.ok(leaf.tooltip?.intuition, `${animation.id} concept ${leaf.id} needs intuition`);
+        assert.ok(leaf.tooltip?.trap, `${animation.id} concept ${leaf.id} needs trap`);
+      }
+    } else {
+      assert.equal(model.mindmap.current.id, animation.id);
+      assert.ok(model.mindmap.current.explanation, `${animation.id} needs current mindmap explanation`);
+      assert.ok(model.mindmap.insights.length >= 4, `${animation.id} needs filled mindmap insight leaves`);
+      for (const node of [
+        model.mindmap.current,
+        ...model.mindmap.prereqs,
+        ...model.mindmap.next,
+        ...model.mindmap.insights,
+      ]) {
+        assert.ok(node.explanation, `${animation.id} mindmap node ${node.id} needs tooltip explanation`);
+        assert.ok(node.explanation.length >= 24, `${animation.id} mindmap node ${node.id} explanation is too thin`);
+      }
     }
     assert.ok(model.glossary.length >= 8);
 

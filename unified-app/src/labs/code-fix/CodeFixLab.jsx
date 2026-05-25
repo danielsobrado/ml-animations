@@ -66,6 +66,26 @@ export default function CodeFixLab({ exercises }) {
   const hintLevel = hintLevelById[activeExercise.id] || 0;
   const visibleHints = activeExercise.hints.slice(0, hintLevel);
   const canRevealSolution = Boolean(currentResult || hintLevel > 0);
+  const exerciseGroups = React.useMemo(() => {
+    const groups = [];
+
+    exercises.forEach((exercise, index) => {
+      const groupName = exercise.group || 'Exercises';
+      const lastGroup = groups[groups.length - 1];
+
+      if (lastGroup?.name === groupName) {
+        lastGroup.items.push({ exercise, index });
+        return;
+      }
+
+      groups.push({
+        name: groupName,
+        items: [{ exercise, index }],
+      });
+    });
+
+    return groups;
+  }, [exercises]);
 
   async function runTests() {
     setRunning(true);
@@ -137,24 +157,42 @@ export default function CodeFixLab({ exercises }) {
       </div>
 
       <div className="ua-codefix-progress">
-        {exercises.map((exercise, index) => {
-          const result = resultById[exercise.id];
-          const exerciseStatus = statusForResults(result?.results, result?.error);
-          const Icon = exerciseStatus === 'passed' ? CheckCircle2 : Circle;
+        {exerciseGroups.map((group) => {
+          const passedInGroup = group.items.filter(({ exercise }) => {
+            const result = resultById[exercise.id];
+            return result?.results?.length && result.results.every((check) => check.passed);
+          }).length;
 
           return (
-            <button
-              key={exercise.id}
-              type="button"
-              onClick={() => {
-                setActiveIndex(index);
-                setShowSolution(false);
-              }}
-              className={`ua-codefix-step ${index === activeIndex ? 'active' : ''} ${exerciseStatus}`}
-            >
-              <Icon size={15} aria-hidden="true" />
-              <span>{exercise.stepLabel || `${index + 1}.`} {exercise.title}</span>
-            </button>
+            <div className="ua-codefix-progress-group" key={group.name}>
+              <div className="ua-codefix-progress-label">
+                <strong>{group.name}</strong>
+                <span>{passedInGroup}/{group.items.length}</span>
+              </div>
+
+              <div className="ua-codefix-progress-steps">
+                {group.items.map(({ exercise, index }) => {
+                  const result = resultById[exercise.id];
+                  const exerciseStatus = statusForResults(result?.results, result?.error);
+                  const Icon = exerciseStatus === 'passed' ? CheckCircle2 : Circle;
+
+                  return (
+                    <button
+                      key={exercise.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveIndex(index);
+                        setShowSolution(false);
+                      }}
+                      className={`ua-codefix-step ${index === activeIndex ? 'active' : ''} ${exerciseStatus}`}
+                    >
+                      <Icon size={15} aria-hidden="true" />
+                      <span>{exercise.stepLabel || `${index + 1}.`} {exercise.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>

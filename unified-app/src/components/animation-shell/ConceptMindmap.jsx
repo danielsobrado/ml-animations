@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FlaskConical } from 'lucide-react';
 import MindElixir, { SIDE } from 'mind-elixir';
 import 'mind-elixir/style.css';
+import { isConceptMap, NODE_TYPES } from '../../data/conceptMaps';
+import ConceptTooltip from './ConceptTooltip';
 
 const MIND_ELIXIR_THEME = {
   name: 'distill',
@@ -32,6 +34,30 @@ const MIND_ELIXIR_THEME = {
     '--map-padding': '32px',
   },
 };
+
+function branchDirection(type) {
+  return NODE_TYPES[type]?.side === 'left' ? MindElixir.LEFT : MindElixir.RIGHT;
+}
+
+function branchColor(type) {
+  return NODE_TYPES[type]?.color || '#1f1f1f';
+}
+
+function branchTag(type) {
+  return NODE_TYPES[type]?.label || type;
+}
+
+function tooltipText(tooltip) {
+  if (!tooltip) return '';
+  if (typeof tooltip === 'string') return tooltip;
+  return [
+    tooltip.short,
+    tooltip.intuition,
+    tooltip.example,
+    tooltip.trap,
+    tooltip.why,
+  ].filter(Boolean).join(' ');
+}
 
 function toMindNode(node, branch, active = false) {
   return {
@@ -65,7 +91,41 @@ function toInsightNode(node, index) {
   };
 }
 
-function makeMindmapData(mindmap) {
+function conceptToMindNode(concept, branchType) {
+  return {
+    id: `${branchType}-${concept.id}`,
+    topic: concept.label,
+    direction: branchDirection(branchType),
+    expanded: true,
+    branchColor: branchColor(branchType),
+    metadata: {
+      tooltip: concept.tooltip,
+      kind: 'concept',
+      lessonId: concept.lessonId,
+      highlightTarget: concept.highlightTarget,
+      branchType,
+    },
+    tags: [branchTag(branchType)],
+  };
+}
+
+function branchToMindNode(branch) {
+  return {
+    id: `branch-${branch.id}`,
+    topic: branch.label,
+    direction: branchDirection(branch.type),
+    expanded: true,
+    branchColor: branchColor(branch.type),
+    metadata: {
+      kind: 'branch',
+      branchType: branch.type,
+    },
+    tags: [branchTag(branch.type)],
+    children: branch.children.map((child) => conceptToMindNode(child, branch.type)),
+  };
+}
+
+function makeLegacyMindmapData(mindmap) {
   return {
     nodeData: {
       id: `current-${mindmap.current.id}`,
@@ -89,11 +149,36 @@ function makeMindmapData(mindmap) {
   };
 }
 
+function makeConceptMapData(map) {
+  return {
+    nodeData: {
+      id: `current-${map.center.id}`,
+      topic: map.center.label,
+      expanded: true,
+      metadata: {
+        lessonId: map.center.id,
+        active: true,
+        tooltip: map.center.tooltip,
+        kind: 'center',
+      },
+      tags: ['Current'],
+      children: map.branches.map(branchToMindNode),
+    },
+    direction: SIDE,
+    theme: MIND_ELIXIR_THEME,
+  };
+}
+
+function makeMindmapData(mindmap) {
+  if (isConceptMap(mindmap)) return makeConceptMapData(mindmap);
+  return makeLegacyMindmapData(mindmap);
+}
+
 function collectMindmapTooltips(data) {
   const tooltips = new Map();
   const visit = (node) => {
     if (!node) return;
-    const tooltip = node.metadata?.tooltip;
+    const tooltip = tooltipText(node.metadata?.tooltip);
     if (tooltip) tooltips.set(node.id, tooltip);
     (node.children || []).forEach(visit);
   };
@@ -101,12 +186,65 @@ function collectMindmapTooltips(data) {
   return tooltips;
 }
 
+function findMindNode(root, nodeId) {
+  if (!root || !nodeId) return null;
+  if (root.id === nodeId) return root;
+  for (const child of root.children || []) {
+    const match = findMindNode(child, nodeId);
+    if (match) return match;
+  }
+  return null;
+}
+
+function selectionFromNode(node) {
+  if (!node?.metadata) return null;
+  const { tooltip, lessonId, highlightTarget } = node.metadata;
+  if (!tooltip && !lessonId) return null;
+  return {
+    label: node.topic,
+    tooltip,
+    lessonId,
+    highlightTarget,
+  };
+}
+
 export default function ConceptMindmap({ mindmap }) {
   const mapRef = useRef(null);
   const instanceRef = useRef(null);
   const navigate = useNavigate();
+  const curated = isConceptMap(mindmap);
   const data = useMemo(() => makeMindmapData(mindmap), [mindmap]);
   const tooltipById = useMemo(() => collectMindmapTooltips(data), [data]);
+  const [selection, setSelection] = useState(() => (
+    curated ? selectionFromNode(data.nodeData) : null
+  ));
+
+  const currentLessonId = curated ? mindmap.center.id : mindmap.current.id;
+
+  const resolveNodeId = useCallback((rawId) => {
+    if (!rawId) return null;
+    const normalized = rawId.replace(/^me/, '');
+    if (findMindNode(data.nodeData, normalized)) return normalized;
+    const withoutPrefix = normalized.replace(/^(?:prereq|next|insight|branch|prerequisite|mechanism|intuition|formula|trap|application)-/, '');
+    const candidates = [
+      normalized,
+      `current-${withoutPrefix}`,
+      `branch-${withoutPrefix}`,
+      ...Object.keys(NODE_TYPES).flatMap((type) => [`${type}-${withoutPrefix}`]),
+      `prereq-${withoutPrefix}`,
+      `next-${withoutPrefix}`,
+      `insight-${withoutPrefix}`,
+    ];
+    return candidates.find((candidate) => findMindNode(data.nodeData, candidate)) || normalized;
+  }, [data.nodeData]);
+
+  useEffect(() => {
+    if (!curated) {
+      setSelection(null);
+      return;
+    }
+    setSelection(selectionFromNode(data.nodeData));
+  }, [curated, data]);
 
   useEffect(() => {
     if (!mapRef.current) return undefined;
@@ -130,7 +268,7 @@ export default function ConceptMindmap({ mindmap }) {
     const applyTooltips = () => {
       mapRef.current?.querySelectorAll('me-tpc').forEach((topic) => {
         const nodeId = topic.dataset?.nodeid || topic.getAttribute('data-nodeid');
-        const normalizedId = nodeId?.replace(/^me/, '');
+        const normalizedId = resolveNodeId(nodeId);
         const tooltip = tooltipById.get(normalizedId);
         if (!tooltip) return;
         topic.setAttribute('title', tooltip);
@@ -150,15 +288,36 @@ export default function ConceptMindmap({ mindmap }) {
     fitMap();
 
     const getLessonId = (nodeId) => {
-      const match = nodeId?.match(/^me(?:prereq|next)-(.+)$/);
-      return match?.[1];
+      const node = findMindNode(data.nodeData, resolveNodeId(nodeId));
+      return node?.metadata?.lessonId;
     };
+
     const handleNodeClick = (event) => {
       const topic = event.target.closest?.('me-tpc');
-      const lessonId = getLessonId(topic?.dataset?.nodeid || topic?.getAttribute?.('data-nodeid'));
-      if (!lessonId || lessonId === mindmap.current.id) return;
-      event.preventDefault();
-      navigate(`/animation/${lessonId}`);
+      const rawId = topic?.dataset?.nodeid || topic?.getAttribute?.('data-nodeid');
+      const nodeId = resolveNodeId(rawId);
+      const node = findMindNode(data.nodeData, nodeId);
+      if (!node) return;
+
+      const lessonId = node.metadata?.lessonId;
+      if (lessonId && lessonId !== currentLessonId) {
+        event.preventDefault();
+        navigate(`/animation/${lessonId}`);
+        return;
+      }
+
+      if (curated) {
+        const nextSelection = selectionFromNode(node);
+        if (nextSelection) {
+          event.preventDefault();
+          setSelection(nextSelection);
+        }
+      } else {
+        const legacyLessonId = getLessonId(rawId);
+        if (!legacyLessonId || legacyLessonId === currentLessonId) return;
+        event.preventDefault();
+        navigate(`/animation/${legacyLessonId}`);
+      }
     };
 
     mapRef.current.addEventListener('click', handleNodeClick, true);
@@ -173,15 +332,21 @@ export default function ConceptMindmap({ mindmap }) {
       mind.destroy();
       instanceRef.current = null;
     };
-  }, [data, mindmap.current.id, navigate, tooltipById]);
+  }, [curated, currentLessonId, data, navigate, resolveNodeId, tooltipById]);
 
   return (
-    <section className="ua-concept-map" aria-label="Concept mindmap">
+    <section
+      className={['ua-concept-map', curated && 'ua-concept-map--curated'].filter(Boolean).join(' ')}
+      aria-label="Concept map"
+    >
       <div className="ua-learning-rail-head">
         <FlaskConical size={15} />
-        <span>Mindmap</span>
+        <span>{curated ? 'Concept map' : 'Mindmap'}</span>
       </div>
-      <div ref={mapRef} className="ua-map-canvas" />
+      <div className={curated ? 'ua-concept-map-layout' : undefined}>
+        <div ref={mapRef} className="ua-map-canvas" />
+        {curated ? <ConceptTooltip selection={selection} /> : null}
+      </div>
     </section>
   );
 }
