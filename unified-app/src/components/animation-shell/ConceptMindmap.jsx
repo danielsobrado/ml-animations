@@ -107,9 +107,12 @@ function tooltipText(tooltip) {
   return [
     tooltip.short,
     tooltip.intuition,
+    tooltip.formula,
+    tooltip.code,
     tooltip.example,
     tooltip.trap,
     tooltip.why,
+    tooltip.practice,
   ].filter(Boolean).join(' ');
 }
 
@@ -173,6 +176,7 @@ function branchToMindNode(branch) {
     metadata: {
       kind: 'branch',
       branchType: branch.type,
+      tooltip: branch.tooltip,
     },
     tags: [branchTag(branch.type)],
     children: branch.children.map((child) => conceptToMindNode(child, branch.type)),

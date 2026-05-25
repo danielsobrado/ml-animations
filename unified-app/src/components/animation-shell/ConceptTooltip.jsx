@@ -57,6 +57,7 @@ export default function ConceptTooltip({ selection }) {
       <TooltipSection title="Example" value={tooltip.example} />
       <TooltipSection title="Watch out" value={tooltip.trap} />
       <TooltipSection title="Used later" value={tooltip.why} />
+      <TooltipSection title="Practice" value={tooltip.practice} />
     </aside>
   );
 }

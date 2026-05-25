@@ -97,6 +97,70 @@ test('every active lesson has curated mindmap copy', () => {
   }
 });
 
+test('curated concept maps answer the six learning questions with concrete practice', () => {
+  const expectedBranches = [
+    ['prerequisites', 'Prerequisites'],
+    ['mechanism', 'Core mechanism'],
+    ['intuitions', 'Intuitions'],
+    ['formula-code', 'Code / formula'],
+    ['traps', 'Common traps'],
+    ['used-later', 'Applications / next concepts'],
+  ];
+
+  const wordCount = (value) => String(value || '').trim().split(/\s+/).filter(Boolean).length;
+  const tooltipWordCount = (tooltip) => [
+    tooltip?.short,
+    tooltip?.intuition,
+    tooltip?.formula,
+    tooltip?.code,
+    tooltip?.example,
+    tooltip?.trap,
+    tooltip?.why,
+    tooltip?.practice,
+  ].reduce((sum, field) => sum + wordCount(field), 0);
+
+  for (const animation of allAnimations) {
+    const map = getConceptMap(animation.id);
+    assert.ok(map, `${animation.id} needs a concept map`);
+
+    assert.deepEqual(
+      map.branches.map((branch) => [branch.id, branch.label]),
+      expectedBranches,
+      `${animation.id} must use the canonical six-branch concept-map layout`,
+    );
+
+    assert.ok(map.center.tooltip?.practice, `${animation.id} center needs practice guidance`);
+
+    const leaves = map.branches.flatMap((branch) => (
+      branch.children.map((node) => ({ branch, node }))
+    ));
+
+    assert.ok(leaves.length >= 30, `${animation.id} needs matrix-level concept-map density`);
+
+    for (const { branch, node } of leaves) {
+      const tooltip = node.tooltip || {};
+      assert.ok(tooltip.short, `${animation.id}/${node.id} needs meaning`);
+      assert.ok(tooltip.intuition, `${animation.id}/${node.id} needs intuition`);
+      assert.ok(
+        tooltip.example || tooltip.formula || tooltip.code,
+        `${animation.id}/${node.id} needs a concrete example, formula, or code hook`,
+      );
+      assert.ok(tooltip.trap, `${animation.id}/${node.id} needs a trap`);
+      assert.ok(tooltip.practice, `${animation.id}/${node.id} needs practice guidance`);
+      assert.ok(
+        tooltipWordCount(tooltip) >= 40,
+        `${animation.id}/${node.id} is too thin for a useful concept map`,
+      );
+      if (branch.id === 'used-later') {
+        assert.ok(
+          tooltip.why || node.lessonId,
+          `${animation.id}/${node.id} must explain where the concept shows up later`,
+        );
+      }
+    }
+  }
+});
+
 test('central glossary repository exposes reusable image-backed term pages', () => {
   assert.ok(glossaryTerms.length >= 30);
   const slugs = new Set();

@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 import { AlertTriangle, BookOpen, ClipboardCheck, FileSearch, GitCompare, Library, ShieldCheck } from 'lucide-react';
 import Eq from '../../_design-system/Eq';
 import { allAnimations } from '../../data/animations';
-import { createLearningModel } from '../../data/animationLearning';
-import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
-import AssessmentPanel from './AssessmentPanel';
 
 const ConceptMindmap = lazy(() => import('./ConceptMindmap'));
+const AssessmentPanel = lazy(() => import('./AssessmentPanel'));
 const GLOSSARY_PAGE_SIZE = 15;
 
 function GlossaryTerm({ entry }) {
@@ -426,7 +424,11 @@ function getLessonWorkspaceTabs({
       id: 'check',
       label: 'Core questions',
       icon: ClipboardCheck,
-      panel: <AssessmentPanel lessonId={lessonId} eyebrow="Progress" title="Core questions" />,
+      panel: (
+        <Suspense fallback={<div className="ua-map-canvas ua-map-loading">Loading questions</div>}>
+          <AssessmentPanel lessonId={lessonId} eyebrow="Progress" title="Core questions" />
+        </Suspense>
+      ),
     },
     glossaryTerms?.length > 0 && {
       id: 'glossary',
@@ -606,15 +608,40 @@ function LessonWorkspace({
 export default function AnimationShell({ animation, children }) {
   const [resetNonce, setResetNonce] = useState(0);
   const [workspaceTab, setWorkspaceTab] = useState('lesson');
-  const model = useMemo(() => createLearningModel(animation, allAnimations), [animation]);
-  const assessment = useMemo(() => getLessonAssessment(animation.id), [animation.id]);
-  const showShellAssessment = hasAssessmentContent(assessment);
+  const [learningState, setLearningState] = useState({
+    model: null,
+    showShellAssessment: false,
+  });
+  const { model, showShellAssessment } = learningState;
+
+  useEffect(() => {
+    let cancelled = false;
+    setLearningState({ model: null, showShellAssessment: false });
+
+    Promise.all([
+      import('../../data/animationLearning'),
+      import('../../data/lessonAssessments'),
+    ]).then(([learning, assessments]) => {
+      if (cancelled) return;
+      const nextModel = learning.createLearningModel(animation, allAnimations);
+      const assessment = assessments.getLessonAssessment(animation.id);
+      setLearningState({
+        model: nextModel,
+        showShellAssessment: assessments.hasAssessmentContent(assessment),
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [animation]);
+
   const workspaceTabs = useMemo(() => getLessonWorkspaceTabs({
     assessment: showShellAssessment,
-    depth: model.depth,
-    glossaryTerms: model.glossary,
+    depth: model?.depth,
+    glossaryTerms: model?.glossary,
     lessonId: animation.id,
-  }), [animation.id, model.depth, model.glossary, showShellAssessment]);
+  }), [animation.id, model?.depth, model?.glossary, showShellAssessment]);
 
   const hasActiveWorkspaceTab = workspaceTabs.some((tab) => tab.id === workspaceTab);
 
@@ -653,6 +680,44 @@ export default function AnimationShell({ animation, children }) {
     if (!workspaceTabs.some((tab) => tab.id === tabId)) return;
     setWorkspaceTab(tabId);
   };
+
+  if (!model) {
+    return (
+      <div className="ua-learning-shell">
+        <header className="ua-learning-strip">
+          <div>
+            <span>{animation.categoryName}</span>
+            <h2>{animation.name}</h2>
+          </div>
+          <div className="ua-chip-row">
+            <span>Loading learning map</span>
+          </div>
+        </header>
+
+        <div className="ua-learning-grid">
+          <main id="math-main-stage" className="ua-main-stage" aria-label={`${animation.name} animation stage`}>
+            <div key={resetNonce} className="ua-stage-wrap">
+              {children}
+            </div>
+          </main>
+
+          <aside className="ua-card-stack" aria-label="Learning cards">
+            <div className="ua-learning-rail-head">
+              <BookOpen size={15} />
+              <span>Learning Cards</span>
+            </div>
+            <section className="ua-learning-card">
+              <div className="ua-learning-card-head">
+                <span>loading</span>
+                <h3>Preparing lesson context</h3>
+              </div>
+              <p>Loading the mindmap, glossary, assessment, and next-step guidance.</p>
+            </section>
+          </aside>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="ua-learning-shell">

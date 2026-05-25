@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { allAnimations, categories, curriculumBacklog, curriculumTracks } from '../data/animations';
 import { HUB_LEARNING_PATHS } from '../data/learningPaths';
-import { getAssessmentStats, lessonAssessments } from '../data/lessonAssessments';
 import { LEARNING_PROGRESS_EVENT, readCompletedLessons } from '../data/learningProgress';
-
-const { totalLabs, totalQuizQuestions } = getAssessmentStats(lessonAssessments);
 
 export default function HomePage() {
   const totalAnimations = categories.reduce((sum, category) => sum + category.items.length, 0);
+  const [assessmentStats, setAssessmentStats] = React.useState({
+    totalLabs: 0,
+    totalQuizQuestions: 0,
+  });
   const [activePathId, setActivePathId] = React.useState(HUB_LEARNING_PATHS[0].id);
   const [completedLessons, setCompletedLessons] = React.useState(() => readCompletedLessons());
   const animationById = React.useMemo(
@@ -43,6 +44,16 @@ export default function HomePage() {
     };
   }, []);
 
+  React.useEffect(() => {
+    let cancelled = false;
+    import('../data/lessonAssessments').then(({ getAssessmentStats, lessonAssessments }) => {
+      if (!cancelled) setAssessmentStats(getAssessmentStats(lessonAssessments));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="ua-home">
       <section className="ua-home-hero">
@@ -71,11 +82,11 @@ export default function HomePage() {
           <span>Animations</span>
         </div>
         <div>
-          <strong>{totalLabs}</strong>
+          <strong>{assessmentStats.totalLabs}</strong>
           <span>Practice labs</span>
         </div>
         <div>
-          <strong>{totalQuizQuestions}</strong>
+          <strong>{assessmentStats.totalQuizQuestions}</strong>
           <span>Quiz questions</span>
         </div>
       </section>

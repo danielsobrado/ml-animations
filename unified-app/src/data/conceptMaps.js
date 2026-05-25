@@ -1,3 +1,5 @@
+import { allAnimations } from './animations.js';
+
 export const NODE_TYPES = {
   prerequisite: {
     label: 'Prerequisite',
@@ -32,7 +34,497 @@ export const NODE_TYPES = {
 };
 
 function tip(fields) {
-  return fields;
+  return {
+    ...fields,
+    practice: fields.practice || practicePrompt(fields),
+  };
+}
+
+function practicePrompt(fields) {
+  if (fields.code) {
+    return 'Trace the code on a tiny example, then change one shape, threshold, or hyperparameter and predict the result before running it.';
+  }
+  if (fields.formula) {
+    return 'Work one small numeric example by hand and name what each symbol controls.';
+  }
+  if (fields.example) {
+    return 'Create a second example with different numbers or data, then explain why the same idea still applies.';
+  }
+  if (fields.trap) {
+    return `Build a quick counterexample for this trap: ${fields.trap}`;
+  }
+  return 'Explain the concept in one sentence, draw the mechanism, then connect it to one later lesson.';
+}
+
+const CANONICAL_BRANCH_LABELS = {
+  prerequisites: 'Prerequisites',
+  mechanism: 'Core mechanism',
+  intuitions: 'Intuitions',
+  'formula-code': 'Code / formula',
+  traps: 'Common traps',
+  'used-later': 'Applications / next concepts',
+};
+
+const BRANCH_GUIDANCE = {
+  prerequisites: tip({
+    short: 'What do I need to know before this lesson?',
+    intuition: 'These are the prior concepts that make the current mechanism feel obvious instead of arbitrary.',
+    example: 'Review the listed items first; missing one usually makes the core animation harder to reason about.',
+    trap: 'Do not memorize the current lesson before checking whether these inputs are understood.',
+  }),
+  mechanism: tip({
+    short: 'What is the core mechanism?',
+    intuition: 'This branch is the moving part: the sequence of operations or causal steps that make the lesson work.',
+    example: 'Follow these nodes in order and ask what changes at each step.',
+    trap: 'Do not replace the mechanism with a slogan; be able to trace the computation or decision path.',
+  }),
+  intuitions: tip({
+    short: 'What are the equivalent intuitions?',
+    intuition: 'These are alternate mental models that point to the same underlying idea from different angles.',
+    example: 'Use at least two intuitions: one visual/geometric and one operational/probabilistic when available.',
+    trap: 'No single metaphor covers every edge case; return to the mechanism when intuitions disagree.',
+  }),
+  'formula-code': tip({
+    short: 'How does the idea appear in code or formula form?',
+    intuition: 'The symbolic or implementation view turns the concept into something you can calculate, test, and debug.',
+    example: 'Trace the formula or pseudocode on a toy input before trusting a library call.',
+    trap: 'Syntax can hide shape, indexing, or normalization assumptions.',
+  }),
+  traps: tip({
+    short: 'What mistakes should I avoid?',
+    intuition: 'These are the bugs, misreadings, and false equivalences that commonly produce wrong conclusions.',
+    example: 'For each trap, construct a small case where the wrong intuition fails.',
+    trap: 'Knowing the definition is not enough if you cannot recognize the failure mode in context.',
+  }),
+  'used-later': tip({
+    short: 'Where does this show up later?',
+    intuition: 'These links show why the concept matters beyond this single animation and what to learn next.',
+    example: 'Pick one downstream lesson and explain exactly which part of the current mechanism it reuses.',
+    trap: 'Do not treat next concepts as unrelated references; look for the reused computation or assumption.',
+  }),
+};
+
+const BRANCH_LEARNING_QUESTIONS = {
+  prerequisites: 'What do I need to know?',
+  mechanism: 'What is the core mechanism?',
+  intuitions: 'What are the equivalent intuitions?',
+  'formula-code': 'What is the code or formula form?',
+  traps: 'What mistakes should I avoid?',
+  'used-later': 'Where does this show up later?',
+};
+
+function branchNodeDefaults(map, branch, node) {
+  const topic = map.center.label;
+  const concept = node.label;
+  const question = BRANCH_LEARNING_QUESTIONS[branch.id] || 'What should I learn?';
+  const defaults = {
+    short: `${concept} is part of ${topic}: ${question}`,
+    intuition: `Use ${concept} as a handle for understanding ${topic}, then connect it back to the branch question rather than memorizing it alone.`,
+    example: `In a ${topic} exercise, point to where ${concept} appears and explain what would break if it were missing or changed.`,
+    trap: `Do not treat ${concept} as an isolated vocabulary word; test it against the actual ${topic} mechanism.`,
+    why: `${concept} helps transfer ${topic} into later lessons that reuse the same assumption, computation, or modeling habit.`,
+    practice: `For ${topic}, make a tiny example focused on ${concept}, predict the outcome, then explain the relevant trap in one sentence.`,
+  };
+
+  if (branch.id === 'prerequisites') {
+    defaults.example = `Before studying ${topic}, solve or explain a toy ${concept} example without using the current lesson as a shortcut.`;
+    defaults.practice = `Teach ${concept} in two sentences, then say exactly how it feeds into ${topic}.`;
+  }
+
+  if (branch.id === 'mechanism') {
+    defaults.example = `Trace one ${topic} run and mark the step where ${concept} changes the state, score, vector, probability, or decision.`;
+    defaults.practice = `Run a toy ${topic} case by hand and stop at ${concept}; predict the next value before continuing.`;
+  }
+
+  if (branch.id === 'intuitions') {
+    defaults.example = `Translate ${concept} into a second intuition for ${topic}, then check that both intuitions predict the same behavior on a toy case.`;
+    defaults.practice = `Draw ${concept} once visually and once operationally for ${topic}; note where the analogy stops working.`;
+  }
+
+  if (branch.id === 'formula-code') {
+    defaults.example = `Write the smallest ${topic} calculation that contains ${concept}, even if it is only pseudocode or one symbolic line.`;
+    defaults.code = `// ${topic}: trace ${concept} on a toy input`;
+    defaults.practice = `Implement or calculate the smallest ${topic} example involving ${concept}, then change one input and predict the effect.`;
+  }
+
+  if (branch.id === 'traps') {
+    defaults.example = `Construct a ${topic} counterexample where ignoring ${concept} gives the wrong conclusion.`;
+    defaults.practice = `Create a failing ${topic} example for ${concept}, then write the diagnostic that catches it.`;
+  }
+
+  if (branch.id === 'used-later') {
+    defaults.example = `When ${topic} appears later, identify the reused part: ${concept}, the same formula, the same assumption, or the same failure mode.`;
+    defaults.why = `${concept} is a next-step bridge from ${topic}; it shows where the lesson becomes useful beyond the current animation.`;
+    defaults.practice = `Open or sketch the next concept for ${concept} and name exactly which part of ${topic} transfers.`;
+  }
+
+  return defaults;
+}
+
+function enrichNodeTooltip(map, branch, node) {
+  const defaults = branchNodeDefaults(map, branch, node);
+  return {
+    ...node,
+    tooltip: tip({
+      ...defaults,
+      ...(node.tooltip || {}),
+    }),
+  };
+}
+
+function enrichConceptMap(map) {
+  return {
+    ...map,
+    center: {
+      ...map.center,
+      tooltip: tip({
+        short: `${map.center.label} is the central lesson concept.`,
+        intuition: `The six branches explain prerequisites, mechanism, intuitions, formula/code, traps, and applications for ${map.center.label}.`,
+        example: `Use the branches around ${map.center.label} as a checklist before moving to the next lesson.`,
+        trap: `Do not stop at the definition; verify the mechanism, failure modes, and practice task.`,
+        why: `${map.center.label} becomes useful when later lessons reuse its computation, assumption, or modeling pattern.`,
+        ...(map.center.tooltip || {}),
+      }),
+    },
+    branches: map.branches.map((branch) => ({
+      ...branch,
+      label: CANONICAL_BRANCH_LABELS[branch.id] || branch.label,
+      tooltip: branch.tooltip || BRANCH_GUIDANCE[branch.id],
+      children: branch.children.map((node) => enrichNodeTooltip(map, branch, node)),
+    })),
+  };
+}
+
+function slugPart(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '') || 'concept';
+}
+
+function lessonNode(animation, suffix, tooltip) {
+  return {
+    id: `${slugPart(animation.id)}-${suffix}`,
+    label: animation.name,
+    tooltip: tip(tooltip),
+    lessonId: animation.id,
+  };
+}
+
+function simpleNode(topic, suffix, label, tooltip) {
+  return {
+    id: `${slugPart(topic)}-${suffix}`,
+    label,
+    tooltip: tip(tooltip),
+  };
+}
+
+function nearbyLessons(animation) {
+  const sameTrack = allAnimations.filter((item) => (
+    item.id !== animation.id
+    && item.trackIds?.some((trackId) => animation.trackIds?.includes(trackId))
+  ));
+  const sameCategory = allAnimations.filter((item) => (
+    item.id !== animation.id
+    && item.categoryId === animation.categoryId
+  ));
+  return [...new Map([...sameTrack, ...sameCategory].map((item) => [item.id, item])).values()];
+}
+
+function generatedPrerequisites(animation) {
+  const explicit = (animation.prerequisites || [])
+    .map((id) => allAnimations.find((item) => item.id === id))
+    .filter(Boolean);
+  const fallback = nearbyLessons(animation).slice(0, 6 - explicit.length);
+  const lessons = [...explicit, ...fallback].slice(0, 4);
+  const nodes = lessons.map((lesson) => lessonNode(lesson, `prereq-for-${slugPart(animation.id)}`, {
+    short: `${lesson.name} gives background needed for ${animation.name}.`,
+    intuition: `Use ${lesson.name} to supply the vocabulary, shapes, data assumptions, or mechanism that ${animation.name} builds on.`,
+    example: `Before ${animation.name}, explain how ${lesson.description.toLowerCase()} would appear in a tiny example.`,
+    trap: `Do not start ${animation.name} by memorizing terms if ${lesson.name} is still unclear.`,
+    why: `${lesson.name} is upstream of ${animation.name} in the ${animation.categoryName} path.`,
+    practice: `Review ${lesson.name}, then write the exact sentence that connects it to ${animation.name}.`,
+  }));
+
+  return [
+    ...nodes,
+    simpleNode(animation.id, 'problem-framing-prereq', 'Problem framing', {
+      short: `Know what problem ${animation.name} is trying to solve: ${animation.description}.`,
+      intuition: `A concept map is useful only if the learner can say why this lesson exists before seeing the mechanism.`,
+      example: `Given a toy scenario, decide whether ${animation.name} is the right tool or whether an earlier concept is enough.`,
+      trap: `Jumping to formulas without naming the problem makes the later branches feel disconnected.`,
+      why: `Problem framing is reused in downstream ${animation.categoryName} lessons when choosing methods.`,
+      practice: `Write a one-sentence "use this when..." rule for ${animation.name}.`,
+    }),
+    simpleNode(animation.id, 'input-output-prereq', 'Inputs and outputs', {
+      short: `Identify what goes into ${animation.name} and what should come out.`,
+      intuition: `Most mistakes are shape, data, or interpretation mistakes; input-output discipline prevents them.`,
+      example: `For ${animation.name}, name the input object, the transformed object, and the decision or score produced.`,
+      trap: `Treating all lesson inputs as generic numbers hides the domain-specific assumption.`,
+      why: `Input-output thinking carries into implementation, debugging, and evaluation.`,
+      practice: `Draw a three-box diagram: input -> ${animation.name} -> output.`,
+    }),
+  ].slice(0, 6);
+}
+
+function generatedBranches(animation) {
+  const topic = animation.name;
+  const desc = animation.description;
+  const category = animation.categoryName;
+  const near = nearbyLessons(animation).slice(0, 6);
+  const nextLessons = near.slice(0, 4);
+
+  return [
+    {
+      id: 'prerequisites',
+      label: 'Prerequisites',
+      type: 'prerequisite',
+      children: generatedPrerequisites(animation),
+    },
+    {
+      id: 'mechanism',
+      label: 'Core mechanism',
+      type: 'mechanism',
+      children: [
+        simpleNode(animation.id, 'define-state', 'Represent the state', {
+          short: `${topic} starts by representing the object being transformed or judged.`,
+          intuition: `Make the hidden state explicit: token, vector, parameter, data split, probability, graph node, or policy state.`,
+          example: `In ${topic}, write the smallest possible input state for: ${desc}.`,
+          trap: `If the state is vague, every later formula or visualization becomes vague too.`,
+          why: `State representation is reused in later ${category} lessons that compose or evaluate this idea.`,
+          practice: `Choose one toy input and label every part of its state before applying ${topic}.`,
+        }),
+        simpleNode(animation.id, 'apply-rule', 'Apply the rule', {
+          short: `${topic} applies a specific transformation, scoring rule, update, or comparison.`,
+          intuition: `This is the moving part: something changes because the rule consumes the current state.`,
+          example: `Trace one ${topic} step and say what value, vector, token, metric, or decision changed.`,
+          trap: `Summarizing ${topic} with a slogan hides the actual operation learners must be able to execute.`,
+          why: `The rule is the part most likely to reappear in implementations and later lessons.`,
+          practice: `Run the rule on a tiny case by hand, then change one input and predict the new result.`,
+        }),
+        simpleNode(animation.id, 'compare-signal', 'Compare signal', {
+          short: `${topic} requires judging whether the produced signal is useful, stable, or correct.`,
+          intuition: `After the rule runs, ask what the output means and what evidence supports it.`,
+          example: `For ${topic}, compare two toy outputs and decide which better matches the lesson goal.`,
+          trap: `A numeric output is not automatically meaningful without interpretation.`,
+          why: `Signal comparison connects ${topic} to evaluation and debugging workflows.`,
+          practice: `Create two outputs for ${topic}: one good and one misleading. Explain the difference.`,
+        }),
+        simpleNode(animation.id, 'iterate-or-compose', 'Iterate or compose', {
+          short: `${topic} often becomes powerful when repeated, layered, chained, or placed inside a larger pipeline.`,
+          intuition: `The lesson is one reusable operation, not an isolated animation moment.`,
+          example: `Show how ${topic} would be used twice or connected to a neighboring ${category} concept.`,
+          trap: `Understanding one step but not how it composes leads to brittle intuition.`,
+          why: `Composition is where ${topic} shows up in real ML systems.`,
+          practice: `Sketch the next operation after ${topic} in a realistic workflow.`,
+        }),
+        simpleNode(animation.id, 'check-result', 'Check the result', {
+          short: `${topic} ends with a sanity check on shape, scale, metric, probability, rank, loss, or behavior.`,
+          intuition: `A good learner can say not just what happened, but how they know it happened correctly.`,
+          example: `Name one invariant or expected pattern that should hold after applying ${topic}.`,
+          trap: `Skipping sanity checks makes subtle bugs look like model behavior.`,
+          why: `Result checks become debugging tools in later lessons.`,
+          practice: `Write one assertion or diagnostic for a toy ${topic} example.`,
+        }),
+      ],
+    },
+    {
+      id: 'intuitions',
+      label: 'Intuitions',
+      type: 'intuition',
+      children: [
+        simpleNode(animation.id, 'operational-intuition', 'Operational view', {
+          short: `${topic} is an operation you can trace step by step.`,
+          intuition: `Ask what the procedure reads, updates, stores, compares, or emits.`,
+          example: `Narrate ${topic} as verbs: read, score, normalize, update, retrieve, or decide.`,
+          trap: `A definition without operations does not help debug examples.`,
+          why: `Operational intuition transfers directly to code and implementation.`,
+          practice: `Write ${topic} as three plain-English operations.`,
+        }),
+        simpleNode(animation.id, 'geometric-structural-intuition', 'Geometric / structural view', {
+          short: `${topic} has a structure: positions, groups, axes, states, clusters, paths, or layers.`,
+          intuition: `Look for what gets moved closer, separated, compressed, routed, normalized, or projected.`,
+          example: `Draw the structure behind ${topic} using only boxes, arrows, or axes.`,
+          trap: `A visual analogy can fail if you ignore the actual mechanism branch.`,
+          why: `Structural intuition helps connect ${topic} to adjacent lessons.`,
+          practice: `Make one sketch of ${topic} and mark where the core mechanism acts.`,
+        }),
+        simpleNode(animation.id, 'probabilistic-signal-view', 'Signal / uncertainty view', {
+          short: `${topic} can be read as managing signal, noise, uncertainty, or evidence.`,
+          intuition: `Ask which part of the lesson strengthens evidence and which part can inject noise.`,
+          example: `In a toy ${topic} setup, identify the signal you trust and the noise you should discount.`,
+          trap: `Confusing confidence with correctness is a common ML-wide failure mode.`,
+          why: `This view connects ${topic} to evaluation, calibration, and monitoring.`,
+          practice: `State one uncertainty or noise source that could mislead ${topic}.`,
+        }),
+        simpleNode(animation.id, 'systems-view', 'Pipeline view', {
+          short: `${topic} usually lives inside a larger data, training, inference, or evaluation pipeline.`,
+          intuition: `The same concept may be correct alone but fail when upstream or downstream assumptions change.`,
+          example: `Place ${topic} between one upstream and one downstream lesson in ${category}.`,
+          trap: `Optimizing the local step while breaking the pipeline is a common production mistake.`,
+          why: `Pipeline thinking makes ${topic} useful beyond the page.`,
+          practice: `Name the component before and after ${topic} in a realistic system.`,
+        }),
+        simpleNode(animation.id, 'decision-view', 'Decision view', {
+          short: `${topic} should change what a learner chooses, predicts, tunes, or checks.`,
+          intuition: `A good intuition pays rent by guiding a concrete decision.`,
+          example: `Given two alternatives, use ${topic} to justify which one you would pick.`,
+          trap: `Understanding the animation without changing decisions is shallow understanding.`,
+          why: `Decision framing links ${topic} to practice and assessment.`,
+          practice: `Write a multiple-choice scenario where ${topic} determines the correct answer.`,
+        }),
+      ],
+    },
+    {
+      id: 'formula-code',
+      label: 'Code / formula',
+      type: 'formula',
+      children: [
+        simpleNode(animation.id, 'minimal-formula', 'Minimal formula', {
+          short: `${topic} needs a compact symbolic form for the core operation.`,
+          intuition: `The formula should expose the moving part, not decorate the lesson with notation.`,
+          formula: `${slugPart(animation.id).replaceAll('-', '_')}(input) -> output`,
+          example: `Replace input and output with the actual objects used in ${topic}.`,
+          trap: `A formula is not understood until every symbol has a role.`,
+          why: `Symbol discipline supports later derivations and comparisons.`,
+          practice: `Rewrite the formula for ${topic} using the smallest concrete toy values you can choose.`,
+        }),
+        simpleNode(animation.id, 'pseudocode-loop', 'Pseudocode loop', {
+          short: `${topic} should be traceable as pseudocode.`,
+          intuition: `Code turns the mechanism into ordered checks and updates.`,
+          code: `state = make_state(input)\nfor step in ${slugPart(animation.id).replaceAll('-', '_')}_steps:\n  state = apply(step, state)\ncheck(state)`,
+          example: `Map each pseudocode line to one visible part of the ${topic} lesson.`,
+          trap: `Skipping the check step hides many wrong implementations.`,
+          why: `Pseudocode is the bridge from concept to lab practice.`,
+          practice: `Fill in the state, step, and check names for ${topic}.`,
+        }),
+        simpleNode(animation.id, 'shape-contract', 'Shape / contract', {
+          short: `${topic} has an input-output contract even when it is not numeric linear algebra.`,
+          intuition: `Contracts prevent using the right idea on the wrong object.`,
+          code: `assert(valid_input)\nresult = ${slugPart(animation.id).replaceAll('-', '_')}(input)\nassert(valid_result)`,
+          example: `Define what valid input and valid result mean for ${topic}.`,
+          trap: `Most implementation errors are contract errors disguised as model errors.`,
+          why: `Contracts transfer to tests, monitoring, and debugging.`,
+          practice: `Write two assertions for a tiny ${topic} implementation.`,
+        }),
+        simpleNode(animation.id, 'metric-or-loss', 'Metric / loss / score', {
+          short: `${topic} is usually judged by a score, loss, metric, or qualitative success criterion.`,
+          intuition: `The score tells whether the mechanism served its purpose.`,
+          formula: `score = evaluate(result, target_or_goal)`,
+          example: `Choose the simplest success measure for ${topic}: accuracy, loss, distance, reward, latency, recall, or consistency.`,
+          trap: `Using the wrong score can reward the wrong behavior.`,
+          why: `Evaluation links ${topic} to model selection and production decisions.`,
+          practice: `Pick one metric for ${topic} and give a case where it can mislead.`,
+        }),
+        simpleNode(animation.id, 'implementation-check', 'Implementation check', {
+          short: `${topic} needs at least one concrete debugging check.`,
+          intuition: `A good implementation has an expected toy outcome before scaling up.`,
+          code: `toy = make_toy_case()\nexpected = reason_by_hand(toy)\nactual = run_${slugPart(animation.id).replaceAll('-', '_')}(toy)\nassert_close(actual, expected)`,
+          example: `Design the toy case so the answer is obvious before running code.`,
+          trap: `Only testing on realistic data makes bugs harder to localize.`,
+          why: `Tiny tests are reusable practice across the whole curriculum.`,
+          practice: `Create one toy ${topic} test with an expected answer.`,
+        }),
+      ],
+    },
+    {
+      id: 'traps',
+      label: 'Common traps',
+      type: 'trap',
+      children: [
+        simpleNode(animation.id, 'definition-only-trap', 'Definition-only learning', {
+          short: `Knowing the definition of ${topic} is not enough.`,
+          intuition: `Learners must trace the mechanism, not just recognize the name.`,
+          example: `Someone can repeat "${desc}" but fail to predict a toy output.`,
+          trap: `Vocabulary fluency can hide mechanism confusion.`,
+          why: `Mechanism fluency is required for later lessons that reuse ${topic}.`,
+          practice: `Explain ${topic} without using its title, only operations and checks.`,
+        }),
+        simpleNode(animation.id, 'wrong-assumption-trap', 'Wrong assumption', {
+          short: `${topic} depends on assumptions about data, shapes, independence, ordering, scale, or feedback.`,
+          intuition: `The method can be correct while the assumptions are false.`,
+          example: `Change one assumption in a toy ${topic} setup and watch the conclusion change.`,
+          trap: `Assumptions are often implicit, so learners forget to test them.`,
+          why: `Assumption checks are central to robust ML practice.`,
+          practice: `List two assumptions behind ${topic} and how to detect a violation.`,
+        }),
+        simpleNode(animation.id, 'scale-trap', 'Toy-to-real scale jump', {
+          short: `${topic} may look simple in the animation but change under real scale.`,
+          intuition: `Scale introduces memory, latency, variance, data quality, or evaluation problems.`,
+          example: `Ask what happens when the ${topic} toy example becomes 1M rows, tokens, users, states, or parameters.`,
+          trap: `Assuming the teaching animation captures every production constraint.`,
+          why: `Scale awareness connects ${topic} to systems and monitoring lessons.`,
+          practice: `Name one thing that breaks first when ${topic} scales up.`,
+        }),
+        simpleNode(animation.id, 'metric-confusion-trap', 'Metric confusion', {
+          short: `${topic} can be optimized or judged with the wrong metric.`,
+          intuition: `A high score is useful only if it matches the learner's goal.`,
+          example: `For ${topic}, compare a metric that looks good with an outcome that is actually bad.`,
+          trap: `Metric gains can mask worse behavior on the task that matters.`,
+          why: `Metric discipline is reused in evaluation, monitoring, and A/B testing.`,
+          practice: `Write a one-line metric and one failure case for that metric in ${topic}.`,
+        }),
+        simpleNode(animation.id, 'order-boundary-trap', 'Order / boundary mistake', {
+          short: `${topic} often fails when the learner uses the right step in the wrong order or boundary.`,
+          intuition: `Boundaries include train/test splits, time, sequence direction, context windows, groups, or pipeline stages.`,
+          example: `Move one step of ${topic} before or after where it belongs and identify the leak or wrong result.`,
+          trap: `Correct operations in the wrong order are still wrong.`,
+          why: `Boundary discipline transfers to every downstream pipeline lesson.`,
+          practice: `Draw the valid order of operations for ${topic} and mark the forbidden shortcut.`,
+        }),
+      ],
+    },
+    {
+      id: 'used-later',
+      label: 'Applications / next concepts',
+      type: 'application',
+      children: [
+        ...nextLessons.map((lesson) => lessonNode(lesson, `used-after-${slugPart(animation.id)}`, {
+          short: `${lesson.name} is a natural next place where ${topic} shows up.`,
+          intuition: `${topic} supplies a mechanism, assumption, representation, or diagnostic reused by ${lesson.name}.`,
+          example: `When opening ${lesson.name}, identify exactly which part of ${topic} transfers.`,
+          trap: `Do not treat ${lesson.name} as unrelated just because the surface vocabulary changes.`,
+          why: `${lesson.name} is nearby in the ${category} curriculum path.`,
+          practice: `Preview ${lesson.name} and write one sentence connecting it back to ${topic}.`,
+        })),
+        simpleNode(animation.id, 'implementation-app', 'Implementation labs', {
+          short: `${topic} should be practiced in code or a hand-computable toy case.`,
+          intuition: `Implementation turns fuzzy understanding into executable checks.`,
+          example: `Build the smallest possible ${topic} input and compare actual output to hand reasoning.`,
+          trap: `Library calls can hide whether the learner understands the mechanism.`,
+          why: `${topic} becomes useful when it can be tested, debugged, and explained.`,
+          practice: `Write a toy implementation or assertion for ${topic}.`,
+        }),
+        simpleNode(animation.id, 'debugging-app', 'Debugging workflows', {
+          short: `${topic} gives diagnostics for later debugging.`,
+          intuition: `Each branch can become a checklist when outputs look wrong.`,
+          example: `If a ${topic} result fails, inspect prerequisites, mechanism, formula/code, and traps in order.`,
+          trap: `Debugging by random parameter changes ignores the concept map.`,
+          why: `Debugging workflows recur across ML systems.`,
+          practice: `Create a three-step debug checklist for ${topic}.`,
+        }),
+      ].slice(0, 6),
+    },
+  ];
+}
+
+function makeGeneratedConceptMap(animation) {
+  return {
+    center: {
+      id: animation.id,
+      label: animation.name,
+      type: 'current',
+      tooltip: tip({
+        short: `${animation.name} teaches ${animation.description}.`,
+        intuition: `Use the six branches to learn what ${animation.name} needs, how it works, how to think about it, how to compute it, what can go wrong, and where it appears next.`,
+        example: `Start from a toy ${animation.name} scenario and trace one complete input-output pass.`,
+        trap: animation.commonMisconception || `${animation.name} is not just vocabulary; the mechanism and failure modes matter.`,
+        why: `${animation.name} sits in ${animation.categoryName} and supports later lessons in the same curriculum path.`,
+        practice: `Build a tiny ${animation.name} example, predict the output, then explain one trap and one downstream use.`,
+      }),
+    },
+    branches: generatedBranches(animation),
+  };
 }
 
 export const CONCEPT_MAPS = {
@@ -27966,8 +28458,16 @@ export const CONCEPT_MAPS = {
   },
 };
 
+for (const animation of allAnimations) {
+  if (!CONCEPT_MAPS[animation.id]) {
+    CONCEPT_MAPS[animation.id] = makeGeneratedConceptMap(animation);
+  }
+}
+
 export function getConceptMap(animationId) {
-  return CONCEPT_MAPS[animationId] || null;
+  const map = CONCEPT_MAPS[animationId];
+  if (!map) return null;
+  return enrichConceptMap(map);
 }
 
 export function isConceptMap(mindmap) {

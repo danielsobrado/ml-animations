@@ -1,8 +1,10 @@
-import { EMPTY_ASSESSMENT } from './lessonAssessments.js';
-
 export const ASSESSMENT_PROGRESS_KEY = 'ml-animations:assessment-progress:v1';
 export const COMPLETED_LESSONS_KEY = 'ml-animations:completed-lessons:v1';
 export const LEARNING_PROGRESS_EVENT = 'ml-animations:progress-updated';
+const EMPTY_ASSESSMENT = Object.freeze({
+  quiz: Object.freeze([]),
+  labs: Object.freeze([]),
+});
 export const DEFAULT_COMPLETION_POLICY = Object.freeze({
   quickCheckRequired: 5,
   masteryRequired: 12,
