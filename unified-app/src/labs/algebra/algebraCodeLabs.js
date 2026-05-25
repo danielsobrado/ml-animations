@@ -10456,4 +10456,2469 @@ return results;`,
 }`,
     explanation: 'Top-p adapts the candidate set size to the shape of the probability distribution.',
   },
+
+  {
+    id: 'rag-count-tokens',
+    stepLabel: '56.1',
+    group: 'Token counts and chunking',
+    title: 'Count tokens',
+    concept: 'A simple token budget starts by counting how many tokens a piece of text uses.',
+    objective: 'Return the number of whitespace-separated tokens.',
+    difficulty: 'warmup',
+    starterCode: `function countTokens(text) {
+  const trimmed = text.trim();
+
+  if (trimmed === '') return 0;
+
+  // TODO: split on whitespace and return the number of pieces.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('three words', countTokens('the cat sat'), 3);
+check('extra spaces', countTokens('  the   cat   sat  '), 3);
+check('empty string', countTokens(''), 0);
+check('one token', countTokens('hello'), 1);
+
+return results;`,
+    hints: [
+      'Use a regular expression that matches one or more whitespace characters.',
+      'trimmed.split(/\\\\s+/) gives an array of simple tokens.',
+      'return trimmed.split(/\\\\s+/).length;',
+    ],
+    solution: `function countTokens(text) {
+  const trimmed = text.trim();
+
+  if (trimmed === '') return 0;
+
+  return trimmed.split(/\\s+/).length;
+}`,
+    explanation: 'Real tokenizers are more complex than whitespace splitting, but token-budget reasoning starts with counting how much context each text piece consumes.',
+  },
+
+  {
+    id: 'rag-chunk-fits-budget',
+    stepLabel: '56.2',
+    group: 'Token counts and chunking',
+    title: 'Does this chunk fit?',
+    concept: 'A chunk can be packed only if its token count is within the remaining context budget.',
+    objective: 'Return whether chunkTokens is less than or equal to remainingBudget.',
+    difficulty: 'warmup',
+    starterCode: `function chunkFits(chunkTokens, remainingBudget) {
+  // TODO: return true when the chunk fits in the remaining budget.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('fits exactly', chunkFits(100, 100), true);
+check('fits under budget', chunkFits(80, 100), true);
+check('too large', chunkFits(120, 100), false);
+
+return results;`,
+    hints: [
+      'A chunk fits when it is not larger than the remaining budget.',
+      'Use <=.',
+      'return chunkTokens <= remainingBudget;',
+    ],
+    solution: `function chunkFits(chunkTokens, remainingBudget) {
+  return chunkTokens <= remainingBudget;
+}`,
+    explanation: 'RAG systems often fail not because evidence is unavailable, but because the right chunks do not fit into the final prompt.',
+  },
+
+  {
+    id: 'rag-fixed-size-chunks',
+    stepLabel: '56.3',
+    group: 'Token counts and chunking',
+    title: 'Fixed-size chunks',
+    concept: 'Chunking splits a token list into smaller windows.',
+    objective: 'Push slices of size chunkSize.',
+    difficulty: 'core',
+    starterCode: `function fixedChunks(tokens, chunkSize) {
+  const chunks = [];
+
+  for (let start = 0; start < tokens.length; start += chunkSize) {
+    // TODO: push tokens from start to start + chunkSize.
+    chunks.push([]);
+  }
+
+  return chunks;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('chunks of 2', fixedChunks(['a', 'b', 'c', 'd', 'e'], 2), [['a', 'b'], ['c', 'd'], ['e']]);
+check('chunks of 3', fixedChunks(['a', 'b', 'c', 'd'], 3), [['a', 'b', 'c'], ['d']]);
+check('one chunk', fixedChunks(['a', 'b'], 5), [['a', 'b']]);
+
+return results;`,
+    hints: [
+      'Array.slice(start, end) extracts a window.',
+      'The end should be start + chunkSize.',
+      'chunks.push(tokens.slice(start, start + chunkSize));',
+    ],
+    solution: `function fixedChunks(tokens, chunkSize) {
+  const chunks = [];
+
+  for (let start = 0; start < tokens.length; start += chunkSize) {
+    chunks.push(tokens.slice(start, start + chunkSize));
+  }
+
+  return chunks;
+}`,
+    explanation: 'Fixed chunks are simple, but they can split important evidence across boundaries.',
+  },
+
+  {
+    id: 'rag-overlapping-chunks',
+    stepLabel: '56.4',
+    group: 'Token counts and chunking',
+    title: 'Overlapping chunks',
+    concept: 'Overlap preserves context near chunk boundaries.',
+    objective: 'Advance by chunkSize - overlap instead of chunkSize.',
+    difficulty: 'challenge',
+    starterCode: `function overlappingChunks(tokens, chunkSize, overlap) {
+  const chunks = [];
+  const step = chunkSize - overlap;
+
+  for (let start = 0; start < tokens.length; start += step) {
+    // TODO: push a chunk from start to start + chunkSize.
+    chunks.push([]);
+  }
+
+  return chunks;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('chunk size 3 overlap 1', overlappingChunks(['a', 'b', 'c', 'd', 'e'], 3, 1), [['a', 'b', 'c'], ['c', 'd', 'e'], ['e']]);
+check('chunk size 4 overlap 2', overlappingChunks(['a', 'b', 'c', 'd', 'e'], 4, 2), [['a', 'b', 'c', 'd'], ['c', 'd', 'e'], ['e']]);
+
+return results;`,
+    hints: [
+      'The step is already computed.',
+      'Each chunk is still tokens.slice(start, start + chunkSize).',
+      'chunks.push(tokens.slice(start, start + chunkSize));',
+    ],
+    solution: `function overlappingChunks(tokens, chunkSize, overlap) {
+  const chunks = [];
+  const step = chunkSize - overlap;
+
+  for (let start = 0; start < tokens.length; start += step) {
+    chunks.push(tokens.slice(start, start + chunkSize));
+  }
+
+  return chunks;
+}`,
+    explanation: 'Overlap reduces boundary loss, but it also increases total retrieved token cost.',
+  },
+
+  {
+    id: 'bow-build-vocabulary',
+    stepLabel: '57.1',
+    group: 'Bag-of-words vectors',
+    title: 'Build vocabulary',
+    concept: 'A bag-of-words vector needs a fixed vocabulary of known terms.',
+    objective: 'Return the unique words in first-seen order.',
+    difficulty: 'core',
+    starterCode: `function buildVocabulary(tokens) {
+  const vocab = [];
+
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+
+    // TODO: push token only if it is not already in vocab.
+  }
+
+  return vocab;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('unique words', buildVocabulary(['cat', 'dog', 'cat', 'fish']), ['cat', 'dog', 'fish']);
+check('one word repeated', buildVocabulary(['a', 'a', 'a']), ['a']);
+check('already unique', buildVocabulary(['a', 'b', 'c']), ['a', 'b', 'c']);
+
+return results;`,
+    hints: [
+      'Use vocab.includes(token) to check if it is already present.',
+      'Only push when it is not included.',
+      'if (!vocab.includes(token)) vocab.push(token);',
+    ],
+    solution: `function buildVocabulary(tokens) {
+  const vocab = [];
+
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+
+    if (!vocab.includes(token)) vocab.push(token);
+  }
+
+  return vocab;
+}`,
+    explanation: 'Vocabulary fixes the coordinate system for text vectors.',
+  },
+
+  {
+    id: 'bow-count-word',
+    stepLabel: '57.2',
+    group: 'Bag-of-words vectors',
+    title: 'Count one word',
+    concept: 'A bag-of-words entry counts how often a vocabulary word appears.',
+    objective: 'Count occurrences of target in tokens.',
+    difficulty: 'warmup',
+    starterCode: `function countWord(tokens, target) {
+  let count = 0;
+
+  for (let i = 0; i < tokens.length; i++) {
+    // TODO: increment count when tokens[i] equals target.
+  }
+
+  return count;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('cat count', countWord(['cat', 'dog', 'cat'], 'cat'), 2);
+check('dog count', countWord(['cat', 'dog', 'cat'], 'dog'), 1);
+check('missing count', countWord(['cat', 'dog'], 'fish'), 0);
+
+return results;`,
+    hints: [
+      'Use an if statement.',
+      'If tokens[i] === target, add one.',
+      'if (tokens[i] === target) count += 1;',
+    ],
+    solution: `function countWord(tokens, target) {
+  let count = 0;
+
+  for (let i = 0; i < tokens.length; i++) {
+    if (tokens[i] === target) count += 1;
+  }
+
+  return count;
+}`,
+    explanation: 'Bag-of-words ignores order and keeps only word counts.',
+  },
+
+  {
+    id: 'bow-vectorize-document',
+    stepLabel: '57.3',
+    group: 'Bag-of-words vectors',
+    title: 'Vectorize document',
+    concept: 'A bag-of-words vector has one count per vocabulary word.',
+    objective: 'Push countWord(tokens, vocab[i]) for each vocabulary word.',
+    difficulty: 'core',
+    starterCode: `function countWord(tokens, target) {
+  let count = 0;
+
+  for (let i = 0; i < tokens.length; i++) {
+    if (tokens[i] === target) count += 1;
+  }
+
+  return count;
+}
+
+function bowVector(tokens, vocab) {
+  const vector = [];
+
+  for (let i = 0; i < vocab.length; i++) {
+    // TODO: push the count of vocab[i] in tokens.
+    vector.push(0);
+  }
+
+  return vector;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+const vocab = ['cat', 'dog', 'fish'];
+
+check('cat dog cat', bowVector(['cat', 'dog', 'cat'], vocab), [2, 1, 0]);
+check('fish fish', bowVector(['fish', 'fish'], vocab), [0, 0, 2]);
+check('empty document', bowVector([], vocab), [0, 0, 0]);
+
+return results;`,
+    hints: [
+      'Each vector coordinate corresponds to one vocabulary word.',
+      'Use countWord(tokens, vocab[i]).',
+      'vector.push(countWord(tokens, vocab[i]));',
+    ],
+    solution: `function countWord(tokens, target) {
+  let count = 0;
+
+  for (let i = 0; i < tokens.length; i++) {
+    if (tokens[i] === target) count += 1;
+  }
+
+  return count;
+}
+
+function bowVector(tokens, vocab) {
+  const vector = [];
+
+  for (let i = 0; i < vocab.length; i++) {
+    vector.push(countWord(tokens, vocab[i]));
+  }
+
+  return vector;
+}`,
+    explanation: 'Text becomes a vector by counting vocabulary terms.',
+  },
+
+  {
+    id: 'bow-normalize-counts',
+    stepLabel: '57.4',
+    group: 'Bag-of-words vectors',
+    title: 'Normalize counts',
+    concept: 'Normalizing counts can reduce the effect of document length.',
+    objective: 'Divide each count by total count.',
+    difficulty: 'core',
+    starterCode: `function normalizeCounts(counts) {
+  const total = counts.reduce((sum, value) => sum + value, 0);
+
+  if (total === 0) return counts.map(() => 0);
+
+  const normalized = [];
+
+  for (let i = 0; i < counts.length; i++) {
+    // TODO: divide counts[i] by total.
+    normalized.push(counts[i]);
+  }
+
+  return normalized;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('normalize [2,1,0]', normalizeCounts([2, 1, 0]), [2 / 3, 1 / 3, 0]);
+check('normalize [0,0,2]', normalizeCounts([0, 0, 2]), [0, 0, 1]);
+check('normalize empty counts', normalizeCounts([0, 0, 0]), [0, 0, 0]);
+
+return results;`,
+    hints: [
+      'total is already computed.',
+      'Each normalized value is counts[i] / total.',
+      'normalized.push(counts[i] / total);',
+    ],
+    solution: `function normalizeCounts(counts) {
+  const total = counts.reduce((sum, value) => sum + value, 0);
+
+  if (total === 0) return counts.map(() => 0);
+
+  const normalized = [];
+
+  for (let i = 0; i < counts.length; i++) {
+    normalized.push(counts[i] / total);
+  }
+
+  return normalized;
+}`,
+    explanation: 'Normalized vectors compare word proportions rather than raw document length.',
+  },
+
+  {
+    id: 'retrieval-dot-score',
+    stepLabel: '58.1',
+    group: 'Cosine retrieval',
+    title: 'Dot retrieval score',
+    concept: 'A simple retrieval score compares a query vector with a document vector.',
+    objective: 'Return dot(query, document).',
+    difficulty: 'warmup',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+
+  return total;
+}
+
+function retrievalDotScore(query, document) {
+  // TODO: return query dotted with document.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('score 1', retrievalDotScore([1, 2], [3, 4]), 11);
+check('orthogonal', retrievalDotScore([1, 0], [0, 1]), 0);
+check('negative value', retrievalDotScore([-1, 2], [3, 5]), 7);
+
+return results;`,
+    hints: [
+      'Use the dot helper.',
+      'Retrieval score is a similarity score.',
+      'return dot(query, document);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+
+  return total;
+}
+
+function retrievalDotScore(query, document) {
+  return dot(query, document);
+}`,
+    explanation: 'Embedding retrieval ranks documents by similarity to the query vector.',
+  },
+
+  {
+    id: 'retrieval-cosine-score',
+    stepLabel: '58.2',
+    group: 'Cosine retrieval',
+    title: 'Cosine retrieval score',
+    concept: 'Cosine similarity compares direction instead of raw vector length.',
+    objective: 'Return dot(query, document) divided by both norms.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+
+  return total;
+}
+
+function norm(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function cosineScore(query, document) {
+  // TODO: return cosine similarity.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('same direction', cosineScore([1, 0], [5, 0]), 1);
+check('perpendicular', cosineScore([1, 0], [0, 1]), 0);
+check('opposite', cosineScore([1, 0], [-2, 0]), -1);
+check('classic', cosineScore([1, 2], [3, 4]), 11 / (Math.sqrt(5) * 5));
+
+return results;`,
+    hints: [
+      'Cosine = dot / (norm(query) * norm(document)).',
+      'Use the dot and norm helpers.',
+      'return dot(query, document) / (norm(query) * norm(document));',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+
+  return total;
+}
+
+function norm(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function cosineScore(query, document) {
+  return dot(query, document) / (norm(query) * norm(document));
+}`,
+    explanation: 'Cosine retrieval is useful when vector direction matters more than vector magnitude.',
+  },
+
+  {
+    id: 'retrieval-score-all-documents',
+    stepLabel: '58.3',
+    group: 'Cosine retrieval',
+    title: 'Score all documents',
+    concept: 'A retriever scores every candidate document before ranking.',
+    objective: 'Push cosineScore(query, documents[i]) for each document.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  return a.reduce((total, value, i) => total + value * b[i], 0);
+}
+
+function norm(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function cosineScore(query, document) {
+  return dot(query, document) / (norm(query) * norm(document));
+}
+
+function scoreDocuments(query, documents) {
+  const scores = [];
+
+  for (let i = 0; i < documents.length; i++) {
+    // TODO: push cosine score for this document.
+    scores.push(0);
+  }
+
+  return scores;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('score three documents', scoreDocuments([1, 0], [[1, 0], [0, 1], [-1, 0]]), [1, 0, -1]);
+
+return results;`,
+    hints: [
+      'Loop through the documents.',
+      'Use cosineScore(query, documents[i]).',
+      'scores.push(cosineScore(query, documents[i]));',
+    ],
+    solution: `function dot(a, b) {
+  return a.reduce((total, value, i) => total + value * b[i], 0);
+}
+
+function norm(v) {
+  return Math.sqrt(dot(v, v));
+}
+
+function cosineScore(query, document) {
+  return dot(query, document) / (norm(query) * norm(document));
+}
+
+function scoreDocuments(query, documents) {
+  const scores = [];
+
+  for (let i = 0; i < documents.length; i++) {
+    scores.push(cosineScore(query, documents[i]));
+  }
+
+  return scores;
+}`,
+    explanation: 'Retrieval turns a query into a ranked list by scoring every candidate document.',
+  },
+
+  {
+    id: 'retrieval-rank-documents',
+    stepLabel: '58.4',
+    group: 'Cosine retrieval',
+    title: 'Rank documents',
+    concept: 'Retrieval returns document IDs sorted by descending score.',
+    objective: 'Return document IDs sorted from highest score to lowest.',
+    difficulty: 'challenge',
+    starterCode: `function rankDocuments(scores) {
+  const indexed = scores.map((score, index) => ({ score, index }));
+
+  indexed.sort((a, b) => b.score - a.score);
+
+  // TODO: return the sorted document indices.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('simple ranking', rankDocuments([0.2, 0.9, 0.4]), [1, 2, 0]);
+check('negative scores', rankDocuments([-1, 0, 1]), [2, 1, 0]);
+check('already sorted', rankDocuments([3, 2, 1]), [0, 1, 2]);
+
+return results;`,
+    hints: [
+      'The array is already sorted by score.',
+      'Map each item to item.index.',
+      'return indexed.map((item) => item.index);',
+    ],
+    solution: `function rankDocuments(scores) {
+  const indexed = scores.map((score, index) => ({ score, index }));
+
+  indexed.sort((a, b) => b.score - a.score);
+
+  return indexed.map((item) => item.index);
+}`,
+    explanation: 'The ranker converts similarity scores into retrieval order.',
+  },
+
+  {
+    id: 'retrieval-hit-at-k',
+    stepLabel: '59.1',
+    group: 'Retrieval metrics',
+    title: 'Hit@k',
+    concept: 'Hit@k checks whether at least one relevant document appears in the top k.',
+    objective: 'Return true if any of the top-k retrieved IDs are relevant.',
+    difficulty: 'core',
+    starterCode: `function hitAtK(retrievedIds, relevantIds, k) {
+  const topK = retrievedIds.slice(0, k);
+
+  for (let i = 0; i < topK.length; i++) {
+    // TODO: return true if topK[i] is relevant.
+  }
+
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('hit at 1', hitAtK(['a', 'b', 'c'], ['a'], 1), true);
+check('miss at 1 hit at 2', hitAtK(['a', 'b', 'c'], ['b'], 1), false);
+check('hit at 2', hitAtK(['a', 'b', 'c'], ['b'], 2), true);
+check('no hit', hitAtK(['a', 'b'], ['z'], 2), false);
+
+return results;`,
+    hints: [
+      'Use relevantIds.includes(topK[i]).',
+      'If you find a relevant item, return true immediately.',
+      'if (relevantIds.includes(topK[i])) return true;',
+    ],
+    solution: `function hitAtK(retrievedIds, relevantIds, k) {
+  const topK = retrievedIds.slice(0, k);
+
+  for (let i = 0; i < topK.length; i++) {
+    if (relevantIds.includes(topK[i])) return true;
+  }
+
+  return false;
+}`,
+    explanation: 'Hit@k is simple: did retrieval put at least one useful document in the top k?',
+  },
+
+  {
+    id: 'retrieval-recall-at-k',
+    stepLabel: '59.2',
+    group: 'Retrieval metrics',
+    title: 'Recall@k',
+    concept: 'Recall@k measures how many relevant documents were retrieved in the top k.',
+    objective: 'Count relevant docs in top-k and divide by total relevant docs.',
+    difficulty: 'core',
+    starterCode: `function recallAtK(retrievedIds, relevantIds, k) {
+  const topK = retrievedIds.slice(0, k);
+  let found = 0;
+
+  for (let i = 0; i < topK.length; i++) {
+    // TODO: increment found if topK[i] is relevant.
+  }
+
+  return found / relevantIds.length;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('one of two relevant', recallAtK(['a', 'b', 'c'], ['a', 'z'], 2), 0.5);
+check('two of two relevant', recallAtK(['a', 'b', 'c'], ['a', 'b'], 2), 1);
+check('zero of two relevant', recallAtK(['a', 'b', 'c'], ['x', 'y'], 3), 0);
+check('top k matters', recallAtK(['a', 'b', 'c'], ['c'], 2), 0);
+
+return results;`,
+    hints: [
+      'Use relevantIds.includes(topK[i]).',
+      'Increment found for each relevant retrieved doc.',
+      'if (relevantIds.includes(topK[i])) found += 1;',
+    ],
+    solution: `function recallAtK(retrievedIds, relevantIds, k) {
+  const topK = retrievedIds.slice(0, k);
+  let found = 0;
+
+  for (let i = 0; i < topK.length; i++) {
+    if (relevantIds.includes(topK[i])) found += 1;
+  }
+
+  return found / relevantIds.length;
+}`,
+    explanation: 'Recall@k matters because a generator cannot use relevant evidence that retrieval failed to include.',
+  },
+
+  {
+    id: 'retrieval-mrr',
+    stepLabel: '59.3',
+    group: 'Retrieval metrics',
+    title: 'Mean reciprocal rank for one query',
+    concept: 'MRR rewards placing the first relevant result early.',
+    objective: 'Return 1 / rank of the first relevant result.',
+    difficulty: 'challenge',
+    starterCode: `function reciprocalRank(retrievedIds, relevantIds) {
+  for (let i = 0; i < retrievedIds.length; i++) {
+    // TODO: if retrievedIds[i] is relevant, return 1 / (i + 1).
+  }
+
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('first result relevant', reciprocalRank(['a', 'b', 'c'], ['a']), 1);
+check('second result relevant', reciprocalRank(['a', 'b', 'c'], ['b']), 0.5);
+check('third result relevant', reciprocalRank(['a', 'b', 'c'], ['c']), 1 / 3);
+check('no relevant result', reciprocalRank(['a', 'b'], ['z']), 0);
+
+return results;`,
+    hints: [
+      'Rank is i + 1 because arrays are zero-indexed.',
+      'Use relevantIds.includes(retrievedIds[i]).',
+      'if (relevantIds.includes(retrievedIds[i])) return 1 / (i + 1);',
+    ],
+    solution: `function reciprocalRank(retrievedIds, relevantIds) {
+  for (let i = 0; i < retrievedIds.length; i++) {
+    if (relevantIds.includes(retrievedIds[i])) return 1 / (i + 1);
+  }
+
+  return 0;
+}`,
+    explanation: 'MRR focuses on how soon the first useful result appears.',
+  },
+
+  {
+    id: 'retrieval-dcg-at-k',
+    stepLabel: '59.4',
+    group: 'Retrieval metrics',
+    title: 'DCG@k',
+    concept: 'DCG gives more credit to relevant documents that appear earlier in the ranking.',
+    objective: 'Add relevance / log2(rank + 1) for each top-k result.',
+    difficulty: 'challenge',
+    starterCode: `function dcgAtK(relevances, k) {
+  let total = 0;
+
+  for (let i = 0; i < Math.min(k, relevances.length); i++) {
+    const rank = i + 1;
+
+    // TODO: add discounted relevance.
+    total += 0;
+  }
+
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('single relevant first', dcgAtK([1, 0, 0], 3), 1);
+check('single relevant second', dcgAtK([0, 1, 0], 3), 1 / Math.log2(3));
+check('graded relevance', dcgAtK([3, 2], 2), 3 / Math.log2(2) + 2 / Math.log2(3));
+
+return results;`,
+    hints: [
+      'Rank starts at 1, not 0.',
+      'Discount denominator is Math.log2(rank + 1).',
+      'total += relevances[i] / Math.log2(rank + 1);',
+    ],
+    solution: `function dcgAtK(relevances, k) {
+  let total = 0;
+
+  for (let i = 0; i < Math.min(k, relevances.length); i++) {
+    const rank = i + 1;
+    total += relevances[i] / Math.log2(rank + 1);
+  }
+
+  return total;
+}`,
+    explanation: 'DCG rewards both relevance and good ordering.',
+  },
+
+  {
+    id: 'rerank-by-score',
+    stepLabel: '60.1',
+    group: 'Reranking and grounding checks',
+    title: 'Rerank by score',
+    concept: 'A reranker reorders retrieved chunks using a more expensive relevance score.',
+    objective: 'Return chunk IDs sorted by descending reranker score.',
+    difficulty: 'core',
+    starterCode: `function rerank(chunkScores) {
+  const indexed = chunkScores.map((item) => ({
+    id: item.id,
+    score: item.score,
+  }));
+
+  indexed.sort((a, b) => b.score - a.score);
+
+  // TODO: return sorted chunk IDs.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('rerank chunks', rerank([{ id: 'a', score: 0.2 }, { id: 'b', score: 0.9 }, { id: 'c', score: 0.4 }]), ['b', 'c', 'a']);
+
+return results;`,
+    hints: [
+      'The array is already sorted by score.',
+      'Map each item to item.id.',
+      'return indexed.map((item) => item.id);',
+    ],
+    solution: `function rerank(chunkScores) {
+  const indexed = chunkScores.map((item) => ({
+    id: item.id,
+    score: item.score,
+  }));
+
+  indexed.sort((a, b) => b.score - a.score);
+
+  return indexed.map((item) => item.id);
+}`,
+    explanation: 'Retrieval often uses a fast first pass, then reranks a smaller candidate set more carefully.',
+  },
+
+  {
+    id: 'grounding-answer-phrase-check',
+    stepLabel: '60.2',
+    group: 'Reranking and grounding checks',
+    title: 'Answer phrase support',
+    concept: 'A simple grounding check asks whether the cited chunk contains the answer phrase.',
+    objective: 'Return whether chunkText includes answerPhrase.',
+    difficulty: 'warmup',
+    starterCode: `function chunkContainsAnswer(chunkText, answerPhrase) {
+  // TODO: return whether answerPhrase appears in chunkText.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('contains phrase', chunkContainsAnswer('The cancellation fee is waived after 12 months.', '12 months'), true);
+check('missing phrase', chunkContainsAnswer('The cancellation fee is waived after 24 months.', '12 months'), false);
+check('exact phrase', chunkContainsAnswer('refund policy', 'refund'), true);
+
+return results;`,
+    hints: [
+      'Use string includes.',
+      'chunkText.includes(answerPhrase) checks for substring support.',
+      'return chunkText.includes(answerPhrase);',
+    ],
+    solution: `function chunkContainsAnswer(chunkText, answerPhrase) {
+  return chunkText.includes(answerPhrase);
+}`,
+    explanation: 'This is a toy grounding check. Real grounding needs entailment, not just substring matching.',
+  },
+
+  {
+    id: 'grounding-detect-unsupported-citation',
+    stepLabel: '60.3',
+    group: 'Reranking and grounding checks',
+    title: 'Unsupported citation',
+    concept: 'A citation is suspicious when the cited chunk does not contain the required answer evidence.',
+    objective: 'Return true when the citation is unsupported.',
+    difficulty: 'core',
+    starterCode: `function isUnsupportedCitation(chunkText, answerPhrase) {
+  const supports = chunkText.includes(answerPhrase);
+
+  // TODO: return true when supports is false.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('supported citation', isUnsupportedCitation('Fee waived after 12 months.', '12 months'), false);
+check('unsupported citation', isUnsupportedCitation('Fee waived after 24 months.', '12 months'), true);
+check('missing answer entirely', isUnsupportedCitation('No fee details here.', '12 months'), true);
+
+return results;`,
+    hints: [
+      'Unsupported means not supported.',
+      'supports is already computed.',
+      'return !supports;',
+    ],
+    solution: `function isUnsupportedCitation(chunkText, answerPhrase) {
+  const supports = chunkText.includes(answerPhrase);
+  return !supports;
+}`,
+    explanation: 'Unsupported citations are dangerous because they make hallucinations look grounded.',
+  },
+
+  {
+    id: 'grounding-conflict-check',
+    stepLabel: '60.4',
+    group: 'Reranking and grounding checks',
+    title: 'Conflicting evidence',
+    concept: 'RAG systems should detect when retrieved chunks disagree.',
+    objective: 'Return true when two chunks contain different claimed values.',
+    difficulty: 'challenge',
+    starterCode: `function hasConflict(valueA, valueB) {
+  // TODO: return true when values disagree.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('same value no conflict', hasConflict('12 months', '12 months'), false);
+check('different values conflict', hasConflict('12 months', '24 months'), true);
+check('same number no conflict', hasConflict(5, 5), false);
+check('different number conflict', hasConflict(5, 7), true);
+
+return results;`,
+    hints: [
+      'Conflict means the values are not equal.',
+      'Use !==.',
+      'return valueA !== valueB;',
+    ],
+    solution: `function hasConflict(valueA, valueB) {
+  return valueA !== valueB;
+}`,
+    explanation: 'A good RAG system should not silently choose one source when retrieved evidence conflicts.',
+  },
+
+  {
+    id: 'prompt-packing-reserve-answer-budget',
+    stepLabel: '61.1',
+    group: 'Prompt packing / context budget',
+    title: 'Reserve answer budget',
+    concept: 'A prompt packer should leave room for the model response.',
+    objective: 'Return totalContext - answerBudget.',
+    difficulty: 'warmup',
+    starterCode: `function inputBudget(totalContext, answerBudget) {
+  // TODO: return how many tokens are available for input.
+  return totalContext;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('reserve 1000 from 8000', inputBudget(8000, 1000), 7000);
+check('reserve 500 from 4096', inputBudget(4096, 500), 3596);
+check('reserve zero', inputBudget(1000, 0), 1000);
+
+return results;`,
+    hints: [
+      'Input and output share the context window.',
+      'Subtract answerBudget from totalContext.',
+      'return totalContext - answerBudget;',
+    ],
+    solution: `function inputBudget(totalContext, answerBudget) {
+  return totalContext - answerBudget;
+}`,
+    explanation: 'If you fill the whole context with input, there may be no room left for the answer.',
+  },
+
+  {
+    id: 'prompt-packing-greedy-chunks',
+    stepLabel: '61.2',
+    group: 'Prompt packing / context budget',
+    title: 'Greedy chunk packing',
+    concept: 'A simple prompt packer adds chunks until the budget is exhausted.',
+    objective: 'Add a chunk only if it fits.',
+    difficulty: 'core',
+    starterCode: `function packChunksGreedy(chunks, budget) {
+  const packed = [];
+  let used = 0;
+
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i];
+
+    // TODO: if used + chunk.tokens <= budget, pack the chunk and update used.
+  }
+
+  return packed;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+const chunks = [
+  { id: 'a', tokens: 100 },
+  { id: 'b', tokens: 200 },
+  { id: 'c', tokens: 300 },
+];
+
+check('budget 250', packChunksGreedy(chunks, 250), ['a']);
+check('budget 500', packChunksGreedy(chunks, 500), ['a', 'b']);
+check('budget 600', packChunksGreedy(chunks, 600), ['a', 'b', 'c']);
+
+return results;`,
+    hints: [
+      'Check whether used + chunk.tokens is within budget.',
+      'If it fits, push chunk.id and add chunk.tokens to used.',
+      `if (used + chunk.tokens <= budget) {
+  packed.push(chunk.id);
+  used += chunk.tokens;
+}`,
+    ],
+    solution: `function packChunksGreedy(chunks, budget) {
+  const packed = [];
+  let used = 0;
+
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i];
+
+    if (used + chunk.tokens <= budget) {
+      packed.push(chunk.id);
+      used += chunk.tokens;
+    }
+  }
+
+  return packed;
+}`,
+    explanation: 'Greedy packing is simple, but it may skip a smaller useful chunk after a large chunk consumes the budget.',
+  },
+
+  {
+    id: 'prompt-packing-sort-by-relevance',
+    stepLabel: '61.3',
+    group: 'Prompt packing / context budget',
+    title: 'Sort by relevance',
+    concept: 'Prompt packing usually prioritizes high-relevance chunks before filling the budget.',
+    objective: 'Sort chunks by descending relevance.',
+    difficulty: 'core',
+    starterCode: `function sortByRelevance(chunks) {
+  const sorted = chunks.slice();
+
+  // TODO: sort highest relevance first.
+  return sorted;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a.map((x) => x.id)) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual.map((x) => x.id)),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('sort chunks', sortByRelevance([{ id: 'a', relevance: 0.2 }, { id: 'b', relevance: 0.9 }, { id: 'c', relevance: 0.4 }]), ['b', 'c', 'a']);
+
+return results;`,
+    hints: [
+      'Use Array.sort.',
+      'Descending means b.relevance - a.relevance.',
+      'sorted.sort((a, b) => b.relevance - a.relevance);',
+    ],
+    solution: `function sortByRelevance(chunks) {
+  const sorted = chunks.slice();
+
+  sorted.sort((a, b) => b.relevance - a.relevance);
+
+  return sorted;
+}`,
+    explanation: 'RAG systems often rerank or sort chunks before packing them into the final prompt.',
+  },
+
+  {
+    id: 'prompt-packing-relevance-budget',
+    stepLabel: '61.4',
+    group: 'Prompt packing / context budget',
+    title: 'Pack relevant chunks within budget',
+    concept: 'A practical packer sorts by relevance, then greedily adds chunks that fit.',
+    objective: 'Sort by relevance and pack fitting chunks.',
+    difficulty: 'challenge',
+    starterCode: `function packRelevantChunks(chunks, budget) {
+  const sorted = chunks.slice();
+  sorted.sort((a, b) => b.relevance - a.relevance);
+
+  const packed = [];
+  let used = 0;
+
+  for (let i = 0; i < sorted.length; i++) {
+    const chunk = sorted[i];
+
+    // TODO: pack this chunk if it fits.
+  }
+
+  return packed;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+const chunks = [
+  { id: 'a', tokens: 100, relevance: 0.2 },
+  { id: 'b', tokens: 300, relevance: 0.9 },
+  { id: 'c', tokens: 200, relevance: 0.8 },
+  { id: 'd', tokens: 100, relevance: 0.7 },
+];
+
+check('budget 300', packRelevantChunks(chunks, 300), ['b']);
+check('budget 400', packRelevantChunks(chunks, 400), ['b', 'd']);
+check('budget 500', packRelevantChunks(chunks, 500), ['b', 'c']);
+
+return results;`,
+    hints: [
+      'The chunks are already sorted by relevance.',
+      'Use the same budget check as greedy packing.',
+      'If it fits, push chunk.id and update used.',
+      `if (used + chunk.tokens <= budget) {
+  packed.push(chunk.id);
+  used += chunk.tokens;
+}`,
+    ],
+    solution: `function packRelevantChunks(chunks, budget) {
+  const sorted = chunks.slice();
+  sorted.sort((a, b) => b.relevance - a.relevance);
+
+  const packed = [];
+  let used = 0;
+
+  for (let i = 0; i < sorted.length; i++) {
+    const chunk = sorted[i];
+
+    if (used + chunk.tokens <= budget) {
+      packed.push(chunk.id);
+      used += chunk.tokens;
+    }
+  }
+
+  return packed;
+}`,
+    explanation: 'Prompt packing balances relevance against token budget. The best chunk is not useful if it crowds out required evidence.',
+  },
+
+  {
+    id: 'eval-true-positive',
+    stepLabel: '62.1',
+    group: 'Confusion matrix',
+    title: 'True positive',
+    concept: 'A true positive happens when the model predicts positive and the true label is positive.',
+    objective: 'Return true only when prediction and label are both 1.',
+    difficulty: 'warmup',
+    starterCode: `function isTruePositive(prediction, label) {
+  // TODO: return true only when prediction is 1 and label is 1.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('predicted positive, actually positive', isTruePositive(1, 1), true);
+check('predicted positive, actually negative', isTruePositive(1, 0), false);
+check('predicted negative, actually positive', isTruePositive(0, 1), false);
+check('predicted negative, actually negative', isTruePositive(0, 0), false);
+
+return results;`,
+    hints: [
+      'True positive means both values are positive.',
+      'Use prediction === 1 and label === 1.',
+      'return prediction === 1 && label === 1;',
+    ],
+    solution: `function isTruePositive(prediction, label) {
+  return prediction === 1 && label === 1;
+}`,
+    explanation: 'True positives are the successful detections of the positive class.',
+  },
+
+  {
+    id: 'eval-false-positive',
+    stepLabel: '62.2',
+    group: 'Confusion matrix',
+    title: 'False positive',
+    concept: 'A false positive happens when the model predicts positive but the true label is negative.',
+    objective: 'Return true only when prediction is 1 and label is 0.',
+    difficulty: 'warmup',
+    starterCode: `function isFalsePositive(prediction, label) {
+  // TODO: return true only when prediction is 1 and label is 0.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('predicted positive, actually negative', isFalsePositive(1, 0), true);
+check('predicted positive, actually positive', isFalsePositive(1, 1), false);
+check('predicted negative, actually positive', isFalsePositive(0, 1), false);
+check('predicted negative, actually negative', isFalsePositive(0, 0), false);
+
+return results;`,
+    hints: [
+      'False positive means the alarm fired but the event was not real.',
+      'Use prediction === 1 and label === 0.',
+      'return prediction === 1 && label === 0;',
+    ],
+    solution: `function isFalsePositive(prediction, label) {
+  return prediction === 1 && label === 0;
+}`,
+    explanation: 'False positives matter when incorrect alarms are costly.',
+  },
+
+  {
+    id: 'eval-false-negative',
+    stepLabel: '62.3',
+    group: 'Confusion matrix',
+    title: 'False negative',
+    concept: 'A false negative happens when the model predicts negative but the true label is positive.',
+    objective: 'Return true only when prediction is 0 and label is 1.',
+    difficulty: 'warmup',
+    starterCode: `function isFalseNegative(prediction, label) {
+  // TODO: return true only when prediction is 0 and label is 1.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('predicted negative, actually positive', isFalseNegative(0, 1), true);
+check('predicted positive, actually positive', isFalseNegative(1, 1), false);
+check('predicted positive, actually negative', isFalseNegative(1, 0), false);
+check('predicted negative, actually negative', isFalseNegative(0, 0), false);
+
+return results;`,
+    hints: [
+      'False negative means the model missed a real positive.',
+      'Use prediction === 0 and label === 1.',
+      'return prediction === 0 && label === 1;',
+    ],
+    solution: `function isFalseNegative(prediction, label) {
+  return prediction === 0 && label === 1;
+}`,
+    explanation: 'False negatives matter when missing a positive case is dangerous or expensive.',
+  },
+
+  {
+    id: 'eval-confusion-counts',
+    stepLabel: '62.4',
+    group: 'Confusion matrix',
+    title: 'Count confusion matrix',
+    concept: 'A confusion matrix counts TP, FP, TN, and FN over a dataset.',
+    objective: 'Increment the correct count for each prediction-label pair.',
+    difficulty: 'core',
+    starterCode: `function confusionCounts(predictions, labels) {
+  const counts = { tp: 0, fp: 0, tn: 0, fn: 0 };
+
+  for (let i = 0; i < predictions.length; i++) {
+    const prediction = predictions[i];
+    const label = labels[i];
+
+    // TODO: increment exactly one of tp, fp, tn, fn.
+  }
+
+  return counts;
+}`,
+    testCode: `const results = [];
+
+function sameObject(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameObject(actual, expected),
+  });
+}
+
+check('mixed predictions', confusionCounts([1, 1, 0, 0], [1, 0, 1, 0]), { tp: 1, fp: 1, tn: 1, fn: 1 });
+check('perfect predictions', confusionCounts([1, 0, 1, 0], [1, 0, 1, 0]), { tp: 2, fp: 0, tn: 2, fn: 0 });
+check('all missed positives', confusionCounts([0, 0, 0], [1, 1, 0]), { tp: 0, fp: 0, tn: 1, fn: 2 });
+
+return results;`,
+    hints: [
+      'There are four mutually exclusive cases.',
+      'Check prediction and label together.',
+      `if (prediction === 1 && label === 1) counts.tp += 1;
+else if (prediction === 1 && label === 0) counts.fp += 1;
+else if (prediction === 0 && label === 0) counts.tn += 1;
+else counts.fn += 1;`,
+    ],
+    solution: `function confusionCounts(predictions, labels) {
+  const counts = { tp: 0, fp: 0, tn: 0, fn: 0 };
+
+  for (let i = 0; i < predictions.length; i++) {
+    const prediction = predictions[i];
+    const label = labels[i];
+
+    if (prediction === 1 && label === 1) counts.tp += 1;
+    else if (prediction === 1 && label === 0) counts.fp += 1;
+    else if (prediction === 0 && label === 0) counts.tn += 1;
+    else counts.fn += 1;
+  }
+
+  return counts;
+}`,
+    explanation: 'The confusion matrix is the foundation for precision, recall, specificity, F1, ROC, and PR curves.',
+  },
+
+  {
+    id: 'eval-accuracy',
+    stepLabel: '63.1',
+    group: 'Precision / recall / F1',
+    title: 'Accuracy',
+    concept: 'Accuracy is the fraction of examples the model classified correctly.',
+    objective: 'Return (tp + tn) / total.',
+    difficulty: 'warmup',
+    starterCode: `function accuracy(counts) {
+  const total = counts.tp + counts.fp + counts.tn + counts.fn;
+
+  // TODO: return accuracy.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('balanced example', accuracy({ tp: 1, fp: 1, tn: 1, fn: 1 }), 0.5);
+check('perfect', accuracy({ tp: 2, fp: 0, tn: 2, fn: 0 }), 1);
+check('all wrong', accuracy({ tp: 0, fp: 2, tn: 0, fn: 2 }), 0);
+
+return results;`,
+    hints: [
+      'Correct predictions are true positives plus true negatives.',
+      'Divide by total examples.',
+      'return (counts.tp + counts.tn) / total;',
+    ],
+    solution: `function accuracy(counts) {
+  const total = counts.tp + counts.fp + counts.tn + counts.fn;
+  return (counts.tp + counts.tn) / total;
+}`,
+    explanation: 'Accuracy is easy to understand, but it can be misleading on imbalanced datasets.',
+  },
+
+  {
+    id: 'eval-precision',
+    stepLabel: '63.2',
+    group: 'Precision / recall / F1',
+    title: 'Precision',
+    concept: 'Precision asks: among predicted positives, how many were truly positive?',
+    objective: 'Return tp / (tp + fp).',
+    difficulty: 'core',
+    starterCode: `function precision(counts) {
+  const predictedPositive = counts.tp + counts.fp;
+
+  if (predictedPositive === 0) return 0;
+
+  // TODO: return precision.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('one true, one false positive', precision({ tp: 1, fp: 1, tn: 1, fn: 1 }), 0.5);
+check('perfect precision', precision({ tp: 3, fp: 0, tn: 1, fn: 2 }), 1);
+check('no predicted positives', precision({ tp: 0, fp: 0, tn: 5, fn: 2 }), 0);
+
+return results;`,
+    hints: [
+      'Precision focuses on predictions labeled positive.',
+      'The denominator is tp + fp.',
+      'return counts.tp / predictedPositive;',
+    ],
+    solution: `function precision(counts) {
+  const predictedPositive = counts.tp + counts.fp;
+
+  if (predictedPositive === 0) return 0;
+
+  return counts.tp / predictedPositive;
+}`,
+    explanation: 'High precision means positive predictions are trustworthy.',
+  },
+
+  {
+    id: 'eval-recall',
+    stepLabel: '63.3',
+    group: 'Precision / recall / F1',
+    title: 'Recall',
+    concept: 'Recall asks: among actual positives, how many did the model find?',
+    objective: 'Return tp / (tp + fn).',
+    difficulty: 'core',
+    starterCode: `function recall(counts) {
+  const actualPositive = counts.tp + counts.fn;
+
+  if (actualPositive === 0) return 0;
+
+  // TODO: return recall.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('one found, one missed', recall({ tp: 1, fp: 1, tn: 1, fn: 1 }), 0.5);
+check('perfect recall', recall({ tp: 3, fp: 2, tn: 1, fn: 0 }), 1);
+check('no actual positives', recall({ tp: 0, fp: 2, tn: 5, fn: 0 }), 0);
+
+return results;`,
+    hints: [
+      'Recall focuses on actual positive cases.',
+      'The denominator is tp + fn.',
+      'return counts.tp / actualPositive;',
+    ],
+    solution: `function recall(counts) {
+  const actualPositive = counts.tp + counts.fn;
+
+  if (actualPositive === 0) return 0;
+
+  return counts.tp / actualPositive;
+}`,
+    explanation: 'High recall means the model misses fewer positive cases.',
+  },
+
+  {
+    id: 'eval-f1',
+    stepLabel: '63.4',
+    group: 'Precision / recall / F1',
+    title: 'F1 score',
+    concept: 'F1 is the harmonic mean of precision and recall.',
+    objective: 'Return 2pr / (p + r).',
+    difficulty: 'challenge',
+    starterCode: `function f1Score(precisionValue, recallValue) {
+  if (precisionValue + recallValue === 0) return 0;
+
+  // TODO: return F1 score.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('precision 0.5 recall 0.5', f1Score(0.5, 0.5), 0.5);
+check('precision 1 recall 0.5', f1Score(1, 0.5), 2 / 3);
+check('precision 0 recall 0', f1Score(0, 0), 0);
+
+return results;`,
+    hints: [
+      'F1 combines precision and recall.',
+      'Use 2 * precision * recall / (precision + recall).',
+      'return (2 * precisionValue * recallValue) / (precisionValue + recallValue);',
+    ],
+    solution: `function f1Score(precisionValue, recallValue) {
+  if (precisionValue + recallValue === 0) return 0;
+
+  return (2 * precisionValue * recallValue) / (precisionValue + recallValue);
+}`,
+    explanation: 'F1 is useful when you need a single score that balances false positives and false negatives.',
+  },
+
+  {
+    id: 'threshold-predict',
+    stepLabel: '64.1',
+    group: 'ROC / PR threshold sweeps',
+    title: 'Predict by threshold',
+    concept: 'A probabilistic classifier becomes a hard classifier by choosing a threshold.',
+    objective: 'Return 1 when score is at least threshold, otherwise 0.',
+    difficulty: 'warmup',
+    starterCode: `function predictByThreshold(score, threshold) {
+  // TODO: return 1 if score >= threshold, else 0.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('above threshold', predictByThreshold(0.8, 0.5), 1);
+check('below threshold', predictByThreshold(0.3, 0.5), 0);
+check('equal threshold counts positive', predictByThreshold(0.5, 0.5), 1);
+
+return results;`,
+    hints: [
+      'Thresholding turns scores into labels.',
+      'Use score >= threshold.',
+      'return score >= threshold ? 1 : 0;',
+    ],
+    solution: `function predictByThreshold(score, threshold) {
+  return score >= threshold ? 1 : 0;
+}`,
+    explanation: 'Changing the threshold changes the tradeoff between false positives and false negatives.',
+  },
+
+  {
+    id: 'threshold-predict-all',
+    stepLabel: '64.2',
+    group: 'ROC / PR threshold sweeps',
+    title: 'Threshold all scores',
+    concept: 'A threshold sweep applies many thresholds to the same scores.',
+    objective: 'Push thresholded prediction for each score.',
+    difficulty: 'core',
+    starterCode: `function predictByThreshold(score, threshold) {
+  return score >= threshold ? 1 : 0;
+}
+
+function predictionsAtThreshold(scores, threshold) {
+  const predictions = [];
+
+  for (let i = 0; i < scores.length; i++) {
+    // TODO: push prediction for scores[i].
+    predictions.push(0);
+  }
+
+  return predictions;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('threshold 0.5', predictionsAtThreshold([0.8, 0.3, 0.5], 0.5), [1, 0, 1]);
+check('threshold 0.7', predictionsAtThreshold([0.8, 0.3, 0.5], 0.7), [1, 0, 0]);
+check('threshold 0.2', predictionsAtThreshold([0.8, 0.3, 0.5], 0.2), [1, 1, 1]);
+
+return results;`,
+    hints: [
+      'Use predictByThreshold on each score.',
+      'Push the result into predictions.',
+      'predictions.push(predictByThreshold(scores[i], threshold));',
+    ],
+    solution: `function predictByThreshold(score, threshold) {
+  return score >= threshold ? 1 : 0;
+}
+
+function predictionsAtThreshold(scores, threshold) {
+  const predictions = [];
+
+  for (let i = 0; i < scores.length; i++) {
+    predictions.push(predictByThreshold(scores[i], threshold));
+  }
+
+  return predictions;
+}`,
+    explanation: 'Threshold sweeps let you see how metrics change as the decision boundary moves.',
+  },
+
+  {
+    id: 'roc-false-positive-rate',
+    stepLabel: '64.3',
+    group: 'ROC / PR threshold sweeps',
+    title: 'False positive rate',
+    concept: 'FPR asks: among actual negatives, how many did the model incorrectly mark positive?',
+    objective: 'Return fp / (fp + tn).',
+    difficulty: 'core',
+    starterCode: `function falsePositiveRate(counts) {
+  const actualNegatives = counts.fp + counts.tn;
+
+  if (actualNegatives === 0) return 0;
+
+  // TODO: return FPR.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('one false positive, one true negative', falsePositiveRate({ tp: 1, fp: 1, tn: 1, fn: 1 }), 0.5);
+check('no false positives', falsePositiveRate({ tp: 1, fp: 0, tn: 4, fn: 1 }), 0);
+check('all negatives false positive', falsePositiveRate({ tp: 1, fp: 4, tn: 0, fn: 1 }), 1);
+
+return results;`,
+    hints: [
+      'FPR is based on actual negatives.',
+      'The denominator is fp + tn.',
+      'return counts.fp / actualNegatives;',
+    ],
+    solution: `function falsePositiveRate(counts) {
+  const actualNegatives = counts.fp + counts.tn;
+
+  if (actualNegatives === 0) return 0;
+
+  return counts.fp / actualNegatives;
+}`,
+    explanation: 'ROC curves plot true positive rate against false positive rate.',
+  },
+
+  {
+    id: 'roc-true-positive-rate',
+    stepLabel: '64.4',
+    group: 'ROC / PR threshold sweeps',
+    title: 'True positive rate',
+    concept: 'TPR is another name for recall.',
+    objective: 'Return tp / (tp + fn).',
+    difficulty: 'core',
+    starterCode: `function truePositiveRate(counts) {
+  const actualPositives = counts.tp + counts.fn;
+
+  if (actualPositives === 0) return 0;
+
+  // TODO: return TPR.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('one found, one missed', truePositiveRate({ tp: 1, fp: 1, tn: 1, fn: 1 }), 0.5);
+check('perfect recall', truePositiveRate({ tp: 4, fp: 1, tn: 1, fn: 0 }), 1);
+check('miss all positives', truePositiveRate({ tp: 0, fp: 1, tn: 1, fn: 4 }), 0);
+
+return results;`,
+    hints: [
+      'TPR is recall.',
+      'The denominator is tp + fn.',
+      'return counts.tp / actualPositives;',
+    ],
+    solution: `function truePositiveRate(counts) {
+  const actualPositives = counts.tp + counts.fn;
+
+  if (actualPositives === 0) return 0;
+
+  return counts.tp / actualPositives;
+}`,
+    explanation: 'TPR measures how many actual positives the model catches.',
+  },
+
+  {
+    id: 'calibration-bin-index',
+    stepLabel: '65.1',
+    group: 'Calibration bins',
+    title: 'Calibration bin index',
+    concept: 'Calibration groups predictions by score range.',
+    objective: 'Return the bin index for a score using equal-width bins.',
+    difficulty: 'core',
+    starterCode: `function binIndex(score, numBins) {
+  // Scores are between 0 and 1.
+  // TODO: return Math.floor(score * numBins), capped at numBins - 1.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('score 0.05 bin 0 of 10', binIndex(0.05, 10), 0);
+check('score 0.35 bin 3 of 10', binIndex(0.35, 10), 3);
+check('score 0.99 bin 9 of 10', binIndex(0.99, 10), 9);
+check('score 1.0 capped bin 9 of 10', binIndex(1.0, 10), 9);
+
+return results;`,
+    hints: [
+      'Start with Math.floor(score * numBins).',
+      'A score of 1.0 would produce numBins, so cap it.',
+      'return Math.min(numBins - 1, Math.floor(score * numBins));',
+    ],
+    solution: `function binIndex(score, numBins) {
+  return Math.min(numBins - 1, Math.floor(score * numBins));
+}`,
+    explanation: 'Calibration bins let you compare predicted confidence with actual frequency.',
+  },
+
+  {
+    id: 'calibration-bin-confidence',
+    stepLabel: '65.2',
+    group: 'Calibration bins',
+    title: 'Average bin confidence',
+    concept: 'A bin average confidence is the mean predicted probability in that bin.',
+    objective: 'Return average of the scores.',
+    difficulty: 'warmup',
+    starterCode: `function averageConfidence(scores) {
+  if (scores.length === 0) return 0;
+
+  let total = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    total += scores[i];
+  }
+
+  // TODO: return average confidence.
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('average two scores', averageConfidence([0.2, 0.4]), 0.3);
+check('one score', averageConfidence([0.7]), 0.7);
+check('empty bin', averageConfidence([]), 0);
+
+return results;`,
+    hints: [
+      'Average means total divided by count.',
+      'The count is scores.length.',
+      'return total / scores.length;',
+    ],
+    solution: `function averageConfidence(scores) {
+  if (scores.length === 0) return 0;
+
+  let total = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    total += scores[i];
+  }
+
+  return total / scores.length;
+}`,
+    explanation: 'If a bin average confidence is 0.8, a calibrated model should be correct about 80% of the time in that bin.',
+  },
+
+  {
+    id: 'calibration-bin-accuracy',
+    stepLabel: '65.3',
+    group: 'Calibration bins',
+    title: 'Bin accuracy',
+    concept: 'A bin empirical accuracy is the fraction of examples in that bin that were correct.',
+    objective: 'Return number correct divided by bin size.',
+    difficulty: 'core',
+    starterCode: `function binAccuracy(correctFlags) {
+  if (correctFlags.length === 0) return 0;
+
+  let correct = 0;
+
+  for (let i = 0; i < correctFlags.length; i++) {
+    // TODO: increment correct when correctFlags[i] is true.
+  }
+
+  return correct / correctFlags.length;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('two of three correct', binAccuracy([true, true, false]), 2 / 3);
+check('all correct', binAccuracy([true, true]), 1);
+check('none correct', binAccuracy([false, false]), 0);
+check('empty bin', binAccuracy([]), 0);
+
+return results;`,
+    hints: [
+      'correctFlags[i] is a boolean.',
+      'If it is true, add 1.',
+      'if (correctFlags[i]) correct += 1;',
+    ],
+    solution: `function binAccuracy(correctFlags) {
+  if (correctFlags.length === 0) return 0;
+
+  let correct = 0;
+
+  for (let i = 0; i < correctFlags.length; i++) {
+    if (correctFlags[i]) correct += 1;
+  }
+
+  return correct / correctFlags.length;
+}`,
+    explanation: 'Calibration compares confidence to empirical accuracy.',
+  },
+
+  {
+    id: 'calibration-gap',
+    stepLabel: '65.4',
+    group: 'Calibration bins',
+    title: 'Calibration gap',
+    concept: 'A calibration gap is the absolute difference between confidence and accuracy.',
+    objective: 'Return |confidence - accuracy|.',
+    difficulty: 'warmup',
+    starterCode: `function calibrationGap(confidence, accuracy) {
+  // TODO: return absolute difference.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('overconfident gap', calibrationGap(0.8, 0.6), 0.2);
+check('underconfident gap', calibrationGap(0.4, 0.7), 0.3);
+check('perfect gap', calibrationGap(0.5, 0.5), 0);
+
+return results;`,
+    hints: [
+      'Use Math.abs.',
+      'Subtract accuracy from confidence, then take absolute value.',
+      'return Math.abs(confidence - accuracy);',
+    ],
+    solution: `function calibrationGap(confidence, accuracy) {
+  return Math.abs(confidence - accuracy);
+}`,
+    explanation: 'A calibrated model has small gaps between predicted confidence and observed correctness.',
+  },
+
+  {
+    id: 'ece-bin-weight',
+    stepLabel: '66.1',
+    group: 'Expected calibration error',
+    title: 'Bin weight',
+    concept: 'ECE weights each bin by how many examples it contains.',
+    objective: 'Return binCount / totalCount.',
+    difficulty: 'warmup',
+    starterCode: `function binWeight(binCount, totalCount) {
+  // TODO: return bin fraction.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('half the examples', binWeight(50, 100), 0.5);
+check('one tenth', binWeight(10, 100), 0.1);
+check('empty bin', binWeight(0, 100), 0);
+
+return results;`,
+    hints: [
+      'Weight is the bin size divided by total size.',
+      'Use binCount / totalCount.',
+      'return binCount / totalCount;',
+    ],
+    solution: `function binWeight(binCount, totalCount) {
+  return binCount / totalCount;
+}`,
+    explanation: 'Large bins should matter more than tiny bins in the final ECE.',
+  },
+
+  {
+    id: 'ece-bin-contribution',
+    stepLabel: '66.2',
+    group: 'Expected calibration error',
+    title: 'One bin contribution',
+    concept: 'A bin contributes weight times calibration gap to ECE.',
+    objective: 'Return weight * abs(confidence - accuracy).',
+    difficulty: 'core',
+    starterCode: `function eceBinContribution(binCount, totalCount, confidence, accuracy) {
+  const weight = binCount / totalCount;
+
+  // TODO: return weighted calibration gap.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('simple contribution', eceBinContribution(50, 100, 0.8, 0.6), 0.1);
+check('perfect bin', eceBinContribution(50, 100, 0.8, 0.8), 0);
+check('small bin', eceBinContribution(10, 100, 0.4, 0.7), 0.03);
+
+return results;`,
+    hints: [
+      'Calibration gap is Math.abs(confidence - accuracy).',
+      'Multiply by weight.',
+      'return weight * Math.abs(confidence - accuracy);',
+    ],
+    solution: `function eceBinContribution(binCount, totalCount, confidence, accuracy) {
+  const weight = binCount / totalCount;
+  return weight * Math.abs(confidence - accuracy);
+}`,
+    explanation: 'ECE summarizes calibration error across bins with size weighting.',
+  },
+
+  {
+    id: 'ece-full',
+    stepLabel: '66.3',
+    group: 'Expected calibration error',
+    title: 'Expected calibration error',
+    concept: 'ECE is the sum of weighted calibration gaps across bins.',
+    objective: 'Accumulate each bin weighted gap.',
+    difficulty: 'challenge',
+    starterCode: `function expectedCalibrationError(bins, totalCount) {
+  let ece = 0;
+
+  for (let i = 0; i < bins.length; i++) {
+    const bin = bins[i];
+
+    // bin has count, confidence, accuracy.
+    // TODO: add this bin's contribution.
+    ece += 0;
+  }
+
+  return ece;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('two bins', expectedCalibrationError([{ count: 50, confidence: 0.8, accuracy: 0.6 }, { count: 50, confidence: 0.4, accuracy: 0.5 }], 100), 0.15);
+check('perfect calibration', expectedCalibrationError([{ count: 30, confidence: 0.7, accuracy: 0.7 }, { count: 70, confidence: 0.2, accuracy: 0.2 }], 100), 0);
+
+return results;`,
+    hints: [
+      'For each bin, contribution is count / totalCount times absolute confidence-accuracy gap.',
+      'Use Math.abs(bin.confidence - bin.accuracy).',
+      'ece += (bin.count / totalCount) * Math.abs(bin.confidence - bin.accuracy);',
+    ],
+    solution: `function expectedCalibrationError(bins, totalCount) {
+  let ece = 0;
+
+  for (let i = 0; i < bins.length; i++) {
+    const bin = bins[i];
+
+    ece += (bin.count / totalCount) * Math.abs(bin.confidence - bin.accuracy);
+  }
+
+  return ece;
+}`,
+    explanation: 'ECE is a compact calibration summary, but it depends on binning choices.',
+  },
+
+  {
+    id: 'cost-false-positive',
+    stepLabel: '67.1',
+    group: 'Cost-sensitive thresholding',
+    title: 'False positive cost',
+    concept: 'False positives and false negatives can have different costs.',
+    objective: 'Return fp * falsePositiveCost.',
+    difficulty: 'warmup',
+    starterCode: `function falsePositiveCost(fp, falsePositiveCostPerCase) {
+  // TODO: return total false-positive cost.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('two false positives cost 5', falsePositiveCost(2, 5), 10);
+check('zero false positives', falsePositiveCost(0, 5), 0);
+check('three false positives cost 10', falsePositiveCost(3, 10), 30);
+
+return results;`,
+    hints: [
+      'Total cost is count times cost per case.',
+      'Use fp * falsePositiveCostPerCase.',
+      'return fp * falsePositiveCostPerCase;',
+    ],
+    solution: `function falsePositiveCost(fp, falsePositiveCostPerCase) {
+  return fp * falsePositiveCostPerCase;
+}`,
+    explanation: 'When false alarms are expensive, precision may matter more.',
+  },
+
+  {
+    id: 'cost-false-negative',
+    stepLabel: '67.2',
+    group: 'Cost-sensitive thresholding',
+    title: 'False negative cost',
+    concept: 'False negatives may be much more expensive than false positives in safety-critical tasks.',
+    objective: 'Return fn * falseNegativeCost.',
+    difficulty: 'warmup',
+    starterCode: `function falseNegativeCost(fn, falseNegativeCostPerCase) {
+  // TODO: return total false-negative cost.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('two false negatives cost 50', falseNegativeCost(2, 50), 100);
+check('zero false negatives', falseNegativeCost(0, 50), 0);
+check('three false negatives cost 10', falseNegativeCost(3, 10), 30);
+
+return results;`,
+    hints: [
+      'Total cost is count times cost per case.',
+      'Use fn * falseNegativeCostPerCase.',
+      'return fn * falseNegativeCostPerCase;',
+    ],
+    solution: `function falseNegativeCost(fn, falseNegativeCostPerCase) {
+  return fn * falseNegativeCostPerCase;
+}`,
+    explanation: 'When misses are expensive, recall may matter more.',
+  },
+
+  {
+    id: 'cost-total-decision-cost',
+    stepLabel: '67.3',
+    group: 'Cost-sensitive thresholding',
+    title: 'Total decision cost',
+    concept: 'A threshold can be chosen by minimizing total false-positive and false-negative cost.',
+    objective: 'Return fp cost plus fn cost.',
+    difficulty: 'core',
+    starterCode: `function totalDecisionCost(counts, costs) {
+  const fpCost = counts.fp * costs.falsePositive;
+  const fnCost = counts.fn * costs.falseNegative;
+
+  // TODO: return total cost.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('balanced costs', totalDecisionCost({ fp: 2, fn: 3 }, { falsePositive: 5, falseNegative: 5 }), 25);
+check('false negatives expensive', totalDecisionCost({ fp: 2, fn: 3 }, { falsePositive: 1, falseNegative: 10 }), 32);
+check('no mistakes', totalDecisionCost({ fp: 0, fn: 0 }, { falsePositive: 5, falseNegative: 10 }), 0);
+
+return results;`,
+    hints: [
+      'fpCost and fnCost are already computed.',
+      'Total cost is their sum.',
+      'return fpCost + fnCost;',
+    ],
+    solution: `function totalDecisionCost(counts, costs) {
+  const fpCost = counts.fp * costs.falsePositive;
+  const fnCost = counts.fn * costs.falseNegative;
+
+  return fpCost + fnCost;
+}`,
+    explanation: 'The best threshold depends on the business or safety cost of each error type.',
+  },
+
+  {
+    id: 'cost-choose-threshold',
+    stepLabel: '67.4',
+    group: 'Cost-sensitive thresholding',
+    title: 'Choose lower-cost threshold',
+    concept: 'A cost-sensitive classifier chooses the threshold with lower expected cost.',
+    objective: 'Return thresholdA if costA <= costB, otherwise thresholdB.',
+    difficulty: 'core',
+    starterCode: `function chooseLowerCostThreshold(thresholdA, costA, thresholdB, costB) {
+  // TODO: return the threshold with lower cost.
+  return thresholdA;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('A lower cost', chooseLowerCostThreshold(0.3, 10, 0.7, 20), 0.3);
+check('B lower cost', chooseLowerCostThreshold(0.3, 30, 0.7, 20), 0.7);
+check('tie chooses A', chooseLowerCostThreshold(0.3, 20, 0.7, 20), 0.3);
+
+return results;`,
+    hints: [
+      'Compare costA and costB.',
+      'If costA is lower or tied, return thresholdA.',
+      'return costA <= costB ? thresholdA : thresholdB;',
+    ],
+    solution: `function chooseLowerCostThreshold(thresholdA, costA, thresholdB, costB) {
+  return costA <= costB ? thresholdA : thresholdB;
+}`,
+    explanation: 'Threshold selection is a decision problem, not just a metrics problem.',
+  },
+
+  {
+    id: 'drift-mean-shift',
+    stepLabel: '68.1',
+    group: 'Drift checks',
+    title: 'Mean shift',
+    concept: 'A simple drift check compares feature means between reference and current data.',
+    objective: 'Return currentMean - referenceMean.',
+    difficulty: 'warmup',
+    starterCode: `function meanShift(referenceMean, currentMean) {
+  // TODO: return current minus reference.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('positive shift', meanShift(10, 13), 3);
+check('negative shift', meanShift(10, 7), -3);
+check('no shift', meanShift(10, 10), 0);
+
+return results;`,
+    hints: [
+      'Shift is current value compared with reference.',
+      'Use currentMean - referenceMean.',
+      'return currentMean - referenceMean;',
+    ],
+    solution: `function meanShift(referenceMean, currentMean) {
+  return currentMean - referenceMean;
+}`,
+    explanation: 'Mean shift is a simple first warning that a feature distribution has changed.',
+  },
+
+  {
+    id: 'drift-standardized-mean-shift',
+    stepLabel: '68.2',
+    group: 'Drift checks',
+    title: 'Standardized mean shift',
+    concept: 'Standardized shift divides mean change by reference standard deviation.',
+    objective: 'Return (currentMean - referenceMean) / referenceStd.',
+    difficulty: 'core',
+    starterCode: `function standardizedMeanShift(referenceMean, currentMean, referenceStd) {
+  // TODO: return standardized shift.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('one std shift', standardizedMeanShift(10, 12, 2), 1);
+check('negative shift', standardizedMeanShift(10, 7, 3), -1);
+check('zero shift', standardizedMeanShift(10, 10, 5), 0);
+
+return results;`,
+    hints: [
+      'First compute currentMean - referenceMean.',
+      'Then divide by referenceStd.',
+      'return (currentMean - referenceMean) / referenceStd;',
+    ],
+    solution: `function standardizedMeanShift(referenceMean, currentMean, referenceStd) {
+  return (currentMean - referenceMean) / referenceStd;
+}`,
+    explanation: 'A shift of 2 units may be small or large depending on normal feature variation.',
+  },
+
+  {
+    id: 'drift-threshold-check',
+    stepLabel: '68.3',
+    group: 'Drift checks',
+    title: 'Drift threshold check',
+    concept: 'A drift alert can fire when absolute standardized shift exceeds a threshold.',
+    objective: 'Return true when |shift| > threshold.',
+    difficulty: 'core',
+    starterCode: `function driftAlert(standardizedShift, threshold) {
+  // TODO: return whether absolute shift exceeds threshold.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('large positive shift', driftAlert(2.5, 2), true);
+check('large negative shift', driftAlert(-2.5, 2), true);
+check('small shift', driftAlert(1.5, 2), false);
+check('equal threshold is not greater', driftAlert(2, 2), false);
+
+return results;`,
+    hints: [
+      'Use Math.abs.',
+      'Compare absolute shift with threshold.',
+      'return Math.abs(standardizedShift) > threshold;',
+    ],
+    solution: `function driftAlert(standardizedShift, threshold) {
+  return Math.abs(standardizedShift) > threshold;
+}`,
+    explanation: 'Drift checks are not proof of model failure, but they can trigger investigation.',
+  },
+
+  {
+    id: 'drift-psi-term',
+    stepLabel: '68.4',
+    group: 'Drift checks',
+    title: 'PSI term',
+    concept: 'Population Stability Index compares reference and current proportions in a bin.',
+    objective: 'Return (current - reference) * log(current / reference).',
+    difficulty: 'challenge',
+    starterCode: `function psiTerm(referenceProportion, currentProportion) {
+  // TODO: return one PSI bin contribution.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('same proportions', psiTerm(0.2, 0.2), 0);
+check('changed proportions', psiTerm(0.2, 0.4), (0.4 - 0.2) * Math.log(0.4 / 0.2));
+check('another change', psiTerm(0.5, 0.25), (0.25 - 0.5) * Math.log(0.25 / 0.5));
+
+return results;`,
+    hints: [
+      'PSI compares current and reference proportions.',
+      'Use Math.log(currentProportion / referenceProportion).',
+      'return (currentProportion - referenceProportion) * Math.log(currentProportion / referenceProportion);',
+    ],
+    solution: `function psiTerm(referenceProportion, currentProportion) {
+  return (currentProportion - referenceProportion) * Math.log(currentProportion / referenceProportion);
+}`,
+    explanation: 'PSI is a common monitoring heuristic for distribution shift across binned features.',
+  },
+
+  {
+    id: 'drift-total-psi',
+    stepLabel: '68.5',
+    group: 'Drift checks',
+    title: 'Total PSI',
+    concept: 'Total PSI sums bin-level PSI contributions.',
+    objective: 'Accumulate psiTerm for every bin.',
+    difficulty: 'challenge',
+    starterCode: `function psiTerm(referenceProportion, currentProportion) {
+  return (currentProportion - referenceProportion) * Math.log(currentProportion / referenceProportion);
+}
+
+function populationStabilityIndex(referenceBins, currentBins) {
+  let total = 0;
+
+  for (let i = 0; i < referenceBins.length; i++) {
+    // TODO: add PSI contribution for this bin.
+    total += 0;
+  }
+
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('no drift', populationStabilityIndex([0.5, 0.5], [0.5, 0.5]), 0);
+check('two-bin drift', populationStabilityIndex([0.5, 0.5], [0.25, 0.75]), psiTerm(0.5, 0.25) + psiTerm(0.5, 0.75));
+
+return results;`,
+    hints: [
+      'Use psiTerm(referenceBins[i], currentBins[i]).',
+      'Add each bin contribution to total.',
+      'total += psiTerm(referenceBins[i], currentBins[i]);',
+    ],
+    solution: `function psiTerm(referenceProportion, currentProportion) {
+  return (currentProportion - referenceProportion) * Math.log(currentProportion / referenceProportion);
+}
+
+function populationStabilityIndex(referenceBins, currentBins) {
+  let total = 0;
+
+  for (let i = 0; i < referenceBins.length; i++) {
+    total += psiTerm(referenceBins[i], currentBins[i]);
+  }
+
+  return total;
+}`,
+    explanation: 'PSI summarizes how much a binned distribution changed between reference and current data.',
+  },
 ];
