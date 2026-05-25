@@ -314,3 +314,18 @@ export function createCategoryLessonLabs(categoryId, domain) {
     .filter((lesson) => lesson.categoryId === categoryId)
     .map((lesson) => createLessonLabGroup(lesson, domain));
 }
+
+export function replaceLessonLabGroup(groups, lessonId, makeExercises) {
+  return groups.map((group) => {
+    if (group.lessonId !== lessonId) return group;
+
+    return {
+      ...group,
+      exercises: makeExercises(group).map((exercise, index) => ({
+        ...exercise,
+        group: group.lessonName,
+        stepLabel: group.exercises[index]?.stepLabel || `${group.groupNumber}.${index + 1}`,
+      })),
+    };
+  });
+}

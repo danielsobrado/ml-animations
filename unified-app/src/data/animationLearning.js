@@ -148,6 +148,7 @@ const EQUATION_OVERRIDES = {
   'rl-exploration': 'a\\sim\\begin{cases}\\operatorname{Random}(A)&\\epsilon\\\\ \\arg\\max_a Q(s,a)&1-\\epsilon\\end{cases}',
   'policy-gradients': '\\nabla J(\\theta)=\\mathbb{E}[G_t\\nabla_\\theta\\log\\pi_\\theta(a_t\\mid s_t)]',
   'actor-critic': 'A_t=G_t-V_\\phi(s_t)\\quad actor:\\nabla\\log\\pi_\\theta(a_t\\mid s_t)A_t',
+  'ppo-clipped-policy-gradient': 'L^{clip}=\\mathbb{E}[\\min(r_tA_t,\\operatorname{clip}(r_t,1-\\epsilon,1+\\epsilon)A_t)]',
   'reward-shaping': "r'=r+\\gamma\\Phi(s')-\\Phi(s)",
   'bloom-filter': 'p\\approx(1-e^{-kn/m})^k',
   pagerank: 'PR(v)=\\frac{1-d}{N}+d\\sum_{u\\in B_v}\\frac{PR(u)}{L(u)}',
@@ -964,6 +965,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate critic value and return to see how actor and critic update signals differ.',
     'Mistake to avoid: the critic is not the controller; it trains the actor by estimating value.',
     'Check understanding by predicting whether the actor should reinforce an action when return is below critic value.',
+  ),
+  'ppo-clipped-policy-gradient': cardSet(
+    'PPO solves the problem of making policy-gradient updates large enough to learn but small enough to stay stable.',
+    'It compares the new policy probability with the old collection policy and clips extra gain when the ratio moves too far.',
+    'The math takes the minimum of ratio times advantage and clipped-ratio times advantage.',
+    'Manipulate ratio, advantage, epsilon, and old probability to see which minibatch rows get clipped.',
+    'Mistake to avoid: clipping is not a monotonic-improvement proof; KL, entropy, and critic quality still matter.',
+    'Check understanding by predicting which side clips when the advantage sign changes.',
   ),
   'reward-shaping': cardSet(
     'Reward shaping solves sparse feedback by adding an immediate hint while preserving the real task reward.',

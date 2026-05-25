@@ -8815,10 +8815,10 @@ export const CONCEPT_MAPS = {
             label: "PPO / modern policy RL",
             tooltip: tip({
               short: "Production RL stacks combine actor-critic with clipped objectives and advantage norm.",
-              intuition: "Same actor–critic split appears inside TRPO, PPO, SAC variants.",
-              trap: "Hyperparameters from one algorithm do not transfer blindly.",
+              intuition: "PPO keeps the actor-critic split and adds a probability-ratio guardrail around each policy update.",
+              trap: "Clipping limits one update objective; it does not remove KL monitoring or value-loss tuning.",
             }),
-            lessonId: "policy-gradients",
+            lessonId: "ppo-clipped-policy-gradient",
           },
           {
             id: "ac-q-learning-contrast",
@@ -28814,6 +28814,181 @@ export const CONCEPT_MAPS = {
     ],
   },
 };
+
+function getAnimationForTargetedMap(animationId) {
+  const animation = allAnimations.find((item) => item.id === animationId);
+  if (!animation) {
+    throw new Error(`Cannot build targeted concept map for unknown lesson ${animationId}`);
+  }
+  return animation;
+}
+
+function makeTargetedConceptMap(animationId, centerTooltip, branchAdditions) {
+  const map = makeGeneratedConceptMap(getAnimationForTargetedMap(animationId));
+  return {
+    ...map,
+    center: {
+      ...map.center,
+      tooltip: tip({
+        ...map.center.tooltip,
+        ...centerTooltip,
+      }),
+    },
+    branches: map.branches.map((branch) => ({
+      ...branch,
+      children: [
+        ...(branchAdditions[branch.id] || []),
+        ...branch.children,
+      ],
+    })),
+  };
+}
+
+function linkedSimpleNode(topic, suffix, label, lessonId, tooltip) {
+  return {
+    ...simpleNode(topic, suffix, label, tooltip),
+    lessonId,
+  };
+}
+
+CONCEPT_MAPS.optimizers = makeTargetedConceptMap('optimizers', {
+  short: 'Optimizers turn mini-batch gradients into parameter steps, and the 3D landscape shows how the same loss surface yields different paths.',
+  intuition: 'SGD follows noisy local slope, momentum builds velocity across consistent directions, and Adam rescales the step by recent gradient magnitude.',
+  formula: 'theta_{t+1}=theta_t-eta*update(g_t,m_t,v_t)',
+  why: 'Optimizer behavior controls convergence, stability, and debugging for every neural-network training loop.',
+  trap: 'A smoother or faster-looking path is not automatically better; validation behavior and learning-rate checks still decide whether training is healthy.',
+  practice: 'Predict the first step direction and final loss trend before rotating the 3D landscape or changing the update rule.',
+}, {
+  prerequisites: [
+    simpleNode('optimizers', 'curvature-prereq', 'Loss curvature', {
+      short: 'Curvature controls how quickly the loss changes in each parameter direction.',
+      intuition: 'A steep narrow axis makes raw SGD zigzag while a shallow axis can need accumulated velocity.',
+      formula: 'L(x,y)=0.08(x+3)^2+0.55(y-1)^2',
+      example: 'The y direction is steeper than the x direction in the optimizer lesson surface.',
+      trap: 'Treating every parameter direction as equally scaled hides why Adam and momentum behave differently.',
+      practice: 'Identify the steep direction on the 3D surface, then predict which optimizer will damp the zigzag most.',
+    }),
+  ],
+  mechanism: [
+    simpleNode('optimizers', 'shared-simulation', 'Shared simulation', {
+      short: 'The 2D path, 3D path, statistics, and prediction check all read the same deterministic update simulation.',
+      intuition: 'One source of math truth prevents the visual layers from disagreeing about what the optimizer actually did.',
+      code: 'path = simulate({ optimizer, learningRate, momentum, batchSize, steps })',
+      example: 'Changing batch size alters the noise scale in both the contour path and the 3D trajectory.',
+      trap: 'A separate animation-only path can teach the wrong update if it drifts from the calculation.',
+      practice: 'Move learning rate once and compare final loss, 2D endpoint, and 3D endpoint for consistency.',
+    }),
+  ],
+  intuitions: [
+    simpleNode('optimizers', '3d-terrain', 'Terrain view', {
+      short: 'The 3D surface makes curvature visible as height and slope instead of a flat contour color.',
+      intuition: 'Rotating the terrain separates downhill direction from screen direction, which helps learners see overshoot and valley travel.',
+      example: 'A path can look short from above while still climbing or oscillating on the surface height.',
+      trap: 'Reading only the top-down contour can hide whether the step crossed a ridge or descended smoothly.',
+      practice: 'Rotate until the valley is side-on, then explain why the selected endpoint is above or below the start.',
+    }),
+  ],
+  'formula-code': [
+    simpleNode('optimizers', 'first-step-code', 'First-step check', {
+      short: 'The learner-facing prediction check is just the sign of the first simulated parameter delta.',
+      intuition: 'A prediction becomes verifiable when it is tied to the computed step rather than a vague visual impression.',
+      code: 'delta = path[1].theta - path[0].theta\nmove = sign(delta_x), sign(delta_y)',
+      example: 'If delta_x is positive and delta_y is negative, the first step is right and down.',
+      trap: 'Using the gradient sign directly without the negative learning-rate update flips the direction.',
+      practice: 'For SGD, compute theta_next = theta - eta*g on the first noisy gradient and compare with the button result.',
+    }),
+  ],
+  traps: [
+    simpleNode('optimizers', '3d-overtrust', 'Visual overtrust', {
+      short: 'A clean 3D trajectory can still represent a bad hyperparameter choice if validation loss or generalization is worse.',
+      intuition: 'The landscape is a training objective view, not a guarantee that the learned model will work on unseen data.',
+      example: 'A large Adam step may reach a low toy loss quickly while real validation behavior still degrades.',
+      trap: 'Choosing the prettiest path instead of checking held-out behavior repeats the Adam-is-always-best misconception.',
+      practice: 'Name one optimizer setting that lowers training loss but should still trigger a validation check.',
+    }),
+  ],
+  'used-later': [
+    linkedSimpleNode('optimizers', 'ppo-optimizer-link', 'Policy optimizer link', 'ppo-clipped-policy-gradient', {
+      short: 'PPO uses gradient-based optimization too, but its objective clips policy-ratio gains before the optimizer step applies.',
+      intuition: 'The optimizer lesson explains parameter steps; PPO explains how the RL objective shapes which gradients are allowed to be large.',
+      formula: 'step = optimizer(grad(clipped_surrogate))',
+      example: 'Adam may update PPO policy weights, while clipping controls the policy-gradient signal before Adam sees it.',
+      trap: 'Confusing the optimizer algorithm with the RL objective makes PPO clipping look like an Adam feature.',
+      practice: 'Open PPO after optimizers and point to the boundary between objective shaping and parameter updating.',
+      why: 'This connection links neural-network training dynamics to modern RL policy updates.',
+    }),
+  ],
+});
+
+CONCEPT_MAPS['ppo-clipped-policy-gradient'] = makeTargetedConceptMap('ppo-clipped-policy-gradient', {
+  short: 'PPO stabilizes policy-gradient learning by comparing new and old action probabilities and clipping excessive objective gains.',
+  intuition: 'The ratio says how much more or less likely the new policy made the sampled action; epsilon says how far that update may count.',
+  formula: 'L_clip=min(r_t*A_t, clip(r_t,1-epsilon,1+epsilon)*A_t)',
+  why: 'PPO is the practical bridge from actor-critic basics to modern RLHF, RLVR, and GRPO-style policy optimization.',
+  trap: 'Clipping is a local objective guardrail, not a proof that the whole policy improved.',
+  practice: 'Set a positive advantage and push ratio above 1+epsilon, then flip the advantage and push ratio below 1-epsilon.',
+}, {
+  prerequisites: [
+    linkedSimpleNode('ppo-clipped-policy-gradient', 'actor-critic-prereq', 'Actor-critic baseline', 'actor-critic', {
+      short: 'PPO normally uses an actor policy and a critic value estimate to compute advantages.',
+      intuition: 'The critic reduces return noise before the clipped policy objective decides how hard to move the actor.',
+      formula: 'A_t=G_t-V_phi(s_t)',
+      example: 'A high return above the critic estimate produces a positive advantage for the sampled action.',
+      trap: 'Skipping the critic makes PPO look like raw REINFORCE, missing why advantage quality matters.',
+      practice: 'Explain which part of the PPO lesson is policy update and which part depends on value estimation.',
+    }),
+  ],
+  mechanism: [
+    simpleNode('ppo-clipped-policy-gradient', 'ratio-clip-mechanism', 'Ratio clipping', {
+      short: 'PPO computes the new-to-old policy ratio, then compares unclipped and clipped surrogate objectives.',
+      intuition: 'The minimum blocks extra objective reward when a probability ratio moved too far in the advantage-favored direction.',
+      formula: 'r_t=pi_new(a_t|s_t)/pi_old(a_t|s_t)',
+      example: 'With positive advantage and ratio 1.5 at epsilon 0.2, the clipped candidate uses 1.2 instead of 1.5.',
+      trap: 'For negative advantages, the dangerous side is the lower ratio bound, not the upper bound.',
+      practice: 'Compute both candidates for one positive and one negative advantage row in the minibatch table.',
+    }),
+  ],
+  intuitions: [
+    simpleNode('ppo-clipped-policy-gradient', 'rubber-band-intuition', 'Rubber-band policy update', {
+      short: 'The old policy acts like a loose anchor; updates can move, but very large probability changes stop getting extra credit.',
+      intuition: 'This lets PPO reuse collected data for several epochs without letting one minibatch yank the policy too far.',
+      example: 'A ratio inside 0.8 to 1.2 receives normal pressure when epsilon is 0.2.',
+      trap: 'The anchor is not an absolute safety cage because KL can still drift across many samples and epochs.',
+      practice: 'Increase epsilon and explain why the green safe band widens while KL monitoring still matters.',
+    }),
+  ],
+  'formula-code': [
+    simpleNode('ppo-clipped-policy-gradient', 'clip-code', 'Clipped surrogate code', {
+      short: 'The PPO objective is small enough to trace by hand on one sample.',
+      intuition: 'Code exposes the sign-sensitive min operation that learners often misread from the formula alone.',
+      code: 'ratio = new_prob / old_prob\nclipped = clamp(ratio, 1-eps, 1+eps)\nloss_term = min(ratio * advantage, clipped * advantage)',
+      example: 'ratio=0.6, advantage=-2, epsilon=0.2 gives min(-1.2, -1.6) = -1.6.',
+      trap: 'Using max instead of min for a negative advantage rewards the wrong direction.',
+      practice: 'Run the three-line calculation for each row in the minibatch table and mark which rows are clipped.',
+    }),
+  ],
+  traps: [
+    simpleNode('ppo-clipped-policy-gradient', 'kl-drift-trap', 'KL drift trap', {
+      short: 'Clipping can reduce incentive for large local changes while the full policy distribution still drifts.',
+      intuition: 'Only sampled action ratios appear in the clipped term, so monitoring approximate KL and entropy remains necessary.',
+      formula: 'D_KL(pi_old || pi_new)',
+      example: 'Many small clipped-safe updates can accumulate into a policy that no longer explores enough.',
+      trap: 'Treating clipping as a complete trust-region proof ignores value loss, entropy collapse, and reward scaling.',
+      practice: 'Raise the ratio and old probability sliders, then explain why the KL metric should affect training decisions.',
+    }),
+  ],
+  'used-later': [
+    linkedSimpleNode('ppo-clipped-policy-gradient', 'grpo-contrast', 'GRPO contrast', 'reasoning-rlvr-grpo', {
+      short: 'GRPO keeps ratio and KL-style policy pressure but replaces PPO critic advantages with group-relative rewards.',
+      intuition: 'Learning PPO first makes the GRPO memory tradeoff clearer: the critic disappears, but policy-ratio discipline remains.',
+      formula: 'A_i=(r_i-mean(r))/(std(r)+epsilon)',
+      example: 'Reasoning RLVR can score several completions for one prompt and normalize them instead of training a value critic.',
+      trap: 'Assuming GRPO is unrelated to PPO hides the shared clipped-policy-gradient heritage.',
+      practice: 'Open GRPO after PPO and identify which column corresponds to advantage and which control corresponds to clipping.',
+      why: 'This is the direct bridge from classic RL policy optimization to the frontier reasoning lesson.',
+    }),
+  ],
+});
 
 for (const animation of allAnimations) {
   if (!CONCEPT_MAPS[animation.id]) {

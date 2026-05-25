@@ -64,6 +64,24 @@ test('lesson code lab exercises keep the Rustlings-style schema', () => {
   }
 });
 
+test('priority optimizer and PPO lessons use mathematical code labs', () => {
+  const optimizerLabIds = getLessonCodeLabExercises('optimizers').map((exercise) => exercise.id);
+  const ppoLabIds = getLessonCodeLabExercises('ppo-clipped-policy-gradient').map((exercise) => exercise.id);
+
+  assert.deepEqual(optimizerLabIds, [
+    'optimizers-minibatch-mean-gradient',
+    'optimizers-sgd-step',
+    'optimizers-momentum-velocity',
+    'optimizers-adam-bias-corrected-step',
+  ]);
+  assert.deepEqual(ppoLabIds, [
+    'ppo-policy-ratio',
+    'ppo-clip-ratio-bounds',
+    'ppo-clipped-surrogate',
+    'ppo-count-clipped-rows',
+  ]);
+});
+
 test('lesson code lab solutions pass their embedded tests', () => {
   const failures = [];
 

@@ -1502,6 +1502,32 @@ test('actor-critic follows policy gradients with a value-baseline lesson', () =>
   );
 });
 
+test('PPO clipped policy gradients follow actor-critic before reward shaping', () => {
+  const animation = getAnimationById('ppo-clipped-policy-gradient');
+  const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');
+  const rlPath = HUB_LEARNING_PATHS.find((path) => path.id === 'rl-path');
+  const grpo = getAnimationById('reasoning-rlvr-grpo');
+
+  assert.ok(animation, 'PPO clipped policy-gradient lesson should be active');
+  assert.equal(animation.categoryId, 'reinforcement-learning');
+  assert.ok(animation.trackIds.includes('rl-algorithms'));
+  assert.ok(rlTrack.animationIds.includes('ppo-clipped-policy-gradient'));
+  assert.ok(isAnimationAvailable('ppo-clipped-policy-gradient'));
+  assert.deepEqual(animation.prerequisites, ['policy-gradients', 'actor-critic', 'expected-value-variance']);
+  assert.match(animation.learningObjectives.join(' '), /ratio|clipped|KL/i);
+  assert.match(animation.commonMisconception, /monotonic improvement|diagnostics/i);
+  assert.ok(grpo.prerequisites.includes('ppo-clipped-policy-gradient'));
+
+  assert.ok(
+    rlPath.nodes.indexOf('actor-critic') < rlPath.nodes.indexOf('ppo-clipped-policy-gradient'),
+    'Actor-critic should precede PPO clipping',
+  );
+  assert.ok(
+    rlPath.nodes.indexOf('ppo-clipped-policy-gradient') < rlPath.nodes.indexOf('reward-shaping'),
+    'PPO clipping should precede reward shaping in the RL path',
+  );
+});
+
 test('reward shaping follows actor-critic with sparse-reward guidance', () => {
   const animation = getAnimationById('reward-shaping');
   const rlTrack = curriculumTracks.find((track) => track.id === 'rl-algorithms');

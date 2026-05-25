@@ -2081,6 +2081,39 @@ const SEEDED_LESSON_ASSESSMENTS = {
         answerIndex: 0,
         explanation: 'Adaptive optimizers change step scaling, but validation behavior still decides whether the setting works.',
       },
+      {
+        id: 'landscape-curvature',
+        prompt: 'In the 3D optimizer landscape, what does a steep narrow direction explain?',
+        choices: [
+          'Small parameter changes can produce large loss changes, so raw steps can zigzag or overshoot',
+          'The optimizer has found a validation-set guarantee',
+          'The batch size no longer affects gradient noise',
+        ],
+        answerIndex: 0,
+        explanation: 'Curvature controls how sensitive the loss is to motion in each parameter direction, which is why optimizer paths differ on the same surface.',
+      },
+      {
+        id: 'first-step-sign',
+        prompt: 'If the noisy gradient points positive in y, which way does a plain gradient-descent update move y?',
+        choices: [
+          'Downward in y because the update subtracts learning rate times gradient',
+          'Upward in y because the gradient is positive',
+          'Nowhere because gradients only affect loss display height',
+        ],
+        answerIndex: 0,
+        explanation: 'Parameter updates move opposite the gradient, so the sign of theta_next - theta is the negative of the gradient sign for SGD.',
+      },
+      {
+        id: 'adam-scaling-landscape',
+        prompt: 'Why can Adam take a different 3D path from momentum on the same gradient sequence?',
+        choices: [
+          'Adam divides the first-moment direction by a running estimate of squared-gradient scale',
+          'Adam changes the loss surface before every step',
+          'Adam ignores gradient signs after the first update',
+        ],
+        answerIndex: 0,
+        explanation: 'Adam uses both first and second gradient moments, so uneven curvature can produce per-parameter step scaling that differs from velocity alone.',
+      },
     ],
     labs: [
       {
@@ -2088,6 +2121,12 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Compare update rules',
         prompt: 'Run SGD, momentum, and Adam with the same learning rate and batch size, then identify which path zigzags least.',
         successCriteria: 'You can connect the visible path to velocity, adaptive scaling, or mini-batch noise.',
+      },
+      {
+        id: 'predict-then-rotate-landscape',
+        title: 'Predict then rotate the landscape',
+        prompt: 'Use the prediction check for the selected optimizer, then rotate the 3D surface and explain why the first step and final endpoint match the computed path.',
+        successCriteria: 'You can connect the first-step sign, surface curvature, endpoint height, and final loss statistic.',
       },
     ],
   },
@@ -3868,6 +3907,73 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Find the sign flip',
         prompt: 'Move critic value above and below return and watch the actor update switch from reinforcing to discouraging.',
         successCriteria: 'You can explain why the critic changes update sign without choosing actions itself.',
+      },
+    ],
+  },
+  'ppo-clipped-policy-gradient': {
+    quiz: [
+      {
+        id: 'positive-advantage-upper-clip',
+        prompt: 'With a positive advantage, which PPO ratio side can be clipped?',
+        choices: [
+          'A ratio above 1 + epsilon because extra probability increase stops getting extra objective gain',
+          'Only a ratio below 1 - epsilon because positive advantages always punish actions',
+          'No ratio can be clipped when the advantage is positive',
+        ],
+        answerIndex: 0,
+        explanation: 'For positive advantage, the unclipped objective keeps growing with ratio, so PPO caps the useful gain at the upper clipping bound.',
+      },
+      {
+        id: 'negative-advantage-lower-clip',
+        prompt: 'With a negative advantage, which ratio side is dangerous enough to activate PPO clipping?',
+        choices: [
+          'A ratio below 1 - epsilon because it would reduce the bad action too aggressively',
+          'A ratio above 1 + epsilon because it always improves the policy',
+          'Only a ratio exactly equal to 1',
+        ],
+        answerIndex: 0,
+        explanation: 'For negative advantage, the minimum selects the more conservative objective when the ratio falls too far below the lower bound.',
+      },
+      {
+        id: 'ratio-definition',
+        prompt: 'What does the PPO policy ratio r_t compare?',
+        choices: [
+          'The new policy probability for the sampled action divided by the old collection-policy probability',
+          'The critic value divided by the immediate reward',
+          'The training loss divided by the validation loss',
+        ],
+        answerIndex: 0,
+        explanation: 'PPO is an on-policy-style update that reuses sampled actions by comparing new action probability with the behavior policy probability.',
+      },
+      {
+        id: 'ppo-not-proof',
+        prompt: 'What is a PPO clipping misconception?',
+        choices: [
+          'Thinking clipping proves monotonic policy improvement without KL, entropy, or value-function checks',
+          'Computing both unclipped and clipped surrogate terms',
+          'Using advantages from an actor-critic baseline',
+        ],
+        answerIndex: 0,
+        explanation: 'PPO clipping is a practical guardrail, not the full trust-region guarantee; diagnostics still matter.',
+      },
+      {
+        id: 'kl-monitoring',
+        prompt: 'Why monitor approximate KL during PPO training?',
+        choices: [
+          'To detect policy drift that can accumulate even when individual clipped terms look acceptable',
+          'To replace the advantage calculation entirely',
+          'To make the old policy probability always equal one',
+        ],
+        answerIndex: 0,
+        explanation: 'The clipped objective only constrains sampled ratio gains locally, while the full policy distribution can still drift across updates.',
+      },
+    ],
+    labs: [
+      {
+        id: 'clip-sign-audit',
+        title: 'Audit clipping by advantage sign',
+        prompt: 'Set a positive advantage and push the ratio above 1 + epsilon, then set a negative advantage and push the ratio below 1 - epsilon.',
+        successCriteria: 'You can state which side clipped in each case and compute both surrogate candidates for one minibatch row.',
       },
     ],
   },

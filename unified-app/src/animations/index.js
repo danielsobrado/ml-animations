@@ -148,6 +148,7 @@ const animationRegistry = {
   'q-learning': lazy(() => import('./q-learning')),
   'policy-gradients': lazy(() => import('./policy-gradients')),
   'actor-critic': lazy(() => import('./actor-critic')),
+  'ppo-clipped-policy-gradient': lazy(() => import('./ppo-clipped-policy-gradient')),
   'reward-shaping': lazy(() => import('./reward-shaping')),
 
   // Algorithms & Data Structures

@@ -177,6 +177,7 @@ export const HUB_LEARNING_PATHS = [
       'rl-exploration',
       'policy-gradients',
       'actor-critic',
+      'ppo-clipped-policy-gradient',
       'reward-shaping',
       'pagerank',
     ],

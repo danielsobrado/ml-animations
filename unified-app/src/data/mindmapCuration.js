@@ -115,6 +115,7 @@ export const MINDMAP_CURATIONS = {
   'rl-exploration': ['Try enough to learn', 'Balance known reward with information gathering.', 'When should epsilon be high?', 'Pure greed can lock in a bad policy.'],
   'policy-gradients': ['Push up good actions', 'Increase probabilities of actions with high returns.', 'Which log-probability gets reinforced?', 'Returns can be noisy without baselines.'],
   'actor-critic': ['Policy plus value helper', 'Use a critic baseline to reduce actor update noise.', 'What did the critic predict versus what happened?', 'The critic guides learning but does not choose actions.'],
+  'ppo-clipped-policy-gradient': ['Clip oversized policy moves', 'Compare new and old action probabilities before applying the advantage update.', 'Which ratios get clipped for positive versus negative advantage?', 'Clipping helps stability but KL and entropy still need monitoring.'],
   'reward-shaping': ['Add helpful feedback safely', 'Make sparse rewards denser without changing the intended optimum.', 'Does the shaping preserve the best policy?', 'Bad shaping teaches the wrong game.'],
   'markov-chains': ['Next state depends on now', 'Model transitions where current state determines future probabilities.', 'Which transition is most likely next?', 'The Markov assumption may ignore useful history.'],
   'bloom-filter': ['Fast maybe-membership', 'Use multiple hashes to test set membership compactly.', 'Why are false positives possible?', 'False negatives should not happen after insertion.'],

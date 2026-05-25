@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { allAnimations } from './animations.js';
+import { allAnimations, categories } from './animations.js';
 import {
   CONCEPT_MAPS,
   NODE_TYPES,
@@ -18,12 +18,45 @@ const REQUIRED_BRANCH_IDS = [
   'used-later',
 ];
 
+const AUDIT_SENTINELS = {
+  'matrix-multiplication': [/shape|dimension/i, /row|column|dot/i, /commut|order matters/i, /linear map|composition/i],
+  'self-attention': [/sqrt|scale|scaled/i, /causal|mask/i, /head|concat/i, /residual|norm/i],
+  'classification-metrics': [/threshold|precision|recall/i, /calibration|brier|ece/i, /imbalance|class balance|base rate/i],
+  'cuped-variance-reduction': [/pre.?treatment|covariate/i, /variance/i, /post.?treatment|bias/i],
+  optimizers: [/curvature|valley/i, /momentum|velocity/i, /adam|squared-gradient|second moment/i, /mini.?batch|noise/i],
+  'ppo-clipped-policy-gradient': [/ratio/i, /advantage/i, /kl|entropy/i, /trust.?region|monotonic/i],
+};
+
+function mapSearchText(map) {
+  const parts = [map.center?.label, ...Object.values(map.center?.tooltip || {})];
+
+  for (const branch of map.branches || []) {
+    parts.push(branch.label, ...Object.values(branch.tooltip || {}));
+    for (const child of branch.children || []) {
+      parts.push(child.label, ...Object.values(child.tooltip || {}));
+    }
+  }
+
+  return parts.filter(Boolean).join('\n');
+}
+
 test('concept map module exports the required API', () => {
   assert.equal(typeof NODE_TYPES, 'object');
   assert.ok(Object.keys(NODE_TYPES).length > 0);
   assert.equal(typeof CONCEPT_MAPS, 'object');
   assert.equal(typeof getConceptMap, 'function');
   assert.equal(typeof isConceptMap, 'function');
+});
+
+test('concept map registry has no unowned ids', () => {
+  const ownedIds = new Set([
+    ...allAnimations.map((animation) => animation.id),
+    ...categories.map((category) => category.id),
+  ]);
+
+  for (const lessonId of Object.keys(CONCEPT_MAPS)) {
+    assert.ok(ownedIds.has(lessonId), `${lessonId} has a concept map but no active lesson or category`);
+  }
 });
 
 test('every live lesson has a structured six-branch concept map', () => {
@@ -63,6 +96,18 @@ test('every live lesson has a structured six-branch concept map', () => {
           );
         }
       }
+    }
+  }
+});
+
+test('audit-priority concept maps retain canonical nuance coverage', () => {
+  for (const [lessonId, patterns] of Object.entries(AUDIT_SENTINELS)) {
+    const map = getConceptMap(lessonId);
+    assert.ok(map, `${lessonId} should have a concept map`);
+
+    const text = mapSearchText(map);
+    for (const pattern of patterns) {
+      assert.match(text, pattern, `${lessonId} concept map should mention ${pattern}`);
     }
   }
 });

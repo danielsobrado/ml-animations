@@ -1,98 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { RotateCcw, SlidersHorizontal, TrendingDown } from 'lucide-react';
+import { CheckCircle2, RotateCcw, SlidersHorizontal, TrendingDown, XCircle } from 'lucide-react';
 import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
-
-const OPTIMIZERS = {
-  sgd: { label: 'SGD', detail: 'Uses the current mini-batch gradient directly.' },
-  momentum: { label: 'Momentum', detail: 'Builds velocity so repeated gradient directions compound.' },
-  adam: { label: 'Adam', detail: 'Normalizes momentum by a running estimate of squared gradients.' },
-};
-
-function loss([x, y]) {
-  return 0.08 * (x + 3) ** 2 + 0.55 * (y - 1) ** 2;
-}
-
-function trueGradient([x, y]) {
-  return [0.16 * (x + 3), 1.1 * (y - 1)];
-}
-
-function deterministicNoise(step, batchSize) {
-  const scale = 0.42 / Math.sqrt(batchSize);
-  return [
-    Math.sin(step * 1.7 + batchSize * 0.11) * scale,
-    Math.cos(step * 2.3 + batchSize * 0.07) * scale,
-  ];
-}
-
-function simulate({ optimizer, learningRate, momentum, batchSize, steps }) {
-  let theta = [-4.8, 3.6];
-  let velocity = [0, 0];
-  let firstMoment = [0, 0];
-  let secondMoment = [0, 0];
-  const beta2 = 0.96;
-  const path = [{ step: 0, theta, loss: loss(theta), grad: [0, 0] }];
-
-  for (let step = 1; step <= steps; step += 1) {
-    const exactGradient = trueGradient(theta);
-    const noise = deterministicNoise(step, batchSize);
-    const gradient = [exactGradient[0] + noise[0], exactGradient[1] + noise[1]];
-
-    if (optimizer === 'momentum') {
-      velocity = [
-        momentum * velocity[0] + gradient[0],
-        momentum * velocity[1] + gradient[1],
-      ];
-      theta = [
-        theta[0] - learningRate * velocity[0],
-        theta[1] - learningRate * velocity[1],
-      ];
-    } else if (optimizer === 'adam') {
-      firstMoment = [
-        momentum * firstMoment[0] + (1 - momentum) * gradient[0],
-        momentum * firstMoment[1] + (1 - momentum) * gradient[1],
-      ];
-      secondMoment = [
-        beta2 * secondMoment[0] + (1 - beta2) * gradient[0] ** 2,
-        beta2 * secondMoment[1] + (1 - beta2) * gradient[1] ** 2,
-      ];
-      const correctedFirst = [
-        firstMoment[0] / (1 - momentum ** step),
-        firstMoment[1] / (1 - momentum ** step),
-      ];
-      const correctedSecond = [
-        secondMoment[0] / (1 - beta2 ** step),
-        secondMoment[1] / (1 - beta2 ** step),
-      ];
-      theta = [
-        theta[0] - learningRate * correctedFirst[0] / (Math.sqrt(correctedSecond[0]) + 1e-6),
-        theta[1] - learningRate * correctedFirst[1] / (Math.sqrt(correctedSecond[1]) + 1e-6),
-      ];
-    } else {
-      theta = [
-        theta[0] - learningRate * gradient[0],
-        theta[1] - learningRate * gradient[1],
-      ];
-    }
-
-    path.push({ step, theta, loss: loss(theta), grad: gradient });
-  }
-
-  return path;
-}
-
-function project([x, y]) {
-  return {
-    cx: 60 + ((x + 5.5) / 5.5) * 420,
-    cy: 320 - ((y + 0.5) / 4.5) * 260,
-  };
-}
-
-function lossColor(value) {
-  if (value < 0.2) return '#ecfdf5';
-  if (value < 0.6) return '#dbeafe';
-  if (value < 1.4) return '#fef3c7';
-  return '#fee2e2';
-}
+import OptimizerLandscape3D from './OptimizerLandscape3D';
+import { OPTIMIZERS, loss, lossColor, project, simulate } from './optimizerModel';
 
 function Control({ label, value, children }) {
   return (
@@ -116,21 +26,48 @@ function Stat({ label, value, detail }) {
   );
 }
 
+function AnswerBadge({ selected, correct }) {
+  if (!selected) return null;
+  const isCorrect = selected === correct;
+  const Icon = isCorrect ? CheckCircle2 : XCircle;
+  return (
+    <p className={`mt-3 inline-flex items-center gap-2 rounded border px-3 py-2 text-sm font-bold ${isCorrect ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-rose-200 bg-rose-50 text-rose-800'}`}>
+      <Icon size={16} />
+      {isCorrect ? 'Matches the simulated update.' : 'Not for the current settings.'}
+    </p>
+  );
+}
+
 export default function OptimizersAnimation() {
   const [optimizer, setOptimizer] = useState('adam');
   const [learningRate, setLearningRate] = useState(0.18);
   const [momentum, setMomentum] = useState(0.85);
   const [batchSize, setBatchSize] = useState(8);
   const [steps, setSteps] = useState(18);
+  const [movePrediction, setMovePrediction] = useState(null);
+  const [lossPrediction, setLossPrediction] = useState(null);
 
-  const path = useMemo(
-    () => simulate({ optimizer, learningRate, momentum, batchSize, steps }),
-    [optimizer, learningRate, momentum, batchSize, steps],
+  const allPaths = useMemo(
+    () => Object.fromEntries(
+      Object.keys(OPTIMIZERS).map((id) => [
+        id,
+        simulate({ optimizer: id, learningRate, momentum, batchSize, steps }),
+      ]),
+    ),
+    [learningRate, momentum, batchSize, steps],
   );
+  const path = allPaths[optimizer];
   const finalPoint = path[path.length - 1];
   const bestPoint = path.reduce((best, point) => (point.loss < best.loss ? point : best), path[0]);
   const startLoss = path[0].loss;
   const improvement = Math.max(0, 1 - finalPoint.loss / startLoss);
+  const firstStep = path[1] || path[0];
+  const firstDelta = [
+    firstStep.theta[0] - path[0].theta[0],
+    firstStep.theta[1] - path[0].theta[1],
+  ];
+  const moveAnswer = `${firstDelta[0] >= 0 ? 'right' : 'left'}-${firstDelta[1] >= 0 ? 'up' : 'down'}`;
+  const lossAnswer = finalPoint.loss < startLoss - 0.02 ? 'lower' : finalPoint.loss > startLoss + 0.02 ? 'higher' : 'similar';
 
   const reset = () => {
     setOptimizer('adam');
@@ -138,6 +75,8 @@ export default function OptimizersAnimation() {
     setMomentum(0.85);
     setBatchSize(8);
     setSteps(18);
+    setMovePrediction(null);
+    setLossPrediction(null);
   };
 
   const contourCells = [];
@@ -220,6 +159,60 @@ export default function OptimizersAnimation() {
         <Stat label="Improvement" value={`${Math.round(improvement * 100)}%`} detail="from starting loss" />
         <Stat label="Noise scale" value={(0.42 / Math.sqrt(batchSize)).toFixed(2)} detail="mini-batch gradient jitter" />
       </div>
+
+      <section className="rounded-lg border border-slate-200 bg-white p-5">
+        <h3 className="text-sm font-black uppercase tracking-wide text-slate-600">Predict the update</h3>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">
+          Before reading the path, predict the first parameter movement and the final loss trend for the selected
+          optimizer. The check uses the same gradient, noise, and update rule as the visualizations.
+        </p>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-xs font-black uppercase tracking-wide text-slate-500">First step direction</p>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {[
+                ['right-down', 'right + down'],
+                ['right-up', 'right + up'],
+                ['left-down', 'left + down'],
+                ['left-up', 'left + up'],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setMovePrediction(id)}
+                  className={`min-h-[44px] rounded border px-3 py-2 text-sm font-bold ${movePrediction === id ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-700'}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <AnswerBadge selected={movePrediction} correct={moveAnswer} />
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-xs font-black uppercase tracking-wide text-slate-500">Final loss after selected steps</p>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {[
+                ['lower', 'lower'],
+                ['similar', 'about same'],
+                ['higher', 'higher'],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setLossPrediction(id)}
+                  className={`min-h-[44px] rounded border px-3 py-2 text-sm font-bold ${lossPrediction === id ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-700'}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <AnswerBadge selected={lossPrediction} correct={lossAnswer} />
+          </div>
+        </div>
+      </section>
+
+      <OptimizerLandscape3D paths={allPaths} activeOptimizer={optimizer} />
 
       <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
         <section className="rounded-lg border border-slate-200 bg-white p-5">
