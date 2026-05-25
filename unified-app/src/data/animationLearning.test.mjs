@@ -9,6 +9,7 @@ import {
   lessonAssessments,
 } from './lessonAssessments.js';
 import { getConceptMap } from './conceptMaps.js';
+import { summarizeCodeLabProgress } from './codeLabProgress.js';
 import { MINDMAP_CURATIONS } from './mindmapCuration.js';
 import { getCompletionStatus, isAssessmentComplete } from './learningProgress.js';
 import {
@@ -19,6 +20,7 @@ import {
 } from './animationLearning.js';
 import { GLOSSARY_IDS_BY_CATEGORY, getGlossaryTerm, glossaryTerms } from './glossaryRepository.js';
 import { isAnimationAvailable } from '../animations/index.js';
+import { getLessonCodeLabExercises } from '../labs/lesson-code/lessonCodeLabs.js';
 
 test('createLearningModel gives every animation the uniform learning shell contract', () => {
   for (const animation of allAnimations) {
@@ -1708,6 +1710,7 @@ test('experimentation and causal ML promotes the full causal roadmap into active
 
 test('assessment completion uses core mastery threshold and required labs', () => {
   const assessment = lessonAssessments['logistic-regression'];
+  const codeLabExercises = getLessonCodeLabExercises('logistic-regression');
   const status = getCompletionStatus(assessment, {});
   const requiredQuiz = assessment.quiz
     .filter((question) => question.countsForCompletion !== false)
@@ -1727,6 +1730,27 @@ test('assessment completion uses core mastery threshold and required labs', () =
       labs: completedLabs,
     }),
     true,
+  );
+
+  const codeLabProgress = {
+    'logistic-regression': Object.fromEntries(codeLabExercises.map((exercise) => [
+      exercise.id,
+      {
+        passed: true,
+        lastPassedAt: '2026-05-25T10:00:00.000Z',
+        checkCount: 3,
+      },
+    ])),
+  };
+
+  assert.equal(summarizeCodeLabProgress('logistic-regression', codeLabExercises, codeLabProgress).complete, true);
+  assert.equal(
+    isAssessmentComplete(assessment, {
+      quiz: completedQuiz,
+      labs: {},
+    }),
+    false,
+    'code-lab progress should not satisfy manual assessment lab requirements yet',
   );
 });
 

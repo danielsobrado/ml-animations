@@ -1,5 +1,13 @@
 import React from 'react';
-import { CheckCircle2, Circle, Eye, EyeOff, Lightbulb, Play, RotateCcw } from 'lucide-react';
+import { CheckCircle2, Circle, Download, Eye, EyeOff, Lightbulb, Play, RotateCcw, Upload } from 'lucide-react';
+import {
+  CODE_LAB_PROGRESS_EVENT,
+  exportCodeLabProgressJson,
+  importCodeLabProgressJson,
+  markCodeLabExercisePassed,
+  readCodeLabProgress,
+  summarizeCodeLabProgress,
+} from '../../data/codeLabProgress';
 import { runJavaScriptExercise } from './jsWorkerRunner';
 
 function statusForResults(results, error) {
@@ -47,22 +55,40 @@ function highlightJavaScript(code) {
   return parts;
 }
 
-export default function CodeFixLab({ exercises }) {
+export default function CodeFixLab({ exercises, progressScopeId, onProgressChange }) {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const activeExercise = exercises[activeIndex];
   const highlightRef = React.useRef(null);
+  const importInputRef = React.useRef(null);
 
   const [codeById, setCodeById] = React.useState(() => (
     Object.fromEntries(exercises.map((exercise) => [exercise.id, exercise.starterCode]))
   ));
   const [hintLevelById, setHintLevelById] = React.useState({});
   const [resultById, setResultById] = React.useState({});
+  const [persistedProgress, setPersistedProgress] = React.useState(() => (
+    progressScopeId ? readCodeLabProgress() : {}
+  ));
+  const [progressMessage, setProgressMessage] = React.useState('');
   const [running, setRunning] = React.useState(false);
   const [showSolution, setShowSolution] = React.useState(false);
 
   const code = codeById[activeExercise.id];
   const currentResult = resultById[activeExercise.id];
-  const status = statusForResults(currentResult?.results, currentResult?.error);
+  const progressSummary = React.useMemo(() => (
+    progressScopeId
+      ? summarizeCodeLabProgress(progressScopeId, exercises, persistedProgress)
+      : null
+  ), [exercises, persistedProgress, progressScopeId]);
+  const statusForExercise = React.useCallback((exercise) => {
+    const result = resultById[exercise.id];
+    const runtimeStatus = statusForResults(result?.results, result?.error);
+
+    if (runtimeStatus !== 'idle') return runtimeStatus;
+    if (progressScopeId && progressSummary?.passedIds.has(exercise.id)) return 'passed';
+    return 'idle';
+  }, [progressScopeId, progressSummary, resultById]);
+  const status = statusForExercise(activeExercise);
   const hintLevel = hintLevelById[activeExercise.id] || 0;
   const visibleHints = activeExercise.hints.slice(0, hintLevel);
   const canRevealSolution = Boolean(currentResult || hintLevel > 0);
@@ -87,6 +113,23 @@ export default function CodeFixLab({ exercises }) {
     return groups;
   }, [exercises]);
 
+  React.useEffect(() => {
+    if (!progressScopeId || typeof window === 'undefined') return undefined;
+
+    const refreshProgress = () => setPersistedProgress(readCodeLabProgress());
+    refreshProgress();
+    window.addEventListener(CODE_LAB_PROGRESS_EVENT, refreshProgress);
+
+    return () => {
+      window.removeEventListener(CODE_LAB_PROGRESS_EVENT, refreshProgress);
+    };
+  }, [progressScopeId]);
+
+  React.useEffect(() => {
+    if (!progressSummary || !onProgressChange) return;
+    onProgressChange(progressSummary);
+  }, [onProgressChange, progressSummary]);
+
   async function runTests() {
     setRunning(true);
     setShowSolution(false);
@@ -100,6 +143,18 @@ export default function CodeFixLab({ exercises }) {
       ...previous,
       [activeExercise.id]: runResult,
     }));
+
+    const passed = runResult.results?.length && runResult.results.every((check) => check.passed);
+
+    if (passed && progressScopeId) {
+      const nextProgress = markCodeLabExercisePassed({
+        scopeId: progressScopeId,
+        exerciseId: activeExercise.id,
+        checkCount: runResult.results.length,
+      });
+      setPersistedProgress(nextProgress);
+      setProgressMessage('Progress saved locally.');
+    }
 
     setRunning(false);
   }
@@ -141,9 +196,37 @@ export default function CodeFixLab({ exercises }) {
     highlightRef.current.scrollLeft = event.currentTarget.scrollLeft;
   }
 
-  const passedCount = Object.values(resultById).filter((result) => (
+  function exportProgress() {
+    const blob = new Blob([exportCodeLabProgressJson()], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = 'ml-animations-code-lab-progress.json';
+    link.click();
+    URL.revokeObjectURL(url);
+    setProgressMessage('Progress JSON exported.');
+  }
+
+  async function importProgress(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const nextProgress = importCodeLabProgressJson(await file.text());
+      setPersistedProgress(nextProgress);
+      setProgressMessage('Progress JSON imported.');
+    } catch {
+      setProgressMessage('Import failed. Choose a valid progress JSON file.');
+    } finally {
+      event.target.value = '';
+    }
+  }
+
+  const localPassedCount = Object.values(resultById).filter((result) => (
     result?.results?.length && result.results.every((check) => check.passed)
   )).length;
+  const passedCount = progressSummary ? progressSummary.passedCount : localPassedCount;
 
   return (
     <section className="ua-codefix-lab">
@@ -154,13 +237,35 @@ export default function CodeFixLab({ exercises }) {
           Each exercise is almost complete. Change the smallest piece of code needed
           to make the tests pass.
         </p>
+        <div className="ua-codefix-persistence">
+          <strong>Passed {passedCount}/{exercises.length} locally</strong>
+          {progressScopeId && (
+            <div className="ua-codefix-persistence-actions">
+              <button type="button" onClick={exportProgress}>
+                <Download size={14} aria-hidden="true" />
+                Export progress
+              </button>
+              <button type="button" onClick={() => importInputRef.current?.click()}>
+                <Upload size={14} aria-hidden="true" />
+                Import progress
+              </button>
+              <input
+                ref={importInputRef}
+                type="file"
+                accept="application/json,.json"
+                onChange={importProgress}
+                hidden
+              />
+            </div>
+          )}
+          {progressMessage && <small>{progressMessage}</small>}
+        </div>
       </div>
 
       <div className="ua-codefix-progress">
         {exerciseGroups.map((group) => {
           const passedInGroup = group.items.filter(({ exercise }) => {
-            const result = resultById[exercise.id];
-            return result?.results?.length && result.results.every((check) => check.passed);
+            return statusForExercise(exercise) === 'passed';
           }).length;
 
           return (
@@ -172,8 +277,7 @@ export default function CodeFixLab({ exercises }) {
 
               <div className="ua-codefix-progress-steps">
                 {group.items.map(({ exercise, index }) => {
-                  const result = resultById[exercise.id];
-                  const exerciseStatus = statusForResults(result?.results, result?.error);
+                  const exerciseStatus = statusForExercise(exercise);
                   const Icon = exerciseStatus === 'passed' ? CheckCircle2 : Circle;
 
                   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import CodeFixLab from '../code-fix/CodeFixLab';
 import { getAlgebraCodeLabsForLesson } from './algebraLessonCodeLabs';
 
-export default function AlgebraCodeLab({ exercises, lessonId }) {
+export default function AlgebraCodeLab({ exercises, lessonId, progressScopeId }) {
   const [catalogueExercises, setCatalogueExercises] = useState(null);
 
   const lessonExercises = useMemo(
@@ -35,5 +35,10 @@ export default function AlgebraCodeLab({ exercises, lessonId }) {
     );
   }
 
-  return <CodeFixLab exercises={selectedExercises} />;
+  return (
+    <CodeFixLab
+      exercises={selectedExercises}
+      progressScopeId={progressScopeId || lessonId}
+    />
+  );
 }

@@ -965,6 +965,40 @@ body {
   line-height: 1.55;
 }
 
+.ua-codefix-persistence {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ua-codefix-persistence strong,
+.ua-codefix-persistence small {
+  color: #6d6254;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ua-codefix-persistence-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ua-codefix-persistence-actions button {
+  align-items: center;
+  background: rgba(255, 253, 247, 0.86);
+  border: 1px solid #d8cfba;
+  border-radius: 8px;
+  color: var(--ds-accent);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  gap: 6px;
+  padding: 7px 9px;
+}
+
 .ua-codefix-progress {
   display: flex;
   gap: 0.75rem;
@@ -2602,6 +2636,15 @@ html.ua-concept-map-expanded .ua-concept-map--expanded:not(.ua-concept-map--cura
   font-family: var(--ds-font-serif);
   font-size: 13px;
   line-height: 1.35;
+  text-align: center;
+}
+
+.ua-assessment-code-progress {
+  grid-column: 1 / -1;
+  color: var(--ds-accent);
+  font-size: 13px;
+  font-weight: 800;
+  margin: 0;
   text-align: center;
 }
 

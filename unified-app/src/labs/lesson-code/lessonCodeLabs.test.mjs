@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { allAnimations } from '../../data/animations.js';
+import { summarizeCodeLabProgress } from '../../data/codeLabProgress.js';
 import {
   LESSON_CODE_LAB_BY_ID,
   LESSON_CODE_LAB_GROUPS,
@@ -95,4 +96,28 @@ test('lesson pages and the central labs route can resolve code lab groups', asyn
   assert.match(animationPageSource, /LessonCodeLab/);
   assert.match(matrixLessonSource, /AlgebraCodeLab/);
   assert.match(matrixLessonSource, /3\. Code Lab/);
+});
+
+test('code lab progress summaries are scoped to the selected lesson exercises', () => {
+  const matrixExercises = getLessonCodeLabExercises('matrix-multiplication');
+  const bagExercises = getLessonCodeLabExercises('bag-of-words');
+  const progress = {
+    'matrix-multiplication': {
+      [matrixExercises[0].id]: {
+        passed: true,
+        lastPassedAt: '2026-05-25T10:00:00.000Z',
+        checkCount: 3,
+      },
+      [bagExercises[0].id]: {
+        passed: true,
+        lastPassedAt: '2026-05-25T10:01:00.000Z',
+        checkCount: 3,
+      },
+    },
+  };
+  const summary = summarizeCodeLabProgress('matrix-multiplication', matrixExercises, progress);
+
+  assert.equal(summary.passedCount, 1);
+  assert.equal(summary.totalCount, matrixExercises.length);
+  assert.deepEqual([...summary.passedIds], [matrixExercises[0].id]);
 });

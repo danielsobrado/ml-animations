@@ -103,7 +103,11 @@ export default function LabsPage() {
                   </div>
                   <Link to={`/animation/${selectedGroup.lessonId}`}>Open lesson</Link>
                 </div>
-                <CodeFixLab key={selectedGroup.lessonId} exercises={selectedGroup.exercises} />
+                <CodeFixLab
+                  key={selectedGroup.lessonId}
+                  exercises={selectedGroup.exercises}
+                  progressScopeId={selectedGroup.lessonId}
+                />
               </>
             ) : (
               <div className="ds-panel ua-placeholder">

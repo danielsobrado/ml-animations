@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight, Circle, Eye, FlaskConical } from 'lucide-react';
 import InlineMathText from '../common/InlineMathText';
+import {
+  CODE_LAB_PROGRESS_EVENT,
+  readCodeLabProgress,
+  summarizeCodeLabProgress,
+} from '../../data/codeLabProgress';
 import { getLessonAssessment, hasAssessmentContent } from '../../data/lessonAssessments';
 import {
   getCompletionStatus,
@@ -9,6 +14,7 @@ import {
   readAssessmentProgress,
   updateLessonProgress,
 } from '../../data/learningProgress';
+import { getLessonCodeLabExercises } from '../../labs/lesson-code/lessonCodeLabs';
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -58,10 +64,12 @@ export default function AssessmentPanel({
   const scenarioItems = assessment.scenarioQuestions || [];
   const quizItems = assessment.quiz || [];
   const reviewItems = assessment.strategyReview || [];
+  const codeLabExercises = useMemo(() => getLessonCodeLabExercises(lessonId), [lessonId]);
   const [quizPage, setQuizPage] = useState(0);
   const [reviewPage, setReviewPage] = useState(0);
   const [showReview, setShowReview] = useState(false);
   const [revealedReview, setRevealedReview] = useState(() => new Set());
+  const [codeLabProgress, setCodeLabProgress] = useState(() => readCodeLabProgress());
   const [lessonProgress, setLessonProgress] = useState(() => (
     getLessonProgress(readAssessmentProgress(), lessonId)
   ));
@@ -72,6 +80,19 @@ export default function AssessmentPanel({
     setShowReview(false);
     setRevealedReview(new Set());
     setLessonProgress(getLessonProgress(readAssessmentProgress(), lessonId));
+  }, [lessonId]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const refreshProgress = () => setCodeLabProgress(readCodeLabProgress());
+
+    refreshProgress();
+    window.addEventListener(CODE_LAB_PROGRESS_EVENT, refreshProgress);
+
+    return () => {
+      window.removeEventListener(CODE_LAB_PROGRESS_EVENT, refreshProgress);
+    };
   }, [lessonId]);
 
   const hasStructuredAssessment = hasAssessmentContent(assessment);
@@ -90,6 +111,9 @@ export default function AssessmentPanel({
   const reviewPageStart = activeReviewPage * QUESTIONS_PER_PAGE;
   const pageReviewItems = reviewItems.slice(reviewPageStart, reviewPageStart + QUESTIONS_PER_PAGE);
   const answeredCount = quizItems.filter((question) => lessonProgress.quiz?.[question.id]?.correct === true).length;
+  const codeLabSummary = codeLabExercises.length > 0
+    ? summarizeCodeLabProgress(lessonId, codeLabExercises, codeLabProgress)
+    : null;
   const activeLevel = pageQuestions.find((question) => question.level)?.level;
   const requiredPercent = Math.round(completionStatus.policy.passThreshold * 100);
   const labRequirement = completionStatus.requiredLabCount > 0
@@ -156,6 +180,11 @@ export default function AssessmentPanel({
             ? 'Completed locally.'
             : `${completionStatus.correctCoreCount}/${completionStatus.requiredQuestionCount} core correct. ${requiredPercent}% core pass${labRequirement} marks completion; the full ${quizItems.length}-question bank is practice.`}
         </p>
+        {codeLabSummary && (
+          <p className="ua-assessment-code-progress">
+            Code lab progress: {codeLabSummary.passedCount}/{codeLabSummary.totalCount} passed locally.
+          </p>
+        )}
       </div>
 
       {scenarioItems.length > 0 && (

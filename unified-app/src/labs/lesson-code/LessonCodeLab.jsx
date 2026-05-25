@@ -13,7 +13,7 @@ export default function LessonCodeLab({ lessonId }) {
       <div className="ua-lesson-code-lab-link">
         <Link to="/labs">Open all code labs</Link>
       </div>
-      <CodeFixLab key={lessonId} exercises={exercises} />
+      <CodeFixLab key={lessonId} exercises={exercises} progressScopeId={lessonId} />
     </section>
   );
 }
