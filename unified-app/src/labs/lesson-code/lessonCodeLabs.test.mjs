@@ -89,7 +89,10 @@ test('lesson pages and the central labs route can resolve code lab groups', asyn
 
   const appSource = await readFile(new URL('../../App.jsx', import.meta.url), 'utf8');
   const animationPageSource = await readFile(new URL('../../pages/AnimationPage.jsx', import.meta.url), 'utf8');
+  const matrixLessonSource = await readFile(new URL('../../animations/matrix-multiplication/index.jsx', import.meta.url), 'utf8');
 
   assert.match(appSource, /path="\/labs"/);
   assert.match(animationPageSource, /LessonCodeLab/);
+  assert.match(matrixLessonSource, /AlgebraCodeLab/);
+  assert.match(matrixLessonSource, /3\. Code Lab/);
 });

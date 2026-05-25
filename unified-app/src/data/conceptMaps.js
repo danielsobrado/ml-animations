@@ -143,7 +143,7 @@ function branchNodeDefaults(map, branch, node) {
 
   if (branch.id === 'formula-code') {
     defaults.example = `Write the smallest ${topic} calculation that contains ${concept}, even if it is only pseudocode or one symbolic line.`;
-    defaults.code = `// ${topic}: trace ${concept} on a toy input`;
+    defaults.code = codeSnippetFor(lessonForMap(map), node);
     defaults.practice = `Implement or calculate the smallest ${topic} example involving ${concept}, then change one input and predict the effect.`;
   }
 
@@ -217,6 +217,368 @@ function simpleNode(topic, suffix, label, tooltip) {
     label,
     tooltip: tip(tooltip),
   };
+}
+
+function codeIdentifier(value) {
+  const identifier = slugPart(value).replaceAll('-', '_');
+  return /^[a-z_]/.test(identifier) ? identifier : `lesson_${identifier}`;
+}
+
+function lessonForMap(map) {
+  return allAnimations.find((animation) => animation.id === map.center.id) || {
+    id: map.center.id,
+    name: map.center.label,
+    categoryName: 'machine learning',
+    description: `${map.center.label} lesson`,
+  };
+}
+
+function codeFamily(animation) {
+  const text = [
+    animation.id,
+    animation.name,
+    animation.categoryName,
+    animation.description,
+  ].join(' ').toLowerCase();
+
+  if (/(diffusion|vae|latent|denois|unet|u-net|dit|sd3|flow matching)/.test(text)) {
+    return 'diffusion';
+  }
+  if (/(self-attention|attention|transformer|rope|positional|kv-cache|token generation|moe|residual|gpt|bert|t5|llm)/.test(text)) {
+    return 'attention';
+  }
+  if (/(rag|retriev|chunk|vector index|rerank|ground)/.test(text)) {
+    return 'rag';
+  }
+  if (/(rl|reinforcement|mdp|q-learning|policy|reward|value iteration|actor-critic|exploration)/.test(text)) {
+    return 'rl';
+  }
+  if (/(matrix|linear algebra|svd|pca|eigen|projection|rank|qr|pseudoinverse|subspace|decomposition)/.test(text)) {
+    return 'linalg';
+  }
+  if (/(probability|likelihood|mle|confidence|hypothesis|sample|treatment|propensity|correlation|sequential|statistic|variance|expected value|power)/.test(text)) {
+    return 'stats';
+  }
+  if (/(neural|relu|softmax|optimizer|gradient|training loop|dropout|batchnorm|lstm|pooling|cnn|activation|loss)/.test(text)) {
+    return 'neural';
+  }
+  if (/(token|bpe|word2vec|glove|fasttext|embedding|bag of words|nlp|language)/.test(text)) {
+    return 'nlp';
+  }
+  if (/(tree|forest|boost|knn|naive bayes|svm|logistic|linear regression|k-means|calibration|roc|regularization|overfitting|validation|scaling|preprocessing|ensemble)/.test(text)) {
+    return 'classic-ml';
+  }
+  if (/(markov|pagerank|graph)/.test(text)) {
+    return 'graph';
+  }
+  return 'generic';
+}
+
+function codeSnippetFor(animation, node) {
+  const topic = codeIdentifier(animation.id || animation.name);
+  const concept = codeIdentifier(node?.label || 'concept');
+  const header = `# ${animation.name}: ${node?.label || 'key step'}`;
+  const id = animation.id || '';
+  const text = [
+    animation.id,
+    animation.name,
+    node?.label,
+    animation.description,
+  ].join(' ').toLowerCase();
+
+  if (/matrix-multiplication/.test(id)) {
+    return [
+      header,
+      'import numpy as np',
+      'C = np.zeros((A.shape[0], B.shape[1]))',
+      'for i in range(A.shape[0]):',
+      '    for j in range(B.shape[1]):',
+      '        C[i, j] = sum(A[i, k] * B[k, j] for k in range(A.shape[1]))',
+    ].join('\n');
+  }
+
+  if (/(pca|principal)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'Xc = X - X.mean(axis=0)',
+      'cov = Xc.T @ Xc / (len(Xc) - 1)',
+      'eigvals, eigvecs = np.linalg.eigh(cov)',
+      'W = eigvecs[:, np.argsort(eigvals)[-k:]]',
+      'Z = Xc @ W',
+    ].join('\n');
+  }
+
+  if (/(svd|low-rank|decomposition)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'U, S, Vt = np.linalg.svd(A, full_matrices=False)',
+      'A_k = U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :]',
+      'error = np.linalg.norm(A - A_k)',
+    ].join('\n');
+  }
+
+  if (/(projection|least-squares|pseudoinverse)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'beta = np.linalg.pinv(X) @ y',
+      'y_hat = X @ beta',
+      'residual = y - y_hat',
+      'assert abs(X.T @ residual).max() < 1e-8',
+    ].join('\n');
+  }
+
+  if (/(qr|orthogonal)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'Q, R = np.linalg.qr(A)',
+      'assert np.allclose(Q.T @ Q, np.eye(Q.shape[1]))',
+      'assert np.allclose(A, Q @ R)',
+    ].join('\n');
+  }
+
+  if (/(eigen|markov|pagerank)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'state = np.ones(P.shape[0]) / P.shape[0]',
+      'for _ in range(50):',
+      '    state = state @ P',
+      'state = state / state.sum()',
+    ].join('\n');
+  }
+
+  if (/(softmax|sampling strategies|token generation)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'logits = logits / temperature',
+      'probs = np.exp(logits - logits.max())',
+      'probs = probs / probs.sum()',
+      'next_token = np.random.choice(len(probs), p=probs)',
+    ].join('\n');
+  }
+
+  if (/(classifier-free-guidance|cfg|guidance)/.test(text)) {
+    return [
+      header,
+      'eps_uncond = denoiser(z_t, t, conditioning=None)',
+      'eps_cond = denoiser(z_t, t, conditioning=prompt)',
+      'eps_hat = eps_uncond + guidance_scale * (eps_cond - eps_uncond)',
+      'z_prev = scheduler.step(z_t, eps_hat, t)',
+    ].join('\n');
+  }
+
+  if (/(vae|variational autoencoder)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'mu, logvar = encoder(x)',
+      'eps = np.random.randn(*mu.shape)',
+      'z = mu + np.exp(0.5 * logvar) * eps',
+      'x_hat = decoder(z)',
+      'kl = -0.5 * np.sum(1 + logvar - mu**2 - np.exp(logvar))',
+    ].join('\n');
+  }
+
+  if (/(diffusion|vae|latent|denois|unet|u-net|dit|sd3|flow matching)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'eps = np.random.randn(*x.shape)',
+      'z_t = alpha_t * x + sigma_t * eps',
+      'eps_hat = denoiser(z_t, t, conditioning)',
+      'x_prev = (z_t - sigma_t * eps_hat) / alpha_t',
+    ].join('\n');
+  }
+
+  if (/(relu|activation)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'z = x @ W + b',
+      'h = np.maximum(0, z)',
+      'dead_units = (h == 0).mean(axis=0)',
+    ].join('\n');
+  }
+
+  if (/(optimizer|gradient descent|training loop)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'for batch_x, batch_y in loader:',
+      '    loss = model.loss(batch_x, batch_y)',
+      '    grads = backward(loss)',
+      '    params = [p - lr * g for p, g in zip(params, grads)]',
+      '    assert np.isfinite(loss)',
+    ].join('\n');
+  }
+
+  if (/(linear regression|logistic regression|regularization)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'logit = X @ weights + bias',
+      'pred = 1 / (1 + np.exp(-logit))',
+      'loss = -(y * np.log(pred) + (1 - y) * np.log(1 - pred)).mean()',
+      'loss += lam * np.sum(weights ** 2)',
+    ].join('\n');
+  }
+
+  if (/(k-means|knn|naive bayes|svm|tree|ensemble|forest|boost)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'dist = ((X[:, None, :] - centers[None, :, :]) ** 2).sum(axis=2)',
+      'labels = dist.argmin(axis=1)',
+      'centers = np.stack([X[labels == c].mean(axis=0) for c in range(k)])',
+    ].join('\n');
+  }
+
+  if (/(roc|precision|recall|calibration|validation|overfitting|split)/.test(text)) {
+    return [
+      header,
+      'threshold = 0.5',
+      'pred = scores >= threshold',
+      'tp = ((pred == 1) & (y == 1)).sum()',
+      'fp = ((pred == 1) & (y == 0)).sum()',
+      'fn = ((pred == 0) & (y == 1)).sum()',
+      'precision = tp / max(tp + fp, 1)',
+      'recall = tp / max(tp + fn, 1)',
+    ].join('\n');
+  }
+
+  if (/(confidence|sample|hypothesis|mle|likelihood|distribution|treatment|propensity|correlation|peeking|power)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'estimate = sample.mean()',
+      'stderr = sample.std(ddof=1) / np.sqrt(len(sample))',
+      'ci = (estimate - 1.96 * stderr, estimate + 1.96 * stderr)',
+      'log_likelihood = np.log(probabilities).sum()',
+    ].join('\n');
+  }
+
+  if (/(tokenization|tokenizer|bpe)/.test(text)) {
+    return [
+      header,
+      'tokens = text.split()',
+      'pairs = [(a, b) for a, b in zip(tokens, tokens[1:])]',
+      'best_pair = max(pair_counts, key=pair_counts.get)',
+      'tokens = merge_pair(tokens, best_pair)',
+    ].join('\n');
+  }
+
+  if (/(word2vec|glove|fasttext|embedding|bag of words)/.test(text)) {
+    return [
+      header,
+      'import numpy as np',
+      'center = embeddings[center_id]',
+      'context = embeddings[context_ids].mean(axis=0)',
+      'score = center @ context',
+      'loss = -np.log(1 / (1 + np.exp(-score)))',
+    ].join('\n');
+  }
+
+  const snippets = {
+    attention: [
+      header,
+      'import numpy as np',
+      'Q, K, V = x @ Wq, x @ Wk, x @ Wv',
+      'scores = Q @ K.T / np.sqrt(K.shape[-1])',
+      'weights = np.exp(scores - scores.max(axis=-1, keepdims=True))',
+      'weights = weights / weights.sum(axis=-1, keepdims=True)',
+      'out = weights @ V',
+    ],
+    rag: [
+      header,
+      'import numpy as np',
+      'q = embed(query)',
+      'D = np.stack([embed(doc) for doc in docs])',
+      'scores = D @ q',
+      'top = np.argsort(scores)[-k:][::-1]',
+      'context = [docs[i] for i in top]',
+    ],
+    rl: [
+      header,
+      'import numpy as np',
+      'q = np.zeros((n_states, n_actions))',
+      'target = reward + gamma * q[next_state].max()',
+      'q[state, action] += alpha * (target - q[state, action])',
+      'policy_action = q[state].argmax()',
+    ],
+    diffusion: [
+      header,
+      'import numpy as np',
+      'eps = np.random.randn(*x.shape)',
+      'z = alpha_t * x + sigma_t * eps',
+      'eps_hat = model(z, t, conditioning)',
+      'x_next = (z - sigma_t * eps_hat) / alpha_t',
+    ],
+    linalg: [
+      header,
+      'import numpy as np',
+      'A = np.asarray(A)',
+      'B = np.asarray(B)',
+      'result = A @ B',
+      'assert result.shape == (A.shape[0], B.shape[1])',
+    ],
+    stats: [
+      header,
+      'import numpy as np',
+      'p = model_probability(x)',
+      'p = np.clip(p, 1e-8, 1 - 1e-8)',
+      'loss = -(y * np.log(p) + (1 - y) * np.log(1 - p)).mean()',
+      'estimate = np.mean(sample)',
+    ],
+    neural: [
+      header,
+      'import numpy as np',
+      'z = x @ W + b',
+      'h = np.maximum(0, z)',
+      'logits = h @ W_out + b_out',
+      'probs = np.exp(logits - logits.max())',
+      'probs = probs / probs.sum()',
+    ],
+    nlp: [
+      header,
+      'tokens = tokenize(text)',
+      'ids = [vocab[token] for token in tokens]',
+      'vectors = embedding_matrix[ids]',
+      'representation = vectors.mean(axis=0)',
+      'nearest = similarity_search(representation)',
+    ],
+    'classic-ml': [
+      header,
+      'import numpy as np',
+      'X = np.asarray(X)',
+      'y = np.asarray(y)',
+      'score = X @ weights + bias',
+      'prediction = score > threshold',
+      'error = prediction.astype(int) - y',
+    ],
+    graph: [
+      header,
+      'import numpy as np',
+      'P = transition_matrix / transition_matrix.sum(axis=1, keepdims=True)',
+      'state = np.ones(P.shape[0]) / P.shape[0]',
+      'for _ in range(20):',
+      '    state = state @ P',
+    ],
+    generic: [
+      header,
+      `def ${topic}_${concept}(toy_input):`,
+      '    state = make_state(toy_input)',
+      '    result = apply_core_rule(state)',
+      '    assert is_valid(result)',
+      '    return result',
+    ],
+  };
+
+  return snippets[codeFamily(animation)].join('\n');
 }
 
 function nearbyLessons(animation) {

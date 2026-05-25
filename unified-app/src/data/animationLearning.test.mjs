@@ -147,6 +147,9 @@ test('curated concept maps answer the six learning questions with concrete pract
       );
       assert.ok(tooltip.trap, `${animation.id}/${node.id} needs a trap`);
       assert.ok(tooltip.practice, `${animation.id}/${node.id} needs practice guidance`);
+      if (branch.id === 'formula-code') {
+        assert.ok(tooltip.code, `${animation.id}/${node.id} needs a code snippet`);
+      }
       assert.ok(
         tooltipWordCount(tooltip) >= 40,
         `${animation.id}/${node.id} is too thin for a useful concept map`,
