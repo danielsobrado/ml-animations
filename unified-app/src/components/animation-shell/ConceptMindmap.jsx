@@ -1,10 +1,64 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FlaskConical } from 'lucide-react';
+import { FlaskConical, Minus, Plus } from 'lucide-react';
 import MindElixir, { SIDE } from 'mind-elixir';
 import 'mind-elixir/style.css';
 import { isConceptMap, NODE_TYPES } from '../../data/conceptMaps';
 import ConceptTooltip from './ConceptTooltip';
+
+const MAP_SCALE_MIN = 0.25;
+const MAP_SCALE_MAX = 2.5;
+const MAP_SCALE_SENSITIVITY = 0.12;
+const WHEEL_ZOOM_LINE_HEIGHT = 40;
+const WHEEL_ZOOM_PIXEL_STEP = 10;
+
+function normalizeWheelDelta(event) {
+  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * WHEEL_ZOOM_LINE_HEIGHT;
+  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+    return event.deltaY * (window.innerHeight || 800);
+  }
+  return event.deltaY;
+}
+
+function getWheelZoomScaleDelta(event, scaleSensitivity, viewportHeight) {
+  const normalizedDelta = normalizeWheelDelta(event);
+  const rawScaleDelta = (-normalizedDelta / WHEEL_ZOOM_PIXEL_STEP) * scaleSensitivity;
+  return Math.max(-scaleSensitivity, Math.min(scaleSensitivity, rawScaleDelta));
+}
+
+function handleMapWheel(mind, event) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (event.shiftKey) {
+    mind.move(-event.deltaX, -event.deltaY);
+    return;
+  }
+  const scaleDelta = getWheelZoomScaleDelta(
+    event,
+    mind.scaleSensitivity,
+    mind.container.clientHeight || window.innerHeight,
+  );
+  if (scaleDelta !== 0) {
+    mind.scale(mind.scaleVal + scaleDelta, { x: event.clientX, y: event.clientY });
+  }
+}
+
+function MapZoomControls({ zoomPercent, onZoomIn, onZoomOut, onFit }) {
+  return (
+    <div className="ua-map-zoom" role="toolbar" aria-label="Map zoom controls">
+      <button type="button" className="ua-map-zoom-btn" onClick={onZoomOut} aria-label="Zoom out">
+        <Minus size={14} aria-hidden />
+      </button>
+      <span className="ua-map-zoom-label" aria-live="polite">{zoomPercent}%</span>
+      <button type="button" className="ua-map-zoom-btn" onClick={onZoomIn} aria-label="Zoom in">
+        <Plus size={14} aria-hidden />
+      </button>
+      <button type="button" className="ua-map-zoom-fit" onClick={onFit}>
+        Fit
+      </button>
+    </div>
+  );
+}
 
 const MIND_ELIXIR_THEME = {
   name: 'distill',
@@ -218,8 +272,36 @@ export default function ConceptMindmap({ mindmap }) {
   const [selection, setSelection] = useState(() => (
     curated ? selectionFromNode(data.nodeData) : null
   ));
+  const [zoomPercent, setZoomPercent] = useState(100);
 
   const currentLessonId = curated ? mindmap.center.id : mindmap.current.id;
+
+  const handleZoomIn = useCallback(() => {
+    const mind = instanceRef.current;
+    if (!mind) return;
+    const rect = mind.container.getBoundingClientRect();
+    mind.scale(
+      Math.min(MAP_SCALE_MAX, mind.scaleVal + MAP_SCALE_SENSITIVITY),
+      { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+    );
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    const mind = instanceRef.current;
+    if (!mind) return;
+    const rect = mind.container.getBoundingClientRect();
+    mind.scale(
+      Math.max(MAP_SCALE_MIN, mind.scaleVal - MAP_SCALE_SENSITIVITY),
+      { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+    );
+  }, []);
+
+  const handleZoomFit = useCallback(() => {
+    const mind = instanceRef.current;
+    if (!mind) return;
+    mind.scaleFit();
+    mind.toCenter();
+  }, []);
 
   const resolveNodeId = useCallback((rawId) => {
     if (!rawId) return null;
@@ -249,6 +331,7 @@ export default function ConceptMindmap({ mindmap }) {
   useEffect(() => {
     if (!mapRef.current) return undefined;
 
+    const mindHolder = { current: null };
     const mind = new MindElixir({
       el: mapRef.current,
       direction: SIDE,
@@ -258,13 +341,21 @@ export default function ConceptMindmap({ mindmap }) {
       keypress: false,
       mouseSelectionButton: 0,
       allowUndo: false,
-      overflowHidden: true,
+      overflowHidden: false,
+      alignment: 'nodes',
       theme: MIND_ELIXIR_THEME,
-      scaleMin: 0.65,
-      scaleMax: 1.2,
+      scaleMin: MAP_SCALE_MIN,
+      scaleMax: MAP_SCALE_MAX,
+      scaleSensitivity: MAP_SCALE_SENSITIVITY,
+      handleWheel: (event) => {
+        if (mindHolder.current) handleMapWheel(mindHolder.current, event);
+      },
     });
+    mindHolder.current = mind;
 
     let disposed = false;
+    const syncZoom = (scaleVal) => setZoomPercent(Math.round(scaleVal * 100));
+    mind.bus.addListener('scale', syncZoom);
     const applyTooltips = () => {
       mapRef.current?.querySelectorAll('me-tpc').forEach((topic) => {
         const nodeId = topic.dataset?.nodeid || topic.getAttribute('data-nodeid');
@@ -285,6 +376,7 @@ export default function ConceptMindmap({ mindmap }) {
 
     mind.init(data);
     instanceRef.current = mind;
+    syncZoom(mind.scaleVal);
     fitMap();
 
     const getLessonId = (nodeId) => {
@@ -327,6 +419,7 @@ export default function ConceptMindmap({ mindmap }) {
 
     return () => {
       disposed = true;
+      mind.bus.removeListener('scale', syncZoom);
       window.removeEventListener('resize', handleResize);
       mapRef.current?.removeEventListener('click', handleNodeClick, true);
       mind.destroy();
@@ -344,7 +437,18 @@ export default function ConceptMindmap({ mindmap }) {
         <span>{curated ? 'Concept map' : 'Mindmap'}</span>
       </div>
       <div className={curated ? 'ua-concept-map-layout' : undefined}>
-        <div ref={mapRef} className="ua-map-canvas" />
+        <div className="ua-map-shell">
+          <div ref={mapRef} className="ua-map-canvas" tabIndex={0} aria-label="Interactive concept map canvas" />
+          <MapZoomControls
+            zoomPercent={zoomPercent}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onFit={handleZoomFit}
+          />
+          <p className="ua-map-zoom-hint">
+            Scroll to zoom · Shift+scroll to pan · Drag to pan · Space+drag also pans
+          </p>
+        </div>
         {curated ? <ConceptTooltip selection={selection} /> : null}
       </div>
     </section>
