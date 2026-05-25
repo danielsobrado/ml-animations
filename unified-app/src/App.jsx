@@ -8,6 +8,7 @@ import { getGlossaryTerm } from './data/glossaryRepository.js';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AnimationPage = lazy(() => import('./pages/AnimationPage'));
+const LabsPage = lazy(() => import('./pages/LabsPage'));
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage'));
 const GlossaryIndexPage = lazy(() => import('./pages/GlossaryIndexPage'));
 const CommandPalette = lazy(() => import('./components/app/CommandPalette'));
@@ -90,6 +91,15 @@ function getMetaFromPath(pathname, currentLesson) {
     return {
       ...getAnimationMeta(currentLesson),
       path: `${pathname.replace(/\/?$/, '/')}`,
+    };
+  }
+
+  if (pathname === '/labs' || pathname === '/labs/') {
+    return {
+      title: 'Code Labs - ML Animations',
+      description:
+        'Rustlings-style JavaScript implementation exercises for every active ML Animations lesson.',
+      path: '/labs/',
     };
   }
 
@@ -253,6 +263,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/animation/:id" element={<AnimationPage />} />
+            <Route path="/labs" element={<LabsPage />} />
             <Route path="/glossary" element={<GlossaryIndexPage />} />
             <Route path="/glossary/:slug" element={<GlossaryPage />} />
           </Routes>

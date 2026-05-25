@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Github, Menu, PanelLeft, PanelLeftClose } from 'lucide-react';
+import { BookOpen, Code2, Github, Menu, PanelLeft, PanelLeftClose } from 'lucide-react';
 
 export default function Header({
   onMenuClick,
@@ -57,6 +57,10 @@ export default function Header({
           <BookOpen size={16} />
           Glossary
         </button>
+        <Link to="/labs" className="ua-header-action">
+          <Code2 size={16} />
+          Labs
+        </Link>
         <a
           className="ua-icon-btn"
           href="https://github.com/danielsobrado/ml-animations"

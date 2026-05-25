@@ -4,6 +4,7 @@ export const APP_BASE_PATH = (process.env.CURRICULUM_SMOKE_BASE || '/ml-animatio
 
 export const EXPLICIT_ROUTES = [
   '/',
+  '/labs',
   '/glossary',
   '/animation/matrix-multiplication',
   '/animation/linear-regression',

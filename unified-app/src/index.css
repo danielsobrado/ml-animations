@@ -9,6 +9,139 @@ html {
   overflow-x: hidden;
 }
 
+.ua-lesson-code-lab {
+  margin-top: 28px;
+}
+
+.ua-lesson-code-lab-link {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.ua-lesson-code-lab-link a,
+.ua-labs-selected-head a {
+  border: 1px solid var(--ds-rule);
+  border-radius: 8px;
+  color: var(--ds-accent);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+
+.ua-labs-browser {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+}
+
+.ua-labs-controls {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+}
+
+.ua-labs-controls label {
+  display: grid;
+  gap: 6px;
+}
+
+.ua-labs-controls span,
+.ua-labs-selected-head span,
+.ua-labs-list button span {
+  color: var(--ds-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ua-labs-controls input,
+.ua-labs-controls select {
+  background: var(--ds-panel);
+  border: 1px solid var(--ds-rule);
+  border-radius: 8px;
+  color: var(--ds-ink);
+  min-height: 42px;
+  padding: 8px 10px;
+}
+
+.ua-labs-layout {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+}
+
+.ua-labs-list {
+  align-content: start;
+  display: grid;
+  gap: 8px;
+  max-height: 70vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.ua-labs-list button {
+  align-items: start;
+  background: var(--ds-panel);
+  border: 1px solid var(--ds-rule);
+  border-radius: 8px;
+  color: var(--ds-ink);
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  text-align: left;
+}
+
+.ua-labs-list button.active,
+.ua-labs-list button:hover {
+  background: var(--ds-accent-w);
+  border-color: var(--ds-accent);
+}
+
+.ua-labs-list button strong {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.ua-labs-runner {
+  min-width: 0;
+}
+
+.ua-labs-selected-head {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ua-labs-selected-head h2 {
+  color: var(--ds-ink);
+  font-family: var(--ds-serif);
+  font-size: clamp(22px, 3vw, 34px);
+  letter-spacing: 0;
+  line-height: 1.05;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .ua-labs-controls,
+  .ua-labs-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ua-labs-list {
+    max-height: 320px;
+  }
+
+  .ua-labs-selected-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 body {
   margin: 0;
   background: var(--ds-paper);

@@ -5,6 +5,8 @@ import { allAnimations, getAnimationById } from '../data/animations';
 import { getAnimationComponent, isAnimationAvailable } from '../animations';
 import AnimationShell from '../components/animation-shell/AnimationShell';
 
+const LessonCodeLab = React.lazy(() => import('../labs/lesson-code/LessonCodeLab'));
+
 export default function AnimationPage() {
   const { id } = useParams();
   const animation = getAnimationById(id);
@@ -42,6 +44,10 @@ export default function AnimationPage() {
 
       <Suspense fallback={<LoadingPanel />}>
         <AnimationContent animationId={id} animation={animation} />
+      </Suspense>
+
+      <Suspense fallback={<div className="ds-panel ua-loading">Loading code lab</div>}>
+        <LessonCodeLab lessonId={id} />
       </Suspense>
 
       <footer className="ua-animation-footer">
