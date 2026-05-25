@@ -6376,4 +6376,4084 @@ return results;`,
 }`,
     explanation: 'Bias broadcasts across the batch: every example gets the same output-feature offsets.',
   },
+
+  {
+    id: 'dense-one-output-neuron',
+    stepLabel: '36.1',
+    group: 'Mini neural network layer',
+    title: 'One dense output',
+    concept: 'One dense-layer output is one input vector dotted with one weight vector plus bias.',
+    objective: 'Return dot(x, weights) + bias.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function denseOne(x, weights, bias) {
+  // TODO: return dot(x, weights) + bias.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('simple dense output', denseOne([1, 2], [3, 4], 0), 11);
+check('with bias', denseOne([1, 2], [3, 4], -1), 10);
+check('negative weight', denseOne([-1, 2], [3, 5], 1), 8);
+
+return results;`,
+    hints: [
+      'A dense neuron is a dot product plus a bias.',
+      'Use the dot helper.',
+      'return dot(x, weights) + bias;',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function denseOne(x, weights, bias) {
+  return dot(x, weights) + bias;
+}`,
+    explanation: 'A dense layer is many versions of this one-neuron calculation.',
+  },
+
+  {
+    id: 'dense-multiple-outputs',
+    stepLabel: '36.2',
+    group: 'Mini neural network layer',
+    title: 'Multiple dense outputs',
+    concept: 'A dense layer has one weight vector and one bias per output feature.',
+    objective: 'Push one output for each output weight vector.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function denseLayer(x, weightColumns, biases) {
+  const outputs = [];
+
+  for (let j = 0; j < weightColumns.length; j++) {
+    // TODO: push dot(x, weightColumns[j]) + biases[j].
+    outputs.push(0);
+  }
+
+  return outputs;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('two outputs', denseLayer([1, 2], [[3, 4], [5, 6]], [0, 1]), [11, 18]);
+check('three outputs', denseLayer([2, 1], [[1, 0], [0, 1], [1, 1]], [0, 0, -1]), [2, 1, 2]);
+
+return results;`,
+    hints: [
+      'Each output j has its own weight vector and bias.',
+      'Use dot(x, weightColumns[j]) + biases[j].',
+      'outputs.push(dot(x, weightColumns[j]) + biases[j]);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function denseLayer(x, weightColumns, biases) {
+  const outputs = [];
+
+  for (let j = 0; j < weightColumns.length; j++) {
+    outputs.push(dot(x, weightColumns[j]) + biases[j]);
+  }
+
+  return outputs;
+}`,
+    explanation: 'A dense layer maps one input vector to several output features by using several weight vectors.',
+  },
+
+  {
+    id: 'dense-relu-vector',
+    stepLabel: '36.3',
+    group: 'Mini neural network layer',
+    title: 'ReLU on a vector',
+    concept: 'Neural layers apply activations element by element.',
+    objective: 'Push Math.max(0, values[i]) for every coordinate.',
+    difficulty: 'warmup',
+    starterCode: `function reluVector(values) {
+  const activated = [];
+
+  for (let i = 0; i < values.length; i++) {
+    // TODO: push ReLU of values[i].
+    activated.push(values[i]);
+  }
+
+  return activated;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('mixed values', reluVector([-2, 0, 3]), [0, 0, 3]);
+check('all positive', reluVector([1, 2, 3]), [1, 2, 3]);
+check('all negative', reluVector([-1, -2]), [0, 0]);
+
+return results;`,
+    hints: [
+      'ReLU is max(0, value).',
+      'Use Math.max(0, values[i]).',
+      'activated.push(Math.max(0, values[i]));',
+    ],
+    solution: `function reluVector(values) {
+  const activated = [];
+
+  for (let i = 0; i < values.length; i++) {
+    activated.push(Math.max(0, values[i]));
+  }
+
+  return activated;
+}`,
+    explanation: 'Activations usually apply coordinate by coordinate after a linear transformation.',
+  },
+
+  {
+    id: 'two-layer-mini-network',
+    stepLabel: '36.4',
+    group: 'Mini neural network layer',
+    title: 'Two-layer mini network',
+    concept: 'A simple network can be dense -> ReLU -> dense.',
+    objective: 'Feed hidden activations into the output layer.',
+    difficulty: 'challenge',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function reluVector(values) {
+  return values.map((value) => Math.max(0, value));
+}
+
+function denseLayer(x, weightColumns, biases) {
+  return weightColumns.map((weights, j) => dot(x, weights) + biases[j]);
+}
+
+function twoLayerNetwork(x, hiddenWeights, hiddenBiases, outputWeights, outputBiases) {
+  const hiddenPre = denseLayer(x, hiddenWeights, hiddenBiases);
+  const hidden = reluVector(hiddenPre);
+
+  // TODO: return the output dense layer applied to hidden.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('two-layer network', twoLayerNetwork([1, 2], [[1, 0], [0, 1]], [0, 0], [[1, 1]], [0]), [3]);
+check('hidden ReLU clips negative', twoLayerNetwork([-1, 2], [[1, 0], [0, 1]], [0, 0], [[1, 1]], [0]), [2]);
+
+return results;`,
+    hints: [
+      'The hidden activations are already computed.',
+      'Use denseLayer(hidden, outputWeights, outputBiases).',
+      'return denseLayer(hidden, outputWeights, outputBiases);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function reluVector(values) {
+  return values.map((value) => Math.max(0, value));
+}
+
+function denseLayer(x, weightColumns, biases) {
+  return weightColumns.map((weights, j) => dot(x, weights) + biases[j]);
+}
+
+function twoLayerNetwork(x, hiddenWeights, hiddenBiases, outputWeights, outputBiases) {
+  const hiddenPre = denseLayer(x, hiddenWeights, hiddenBiases);
+  const hidden = reluVector(hiddenPre);
+  return denseLayer(hidden, outputWeights, outputBiases);
+}`,
+    explanation: 'Stacking layers means using one layer output as the next layer input.',
+  },
+
+  {
+    id: 'training-loop-one-prediction',
+    stepLabel: '37.1',
+    group: 'Training loop mechanics',
+    title: 'One prediction',
+    concept: 'Training begins with a prediction from current parameters.',
+    objective: 'Return weight * x + bias.',
+    difficulty: 'warmup',
+    starterCode: `function predictLinear(x, weight, bias) {
+  // TODO: return weight * x + bias.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('predict 2*3+1', predictLinear(3, 2, 1), 7);
+check('predict -1*4+2', predictLinear(4, -1, 2), -2);
+check('bias only', predictLinear(10, 0, 5), 5);
+
+return results;`,
+    hints: [
+      'Linear prediction is slope times input plus bias.',
+      'Use weight * x + bias.',
+      'return weight * x + bias;',
+    ],
+    solution: `function predictLinear(x, weight, bias) {
+  return weight * x + bias;
+}`,
+    explanation: 'A training loop repeatedly predicts, measures error, computes gradients, and updates parameters.',
+  },
+
+  {
+    id: 'training-loop-one-loss',
+    stepLabel: '37.2',
+    group: 'Training loop mechanics',
+    title: 'One-example loss',
+    concept: 'Squared error loss measures prediction error squared.',
+    objective: 'Return (prediction - target)^2.',
+    difficulty: 'warmup',
+    starterCode: `function squaredLoss(prediction, target) {
+  const error = prediction - target;
+
+  // TODO: return squared error.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('error 3', squaredLoss(10, 7), 9);
+check('error -5', squaredLoss(4, 9), 25);
+check('perfect', squaredLoss(5, 5), 0);
+
+return results;`,
+    hints: [
+      'Squared error means error times error.',
+      'The error variable is already computed.',
+      'return error * error;',
+    ],
+    solution: `function squaredLoss(prediction, target) {
+  const error = prediction - target;
+  return error * error;
+}`,
+    explanation: 'The loss is the number the training loop tries to reduce.',
+  },
+
+  {
+    id: 'training-loop-average-loss',
+    stepLabel: '37.3',
+    group: 'Training loop mechanics',
+    title: 'Average batch loss',
+    concept: 'Batch loss averages losses over examples.',
+    objective: 'Divide total loss by the number of examples.',
+    difficulty: 'core',
+    starterCode: `function averageLoss(losses) {
+  let total = 0;
+
+  for (let i = 0; i < losses.length; i++) {
+    total += losses[i];
+  }
+
+  // TODO: return the average loss.
+  return total;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('average [1,2,3]', averageLoss([1, 2, 3]), 2);
+check('average [10,20]', averageLoss([10, 20]), 15);
+check('average zeros', averageLoss([0, 0, 0]), 0);
+
+return results;`,
+    hints: [
+      'Average means total divided by count.',
+      'The count is losses.length.',
+      'return total / losses.length;',
+    ],
+    solution: `function averageLoss(losses) {
+  let total = 0;
+
+  for (let i = 0; i < losses.length; i++) {
+    total += losses[i];
+  }
+
+  return total / losses.length;
+}`,
+    explanation: 'Training reports average loss so batches of different sizes are comparable.',
+  },
+
+  {
+    id: 'training-loop-step-summary',
+    stepLabel: '37.4',
+    group: 'Training loop mechanics',
+    title: 'One training step',
+    concept: 'A training step computes prediction, error, gradients, and updated parameters.',
+    objective: 'Return updated weight after one gradient step.',
+    difficulty: 'challenge',
+    starterCode: `function oneStepWeightUpdate(x, target, weight, bias, learningRate) {
+  const prediction = weight * x + bias;
+  const error = prediction - target;
+
+  // Gradient of squared error without the factor 2 for simplicity.
+  const weightGradient = error * x;
+
+  // TODO: return updated weight.
+  return weight;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('update decreases high prediction', oneStepWeightUpdate(2, 3, 2, 0, 0.1), 1.8);
+check('update increases low prediction', oneStepWeightUpdate(2, 10, 2, 0, 0.1), 3.2);
+check('perfect no update', oneStepWeightUpdate(2, 4, 2, 0, 0.1), 2);
+
+return results;`,
+    hints: [
+      'Gradient descent subtracts learningRate * gradient.',
+      'The weightGradient is already computed.',
+      'return weight - learningRate * weightGradient;',
+    ],
+    solution: `function oneStepWeightUpdate(x, target, weight, bias, learningRate) {
+  const prediction = weight * x + bias;
+  const error = prediction - target;
+  const weightGradient = error * x;
+
+  return weight - learningRate * weightGradient;
+}`,
+    explanation: 'One training step nudges parameters opposite the gradient.',
+  },
+
+  {
+    id: 'optimizer-sgd-update',
+    stepLabel: '38.1',
+    group: 'Optimizer updates',
+    title: 'SGD update',
+    concept: 'Stochastic gradient descent subtracts learningRate times gradient.',
+    objective: 'Return parameter - learningRate * gradient.',
+    difficulty: 'warmup',
+    starterCode: `function sgdUpdate(parameter, gradient, learningRate) {
+  // TODO: return the updated parameter.
+  return parameter;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('positive gradient', sgdUpdate(1, 3, 0.1), 0.7);
+check('negative gradient', sgdUpdate(1, -2, 0.5), 2);
+check('zero gradient', sgdUpdate(5, 0, 0.1), 5);
+
+return results;`,
+    hints: [
+      'Move opposite the gradient.',
+      'Subtract learningRate * gradient.',
+      'return parameter - learningRate * gradient;',
+    ],
+    solution: `function sgdUpdate(parameter, gradient, learningRate) {
+  return parameter - learningRate * gradient;
+}`,
+    explanation: 'SGD is the simplest optimizer: follow the negative gradient.',
+  },
+
+  {
+    id: 'optimizer-momentum-velocity',
+    stepLabel: '38.2',
+    group: 'Optimizer updates',
+    title: 'Momentum velocity',
+    concept: 'Momentum keeps a moving velocity of recent gradients.',
+    objective: 'Return beta * velocity + gradient.',
+    difficulty: 'core',
+    starterCode: `function updateVelocity(velocity, gradient, beta) {
+  // TODO: combine old velocity and current gradient.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('new velocity', updateVelocity(0, 3, 0.9), 3);
+check('carry velocity', updateVelocity(10, 3, 0.9), 12);
+check('negative gradient', updateVelocity(5, -2, 0.8), 2);
+
+return results;`,
+    hints: [
+      'Momentum mixes previous velocity with current gradient.',
+      'Use beta * velocity + gradient.',
+      'return beta * velocity + gradient;',
+    ],
+    solution: `function updateVelocity(velocity, gradient, beta) {
+  return beta * velocity + gradient;
+}`,
+    explanation: 'Momentum smooths updates by remembering previous gradient direction.',
+  },
+
+  {
+    id: 'optimizer-momentum-update',
+    stepLabel: '38.3',
+    group: 'Optimizer updates',
+    title: 'Momentum update',
+    concept: 'Momentum updates parameters using velocity rather than the raw current gradient only.',
+    objective: 'Subtract learningRate times velocity.',
+    difficulty: 'core',
+    starterCode: `function momentumParameterUpdate(parameter, velocity, learningRate) {
+  // TODO: update parameter using velocity.
+  return parameter;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('velocity 3', momentumParameterUpdate(1, 3, 0.1), 0.7);
+check('negative velocity', momentumParameterUpdate(1, -2, 0.5), 2);
+check('zero velocity', momentumParameterUpdate(5, 0, 0.1), 5);
+
+return results;`,
+    hints: [
+      'Velocity acts like the gradient direction to follow.',
+      'Subtract learningRate * velocity.',
+      'return parameter - learningRate * velocity;',
+    ],
+    solution: `function momentumParameterUpdate(parameter, velocity, learningRate) {
+  return parameter - learningRate * velocity;
+}`,
+    explanation: 'Momentum can accelerate updates in consistent directions and damp zig-zagging.',
+  },
+
+  {
+    id: 'optimizer-adam-first-moment',
+    stepLabel: '38.4',
+    group: 'Optimizer updates',
+    title: 'Adam first moment',
+    concept: 'Adam keeps an exponential moving average of gradients.',
+    objective: 'Return beta1 * m + (1 - beta1) * gradient.',
+    difficulty: 'core',
+    starterCode: `function adamFirstMoment(m, gradient, beta1) {
+  // TODO: update the first moment estimate.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('first moment from zero', adamFirstMoment(0, 10, 0.9), 1);
+check('carry moment', adamFirstMoment(5, 10, 0.9), 5.5);
+check('negative gradient', adamFirstMoment(1, -9, 0.8), -1);
+
+return results;`,
+    hints: [
+      'Adam first moment is a weighted average of old m and new gradient.',
+      'Use beta1 for old m and 1 - beta1 for gradient.',
+      'return beta1 * m + (1 - beta1) * gradient;',
+    ],
+    solution: `function adamFirstMoment(m, gradient, beta1) {
+  return beta1 * m + (1 - beta1) * gradient;
+}`,
+    explanation: 'Adam first moment behaves like momentum but with exponential averaging.',
+  },
+
+  {
+    id: 'optimizer-adam-second-moment',
+    stepLabel: '38.5',
+    group: 'Optimizer updates',
+    title: 'Adam second moment',
+    concept: 'Adam tracks an exponential moving average of squared gradients.',
+    objective: 'Return beta2 * v + (1 - beta2) * gradient squared.',
+    difficulty: 'core',
+    starterCode: `function adamSecondMoment(v, gradient, beta2) {
+  // TODO: update the second moment estimate.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('second moment from zero', adamSecondMoment(0, 10, 0.99), 1);
+check('carry second moment', adamSecondMoment(5, 10, 0.9), 14.5);
+check('negative gradient squares', adamSecondMoment(0, -3, 0.9), 0.9);
+
+return results;`,
+    hints: [
+      'Use gradient * gradient.',
+      'Mix old v with squared gradient.',
+      'return beta2 * v + (1 - beta2) * gradient * gradient;',
+    ],
+    solution: `function adamSecondMoment(v, gradient, beta2) {
+  return beta2 * v + (1 - beta2) * gradient * gradient;
+}`,
+    explanation: 'Adam uses the second moment to scale updates by recent gradient magnitude.',
+  },
+
+  {
+    id: 'regularization-l2-penalty',
+    stepLabel: '39.1',
+    group: 'Regularization',
+    title: 'L2 penalty',
+    concept: 'L2 regularization penalizes large weights by adding lambda times sum of squared weights.',
+    objective: 'Accumulate weight squared.',
+    difficulty: 'core',
+    starterCode: `function l2Penalty(weights, lambda) {
+  let sumSquares = 0;
+
+  for (let i = 0; i < weights.length; i++) {
+    // TODO: add squared weight.
+    sumSquares += 0;
+  }
+
+  return lambda * sumSquares;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('simple L2', l2Penalty([3, 4], 1), 25);
+check('lambda half', l2Penalty([3, 4], 0.5), 12.5);
+check('zero weights', l2Penalty([0, 0], 10), 0);
+
+return results;`,
+    hints: [
+      'L2 uses squared weights.',
+      'Add weights[i] * weights[i].',
+      'sumSquares += weights[i] * weights[i];',
+    ],
+    solution: `function l2Penalty(weights, lambda) {
+  let sumSquares = 0;
+
+  for (let i = 0; i < weights.length; i++) {
+    sumSquares += weights[i] * weights[i];
+  }
+
+  return lambda * sumSquares;
+}`,
+    explanation: 'L2 discourages very large weights, often improving generalization.',
+  },
+
+  {
+    id: 'regularization-l2-gradient',
+    stepLabel: '39.2',
+    group: 'Regularization',
+    title: 'L2 gradient',
+    concept: 'The derivative of lambda times w squared with respect to w is 2 * lambda * w.',
+    objective: 'Push 2 * lambda * weight.',
+    difficulty: 'core',
+    starterCode: `function l2Gradient(weights, lambda) {
+  const gradients = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    // TODO: push the L2 gradient for this weight.
+    gradients.push(0);
+  }
+
+  return gradients;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('lambda 1', l2Gradient([3, 4], 1), [6, 8]);
+check('lambda half', l2Gradient([3, 4], 0.5), [3, 4]);
+check('negative weights', l2Gradient([-1, 2], 1), [-2, 4]);
+
+return results;`,
+    hints: [
+      'Derivative of w squared is 2w.',
+      'Multiply by lambda.',
+      'gradients.push(2 * lambda * weights[i]);',
+    ],
+    solution: `function l2Gradient(weights, lambda) {
+  const gradients = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    gradients.push(2 * lambda * weights[i]);
+  }
+
+  return gradients;
+}`,
+    explanation: 'L2 gradient pulls weights toward zero.',
+  },
+
+  {
+    id: 'regularization-dropout-mask',
+    stepLabel: '39.3',
+    group: 'Regularization',
+    title: 'Apply dropout mask',
+    concept: 'Dropout removes selected activations during training.',
+    objective: 'Multiply each activation by its mask value.',
+    difficulty: 'warmup',
+    starterCode: `function applyDropoutMask(activations, mask) {
+  const dropped = [];
+
+  for (let i = 0; i < activations.length; i++) {
+    // TODO: multiply activation by mask.
+    dropped.push(activations[i]);
+  }
+
+  return dropped;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('drop middle', applyDropoutMask([1, 2, 3], [1, 0, 1]), [1, 0, 3]);
+check('drop all', applyDropoutMask([1, 2], [0, 0]), [0, 0]);
+check('keep all', applyDropoutMask([1, 2], [1, 1]), [1, 2]);
+
+return results;`,
+    hints: [
+      'Mask values are 0 or 1.',
+      'Multiply activations[i] by mask[i].',
+      'dropped.push(activations[i] * mask[i]);',
+    ],
+    solution: `function applyDropoutMask(activations, mask) {
+  const dropped = [];
+
+  for (let i = 0; i < activations.length; i++) {
+    dropped.push(activations[i] * mask[i]);
+  }
+
+  return dropped;
+}`,
+    explanation: 'Dropout forces the network not to rely too heavily on any one activation.',
+  },
+
+  {
+    id: 'regularization-inverted-dropout',
+    stepLabel: '39.4',
+    group: 'Regularization',
+    title: 'Inverted dropout scaling',
+    concept: 'Inverted dropout divides kept activations by keep probability.',
+    objective: 'Apply mask and divide by keepProbability.',
+    difficulty: 'core',
+    starterCode: `function invertedDropout(activations, mask, keepProbability) {
+  const output = [];
+
+  for (let i = 0; i < activations.length; i++) {
+    // TODO: apply inverted dropout scaling.
+    output.push(activations[i]);
+  }
+
+  return output;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('keep prob 0.5', invertedDropout([1, 2, 3], [1, 0, 1], 0.5), [2, 0, 6]);
+check('keep prob 1', invertedDropout([1, 2], [1, 1], 1), [1, 2]);
+check('drop all', invertedDropout([1, 2], [0, 0], 0.5), [0, 0]);
+
+return results;`,
+    hints: [
+      'First multiply by mask[i].',
+      'Then divide by keepProbability.',
+      'output.push((activations[i] * mask[i]) / keepProbability);',
+    ],
+    solution: `function invertedDropout(activations, mask, keepProbability) {
+  const output = [];
+
+  for (let i = 0; i < activations.length; i++) {
+    output.push((activations[i] * mask[i]) / keepProbability);
+  }
+
+  return output;
+}`,
+    explanation: 'Inverted dropout keeps expected activation scale roughly stable during training.',
+  },
+
+  {
+    id: 'matmul-backprop-a-entry',
+    stepLabel: '40.1',
+    group: 'Matrix multiplication backprop',
+    title: 'Gradient for A entry',
+    concept: 'If C[i][j] = sum over k of A[i][k] * B[k][j], then the derivative with respect to A[i][k] is B[k][j].',
+    objective: 'Return B[k][j].',
+    difficulty: 'core',
+    starterCode: `function gradCellWithRespectToA(B, k, j) {
+  // TODO: return the derivative of C[i][j] with respect to A[i][k].
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+const B = [
+  [2, 1, 3],
+  [1, 4, 2],
+];
+
+check('k=0 j=0', gradCellWithRespectToA(B, 0, 0), 2);
+check('k=0 j=2', gradCellWithRespectToA(B, 0, 2), 3);
+check('k=1 j=1', gradCellWithRespectToA(B, 1, 1), 4);
+
+return results;`,
+    hints: [
+      'A[i][k] is multiplied by B[k][j].',
+      'The derivative with respect to A[i][k] is B[k][j].',
+      'return B[k][j];',
+    ],
+    solution: `function gradCellWithRespectToA(B, k, j) {
+  return B[k][j];
+}`,
+    explanation: 'Backprop through multiplication sends the other factor backward.',
+  },
+
+  {
+    id: 'matmul-backprop-b-entry',
+    stepLabel: '40.2',
+    group: 'Matrix multiplication backprop',
+    title: 'Gradient for B entry',
+    concept: 'If C[i][j] = sum over k of A[i][k] * B[k][j], then the derivative with respect to B[k][j] is A[i][k].',
+    objective: 'Return A[i][k].',
+    difficulty: 'core',
+    starterCode: `function gradCellWithRespectToB(A, i, k) {
+  // TODO: return the derivative of C[i][j] with respect to B[k][j].
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+const A = [
+  [1, 2],
+  [3, 1],
+];
+
+check('i=0 k=0', gradCellWithRespectToB(A, 0, 0), 1);
+check('i=0 k=1', gradCellWithRespectToB(A, 0, 1), 2);
+check('i=1 k=0', gradCellWithRespectToB(A, 1, 0), 3);
+
+return results;`,
+    hints: [
+      'B[k][j] is multiplied by A[i][k].',
+      'The derivative with respect to B[k][j] is A[i][k].',
+      'return A[i][k];',
+    ],
+    solution: `function gradCellWithRespectToB(A, i, k) {
+  return A[i][k];
+}`,
+    explanation: 'Again, the gradient through multiplication sends the other factor backward.',
+  },
+
+  {
+    id: 'matmul-backprop-dA',
+    stepLabel: '40.3',
+    group: 'Matrix multiplication backprop',
+    title: 'dA from dC',
+    concept: 'For C = AB, the gradient with respect to A is dC times B transposed.',
+    objective: 'Return matmul(dC, transpose(B)).',
+    difficulty: 'challenge',
+    starterCode: `function transpose(A) {
+  const T = [];
+  for (let j = 0; j < A[0].length; j++) {
+    const row = [];
+    for (let i = 0; i < A.length; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+  return T;
+}
+
+function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+  for (let i = 0; i < A.length; i++) {
+    const row = [];
+    for (let j = 0; j < B[0].length; j++) {
+      row.push(matrixCell(A, B, i, j));
+    }
+    C.push(row);
+  }
+  return C;
+}
+
+function gradA(dC, B) {
+  // TODO: return dC times B transposed.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameMatrix(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameMatrix(actual, expected),
+  });
+}
+
+check('dA simple', gradA([[1, 0]], [[2, 3], [4, 5]]), [[2, 4]]);
+check('dA two rows', gradA([[1, 1], [0, 1]], [[2, 3], [4, 5]]), [[5, 9], [3, 5]]);
+
+return results;`,
+    hints: [
+      'The formula is dA = dC times B transpose.',
+      'Use transpose(B).',
+      'return matmul(dC, transpose(B));',
+    ],
+    solution: `function transpose(A) {
+  const T = [];
+  for (let j = 0; j < A[0].length; j++) {
+    const row = [];
+    for (let i = 0; i < A.length; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+  return T;
+}
+
+function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+  for (let i = 0; i < A.length; i++) {
+    const row = [];
+    for (let j = 0; j < B[0].length; j++) {
+      row.push(matrixCell(A, B, i, j));
+    }
+    C.push(row);
+  }
+  return C;
+}
+
+function gradA(dC, B) {
+  return matmul(dC, transpose(B));
+}`,
+    explanation: 'Matrix backprop uses transposes to send gradients to the correct side of the multiplication.',
+  },
+
+  {
+    id: 'matmul-backprop-dB',
+    stepLabel: '40.4',
+    group: 'Matrix multiplication backprop',
+    title: 'dB from dC',
+    concept: 'For C = AB, the gradient with respect to B is A transposed times dC.',
+    objective: 'Return matmul(transpose(A), dC).',
+    difficulty: 'challenge',
+    starterCode: `function transpose(A) {
+  const T = [];
+  for (let j = 0; j < A[0].length; j++) {
+    const row = [];
+    for (let i = 0; i < A.length; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+  return T;
+}
+
+function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+  for (let i = 0; i < A.length; i++) {
+    const row = [];
+    for (let j = 0; j < B[0].length; j++) {
+      row.push(matrixCell(A, B, i, j));
+    }
+    C.push(row);
+  }
+  return C;
+}
+
+function gradB(A, dC) {
+  // TODO: return A transposed times dC.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameMatrix(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameMatrix(actual, expected),
+  });
+}
+
+check('dB simple', gradB([[2, 4]], [[1, 0]]), [[2, 0], [4, 0]]);
+check('dB two examples', gradB([[1, 2], [3, 4]], [[1, 0], [0, 1]]), [[1, 3], [2, 4]]);
+
+return results;`,
+    hints: [
+      'The formula is dB = A transpose times dC.',
+      'Use transpose(A).',
+      'return matmul(transpose(A), dC);',
+    ],
+    solution: `function transpose(A) {
+  const T = [];
+  for (let j = 0; j < A[0].length; j++) {
+    const row = [];
+    for (let i = 0; i < A.length; i++) {
+      row.push(A[i][j]);
+    }
+    T.push(row);
+  }
+  return T;
+}
+
+function matrixCell(A, B, row, col) {
+  let total = 0;
+  for (let k = 0; k < B.length; k++) {
+    total += A[row][k] * B[k][col];
+  }
+  return total;
+}
+
+function matmul(A, B) {
+  const C = [];
+  for (let i = 0; i < A.length; i++) {
+    const row = [];
+    for (let j = 0; j < B[0].length; j++) {
+      row.push(matrixCell(A, B, i, j));
+    }
+    C.push(row);
+  }
+  return C;
+}
+
+function gradB(A, dC) {
+  return matmul(transpose(A), dC);
+}`,
+    explanation: 'This is the dense-layer weight-gradient formula used in neural-network training.',
+  },
+
+  {
+    id: 'transformer-token-embedding-lookup',
+    stepLabel: '41.1',
+    group: 'Transformer mini-block shapes',
+    title: 'Token embedding lookup',
+    concept: 'A token ID selects one row from the embedding table.',
+    objective: 'Return embeddingTable[tokenId].',
+    difficulty: 'warmup',
+    starterCode: `function lookupEmbedding(embeddingTable, tokenId) {
+  // TODO: return the embedding vector for tokenId.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+const E = [
+  [1, 0],
+  [0, 1],
+  [2, 3],
+];
+
+check('token 0', lookupEmbedding(E, 0), [1, 0]);
+check('token 1', lookupEmbedding(E, 1), [0, 1]);
+check('token 2', lookupEmbedding(E, 2), [2, 3]);
+
+return results;`,
+    hints: [
+      'The embedding table is indexed by token ID.',
+      'Return the row at tokenId.',
+      'return embeddingTable[tokenId];',
+    ],
+    solution: `function lookupEmbedding(embeddingTable, tokenId) {
+  return embeddingTable[tokenId];
+}`,
+    explanation: 'Token IDs become vectors by selecting rows from an embedding matrix.',
+  },
+
+  {
+    id: 'transformer-add-position',
+    stepLabel: '41.2',
+    group: 'Transformer mini-block shapes',
+    title: 'Add positional embedding',
+    concept: 'Token embeddings and position embeddings are added coordinate by coordinate.',
+    objective: 'Push tokenEmbedding[i] + positionEmbedding[i].',
+    difficulty: 'warmup',
+    starterCode: `function addPosition(tokenEmbedding, positionEmbedding) {
+  const result = [];
+
+  for (let i = 0; i < tokenEmbedding.length; i++) {
+    // TODO: add token and position coordinate.
+    result.push(0);
+  }
+
+  return result;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('add position', addPosition([1, 2], [10, 20]), [11, 22]);
+check('zero position', addPosition([1, 2, 3], [0, 0, 0]), [1, 2, 3]);
+check('negative position', addPosition([5, 5], [-1, 2]), [4, 7]);
+
+return results;`,
+    hints: [
+      'Embeddings have the same dimension.',
+      'Add coordinate by coordinate.',
+      'result.push(tokenEmbedding[i] + positionEmbedding[i]);',
+    ],
+    solution: `function addPosition(tokenEmbedding, positionEmbedding) {
+  const result = [];
+
+  for (let i = 0; i < tokenEmbedding.length; i++) {
+    result.push(tokenEmbedding[i] + positionEmbedding[i]);
+  }
+
+  return result;
+}`,
+    explanation: 'Position information lets equal tokens behave differently at different sequence positions.',
+  },
+
+  {
+    id: 'transformer-project-query',
+    stepLabel: '41.3',
+    group: 'Transformer mini-block shapes',
+    title: 'Project to query vector',
+    concept: 'A query vector is a linear projection of the hidden state.',
+    objective: 'Return hidden times Wq using row dot products.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function project(hidden, weightColumns) {
+  const output = [];
+
+  for (let j = 0; j < weightColumns.length; j++) {
+    // TODO: push dot(hidden, weightColumns[j]).
+    output.push(0);
+  }
+
+  return output;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('project hidden', project([1, 2], [[3, 4], [5, 6]]), [11, 17]);
+check('identity projection', project([7, 8], [[1, 0], [0, 1]]), [7, 8]);
+
+return results;`,
+    hints: [
+      'Each output coordinate has its own weight column.',
+      'Use dot(hidden, weightColumns[j]).',
+      'output.push(dot(hidden, weightColumns[j]));',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function project(hidden, weightColumns) {
+  const output = [];
+
+  for (let j = 0; j < weightColumns.length; j++) {
+    output.push(dot(hidden, weightColumns[j]));
+  }
+
+  return output;
+}`,
+    explanation: 'Transformers create Q, K, and V vectors through learned linear projections.',
+  },
+
+  {
+    id: 'transformer-attention-score-shape',
+    stepLabel: '41.4',
+    group: 'Transformer mini-block shapes',
+    title: 'Attention score shape',
+    concept: 'Q times K transposed produces one score for every query token and key token pair.',
+    objective: 'Return [numQueries, numKeys].',
+    difficulty: 'core',
+    starterCode: `function attentionScoreShape(Q, K) {
+  const numQueries = Q.length;
+  const numKeys = K.length;
+
+  // TODO: return the shape of Q times K transposed.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('3 queries 3 keys', attentionScoreShape([[1],[2],[3]], [[1],[2],[3]]), [3, 3]);
+check('2 queries 4 keys', attentionScoreShape([[1],[2]], [[1],[2],[3],[4]]), [2, 4]);
+check('1 query 5 keys', attentionScoreShape([[1]], [[1],[2],[3],[4],[5]]), [1, 5]);
+
+return results;`,
+    hints: [
+      'Rows come from queries.',
+      'Columns come from keys.',
+      'return [numQueries, numKeys];',
+    ],
+    solution: `function attentionScoreShape(Q, K) {
+  const numQueries = Q.length;
+  const numKeys = K.length;
+
+  return [numQueries, numKeys];
+}`,
+    explanation: 'Attention score matrices grow with sequence length squared in full attention.',
+  },
+
+  {
+    id: 'transformer-causal-mask-check',
+    stepLabel: '41.5',
+    group: 'Transformer mini-block shapes',
+    title: 'Causal mask visibility',
+    concept: 'In causal attention, a query position can read only keys at the same or earlier positions.',
+    objective: 'Return true if keyPosition <= queryPosition.',
+    difficulty: 'core',
+    starterCode: `function canAttendCausally(queryPosition, keyPosition) {
+  // TODO: return whether query can see key.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('same position visible', canAttendCausally(2, 2), true);
+check('past visible', canAttendCausally(2, 0), true);
+check('future hidden', canAttendCausally(2, 3), false);
+check('first token cannot see second', canAttendCausally(0, 1), false);
+
+return results;`,
+    hints: [
+      'Causal attention blocks future keys.',
+      'A key is visible if keyPosition is less than or equal to queryPosition.',
+      'return keyPosition <= queryPosition;',
+    ],
+    solution: `function canAttendCausally(queryPosition, keyPosition) {
+  return keyPosition <= queryPosition;
+}`,
+    explanation: 'Causal masking prevents next-token models from seeing future answers.',
+  },
+
+  {
+    id: 'self-attention-one-query-scores',
+    stepLabel: '42.1',
+    group: 'Mini self-attention',
+    title: 'Scores for one query',
+    concept: 'A query compares itself to every key using dot products.',
+    objective: 'Push dot(query, keys[i]) for every key.',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function attentionScoresForQuery(query, keys) {
+  const scores = [];
+
+  for (let i = 0; i < keys.length; i++) {
+    // TODO: push dot(query, keys[i]).
+    scores.push(0);
+  }
+
+  return scores;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('query against two keys', attentionScoresForQuery([1, 2], [[3, 4], [5, 6]]), [11, 17]);
+check('orthogonal key', attentionScoresForQuery([1, 0], [[1, 0], [0, 1]]), [1, 0]);
+
+return results;`,
+    hints: [
+      'Each score is one dot product.',
+      'Compare the query with each key vector.',
+      'scores.push(dot(query, keys[i]));',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function attentionScoresForQuery(query, keys) {
+  const scores = [];
+
+  for (let i = 0; i < keys.length; i++) {
+    scores.push(dot(query, keys[i]));
+  }
+
+  return scores;
+}`,
+    explanation: 'Self-attention starts by asking how strongly this query matches each key.',
+  },
+
+  {
+    id: 'self-attention-scale-scores',
+    stepLabel: '42.2',
+    group: 'Mini self-attention',
+    title: 'Scale attention scores',
+    concept: 'Scaled dot-product attention divides scores by sqrt(d).',
+    objective: 'Divide every score by Math.sqrt(d).',
+    difficulty: 'core',
+    starterCode: `function scaleScores(scores, d) {
+  const scaled = [];
+
+  for (let i = 0; i < scores.length; i++) {
+    // TODO: push scores[i] divided by sqrt(d).
+    scaled.push(scores[i]);
+  }
+
+  return scaled;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('scale by sqrt 4', scaleScores([8, 4], 4), [4, 2]);
+check('scale by sqrt 9', scaleScores([12, 3], 9), [4, 1]);
+check('scale by sqrt 1', scaleScores([7, -2], 1), [7, -2]);
+
+return results;`,
+    hints: [
+      'Use Math.sqrt(d).',
+      'Each score gets divided by the same scale.',
+      'scaled.push(scores[i] / Math.sqrt(d));',
+    ],
+    solution: `function scaleScores(scores, d) {
+  const scaled = [];
+
+  for (let i = 0; i < scores.length; i++) {
+    scaled.push(scores[i] / Math.sqrt(d));
+  }
+
+  return scaled;
+}`,
+    explanation: 'Scaling prevents large dot products from making softmax too sharp too early.',
+  },
+
+  {
+    id: 'self-attention-causal-mask-scores',
+    stepLabel: '42.3',
+    group: 'Mini self-attention',
+    title: 'Apply causal mask',
+    concept: 'Causal attention hides future positions by setting their scores to -Infinity.',
+    objective: 'Keep visible scores and mask future scores.',
+    difficulty: 'core',
+    starterCode: `function applyCausalMask(scores, queryPosition) {
+  const masked = [];
+
+  for (let keyPosition = 0; keyPosition < scores.length; keyPosition++) {
+    // TODO: keep scores[keyPosition] if keyPosition <= queryPosition, otherwise -Infinity.
+    masked.push(scores[keyPosition]);
+  }
+
+  return masked;
+}`,
+    testCode: `const results = [];
+
+function sameArraySpecial(a, b) {
+  return a.length === b.length && a.every((value, index) => Object.is(value, b[index]));
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArraySpecial(actual, expected),
+  });
+}
+
+check('query at position 0', applyCausalMask([1, 2, 3], 0), [1, -Infinity, -Infinity]);
+check('query at position 1', applyCausalMask([1, 2, 3], 1), [1, 2, -Infinity]);
+check('query at position 2', applyCausalMask([1, 2, 3], 2), [1, 2, 3]);
+
+return results;`,
+    hints: [
+      'A token can attend to itself and the past.',
+      'Future key positions are greater than queryPosition.',
+      'masked.push(keyPosition <= queryPosition ? scores[keyPosition] : -Infinity);',
+    ],
+    solution: `function applyCausalMask(scores, queryPosition) {
+  const masked = [];
+
+  for (let keyPosition = 0; keyPosition < scores.length; keyPosition++) {
+    masked.push(keyPosition <= queryPosition ? scores[keyPosition] : -Infinity);
+  }
+
+  return masked;
+}`,
+    explanation: 'Causal masking prevents next-token models from seeing future tokens.',
+  },
+
+  {
+    id: 'self-attention-stable-softmax',
+    stepLabel: '42.4',
+    group: 'Mini self-attention',
+    title: 'Stable softmax',
+    concept: 'Stable softmax subtracts the maximum score before exponentiating.',
+    objective: 'Use Math.exp(scores[i] - maxScore).',
+    difficulty: 'challenge',
+    starterCode: `function stableSoftmax(scores) {
+  const maxScore = Math.max(...scores);
+  let denominator = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    // TODO: add exp(scores[i] - maxScore).
+    denominator += 0;
+  }
+
+  const weights = [];
+  for (let i = 0; i < scores.length; i++) {
+    weights.push(Math.exp(scores[i] - maxScore) / denominator);
+  }
+
+  return weights;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('two equal scores', stableSoftmax([0, 0]), [0.5, 0.5]);
+check('log ratio', stableSoftmax([0, Math.log(3)]), [0.25, 0.75]);
+check('large scores stay stable', stableSoftmax([1000, 1000]), [0.5, 0.5]);
+
+return results;`,
+    hints: [
+      'Subtracting maxScore does not change the softmax probabilities.',
+      'It prevents overflow for large scores.',
+      'denominator += Math.exp(scores[i] - maxScore);',
+    ],
+    solution: `function stableSoftmax(scores) {
+  const maxScore = Math.max(...scores);
+  let denominator = 0;
+
+  for (let i = 0; i < scores.length; i++) {
+    denominator += Math.exp(scores[i] - maxScore);
+  }
+
+  const weights = [];
+  for (let i = 0; i < scores.length; i++) {
+    weights.push(Math.exp(scores[i] - maxScore) / denominator);
+  }
+
+  return weights;
+}`,
+    explanation: 'Stable softmax is the same math, but safer numerically.',
+  },
+
+  {
+    id: 'self-attention-weighted-value-sum',
+    stepLabel: '42.5',
+    group: 'Mini self-attention',
+    title: 'Weighted value sum',
+    concept: 'Attention output is a weighted mixture of value vectors.',
+    objective: 'Add weights[token] * values[token][dim] into output[dim].',
+    difficulty: 'challenge',
+    starterCode: `function weightedValueSum(weights, values) {
+  const dimension = values[0].length;
+  const output = Array(dimension).fill(0);
+
+  for (let token = 0; token < values.length; token++) {
+    for (let dim = 0; dim < dimension; dim++) {
+      // TODO: add this token's weighted value coordinate.
+      output[dim] += 0;
+    }
+  }
+
+  return output;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('choose first value', weightedValueSum([1, 0], [[3, 4], [10, 20]]), [3, 4]);
+check('average two values', weightedValueSum([0.5, 0.5], [[2, 4], [6, 8]]), [4, 6]);
+check('weighted mix', weightedValueSum([0.25, 0.75], [[0, 4], [8, 0]]), [6, 1]);
+
+return results;`,
+    hints: [
+      'Each value vector contributes according to its attention weight.',
+      'For each dimension, add weights[token] times values[token][dim].',
+      'output[dim] += weights[token] * values[token][dim];',
+    ],
+    solution: `function weightedValueSum(weights, values) {
+  const dimension = values[0].length;
+  const output = Array(dimension).fill(0);
+
+  for (let token = 0; token < values.length; token++) {
+    for (let dim = 0; dim < dimension; dim++) {
+      output[dim] += weights[token] * values[token][dim];
+    }
+  }
+
+  return output;
+}`,
+    explanation: 'Attention does not copy one token. It mixes value vectors using attention weights.',
+  },
+
+  {
+    id: 'layernorm-feature-mean',
+    stepLabel: '43.1',
+    group: 'LayerNorm and RMSNorm',
+    title: 'Feature mean',
+    concept: 'LayerNorm computes statistics across features of one token.',
+    objective: 'Return the average of the feature vector.',
+    difficulty: 'warmup',
+    starterCode: `function featureMean(x) {
+  let total = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    total += x[i];
+  }
+
+  // TODO: return the average.
+  return total;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('mean [1,2,3]', featureMean([1, 2, 3]), 2);
+check('mean [10,20]', featureMean([10, 20]), 15);
+check('mean [-1,1]', featureMean([-1, 1]), 0);
+
+return results;`,
+    hints: [
+      'Average is total divided by number of features.',
+      'The number of features is x.length.',
+      'return total / x.length;',
+    ],
+    solution: `function featureMean(x) {
+  let total = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    total += x[i];
+  }
+
+  return total / x.length;
+}`,
+    explanation: 'LayerNorm normalizes one token vector at a time, not a whole batch.',
+  },
+
+  {
+    id: 'layernorm-feature-variance',
+    stepLabel: '43.2',
+    group: 'LayerNorm and RMSNorm',
+    title: 'Feature variance',
+    concept: 'Variance measures average squared distance from the mean.',
+    objective: 'Add squared centered values.',
+    difficulty: 'core',
+    starterCode: `function featureVariance(x) {
+  const mean = x.reduce((total, value) => total + value, 0) / x.length;
+  let total = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    const centered = x[i] - mean;
+
+    // TODO: add centered squared.
+    total += 0;
+  }
+
+  return total / x.length;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('variance [1,2,3]', featureVariance([1, 2, 3]), 2 / 3);
+check('variance [10,20]', featureVariance([10, 20]), 25);
+check('variance constant', featureVariance([5, 5, 5]), 0);
+
+return results;`,
+    hints: [
+      'Variance uses squared centered values.',
+      'centered is already computed.',
+      'total += centered * centered;',
+    ],
+    solution: `function featureVariance(x) {
+  const mean = x.reduce((total, value) => total + value, 0) / x.length;
+  let total = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    const centered = x[i] - mean;
+    total += centered * centered;
+  }
+
+  return total / x.length;
+}`,
+    explanation: 'LayerNorm uses variance to rescale features to a stable range.',
+  },
+
+  {
+    id: 'layernorm-normalize-vector',
+    stepLabel: '43.3',
+    group: 'LayerNorm and RMSNorm',
+    title: 'Normalize one token vector',
+    concept: 'LayerNorm subtracts mean and divides by standard deviation.',
+    objective: 'Push (x[i] - mean) / sqrt(variance + eps).',
+    difficulty: 'challenge',
+    starterCode: `function layerNormNoAffine(x, eps = 1e-5) {
+  const mean = x.reduce((total, value) => total + value, 0) / x.length;
+  const variance = x.reduce((total, value) => {
+    const centered = value - mean;
+    return total + centered * centered;
+  }, 0) / x.length;
+
+  const normalized = [];
+
+  for (let i = 0; i < x.length; i++) {
+    // TODO: push the normalized feature.
+    normalized.push(0);
+  }
+
+  return normalized;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-5) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('normalize [1,2,3]', layerNormNoAffine([1, 2, 3], 0), [-1.224744871, 0, 1.224744871]);
+check('normalize [10,20]', layerNormNoAffine([10, 20], 0), [-1, 1]);
+
+return results;`,
+    hints: [
+      'Standard deviation is Math.sqrt(variance + eps).',
+      'Subtract mean first, then divide by std.',
+      'normalized.push((x[i] - mean) / Math.sqrt(variance + eps));',
+    ],
+    solution: `function layerNormNoAffine(x, eps = 1e-5) {
+  const mean = x.reduce((total, value) => total + value, 0) / x.length;
+  const variance = x.reduce((total, value) => {
+    const centered = value - mean;
+    return total + centered * centered;
+  }, 0) / x.length;
+
+  const normalized = [];
+
+  for (let i = 0; i < x.length; i++) {
+    normalized.push((x[i] - mean) / Math.sqrt(variance + eps));
+  }
+
+  return normalized;
+}`,
+    explanation: 'LayerNorm stabilizes the scale of each token representation before the next transformation.',
+  },
+
+  {
+    id: 'rmsnorm-denominator',
+    stepLabel: '43.4',
+    group: 'LayerNorm and RMSNorm',
+    title: 'RMSNorm denominator',
+    concept: 'RMSNorm divides by root mean square without subtracting the mean.',
+    objective: 'Return sqrt(mean square + eps).',
+    difficulty: 'core',
+    starterCode: `function rmsDenominator(x, eps = 1e-5) {
+  let meanSquare = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    meanSquare += x[i] * x[i];
+  }
+
+  meanSquare = meanSquare / x.length;
+
+  // TODO: return root mean square denominator.
+  return meanSquare;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('rms [3,4] eps 0', rmsDenominator([3, 4], 0), Math.sqrt(12.5));
+check('rms [1,1] eps 0', rmsDenominator([1, 1], 0), 1);
+check('rms [0,0] eps 1', rmsDenominator([0, 0], 1), 1);
+
+return results;`,
+    hints: [
+      'RMS means root mean square.',
+      'Use Math.sqrt(meanSquare + eps).',
+      'return Math.sqrt(meanSquare + eps);',
+    ],
+    solution: `function rmsDenominator(x, eps = 1e-5) {
+  let meanSquare = 0;
+
+  for (let i = 0; i < x.length; i++) {
+    meanSquare += x[i] * x[i];
+  }
+
+  meanSquare = meanSquare / x.length;
+
+  return Math.sqrt(meanSquare + eps);
+}`,
+    explanation: 'RMSNorm stabilizes scale without centering features.',
+  },
+
+  {
+    id: 'residual-add-vector',
+    stepLabel: '44.1',
+    group: 'Residual stream mechanics',
+    title: 'Add residual',
+    concept: 'A residual connection adds a block output back to the original stream.',
+    objective: 'Push x[i] + update[i].',
+    difficulty: 'warmup',
+    starterCode: `function addResidual(x, update) {
+  const result = [];
+
+  for (let i = 0; i < x.length; i++) {
+    // TODO: add original stream and update.
+    result.push(0);
+  }
+
+  return result;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('simple residual', addResidual([1, 2], [10, 20]), [11, 22]);
+check('zero update', addResidual([1, 2, 3], [0, 0, 0]), [1, 2, 3]);
+check('negative update', addResidual([5, 5], [-1, 2]), [4, 7]);
+
+return results;`,
+    hints: [
+      'Residual means original plus update.',
+      'Add coordinate by coordinate.',
+      'result.push(x[i] + update[i]);',
+    ],
+    solution: `function addResidual(x, update) {
+  const result = [];
+
+  for (let i = 0; i < x.length; i++) {
+    result.push(x[i] + update[i]);
+  }
+
+  return result;
+}`,
+    explanation: 'Residual connections let each block write an update into the shared representation stream.',
+  },
+
+  {
+    id: 'residual-scaled-update',
+    stepLabel: '44.2',
+    group: 'Residual stream mechanics',
+    title: 'Scaled residual update',
+    concept: 'Sometimes updates are scaled before being added to the residual stream.',
+    objective: 'Push x[i] + scale * update[i].',
+    difficulty: 'core',
+    starterCode: `function addScaledResidual(x, update, scale) {
+  const result = [];
+
+  for (let i = 0; i < x.length; i++) {
+    // TODO: add scaled update to x.
+    result.push(x[i]);
+  }
+
+  return result;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('scale 0.5', addScaledResidual([1, 2], [10, 20], 0.5), [6, 12]);
+check('scale 0', addScaledResidual([1, 2], [10, 20], 0), [1, 2]);
+check('scale 1', addScaledResidual([1, 2], [10, 20], 1), [11, 22]);
+
+return results;`,
+    hints: [
+      'The update is multiplied by scale before adding.',
+      'Use x[i] + scale * update[i].',
+      'result.push(x[i] + scale * update[i]);',
+    ],
+    solution: `function addScaledResidual(x, update, scale) {
+  const result = [];
+
+  for (let i = 0; i < x.length; i++) {
+    result.push(x[i] + scale * update[i]);
+  }
+
+  return result;
+}`,
+    explanation: 'Scaling residual updates can help control signal size in deep networks.',
+  },
+
+  {
+    id: 'residual-prenorm-block',
+    stepLabel: '44.3',
+    group: 'Residual stream mechanics',
+    title: 'Pre-norm residual block',
+    concept: 'A pre-norm block normalizes before the sublayer, then adds the sublayer output back to the stream.',
+    objective: 'Return x plus sublayer(normedX).',
+    difficulty: 'challenge',
+    starterCode: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function preNormBlock(x, normedX, sublayer) {
+  const update = sublayer(normedX);
+
+  // TODO: return residual stream after the update.
+  return update;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('identity update', preNormBlock([1, 2], [10, 20], (h) => [h[0], h[1]]), [11, 22]);
+check('zero update', preNormBlock([1, 2], [10, 20], () => [0, 0]), [1, 2]);
+
+return results;`,
+    hints: [
+      'Residual block returns original x plus update.',
+      'update is already computed.',
+      'return addVectors(x, update);',
+    ],
+    solution: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function preNormBlock(x, normedX, sublayer) {
+  const update = sublayer(normedX);
+  return addVectors(x, update);
+}`,
+    explanation: 'Pre-norm transformers normalize the stream before attention or MLP, then add the block output back.',
+  },
+
+  {
+    id: 'swiglu-silu',
+    stepLabel: '45.1',
+    group: 'MLP and SwiGLU',
+    title: 'SiLU activation',
+    concept: 'SiLU is x * sigmoid(x), used inside SwiGLU-style MLPs.',
+    objective: 'Return x * sigmoid(x).',
+    difficulty: 'core',
+    starterCode: `function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+function silu(x) {
+  // TODO: return x times sigmoid(x).
+  return x;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('silu 0', silu(0), 0);
+check('silu log 3', silu(Math.log(3)), Math.log(3) * 0.75);
+check('silu -log 3', silu(-Math.log(3)), -Math.log(3) * 0.25);
+
+return results;`,
+    hints: [
+      'SiLU gates x by sigmoid(x).',
+      'sigmoid(x) is already available.',
+      'return x * sigmoid(x);',
+    ],
+    solution: `function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+function silu(x) {
+  return x * sigmoid(x);
+}`,
+    explanation: 'SiLU is a smooth gate: positive values mostly pass, negative values are softened.',
+  },
+
+  {
+    id: 'swiglu-elementwise-gate',
+    stepLabel: '45.2',
+    group: 'MLP and SwiGLU',
+    title: 'Elementwise gate',
+    concept: 'Gated MLPs multiply one hidden stream by another gate stream element by element.',
+    objective: 'Push values[i] * gates[i].',
+    difficulty: 'warmup',
+    starterCode: `function elementwiseGate(values, gates) {
+  const output = [];
+
+  for (let i = 0; i < values.length; i++) {
+    // TODO: multiply matching entries.
+    output.push(values[i]);
+  }
+
+  return output;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('simple gate', elementwiseGate([1, 2, 3], [10, 0, 2]), [10, 0, 6]);
+check('all keep', elementwiseGate([1, 2], [1, 1]), [1, 2]);
+check('all block', elementwiseGate([1, 2], [0, 0]), [0, 0]);
+
+return results;`,
+    hints: [
+      'This is elementwise multiplication.',
+      'Use values[i] * gates[i].',
+      'output.push(values[i] * gates[i]);',
+    ],
+    solution: `function elementwiseGate(values, gates) {
+  const output = [];
+
+  for (let i = 0; i < values.length; i++) {
+    output.push(values[i] * gates[i]);
+  }
+
+  return output;
+}`,
+    explanation: 'Gating lets one stream decide how much of another stream passes through.',
+  },
+
+  {
+    id: 'swiglu-hidden',
+    stepLabel: '45.3',
+    group: 'MLP and SwiGLU',
+    title: 'SwiGLU hidden activation',
+    concept: 'SwiGLU combines a value stream with a SiLU-activated gate stream.',
+    objective: 'Push value[i] * silu(gate[i]).',
+    difficulty: 'challenge',
+    starterCode: `function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+function silu(x) {
+  return x * sigmoid(x);
+}
+
+function swigluHidden(values, gates) {
+  const output = [];
+
+  for (let i = 0; i < values.length; i++) {
+    // TODO: multiply values[i] by silu(gates[i]).
+    output.push(0);
+  }
+
+  return output;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+function siluRef(x) {
+  return x * sigmoid(x);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('swiglu simple', swigluHidden([2, 3], [0, Math.log(3)]), [0, 3 * siluRef(Math.log(3))]);
+check('zero values', swigluHidden([0, 0], [10, 10]), [0, 0]);
+
+return results;`,
+    hints: [
+      'Apply SiLU to the gate stream.',
+      'Then multiply by the value stream.',
+      'output.push(values[i] * silu(gates[i]));',
+    ],
+    solution: `function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+function silu(x) {
+  return x * sigmoid(x);
+}
+
+function swigluHidden(values, gates) {
+  const output = [];
+
+  for (let i = 0; i < values.length; i++) {
+    output.push(values[i] * silu(gates[i]));
+  }
+
+  return output;
+}`,
+    explanation: 'SwiGLU is a modern gated MLP pattern used in many transformer variants.',
+  },
+
+  {
+    id: 'mlp-output-projection',
+    stepLabel: '45.4',
+    group: 'MLP and SwiGLU',
+    title: 'MLP output projection',
+    concept: 'After hidden activation, an MLP projects back to the model dimension.',
+    objective: 'Return denseLayer(hidden, outputWeights, outputBiases).',
+    difficulty: 'core',
+    starterCode: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function denseLayer(x, weightColumns, biases) {
+  return weightColumns.map((weights, j) => dot(x, weights) + biases[j]);
+}
+
+function mlpOutput(hidden, outputWeights, outputBiases) {
+  // TODO: project hidden back to output dimension.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('project hidden to 2 outputs', mlpOutput([1, 2], [[3, 4], [5, 6]], [0, 1]), [11, 18]);
+check('identity projection', mlpOutput([7, 8], [[1, 0], [0, 1]], [0, 0]), [7, 8]);
+
+return results;`,
+    hints: [
+      'The helper denseLayer is already available.',
+      'Use hidden as the input vector.',
+      'return denseLayer(hidden, outputWeights, outputBiases);',
+    ],
+    solution: `function dot(a, b) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+  }
+  return total;
+}
+
+function denseLayer(x, weightColumns, biases) {
+  return weightColumns.map((weights, j) => dot(x, weights) + biases[j]);
+}
+
+function mlpOutput(hidden, outputWeights, outputBiases) {
+  return denseLayer(hidden, outputWeights, outputBiases);
+}`,
+    explanation: 'Transformer MLPs expand, activate or gate, then project back into the residual stream dimension.',
+  },
+
+  {
+    id: 'transformer-attention-residual-update',
+    stepLabel: '46.1',
+    group: 'Tiny transformer block',
+    title: 'Attention residual update',
+    concept: 'The attention sublayer writes an update into the residual stream.',
+    objective: 'Return x + attentionOutput.',
+    difficulty: 'warmup',
+    starterCode: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function attentionResidual(x, attentionOutput) {
+  // TODO: return residual stream after attention.
+  return attentionOutput;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('attention update', attentionResidual([1, 2], [10, 20]), [11, 22]);
+check('zero update', attentionResidual([1, 2], [0, 0]), [1, 2]);
+
+return results;`,
+    hints: [
+      'Residual means original stream plus update.',
+      'Use addVectors.',
+      'return addVectors(x, attentionOutput);',
+    ],
+    solution: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function attentionResidual(x, attentionOutput) {
+  return addVectors(x, attentionOutput);
+}`,
+    explanation: 'Attention reads from the sequence and writes an update back into each token residual stream.',
+  },
+
+  {
+    id: 'transformer-mlp-residual-update',
+    stepLabel: '46.2',
+    group: 'Tiny transformer block',
+    title: 'MLP residual update',
+    concept: 'After attention, the MLP sublayer also writes into the residual stream.',
+    objective: 'Return streamAfterAttention + mlpOutput.',
+    difficulty: 'warmup',
+    starterCode: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function mlpResidual(streamAfterAttention, mlpOutput) {
+  // TODO: return residual stream after MLP.
+  return mlpOutput;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('mlp update', mlpResidual([11, 22], [3, 4]), [14, 26]);
+check('zero update', mlpResidual([11, 22], [0, 0]), [11, 22]);
+
+return results;`,
+    hints: [
+      'The MLP update is added to the current stream.',
+      'Use addVectors.',
+      'return addVectors(streamAfterAttention, mlpOutput);',
+    ],
+    solution: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function mlpResidual(streamAfterAttention, mlpOutput) {
+  return addVectors(streamAfterAttention, mlpOutput);
+}`,
+    explanation: 'Transformer blocks usually contain two residual writes: attention, then MLP.',
+  },
+
+  {
+    id: 'transformer-prenorm-block-forward',
+    stepLabel: '46.3',
+    group: 'Tiny transformer block',
+    title: 'Pre-norm transformer block',
+    concept: 'A pre-norm transformer block normalizes before attention and before MLP.',
+    objective: 'Return x + attention(norm1(x)) + mlp(norm2(afterAttention)).',
+    difficulty: 'challenge',
+    starterCode: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function tinyPreNormBlock(x, norm1, attention, norm2, mlp) {
+  const attentionInput = norm1(x);
+  const attentionOutput = attention(attentionInput);
+  const afterAttention = addVectors(x, attentionOutput);
+
+  const mlpInput = norm2(afterAttention);
+  const mlpOutput = mlp(mlpInput);
+
+  // TODO: return afterAttention plus mlpOutput.
+  return mlpOutput;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('simple block', tinyPreNormBlock([1, 2], (x) => x, () => [10, 20], (x) => x, () => [3, 4]), [14, 26]);
+check('zero updates', tinyPreNormBlock([1, 2], (x) => x, () => [0, 0], (x) => x, () => [0, 0]), [1, 2]);
+
+return results;`,
+    hints: [
+      'afterAttention is already x plus attention output.',
+      'The final step adds mlpOutput to afterAttention.',
+      'return addVectors(afterAttention, mlpOutput);',
+    ],
+    solution: `function addVectors(a, b) {
+  return a.map((value, i) => value + b[i]);
+}
+
+function tinyPreNormBlock(x, norm1, attention, norm2, mlp) {
+  const attentionInput = norm1(x);
+  const attentionOutput = attention(attentionInput);
+  const afterAttention = addVectors(x, attentionOutput);
+
+  const mlpInput = norm2(afterAttention);
+  const mlpOutput = mlp(mlpInput);
+
+  return addVectors(afterAttention, mlpOutput);
+}`,
+    explanation: 'This is the transformer-block skeleton: normalize, attention, residual, normalize, MLP, residual.',
+  },
+
+  {
+    id: 'transformer-stack-two-blocks',
+    stepLabel: '46.4',
+    group: 'Tiny transformer block',
+    title: 'Stack two blocks',
+    concept: 'Transformer depth comes from feeding one block output into the next block.',
+    objective: 'Return block2(block1(x)).',
+    difficulty: 'core',
+    starterCode: `function stackTwoBlocks(x, block1, block2) {
+  const afterBlock1 = block1(x);
+
+  // TODO: feed afterBlock1 into block2.
+  return afterBlock1;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('two additive blocks', stackTwoBlocks([1, 2], (x) => x.map((v) => v + 10), (x) => x.map((v) => v * 2)), [22, 24]);
+check('identity then shift', stackTwoBlocks([1, 2], (x) => x, (x) => x.map((v) => v + 1)), [2, 3]);
+
+return results;`,
+    hints: [
+      'Depth means sequential composition.',
+      'block2 receives the output of block1.',
+      'return block2(afterBlock1);',
+    ],
+    solution: `function stackTwoBlocks(x, block1, block2) {
+  const afterBlock1 = block1(x);
+  return block2(afterBlock1);
+}`,
+    explanation: 'Deep transformers repeatedly update the residual stream through many blocks.',
+  },
+
+  {
+    id: 'debug-attention-weights-sum',
+    stepLabel: '47.1',
+    group: 'Transformer debugging checks',
+    title: 'Attention weights sum to one',
+    concept: 'Softmax attention weights should sum to 1.',
+    objective: 'Return the sum of weights.',
+    difficulty: 'warmup',
+    starterCode: `function sumWeights(weights) {
+  let total = 0;
+
+  for (let i = 0; i < weights.length; i++) {
+    // TODO: add each weight.
+    total += 0;
+  }
+
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('two weights', sumWeights([0.5, 0.5]), 1);
+check('three weights', sumWeights([0.2, 0.3, 0.5]), 1);
+check('one weight', sumWeights([1]), 1);
+
+return results;`,
+    hints: [
+      'Loop over all weights.',
+      'Add weights[i] into total.',
+      'total += weights[i];',
+    ],
+    solution: `function sumWeights(weights) {
+  let total = 0;
+
+  for (let i = 0; i < weights.length; i++) {
+    total += weights[i];
+  }
+
+  return total;
+}`,
+    explanation: 'If attention weights do not sum to one, the softmax or mask logic is likely broken.',
+  },
+
+  {
+    id: 'debug-causal-leak',
+    stepLabel: '47.2',
+    group: 'Transformer debugging checks',
+    title: 'Detect future attention leak',
+    concept: 'A causal mask fails if any query attends to a future key.',
+    objective: 'Return true if keyPosition is greater than queryPosition.',
+    difficulty: 'core',
+    starterCode: `function isFutureLeak(queryPosition, keyPosition) {
+  // TODO: return true when key is in the future.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('past is not leak', isFutureLeak(3, 1), false);
+check('same position is not leak', isFutureLeak(3, 3), false);
+check('future is leak', isFutureLeak(3, 4), true);
+check('first query cannot see second key', isFutureLeak(0, 1), true);
+
+return results;`,
+    hints: [
+      'Future means keyPosition is greater than queryPosition.',
+      'Same position is allowed in causal attention.',
+      'return keyPosition > queryPosition;',
+    ],
+    solution: `function isFutureLeak(queryPosition, keyPosition) {
+  return keyPosition > queryPosition;
+}`,
+    explanation: 'Future leakage lets next-token models cheat during training.',
+  },
+
+  {
+    id: 'debug-residual-norm-explosion',
+    stepLabel: '47.3',
+    group: 'Transformer debugging checks',
+    title: 'Detect residual norm explosion',
+    concept: 'Very large residual norms can indicate unstable updates.',
+    objective: 'Return true when norm exceeds threshold.',
+    difficulty: 'core',
+    starterCode: `function norm(v) {
+  let total = 0;
+  for (let i = 0; i < v.length; i++) {
+    total += v[i] * v[i];
+  }
+  return Math.sqrt(total);
+}
+
+function residualNormTooLarge(stream, threshold) {
+  // TODO: return whether norm(stream) is greater than threshold.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('small stream', residualNormTooLarge([3, 4], 10), false);
+check('large stream', residualNormTooLarge([30, 40], 10), true);
+check('equal threshold is not greater', residualNormTooLarge([3, 4], 5), false);
+
+return results;`,
+    hints: [
+      'Use the norm helper.',
+      'Compare norm(stream) with threshold.',
+      'return norm(stream) > threshold;',
+    ],
+    solution: `function norm(v) {
+  let total = 0;
+  for (let i = 0; i < v.length; i++) {
+    total += v[i] * v[i];
+  }
+  return Math.sqrt(total);
+}
+
+function residualNormTooLarge(stream, threshold) {
+  return norm(stream) > threshold;
+}`,
+    explanation: 'Monitoring residual stream norms can help diagnose instability in deep networks.',
+  },
+
+  {
+    id: 'debug-attention-shape-mismatch',
+    stepLabel: '47.4',
+    group: 'Transformer debugging checks',
+    title: 'Detect Q/K dimension mismatch',
+    concept: 'Queries and keys must have the same feature dimension for dot products.',
+    objective: 'Return whether queryDim equals keyDim.',
+    difficulty: 'core',
+    starterCode: `function attentionDimsCompatible(query, key) {
+  const queryDim = query.length;
+  const keyDim = key.length;
+
+  // TODO: return whether dimensions match.
+  return false;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('same dimension', attentionDimsCompatible([1, 2], [3, 4]), true);
+check('different dimension', attentionDimsCompatible([1, 2, 3], [4, 5]), false);
+check('one-dimensional same', attentionDimsCompatible([1], [2]), true);
+
+return results;`,
+    hints: [
+      'Dot products require matching lengths.',
+      'Compare queryDim and keyDim.',
+      'return queryDim === keyDim;',
+    ],
+    solution: `function attentionDimsCompatible(query, key) {
+  const queryDim = query.length;
+  const keyDim = key.length;
+
+  return queryDim === keyDim;
+}`,
+    explanation: 'Many transformer bugs are shape bugs: Q and K must line up for similarity scores.',
+  },
+
+  {
+    id: 'lm-vocab-size',
+    stepLabel: '48.1',
+    group: 'Mini vocabulary and logits',
+    title: 'Vocabulary size',
+    concept: 'A language model predicts one score per vocabulary token.',
+    objective: 'Return the number of tokens in the vocabulary.',
+    difficulty: 'warmup',
+    starterCode: `function vocabSize(vocab) {
+  // TODO: return the number of tokens.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('three-token vocab', vocabSize(['cat', 'dog', 'fish']), 3);
+check('one-token vocab', vocabSize(['<eos>']), 1);
+check('five-token vocab', vocabSize(['a', 'b', 'c', 'd', 'e']), 5);
+
+return results;`,
+    hints: [
+      'The vocabulary is an array.',
+      'Array length gives the number of tokens.',
+      'return vocab.length;',
+    ],
+    solution: `function vocabSize(vocab) {
+  return vocab.length;
+}`,
+    explanation: 'A model with vocabulary size V produces V logits at each prediction position.',
+  },
+
+  {
+    id: 'lm-argmax-logit',
+    stepLabel: '48.2',
+    group: 'Mini vocabulary and logits',
+    title: 'Argmax logit',
+    concept: 'Greedy decoding chooses the token with the largest logit.',
+    objective: 'Return the index of the largest logit.',
+    difficulty: 'core',
+    starterCode: `function argmax(logits) {
+  let bestIndex = 0;
+  let bestValue = logits[0];
+
+  for (let i = 1; i < logits.length; i++) {
+    // TODO: update bestIndex and bestValue when logits[i] is larger.
+  }
+
+  return bestIndex;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('largest at index 0', argmax([5, 1, 2]), 0);
+check('largest at index 1', argmax([1, 5, 2]), 1);
+check('largest at index 2', argmax([-3, -2, -1]), 2);
+
+return results;`,
+    hints: [
+      'Compare logits[i] with bestValue.',
+      'If logits[i] is larger, update both bestValue and bestIndex.',
+      `if (logits[i] > bestValue) {
+  bestValue = logits[i];
+  bestIndex = i;
+}`,
+    ],
+    solution: `function argmax(logits) {
+  let bestIndex = 0;
+  let bestValue = logits[0];
+
+  for (let i = 1; i < logits.length; i++) {
+    if (logits[i] > bestValue) {
+      bestValue = logits[i];
+      bestIndex = i;
+    }
+  }
+
+  return bestIndex;
+}`,
+    explanation: 'Argmax decoding is deterministic: it always picks the highest-scoring token.',
+  },
+
+  {
+    id: 'lm-decode-argmax-token',
+    stepLabel: '48.3',
+    group: 'Mini vocabulary and logits',
+    title: 'Decode predicted token',
+    concept: 'A predicted token ID becomes text by indexing into the vocabulary.',
+    objective: 'Return vocab[argmax(logits)].',
+    difficulty: 'core',
+    starterCode: `function argmax(logits) {
+  let bestIndex = 0;
+  let bestValue = logits[0];
+
+  for (let i = 1; i < logits.length; i++) {
+    if (logits[i] > bestValue) {
+      bestValue = logits[i];
+      bestIndex = i;
+    }
+  }
+
+  return bestIndex;
+}
+
+function greedyToken(vocab, logits) {
+  // TODO: return the vocabulary token with the largest logit.
+  return '';
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+const vocab = ['cat', 'dog', 'fish'];
+
+check('predict cat', greedyToken(vocab, [5, 1, 2]), 'cat');
+check('predict dog', greedyToken(vocab, [1, 5, 2]), 'dog');
+check('predict fish', greedyToken(vocab, [-3, -2, -1]), 'fish');
+
+return results;`,
+    hints: [
+      'First get the best token index.',
+      'Then use that index to read from vocab.',
+      'return vocab[argmax(logits)];',
+    ],
+    solution: `function argmax(logits) {
+  let bestIndex = 0;
+  let bestValue = logits[0];
+
+  for (let i = 1; i < logits.length; i++) {
+    if (logits[i] > bestValue) {
+      bestValue = logits[i];
+      bestIndex = i;
+    }
+  }
+
+  return bestIndex;
+}
+
+function greedyToken(vocab, logits) {
+  return vocab[argmax(logits)];
+}`,
+    explanation: 'The model predicts token IDs. The tokenizer vocabulary maps those IDs back to text pieces.',
+  },
+
+  {
+    id: 'lm-logits-to-probabilities',
+    stepLabel: '48.4',
+    group: 'Mini vocabulary and logits',
+    title: 'Logits to probabilities',
+    concept: 'Softmax converts arbitrary logits into probabilities that sum to 1.',
+    objective: 'Return stable softmax probabilities.',
+    difficulty: 'challenge',
+    starterCode: `function softmax(logits) {
+  const maxLogit = Math.max(...logits);
+  let denominator = 0;
+
+  for (let i = 0; i < logits.length; i++) {
+    denominator += Math.exp(logits[i] - maxLogit);
+  }
+
+  const probabilities = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    // TODO: push normalized probability for logits[i].
+    probabilities.push(0);
+  }
+
+  return probabilities;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('equal logits', softmax([0, 0]), [0.5, 0.5]);
+check('log ratio', softmax([0, Math.log(3)]), [0.25, 0.75]);
+check('large equal logits', softmax([1000, 1000]), [0.5, 0.5]);
+
+return results;`,
+    hints: [
+      'Use the same shifted exponentials as the denominator.',
+      'Probability = exp(logit - maxLogit) / denominator.',
+      'probabilities.push(Math.exp(logits[i] - maxLogit) / denominator);',
+    ],
+    solution: `function softmax(logits) {
+  const maxLogit = Math.max(...logits);
+  let denominator = 0;
+
+  for (let i = 0; i < logits.length; i++) {
+    denominator += Math.exp(logits[i] - maxLogit);
+  }
+
+  const probabilities = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    probabilities.push(Math.exp(logits[i] - maxLogit) / denominator);
+  }
+
+  return probabilities;
+}`,
+    explanation: 'Logits are raw scores. Softmax turns them into a probability distribution over tokens.',
+  },
+
+  {
+    id: 'sequence-target-probability',
+    stepLabel: '49.1',
+    group: 'Cross-entropy over sequence positions',
+    title: 'Target token probability',
+    concept: 'At one position, the loss uses the probability assigned to the true next token.',
+    objective: 'Return probabilities[targetTokenId].',
+    difficulty: 'warmup',
+    starterCode: `function targetProbability(probabilities, targetTokenId) {
+  // TODO: return probability of the target token.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('target 0', targetProbability([0.7, 0.2, 0.1], 0), 0.7);
+check('target 1', targetProbability([0.7, 0.2, 0.1], 1), 0.2);
+check('target 2', targetProbability([0.7, 0.2, 0.1], 2), 0.1);
+
+return results;`,
+    hints: [
+      'targetTokenId is an array index.',
+      'Read that probability from the probabilities array.',
+      'return probabilities[targetTokenId];',
+    ],
+    solution: `function targetProbability(probabilities, targetTokenId) {
+  return probabilities[targetTokenId];
+}`,
+    explanation: 'Cross-entropy only cares how much probability the model assigned to the correct token.',
+  },
+
+  {
+    id: 'sequence-nll-one-position',
+    stepLabel: '49.2',
+    group: 'Cross-entropy over sequence positions',
+    title: 'Negative log-likelihood',
+    concept: 'Token loss is -log(probability assigned to the true token).',
+    objective: 'Return -Math.log(targetProbability).',
+    difficulty: 'core',
+    starterCode: `function tokenNLL(targetProbability) {
+  // TODO: return negative log likelihood.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('p=0.5', tokenNLL(0.5), -Math.log(0.5));
+check('p=0.8', tokenNLL(0.8), -Math.log(0.8));
+check('p=0.25', tokenNLL(0.25), -Math.log(0.25));
+
+return results;`,
+    hints: [
+      'Use Math.log.',
+      'The loss is negative log probability.',
+      'return -Math.log(targetProbability);',
+    ],
+    solution: `function tokenNLL(targetProbability) {
+  return -Math.log(targetProbability);
+}`,
+    explanation: 'Confident correct predictions have low loss; low probability on the true token gives high loss.',
+  },
+
+  {
+    id: 'sequence-average-token-loss',
+    stepLabel: '49.3',
+    group: 'Cross-entropy over sequence positions',
+    title: 'Average token loss',
+    concept: 'Language-model loss is usually averaged across predicted positions.',
+    objective: 'Return average of token losses.',
+    difficulty: 'core',
+    starterCode: `function averageTokenLoss(tokenLosses) {
+  let total = 0;
+
+  for (let i = 0; i < tokenLosses.length; i++) {
+    total += tokenLosses[i];
+  }
+
+  // TODO: return average loss.
+  return total;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('average [1,2,3]', averageTokenLoss([1, 2, 3]), 2);
+check('average two losses', averageTokenLoss([0.5, 1.5]), 1);
+check('zero losses', averageTokenLoss([0, 0, 0]), 0);
+
+return results;`,
+    hints: [
+      'Average means total divided by count.',
+      'The count is tokenLosses.length.',
+      'return total / tokenLosses.length;',
+    ],
+    solution: `function averageTokenLoss(tokenLosses) {
+  let total = 0;
+
+  for (let i = 0; i < tokenLosses.length; i++) {
+    total += tokenLosses[i];
+  }
+
+  return total / tokenLosses.length;
+}`,
+    explanation: 'A sequence loss summarizes many next-token prediction losses into one training number.',
+  },
+
+  {
+    id: 'sequence-perplexity',
+    stepLabel: '49.4',
+    group: 'Cross-entropy over sequence positions',
+    title: 'Perplexity',
+    concept: 'Perplexity is exp(average cross-entropy loss).',
+    objective: 'Return Math.exp(averageLoss).',
+    difficulty: 'core',
+    starterCode: `function perplexity(averageLoss) {
+  // TODO: return exp of averageLoss.
+  return averageLoss;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('loss 0', perplexity(0), 1);
+check('loss log 2', perplexity(Math.log(2)), 2);
+check('loss log 10', perplexity(Math.log(10)), 10);
+
+return results;`,
+    hints: [
+      'Use Math.exp.',
+      'Perplexity = e raised to average loss.',
+      'return Math.exp(averageLoss);',
+    ],
+    solution: `function perplexity(averageLoss) {
+  return Math.exp(averageLoss);
+}`,
+    explanation: 'Perplexity loosely means how many choices the model is confused among on average.',
+  },
+
+  {
+    id: 'lm-select-position-logits',
+    stepLabel: '50.1',
+    group: 'Tiny language-model loss',
+    title: 'Select position logits',
+    concept: 'A language model produces one logit vector per sequence position.',
+    objective: 'Return logitsByPosition[position].',
+    difficulty: 'warmup',
+    starterCode: `function positionLogits(logitsByPosition, position) {
+  // TODO: return logits for this sequence position.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+const logits = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+
+check('position 0', positionLogits(logits, 0), [1, 2, 3]);
+check('position 1', positionLogits(logits, 1), [4, 5, 6]);
+check('position 2', positionLogits(logits, 2), [7, 8, 9]);
+
+return results;`,
+    hints: [
+      'Position is an array index.',
+      'Each row is the logits for one position.',
+      'return logitsByPosition[position];',
+    ],
+    solution: `function positionLogits(logitsByPosition, position) {
+  return logitsByPosition[position];
+}`,
+    explanation: 'For a sequence of length T, the model returns T logit vectors, one for each position.',
+  },
+
+  {
+    id: 'lm-one-position-loss',
+    stepLabel: '50.2',
+    group: 'Tiny language-model loss',
+    title: 'One-position loss',
+    concept: 'One LM loss position is cross-entropy between logits and the true next token ID.',
+    objective: 'Convert logits to probabilities, then return -log target probability.',
+    difficulty: 'challenge',
+    starterCode: `function softmax(logits) {
+  const maxLogit = Math.max(...logits);
+  let denominator = 0;
+
+  for (let i = 0; i < logits.length; i++) {
+    denominator += Math.exp(logits[i] - maxLogit);
+  }
+
+  return logits.map((logit) => Math.exp(logit - maxLogit) / denominator);
+}
+
+function onePositionLoss(logits, targetTokenId) {
+  const probabilities = softmax(logits);
+
+  // TODO: return negative log probability of targetTokenId.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('target 0 equal logits', onePositionLoss([0, 0], 0), -Math.log(0.5));
+check('target 1 log ratio', onePositionLoss([0, Math.log(3)], 1), -Math.log(0.75));
+check('target 0 log ratio', onePositionLoss([0, Math.log(3)], 0), -Math.log(0.25));
+
+return results;`,
+    hints: [
+      'The target probability is probabilities[targetTokenId].',
+      'Loss is -Math.log(target probability).',
+      'return -Math.log(probabilities[targetTokenId]);',
+    ],
+    solution: `function softmax(logits) {
+  const maxLogit = Math.max(...logits);
+  let denominator = 0;
+
+  for (let i = 0; i < logits.length; i++) {
+    denominator += Math.exp(logits[i] - maxLogit);
+  }
+
+  return logits.map((logit) => Math.exp(logit - maxLogit) / denominator);
+}
+
+function onePositionLoss(logits, targetTokenId) {
+  const probabilities = softmax(logits);
+  return -Math.log(probabilities[targetTokenId]);
+}`,
+    explanation: 'The model is trained to put high probability on the true next token.',
+  },
+
+  {
+    id: 'lm-average-loss',
+    stepLabel: '50.3',
+    group: 'Tiny language-model loss',
+    title: 'Average language-model loss',
+    concept: 'The final LM loss averages next-token losses across positions.',
+    objective: 'Accumulate onePositionLoss for each position and divide by count.',
+    difficulty: 'challenge',
+    starterCode: `function softmax(logits) {
+  const maxLogit = Math.max(...logits);
+  const exps = logits.map((x) => Math.exp(x - maxLogit));
+  const denom = exps.reduce((a, b) => a + b, 0);
+  return exps.map((x) => x / denom);
+}
+
+function onePositionLoss(logits, targetTokenId) {
+  const probabilities = softmax(logits);
+  return -Math.log(probabilities[targetTokenId]);
+}
+
+function languageModelLoss(logitsByPosition, targetTokenIds) {
+  let total = 0;
+
+  for (let position = 0; position < targetTokenIds.length; position++) {
+    // TODO: add loss for this position.
+    total += 0;
+  }
+
+  return total / targetTokenIds.length;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('two positions equal logits', languageModelLoss([[0, 0], [0, 0]], [0, 1]), -Math.log(0.5));
+check('two positions log ratios', languageModelLoss([[0, Math.log(3)], [Math.log(3), 0]], [1, 0]), -Math.log(0.75));
+
+return results;`,
+    hints: [
+      'Use onePositionLoss(logitsByPosition[position], targetTokenIds[position]).',
+      'Add it to total.',
+      'total += onePositionLoss(logitsByPosition[position], targetTokenIds[position]);',
+    ],
+    solution: `function softmax(logits) {
+  const maxLogit = Math.max(...logits);
+  const exps = logits.map((x) => Math.exp(x - maxLogit));
+  const denom = exps.reduce((a, b) => a + b, 0);
+  return exps.map((x) => x / denom);
+}
+
+function onePositionLoss(logits, targetTokenId) {
+  const probabilities = softmax(logits);
+  return -Math.log(probabilities[targetTokenId]);
+}
+
+function languageModelLoss(logitsByPosition, targetTokenIds) {
+  let total = 0;
+
+  for (let position = 0; position < targetTokenIds.length; position++) {
+    total += onePositionLoss(logitsByPosition[position], targetTokenIds[position]);
+  }
+
+  return total / targetTokenIds.length;
+}`,
+    explanation: 'Language modeling is many small classification losses, one for each predicted next token.',
+  },
+
+  {
+    id: 'teacher-forcing-previous-token',
+    stepLabel: '51.1',
+    group: 'Teacher forcing',
+    title: 'True previous token',
+    concept: 'Teacher forcing feeds the true previous token during training.',
+    objective: 'Return trueTokens[position - 1].',
+    difficulty: 'warmup',
+    starterCode: `function previousTrueToken(trueTokens, position) {
+  // position is greater than 0.
+  // TODO: return the true previous token.
+  return null;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('previous at position 1', previousTrueToken(['A', 'B', 'C'], 1), 'A');
+check('previous at position 2', previousTrueToken(['A', 'B', 'C'], 2), 'B');
+check('previous at position 3', previousTrueToken(['A', 'B', 'C', 'D'], 3), 'C');
+
+return results;`,
+    hints: [
+      'Previous position is position - 1.',
+      'Index into trueTokens.',
+      'return trueTokens[position - 1];',
+    ],
+    solution: `function previousTrueToken(trueTokens, position) {
+  return trueTokens[position - 1];
+}`,
+    explanation: 'During training, teacher forcing gives the model the correct previous context instead of its own sampled mistakes.',
+  },
+
+  {
+    id: 'teacher-forcing-inputs',
+    stepLabel: '51.2',
+    group: 'Teacher forcing',
+    title: 'Teacher-forced inputs',
+    concept: 'Training inputs are usually shifted right: start token followed by all true tokens except the last.',
+    objective: 'Build [startToken, ...tokensWithoutLast].',
+    difficulty: 'core',
+    starterCode: `function teacherForcedInputs(tokens, startToken) {
+  const inputs = [startToken];
+
+  for (let i = 0; i < tokens.length - 1; i++) {
+    // TODO: append the true token at position i.
+    inputs.push(null);
+  }
+
+  return inputs;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('ABC', teacherForcedInputs(['A', 'B', 'C'], '<bos>'), ['<bos>', 'A', 'B']);
+check('one token', teacherForcedInputs(['A'], '<bos>'), ['<bos>']);
+check('four tokens', teacherForcedInputs(['A', 'B', 'C', 'D'], '<bos>'), ['<bos>', 'A', 'B', 'C']);
+
+return results;`,
+    hints: [
+      'The loop already stops before the last token.',
+      'Push tokens[i].',
+      'inputs.push(tokens[i]);',
+    ],
+    solution: `function teacherForcedInputs(tokens, startToken) {
+  const inputs = [startToken];
+
+  for (let i = 0; i < tokens.length - 1; i++) {
+    inputs.push(tokens[i]);
+  }
+
+  return inputs;
+}`,
+    explanation: 'Teacher forcing trains the model to predict token t using the true tokens before t.',
+  },
+
+  {
+    id: 'teacher-forcing-targets',
+    stepLabel: '51.3',
+    group: 'Teacher forcing',
+    title: 'Teacher-forced targets',
+    concept: 'For next-token training, targets are the original token sequence.',
+    objective: 'Return a copy of tokens.',
+    difficulty: 'warmup',
+    starterCode: `function teacherForcedTargets(tokens) {
+  // TODO: return the target tokens.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('ABC', teacherForcedTargets(['A', 'B', 'C']), ['A', 'B', 'C']);
+check('one token', teacherForcedTargets(['A']), ['A']);
+
+return results;`,
+    hints: [
+      'Targets are the true sequence.',
+      'Return a shallow copy so you do not mutate the input.',
+      'return tokens.slice();',
+    ],
+    solution: `function teacherForcedTargets(tokens) {
+  return tokens.slice();
+}`,
+    explanation: 'Inputs are shifted right; targets are the true next tokens to predict.',
+  },
+
+  {
+    id: 'causal-labels-drop-first',
+    stepLabel: '52.1',
+    group: 'Causal label shifting',
+    title: 'Drop first token for labels',
+    concept: 'In causal LM training, each position predicts the next token.',
+    objective: 'Return tokens from index 1 onward.',
+    difficulty: 'warmup',
+    starterCode: `function nextTokenLabels(tokens) {
+  // TODO: return all tokens except the first.
+  return tokens;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('ABC labels', nextTokenLabels(['A', 'B', 'C']), ['B', 'C']);
+check('AB labels', nextTokenLabels(['A', 'B']), ['B']);
+check('one token labels', nextTokenLabels(['A']), []);
+
+return results;`,
+    hints: [
+      'The first token has no previous token predicting it in this simple setup.',
+      'Use slice starting at index 1.',
+      'return tokens.slice(1);',
+    ],
+    solution: `function nextTokenLabels(tokens) {
+  return tokens.slice(1);
+}`,
+    explanation: 'For sequence A B C, the model can learn A -> B and B -> C.',
+  },
+
+  {
+    id: 'causal-inputs-drop-last',
+    stepLabel: '52.2',
+    group: 'Causal label shifting',
+    title: 'Drop last token for inputs',
+    concept: 'The last token has no next-token target inside the sequence.',
+    objective: 'Return all tokens except the last.',
+    difficulty: 'warmup',
+    starterCode: `function causalInputs(tokens) {
+  // TODO: return all tokens except the last.
+  return tokens;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('ABC inputs', causalInputs(['A', 'B', 'C']), ['A', 'B']);
+check('AB inputs', causalInputs(['A', 'B']), ['A']);
+check('one token inputs', causalInputs(['A']), []);
+
+return results;`,
+    hints: [
+      'Use slice from the start to length - 1.',
+      'The last token is a target, not an input for a next token within this sequence.',
+      'return tokens.slice(0, tokens.length - 1);',
+    ],
+    solution: `function causalInputs(tokens) {
+  return tokens.slice(0, tokens.length - 1);
+}`,
+    explanation: 'Causal inputs and next-token labels are offset by one position.',
+  },
+
+  {
+    id: 'causal-input-label-pairs',
+    stepLabel: '52.3',
+    group: 'Causal label shifting',
+    title: 'Input-label pairs',
+    concept: 'Causal language modeling turns a sequence into pairs: current token -> next token.',
+    objective: 'Push [tokens[i], tokens[i + 1]].',
+    difficulty: 'core',
+    starterCode: `function causalPairs(tokens) {
+  const pairs = [];
+
+  for (let i = 0; i < tokens.length - 1; i++) {
+    // TODO: push current token and next token as a pair.
+    pairs.push([]);
+  }
+
+  return pairs;
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('ABC pairs', causalPairs(['A', 'B', 'C']), [['A', 'B'], ['B', 'C']]);
+check('AB pairs', causalPairs(['A', 'B']), [['A', 'B']]);
+check('one token pairs', causalPairs(['A']), []);
+
+return results;`,
+    hints: [
+      'Each pair is current token and next token.',
+      'Use tokens[i] and tokens[i + 1].',
+      'pairs.push([tokens[i], tokens[i + 1]]);',
+    ],
+    solution: `function causalPairs(tokens) {
+  const pairs = [];
+
+  for (let i = 0; i < tokens.length - 1; i++) {
+    pairs.push([tokens[i], tokens[i + 1]]);
+  }
+
+  return pairs;
+}`,
+    explanation: 'Next-token prediction is supervised learning over shifted token pairs.',
+  },
+
+  {
+    id: 'token-training-logit-gradient',
+    stepLabel: '53.1',
+    group: 'Mini token training step',
+    title: 'Logit gradient',
+    concept: 'For softmax + cross-entropy, gradient is probabilities minus one-hot target.',
+    objective: 'Push probabilities[i] - target.',
+    difficulty: 'core',
+    starterCode: `function logitGradient(probabilities, targetId) {
+  const gradient = [];
+
+  for (let i = 0; i < probabilities.length; i++) {
+    const target = i === targetId ? 1 : 0;
+
+    // TODO: push probability minus target.
+    gradient.push(0);
+  }
+
+  return gradient;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('target 0', logitGradient([0.7, 0.3], 0), [-0.3, 0.3]);
+check('target 1', logitGradient([0.7, 0.3], 1), [0.7, -0.7]);
+check('three classes', logitGradient([0.1, 0.8, 0.1], 1), [0.1, -0.2, 0.1]);
+
+return results;`,
+    hints: [
+      'The formula is p - y.',
+      'target is 1 for the true class and 0 otherwise.',
+      'gradient.push(probabilities[i] - target);',
+    ],
+    solution: `function logitGradient(probabilities, targetId) {
+  const gradient = [];
+
+  for (let i = 0; i < probabilities.length; i++) {
+    const target = i === targetId ? 1 : 0;
+    gradient.push(probabilities[i] - target);
+  }
+
+  return gradient;
+}`,
+    explanation: 'The true token logit is pushed up, and competing token logits are pushed down.',
+  },
+
+  {
+    id: 'token-training-update-logit',
+    stepLabel: '53.2',
+    group: 'Mini token training step',
+    title: 'Update one logit',
+    concept: 'A gradient step subtracts learningRate times gradient from a parameter.',
+    objective: 'Return logit - learningRate * gradient.',
+    difficulty: 'warmup',
+    starterCode: `function updateLogit(logit, gradient, learningRate) {
+  // TODO: return updated logit.
+  return logit;
+}`,
+    testCode: `const results = [];
+
+function approxEqual(a, b, tolerance = 1e-9) {
+  return Math.abs(a - b) <= tolerance;
+}
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: approxEqual(actual, expected) });
+}
+
+check('negative gradient increases logit', updateLogit(1, -0.3, 0.1), 1.03);
+check('positive gradient decreases logit', updateLogit(1, 0.7, 0.1), 0.93);
+check('zero gradient no change', updateLogit(5, 0, 0.1), 5);
+
+return results;`,
+    hints: [
+      'Gradient descent subtracts the gradient step.',
+      'Use logit - learningRate * gradient.',
+      'return logit - learningRate * gradient;',
+    ],
+    solution: `function updateLogit(logit, gradient, learningRate) {
+  return logit - learningRate * gradient;
+}`,
+    explanation: 'When the true class gradient is negative, subtracting it increases that logit.',
+  },
+
+  {
+    id: 'token-training-update-all-logits',
+    stepLabel: '53.3',
+    group: 'Mini token training step',
+    title: 'Update all logits',
+    concept: 'One token-prediction training step updates every vocabulary logit.',
+    objective: 'Push logits[i] - learningRate * gradients[i].',
+    difficulty: 'core',
+    starterCode: `function updateAllLogits(logits, gradients, learningRate) {
+  const updated = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    // TODO: update this logit.
+    updated.push(logits[i]);
+  }
+
+  return updated;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('binary update', updateAllLogits([1, 1], [-0.3, 0.3], 0.1), [1.03, 0.97]);
+check('three-class update', updateAllLogits([0, 0, 0], [0.1, -0.2, 0.1], 0.5), [-0.05, 0.1, -0.05]);
+
+return results;`,
+    hints: [
+      'Use the same SGD rule for every logit.',
+      'Subtract learningRate * gradients[i].',
+      'updated.push(logits[i] - learningRate * gradients[i]);',
+    ],
+    solution: `function updateAllLogits(logits, gradients, learningRate) {
+  const updated = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    updated.push(logits[i] - learningRate * gradients[i]);
+  }
+
+  return updated;
+}`,
+    explanation: 'A training step increases the true token score and lowers competing scores.',
+  },
+
+  {
+    id: 'sampling-cumulative-pick',
+    stepLabel: '54.1',
+    group: 'Sampling from logits',
+    title: 'Pick from cumulative probabilities',
+    concept: 'Sampling chooses the first cumulative probability that exceeds a random number.',
+    objective: 'Return the first index where cumulative probability exceeds r.',
+    difficulty: 'core',
+    starterCode: `function sampleFromProbabilities(probabilities, r) {
+  let cumulative = 0;
+
+  for (let i = 0; i < probabilities.length; i++) {
+    cumulative += probabilities[i];
+
+    // TODO: return i when r is less than cumulative.
+  }
+
+  return probabilities.length - 1;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('r in first bucket', sampleFromProbabilities([0.2, 0.3, 0.5], 0.1), 0);
+check('r in second bucket', sampleFromProbabilities([0.2, 0.3, 0.5], 0.25), 1);
+check('r in third bucket', sampleFromProbabilities([0.2, 0.3, 0.5], 0.8), 2);
+
+return results;`,
+    hints: [
+      'cumulative is the probability mass up to index i.',
+      'If r < cumulative, choose i.',
+      'if (r < cumulative) return i;',
+    ],
+    solution: `function sampleFromProbabilities(probabilities, r) {
+  let cumulative = 0;
+
+  for (let i = 0; i < probabilities.length; i++) {
+    cumulative += probabilities[i];
+
+    if (r < cumulative) return i;
+  }
+
+  return probabilities.length - 1;
+}`,
+    explanation: 'Sampling turns a probability distribution into one selected token ID.',
+  },
+
+  {
+    id: 'sampling-token-from-vocab',
+    stepLabel: '54.2',
+    group: 'Sampling from logits',
+    title: 'Sample token from vocabulary',
+    concept: 'After sampling a token ID, decode it through the vocabulary.',
+    objective: 'Return vocab[sampledIndex].',
+    difficulty: 'warmup',
+    starterCode: `function sampleFromProbabilities(probabilities, r) {
+  let cumulative = 0;
+
+  for (let i = 0; i < probabilities.length; i++) {
+    cumulative += probabilities[i];
+    if (r < cumulative) return i;
+  }
+
+  return probabilities.length - 1;
+}
+
+function sampleToken(vocab, probabilities, r) {
+  const sampledIndex = sampleFromProbabilities(probabilities, r);
+
+  // TODO: return the token at sampledIndex.
+  return '';
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+const vocab = ['cat', 'dog', 'fish'];
+
+check('sample cat', sampleToken(vocab, [0.2, 0.3, 0.5], 0.1), 'cat');
+check('sample dog', sampleToken(vocab, [0.2, 0.3, 0.5], 0.25), 'dog');
+check('sample fish', sampleToken(vocab, [0.2, 0.3, 0.5], 0.8), 'fish');
+
+return results;`,
+    hints: [
+      'sampledIndex is already computed.',
+      'Use it to index into vocab.',
+      'return vocab[sampledIndex];',
+    ],
+    solution: `function sampleFromProbabilities(probabilities, r) {
+  let cumulative = 0;
+
+  for (let i = 0; i < probabilities.length; i++) {
+    cumulative += probabilities[i];
+    if (r < cumulative) return i;
+  }
+
+  return probabilities.length - 1;
+}
+
+function sampleToken(vocab, probabilities, r) {
+  const sampledIndex = sampleFromProbabilities(probabilities, r);
+  return vocab[sampledIndex];
+}`,
+    explanation: 'Sampling can produce different valid continuations from the same model distribution.',
+  },
+
+  {
+    id: 'sampling-greedy-or-sample',
+    stepLabel: '54.3',
+    group: 'Sampling from logits',
+    title: 'Greedy or sample',
+    concept: 'Generation can choose the highest-probability token or sample from the distribution.',
+    objective: 'Use greedy when mode is "greedy", otherwise sample.',
+    difficulty: 'core',
+    starterCode: `function argmax(values) {
+  let bestIndex = 0;
+  let bestValue = values[0];
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i] > bestValue) {
+      bestValue = values[i];
+      bestIndex = i;
+    }
+  }
+
+  return bestIndex;
+}
+
+function sampleFromProbabilities(probabilities, r) {
+  let cumulative = 0;
+  for (let i = 0; i < probabilities.length; i++) {
+    cumulative += probabilities[i];
+    if (r < cumulative) return i;
+  }
+  return probabilities.length - 1;
+}
+
+function chooseTokenId(probabilities, mode, r) {
+  // TODO: if mode is "greedy", return argmax; otherwise sample.
+  return 0;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('greedy chooses largest', chooseTokenId([0.2, 0.3, 0.5], 'greedy', 0.1), 2);
+check('sample first bucket', chooseTokenId([0.2, 0.3, 0.5], 'sample', 0.1), 0);
+check('sample second bucket', chooseTokenId([0.2, 0.3, 0.5], 'sample', 0.25), 1);
+
+return results;`,
+    hints: [
+      'Greedy ignores r and picks argmax.',
+      'Sampling uses sampleFromProbabilities.',
+      'return mode === "greedy" ? argmax(probabilities) : sampleFromProbabilities(probabilities, r);',
+    ],
+    solution: `function argmax(values) {
+  let bestIndex = 0;
+  let bestValue = values[0];
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i] > bestValue) {
+      bestValue = values[i];
+      bestIndex = i;
+    }
+  }
+
+  return bestIndex;
+}
+
+function sampleFromProbabilities(probabilities, r) {
+  let cumulative = 0;
+  for (let i = 0; i < probabilities.length; i++) {
+    cumulative += probabilities[i];
+    if (r < cumulative) return i;
+  }
+  return probabilities.length - 1;
+}
+
+function chooseTokenId(probabilities, mode, r) {
+  return mode === "greedy" ? argmax(probabilities) : sampleFromProbabilities(probabilities, r);
+}`,
+    explanation: 'Greedy decoding is stable but can be dull; sampling is more diverse but less predictable.',
+  },
+
+  {
+    id: 'temperature-scale-logits',
+    stepLabel: '55.1',
+    group: 'Temperature and top-k / top-p',
+    title: 'Temperature-scaled logits',
+    concept: 'Temperature divides logits before softmax. Lower temperature sharpens; higher temperature flattens.',
+    objective: 'Push logits[i] / temperature.',
+    difficulty: 'core',
+    starterCode: `function applyTemperature(logits, temperature) {
+  const scaled = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    // TODO: divide logit by temperature.
+    scaled.push(logits[i]);
+  }
+
+  return scaled;
+}`,
+    testCode: `const results = [];
+
+function approxArray(a, b, tolerance = 1e-9) {
+  return a.length === b.length && a.every((value, index) => Math.abs(value - b[index]) <= tolerance);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: approxArray(actual, expected),
+  });
+}
+
+check('temperature 1', applyTemperature([2, 4], 1), [2, 4]);
+check('temperature 2', applyTemperature([2, 4], 2), [1, 2]);
+check('temperature 0.5', applyTemperature([2, 4], 0.5), [4, 8]);
+
+return results;`,
+    hints: [
+      'Temperature rescales every logit.',
+      'Divide by temperature.',
+      'scaled.push(logits[i] / temperature);',
+    ],
+    solution: `function applyTemperature(logits, temperature) {
+  const scaled = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    scaled.push(logits[i] / temperature);
+  }
+
+  return scaled;
+}`,
+    explanation: 'Temperature changes how sharp the final softmax distribution becomes.',
+  },
+
+  {
+    id: 'top-k-indices',
+    stepLabel: '55.2',
+    group: 'Temperature and top-k / top-p',
+    title: 'Top-k indices',
+    concept: 'Top-k sampling keeps only the k highest-scoring tokens.',
+    objective: 'Return indices of the top k logits.',
+    difficulty: 'challenge',
+    starterCode: `function topKIndices(logits, k) {
+  const indexed = logits.map((value, index) => ({ value, index }));
+
+  indexed.sort((a, b) => b.value - a.value);
+
+  // TODO: return the first k indices.
+  return [];
+}`,
+    testCode: `const results = [];
+
+function sameArray(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArray(actual, expected),
+  });
+}
+
+check('top 1', topKIndices([1, 5, 3], 1), [1]);
+check('top 2', topKIndices([1, 5, 3], 2), [1, 2]);
+check('top 3', topKIndices([-1, -5, 0], 3), [2, 0, 1]);
+
+return results;`,
+    hints: [
+      'indexed is already sorted from largest to smallest.',
+      'Take the first k entries and return their index fields.',
+      'return indexed.slice(0, k).map((item) => item.index);',
+    ],
+    solution: `function topKIndices(logits, k) {
+  const indexed = logits.map((value, index) => ({ value, index }));
+
+  indexed.sort((a, b) => b.value - a.value);
+
+  return indexed.slice(0, k).map((item) => item.index);
+}`,
+    explanation: 'Top-k prevents low-ranked tokens from being sampled at all.',
+  },
+
+  {
+    id: 'top-k-mask-logits',
+    stepLabel: '55.3',
+    group: 'Temperature and top-k / top-p',
+    title: 'Mask non-top-k logits',
+    concept: 'Tokens outside top-k are masked to -Infinity before softmax.',
+    objective: 'Keep logits in allowed indices, otherwise -Infinity.',
+    difficulty: 'challenge',
+    starterCode: `function maskToTopK(logits, allowedIndices) {
+  const masked = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    // TODO: keep logits[i] only if i is in allowedIndices.
+    masked.push(logits[i]);
+  }
+
+  return masked;
+}`,
+    testCode: `const results = [];
+
+function sameArraySpecial(a, b) {
+  return a.length === b.length && a.every((value, index) => Object.is(value, b[index]));
+}
+
+function check(name, actual, expected) {
+  results.push({
+    name,
+    actual: JSON.stringify(actual),
+    expected: JSON.stringify(expected),
+    passed: sameArraySpecial(actual, expected),
+  });
+}
+
+check('keep indices 1 and 2', maskToTopK([1, 5, 3], [1, 2]), [-Infinity, 5, 3]);
+check('keep index 0', maskToTopK([1, 5, 3], [0]), [1, -Infinity, -Infinity]);
+
+return results;`,
+    hints: [
+      'Use allowedIndices.includes(i).',
+      'Keep the logit when allowed; otherwise use -Infinity.',
+      'masked.push(allowedIndices.includes(i) ? logits[i] : -Infinity);',
+    ],
+    solution: `function maskToTopK(logits, allowedIndices) {
+  const masked = [];
+
+  for (let i = 0; i < logits.length; i++) {
+    masked.push(allowedIndices.includes(i) ? logits[i] : -Infinity);
+  }
+
+  return masked;
+}`,
+    explanation: 'Masking before softmax makes excluded tokens receive zero probability.',
+  },
+
+  {
+    id: 'top-p-cutoff',
+    stepLabel: '55.4',
+    group: 'Temperature and top-k / top-p',
+    title: 'Top-p cutoff',
+    concept: 'Top-p keeps the smallest set of high-probability tokens whose cumulative mass reaches p.',
+    objective: 'Return how many sorted probabilities are needed to reach p.',
+    difficulty: 'challenge',
+    starterCode: `function topPCount(sortedProbabilities, p) {
+  let cumulative = 0;
+
+  for (let i = 0; i < sortedProbabilities.length; i++) {
+    cumulative += sortedProbabilities[i];
+
+    // TODO: return i + 1 once cumulative reaches p.
+  }
+
+  return sortedProbabilities.length;
+}`,
+    testCode: `const results = [];
+
+function check(name, actual, expected) {
+  results.push({ name, actual, expected, passed: Object.is(actual, expected) });
+}
+
+check('one token enough', topPCount([0.8, 0.1, 0.1], 0.7), 1);
+check('two tokens needed', topPCount([0.5, 0.3, 0.2], 0.8), 2);
+check('all tokens needed', topPCount([0.4, 0.3, 0.2, 0.1], 0.95), 4);
+
+return results;`,
+    hints: [
+      'sortedProbabilities are already largest to smallest.',
+      'When cumulative >= p, return the number of tokens included.',
+      'if (cumulative >= p) return i + 1;',
+    ],
+    solution: `function topPCount(sortedProbabilities, p) {
+  let cumulative = 0;
+
+  for (let i = 0; i < sortedProbabilities.length; i++) {
+    cumulative += sortedProbabilities[i];
+
+    if (cumulative >= p) return i + 1;
+  }
+
+  return sortedProbabilities.length;
+}`,
+    explanation: 'Top-p adapts the candidate set size to the shape of the probability distribution.',
+  },
 ];
