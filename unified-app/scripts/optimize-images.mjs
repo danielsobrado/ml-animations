@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const defaultImagesDir = path.resolve(__dirname, '../../images');
+const repoRoot = path.resolve(__dirname, '../..');
 
 const defaults = {
   format: 'jpeg',
@@ -28,7 +28,7 @@ Usage:
   npm run images:optimize -- [folder] [options]
 
 Defaults:
-  folder      ../images
+  folder      all existing ../*-animation/images folders
   format      jpeg
   quality     82
   max size    1600x1600
@@ -46,7 +46,7 @@ Options:
 
 function parseArgs(argv) {
   const options = { ...defaults };
-  let folder = defaultImagesDir;
+  let folder = null;
 
   for (const arg of argv) {
     if (arg === '--help' || arg === '-h') {
@@ -100,6 +100,27 @@ async function getPngFiles(folder) {
     .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith('.png'))
     .map((entry) => path.join(folder, entry.name))
     .sort((a, b) => a.localeCompare(b));
+}
+
+async function getDefaultImageFolders() {
+  const entries = await fs.readdir(repoRoot, { withFileTypes: true });
+  const lessonImageFolders = entries
+    .filter((entry) => entry.isDirectory() && entry.name.endsWith('-animation'))
+    .map((entry) => path.join(repoRoot, entry.name, 'images'));
+  const existingFolders = [];
+
+  for (const folder of lessonImageFolders) {
+    try {
+      const stats = await fs.stat(folder);
+      if (stats.isDirectory()) {
+        existingFolders.push(folder);
+      }
+    } catch {
+      // Lesson has no images folder. Skip it.
+    }
+  }
+
+  return existingFolders.sort((a, b) => a.localeCompare(b));
 }
 
 function formatBytes(bytes) {
@@ -192,14 +213,25 @@ async function convertPng(file, options) {
 
 async function main() {
   const { folder, options } = parseArgs(process.argv.slice(2));
-  const pngFiles = await getPngFiles(folder);
+  const folders = folder ? [folder] : await getDefaultImageFolders();
+  const pngFilesByFolder = [];
+
+  for (const imageFolder of folders) {
+    pngFilesByFolder.push({
+      folder: imageFolder,
+      files: await getPngFiles(imageFolder),
+    });
+  }
+
+  const pngFiles = pngFilesByFolder.flatMap((entry) => entry.files);
 
   if (pngFiles.length === 0) {
-    console.log(`No PNG files found in ${folder}`);
+    const folderDescription = folder ? folder : 'lesson image folders';
+    console.log(`No PNG files found in ${folderDescription}`);
     return;
   }
 
-  console.log(`Optimizing ${pngFiles.length} PNG file(s) in ${folder}`);
+  console.log(`Optimizing ${pngFiles.length} PNG file(s) across ${pngFilesByFolder.length} folder(s)`);
 
   const results = [];
   for (const file of pngFiles) {

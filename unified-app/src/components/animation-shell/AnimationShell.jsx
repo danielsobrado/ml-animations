@@ -1,9 +1,21 @@
 import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, BookOpen, ClipboardCheck, FileSearch, GitCompare, Library, ShieldCheck } from 'lucide-react';
+import {
+  AlertTriangle,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardCheck,
+  FileSearch,
+  GitCompare,
+  Image as ImageIcon,
+  Library,
+  ShieldCheck,
+} from 'lucide-react';
 import Eq from '../../_design-system/Eq';
 import { allAnimations } from '../../data/animations';
+import { getLessonImages } from '../../data/lessonImages';
 
 const ConceptMindmap = lazy(() => import('./ConceptMindmap'));
 const AssessmentPanel = lazy(() => import('./AssessmentPanel'));
@@ -307,34 +319,111 @@ function CurriculumDepthPanels({ depth }) {
   );
 }
 
-function MathControls({ model, onReset, onFocusStage, onOpenGlossary }) {
+function MathControls({
+  model,
+  activeWorkspaceTab,
+  hasImages,
+  onReset,
+  onFocusStage,
+  onOpenGlossary,
+  onOpenImages,
+}) {
   const [prereq] = model.mindmap.prereqs;
   const [next] = model.mindmap.next;
+  const controls = hasImages
+    ? model.controls.flatMap((control) => (
+        control.id === 'sum'
+          ? [control, { id: 'images', sigil: '▧', label: 'Images' }]
+          : [control]
+      ))
+    : model.controls;
 
   const actions = {
     prereq: prereq ? { as: Link, to: `/animation/${prereq.id}` } : { as: 'button', onClick: onFocusStage },
     reset: { as: 'button', onClick: onReset },
     play: { as: 'button', onClick: onFocusStage },
     sum: { as: 'button', onClick: onOpenGlossary },
+    images: { as: 'button', onClick: onOpenImages },
     next: next ? { as: Link, to: `/animation/${next.id}` } : { as: 'button', onClick: onFocusStage },
   };
 
   return (
-    <nav className="ua-math-controls" aria-label="Math animation controls">
-      {model.controls.map((control) => {
+    <nav
+      className="ua-math-controls"
+      aria-label="Math animation controls"
+      style={{ '--math-control-count': controls.length }}
+    >
+      {controls.map((control) => {
         const action = actions[control.id];
         const Component = action.as;
         const props = { ...action };
+        const selected = control.id === activeWorkspaceTab;
         delete props.as;
 
         return (
-          <Component key={control.id} {...props} className="ua-sigil-button" data-math-control="true">
+          <Component
+            key={control.id}
+            {...props}
+            className={`ua-sigil-button${selected ? ' is-active' : ''}`}
+            data-math-control="true"
+            aria-pressed={Component === 'button' ? selected : undefined}
+          >
             <span>{control.sigil}</span>
             {control.label}
           </Component>
         );
       })}
     </nav>
+  );
+}
+
+function LessonImageGallery({ images, lessonName }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeImage = images[Math.min(activeIndex, images.length - 1)];
+  const hasMultipleImages = images.length > 1;
+
+  if (!activeImage) return null;
+
+  return (
+    <section className="ua-lesson-images" aria-label={`${lessonName} images`}>
+      <div className="ua-lesson-images-head">
+        <div>
+          <span>Images</span>
+          <h2>{lessonName}</h2>
+        </div>
+        {hasMultipleImages && (
+          <div className="ua-lesson-images-count">
+            {activeIndex + 1} / {images.length}
+          </div>
+        )}
+      </div>
+
+      <figure className="ua-lesson-image-frame">
+        <img src={activeImage.src} alt={activeImage.alt} />
+        <figcaption>{activeImage.title}</figcaption>
+      </figure>
+
+      {hasMultipleImages && (
+        <nav className="ua-lesson-image-nav" aria-label="Lesson image gallery">
+          <button
+            type="button"
+            onClick={() => setActiveIndex((value) => Math.max(0, value - 1))}
+            disabled={activeIndex === 0}
+          >
+            <ChevronLeft size={15} />
+            Previous
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveIndex((value) => Math.min(images.length - 1, value + 1))}
+            disabled={activeIndex === images.length - 1}
+          >
+            Next
+            <ChevronRight size={15} />
+          </button>
+        </nav>
+      )}
+    </section>
   );
 }
 
@@ -410,7 +499,9 @@ function getLessonWorkspaceTabs({
   assessment,
   depth,
   glossaryTerms,
+  lessonImages,
   lessonId,
+  lessonName,
 }) {
   const hasDepth = depth && (
     depth.comparisons.length > 0
@@ -436,6 +527,13 @@ function getLessonWorkspaceTabs({
       icon: Library,
       panel: <Glossary key={lessonId} terms={glossaryTerms} />,
     },
+    lessonImages?.length > 0 && {
+      id: 'images',
+      label: 'Images',
+      icon: ImageIcon,
+      hideFromTabBar: true,
+      panel: <LessonImageGallery key={lessonId} images={lessonImages} lessonName={lessonName} />,
+    },
     hasDepth && {
       id: 'deep-dive',
       label: 'Deep dive',
@@ -446,11 +544,12 @@ function getLessonWorkspaceTabs({
 }
 
 function WorkspaceTabBar({ activeTab, tabs, onTabChange, className = '' }) {
-  if (!tabs.length) return null;
+  const visibleTabs = tabs.filter((tab) => !tab.hideFromTabBar);
+  if (!visibleTabs.length) return null;
 
   return (
     <div className={`ua-workspace-tabs ${className}`.trim()} aria-label="Lesson workspace sections" role="tablist">
-      {tabs.map((tab) => {
+      {visibleTabs.map((tab) => {
         const Icon = tab.icon;
         const selected = tab.id === activeTab;
 
@@ -507,6 +606,8 @@ function WorkspaceTabPortal({ activeTab, tabs, onTabChange }) {
   const [portalSlot, setPortalSlot] = useState(null);
   const contentRootRef = useRef(null);
   const workspaceActive = isWorkspaceTabActive(activeTab, tabs);
+  const visibleTabs = tabs.filter((tab) => !tab.hideFromTabBar);
+  const activeTabConfig = tabs.find((tab) => tab.id === activeTab);
 
   useEffect(() => {
     const stage = document.getElementById('math-main-stage');
@@ -558,7 +659,9 @@ function WorkspaceTabPortal({ activeTab, tabs, onTabChange }) {
     setWorkspaceContentState(contentRootRef.current, workspaceActive);
   }, [workspaceActive]);
 
-  if (!portalSlot) {
+  if (activeTabConfig?.hideFromTabBar) return null;
+
+  if (!portalSlot && visibleTabs.length > 0) {
     return (
       <WorkspaceTabBar
         activeTab={activeTab}
@@ -589,7 +692,9 @@ function LessonWorkspace({
   const selectedTab = tabs.some((tab) => tab.id === activeTab) ? activeTab : null;
   if (!selectedTab) return null;
 
-  const selectedPanel = tabs.find((tab) => tab.id === selectedTab)?.panel;
+  const selectedTabConfig = tabs.find((tab) => tab.id === selectedTab);
+  const selectedPanel = selectedTabConfig?.panel;
+  const labelledBy = selectedTabConfig?.hideFromTabBar ? undefined : `workspace-tab-${selectedTab}`;
 
   return (
     <section id="lesson-workspace" className="ua-lesson-workspace" aria-label="Lesson workspace">
@@ -597,7 +702,8 @@ function LessonWorkspace({
         className="ua-workspace-panel"
         id={`workspace-panel-${selectedTab}`}
         role="tabpanel"
-        aria-labelledby={`workspace-tab-${selectedTab}`}
+        aria-label={labelledBy ? undefined : selectedTabConfig?.label}
+        aria-labelledby={labelledBy}
       >
         {selectedPanel}
       </div>
@@ -613,6 +719,10 @@ export default function AnimationShell({ animation, children }) {
     showShellAssessment: false,
   });
   const { model, showShellAssessment } = learningState;
+  const lessonImages = useMemo(
+    () => getLessonImages(animation.id, animation.name),
+    [animation.id, animation.name],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -640,8 +750,10 @@ export default function AnimationShell({ animation, children }) {
     assessment: showShellAssessment,
     depth: model?.depth,
     glossaryTerms: model?.glossary,
+    lessonImages,
     lessonId: animation.id,
-  }), [animation.id, model?.depth, model?.glossary, showShellAssessment]);
+    lessonName: animation.name,
+  }), [animation.id, animation.name, lessonImages, model?.depth, model?.glossary, showShellAssessment]);
 
   const hasActiveWorkspaceTab = workspaceTabs.some((tab) => tab.id === workspaceTab);
 
@@ -668,11 +780,13 @@ export default function AnimationShell({ animation, children }) {
   }, [animation.id]);
 
   const resetStage = () => {
+    setWorkspaceTab('lesson');
     setResetNonce((value) => value + 1);
     document.getElementById('math-main-stage')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const focusStage = () => {
+    setWorkspaceTab('lesson');
     document.getElementById('math-main-stage')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
@@ -738,9 +852,12 @@ export default function AnimationShell({ animation, children }) {
 
       <MathControls
         model={model}
+        activeWorkspaceTab={workspaceTab}
+        hasImages={lessonImages.length > 0}
         onReset={resetStage}
         onFocusStage={focusStage}
         onOpenGlossary={() => openWorkspaceTab('glossary')}
+        onOpenImages={() => openWorkspaceTab('images')}
       />
 
       <Suspense fallback={<MindmapFallback />}>
@@ -762,11 +879,12 @@ export default function AnimationShell({ animation, children }) {
               hasActiveWorkspaceTab && 'has-workspace-tab',
             ].filter(Boolean).join(' ')}
           >
-            {children}
-            <LessonWorkspace
-              activeTab={workspaceTab}
-              tabs={workspaceTabs}
-            />
+            {hasActiveWorkspaceTab ? (
+              <LessonWorkspace
+                activeTab={workspaceTab}
+                tabs={workspaceTabs}
+              />
+            ) : children}
           </div>
         </main>
 
