@@ -14,9 +14,9 @@ $$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
 
 Probability of A given B = probability of both / probability of B.
 
-![Conditional Probability](https://danielsobrado.github.io/ml-animations/animation/conditional-probability)
+![Conditional Probability](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conditional-probability)
 
-See the intuition: [Conditional Probability Animation](https://danielsobrado.github.io/ml-animations/animation/conditional-probability)
+See the intuition: [Conditional Probability Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conditional-probability)
 
 ## Example
 
@@ -132,7 +132,7 @@ p_b = np.mean(B == 1)
 p_a_given_b = p_ab / p_b
 ```
 
-The animation helps build intuition: [Conditional Probability Animation](https://danielsobrado.github.io/ml-animations/animation/conditional-probability)
+The animation helps build intuition: [Conditional Probability Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conditional-probability)
 
 ---
 

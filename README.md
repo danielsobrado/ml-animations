@@ -4,7 +4,7 @@ Machine Learning Visualized is an interactive curriculum for machine learning, d
 
 The project started as a collection of standalone animations. It is now centered on a unified React app with guided paths, lesson metadata, quizzes, labs, glossary links, and local progress tracking.
 
-[Open the live site](https://danielsobrado.github.io/ml-animations/)
+[Open the live site](https://danielsobrado.github.io/Machine-Learning-Visualized/)
 
 ![Machine Learning Visualized home](screenshots/readme/home.png)
 

@@ -75,7 +75,7 @@ test('active lessons expose static SEO entry pages', () => {
     assert.match(html, /<meta name="description" content="[^"]+" \/>/);
     assert.match(html, /<meta property="og:title" content="[^"]+" \/>/);
     assert.match(html, /<meta name="twitter:card" content="summary_large_image" \/>/);
-    assert.match(html, /<link rel="canonical" href="https:\/\/danielsobrado.github.io\/ml-animations\/[^"]+\/" \/>/);
+    assert.match(html, /<link rel="canonical" href="https:\/\/danielsobrado.github.io\/Machine-Learning-Visualized\/[^"]+\/" \/>/);
   }
 });
 

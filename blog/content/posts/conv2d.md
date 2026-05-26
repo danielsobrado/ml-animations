@@ -21,9 +21,9 @@ Image patch:     Filter:        Output:
 
 The filter "detects" certain patterns - edges, textures, shapes.
 
-![Conv2D Operation](https://danielsobrado.github.io/ml-animations/animation/conv2d)
+![Conv2D Operation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conv2d)
 
-Watch it work: [Conv2D Animation](https://danielsobrado.github.io/ml-animations/animation/conv2d)
+Watch it work: [Conv2D Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conv2d)
 
 ## Key concepts
 
@@ -163,7 +163,7 @@ Vision Transformers (ViT) challenge CNNs but convolutions still useful:
 - Hybrid models: conv stems with transformer bodies
 - Efficient on edge devices
 
-The animation shows exactly how sliding window works: [Conv2D Animation](https://danielsobrado.github.io/ml-animations/animation/conv2d)
+The animation shows exactly how sliding window works: [Conv2D Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conv2d)
 
 ---
 

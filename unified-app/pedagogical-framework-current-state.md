@@ -4,7 +4,7 @@ This note corrects an earlier analytical review that described several now-stale
 
 ## Current Verified State
 
-- The GitHub Pages deployment is accessible at `https://danielsobrado.github.io/ml-animations/`.
+- The GitHub Pages deployment is accessible at `https://danielsobrado.github.io/Machine-Learning-Visualized/`.
 - Live lessons have six-branch concept maps covering prerequisites, mechanism, intuitions, code/formula, traps, and applications/next concepts.
 - Concept-map exports and live-lesson coverage are protected by integrity tests.
 - Rustlings-style code labs exist for every live lesson, with worker-backed test execution in the browser.

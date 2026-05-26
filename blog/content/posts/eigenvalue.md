@@ -18,9 +18,9 @@ $$Av = \lambda v$$
 
 Apply matrix → just multiplies by scalar. Direction unchanged.
 
-![Eigenvalue Visualization](https://danielsobrado.github.io/ml-animations/animation/eigenvalue)
+![Eigenvalue Visualization](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/eigenvalue)
 
-See the transformation: [Eigenvalue Animation](https://danielsobrado.github.io/ml-animations/animation/eigenvalue)
+See the transformation: [Eigenvalue Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/eigenvalue)
 
 ## Finding eigenvalues
 
@@ -169,7 +169,7 @@ For symmetric positive definite matrices, singular values = eigenvalues.
 
 **Attention analysis:** Eigenvalues of attention matrices
 
-The animation shows how matrices transform eigenvectors: [Eigenvalue Animation](https://danielsobrado.github.io/ml-animations/animation/eigenvalue)
+The animation shows how matrices transform eigenvectors: [Eigenvalue Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/eigenvalue)
 
 ---
 

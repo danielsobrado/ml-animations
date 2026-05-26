@@ -25,9 +25,9 @@ logits = [2.0, 1.0, 0.1]
 probs = softmax(logits)  # [0.659, 0.242, 0.099]
 ```
 
-![Softmax Function](https://danielsobrado.github.io/ml-animations/animation/softmax)
+![Softmax Function](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/softmax)
 
-Interactive demo: [Softmax Animation](https://danielsobrado.github.io/ml-animations/animation/softmax)
+Interactive demo: [Softmax Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/softmax)
 
 ## What it does
 
@@ -174,7 +174,7 @@ class Classifier(nn.Module):
 loss = nn.CrossEntropyLoss()(logits, targets)
 ```
 
-See how logits become probabilities: [Softmax Animation](https://danielsobrado.github.io/ml-animations/animation/softmax)
+See how logits become probabilities: [Softmax Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/softmax)
 
 ---
 

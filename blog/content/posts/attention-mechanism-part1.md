@@ -22,9 +22,9 @@ You have three things:
 
 Unlike normal database that returns exact match, attention returns weighted combination of ALL values. The weights depend on how well query matches each key.
 
-![Attention Mechanism Interactive Demo](https://danielsobrado.github.io/ml-animations/animation/attention-mechanism)
+![Attention Mechanism Interactive Demo](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/attention-mechanism)
 
-Check out the interactive visualization I built: [Attention Mechanism Animation](https://danielsobrado.github.io/ml-animations/animation/attention-mechanism)
+Check out the interactive visualization I built: [Attention Mechanism Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/attention-mechanism)
 
 ## Library search example
 
@@ -87,7 +87,7 @@ In part 2 gonna cover:
 - multi-head attention (why multiple heads?)
 - self-attention vs cross-attention
 
-The visualization tool shows all of this interactively. Play with it: [https://danielsobrado.github.io/ml-animations/animation/attention-mechanism](https://danielsobrado.github.io/ml-animations/animation/attention-mechanism)
+The visualization tool shows all of this interactively. Play with it: [https://danielsobrado.github.io/Machine-Learning-Visualized/animation/attention-mechanism](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/attention-mechanism)
 
 ---
 

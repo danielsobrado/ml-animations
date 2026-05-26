@@ -28,9 +28,9 @@ def relu(x):
 
 That's it. Why is this good?
 
-![ReLU Function](https://danielsobrado.github.io/ml-animations/animation/relu)
+![ReLU Function](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/relu)
 
-Visual explanation: [ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/relu)
+Visual explanation: [ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/relu)
 
 ## The sigmoid problem
 
@@ -93,7 +93,7 @@ def leaky_relu(x, alpha=0.01):
 
 Dead neurons can recover. Still fast.
 
-More on this: [Leaky ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/leaky-relu)
+More on this: [Leaky ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/leaky-relu)
 
 ## Other variants
 
@@ -174,7 +174,7 @@ ReLU wasn't new when deep learning took off. But Krizhevsky used it in AlexNet (
 
 Combined with better initialization and batch norm, deep networks finally worked.
 
-The animation shows how ReLU shapes neural network learning: [ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/relu)
+The animation shows how ReLU shapes neural network learning: [ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/relu)
 
 ---
 

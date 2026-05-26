@@ -29,9 +29,9 @@ Where:
 - γ, β = learnable scale and shift
 - ε = small constant for stability
 
-![Layer Normalization](https://danielsobrado.github.io/ml-animations/animation/layer-normalization)
+![Layer Normalization](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/layer-normalization)
 
-See it visualized: [Layer Norm Animation](https://danielsobrado.github.io/ml-animations/animation/layer-normalization)
+See it visualized: [Layer Norm Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/layer-normalization)
 
 ## Code
 
@@ -153,7 +153,7 @@ Layer norm helps gradient flow:
 
 This is why deep transformers can train at all.
 
-The animation shows how normalization stabilizes activations: [Layer Norm Animation](https://danielsobrado.github.io/ml-animations/animation/layer-normalization)
+The animation shows how normalization stabilizes activations: [Layer Norm Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/layer-normalization)
 
 ---
 

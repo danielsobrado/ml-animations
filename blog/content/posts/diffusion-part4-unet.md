@@ -478,7 +478,7 @@ In [Part 5: Training Loop](/posts/diffusion-part5-training/), we cover:
 - Learning rate schedules
 - Training dynamics
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 ---
 

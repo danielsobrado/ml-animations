@@ -18,9 +18,9 @@ Where:
 - Q is m×n with orthonormal columns (Q^TQ = I)
 - R is n×n upper triangular
 
-![QR Decomposition](https://danielsobrado.github.io/ml-animations/animation/qr-decomposition)
+![QR Decomposition](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/qr-decomposition)
 
-Visualization: [QR Decomposition Animation](https://danielsobrado.github.io/ml-animations/animation/qr-decomposition)
+Visualization: [QR Decomposition Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/qr-decomposition)
 
 ## Why orthogonal matrices are nice
 
@@ -182,7 +182,7 @@ Q, R, P = scipy.linalg.qr(A, pivoting=True)
 - Orthonormalizing a set of vectors
 - Stable basis for column space
 
-The animation shows orthogonalization step by step: [QR Decomposition Animation](https://danielsobrado.github.io/ml-animations/animation/qr-decomposition)
+The animation shows orthogonalization step by step: [QR Decomposition Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/qr-decomposition)
 
 ---
 

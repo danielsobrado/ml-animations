@@ -18,9 +18,9 @@ $$E[X] = \sum_x x \cdot P(X=x)$$
 Continuous:
 $$E[X] = \int_{-\infty}^{\infty} x \cdot f(x) dx$$
 
-![Expected Value and Variance](https://danielsobrado.github.io/ml-animations/animation/expected-value-variance)
+![Expected Value and Variance](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/expected-value-variance)
 
-Visual explanation: [Expected Value Animation](https://danielsobrado.github.io/ml-animations/animation/expected-value-variance)
+Visual explanation: [Expected Value Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/expected-value-variance)
 
 ## Example
 
@@ -150,7 +150,7 @@ Derivatives at t=0 give moments:
 
 Useful for proofs and deriving distributions.
 
-The animation shows how mean and variance describe distributions: [Expected Value Animation](https://danielsobrado.github.io/ml-animations/animation/expected-value-variance)
+The animation shows how mean and variance describe distributions: [Expected Value Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/expected-value-variance)
 
 ---
 

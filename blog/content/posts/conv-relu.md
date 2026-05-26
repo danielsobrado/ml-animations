@@ -20,9 +20,9 @@ output = relu(conv(input))
 
 Conv extracts features. ReLU adds nonlinearity.
 
-![Conv ReLU Pattern](https://danielsobrado.github.io/ml-animations/animation/conv-relu)
+![Conv ReLU Pattern](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conv-relu)
 
-See both operations: [Conv-ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/conv-relu)
+See both operations: [Conv-ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conv-relu)
 
 ## Why ReLU after conv?
 
@@ -151,7 +151,7 @@ print(f"Mean: {activations.mean():.3f}")
 print(f"% zeros: {(activations == 0).float().mean():.1%}")
 ```
 
-The animation shows feature extraction step by step: [Conv-ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/conv-relu)
+The animation shows feature extraction step by step: [Conv-ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/conv-relu)
 
 ---
 

@@ -25,11 +25,11 @@ test('route smoke plan preserves critical explicit routes', () => {
 });
 
 test('route smoke paths are normalized under the GitHub Pages base path', () => {
-  assert.equal(normalizeRoute('/'), '/ml-animations/');
-  assert.equal(normalizeRoute('/labs'), '/ml-animations/labs/');
-  assert.equal(normalizeRoute('/settings'), '/ml-animations/settings/');
-  assert.equal(normalizeRoute('/animation/linear-regression'), '/ml-animations/animation/linear-regression/');
-  assert.equal(normalizeRoute('/ml-animations/animation/softmax'), '/ml-animations/animation/softmax/');
+  assert.equal(normalizeRoute('/'), '/Machine-Learning-Visualized/');
+  assert.equal(normalizeRoute('/labs'), '/Machine-Learning-Visualized/labs/');
+  assert.equal(normalizeRoute('/settings'), '/Machine-Learning-Visualized/settings/');
+  assert.equal(normalizeRoute('/animation/linear-regression'), '/Machine-Learning-Visualized/animation/linear-regression/');
+  assert.equal(normalizeRoute('/Machine-Learning-Visualized/animation/softmax'), '/Machine-Learning-Visualized/animation/softmax/');
 });
 
 test('GitHub Pages static route plan materializes every SPA detail route', () => {

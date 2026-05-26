@@ -31,9 +31,9 @@ def matmul(A, B):
 
 Never use this - O(n³) and slow. Use numpy/torch.
 
-![Matrix Multiplication](https://danielsobrado.github.io/ml-animations/animation/matrix-multiplication)
+![Matrix Multiplication](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/matrix-multiplication)
 
-Visualized step by step: [Matrix Multiplication Animation](https://danielsobrado.github.io/ml-animations/animation/matrix-multiplication)
+Visualized step by step: [Matrix Multiplication Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/matrix-multiplication)
 
 ## Dimension rules
 
@@ -194,7 +194,7 @@ C = A @ B  # allocates new memory
 # For in-place: use torch.mm(A, B, out=C)
 ```
 
-The animation makes the operation intuitive: [Matrix Multiplication Animation](https://danielsobrado.github.io/ml-animations/animation/matrix-multiplication)
+The animation makes the operation intuitive: [Matrix Multiplication Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/matrix-multiplication)
 
 ---
 

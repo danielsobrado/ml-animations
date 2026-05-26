@@ -12,9 +12,9 @@ ML is full of probability distributions. Knowing when to use which one matters.
 
 Data has patterns. Heights cluster around average. Rare events are rare. Distributions capture these patterns mathematically.
 
-![Probability Distributions](https://danielsobrado.github.io/ml-animations/animation/probability-distributions)
+![Probability Distributions](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/probability-distributions)
 
-Interactive examples: [Probability Distributions Animation](https://danielsobrado.github.io/ml-animations/animation/probability-distributions)
+Interactive examples: [Probability Distributions Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/probability-distributions)
 
 ## Normal (Gaussian)
 
@@ -170,7 +170,7 @@ stats.probplot(data, dist="norm", plot=plt)
 statistic, pvalue = stats.kstest(data, 'norm', args=(mu, sigma))
 ```
 
-Explore different distributions interactively: [Probability Distributions Animation](https://danielsobrado.github.io/ml-animations/animation/probability-distributions)
+Explore different distributions interactively: [Probability Distributions Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/probability-distributions)
 
 ---
 

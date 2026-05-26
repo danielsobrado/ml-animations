@@ -22,9 +22,9 @@ Fine-tuning needs:
 
 The pretrained model already knows language. You're just teaching it your task.
 
-![Fine-Tuning Methods](https://danielsobrado.github.io/ml-animations/animation/fine-tuning)
+![Fine-Tuning Methods](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/fine-tuning)
 
-Check the interactive comparison: [Fine-Tuning Animation](https://danielsobrado.github.io/ml-animations/animation/fine-tuning)
+Check the interactive comparison: [Fine-Tuning Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/fine-tuning)
 
 ## Full fine-tuning
 
@@ -159,7 +159,7 @@ model = get_peft_model(model, lora_config)
 4. Ignoring class imbalance
 5. Wrong loss function for task
 
-The visualization helps understand different approaches: [Fine-Tuning Animation](https://danielsobrado.github.io/ml-animations/animation/fine-tuning)
+The visualization helps understand different approaches: [Fine-Tuning Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/fine-tuning)
 
 ---
 

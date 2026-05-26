@@ -22,9 +22,9 @@ Document 2: [2, 0, 1, 1, 0, 1, 1]
 
 That's it. Count each word.
 
-![Bag of Words Process](https://danielsobrado.github.io/ml-animations/animation/bag-of-words)
+![Bag of Words Process](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bag-of-words)
 
-See it visualized: [Bag of Words Animation](https://danielsobrado.github.io/ml-animations/animation/bag-of-words)
+See it visualized: [Bag of Words Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bag-of-words)
 
 ## Building it
 
@@ -167,7 +167,7 @@ Starting new NLP project?
 
 Surprised how often TF-IDF is "good enough" for classification tasks.
 
-The animation shows how documents become vectors: [Bag of Words Animation](https://danielsobrado.github.io/ml-animations/animation/bag-of-words)
+The animation shows how documents become vectors: [Bag of Words Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bag-of-words)
 
 ---
 

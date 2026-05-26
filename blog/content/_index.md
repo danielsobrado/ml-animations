@@ -4,7 +4,7 @@ title: "Welcome"
 
 # Machine Learning Visualized Blog
 
-Interactive explanations of machine learning concepts. Each article pairs with a [visualization](https://danielsobrado.github.io/ml-animations/).
+Interactive explanations of machine learning concepts. Each article pairs with a [visualization](https://danielsobrado.github.io/Machine-Learning-Visualized/).
 
 ## Recent Posts
 
@@ -69,4 +69,4 @@ Browse by category:
 
 ---
 
-[View all animations →](https://danielsobrado.github.io/ml-animations/)
+[View all animations →](https://danielsobrado.github.io/Machine-Learning-Visualized/)

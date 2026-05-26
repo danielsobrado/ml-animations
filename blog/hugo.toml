@@ -1,4 +1,4 @@
-baseURL = 'https://danielsobrado.github.io/ml-animations/blog/'
+baseURL = 'https://danielsobrado.github.io/Machine-Learning-Visualized/blog/'
 languageCode = 'en-us'
 title = 'Machine Learning Visualized Blog'
 theme = 'hugo-paper'
@@ -16,7 +16,7 @@ theme = 'hugo-paper'
   [[menu.main]]
     identifier = 'animations'
     name = 'Animations'
-    url = 'https://danielsobrado.github.io/ml-animations/'
+    url = 'https://danielsobrado.github.io/Machine-Learning-Visualized/'
     weight = 1
   [[menu.main]]
     identifier = 'posts'

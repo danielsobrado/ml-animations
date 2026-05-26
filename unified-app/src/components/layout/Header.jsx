@@ -63,7 +63,7 @@ export default function Header({
         </Link>
         <a
           className="ua-icon-btn"
-          href="https://github.com/danielsobrado/ml-animations"
+          href="https://github.com/danielsobrado/Machine-Learning-Visualized"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub repository"

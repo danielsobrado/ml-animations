@@ -15,9 +15,9 @@ $$\cos(\theta) = \frac{\mathbf{a} \cdot \mathbf{b}}{||\mathbf{a}|| \cdot ||\math
 Range: -1 (opposite) to 1 (same direction).
 0 means perpendicular (orthogonal).
 
-![Cosine Similarity](https://danielsobrado.github.io/ml-animations/animation/cosine-similarity)
+![Cosine Similarity](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/cosine-similarity)
 
-Visual explanation: [Cosine Similarity Animation](https://danielsobrado.github.io/ml-animations/animation/cosine-similarity)
+Visual explanation: [Cosine Similarity Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/cosine-similarity)
 
 ## Computing it
 
@@ -174,7 +174,7 @@ index.add(normalized_embeddings)
 D, I = index.search(query, k=10)  # top 10 neighbors
 ```
 
-The animation shows angle vs magnitude intuition: [Cosine Similarity Animation](https://danielsobrado.github.io/ml-animations/animation/cosine-similarity)
+The animation shows angle vs magnitude intuition: [Cosine Similarity Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/cosine-similarity)
 
 ---
 

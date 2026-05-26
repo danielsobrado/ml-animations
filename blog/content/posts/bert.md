@@ -18,9 +18,9 @@ Left-to-right model sees "bank" before knowing about "river". Has to guess meani
 
 BERT sees full context. "River" helps understand "bank" means riverbank, not financial institution.
 
-![BERT Demo](https://danielsobrado.github.io/ml-animations/animation/bert)
+![BERT Demo](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bert)
 
-Interactive demo: [BERT Animation](https://danielsobrado.github.io/ml-animations/animation/bert)
+Interactive demo: [BERT Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bert)
 
 ## Architecture
 
@@ -83,7 +83,7 @@ Check out the interactive BERT demo:
 - How [CLS] aggregates information
 - Masking process visualization
 
-[BERT Animation](https://danielsobrado.github.io/ml-animations/animation/bert)
+[BERT Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bert)
 
 ## Practical tips from my experience
 

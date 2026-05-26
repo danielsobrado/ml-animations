@@ -16,9 +16,9 @@ $$P(X_{n+1} = j | X_n = i, X_{n-1}, ..., X_0) = P(X_{n+1} = j | X_n = i)$$
 
 Only current state matters. History irrelevant.
 
-![Markov Chains](https://danielsobrado.github.io/ml-animations/animation/markov-chains)
+![Markov Chains](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/markov-chains)
 
-See states evolve: [Markov Chains Animation](https://danielsobrado.github.io/ml-animations/animation/markov-chains)
+See states evolve: [Markov Chains Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/markov-chains)
 
 ## Transition matrix
 
@@ -171,7 +171,7 @@ $$\pi_i P_{ij} = \pi_j P_{ji}$$
 
 Chain looks same forward and backward. Important for MCMC algorithms.
 
-The animation shows how probability flows through states: [Markov Chains Animation](https://danielsobrado.github.io/ml-animations/animation/markov-chains)
+The animation shows how probability flows through states: [Markov Chains Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/markov-chains)
 
 ---
 

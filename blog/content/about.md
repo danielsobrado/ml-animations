@@ -2,7 +2,7 @@
 title: "About Machine Learning Visualized"
 ---
 
-This blog accompanies the [Machine Learning Visualized](https://danielsobrado.github.io/ml-animations/) project - a collection of interactive visualizations explaining machine learning concepts.
+This blog accompanies the [Machine Learning Visualized](https://danielsobrado.github.io/Machine-Learning-Visualized/) project - a collection of interactive visualizations explaining machine learning concepts.
 
 ## What you'll find here
 
@@ -29,5 +29,5 @@ If something's unclear or wrong, open an issue.
 
 ## Links
 
-- [Interactive Animations](https://danielsobrado.github.io/ml-animations/)
-- [GitHub Repository](https://github.com/danielsobrado/ml-animations)
+- [Interactive Animations](https://danielsobrado.github.io/Machine-Learning-Visualized/)
+- [GitHub Repository](https://github.com/danielsobrado/Machine-Learning-Visualized)

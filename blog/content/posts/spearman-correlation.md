@@ -19,9 +19,9 @@ $$\rho = 1 - \frac{6\sum d_i^2}{n(n^2-1)}$$
 
 Where $d_i$ = difference between ranks.
 
-![Spearman Correlation](https://danielsobrado.github.io/ml-animations/animation/spearman-correlation)
+![Spearman Correlation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/spearman-correlation)
 
-See ranking in action: [Spearman Animation](https://danielsobrado.github.io/ml-animations/animation/spearman-correlation)
+See ranking in action: [Spearman Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/spearman-correlation)
 
 ## Example
 
@@ -191,7 +191,7 @@ def partial_spearman(X, Y, Z):
 
 Same for negative values (inverse relationship).
 
-The animation shows how ranking affects correlation: [Spearman Animation](https://danielsobrado.github.io/ml-animations/animation/spearman-correlation)
+The animation shows how ranking affects correlation: [Spearman Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/spearman-correlation)
 
 ---
 

@@ -5,7 +5,7 @@ import 'prismjs/components/prism-rust';
 import 'prismjs/themes/prism-tomorrow.css';
 
 // GitHub repo base URL
-const GITHUB_BASE = 'https://github.com/danielsobrado/ml-animations/blob/main/mini-nn/src';
+const GITHUB_BASE = 'https://github.com/danielsobrado/Machine-Learning-Visualized/blob/main/mini-nn/src';
 
 // Neural Network Architecture
 const NETWORK = {
@@ -773,7 +773,7 @@ function App() {
           </h1>
           <p className="text-gray-400">
             Interactive visualization with Rust code from{' '}
-            <a href="https://github.com/danielsobrado/ml-animations/tree/main/mini-nn" 
+            <a href="https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-nn" 
                className="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener noreferrer">
               mini-nn
             </a>
@@ -1007,7 +1007,7 @@ function App() {
                   </p>
                 </div>
                 <a
-                  href="https://github.com/danielsobrado/ml-animations/tree/main/mini-nn"
+                  href="https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-nn"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
@@ -1053,7 +1053,7 @@ function App() {
         {/* Footer */}
         <div className="mt-8 text-center text-gray-500 text-sm">
           Built with React + GSAP | Rust implementation:{' '}
-          <a href="https://github.com/danielsobrado/ml-animations/tree/main/mini-nn" 
+          <a href="https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-nn" 
              className="text-blue-400 hover:text-blue-300">mini-nn</a>
           {' '}| 84.3% Titanic accuracy, 100% XOR accuracy
         </div>

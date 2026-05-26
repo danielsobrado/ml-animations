@@ -15,9 +15,9 @@ GloVe: first builds co-occurrence matrix, then factorizes it
 
 Different philosophy but results are similar. Sometimes GloVe works better, sometimes Word2Vec.
 
-![GloVe Training](https://danielsobrado.github.io/ml-animations/animation/glove)
+![GloVe Training](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/glove)
 
-Watch the process: [GloVe Animation](https://danielsobrado.github.io/ml-animations/animation/glove)
+Watch the process: [GloVe Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/glove)
 
 ## The co-occurrence matrix
 
@@ -165,7 +165,7 @@ Also:
 - Memory for co-occurrence matrix
 - Harder to train incrementally
 
-The visualization shows how GloVe learns from co-occurrence patterns: [GloVe Animation](https://danielsobrado.github.io/ml-animations/animation/glove)
+The visualization shows how GloVe learns from co-occurrence patterns: [GloVe Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/glove)
 
 ---
 

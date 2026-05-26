@@ -19,9 +19,9 @@ $$y = w_1x_1 + w_2x_2 + ... + w_nx_n + b = \mathbf{w}^T\mathbf{x} + b$$
 
 Find w and b that best fit the data.
 
-![Linear Regression](https://danielsobrado.github.io/ml-animations/animation/linear-regression)
+![Linear Regression](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/linear-regression)
 
-See the fitting process: [Linear Regression Animation](https://danielsobrado.github.io/ml-animations/animation/linear-regression)
+See the fitting process: [Linear Regression Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/linear-regression)
 
 ## Loss function
 
@@ -193,7 +193,7 @@ Not good for:
 
 But always try linear first. Surprisingly often it's enough.
 
-The animation shows how the line fits to data: [Linear Regression Animation](https://danielsobrado.github.io/ml-animations/animation/linear-regression)
+The animation shows how the line fits to data: [Linear Regression Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/linear-regression)
 
 ---
 

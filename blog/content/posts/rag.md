@@ -16,9 +16,9 @@ Training or fine-tuning on your data? Expensive. Slow to update. Data might leak
 
 RAG is simpler: just give the model relevant context at inference time.
 
-![RAG Pipeline](https://danielsobrado.github.io/ml-animations/animation/rag)
+![RAG Pipeline](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rag)
 
-Explore the pipeline: [RAG Animation](https://danielsobrado.github.io/ml-animations/animation/rag)
+Explore the pipeline: [RAG Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rag)
 
 ## How it works
 
@@ -175,7 +175,7 @@ Struggles with:
 - Very precise numerical questions
 - When relevant info spread across many docs
 
-The interactive visualization shows the full flow: [RAG Animation](https://danielsobrado.github.io/ml-animations/animation/rag)
+The interactive visualization shows the full flow: [RAG Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rag)
 
 ---
 

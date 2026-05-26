@@ -431,7 +431,7 @@ In [Part 2: Neural Network Layers](/posts/diffusion-part2-neural-networks/), we'
 - Normalization layers
 - The building blocks of U-Net
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 ---
 

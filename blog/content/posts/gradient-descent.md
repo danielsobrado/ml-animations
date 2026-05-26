@@ -20,9 +20,9 @@ $$w_{new} = w_{old} - \alpha \nabla L(w)$$
 
 Where α is learning rate.
 
-![Gradient Descent](https://danielsobrado.github.io/ml-animations/animation/gradient-descent)
+![Gradient Descent](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/gradient-descent)
 
-Watch the optimization: [Gradient Descent Animation](https://danielsobrado.github.io/ml-animations/animation/gradient-descent)
+Watch the optimization: [Gradient Descent Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/gradient-descent)
 
 ## Why it works
 
@@ -191,7 +191,7 @@ Solutions:
 - Layer normalization
 - Careful initialization
 
-The animation shows how gradient descent navigates the loss landscape: [Gradient Descent Animation](https://danielsobrado.github.io/ml-animations/animation/gradient-descent)
+The animation shows how gradient descent navigates the loss landscape: [Gradient Descent Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/gradient-descent)
 
 ---
 

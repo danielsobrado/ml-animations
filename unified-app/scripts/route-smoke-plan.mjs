@@ -1,6 +1,6 @@
 import { allAnimations } from '../src/data/animations.js';
 
-export const APP_BASE_PATH = (process.env.CURRICULUM_SMOKE_BASE || '/ml-animations').replace(/\/+$/, '');
+export const APP_BASE_PATH = (process.env.CURRICULUM_SMOKE_BASE || '/Machine-Learning-Visualized').replace(/\/+$/, '');
 
 export const EXPLICIT_ROUTES = [
   '/',

@@ -17,9 +17,9 @@ If B gives 1: wasted time exploring.
 
 Can't know without trying. But trying has cost.
 
-![Exploration Strategies](https://danielsobrado.github.io/ml-animations/animation/rl-exploration)
+![Exploration Strategies](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rl-exploration)
 
-Compare strategies: [Exploration Animation](https://danielsobrado.github.io/ml-animations/animation/rl-exploration)
+Compare strategies: [Exploration Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rl-exploration)
 
 ## ε-greedy
 
@@ -179,7 +179,7 @@ class NoisyLinear(nn.Module):
 3. For deep RL, noisy networks often better
 4. For sparse rewards, intrinsic motivation helps
 
-The animation compares these strategies head-to-head: [Exploration Animation](https://danielsobrado.github.io/ml-animations/animation/rl-exploration)
+The animation compares these strategies head-to-head: [Exploration Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rl-exploration)
 
 ---
 

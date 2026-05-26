@@ -14,9 +14,9 @@ Words that appear in similar contexts have similar meanings. "Dog" and "cat" bot
 
 Train a simple neural network on a prediction task. The "side effect" is that word vectors learn to encode meaning.
 
-![Word2Vec Training](https://danielsobrado.github.io/ml-animations/animation/word2vec)
+![Word2Vec Training](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/word2vec)
 
-See it in action: [Word2Vec Animation](https://danielsobrado.github.io/ml-animations/animation/word2vec)
+See it in action: [Word2Vec Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/word2vec)
 
 ## Two flavors
 
@@ -164,7 +164,7 @@ Or use pretrained. GoogleNews vectors trained on 100B words, 3M vocabulary.
 
 BERT and contextual embeddings solved the first issue. But Word2Vec is still useful for many applications.
 
-Interactive exploration: [Word2Vec Animation](https://danielsobrado.github.io/ml-animations/animation/word2vec)
+Interactive exploration: [Word2Vec Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/word2vec)
 
 ---
 

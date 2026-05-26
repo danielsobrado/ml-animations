@@ -29,9 +29,9 @@ def leaky_relu(x, alpha=0.01):
     return np.where(x > 0, x, alpha * x)
 ```
 
-![Leaky ReLU](https://danielsobrado.github.io/ml-animations/animation/leaky-relu)
+![Leaky ReLU](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/leaky-relu)
 
-See the comparison: [Leaky ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/leaky-relu)
+See the comparison: [Leaky ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/leaky-relu)
 
 ## Why it works
 
@@ -142,7 +142,7 @@ Switch to Leaky ReLU. Usually solves it.
 
 PReLU if you want to squeeze out a bit more performance and have compute to spare.
 
-See how the leak prevents dead neurons: [Leaky ReLU Animation](https://danielsobrado.github.io/ml-animations/animation/leaky-relu)
+See how the leak prevents dead neurons: [Leaky ReLU Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/leaky-relu)
 
 ---
 

@@ -136,8 +136,8 @@ function allowedOrigins(env) {
 function safeReturnTo(value, env) {
   const allowed = allowedOrigins(env);
   const fallback = allowed[0]
-    ? `${allowed[0].replace(/\/+$/, '')}/ml-animations/settings`
-    : 'https://danielsobrado.github.io/ml-animations/settings';
+    ? `${allowed[0].replace(/\/+$/, '')}/Machine-Learning-Visualized/settings`
+    : 'https://danielsobrado.github.io/Machine-Learning-Visualized/settings';
   try {
     const url = new URL(value || fallback);
     if (allowed.includes(url.origin)) return url.toString();

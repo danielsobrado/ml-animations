@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { allAnimations } from '../unified-app/src/data/animations.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const siteBaseUrl = 'https://danielsobrado.github.io/ml-animations';
-const appBasePath = '/ml-animations';
+const siteBaseUrl = 'https://danielsobrado.github.io/Machine-Learning-Visualized';
+const appBasePath = '/Machine-Learning-Visualized';
 
 const escapeHtml = (value) =>
   String(value)

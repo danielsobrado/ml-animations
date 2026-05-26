@@ -19,9 +19,9 @@ Two main parts:
 
 Some models use both (original transformer, T5). Some use only encoder (BERT). Some use only decoder (GPT).
 
-![Transformer Architecture](https://danielsobrado.github.io/ml-animations/animation/transformer)
+![Transformer Architecture](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/transformer)
 
-Interactive visualization: [Transformer Animation](https://danielsobrado.github.io/ml-animations/animation/transformer)
+Interactive visualization: [Transformer Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/transformer)
 
 ## Encoder stack
 
@@ -62,7 +62,7 @@ Normalizes activations across features (not batch). Helps training stability.
 
 Placed after residual connection in original transformer. Some variants put it before (Pre-LN vs Post-LN).
 
-See: [Layer Normalization Animation](https://danielsobrado.github.io/ml-animations/animation/layer-normalization)
+See: [Layer Normalization Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/layer-normalization)
 
 ## Feed-forward networks
 
@@ -94,7 +94,7 @@ The animation shows:
 - How encoder and decoder interact
 - Residual connections visually
 
-Try: [Transformer Architecture Animation](https://danielsobrado.github.io/ml-animations/animation/transformer)
+Try: [Transformer Architecture Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/transformer)
 
 Seeing the full picture helped me understand why certain design choices were made.
 

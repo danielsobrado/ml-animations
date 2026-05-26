@@ -19,9 +19,9 @@ Options:
 
 Each has tradeoffs.
 
-![Tokenization Methods](https://danielsobrado.github.io/ml-animations/animation/tokenization)
+![Tokenization Methods](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/tokenization)
 
-See different methods: [Tokenization Animation](https://danielsobrado.github.io/ml-animations/animation/tokenization)
+See different methods: [Tokenization Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/tokenization)
 
 ## Character-level
 
@@ -212,7 +212,7 @@ tokenizer.train(files=['data.txt'], trainer=trainer)
 
 Worth it for specialized domains (code, biology, legal).
 
-See tokenization methods compared: [Tokenization Animation](https://danielsobrado.github.io/ml-animations/animation/tokenization)
+See tokenization methods compared: [Tokenization Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/tokenization)
 
 ---
 

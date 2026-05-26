@@ -14,9 +14,9 @@ Model that processes multiple types of input: text + images, text + audio, etc.
 
 GPT-4V, Gemini, LLaVA, Claude 3 - all multimodal. They can "see" images and reason about them.
 
-![Multimodal Architecture](https://danielsobrado.github.io/ml-animations/animation/multimodal-llm)
+![Multimodal Architecture](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/multimodal-llm)
 
-See the architecture: [Multimodal LLM Animation](https://danielsobrado.github.io/ml-animations/animation/multimodal-llm)
+See the architecture: [Multimodal LLM Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/multimodal-llm)
 
 ## How it works (simplified)
 
@@ -181,7 +181,7 @@ inputs = processor(text=prompt, images=image, return_tensors="pt")
 output = model.generate(**inputs)
 ```
 
-See how modalities combine: [Multimodal LLM Animation](https://danielsobrado.github.io/ml-animations/animation/multimodal-llm)
+See how modalities combine: [Multimodal LLM Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/multimodal-llm)
 
 ---
 

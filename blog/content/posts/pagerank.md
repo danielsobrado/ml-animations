@@ -14,9 +14,9 @@ Imagine random web surfer. Keeps clicking random links. Where do they spend most
 
 Pages with many incoming links from important pages get visited more.
 
-![PageRank](https://danielsobrado.github.io/ml-animations/animation/pagerank)
+![PageRank](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/pagerank)
 
-Watch scores converge: [PageRank Animation](https://danielsobrado.github.io/ml-animations/animation/pagerank)
+Watch scores converge: [PageRank Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/pagerank)
 
 ## Mathematical formulation
 
@@ -180,7 +180,7 @@ Google was born
 
 Simple algorithm, revolutionary impact.
 
-The animation shows PageRank flowing through nodes: [PageRank Animation](https://danielsobrado.github.io/ml-animations/animation/pagerank)
+The animation shows PageRank flowing through nodes: [PageRank Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/pagerank)
 
 ---
 

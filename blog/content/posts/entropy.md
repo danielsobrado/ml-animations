@@ -14,9 +14,9 @@ $$H(X) = -\sum_x P(x) \log P(x)$$
 
 For continuous distributions, use differential entropy with integral.
 
-![Entropy](https://danielsobrado.github.io/ml-animations/animation/entropy)
+![Entropy](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/entropy)
 
-Interactive demo: [Entropy Animation](https://danielsobrado.github.io/ml-animations/animation/entropy)
+Interactive demo: [Entropy Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/entropy)
 
 ## Intuition
 
@@ -136,7 +136,7 @@ Same math, different context. Information entropy and thermodynamic entropy are 
 
 Maximum entropy = equilibrium = most disordered state.
 
-The animation shows how entropy changes with distribution shape: [Entropy Animation](https://danielsobrado.github.io/ml-animations/animation/entropy)
+The animation shows how entropy changes with distribution shape: [Entropy Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/entropy)
 
 ---
 

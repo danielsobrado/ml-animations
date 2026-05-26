@@ -16,9 +16,9 @@ $$Q^*(s, a) = E[r + \gamma \max_{a'} Q^*(s', a')]$$
 
 If we know Q*, optimal policy is simple: always pick argmax_a Q*(s, a).
 
-![Q-Learning](https://danielsobrado.github.io/ml-animations/animation/q-learning)
+![Q-Learning](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/q-learning)
 
-Watch it learn: [Q-Learning Animation](https://danielsobrado.github.io/ml-animations/animation/q-learning)
+Watch it learn: [Q-Learning Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/q-learning)
 
 ## The update rule
 
@@ -179,7 +179,7 @@ $$y = r + \gamma Q_{target}(s', \arg\max_{a'} Q_{policy}(s', a'))$$
 
 **Prioritized replay:** Sample important transitions more often
 
-The animation shows Q-values evolving: [Q-Learning Animation](https://danielsobrado.github.io/ml-animations/animation/q-learning)
+The animation shows Q-values evolving: [Q-Learning Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/q-learning)
 
 ---
 

@@ -465,7 +465,7 @@ We've built a diffusion model from scratch in Rust:
 6. **Sampling**: DDPM and DDIM
 7. **Conditioning**: Text-to-image
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 For a production system, you'd use proper autograd, GPU acceleration, and pretrained components. But now you understand what's happening under the hood.
 

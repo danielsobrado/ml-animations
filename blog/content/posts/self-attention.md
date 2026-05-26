@@ -24,9 +24,9 @@ What does "it" refer to? Cat or mat?
 
 Human brain instantly knows it's the cat. Self-attention lets model figure this out by letting "it" attend to all other words and learn that "cat" is most relevant.
 
-![Self-Attention Demo](https://danielsobrado.github.io/ml-animations/animation/self-attention)
+![Self-Attention Demo](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/self-attention)
 
-Try the interactive demo: [Self-Attention Animation](https://danielsobrado.github.io/ml-animations/animation/self-attention)
+Try the interactive demo: [Self-Attention Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/self-attention)
 
 ## How it works step by step
 
@@ -100,7 +100,7 @@ also the softmax gives distribution that sums to 1. So it's always attending to 
 
 Best way to understand: play with visualization
 
-[Self-Attention Interactive Demo](https://danielsobrado.github.io/ml-animations/animation/self-attention)
+[Self-Attention Interactive Demo](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/self-attention)
 
 Watch how changing input changes attention patterns. See multi-head in action.
 

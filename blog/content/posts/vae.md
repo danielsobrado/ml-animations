@@ -35,9 +35,9 @@ $$q(z|x) = \mathcal{N}(\mu(x), \sigma^2(x))$$
 
 Sample z from this distribution. Decode sample.
 
-![VAE Architecture](https://danielsobrado.github.io/ml-animations/animation/vae)
+![VAE Architecture](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/vae)
 
-See the latent space: [VAE Animation](https://danielsobrado.github.io/ml-animations/animation/vae)
+See the latent space: [VAE Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/vae)
 
 ## The reparameterization trick
 
@@ -184,7 +184,7 @@ def decode(self, z, y):
 
 Generate specific class: sample z, provide target y.
 
-Explore the latent space interactively: [VAE Animation](https://danielsobrado.github.io/ml-animations/animation/vae)
+Explore the latent space interactively: [VAE Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/vae)
 
 ---
 

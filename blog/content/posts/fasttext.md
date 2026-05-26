@@ -33,9 +33,9 @@ get_ngrams('cat')
 # ['<ca', 'cat', 'at>', '<cat', 'cat>', '<cat>']
 ```
 
-![FastText Subwords](https://danielsobrado.github.io/ml-animations/animation/fasttext)
+![FastText Subwords](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/fasttext)
 
-Interactive demo: [FastText Animation](https://danielsobrado.github.io/ml-animations/animation/fasttext)
+Interactive demo: [FastText Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/fasttext)
 
 ## Why this works for OOV
 
@@ -192,7 +192,7 @@ When Word2Vec/GloVe might be enough:
 - Large vocabulary coverage
 - Speed critical
 
-See the subword mechanism in action: [FastText Animation](https://danielsobrado.github.io/ml-animations/animation/fasttext)
+See the subword mechanism in action: [FastText Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/fasttext)
 
 ---
 

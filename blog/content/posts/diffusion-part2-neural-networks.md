@@ -482,7 +482,7 @@ In [Part 3: Understanding Noise](/posts/diffusion-part3-noise/), we'll dive into
 - Noise schedules
 - Why this approach works
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 ---
 

@@ -17,9 +17,9 @@ Agent interacts with environment. Gets rewards. Learns to maximize rewards. That
 - **Reward (r):** Feedback signal
 - **Policy (π):** Strategy for choosing actions
 
-![RL Foundations](https://danielsobrado.github.io/ml-animations/animation/rl-foundations)
+![RL Foundations](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rl-foundations)
 
-Interactive diagram: [RL Foundations Animation](https://danielsobrado.github.io/ml-animations/animation/rl-foundations)
+Interactive diagram: [RL Foundations Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rl-foundations)
 
 ## MDP framework
 
@@ -145,7 +145,7 @@ More in: [Exploration post](/posts/rl-exploration/)
 3. **Generalization:** Transfer to new states
 4. **Stability:** Training can be unstable
 
-The animation shows agent-environment interaction: [RL Foundations Animation](https://danielsobrado.github.io/ml-animations/animation/rl-foundations)
+The animation shows agent-environment interaction: [RL Foundations Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/rl-foundations)
 
 ---
 

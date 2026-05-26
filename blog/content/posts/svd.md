@@ -19,9 +19,9 @@ Where:
 - Σ is m×n diagonal (singular values on diagonal)
 - V is n×n orthogonal (columns are right singular vectors)
 
-![SVD Decomposition](https://danielsobrado.github.io/ml-animations/animation/svd)
+![SVD Decomposition](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/svd)
 
-Visual breakdown: [SVD Animation](https://danielsobrado.github.io/ml-animations/animation/svd)
+Visual breakdown: [SVD Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/svd)
 
 ## Computing SVD
 
@@ -174,7 +174,7 @@ $$\min_{\text{rank}(B)=k} ||A - B||_F = ||A - A_k||_F = \sqrt{\sum_{i>k}\sigma_i
 
 No other rank-k matrix is closer (in Frobenius norm).
 
-Watch the decomposition process: [SVD Animation](https://danielsobrado.github.io/ml-animations/animation/svd)
+Watch the decomposition process: [SVD Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/svd)
 
 ---
 

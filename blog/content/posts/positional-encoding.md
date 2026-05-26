@@ -38,9 +38,9 @@ $$PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d})$$
 
 where pos is position, i is dimension index, d is embedding dimension
 
-![Positional Encoding Visualization](https://danielsobrado.github.io/ml-animations/animation/positional-encoding)
+![Positional Encoding Visualization](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/positional-encoding)
 
-Check out: [Positional Encoding Animation](https://danielsobrado.github.io/ml-animations/animation/positional-encoding)
+Check out: [Positional Encoding Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/positional-encoding)
 
 ## Why sinusoids?
 
@@ -87,7 +87,7 @@ The visualization demonstrates:
 
 You can adjust parameters and see how patterns change. Helped me understand why certain frequency choices work.
 
-[Interactive Demo](https://danielsobrado.github.io/ml-animations/animation/positional-encoding)
+[Interactive Demo](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/positional-encoding)
 
 ## Practical notes
 

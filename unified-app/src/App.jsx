@@ -22,7 +22,7 @@ const CommandPalette = lazy(() => import('./components/app/CommandPalette'));
 const Sidebar = lazy(() => import('./components/layout/Sidebar'));
 
 const VISITED_KEY = 'ml-animations:visited-lessons';
-const SITE_BASE_URL = 'https://danielsobrado.github.io/ml-animations';
+const SITE_BASE_URL = 'https://danielsobrado.github.io/Machine-Learning-Visualized';
 
 const DEFAULT_META = {
   title: 'Machine Learning Visualized - Interactive AI and ML Visualizations',

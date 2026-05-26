@@ -5,7 +5,7 @@ edition = "2021"
 description = "A minimal neural network implementation in Rust, built from scratch for educational purposes"
 license = "MIT"
 authors = ["Daniel Sobrado"]
-repository = "https://github.com/danielsobrado/ml-animations/tree/main/mini-nn"
+repository = "https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-nn"
 keywords = ["neural-network", "deep-learning", "machine-learning", "educational", "rust"]
 categories = ["science", "mathematics"]
 

@@ -369,7 +369,7 @@ In [Part 4: U-Net Architecture](/posts/diffusion-part4-unet/), we build the neur
 - Downsampling and upsampling paths
 - Skip connections
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 ---
 

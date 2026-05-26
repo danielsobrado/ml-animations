@@ -466,7 +466,7 @@ In [Part 6: Sampling](/posts/diffusion-part6-sampling/), we generate images:
 - DDIM sampling (deterministic, faster)
 - Saving generated images
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 ---
 

@@ -72,11 +72,11 @@ test('GitHub auth URL routes through the configured broker', () => {
   const url = getGitHubSyncAuthUrl({
     brokerUrl: 'https://sync.example.com/',
     target: 'repo',
-  }, 'https://danielsobrado.github.io/ml-animations/settings');
+  }, 'https://danielsobrado.github.io/Machine-Learning-Visualized/settings');
 
   assert.equal(
     url,
-    'https://sync.example.com/auth/github/start?returnTo=https%3A%2F%2Fdanielsobrado.github.io%2Fml-animations%2Fsettings&target=repo',
+    'https://sync.example.com/auth/github/start?returnTo=https%3A%2F%2Fdanielsobrado.github.io%2FMachine-Learning-Visualized%2Fsettings&target=repo',
   );
 });
 

@@ -457,7 +457,7 @@ In [Part 7: Text Conditioning](/posts/diffusion-part7-conditioning/), we add tex
 - Cross-attention
 - Classifier-free guidance
 
-The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/ml-animations/tree/main/mini-diffusion)
+The full code is in the `mini-diffusion` folder: [View on GitHub](https://github.com/danielsobrado/Machine-Learning-Visualized/tree/main/mini-diffusion)
 
 ---
 

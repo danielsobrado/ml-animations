@@ -18,9 +18,9 @@ Car → [-0.8, 0.3, -0.2, ...]
 
 Cat and dog vectors are close. Car is far from both. That's the goal.
 
-![Embedding Space](https://danielsobrado.github.io/ml-animations/animation/embeddings)
+![Embedding Space](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/embeddings)
 
-Explore: [Embeddings Animation](https://danielsobrado.github.io/ml-animations/animation/embeddings)
+Explore: [Embeddings Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/embeddings)
 
 ## Why not one-hot?
 
@@ -207,7 +207,7 @@ When to use pretrained:
 
 Fine-tuning middle ground: start pretrained, adapt to your domain.
 
-Explore how embeddings organize in space: [Embeddings Animation](https://danielsobrado.github.io/ml-animations/animation/embeddings)
+Explore how embeddings organize in space: [Embeddings Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/embeddings)
 
 ---
 

@@ -18,9 +18,9 @@ Weird but incredibly useful.
 **Insert:** Hash item k times. Set those k bits to 1.
 **Query:** Hash item k times. All k bits are 1? Probably in set. Any bit is 0? Definitely not in set.
 
-![Bloom Filter](https://danielsobrado.github.io/ml-animations/animation/bloom-filter)
+![Bloom Filter](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bloom-filter)
 
-Watch insertions and queries: [Bloom Filter Animation](https://danielsobrado.github.io/ml-animations/animation/bloom-filter)
+Watch insertions and queries: [Bloom Filter Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bloom-filter)
 
 ## Why false positives happen
 
@@ -151,7 +151,7 @@ This makes them perfect for "gatekeeper" role.
 
 40x memory savings for 1% false positive rate!
 
-The animation shows exactly how bits get set: [Bloom Filter Animation](https://danielsobrado.github.io/ml-animations/animation/bloom-filter)
+The animation shows exactly how bits get set: [Bloom Filter Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/bloom-filter)
 
 ---
 

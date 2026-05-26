@@ -28,9 +28,9 @@ LSTM adds a "cell state" - a highway for information to flow unimpeded.
 
 Four gates control what happens:
 
-![LSTM Gates](https://danielsobrado.github.io/ml-animations/animation/lstm)
+![LSTM Gates](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/lstm)
 
-Interactive breakdown: [LSTM Animation](https://danielsobrado.github.io/ml-animations/animation/lstm)
+Interactive breakdown: [LSTM Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/lstm)
 
 ### Forget gate
 
@@ -193,7 +193,7 @@ for t in range(seq_len):
     next_token = sample(output)
 ```
 
-See how gates control information flow: [LSTM Animation](https://danielsobrado.github.io/ml-animations/animation/lstm)
+See how gates control information flow: [LSTM Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/lstm)
 
 ---
 

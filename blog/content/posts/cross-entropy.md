@@ -16,9 +16,9 @@ $$H(P, Q) = -\sum_x P(x) \log Q(x)$$
 
 In classification, P is one-hot (true label), Q is softmax output.
 
-![Cross-Entropy](https://danielsobrado.github.io/ml-animations/animation/cross-entropy)
+![Cross-Entropy](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/cross-entropy)
 
-See the math: [Cross-Entropy Animation](https://danielsobrado.github.io/ml-animations/animation/cross-entropy)
+See the math: [Cross-Entropy Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/cross-entropy)
 
 ## For classification
 
@@ -159,7 +159,7 @@ Predicted minus actual. Clean and intuitive.
 3. **Ignoring class imbalance** - leads to biased models
 4. **Not using with_logits versions** - numerical issues
 
-The animation shows how loss responds to predictions: [Cross-Entropy Animation](https://danielsobrado.github.io/ml-animations/animation/cross-entropy)
+The animation shows how loss responds to predictions: [Cross-Entropy Animation](https://danielsobrado.github.io/Machine-Learning-Visualized/animation/cross-entropy)
 
 ---
 
