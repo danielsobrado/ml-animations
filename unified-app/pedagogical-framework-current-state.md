@@ -1,6 +1,6 @@
 # Pedagogical Framework Current State
 
-This note corrects an earlier analytical review that described several now-stale gaps in the ML Animations repository.
+This note corrects an earlier analytical review that described several now-stale gaps in the Machine Learning Visualized repository.
 
 ## Current Verified State
 

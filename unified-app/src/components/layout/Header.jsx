@@ -35,7 +35,7 @@ export default function Header({
         <Link to="/" className="ua-brand">
           <span className="ua-brand-mark">ml</span>
           <span className="ua-brand-text">
-            <span className="ua-brand-title">ML Animations</span>
+            <span className="ua-brand-title">Machine Learning Visualized</span>
             <span className="ua-brand-sub">Interactive machine learning lessons</span>
           </span>
         </Link>

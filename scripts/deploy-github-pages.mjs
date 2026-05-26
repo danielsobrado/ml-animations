@@ -101,7 +101,7 @@ function escapeHtml(value) {
 }
 
 function renderStaticAnimationEntry(animation) {
-  const title = escapeHtml(`${animation.name} | ML Animations`);
+  const title = escapeHtml(`${animation.name} | Machine Learning Visualized`);
   const description = escapeHtml(
     animation.description ||
       `Explore the ${animation.name} guided machine-learning lesson with visual intuition and practice checks.`,
@@ -116,14 +116,14 @@ function renderStaticAnimationEntry(animation) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${title}</title>
     <meta name="description" content="${description}" />
-    <meta name="keywords" content="${escapeHtml(`${animation.name}, machine learning animation, ML Animations`)}" />
+    <meta name="keywords" content="${escapeHtml(`${animation.name}, machine learning visualization, Machine Learning Visualized`)}" />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="refresh" content="0; url=${route}" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:url" content="${canonical}" />
-    <meta property="og:site_name" content="ML Animations" />
+    <meta property="og:site_name" content="Machine Learning Visualized" />
     <meta property="og:image" content="${siteBaseUrl}/favicon.svg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${title}" />

@@ -255,7 +255,7 @@ async function writeRepoProgress(token, body) {
   const response = await githubFetch(token, apiPath, {
     method: 'PUT',
     body: JSON.stringify({
-      message: 'Sync ML Animations progress',
+      message: 'Sync Machine Learning Visualized progress',
       content: encodeContent(body.envelope),
       branch: body.branch || 'main',
       ...(body.sha ? { sha: body.sha } : {}),
@@ -294,7 +294,7 @@ async function writeGistProgress(token, body) {
   const response = await githubFetch(token, body.gistId ? `/gists/${encodeURIComponent(body.gistId)}` : '/gists', {
     method: body.gistId ? 'PATCH' : 'POST',
     body: JSON.stringify(body.gistId ? payload : {
-      description: 'ML Animations progress',
+      description: 'Machine Learning Visualized progress',
       public: false,
       ...payload,
     }),

@@ -1,4 +1,4 @@
-# ML Animations - Unified Application
+# Machine Learning Visualized - Unified Application
 
 A unified React application that consolidates the ML animation visualizations into a Distill-style educational experience with sidebar navigation, guided curriculum tracks, glossary-backed learning cards, and lazy-loaded animation modules.
 

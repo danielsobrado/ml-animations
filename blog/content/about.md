@@ -1,8 +1,8 @@
 ---
-title: "About ML Animations"
+title: "About Machine Learning Visualized"
 ---
 
-This blog accompanies the [ML Animations](https://danielsobrado.github.io/ml-animations/) project - a collection of interactive visualizations explaining machine learning concepts.
+This blog accompanies the [Machine Learning Visualized](https://danielsobrado.github.io/ml-animations/) project - a collection of interactive visualizations explaining machine learning concepts.
 
 ## What you'll find here
 

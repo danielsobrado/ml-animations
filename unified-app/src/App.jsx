@@ -25,7 +25,7 @@ const VISITED_KEY = 'ml-animations:visited-lessons';
 const SITE_BASE_URL = 'https://danielsobrado.github.io/ml-animations';
 
 const DEFAULT_META = {
-  title: 'ML Animations - Interactive Machine Learning Visualizations',
+  title: 'Machine Learning Visualized - Interactive AI and ML Visualizations',
   description:
     'Interactive visualizations and animations for machine learning concepts including transformers, attention mechanisms, neural networks, and more.',
 };
@@ -58,7 +58,7 @@ function setHeadMeta({ title = DEFAULT_META.title, description = DEFAULT_META.de
   ensureMetaTag('meta', 'property', 'og:title', { content: title });
   ensureMetaTag('meta', 'property', 'og:description', { content: description });
   ensureMetaTag('meta', 'property', 'og:url', { content: `${SITE_BASE_URL}${path}` });
-  ensureMetaTag('meta', 'property', 'og:site_name', { content: 'ML Animations' });
+  ensureMetaTag('meta', 'property', 'og:site_name', { content: 'Machine Learning Visualized' });
   ensureMetaTag('meta', 'property', 'og:image', {
     content: `${SITE_BASE_URL}/favicon.svg`,
   });
@@ -74,14 +74,14 @@ function setHeadMeta({ title = DEFAULT_META.title, description = DEFAULT_META.de
 function getAnimationMeta(animation) {
   if (!animation) {
     return {
-      title: 'Animation not found - ML Animations',
+      title: 'Animation not found - Machine Learning Visualized',
       description:
         'That animation is not yet available in the catalog. Try another topic or go back to the main catalog.',
     };
   }
 
   return {
-    title: `${animation.name} - ML Animations`,
+    title: `${animation.name} - Machine Learning Visualized`,
     description: `${animation.description}. An interactive lesson with controls, charts, and visual step-through.`,
   };
 }
@@ -103,25 +103,25 @@ function getMetaFromPath(pathname, currentLesson) {
 
   if (pathname === '/labs' || pathname === '/labs/') {
     return {
-      title: 'Code Labs - ML Animations',
+      title: 'Code Labs - Machine Learning Visualized',
       description:
-        'Rustlings-style JavaScript implementation exercises for every active ML Animations lesson.',
+        'Rustlings-style JavaScript implementation exercises for every active Machine Learning Visualized lesson.',
       path: '/labs/',
     };
   }
 
   if (pathname === '/settings' || pathname === '/settings/') {
     return {
-      title: 'Progress Settings - ML Animations',
+      title: 'Progress Settings - Machine Learning Visualized',
       description:
-        'Configure local code-lab progress and optional GitHub sync for ML Animations practice evidence.',
+        'Configure local code-lab progress and optional GitHub sync for Machine Learning Visualized practice evidence.',
       path: '/settings/',
     };
   }
 
   if (pathname === '/glossary' || pathname === '/glossary/') {
     return {
-      title: 'Glossary - ML Animations',
+      title: 'Glossary - Machine Learning Visualized',
       description:
         'Browse machine learning glossary terms with definitions, intuition, examples, and links to related lessons.',
       path: '/glossary/',
@@ -133,14 +133,14 @@ function getMetaFromPath(pathname, currentLesson) {
     const term = getGlossaryTerm(slug);
     if (term) {
       return {
-        title: `${term.term} - ML Animations Glossary`,
+        title: `${term.term} - Machine Learning Visualized Glossary`,
         description: `${term.definition} Explore intuition, examples, and related concepts.`,
         path: `${pathname.replace(/\/?$/, '/')}`,
       };
     }
 
     return {
-      title: 'Glossary term not found - ML Animations',
+      title: 'Glossary term not found - Machine Learning Visualized',
       description: 'That glossary entry is not in the catalog yet. Browse the full glossary or return to the home page.',
       path: `${pathname.replace(/\/?$/, '/')}`,
     };

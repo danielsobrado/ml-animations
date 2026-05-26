@@ -1,6 +1,6 @@
 baseURL = 'https://danielsobrado.github.io/ml-animations/blog/'
 languageCode = 'en-us'
-title = 'ML Animations Blog'
+title = 'Machine Learning Visualized Blog'
 theme = 'hugo-paper'
 
 [params]

@@ -2,7 +2,7 @@
 title: "Welcome"
 ---
 
-# ML Animations Blog
+# Machine Learning Visualized Blog
 
 Interactive explanations of machine learning concepts. Each article pairs with a [visualization](https://danielsobrado.github.io/ml-animations/).
 
