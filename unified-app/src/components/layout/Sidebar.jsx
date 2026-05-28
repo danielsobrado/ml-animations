@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Settings } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { categories } from '../../data/animations';
 
 export default function Sidebar({ isOpen, isCollapsed, onClose, onOpenCommandPalette }) {
@@ -32,13 +32,6 @@ export default function Sidebar({ isOpen, isCollapsed, onClose, onOpenCommandPal
           <Link to="/labs" className={`ua-sidebar-home ${isActive('/labs') ? 'active' : ''}`}>
             <span className="num">LAB</span>
             <span>Code labs</span>
-          </Link>
-          <Link
-            to="/settings"
-            className={`ua-sidebar-home ${isActive('/settings') ? 'active' : ''}`}
-          >
-            <span className="num"><Settings size={12} /></span>
-            <span>Settings</span>
           </Link>
 
           {categories.map((category, categoryIndex) => (

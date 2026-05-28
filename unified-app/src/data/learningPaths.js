@@ -83,6 +83,8 @@ export const HUB_LEARNING_PATHS = [
       'multi-head-latent-attention',
       'native-sparse-attention',
       'grpo-reasoning',
+      'dapo-reasoning-rl',
+      'coconut-latent-reasoning',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
       'long-context-frontier-models',
@@ -168,7 +170,7 @@ export const HUB_LEARNING_PATHS = [
   {
     id: 'rl-path',
     label: 'RL And Algorithms',
-    description: 'A decision-making route through Markov structure, rewards, Q-values, exploration, and graph ranking.',
+    description: 'A decision-making route through Markov structure, rewards, policy gradients, clipped updates, and reasoning RL.',
     nodes: [
       'markov-chains',
       'rl-foundations',
@@ -181,6 +183,8 @@ export const HUB_LEARNING_PATHS = [
       'actor-critic',
       'ppo-clipped-policy-gradient',
       'reward-shaping',
+      'grpo-reasoning',
+      'dapo-reasoning-rl',
       'pagerank',
     ],
   },

@@ -94,7 +94,7 @@ function compareIsoDates(left, right) {
 function joinBrokerUrl(baseUrl, pathname) {
   const normalizedBase = cleanBrokerUrl(baseUrl);
   if (!normalizedBase) {
-    throw new GitHubProgressSyncError('Add a GitHub sync broker URL before signing in or syncing.');
+    throw new GitHubProgressSyncError('Add a GitHub Storage URL before signing in or syncing.');
   }
   return `${normalizedBase}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
 }

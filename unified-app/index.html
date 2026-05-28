@@ -20,6 +20,19 @@
         }
       }(window.location))
     </script>
+    <!-- Handle CSS and JS preload errors gracefully -->
+    <script type="text/javascript">
+      window.addEventListener('vite:preloadError', (event) => {
+        if (event.payload && typeof event.payload.message === 'string' && event.payload.message.includes('preload CSS')) {
+          event.preventDefault();
+          console.warn('Vite CSS preload error intercepted and ignored:', event.payload.message);
+        } else {
+          // For JS or other critical preload errors, reload the page to get the latest bundle
+          console.error('Vite JS/critical preload error, reloading page:', event.payload);
+          window.location.reload();
+        }
+      });
+    </script>
     <!-- End Single Page Apps for GitHub Pages -->
     <meta name="description" content="Interactive visualizations and animations for machine learning concepts including transformers, attention mechanisms, neural networks, and more." />
     <meta name="keywords" content="Machine Learning, Deep Learning, AI, https://danielsobrado.github.io/Machine-Learning-Visualized" />

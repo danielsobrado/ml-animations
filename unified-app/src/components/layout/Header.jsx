@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Code2, Github, Menu, PanelLeft, PanelLeftClose } from 'lucide-react';
+import { BookOpen, Code2, Github, Menu, PanelLeft, PanelLeftClose, Settings } from 'lucide-react';
 
 export default function Header({
   onMenuClick,
@@ -60,6 +60,9 @@ export default function Header({
         <Link to="/labs" className="ua-header-action">
           <Code2 size={16} />
           Labs
+        </Link>
+        <Link to="/settings" className="ua-icon-btn" aria-label="Settings">
+          <Settings size={19} />
         </Link>
         <a
           className="ua-icon-btn"

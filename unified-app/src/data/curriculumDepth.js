@@ -25,7 +25,7 @@ export const conceptComparisons = [
   },
   {
     id: 'sft-rlvr-grpo',
-    lessonIds: ['reasoning-rlvr-grpo', 'test-time-compute-thinking-budgets', 'fine-tuning'],
+    lessonIds: ['reasoning-rlvr-grpo', 'dapo-reasoning-rl', 'test-time-compute-thinking-budgets', 'fine-tuning'],
     title: 'SFT vs RLVR vs GRPO',
     left: 'Imitation',
     right: 'Relative reward optimization',
@@ -34,6 +34,18 @@ export const conceptComparisons = [
     commonMistake: 'Thinking RL automatically teaches intention. It teaches the reward surface provided.',
     diagnostic: 'Ask what signal scores the output, whether it is verifiable, and how credit is assigned.',
     glossaryTerms: ['rlvr', 'grpo', 'verifiable-reward', 'cold-start-data'],
+  },
+  {
+    id: 'grpo-dapo',
+    lessonIds: ['grpo-reasoning', 'dapo-reasoning-rl', 'reasoning-rlvr-grpo'],
+    title: 'GRPO vs DAPO',
+    left: 'Clean relative objective',
+    right: 'Production training recipe',
+    leftSummary: 'GRPO samples sibling answers and normalizes rewards inside the group.',
+    rightSummary: 'DAPO keeps only useful groups, decouples clip bounds, aggregates over tokens, and smooths length penalties.',
+    commonMistake: 'Thinking a clean group-relative formula is enough for stable long-CoT RL at scale.',
+    diagnostic: 'Ask whether the batch has contrast, whether entropy is collapsing, whether clipping blocks positive updates, and whether length penalties are noisy.',
+    glossaryTerms: ['grpo', 'rlvr', 'reward-shaping'],
   },
   {
     id: 'orm-prm',
@@ -1178,11 +1190,11 @@ export const caveatBoxes = [
   },
   {
     id: 'grpo-caveats',
-    lessonIds: ['reasoning-rlvr-grpo'],
+    lessonIds: ['reasoning-rlvr-grpo', 'dapo-reasoning-rl'],
     solves: ['Critic-free relative reward optimization', 'Verifier-based reasoning improvement'],
-    doesNotSolve: ['Reward misspecification', 'All credit assignment', 'General truthfulness'],
-    canGoWrong: ['All-negative groups', 'Format reward hacking', 'Language mixing', 'Overthinking'],
-    howToTest: ['Verifier coverage', 'Reward hacking probes', 'Held-out reasoning tasks', 'Trace quality audits'],
+    doesNotSolve: ['Reward misspecification', 'All credit assignment', 'General truthfulness', 'All long-CoT stability issues'],
+    canGoWrong: ['All-negative groups', 'Entropy collapse', 'Noisy overlong rewards', 'Format reward hacking', 'Language mixing', 'Overthinking'],
+    howToTest: ['Effective batch counts', 'Entropy and clip-fraction traces', 'Verifier coverage', 'Reward hacking probes', 'Held-out reasoning tasks', 'Trace quality audits'],
   },
   {
     id: 'calibration-caveats',

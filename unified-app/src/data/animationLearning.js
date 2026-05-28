@@ -92,6 +92,8 @@ const EQUATION_OVERRIDES = {
   'multi-head-latent-attention': 'c_t = W_{down} x_t \\quad K_t, V_t \\approx W_{up} c_t',
   'native-sparse-attention': 'z=g_c z_c + g_s z_s + g_w z_w',
   'grpo-reasoning': 'A_i = \\frac{r_i - \\operatorname{mean}(r)}{\\operatorname{std}(r)}',
+  'dapo-reasoning-rl': 'L=\\operatorname{mean}_{tokens}\\min(r_t A,\\operatorname{clip}(r_t,1-\\epsilon_{low},1+\\epsilon_{high})A)',
+  'coconut-latent-reasoning': 'x_{t+1}=h_t\\quad\\text{in latent mode}',
   'reasoning-rlvr-grpo': 'A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon} \\quad \\Delta \\theta \\propto \\mathbb{E}[\\nabla \\log \\pi_\\theta(y_i|x) A_i]',
   'test-time-compute-thinking-budgets': 'acc(N) \\approx 1 - (1 - p_{correct})^N \\quad cost(N) = N \\cdot L_{avg}',
   'long-context-frontier-models': 'score = Q + \\lambda_g G - \\lambda_c C - \\lambda_l L - \\lambda_r R',
@@ -783,6 +785,22 @@ export const LEARNING_CARD_OVERRIDES = {
     'Move group size, reward type, KL strength, clip range, difficulty, and temperature to see when the group has useful contrast.',
     'Mistake to avoid: all-correct or all-wrong groups can provide weak or misleading relative learning signals.',
     'Check understanding by explaining why R1-Zero can discover self-checking behavior while R1 adds cold-start data for readability.'
+  ),
+  'dapo-reasoning-rl': cardSet(
+    'DAPO makes GRPO-style reasoning RL train reliably at long chain-of-thought scale.',
+    'Think of DAPO as a batch factory with quality control: keep useful comparisons, preserve exploration, grade token by token, and smooth length penalties.',
+    'The objective uses group-relative advantages with separated clip bounds and token-level aggregation across long responses.',
+    'Move difficulty, group size, upper clip, loss granularity, max response length, and shaping mode to see which bottleneck dominates the batch.',
+    'Mistake to avoid: large nominal batches are not useful if most prompt groups are all correct, all wrong, overlong, or entropy-collapsed.',
+    'Check understanding by explaining why Dynamic Sampling, Clip-Higher, Token-Level Loss, and Overlong Reward Shaping work together.'
+  ),
+  'coconut-latent-reasoning': cardSet(
+    'Coconut separates reasoning from explanation by feeding hidden states back as continuous thoughts.',
+    'Think of CoT as speaking each scratchpad step aloud and Coconut as taking silent vector scratchpad steps before answering.',
+    'In language mode, hidden state goes through the LM head to a token; in latent mode, h_t becomes the next input embedding directly.',
+    'Move reasoning mode, latent steps, training stage, task type, and faithfulness test to compare visible tokens, branch entropy, and perturbation sensitivity.',
+    'Mistake to avoid: latent thoughts are not automatically faithful reasoning traces; they can be opaque or shortcut-like.',
+    'Check understanding by explaining why perturbing or removing a reasoning-critical latent state should change branch distributions or answers.'
   ),
   'reasoning-rlvr-grpo': cardSet(
     'Reasoning post-training teaches a model to produce, check, and improve multi-step solution traces rather than only imitate next-token text.',

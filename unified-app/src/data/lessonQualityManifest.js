@@ -38,6 +38,18 @@ export const MANUAL_LESSON_QUALITY = {
     reason: 'Paper-style DeepSeek-R1 / GRPO module with group sampling controls, reward-type comparison, group-relative advantage visualization, PPO-vs-GRPO flow, R1-Zero/R1/distillation timelines, source trail, and mini-grpo exercises.',
     nextAction: 'Add a custom prompt authoring mode with deterministic toy verifier traces.',
   },
+  'dapo-reasoning-rl': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Paper-style DAPO module with deterministic rollout groups, dynamic sampling filter, Clip-Higher curve, token-level loss timeline, overlong shaping curve, health dashboard, source trail, and mini-dapo exercises.',
+    nextAction: 'Add side-by-side ablation presets from public verl reproduction runs.',
+  },
+  'coconut-latent-reasoning': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Paper-style Coconut module with CoT-vs-latent timelines, hidden-state feedback diagrams, curriculum replacement stages, delayed-commitment branch entropy, faithfulness interventions, source trail, and mini-coconut exercises.',
+    nextAction: 'Add a real embedding-probe demo that maps latent states to nearest vocabulary tokens from a small toy vocabulary.',
+  },
   'reasoning-rlvr-grpo': {
     tier: 'A',
     status: 'stable',

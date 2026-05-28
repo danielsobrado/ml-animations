@@ -198,11 +198,11 @@ export default function SettingsPage() {
           </div>
 
           <div className="ua-settings-form">
-            <Field label="Broker URL">
+            <Field label="GitHub Storage URL">
               <input
                 value={settings.brokerUrl}
                 onChange={(event) => updateSettings({ brokerUrl: event.target.value })}
-                placeholder="https://your-progress-broker.example.com"
+                placeholder="https://your-github-storage.example.com"
               />
             </Field>
 
@@ -385,7 +385,7 @@ export default function SettingsPage() {
             </div>
           </dl>
           <p>
-            Tokens stay with the sync broker as an HttpOnly session. The browser stores only target settings and local progress metadata.
+            Tokens stay with the GitHub storage service as an HttpOnly session. The browser stores only target settings and local progress metadata.
           </p>
           {settings.lastSyncAt && (
             <p>Last sync: {new Date(settings.lastSyncAt).toLocaleString()}</p>

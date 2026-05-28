@@ -160,6 +160,18 @@ export const MINDMAP_CURATIONS = {
     'Why do all-correct or all-wrong groups produce weak or risky training pressure?',
     'The group replaces the critic baseline; it does not guarantee the reward measures true reasoning.',
   ],
+  'dapo-reasoning-rl': [
+    'Which rollout groups actually teach the policy?',
+    'Toggle Dynamic Sampling, Clip-Higher, token-level loss, and overlong shaping while watching effective groups, entropy, clipping, and length behavior.',
+    'Why does an all-correct batch waste optimizer steps even when the average reward looks high?',
+    'DAPO improves the training signal, but it still inherits the limits of the verifier and reward design.',
+  ],
+  'coconut-latent-reasoning': [
+    'Can the model think between words?',
+    'Compare text CoT, pause tokens, and continuous hidden-state feedback on a planning task.',
+    'What changes when h_t bypasses the LM head and becomes x_t+1?',
+    'Latent reasoning can be compact, but opacity demands perturbation and shortcut tests.',
+  ],
   'reasoning-rlvr-grpo': [
     'How does a model learn which reasoning traces deserve more probability?',
     'Generate 8 solutions, score them under various reward weights, and normalize group advantages.',
