@@ -6,6 +6,7 @@ import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js'
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
+import { SVD_QUIZ } from './svdAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
@@ -511,41 +512,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   svd: {
-    quiz: [
-      {
-        id: 'factor-roles',
-        prompt: 'In A = U Sigma V^T, what do the singular values in Sigma describe?',
-        choices: [
-          'How strongly A stretches each singular direction',
-          'The original row labels',
-          'Only the signs of matrix entries',
-        ],
-        answerIndex: 0,
-        explanation: 'Singular values are nonnegative stretch factors ordered from strongest to weakest.',
-      },
-      {
-        id: 'rectangular-support',
-        prompt: 'Why is SVD broadly useful compared with eigen decomposition?',
-        choices: [
-          'SVD works for any real rectangular matrix',
-          'SVD only works for diagonal square matrices',
-          'SVD ignores rank information',
-        ],
-        answerIndex: 0,
-        explanation: 'Eigen decomposition is square-matrix specific; SVD applies to any real m by n matrix.',
-      },
-      {
-        id: 'truncated-svd',
-        prompt: 'What does truncated SVD keep for compression?',
-        choices: [
-          'The largest singular values and their matching singular vectors',
-          'Only the smallest singular value',
-          'Every zero entry in the original matrix',
-        ],
-        answerIndex: 0,
-        explanation: 'Keeping the top k singular components preserves the strongest low-rank structure.',
-      },
-    ],
+    quiz: SVD_QUIZ,
     labs: [
       {
         id: 'rank-k-reconstruction',
