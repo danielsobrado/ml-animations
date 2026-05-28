@@ -14,6 +14,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
+import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
@@ -1332,20 +1333,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'sequential-testing-peeking': causalAssessment('sequential-testing-peeking', {
-    name: 'sequential testing',
-    purpose: 'To monitor an experiment while preserving a planned false positive budget',
-    purposeExplanation: 'Sequential designs define interim looks and stopping rules before data arrives.',
-    failureExplanation: 'Repeated unplanned peeking reuses alpha and inflates false positives.',
-    decisionUse: 'Use pre-declared interim boundaries or wait for the fixed horizon',
-    decisionExplanation: 'The decision rule determines the error rate.',
-    assumption: 'The number and timing of looks are part of the design',
-    assumptionExplanation: 'Unplanned looks change the statistical procedure.',
-    diagnostic: 'Any-look false positive risk versus the planned alpha budget',
-    diagnosticExplanation: 'This shows how far naive peeking drifts from the advertised alpha.',
-    labTitle: 'Compare peeking policies',
-    successCriteria: 'You can explain why any-look risk exceeds a single fixed-horizon alpha.',
-  }, 'Stopping the first time p is below 0.05 without a sequential design', 'Set many interim looks and compare naive false positive risk with the planned alpha budget.'),
+  'sequential-testing-peeking': {
+    quiz: SEQUENTIAL_TESTING_PEEKING_QUIZ,
+    labs: [
+      {
+        id: 'peeking-policy-comparison',
+        title: 'Compare peeking policies',
+        prompt: 'Set many interim looks and compare naive false positive risk with the planned alpha budget.',
+        successCriteria: 'You can explain why any-look risk exceeds a single fixed-horizon alpha.',
+      },
+    ],
+  },
   'cuped-variance-reduction': causalAssessment('cuped-variance-reduction', {
     name: 'CUPED variance reduction',
     purpose: 'To reduce experiment noise using pre-treatment covariates',
