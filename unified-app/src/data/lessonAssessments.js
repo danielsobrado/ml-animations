@@ -1,6 +1,7 @@
 import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
+import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
@@ -1370,20 +1371,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'causal-graphs-dags': causalAssessment('causal-graphs-dags', {
-    name: 'causal DAG adjustment',
-    purpose: 'To choose adjustment variables from explicit causal assumptions',
-    purposeExplanation: 'DAGs show which paths carry causation and which paths create bias.',
-    failureExplanation: 'Conditioning on colliders can open a path that was previously blocked.',
-    decisionUse: 'Close backdoor paths while avoiding colliders and inappropriate mediators',
-    decisionExplanation: 'The adjustment set should match the causal effect being estimated.',
-    assumption: 'The graph correctly represents key causes before estimation',
-    assumptionExplanation: 'DAG validity depends on domain assumptions, not only data.',
-    diagnostic: 'Open backdoor paths, collider conditioning, and adjustment-set validity',
-    diagnosticExplanation: 'These checks determine whether the comparison is interpretable.',
-    labTitle: 'Repair an adjustment set',
-    successCriteria: 'You can classify a variable as confounder, collider, or mediator.',
-  }, 'Adding every available variable without checking graph structure', 'Increase collider conditioning and explain why the adjustment set gets worse.'),
+  'causal-graphs-dags': {
+    quiz: CAUSAL_GRAPHS_DAGS_QUIZ,
+    labs: [
+      {
+        id: 'adjustment-set-repair',
+        title: 'Repair an adjustment set',
+        prompt: 'Increase collider conditioning and explain why the adjustment set gets worse.',
+        successCriteria: 'You can classify a variable as confounder, collider, or mediator.',
+      },
+    ],
+  },
   'treatment-effects': causalAssessment('treatment-effects', {
     name: 'treatment-effect heterogeneity',
     purpose: 'To distinguish average effects from segment-specific effects',
