@@ -4,6 +4,7 @@ import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
+import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
@@ -499,41 +500,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'qr-decomposition': {
-    quiz: [
-      {
-        id: 'factor-meaning',
-        prompt: 'In A = QR, what is special about Q?',
-        choices: [
-          'Its columns are orthonormal',
-          'It is always diagonal',
-          'It contains the original labels',
-        ],
-        answerIndex: 0,
-        explanation: 'Q stores orthonormal basis directions, while R stores the coordinates of A in that basis.',
-      },
-      {
-        id: 'gram-schmidt',
-        prompt: 'What does Gram-Schmidt do to the second column after finding q1?',
-        choices: [
-          'Subtract the projection onto q1, then normalize the leftover',
-          'Duplicate q1 exactly',
-          'Replace the column with all zeros no matter what',
-        ],
-        answerIndex: 0,
-        explanation: 'The projection removal creates a component orthogonal to q1; normalization turns it into the next unit vector.',
-      },
-      {
-        id: 'least-squares',
-        prompt: 'Why is QR useful for least squares?',
-        choices: [
-          'Q preserves lengths and angles better than forming normal equations',
-          'It only works when there are no residuals',
-          'It makes every matrix symmetric positive definite',
-        ],
-        answerIndex: 0,
-        explanation: 'Orthogonal factors are numerically stable, so QR avoids squaring the condition number through A^T A.',
-      },
-    ],
+    quiz: QR_DECOMPOSITION_QUIZ,
     labs: [
       {
         id: 'trace-projection-removal',
