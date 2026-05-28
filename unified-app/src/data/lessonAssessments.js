@@ -15,6 +15,7 @@ import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompre
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
+import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
@@ -2532,41 +2533,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'gradient-problems': {
-    quiz: [
-      {
-        id: 'chain-product',
-        prompt: 'Why do gradients vanish or explode in deep networks?',
-        choices: [
-          'Backprop multiplies many local derivatives through the depth of the network',
-          'The optimizer deletes early layers after each batch',
-          'The loss function ignores all hidden activations',
-        ],
-        answerIndex: 0,
-        explanation: 'A long product of values below one shrinks; a long product above one grows rapidly.',
-      },
-      {
-        id: 'residual-path',
-        prompt: 'How does a residual connection help gradient flow?',
-        choices: [
-          'It adds a direct path so gradients are not forced only through the transformed branch',
-          'It removes the need for a loss function',
-          'It makes every local derivative exactly zero',
-        ],
-        answerIndex: 0,
-        explanation: 'Residual connections give the backward pass an additive shortcut around difficult transformations.',
-      },
-      {
-        id: 'clipping-limit',
-        prompt: 'What is a limitation of gradient clipping?',
-        choices: [
-          'It limits large updates but does not fix the underlying scale or saturation cause',
-          'It makes gradients larger when they vanish',
-          'It changes convolution into pooling',
-        ],
-        answerIndex: 0,
-        explanation: 'Clipping is a guardrail for explosions; initialization, normalization, and architecture still matter.',
-      },
-    ],
+    quiz: GRADIENT_PROBLEMS_QUIZ,
     labs: [
       {
         id: 'diagnose-gradient-flow',
