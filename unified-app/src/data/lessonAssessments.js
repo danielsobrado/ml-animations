@@ -10,6 +10,7 @@ import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js'
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
+import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
@@ -1285,63 +1286,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'sampling-confidence-intervals': {
-    quiz: [
-      {
-        id: 'sample-size-width',
-        prompt: 'What happens to a confidence interval when sample size increases and everything else stays similar?',
-        choices: [
-          'It usually narrows because standard error falls',
-          'It always widens because more data adds uncertainty',
-          'It becomes unrelated to the observed estimate',
-        ],
-        answerIndex: 0,
-        explanation: 'Standard error falls roughly with the square root of sample size, so intervals usually narrow.',
-      },
-      {
-        id: 'confidence-width',
-        prompt: 'Why does a 99% confidence interval tend to be wider than a 95% interval?',
-        choices: [
-          'It uses a larger critical value to cover more repeated-sampling outcomes',
-          'It changes the observed data',
-          'It removes sampling variation entirely',
-        ],
-        answerIndex: 0,
-        explanation: 'Higher confidence requires a wider procedure because it must cover more possible samples.',
-      },
-      {
-        id: 'single-interval-meaning',
-        prompt: 'What is wrong with saying a computed 95% confidence interval has a 95% probability of containing the fixed truth?',
-        choices: [
-          'The 95% describes the long-run coverage of the procedure, not probability assigned to this fixed interval',
-          'A confidence interval never uses sampling variation',
-          'The population value changes after every sample',
-        ],
-        answerIndex: 0,
-        explanation: 'In the frequentist interpretation, the procedure has long-run coverage; the fixed interval either captured the value or it did not.',
-      },
-      {
-        id: 'quadruple-sample-size',
-        prompt: 'Roughly what happens to the margin of error when sample size is quadrupled?',
-        choices: [
-          'It is cut about in half',
-          'It is divided by four',
-          'It doubles',
-        ],
-        answerIndex: 0,
-        explanation: 'Standard error scales with 1/sqrt(n), so four times as much data gives about half the margin.',
-      },
-      {
-        id: 'coverage-misconception',
-        prompt: 'A team makes many 95% intervals with the same procedure. What should happen in the long run?',
-        choices: [
-          'About 95% of those intervals should contain the fixed population value',
-          'Every interval should contain exactly 95% of the sample rows',
-          'The first interval has a 95% chance of moving after it is computed',
-        ],
-        answerIndex: 0,
-        explanation: 'Coverage is about repeated intervals from the procedure, not the probability of a fixed interval after seeing the data.',
-      },
-    ],
+    quiz: SAMPLING_CONFIDENCE_INTERVALS_QUIZ,
     labs: [
       {
         id: 'sample-size-sweep',
