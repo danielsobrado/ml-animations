@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
@@ -1541,63 +1542,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'cross-validation': {
-    quiz: [
-      {
-        id: 'pipeline-inside-fold',
-        prompt: 'Why should preprocessing be fitted inside each cross-validation fold?',
-        choices: [
-          'So validation-fold information cannot shape the training pipeline',
-          'So every fold uses a different target variable',
-          'So the final test set can be used during model selection',
-        ],
-        answerIndex: 0,
-        explanation: 'Scaling, imputation, feature selection, or embedding fitting can leak validation statistics if done before the fold split.',
-      },
-      {
-        id: 'grouped-folds',
-        prompt: 'When repeated users appear in a dataset, what split is usually safer?',
-        choices: [
-          'Group all rows from the same user into the same fold',
-          'Randomly scatter every row independently',
-          'Put all users into every validation fold',
-        ],
-        answerIndex: 0,
-        explanation: 'Grouped folds prevent a model from seeing one row for a user in training and another row for the same user in validation.',
-      },
-      {
-        id: 'fold-variance',
-        prompt: 'What should you inspect besides the mean cross-validation score?',
-        choices: [
-          'The spread of scores across folds',
-          'Only the best fold score',
-          'Only the number of model parameters',
-        ],
-        answerIndex: 0,
-        explanation: 'Large fold-to-fold variance can signal unstable performance, small folds, segment imbalance, or split-specific leakage.',
-      },
-      {
-        id: 'test-set-role',
-        prompt: 'After using cross-validation for model selection, what is the test set for?',
-        choices: [
-          'A final untouched estimate after model choices are made',
-          'Trying more hyperparameters until the score improves',
-          'Fitting the preprocessing statistics for every fold',
-        ],
-        answerIndex: 0,
-        explanation: 'Cross-validation is development feedback; the test set should remain untouched until the final estimate.',
-      },
-      {
-        id: 'predict-fold-failure',
-        prompt: 'What should you predict if one fold contains a very different subgroup from the others?',
-        choices: [
-          'That fold score may be much worse and reveal deployment risk',
-          'The mean score is guaranteed to improve',
-          'The validation fold will be copied into training automatically',
-        ],
-        answerIndex: 0,
-        explanation: 'A subgroup-heavy fold can expose instability that the mean score alone hides.',
-      },
-    ],
+    quiz: CROSS_VALIDATION_QUIZ,
     labs: [
       {
         id: 'choose-fold-design',
