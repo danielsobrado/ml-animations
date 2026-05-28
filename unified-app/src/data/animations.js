@@ -90,6 +90,20 @@ export const categories = [
     ],
   },
   {
+    id: 'papers',
+    name: 'Papers',
+    icon: FileText,
+    color: 'from-zinc-700 to-cyan-600',
+    items: [
+      {
+        id: 'eagle-3-1-speculative-decoding',
+        name: 'EAGLE 3.1: When the Drafter Starts Trusting Itself',
+        icon: BookOpen,
+        description: 'A paper lesson pack on speculative decoding, attention drift, normalization, and Rustlings-style exercises',
+      },
+    ],
+  },
+  {
     id: 'frontier-llms',
     name: 'Frontier LLMs',
     icon: Cpu,
@@ -514,6 +528,7 @@ export const curriculumTracks = [
       'grouped-query-attention',
       'kv-cache',
       'flash-attention',
+      'eagle-3-1-speculative-decoding',
       'recommender-systems-ranking-track',
       'efficient-inference-compression-track',
       'fine-tuning',
@@ -1460,6 +1475,18 @@ const CURRICULUM_OVERRIDES = {
     difficulty: 'advanced',
     estimatedMinutes: 18,
     prerequisites: ['self-attention', 'matrix-multiplication'],
+  },
+  'eagle-3-1-speculative-decoding': {
+    difficulty: 'advanced',
+    estimatedMinutes: 35,
+    prerequisites: ['transformer-token-generation', 'kv-cache', 'flash-attention'],
+    learningObjectives: [
+      'Explain why autoregressive decoding is sequential and why speculative verification can speed it up',
+      'Trace acceptance length, fallback, and target-model verification in one speculative round',
+      'Identify attention drift as the drafter shifting attention from prompt and sink tokens toward its own speculative tokens',
+      'Connect FC normalization and post-norm feedback to stable hidden-state scale and longer accepted prefixes',
+    ],
+    commonMisconception: 'Speculative decoding is not accepting a small model output blindly; the target model still verifies the draft and falls back on rejection.',
   },
   'kv-cache': {
     difficulty: 'advanced',

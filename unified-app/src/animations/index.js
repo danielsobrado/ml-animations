@@ -18,6 +18,7 @@ const animationRegistry = {
   'grouped-query-attention': lazy(() => import('./grouped-query-attention')),
   'kv-cache': lazy(() => import('./kv-cache')),
   'flash-attention': lazy(() => import('./flash-attention')),
+  'eagle-3-1-speculative-decoding': lazy(() => import('./eagle-3-1-speculative-decoding')),
   'recommender-systems-ranking-track': lazy(() => import('./recommender-systems-ranking-track')),
   'efficient-inference-compression-track': lazy(() => import('./efficient-inference-compression-track')),
   'transformer': lazy(() => import('./transformer')),

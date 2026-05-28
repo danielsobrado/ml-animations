@@ -117,6 +117,7 @@ The repository also includes compact implementations meant for reading and exper
 - `mini-nn/`, `mini-nn-go/`, `mini-nn-java/`, `mini-nn-python/`
 - `mini-diffusion/`, `mini-diffusion-go/`, `mini-diffusion-java/`, `mini-diffusion-python/`
 - `mini-markov/`, `mini-markov-go/`, `mini-markov-java/`, `mini-markov-python/`
+- `mini-eagle/` Rustlings-style exercises for EAGLE 3.1 speculative decoding
 
 Each directory has its own README with setup notes and examples.
 
@@ -140,6 +141,7 @@ scripts/                     Local maintenance and deploy scripts
 mini-nn*/                    Small neural-network implementations
 mini-diffusion*/             Small diffusion implementations
 mini-markov*/                Small Markov-chain implementations
+mini-eagle/                  Speculative decoding exercises with TODO-driven Rust tests
 ```
 
 ## License

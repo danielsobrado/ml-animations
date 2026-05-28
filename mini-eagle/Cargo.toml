@@ -1,0 +1,34 @@
+[package]
+name = "mini-eagle"
+version = "0.1.0"
+edition = "2021"
+description = "Rustlings-style exercises for EAGLE 3.1 speculative decoding"
+authors = ["Daniel Sobrado"]
+
+[[bin]]
+name = "01_accept_prefix"
+path = "exercises/01_accept_prefix.rs"
+
+[[bin]]
+name = "02_speculative_round"
+path = "exercises/02_speculative_round.rs"
+
+[[bin]]
+name = "03_attention_drift"
+path = "exercises/03_attention_drift.rs"
+
+[[bin]]
+name = "04_rms_norm"
+path = "exercises/04_rms_norm.rs"
+
+[[bin]]
+name = "05_feature_fusion"
+path = "exercises/05_feature_fusion.rs"
+
+[[bin]]
+name = "06_post_norm_feedback"
+path = "exercises/06_post_norm_feedback.rs"
+
+[[bin]]
+name = "07_acceptance_length_sim"
+path = "exercises/07_acceptance_length_sim.rs"

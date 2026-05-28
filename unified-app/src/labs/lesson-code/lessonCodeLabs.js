@@ -1,5 +1,6 @@
 import { NLP_LESSON_LABS } from './categories/nlpLessonLabs.js';
 import { TRANSFORMER_LESSON_LABS } from './categories/transformerLessonLabs.js';
+import { PAPER_LESSON_LABS } from './categories/paperLessonLabs.js';
 import { FRONTIER_LLM_LESSON_LABS } from './categories/frontierLlmLessonLabs.js';
 import { NEURAL_NETWORK_LESSON_LABS } from './categories/neuralNetworkLessonLabs.js';
 import { ADVANCED_MODEL_LESSON_LABS } from './categories/advancedModelLessonLabs.js';
@@ -15,6 +16,7 @@ import { DIFFUSION_LESSON_LABS } from './categories/diffusionLessonLabs.js';
 export const LESSON_CODE_LAB_GROUPS = [
   ...NLP_LESSON_LABS,
   ...TRANSFORMER_LESSON_LABS,
+  ...PAPER_LESSON_LABS,
   ...FRONTIER_LLM_LESSON_LABS,
   ...NEURAL_NETWORK_LESSON_LABS,
   ...ADVANCED_MODEL_LESSON_LABS,

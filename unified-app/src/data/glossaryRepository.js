@@ -4861,6 +4861,20 @@ const glossaryByAlias = new Map(glossaryTerms.flatMap((term) => (
 export const GLOSSARY_IDS_BY_CATEGORY = {
   nlp: ['token', 'embedding', 'vocabulary', 'vector', 'representation', 'input', 'output', 'concept'],
   transformers: ['attention', 'query', 'key', 'value', 'head', 'vector', 'matrix', 'probability', 'normalization', 'representation'],
+  papers: [
+    'speculative-decoding',
+    'draft-model',
+    'target-model',
+    'verification-phase',
+    'acceptance-rate',
+    'eagle-draft-model',
+    'autoregressive-decoding',
+    'decode-step',
+    'attention',
+    'normalization',
+    'kv-cache',
+    'throughput',
+  ],
   'frontier-llms': [
     'dense-model',
     'sparse-model',
