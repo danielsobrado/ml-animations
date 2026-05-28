@@ -33,6 +33,7 @@ import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TREE_ENSEMBLES_QUIZ } from './treeEnsemblesAssessment.js';
+import { TIME_SERIES_FORECASTING_QUIZ } from './timeSeriesForecastingAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
@@ -1418,20 +1419,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'time-series-forecasting-track': causalAssessment('time-series-forecasting-track', {
-    name: 'time series forecasting',
-    purpose: 'To predict future values with validation that respects chronological order',
-    purposeExplanation: 'Forecasting workflows must mimic what will be known at prediction time.',
-    failureExplanation: 'Random splits or future-derived features leak information backward.',
-    decisionUse: 'Use rolling backtests and horizon-specific metrics before trusting a forecast',
-    decisionExplanation: 'Multiple temporal cutoffs show stability across regimes.',
-    assumption: 'Features are computed only from information available at the prediction timestamp',
-    assumptionExplanation: 'Point-in-time feature validity is what makes the backtest honest.',
-    diagnostic: 'Rolling split performance, leakage checks, and seasonality/lag coverage',
-    diagnosticExplanation: 'These checks catch temporal shortcuts and unstable patterns.',
-    labTitle: 'Audit a forecasting backtest',
-    successCriteria: 'You can identify the horizon, lag features, split design, and leakage boundary.',
-  }, 'Using a random row split for future forecasting', 'Create a forecast setup with future leakage and explain how rolling splits fix it.'),
+  'time-series-forecasting-track': {
+    quiz: TIME_SERIES_FORECASTING_QUIZ,
+    labs: [
+      {
+        id: 'time-series-forecasting-track-scenario-lab',
+        title: 'Audit a forecasting backtest',
+        prompt: 'Create a forecast setup with future leakage and explain how rolling splits fix it.',
+        successCriteria: 'You can identify the horizon, lag features, split design, and leakage boundary.',
+      },
+    ],
+  },
   'recommender-systems-ranking-track': causalAssessment('recommender-systems-ranking-track', {
     name: 'recommender ranking',
     purpose: 'To order items for a user using interaction signal, ranking objectives, and exploration',
