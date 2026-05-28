@@ -10,6 +10,7 @@ import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessmen
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
 import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
+import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
@@ -1710,30 +1711,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'dropout-batchnorm': {
-    quiz: [
-      {
-        id: 'different-jobs',
-        prompt: 'What is the key difference between BatchNorm and dropout?',
-        choices: [
-          'BatchNorm stabilizes activation scale; dropout regularizes by masking units during training',
-          'BatchNorm deletes units permanently; dropout computes batch statistics',
-          'They are two names for the same inference-time operation',
-        ],
-        answerIndex: 0,
-        explanation: 'BatchNorm normalizes and learns scale/shift, while dropout randomly masks activations during training.',
-      },
-      {
-        id: 'dropout-inference',
-        prompt: 'What happens to dropout at inference time?',
-        choices: [
-          'Units are no longer randomly masked',
-          'The dropout rate is usually doubled',
-          'Batch statistics replace every weight',
-        ],
-        answerIndex: 0,
-        explanation: 'Dropout is a training-time regularizer; inference uses the full network with the learned weights.',
-      },
-    ],
+    quiz: DROPOUT_BATCHNORM_QUIZ,
     labs: [
       {
         id: 'mode-switch',
