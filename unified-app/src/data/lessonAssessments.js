@@ -13,6 +13,7 @@ import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js'
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
+import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
@@ -1655,52 +1656,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'gradient-descent': {
-    quiz: [
-      {
-        id: 'negative-gradient',
-        prompt: 'Why does gradient descent subtract the gradient?',
-        choices: [
-          'The negative gradient points toward the steepest local decrease',
-          'The gradient is always negative',
-          'Subtraction makes the loss exactly zero',
-        ],
-        answerIndex: 0,
-        explanation: 'The gradient points uphill, so subtracting a scaled gradient steps downhill locally.',
-      },
-      {
-        id: 'learning-rate',
-        prompt: 'What can a learning rate that is too large cause?',
-        choices: [
-          'Overshooting or unstable loss',
-          'A guaranteed global minimum',
-          'No parameter updates at all',
-        ],
-        answerIndex: 0,
-        explanation: 'Large steps can jump past useful regions and make training oscillate or diverge.',
-      },
-      {
-        id: 'small-learning-rate',
-        prompt: 'What does a very small learning rate usually look like in the loss trace?',
-        choices: [
-          'Slow but stable progress',
-          'Instant convergence in one update',
-          'Random jumps unrelated to the gradient',
-        ],
-        answerIndex: 0,
-        explanation: 'Tiny steps usually move downhill safely but may require many iterations.',
-      },
-      {
-        id: 'predict-next-step',
-        prompt: 'Before running the next update, what determines the step direction?',
-        choices: [
-          'The current gradient and the sign of the update rule',
-          'The validation label chosen at random',
-          'The largest feature name alphabetically',
-        ],
-        answerIndex: 0,
-        explanation: 'Gradient descent uses the current local gradient; subtracting it determines the next parameter move.',
-      },
-    ],
+    quiz: GRADIENT_DESCENT_QUIZ,
     labs: [
       {
         id: 'tune-step-size',
