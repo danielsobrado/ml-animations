@@ -206,9 +206,13 @@ function retainAssetsFromRef(ref) {
 }
 
 function collectRetainedAssets() {
+  if (!Number.isFinite(assetRetentionCommits) || assetRetentionCommits <= 0) {
+    return;
+  }
+
   fs.rmSync(retainedAssetsDir, { recursive: true, force: true });
 
-  if (!Number.isFinite(assetRetentionCommits) || assetRetentionCommits <= 0 || !remoteBranchExists()) {
+  if (!remoteBranchExists()) {
     return;
   }
 
