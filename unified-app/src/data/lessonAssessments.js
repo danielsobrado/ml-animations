@@ -11,6 +11,7 @@ import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
+import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
@@ -1320,20 +1321,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'power-sample-size': causalAssessment('power-sample-size', {
-    name: 'power and sample size planning',
-    purpose: 'To decide whether the experiment can detect the smallest useful effect',
-    purposeExplanation: 'Power planning connects MDE, variance, alpha, and sample size before launch.',
-    failureExplanation: 'An underpowered test can miss a real effect and produce an inconclusive result.',
-    decisionUse: 'Treat non-significant underpowered results as inconclusive rather than proof of no effect',
-    decisionExplanation: 'Low power raises false negative risk.',
-    assumption: 'The MDE is chosen from practical value before reading outcomes',
-    assumptionExplanation: 'Choosing MDE after the fact turns planning into rationalization.',
-    diagnostic: 'Required sample, achieved power, alpha, and false negative risk',
-    diagnosticExplanation: 'These diagnostics show whether the design has enough resolution.',
-    labTitle: 'Diagnose an underpowered test',
-    successCriteria: 'You can name the MDE, planned sample, power, and false negative risk.',
-  }, 'Calling a low-power non-significant result proof that the treatment does nothing', 'Create an underpowered design and explain why the readout is not decisive.'),
+  'power-sample-size': {
+    quiz: POWER_SAMPLE_SIZE_QUIZ,
+    labs: [
+      {
+        id: 'underpowered-design-audit',
+        title: 'Diagnose an underpowered test',
+        prompt: 'Create an underpowered design and explain why the readout is not decisive.',
+        successCriteria: 'You can name the MDE, planned sample, power, and false negative risk.',
+      },
+    ],
+  },
   'sequential-testing-peeking': causalAssessment('sequential-testing-peeking', {
     name: 'sequential testing',
     purpose: 'To monitor an experiment while preserving a planned false positive budget',
