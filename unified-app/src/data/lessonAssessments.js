@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
@@ -971,63 +972,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'bayes-rule-ml': {
-    quiz: [
-      {
-        id: 'base-rate-role',
-        prompt: 'Why can a positive signal still leave a modest posterior probability for a rare class?',
-        choices: [
-          'The prior base rate and false positive rate both affect the posterior',
-          'Bayes rule ignores evidence strength',
-          'Rare classes cannot be modeled with probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'Bayes rule combines the prior, the true positive rate, and the false positive rate before normalizing.',
-      },
-      {
-        id: 'false-positive-effect',
-        prompt: 'What usually happens when the false positive rate falls while the prior and hit rate stay fixed?',
-        choices: [
-          'The posterior after positive evidence rises',
-          'The posterior must become zero',
-          'The prior disappears from the calculation',
-        ],
-        answerIndex: 0,
-        explanation: 'Fewer false alarms means a positive signal is more likely to come from true positives.',
-      },
-      {
-        id: 'normalizer-meaning',
-        prompt: 'In the Bayes denominator for a positive signal, what is being normalized?',
-        choices: [
-          'All ways the positive signal could occur, including true positives and false alarms',
-          'Only the true positive cases',
-          'Only the prior probability before evidence',
-        ],
-        answerIndex: 0,
-        explanation: 'The posterior divides true positive evidence by all positive evidence, including false alarms from non-class cases.',
-      },
-      {
-        id: 'rare-class-action',
-        prompt: 'For a rare class, which change often makes positive evidence more actionable?',
-        choices: [
-          'Reducing the false positive rate',
-          'Ignoring the base rate',
-          'Removing the normalizing denominator',
-        ],
-        answerIndex: 0,
-        explanation: 'When the class is rare, false alarms can dominate the positive evidence pool, so reducing them can sharply raise the posterior.',
-      },
-      {
-        id: 'predict-base-rate-shift',
-        prompt: 'If the hit rate and false-positive rate stay fixed but the class becomes much rarer, what should you predict?',
-        choices: [
-          'The posterior after a positive signal usually drops',
-          'The posterior must stay unchanged',
-          'The false-positive rate becomes irrelevant',
-        ],
-        answerIndex: 0,
-        explanation: 'A rarer prior means more positive signals can come from false alarms, which is the base-rate failure mode.',
-      },
-    ],
+    quiz: BAYES_RULE_QUIZ,
     labs: [
       {
         id: 'rare-class-posterior',
