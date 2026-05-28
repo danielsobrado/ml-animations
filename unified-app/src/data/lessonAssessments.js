@@ -18,6 +18,7 @@ import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAsses
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
+import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
@@ -1605,52 +1606,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   overfitting: {
-    quiz: [
-      {
-        id: 'gap-signal',
-        prompt: 'What is the classic overfitting signal?',
-        choices: [
-          'Training error falls while validation error rises',
-          'Training and validation error are both high from the start',
-          'Validation error is never measured',
-        ],
-        answerIndex: 0,
-        explanation: 'Overfitting appears when the model keeps improving on training data but generalizes worse.',
-      },
-      {
-        id: 'complexity-risk',
-        prompt: 'What does too much model complexity often learn?',
-        choices: [
-          'Noise and quirks in the training sample',
-          'Only the simplest trend',
-          'The test-set labels directly',
-        ],
-        answerIndex: 0,
-        explanation: 'A flexible model can bend around noise instead of learning reusable signal.',
-      },
-      {
-        id: 'early-stopping-signal',
-        prompt: 'Why can early stopping help with overfitting?',
-        choices: [
-          'It can stop near the lowest validation error before memorization dominates',
-          'It removes the need for a validation set',
-          'It guarantees the test score will improve forever',
-        ],
-        answerIndex: 0,
-        explanation: 'Early stopping uses validation behavior to avoid later epochs that keep reducing training error but hurt validation error.',
-      },
-      {
-        id: 'not-every-gap',
-        prompt: 'When is a bad validation score not classic overfitting?',
-        choices: [
-          'When training error is also high, suggesting underfitting',
-          'When training error is lower than validation error',
-          'When the model has more than one parameter',
-        ],
-        answerIndex: 0,
-        explanation: 'Classic overfitting needs a strong training fit with worse validation performance; high error on both splits points to underfitting.',
-      },
-    ],
+    quiz: OVERFITTING_QUIZ,
     labs: [
       {
         id: 'find-sweet-spot',
