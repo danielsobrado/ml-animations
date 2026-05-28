@@ -8,6 +8,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
+import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
@@ -1529,63 +1530,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'train-validation-test-split': {
-    quiz: [
-      {
-        id: 'test-set-role',
-        prompt: 'What happens if the test set guides model selection?',
-        choices: [
-          'It turns into another validation set',
-          'It becomes a larger training set',
-          'It prevents overfitting automatically',
-        ],
-        answerIndex: 0,
-        explanation: 'Repeated test-set decisions leak information and make the final score optimistic.',
-      },
-      {
-        id: 'validation-role',
-        prompt: 'Which split should tune thresholds and hyperparameters?',
-        choices: [
-          'Validation',
-          'Test',
-          'Production-only traffic',
-        ],
-        answerIndex: 0,
-        explanation: 'Validation data is the development feedback loop; test data is reserved for the final estimate.',
-      },
-      {
-        id: 'stratified-split',
-        prompt: 'Why use a stratified split for a small classification dataset?',
-        choices: [
-          'To keep class proportions closer across train, validation, and test',
-          'To guarantee the model cannot overfit',
-          'To make the test set larger than the training set',
-        ],
-        answerIndex: 0,
-        explanation: 'Stratification reduces the chance that one split has a very different label distribution by accident.',
-      },
-      {
-        id: 'preprocessing-order',
-        prompt: 'When should learned preprocessing be fitted?',
-        choices: [
-          'After splitting, using training data only',
-          'Before splitting, using the full dataset',
-          'After checking the final test score',
-        ],
-        answerIndex: 0,
-        explanation: 'Fitting preprocessing on all rows leaks validation and test statistics into the training recipe.',
-      },
-      {
-        id: 'predict-leakage-score',
-        prompt: 'What score pattern should make you suspicious of split leakage?',
-        choices: [
-          'Validation performance is implausibly high compared with a leakage-safe split',
-          'Training takes longer after the split',
-          'The test set is smaller than the validation set',
-        ],
-        answerIndex: 0,
-        explanation: 'Leakage often shows up as unusually optimistic validation or test scores that disappear under a cleaner split.',
-      },
-    ],
+    quiz: TRAIN_VALIDATION_TEST_SPLIT_QUIZ,
     labs: [
       {
         id: 'spot-leakage',
