@@ -1,0 +1,42 @@
+[package]
+name = "mini-spec-sparse"
+version = "0.1.0"
+edition = "2021"
+description = "Rustlings-style exercises for SpecSA and SpecAttn sparse speculative decoding"
+authors = ["Daniel Sobrado"]
+
+[[bin]]
+name = "01_accept_prefix"
+path = "exercises/01_accept_prefix.rs"
+
+[[bin]]
+name = "02_sparse_ratio"
+path = "exercises/02_sparse_ratio.rs"
+
+[[bin]]
+name = "03_critical_kv_scores"
+path = "exercises/03_critical_kv_scores.rs"
+
+[[bin]]
+name = "04_collect_two_query"
+path = "exercises/04_collect_two_query.rs"
+
+[[bin]]
+name = "05_block_overlap"
+path = "exercises/05_block_overlap.rs"
+
+[[bin]]
+name = "06_exact_merged_schedule"
+path = "exercises/06_exact_merged_schedule.rs"
+
+[[bin]]
+name = "07_shared_index"
+path = "exercises/07_shared_index.rs"
+
+[[bin]]
+name = "08_refresh_reuse"
+path = "exercises/08_refresh_reuse.rs"
+
+[[bin]]
+name = "09_strategy_planner"
+path = "exercises/09_strategy_planner.rs"

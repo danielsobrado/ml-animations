@@ -118,6 +118,8 @@ The repository also includes compact implementations meant for reading and exper
 - `mini-diffusion/`, `mini-diffusion-go/`, `mini-diffusion-java/`, `mini-diffusion-python/`
 - `mini-markov/`, `mini-markov-go/`, `mini-markov-java/`, `mini-markov-python/`
 - `mini-eagle/` Rustlings-style exercises for EAGLE 3.1 speculative decoding
+- `mini-spec-sparse/` Rustlings-style exercises for SpecSA / SpecAttn sparse speculative decoding
+- `mini-turboquant/` Rustlings-style exercises for TurboQuant KV-cache quantization
 
 Each directory has its own README with setup notes and examples.
 
@@ -142,6 +144,8 @@ mini-nn*/                    Small neural-network implementations
 mini-diffusion*/             Small diffusion implementations
 mini-markov*/                Small Markov-chain implementations
 mini-eagle/                  Speculative decoding exercises with TODO-driven Rust tests
+mini-spec-sparse/            Sparse speculative decoding exercises with TODO-driven Rust tests
+mini-turboquant/             KV-cache quantization exercises with TODO-driven Rust tests
 ```
 
 ## License

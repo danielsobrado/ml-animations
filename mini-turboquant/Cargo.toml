@@ -1,0 +1,40 @@
+[package]
+name = "mini-turboquant"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "01_kv_cache_size"
+path = "exercises/01_kv_cache_size.rs"
+
+[[bin]]
+name = "02_uniform_quantization"
+path = "exercises/02_uniform_quantization.rs"
+
+[[bin]]
+name = "03_dot_product_error"
+path = "exercises/03_dot_product_error.rs"
+
+[[bin]]
+name = "04_random_rotation"
+path = "exercises/04_random_rotation.rs"
+
+[[bin]]
+name = "05_mse_vs_inner_product"
+path = "exercises/05_mse_vs_inner_product.rs"
+
+[[bin]]
+name = "06_residual_correction"
+path = "exercises/06_residual_correction.rs"
+
+[[bin]]
+name = "07_outlier_channels"
+path = "exercises/07_outlier_channels.rs"
+
+[[bin]]
+name = "08_attention_topk_agreement"
+path = "exercises/08_attention_topk_agreement.rs"
+
+[[bin]]
+name = "09_compression_tradeoff"
+path = "exercises/09_compression_tradeoff.rs"
