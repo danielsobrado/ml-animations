@@ -20,6 +20,7 @@ import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAsses
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
+import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
@@ -1442,20 +1443,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'ml-security-robustness-track': causalAssessment('ml-security-robustness-track', {
-    name: 'ML security and robustness',
-    purpose: 'To protect ML systems from adversarial inputs, poisoning, privacy leakage, and unsafe tool use',
-    purposeExplanation: 'Security covers the model, retrieval, tools, data access, and monitoring.',
-    failureExplanation: 'Treating the system prompt as the only defense leaves retrieval and tools exposed.',
-    decisionUse: 'Map each threat to isolation, validation, evaluation, policy gates, or monitoring',
-    decisionExplanation: 'Concrete controls make security testable.',
-    assumption: 'Untrusted content can attempt to steer model behavior or reveal sensitive data',
-    assumptionExplanation: 'That assumption is necessary for realistic RAG and tool safety.',
-    diagnostic: 'Attack surface, data sensitivity, defense coverage, and adversarial eval results',
-    diagnosticExplanation: 'These indicate whether release risk is acceptable.',
-    labTitle: 'Map one ML threat',
-    successCriteria: 'You can name an attack, impacted asset, control, and evaluation.',
-  }, 'Relying only on prompt wording instead of system-level controls', 'Choose a prompt-injection or poisoning scenario and define a defense plus an eval.'),
+  'ml-security-robustness-track': {
+    quiz: ML_SECURITY_ROBUSTNESS_QUIZ,
+    labs: [
+      {
+        id: 'ml-security-robustness-track-scenario-lab',
+        title: 'Map one ML threat',
+        prompt: 'Choose a prompt-injection or poisoning scenario and define a defense plus an eval.',
+        successCriteria: 'You can name an attack, impacted asset, control, and evaluation.',
+      },
+    ],
+  },
   'efficient-inference-compression-track': causalAssessment('efficient-inference-compression-track', {
     name: 'efficient inference and compression',
     purpose: 'To serve models within throughput, latency, memory, and quality budgets',
