@@ -15,7 +15,7 @@ export const DEFAULT_GITHUB_SYNC_SETTINGS = {
   enabled: false,
   autoSync: false,
   target: GITHUB_SYNC_TARGETS.repo,
-  brokerUrl: '',
+  storageUrl: '',
   owner: '',
   repo: '',
   branch: 'main',
@@ -69,7 +69,7 @@ function cleanPath(value) {
   return cleanString(value).replace(/^\/+/, '') || DEFAULT_GITHUB_SYNC_SETTINGS.path;
 }
 
-function cleanBrokerUrl(value) {
+function cleanStorageUrl(value) {
   return cleanString(value).replace(/\/+$/, '');
 }
 
@@ -91,8 +91,8 @@ function compareIsoDates(left, right) {
   return Date.parse(left || '') - Date.parse(right || '');
 }
 
-function joinBrokerUrl(baseUrl, pathname) {
-  const normalizedBase = cleanBrokerUrl(baseUrl);
+function joinStorageUrl(baseUrl, pathname) {
+  const normalizedBase = cleanStorageUrl(baseUrl);
   if (!normalizedBase) {
     throw new GitHubProgressSyncError('Add a GitHub Storage URL before signing in or syncing.');
   }
@@ -115,12 +115,14 @@ export function normalizeGitHubSyncSettings(value) {
     ? GITHUB_SYNC_TARGETS.gist
     : GITHUB_SYNC_TARGETS.repo;
 
+  const rawStorageUrl = source.storageUrl || source.brokerUrl || '';
+
   return {
     ...DEFAULT_GITHUB_SYNC_SETTINGS,
     enabled: source.enabled === true,
     autoSync: source.autoSync === true,
     target,
-    brokerUrl: cleanBrokerUrl(source.brokerUrl),
+    storageUrl: cleanStorageUrl(rawStorageUrl),
     owner: cleanString(source.owner),
     repo: cleanString(source.repo),
     branch: cleanString(source.branch) || DEFAULT_GITHUB_SYNC_SETTINGS.branch,
@@ -223,7 +225,7 @@ export function getGitHubSyncAuthUrl(settings, returnTo = '') {
     returnTo,
     target: normalized.target,
   });
-  return `${joinBrokerUrl(normalized.brokerUrl, '/auth/github/start')}?${params.toString()}`;
+  return `${joinStorageUrl(normalized.storageUrl, '/auth/github/start')}?${params.toString()}`;
 }
 
 export function startGitHubSignIn(settings, returnTo) {
@@ -233,7 +235,7 @@ export function startGitHubSignIn(settings, returnTo) {
   window.location.assign(getGitHubSyncAuthUrl(settings, returnTo || window.location.href));
 }
 
-async function parseBrokerResponse(response) {
+async function parseStorageResponse(response) {
   const rateLimit = readRateLimit(response.headers);
   const retryAfter = readHeader(response.headers, 'retry-after');
   const text = await response.text();
@@ -254,8 +256,8 @@ async function parseBrokerResponse(response) {
   };
 }
 
-async function brokerRequest(settings, pathname, options = {}, fetchFn = fetch) {
-  const response = await fetchFn(joinBrokerUrl(settings.brokerUrl, pathname), {
+async function storageRequest(settings, pathname, options = {}, fetchFn = fetch) {
+  const response = await fetchFn(joinStorageUrl(settings.storageUrl, pathname), {
     credentials: 'include',
     headers: {
       Accept: 'application/json',
@@ -264,7 +266,7 @@ async function brokerRequest(settings, pathname, options = {}, fetchFn = fetch) 
     },
     ...options,
   });
-  return parseBrokerResponse(response);
+  return parseStorageResponse(response);
 }
 
 function buildProgressQuery(settings) {
@@ -281,25 +283,26 @@ function buildProgressQuery(settings) {
 }
 
 export async function getGitHubSyncSession(settings, fetchFn = fetch) {
-  const { payload } = await brokerRequest(settings, '/api/github/session', {}, fetchFn);
+  const { payload } = await storageRequest(settings, '/api/github/session', {}, fetchFn);
   return payload;
 }
 
 export async function listGitHubSyncRepos(settings, fetchFn = fetch) {
-  const { payload } = await brokerRequest(settings, '/api/github/repos', {}, fetchFn);
+  const { payload } = await storageRequest(settings, '/api/github/repos', {}, fetchFn);
   return Array.isArray(payload.repos) ? payload.repos : [];
 }
 
 export async function disconnectGitHubSession(settings, fetchFn = fetch) {
-  const { payload } = await brokerRequest(settings, '/auth/github/logout', {
+  const { payload } = await storageRequest(settings, '/auth/github/logout', {
     method: 'POST',
   }, fetchFn);
   return payload;
 }
 
 export async function pullGitHubProgress(settings, fetchFn = fetch) {
+  const normalized = normalizeGitHubSyncSettings(settings);
   const query = buildProgressQuery(settings);
-  const { payload, rateLimit } = await brokerRequest(
+  const { payload, rateLimit } = await storageRequest(
     settings,
     `/api/github/progress?${query.toString()}`,
     {},
@@ -317,7 +320,7 @@ export async function pullGitHubProgress(settings, fetchFn = fetch) {
 
 export async function pushGitHubProgress(settings, envelope, remoteMeta = {}, fetchFn = fetch) {
   const normalized = normalizeGitHubSyncSettings(settings);
-  const { payload, rateLimit } = await brokerRequest(normalized, '/api/github/progress', {
+  const { payload, rateLimit } = await storageRequest(normalized, '/api/github/progress', {
     method: 'PUT',
     body: JSON.stringify({
       target: normalized.target,

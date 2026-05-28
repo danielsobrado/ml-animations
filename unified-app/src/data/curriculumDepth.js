@@ -45,7 +45,7 @@ export const conceptComparisons = [
     rightSummary: 'DAPO keeps only useful groups, decouples clip bounds, aggregates over tokens, and smooths length penalties.',
     commonMistake: 'Thinking a clean group-relative formula is enough for stable long-CoT RL at scale.',
     diagnostic: 'Ask whether the batch has contrast, whether entropy is collapsing, whether clipping blocks positive updates, and whether length penalties are noisy.',
-    glossaryTerms: ['grpo', 'rlvr', 'reward-shaping'],
+    glossaryTerms: ['grpo', 'rlvr', 'reward'],
   },
   {
     id: 'orm-prm',

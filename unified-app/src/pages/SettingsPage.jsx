@@ -129,7 +129,7 @@ export default function SettingsPage() {
   async function disconnect() {
     await run(async () => {
       try {
-        if (settings.brokerUrl) await disconnectGitHubSession(settings);
+        if (settings.storageUrl) await disconnectGitHubSession(settings);
       } catch {
         // Local disconnect still matters if the remote session is already gone.
       }
@@ -167,10 +167,10 @@ export default function SettingsPage() {
   }
 
   const selectedRepo = settings.owner && settings.repo ? `${settings.owner}/${settings.repo}` : '';
-  const canUseBroker = Boolean(settings.brokerUrl);
+  const canUseStorage = Boolean(settings.storageUrl);
   const canRepoSync = settings.target !== GITHUB_SYNC_TARGETS.repo || (settings.owner && settings.repo && settings.path);
   const canGistSync = settings.target !== GITHUB_SYNC_TARGETS.gist || settings.gistFilename;
-  const canSync = canUseBroker && canRepoSync && canGistSync;
+  const canSync = canUseStorage && canRepoSync && canGistSync;
 
   return (
     <div className="ua-animation-page ua-settings-page">
@@ -200,8 +200,8 @@ export default function SettingsPage() {
           <div className="ua-settings-form">
             <Field label="GitHub Storage URL">
               <input
-                value={settings.brokerUrl}
-                onChange={(event) => updateSettings({ brokerUrl: event.target.value })}
+                value={settings.storageUrl}
+                onChange={(event) => updateSettings({ storageUrl: event.target.value })}
                 placeholder="https://your-github-storage.example.com"
               />
             </Field>
@@ -228,7 +228,7 @@ export default function SettingsPage() {
                       }}
                       placeholder="owner/repo"
                     />
-                    <button type="button" onClick={loadRepos} disabled={!canUseBroker || busy === 'repos'}>
+                    <button type="button" onClick={loadRepos} disabled={!canUseStorage || busy === 'repos'}>
                       <RefreshCcw size={14} />
                       Load
                     </button>
@@ -310,12 +310,12 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => startGitHubSignIn(settings, window.location.href)}
-              disabled={!canUseBroker || busy !== ''}
+              disabled={!canUseStorage || busy !== ''}
             >
               <Github size={15} />
               Sign in with GitHub
             </button>
-            <button type="button" onClick={checkSession} disabled={!canUseBroker || busy !== ''}>
+            <button type="button" onClick={checkSession} disabled={!canUseStorage || busy !== ''}>
               <ShieldCheck size={15} />
               Check sign-in
             </button>

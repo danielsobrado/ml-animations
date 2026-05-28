@@ -5821,3 +5821,48 @@ html.ua-concept-map-expanded .ua-concept-map--expanded:not(.ua-concept-map--cura
     grid-template-columns: 68px minmax(0, 1fr);
   }
 }
+
+/* Code Labs Widening overrides */
+.ua-labs-page-container {
+  max-width: 96vw;
+  width: 100%;
+}
+
+.ua-labs-page-container .ua-labs-browser {
+  padding: 1.5rem;
+}
+
+.ua-labs-page-container .ua-labs-layout {
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+}
+
+.ua-labs-page-container .ua-codefix-lab {
+  width: 100%;
+}
+
+.ua-labs-page-container .ua-codefix-grid {
+  grid-template-columns: minmax(240px, 0.8fr) minmax(500px, 1.8fr) minmax(300px, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .ua-labs-page-container .ua-codefix-grid {
+    grid-template-columns: minmax(240px, 1fr) minmax(400px, 1.5fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .ua-labs-page-container .ua-codefix-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Header Login button active state style */
+.ua-header-login-btn.ua-sync-active {
+  border-color: rgba(63, 111, 70, 0.5);
+  background: var(--ds-accent-w);
+  color: rgb(63, 111, 70);
+}
+.ua-header-login-btn.ua-sync-active:hover {
+  background: #f1f8f1;
+  border-color: rgb(63, 111, 70);
+}

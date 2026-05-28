@@ -258,7 +258,7 @@ export default function App() {
 
     const scheduleAutoSync = () => {
       const settings = readGitHubSyncSettings();
-      if (!settings.enabled || !settings.autoSync || !settings.brokerUrl) return;
+      if (!settings.enabled || !settings.autoSync || !settings.storageUrl) return;
       if (timeoutId || syncing) return;
 
       timeoutId = window.setTimeout(async () => {

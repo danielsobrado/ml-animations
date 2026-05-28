@@ -48,7 +48,7 @@ test('GitHub sync settings normalize safely and never store tokens', () => {
     enabled: true,
     autoSync: true,
     target: 'gist',
-    brokerUrl: 'https://sync.example.com/',
+    storageUrl: 'https://sync.example.com/',
     owner: '  octo  ',
     repo: ' progress ',
     branch: '',
@@ -57,7 +57,7 @@ test('GitHub sync settings normalize safely and never store tokens', () => {
     token: 'should-not-persist',
   }, storage);
 
-  assert.equal(settings.brokerUrl, 'https://sync.example.com');
+  assert.equal(settings.storageUrl, 'https://sync.example.com');
   assert.equal(settings.owner, 'octo');
   assert.equal(settings.repo, 'progress');
   assert.equal(settings.branch, DEFAULT_GITHUB_SYNC_SETTINGS.branch);
@@ -68,9 +68,9 @@ test('GitHub sync settings normalize safely and never store tokens', () => {
   assert.deepEqual(readGitHubSyncSettings(storage), settings);
 });
 
-test('GitHub auth URL routes through the configured broker', () => {
+test('GitHub auth URL routes through the configured storage service', () => {
   const url = getGitHubSyncAuthUrl({
-    brokerUrl: 'https://sync.example.com/',
+    storageUrl: 'https://sync.example.com/',
     target: 'repo',
   }, 'https://danielsobrado.github.io/Machine-Learning-Visualized/settings');
 
@@ -144,7 +144,7 @@ test('GitHub sync pulls, merges, writes local progress, then pushes one progress
   });
   const settings = normalizeGitHubSyncSettings({
     enabled: true,
-    brokerUrl: 'https://sync.example.com',
+    storageUrl: 'https://sync.example.com',
     owner: 'octo',
     repo: 'progress',
     branch: 'main',
@@ -198,7 +198,7 @@ test('GitHub sync retries once after a remote conflict', async () => {
   });
   const settings = normalizeGitHubSyncSettings({
     enabled: true,
-    brokerUrl: 'https://sync.example.com',
+    storageUrl: 'https://sync.example.com',
     owner: 'octo',
     repo: 'progress',
   });

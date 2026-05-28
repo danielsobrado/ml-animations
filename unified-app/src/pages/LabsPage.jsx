@@ -37,7 +37,7 @@ export default function LabsPage() {
     null;
 
   return (
-    <div className="ua-animation-page">
+    <div className="ua-animation-page ua-labs-page-container">
       <header className="ua-animation-header">
         <div className="ds-eyebrow">
           <Link to="/">Catalog</Link>

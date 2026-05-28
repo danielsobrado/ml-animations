@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Code2, Github, Menu, PanelLeft, PanelLeftClose, Settings } from 'lucide-react';
+import { readGitHubSyncSettings, GITHUB_SYNC_EVENT } from '../../data/githubProgressSync.js';
 
 export default function Header({
   onMenuClick,
@@ -13,6 +14,23 @@ export default function Header({
   const progressLabel = `Σ ${progress.visited} / ${progress.total} lessons`;
   const progressPercent = progress.total > 0 ? (progress.visited / progress.total) * 100 : 0;
   const DesktopIcon = !sidebarOpen || sidebarCollapsed ? PanelLeft : PanelLeftClose;
+
+  const [settings, setSettings] = React.useState(() => readGitHubSyncSettings());
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleUpdate = () => {
+      setSettings(readGitHubSyncSettings());
+    };
+    window.addEventListener(GITHUB_SYNC_EVENT, handleUpdate);
+    return () => {
+      window.removeEventListener(GITHUB_SYNC_EVENT, handleUpdate);
+    };
+  }, []);
+
+  const hasStorageUrl = Boolean(settings.storageUrl);
+  const isEnabled = settings.enabled;
+
   return (
     <header className="ua-header">
       <div className="ua-header-left">
@@ -60,6 +78,13 @@ export default function Header({
         <Link to="/labs" className="ua-header-action">
           <Code2 size={16} />
           Labs
+        </Link>
+        <Link
+          to="/settings"
+          className={`ua-header-action ua-header-login-btn ${hasStorageUrl && isEnabled ? 'ua-sync-active' : ''}`}
+        >
+          <Github size={15} />
+          <span>{hasStorageUrl && isEnabled ? 'Sync Active' : 'Sign In'}</span>
         </Link>
         <Link to="/settings" className="ua-icon-btn" aria-label="Settings">
           <Settings size={19} />
