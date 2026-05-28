@@ -15,6 +15,7 @@ import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessin
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
+import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
@@ -1774,52 +1775,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   initialization: {
-    quiz: [
-      {
-        id: 'he-for-relu',
-        prompt: 'Why does He initialization usually fit ReLU networks better than Xavier?',
-        choices: [
-          'It compensates for ReLU zeroing many activations',
-          'It removes the need for backpropagation',
-          'It makes every weight start with the same value',
-        ],
-        answerIndex: 0,
-        explanation: 'He initialization uses fan-in scaling that accounts for ReLU discarding roughly half the signal.',
-      },
-      {
-        id: 'bad-variance',
-        prompt: 'What can happen when initial weight variance is far too large?',
-        choices: [
-          'Activations and gradients can explode through depth',
-          'The model becomes perfectly regularized',
-          'The optimizer no longer needs a learning rate',
-        ],
-        answerIndex: 0,
-        explanation: 'Large initial weights can amplify signals layer after layer, making training unstable before it begins.',
-      },
-      {
-        id: 'predict-tiny-weights',
-        prompt: 'If every layer starts with weights that are far too tiny, what should you predict through depth?',
-        choices: [
-          'Signals and gradients can shrink toward zero',
-          'Activations must explode',
-          'The network skips the activation functions',
-        ],
-        answerIndex: 0,
-        explanation: 'Too-small variance can repeatedly shrink forward activations and backward gradients.',
-      },
-      {
-        id: 'same-weight-symmetry',
-        prompt: 'Why is initializing all hidden units with the same weight a failure mode?',
-        choices: [
-          'Units can receive identical gradients and fail to specialize',
-          'It makes the model train faster by creating diversity',
-          'It removes the loss function',
-        ],
-        answerIndex: 0,
-        explanation: 'Symmetry prevents units in the same layer from learning different features unless the initialization breaks it.',
-      },
-    ],
+    quiz: INITIALIZATION_QUIZ,
     labs: [
       {
         id: 'signal-scale',
