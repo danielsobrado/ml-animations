@@ -11,6 +11,7 @@ import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js'
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
+import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
@@ -1501,63 +1502,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'loss-functions-likelihoods': {
-    quiz: [
-      {
-        id: 'negative-log-likelihood',
-        prompt: 'What is the link between many ML losses and probability models?',
-        choices: [
-          'The loss is often negative log-likelihood of the observed target',
-          'The loss is always the number of wrong labels',
-          'The loss removes the need for a model assumption',
-        ],
-        answerIndex: 0,
-        explanation: 'Squared error and cross-entropy can be derived as negative log-likelihoods under common target assumptions.',
-      },
-      {
-        id: 'cross-entropy-pressure',
-        prompt: 'Why does cross-entropy rise sharply when the true-class probability is low?',
-        choices: [
-          'Low probability assigned to the observed class is low likelihood',
-          'The label has become continuous',
-          'The model has stopped using softmax',
-        ],
-        answerIndex: 0,
-        explanation: 'Cross-entropy penalizes the negative log of the probability assigned to the observed class.',
-      },
-      {
-        id: 'squared-error-assumption',
-        prompt: 'What assumption commonly leads to squared error as negative log-likelihood?',
-        choices: [
-          'Gaussian residual noise with fixed variance',
-          'Binary labels with only two classes',
-          'A prior that every parameter is equally useful',
-        ],
-        answerIndex: 0,
-        explanation: 'Under Gaussian residuals with fixed variance, the NLL differs from squared error only by constants and scale.',
-      },
-      {
-        id: 'loss-choice-signal',
-        prompt: 'What does choosing a loss function usually encode?',
-        choices: [
-          'An assumption about target type, noise, or error cost',
-          'A guarantee that the model cannot overfit',
-          'A way to avoid measuring validation performance',
-        ],
-        answerIndex: 0,
-        explanation: 'Loss choice defines what kinds of errors are expensive, often through an implied probabilistic model.',
-      },
-      {
-        id: 'mismatched-loss-failure',
-        prompt: 'What can go wrong if you use squared error for a heavily skewed count target with rare huge spikes?',
-        choices: [
-          'The loss can over-focus on large residuals and poorly match the noise pattern',
-          'The labels become categorical automatically',
-          'The model is guaranteed to calibrate tail probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'A loss carries assumptions about noise and error cost; a mismatch can train the model toward the wrong behavior.',
-      },
-    ],
+    quiz: LOSS_FUNCTIONS_LIKELIHOODS_QUIZ,
     labs: [
       {
         id: 'match-loss-to-noise',
