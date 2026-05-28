@@ -15,6 +15,7 @@ import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js'
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
+import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
@@ -1394,20 +1395,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'propensity-scores': causalAssessment('propensity-scores', {
-    name: 'propensity score adjustment',
-    purpose: 'To balance observed covariates in observational treated/control comparisons',
-    purposeExplanation: 'The propensity score summarizes treatment probability from measured features.',
-    failureExplanation: 'Poor overlap means some treated units have no credible comparable controls.',
-    decisionUse: 'Use matched or weighted estimates only after checking balance and overlap',
-    decisionExplanation: 'Design diagnostics come before trusting an observational effect estimate.',
-    assumption: 'All important confounders are measured well enough to model treatment assignment',
-    assumptionExplanation: 'Unobserved confounding remains outside the propensity model.',
-    diagnostic: 'Common support, covariate balance, and hidden-bias sensitivity',
-    diagnosticExplanation: 'These show whether adjustment made the groups comparable.',
-    labTitle: 'Audit observational support',
-    successCriteria: 'You can identify overlap, balance, and unmeasured-confounding limits.',
-  }, 'Treating propensity scores as a fix for unmeasured confounding', 'Lower overlap or raise hidden bias and explain why the estimate becomes fragile.'),
+  'propensity-scores': {
+    quiz: PROPENSITY_SCORES_QUIZ,
+    labs: [
+      {
+        id: 'observational-support-audit',
+        title: 'Audit observational support',
+        prompt: 'Lower overlap or raise hidden bias and explain why the estimate becomes fragile.',
+        successCriteria: 'You can identify overlap, balance, and unmeasured-confounding limits.',
+      },
+    ],
+  },
   'time-series-forecasting-track': causalAssessment('time-series-forecasting-track', {
     name: 'time series forecasting',
     purpose: 'To predict future values with validation that respects chronological order',
