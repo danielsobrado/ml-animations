@@ -1,6 +1,7 @@
 import { allAnimations } from './animations.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
+import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
@@ -1565,52 +1566,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'feature-scaling-preprocessing': {
-    quiz: [
-      {
-        id: 'train-only-fit',
-        prompt: 'Why should a scaler be fitted on training data only?',
-        choices: [
-          'So validation or test statistics cannot shape the model pipeline',
-          'So validation examples become part of the training labels',
-          'So every feature keeps its original unit scale',
-        ],
-        answerIndex: 0,
-        explanation: 'Preprocessing parameters are learned from data, so fitting them on validation or test rows leaks evaluation information.',
-      },
-      {
-        id: 'unit-dominance',
-        prompt: 'Why can raw feature units hurt distance-based models?',
-        choices: [
-          'A large-unit column can dominate Euclidean distance',
-          'Distances ignore feature values after scaling',
-          'Standardization removes the need for labels',
-        ],
-        answerIndex: 0,
-        explanation: 'If income is measured in thousands and age in years, raw distances mostly reflect income unless features are scaled.',
-      },
-      {
-        id: 'predict-outlier-scaler',
-        prompt: 'With one extreme outlier, which scaler is usually least moved by that single point?',
-        choices: [
-          'Robust scaling based on median and interquartile range',
-          'Min-max scaling based on the largest and smallest values',
-          'A scaler fitted on validation and test rows',
-        ],
-        answerIndex: 0,
-        explanation: 'Median and IQR are less sensitive to one extreme value than min and max.',
-      },
-      {
-        id: 'fit-all-data-failure',
-        prompt: 'What is the failure mode when preprocessing is fitted before the train/test split?',
-        choices: [
-          'Evaluation rows can influence learned preprocessing parameters',
-          'The model is forced to ignore all feature scales',
-          'Only the training rows are transformed',
-        ],
-        answerIndex: 0,
-        explanation: 'A scaler or imputer learns from data; fitting it before splitting lets evaluation information leak into the pipeline.',
-      },
-    ],
+    quiz: FEATURE_SCALING_PREPROCESSING_QUIZ,
     labs: [
       {
         id: 'outlier-scaler-comparison',
