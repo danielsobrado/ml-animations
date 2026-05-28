@@ -1,6 +1,7 @@
 import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
+import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
@@ -1593,52 +1594,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   calibration: {
-    quiz: [
-      {
-        id: 'probability-meaning',
-        prompt: 'What does a calibrated 0.8 score mean?',
-        choices: [
-          'About 80 percent of similar scored examples should be positive',
-          'The example is guaranteed to be positive',
-          'The model has 80 percent accuracy overall',
-        ],
-        answerIndex: 0,
-        explanation: 'Calibration is about observed frequency within score buckets, not certainty for one row or global accuracy.',
-      },
-      {
-        id: 'sigmoid-warning',
-        prompt: 'Why is a sigmoid output not automatically calibrated?',
-        choices: [
-          'The model score can be overconfident or underconfident after training',
-          'Sigmoid outputs are never between 0 and 1',
-          'Calibration only applies to regression models',
-        ],
-        answerIndex: 0,
-        explanation: 'A bounded probability-shaped score can still disagree with observed outcome frequencies.',
-      },
-      {
-        id: 'predict-overconfidence-gap',
-        prompt: 'If the 0.9 score bucket is positive only 60% of the time, what should you diagnose?',
-        choices: [
-          'Overconfidence in that bucket',
-          'Perfect calibration at 90%',
-          'A threshold that is too low by definition',
-        ],
-        answerIndex: 0,
-        explanation: 'Predicted 90% but observed 60% means the model is overstating confidence for similar examples.',
-      },
-      {
-        id: 'ranking-not-calibration',
-        prompt: 'What calibration failure can a highly ranked classifier still have?',
-        choices: [
-          'Its score ordering can be useful while the probabilities are too high or too low',
-          'Good ranking guarantees calibrated probabilities',
-          'Calibration ignores score buckets',
-        ],
-        answerIndex: 0,
-        explanation: 'Discrimination and calibration are different: a model can rank examples well but misstate probabilities.',
-      },
-    ],
+    quiz: CALIBRATION_QUIZ,
     labs: [
       {
         id: 'reliability-gap',
