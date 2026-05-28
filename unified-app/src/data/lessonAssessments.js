@@ -24,6 +24,7 @@ import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimatio
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
+import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
@@ -1667,52 +1668,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'neural-network': {
-    quiz: [
-      {
-        id: 'layer-computation',
-        prompt: 'What does a dense neural-network layer compute before the activation?',
-        choices: [
-          'A weighted sum plus bias',
-          'A confusion matrix',
-          'A train/test split',
-        ],
-        answerIndex: 0,
-        explanation: 'A dense layer forms z = W x + b, then an activation function transforms that pre-activation.',
-      },
-      {
-        id: 'activation-purpose',
-        prompt: 'Why do hidden layers need nonlinear activation functions?',
-        choices: [
-          'Without them, stacked linear layers collapse into one linear transformation',
-          'They make backpropagation unnecessary',
-          'They store the target labels inside each neuron',
-        ],
-        answerIndex: 0,
-        explanation: 'Nonlinear activations let the network represent curved decision boundaries and interactions.',
-      },
-      {
-        id: 'predict-xor',
-        prompt: 'Why is XOR a useful toy example for a neural-network overview?',
-        choices: [
-          'A single straight-line boundary cannot solve it, so hidden layers matter',
-          'It is solved by sorting the rows alphabetically',
-          'It does not require any weights',
-        ],
-        answerIndex: 0,
-        explanation: 'XOR exposes the limitation of a single linear separator and motivates hidden nonlinear features.',
-      },
-      {
-        id: 'backward-flow',
-        prompt: 'During backpropagation, what flows backward through the network?',
-        choices: [
-          'Gradients that assign local credit for the loss',
-          'Raw input examples copied from the output layer',
-          'Validation rows used as training labels',
-        ],
-        answerIndex: 0,
-        explanation: 'Backpropagation applies the chain rule to send loss gradients backward through layers.',
-      },
-    ],
+    quiz: NEURAL_NETWORK_QUIZ,
     labs: [
       {
         id: 'trace-forward-backward',
