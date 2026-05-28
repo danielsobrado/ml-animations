@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
@@ -175,63 +176,7 @@ function causalAssessment(topic, coreIdea, failureMode, labPrompt) {
 
 const SEEDED_LESSON_ASSESSMENTS = {
   'matrix-multiplication': {
-    quiz: [
-      {
-        id: 'row-column-entry',
-        prompt: 'For C = A B, what creates entry C[1,2]?',
-        choices: [
-          'Row 1 of A dotted with column 2 of B',
-          'Column 1 of A dotted with row 2 of B',
-          'A[1,2] multiplied by B[1,2]',
-        ],
-        answerIndex: 0,
-        explanation: 'Each output entry combines one row from the left matrix with one column from the right matrix.',
-      },
-      {
-        id: 'composition-order',
-        prompt: 'Why does matrix multiplication order matter?',
-        choices: [
-          'The left and right matrices define a sequence of transformations',
-          'The larger matrix always has to be first',
-          'Only square matrices can be multiplied',
-        ],
-        answerIndex: 0,
-        explanation: 'A B applies transformations in a specific order, so swapping them usually changes the result.',
-      },
-      {
-        id: 'dimension-match',
-        prompt: 'When can A B be multiplied?',
-        choices: [
-          'The column count of A matches the row count of B',
-          'A and B have the same number of rows',
-          'Both matrices contain only positive entries',
-        ],
-        answerIndex: 0,
-        explanation: 'Each output entry needs a dot product between a row of A and a column of B, so their lengths must match.',
-      },
-      {
-        id: 'predict-output-shape',
-        prompt: 'If A is 2 by 3 and B is 3 by 4, what shape is A B?',
-        choices: [
-          '2 by 4',
-          '3 by 3',
-          '4 by 2',
-        ],
-        answerIndex: 0,
-        explanation: 'The outside dimensions become the output shape: rows from A and columns from B.',
-      },
-      {
-        id: 'elementwise-confusion',
-        prompt: 'What is the common failure mode when reading A B as elementwise multiplication?',
-        choices: [
-          'You ignore the row-column dot products that define each output entry',
-          'You correctly preserve transformation composition',
-          'You make non-square matrices easier to multiply',
-        ],
-        answerIndex: 0,
-        explanation: 'Matrix multiplication composes rows and columns; elementwise multiplication is a different operation with different shape rules.',
-      },
-    ],
+    quiz: MATRIX_MULTIPLICATION_QUIZ,
     labs: [
       {
         id: 'compute-one-cell',
