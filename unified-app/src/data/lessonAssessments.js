@@ -1,5 +1,6 @@
 import { allAnimations } from './animations.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
+import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
@@ -523,52 +524,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'k-means': {
-    quiz: [
-      {
-        id: 'assignment-step',
-        prompt: 'During the assignment step, where does each point go?',
-        choices: [
-          'To the nearest centroid',
-          'To the cluster with the largest label value',
-          'To every centroid equally',
-        ],
-        answerIndex: 0,
-        explanation: 'K-means assigns each point to the currently nearest centroid before updating centroid positions.',
-      },
-      {
-        id: 'centroid-update',
-        prompt: 'How is a centroid updated after points are assigned?',
-        choices: [
-          'Move it to the mean of its assigned points',
-          'Move it to the farthest point in the cluster',
-          'Move it to the origin every time',
-        ],
-        answerIndex: 0,
-        explanation: 'The centroid is the coordinate-wise average of the points currently assigned to that cluster.',
-      },
-      {
-        id: 'predict-centroid-move',
-        prompt: 'If a centroid owns mostly points to its upper right, what should happen on the update step?',
-        choices: [
-          'It should move toward the mean of those assigned points',
-          'It should move away from its assigned points',
-          'It should stay fixed until labels are provided',
-        ],
-        answerIndex: 0,
-        explanation: 'The update step replaces each centroid with the average of the points currently assigned to it.',
-      },
-      {
-        id: 'bad-initialization',
-        prompt: 'What failure mode can poor initialization create in k-means?',
-        choices: [
-          'The algorithm can settle into a weak local solution or empty-ish cluster pattern',
-          'The algorithm becomes supervised classification',
-          'The nearest-centroid rule stops using distances',
-        ],
-        answerIndex: 0,
-        explanation: 'K-means is sensitive to starting centroids, so multiple restarts or k-means++ can matter.',
-      },
-    ],
+    quiz: KMEANS_QUIZ,
     labs: [
       {
         id: 'k-vs-inertia',
