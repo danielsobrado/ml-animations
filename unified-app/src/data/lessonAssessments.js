@@ -2,6 +2,7 @@ import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
+import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
@@ -1569,52 +1570,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'classification-metrics': {
-    quiz: [
-      {
-        id: 'precision-question',
-        prompt: 'What does precision measure?',
-        choices: [
-          'Among predicted positives, how many were actually positive',
-          'Among actual positives, how many were found',
-          'Among all examples, how many were negative',
-        ],
-        answerIndex: 0,
-        explanation: 'Precision focuses on the trustworthiness of positive predictions.',
-      },
-      {
-        id: 'rare-positive-risk',
-        prompt: 'Why can accuracy be misleading for rare positives?',
-        choices: [
-          'A model can predict mostly negative and still look accurate',
-          'Accuracy ignores true negatives entirely',
-          'Accuracy can only be used with continuous targets',
-        ],
-        answerIndex: 0,
-        explanation: 'When negatives dominate, a high accuracy score can hide missed positives.',
-      },
-      {
-        id: 'predict-rare-class-baseline',
-        prompt: 'If only 2% of examples are positive, what accuracy can an all-negative classifier reach?',
-        choices: [
-          'About 98%, while finding zero positives',
-          'About 2%, because positives are rare',
-          'Exactly 50%, because there are two classes',
-        ],
-        answerIndex: 0,
-        explanation: 'Class imbalance can make a trivial majority-class classifier look accurate while recall is zero.',
-      },
-      {
-        id: 'precision-recall-tradeoff',
-        prompt: 'What failure can appear when you optimize only precision?',
-        choices: [
-          'The model may predict very few positives and miss many real positives',
-          'The model must maximize recall too',
-          'The confusion matrix no longer has false negatives',
-        ],
-        answerIndex: 0,
-        explanation: 'Very selective thresholds can make positive predictions trustworthy while leaving many positives unrecovered.',
-      },
-    ],
+    quiz: CLASSIFICATION_METRICS_QUIZ,
     labs: [
       {
         id: 'threshold-counts',
