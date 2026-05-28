@@ -11,6 +11,7 @@ import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js'
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
+import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
@@ -1557,63 +1558,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'logistic-regression': {
-    quiz: [
-      {
-        id: 'sigmoid-role',
-        prompt: 'What does the sigmoid do in binary logistic regression?',
-        choices: [
-          'It maps a linear score into a 0-to-1 probability',
-          'It sorts examples by class label',
-          'It computes the confusion matrix',
-        ],
-        answerIndex: 0,
-        explanation: 'The model first computes a logit, then sigmoid converts that score into a probability-like output.',
-      },
-      {
-        id: 'threshold-tradeoff',
-        prompt: 'If the threshold rises from 0.5 to 0.7, what usually happens?',
-        choices: [
-          'Fewer examples are predicted positive',
-          'More examples are predicted positive',
-          'The fitted weights are retrained immediately',
-        ],
-        answerIndex: 0,
-        explanation: 'A higher threshold requires stronger positive evidence before predicting class 1.',
-      },
-      {
-        id: 'logit-vs-probability',
-        prompt: 'What is the relationship between the logit and the predicted probability?',
-        choices: [
-          'The sigmoid maps the logit to a probability-like score',
-          'The threshold is multiplied by the feature weights',
-          'The confusion matrix is computed before probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'Logistic regression computes a linear logit first, then applies the sigmoid to place the score between 0 and 1.',
-      },
-      {
-        id: 'threshold-without-refit',
-        prompt: 'What changes when you move only the classification threshold?',
-        choices: [
-          'Predicted labels and confusion-matrix counts can change',
-          'The learned weights are recomputed from scratch',
-          'The feature values are normalized again',
-        ],
-        answerIndex: 0,
-        explanation: 'The probability scores stay fixed, but the label assigned to scores near the threshold can flip.',
-      },
-      {
-        id: 'probability-not-decision',
-        prompt: 'What is the threshold-vs-probability failure mode?',
-        choices: [
-          'Treating a 0.61 probability as a guaranteed positive instead of a score compared with a threshold',
-          'Comparing probabilities against a chosen cutoff',
-          'Changing the threshold to reflect false-positive costs',
-        ],
-        answerIndex: 0,
-        explanation: 'The sigmoid output is a score used for decisions; the threshold turns that score into a class label.',
-      },
-    ],
+    quiz: LOGISTIC_REGRESSION_QUIZ,
     labs: [
       {
         id: 'threshold-flips',
