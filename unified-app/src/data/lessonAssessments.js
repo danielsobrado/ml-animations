@@ -13,6 +13,7 @@ import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessin
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
+import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
@@ -1641,52 +1642,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'knn-naive-bayes-svm': {
-    quiz: [
-      {
-        id: 'knn-scale',
-        prompt: 'Why does kNN need feature scaling?',
-        choices: [
-          'Euclidean distance can be dominated by the largest-unit feature',
-          'Scaling changes labels into probabilities',
-          'kNN ignores feature values after training',
-        ],
-        answerIndex: 0,
-        explanation: 'kNN compares distances directly, so one unscaled large-unit column can decide most neighbor relationships.',
-      },
-      {
-        id: 'model-assumption',
-        prompt: 'Which statement best matches Gaussian Naive Bayes?',
-        choices: [
-          'It combines per-feature likelihoods under a conditional-independence assumption',
-          'It votes among the nearest k training examples',
-          'It learns a maximum-margin boundary only from support vectors',
-        ],
-        answerIndex: 0,
-        explanation: 'Naive Bayes is probabilistic: it combines class priors with feature likelihoods, often with an independence assumption.',
-      },
-      {
-        id: 'predict-knn-local',
-        prompt: 'Which model is most likely to flip when a query crosses near a small local cluster?',
-        choices: [
-          'kNN, because nearby training examples vote directly',
-          'Naive Bayes, because it ignores all feature values',
-          'SVM, because support vectors are never near boundaries',
-        ],
-        answerIndex: 0,
-        explanation: 'kNN is local and instance-based, so neighborhood composition can change the decision abruptly.',
-      },
-      {
-        id: 'naive-bayes-correlation-failure',
-        prompt: 'What can hurt Naive Bayes when features are strongly redundant?',
-        choices: [
-          'The conditional-independence assumption can double-count correlated evidence',
-          'It becomes a nearest-neighbor method',
-          'It cannot use class priors',
-        ],
-        answerIndex: 0,
-        explanation: 'The naive assumption multiplies feature evidence as if conditionally independent, which can overstate redundant signals.',
-      },
-    ],
+    quiz: KNN_NAIVE_BAYES_SVM_QUIZ,
     labs: [
       {
         id: 'boundary-comparison',
