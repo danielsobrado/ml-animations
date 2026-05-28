@@ -42,6 +42,7 @@ import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TREE_ENSEMBLES_QUIZ } from './treeEnsemblesAssessment.js';
 import { TIME_SERIES_FORECASTING_QUIZ } from './timeSeriesForecastingAssessment.js';
+import { TRAINING_LOOP_DYNAMICS_QUIZ } from './trainingLoopDynamicsAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
@@ -1743,52 +1744,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'training-loop-dynamics': {
-    quiz: [
-      {
-        id: 'batch-noise-diagnosis',
-        prompt: 'What usually happens when mini-batch size is very small?',
-        choices: [
-          'Gradient estimates become noisier from step to step',
-          'Validation loss becomes unnecessary',
-          'The learning rate automatically becomes zero',
-        ],
-        answerIndex: 0,
-        explanation: 'Small batches average fewer examples, so each gradient estimate is more variable.',
-      },
-      {
-        id: 'validation-signal',
-        prompt: 'Why watch validation loss during training?',
-        choices: [
-          'It helps detect overfitting even while training loss falls',
-          'It replaces the need for a training objective',
-          'It makes every optimizer deterministic',
-        ],
-        answerIndex: 0,
-        explanation: 'Validation loss shows whether improvements on training data are transferring to held-out data.',
-      },
-      {
-        id: 'predict-overshoot',
-        prompt: 'If the learning rate is too high, what pattern should you expect in the training loss?',
-        choices: [
-          'Oscillation or sudden spikes instead of steady descent',
-          'A perfectly smooth monotone decrease every time',
-          'No parameter updates at all',
-        ],
-        answerIndex: 0,
-        explanation: 'Large steps can jump across the valley or destabilize the update path.',
-      },
-      {
-        id: 'early-stopping-failure',
-        prompt: 'What failure does early stopping try to prevent?',
-        choices: [
-          'Continuing to optimize training loss after validation loss has begun worsening',
-          'Training for too few epochs before any validation is measured',
-          'Using batches smaller than the full dataset',
-        ],
-        answerIndex: 0,
-        explanation: 'Early stopping uses held-out performance to avoid late-epoch memorization.',
-      },
-    ],
+    quiz: TRAINING_LOOP_DYNAMICS_QUIZ,
     labs: [
       {
         id: 'loop-diagnosis',
