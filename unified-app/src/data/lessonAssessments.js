@@ -4,6 +4,7 @@ import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
+import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
@@ -1297,63 +1298,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'hypothesis-testing-intuition': {
-    quiz: [
-      {
-        id: 'statistic-ratio',
-        prompt: 'What does the test statistic compare in this lesson?',
-        choices: [
-          'Observed effect against standard error',
-          'Training loss against test labels',
-          'Feature count against model size',
-        ],
-        answerIndex: 0,
-        explanation: 'The statistic grows when the observed effect is large relative to sampling noise.',
-      },
-      {
-        id: 'significance-vs-importance',
-        prompt: 'What is a common mistake with hypothesis tests?',
-        choices: [
-          'Treating statistical significance as practical importance',
-          'Using sample size in the calculation',
-          'Comparing an observed effect with noise',
-        ],
-        answerIndex: 0,
-        explanation: 'A small p-value can come from a tiny effect with a huge sample; usefulness is a separate question.',
-      },
-      {
-        id: 'sample-size-pvalue',
-        prompt: 'If the observed effect stays fixed but sample size grows, what can happen to the p-value?',
-        choices: [
-          'It can shrink because standard error falls',
-          'It must grow because more data adds noise',
-          'It becomes independent of the test statistic',
-        ],
-        answerIndex: 0,
-        explanation: 'Larger samples reduce standard error, so the same effect can become more statistically unusual.',
-      },
-      {
-        id: 'power-meaning',
-        prompt: 'What does statistical power describe in this lesson?',
-        choices: [
-          'The chance the test rejects the null when the modeled effect is real',
-          'The business value of the observed effect',
-          'The probability that the null hypothesis is true',
-        ],
-        answerIndex: 0,
-        explanation: 'Power is a long-run detection probability under an assumed real effect and test setup.',
-      },
-      {
-        id: 'pvalue-not-null-probability',
-        prompt: 'Which interpretation is a p-value failure mode?',
-        choices: [
-          'Calling it the probability that the null hypothesis is true',
-          'Computing it under a null model',
-          'Using it as one part of an evidence summary',
-        ],
-        answerIndex: 0,
-        explanation: 'A p-value is the probability of data at least this extreme under the null setup; it is not P(null is true).',
-      },
-    ],
+    quiz: HYPOTHESIS_TESTING_INTUITION_QUIZ,
     labs: [
       {
         id: 'tiny-effect-large-sample',
