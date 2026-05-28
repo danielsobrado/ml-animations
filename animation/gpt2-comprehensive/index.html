@@ -20,6 +20,19 @@
         }
       }(window.location))
     </script>
+    <!-- Handle CSS and JS preload errors gracefully -->
+    <script type="text/javascript">
+      window.addEventListener('vite:preloadError', (event) => {
+        if (event.payload && typeof event.payload.message === 'string' && event.payload.message.includes('preload CSS')) {
+          event.preventDefault();
+          console.warn('Vite CSS preload error intercepted and ignored:', event.payload.message);
+        } else {
+          // For JS or other critical preload errors, reload the page to get the latest bundle
+          console.error('Vite JS/critical preload error, reloading page:', event.payload);
+          window.location.reload();
+        }
+      });
+    </script>
     <!-- End Single Page Apps for GitHub Pages -->
     <meta name="description" content="Interactive visualizations and animations for machine learning concepts including transformers, attention mechanisms, neural networks, and more." />
     <meta name="keywords" content="Machine Learning, Deep Learning, AI, https://danielsobrado.github.io/Machine-Learning-Visualized" />
@@ -36,13 +49,13 @@
     <meta name="twitter:image" content="https://danielsobrado.github.io/Machine-Learning-Visualized/favicon.svg" />
     <link rel="canonical" href="https://danielsobrado.github.io/Machine-Learning-Visualized/" />
     <link rel="icon" type="image/svg+xml" href="/Machine-Learning-Visualized/favicon.svg" />
-    <script type="module" crossorigin src="/Machine-Learning-Visualized/assets/index-xx1ameEC.js"></script>
+    <script type="module" crossorigin src="/Machine-Learning-Visualized/assets/index-BFk9h7bZ.js"></script>
     <link rel="modulepreload" crossorigin href="/Machine-Learning-Visualized/assets/react-vendor-Cdu38Wyn.js">
     <link rel="modulepreload" crossorigin href="/Machine-Learning-Visualized/assets/router-D1rsdnJA.js">
     <link rel="modulepreload" crossorigin href="/Machine-Learning-Visualized/assets/icons-BEfsDuMg.js">
-    <link rel="modulepreload" crossorigin href="/Machine-Learning-Visualized/assets/assessment-data-Cv946UFF.js">
+    <link rel="modulepreload" crossorigin href="/Machine-Learning-Visualized/assets/assessment-data-Bb81kcxw.js">
     <link rel="modulepreload" crossorigin href="/Machine-Learning-Visualized/assets/glossary-data-DT2DBpOJ.js">
-    <link rel="stylesheet" crossorigin href="/Machine-Learning-Visualized/assets/index-CK_uHD0_.css">
+    <link rel="stylesheet" crossorigin href="/Machine-Learning-Visualized/assets/index-CcQSr_--.css">
   </head>
   <body class="antialiased">
     <div id="root"></div>
