@@ -3,6 +3,7 @@ import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
+import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
@@ -1358,20 +1359,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'confounding-simpsons-paradox': causalAssessment('confounding-simpsons-paradox', {
-    name: 'confounding and Simpson reversals',
-    purpose: 'To detect when aggregate comparisons mix treatment effects with group composition',
-    purposeExplanation: 'A confounder affects both exposure and outcome, creating a non-causal path.',
-    failureExplanation: 'Aggregate effects can reverse when treatment and control contain different segment mixes.',
-    decisionUse: 'Inspect comparable slices or adjust for the confounder before claiming causality',
-    decisionExplanation: 'Like-with-like comparisons separate mix effects from treatment effects.',
-    assumption: 'The segment variable is measured before treatment and affects exposure and outcome',
-    assumptionExplanation: 'That timing and structure make it a plausible confounder.',
-    diagnostic: 'Aggregate effect versus within-segment effects',
-    diagnosticExplanation: 'A reversal flags that the aggregate is misleading.',
-    labTitle: 'Create a Simpson reversal',
-    successCriteria: 'You can explain why the aggregate and segment effects point different ways.',
-  }, 'Trusting the aggregate effect when group composition differs sharply', 'Change segment mix until the aggregate effect disagrees with the within-segment effect.'),
+  'confounding-simpsons-paradox': {
+    quiz: CONFOUNDING_SIMPSONS_PARADOX_QUIZ,
+    labs: [
+      {
+        id: 'simpson-reversal-audit',
+        title: 'Create a Simpson reversal',
+        prompt: 'Change segment mix until the aggregate effect disagrees with the within-segment effect.',
+        successCriteria: 'You can explain why the aggregate and segment effects point different ways.',
+      },
+    ],
+  },
   'causal-graphs-dags': causalAssessment('causal-graphs-dags', {
     name: 'causal DAG adjustment',
     purpose: 'To choose adjustment variables from explicit causal assumptions',
