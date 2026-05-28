@@ -9,6 +9,7 @@ import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
+import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
@@ -1454,20 +1455,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'efficient-inference-compression-track': causalAssessment('efficient-inference-compression-track', {
-    name: 'efficient inference and compression',
-    purpose: 'To serve models within throughput, latency, memory, and quality budgets',
-    purposeExplanation: 'Deployment quality depends on the full serving Pareto frontier.',
-    failureExplanation: 'Maximizing throughput alone can harm time-to-first-token or quality.',
-    decisionUse: 'Track compression quality risk, batching latency, KV-cache memory, and throughput together',
-    decisionExplanation: 'Serving decisions are tradeoffs across resource and UX constraints.',
-    assumption: 'The workload has explicit latency, quality, memory, and cost targets',
-    assumptionExplanation: 'Without targets, optimization has no objective.',
-    diagnostic: 'Tokens per second, time-to-first-token, decode latency, memory, and quality evals',
-    diagnosticExplanation: 'These metrics identify the actual bottleneck.',
-    labTitle: 'Tune a serving tradeoff',
-    successCriteria: 'You can explain which bottleneck is addressed by batching, quantization, or paged attention.',
-  }, 'Calling a system optimized because one throughput number improved', 'Create a high-throughput but high-latency scenario and explain the tradeoff.'),
+  'efficient-inference-compression-track': {
+    quiz: EFFICIENT_INFERENCE_COMPRESSION_QUIZ,
+    labs: [
+      {
+        id: 'efficient-inference-compression-track-scenario-lab',
+        title: 'Tune a serving tradeoff',
+        prompt: 'Create a high-throughput but high-latency scenario and explain the tradeoff.',
+        successCriteria: 'You can explain which bottleneck is addressed by batching, quantization, or paged attention.',
+      },
+    ],
+  },
   'data-engineering-for-ml-track': causalAssessment('data-engineering-for-ml-track', {
     name: 'data engineering for ML',
     purpose: 'To produce features and labels that are reproducible, time-correct, and production-safe',
