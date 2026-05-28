@@ -1,5 +1,6 @@
 import { allAnimations } from './animations.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
+import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
@@ -1553,52 +1554,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'data-leakage-deep-dive': {
-    quiz: [
-      {
-        id: 'duplicate-users',
-        prompt: 'Why can duplicate users create leakage?',
-        choices: [
-          'The model can learn user-specific patterns in train and see the same user in validation',
-          'Duplicate users always make the dataset smaller',
-          'Validation rows cannot have user ids',
-        ],
-        answerIndex: 0,
-        explanation: 'If rows from the same entity cross the split, validation no longer measures generalization to unseen entities.',
-      },
-      {
-        id: 'target-derived-feature',
-        prompt: 'Which feature is a target-leakage warning sign?',
-        choices: [
-          'A value created from information known only after the outcome',
-          'A feature scaled using training data only',
-          'A categorical feature observed before prediction time',
-        ],
-        answerIndex: 0,
-        explanation: 'Target leakage often enters through post-outcome fields, future labels, or aggregates that include the answer.',
-      },
-      {
-        id: 'predict-score-inflation',
-        prompt: 'What should you predict if validation rows contain a post-outcome feature that will not exist at serving time?',
-        choices: [
-          'Validation score may look inflated and then collapse in production',
-          'Production score must improve because the feature is predictive',
-          'The split becomes safer because validation is easier',
-        ],
-        answerIndex: 0,
-        explanation: 'The model is using information from the future, so offline evaluation no longer matches the real prediction setting.',
-      },
-      {
-        id: 'group-leakage-failure',
-        prompt: 'Why can random splitting fail when one user contributes many rows?',
-        choices: [
-          'The same user can appear in both train and validation, hiding entity-level overfitting',
-          'Random splitting always removes duplicate users',
-          'Validation labels stop being observed',
-        ],
-        answerIndex: 0,
-        explanation: 'Related examples crossing the split can make memorization look like generalization.',
-      },
-    ],
+    quiz: DATA_LEAKAGE_DEEP_DIVE_QUIZ,
     labs: [
       {
         id: 'leakage-mode-audit',
