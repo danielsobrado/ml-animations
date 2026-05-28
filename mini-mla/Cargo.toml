@@ -1,0 +1,46 @@
+[package]
+name = "mini-mla"
+version = "0.1.0"
+edition = "2021"
+description = "Rustlings-style exercises for MLA and TransMLA KV cache compression"
+authors = ["Daniel Sobrado"]
+
+[[bin]]
+name = "01_kv_cache_size"
+path = "exercises/01_kv_cache_size.rs"
+
+[[bin]]
+name = "02_mha_gqa_cache"
+path = "exercises/02_mha_gqa_cache.rs"
+
+[[bin]]
+name = "03_latent_cache"
+path = "exercises/03_latent_cache.rs"
+
+[[bin]]
+name = "04_down_up_projection"
+path = "exercises/04_down_up_projection.rs"
+
+[[bin]]
+name = "05_absorb_projection"
+path = "exercises/05_absorb_projection.rs"
+
+[[bin]]
+name = "06_rope_non_commute"
+path = "exercises/06_rope_non_commute.rs"
+
+[[bin]]
+name = "07_decoupled_rope_cache"
+path = "exercises/07_decoupled_rope_cache.rs"
+
+[[bin]]
+name = "08_gqa_repetition"
+path = "exercises/08_gqa_repetition.rs"
+
+[[bin]]
+name = "09_low_rank_factorization"
+path = "exercises/09_low_rank_factorization.rs"
+
+[[bin]]
+name = "10_strategy_tradeoff"
+path = "exercises/10_strategy_tradeoff.rs"

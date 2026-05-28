@@ -90,6 +90,8 @@ const EQUATION_OVERRIDES = {
   'frontier-llm-architecture-overview': 'KV\\ bytes\\approx L\\cdot T\\cdot H_{kv}\\cdot d_h\\cdot2\\cdot bytes',
   'frontier-moe-systems': '\\operatorname{MoE}(x)=\\operatorname{SharedExpert}(x) + \\sum_{e\\in E_{selected}} g_e(x) \\cdot \\operatorname{Expert}_e(x)',
   'multi-head-latent-attention': 'c_t = W_{down} x_t \\quad K_t, V_t \\approx W_{up} c_t',
+  'native-sparse-attention': 'z=g_c z_c + g_s z_s + g_w z_w',
+  'grpo-reasoning': 'A_i = \\frac{r_i - \\operatorname{mean}(r)}{\\operatorname{std}(r)}',
   'reasoning-rlvr-grpo': 'A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon} \\quad \\Delta \\theta \\propto \\mathbb{E}[\\nabla \\log \\pi_\\theta(y_i|x) A_i]',
   'test-time-compute-thinking-budgets': 'acc(N) \\approx 1 - (1 - p_{correct})^N \\quad cost(N) = N \\cdot L_{avg}',
   'long-context-frontier-models': 'score = Q + \\lambda_g G - \\lambda_c C - \\lambda_l L - \\lambda_r R',
@@ -759,12 +761,28 @@ export const LEARNING_CARD_OVERRIDES = {
     'Check understanding by diagnosing whether poor behavior comes from routing collapse, dead experts, token dropping, or communication bottlenecks.'
   ),
   'multi-head-latent-attention': cardSet(
-    'Attention compression solves the problem of KV cache becoming too large and bandwidth-heavy during long-context autoregressive decoding.',
-    'Read the cache as per-request memory: every old token leaves behind K/V memory that the next token must repeatedly read.',
-    'MHA caches K/V per head; GQA/MQA reduce heads by sharing; MLA projects K/V into a compressed latent state to trade bandwidth for extra query projection compute.',
-    'Increase context length and compare how MHA, GQA, and MLA memory layouts grow and consume serving bandwidth.',
-    'Mistake to avoid: smaller KV cache does not mean zero compute; MLA requires query-time low-rank projections (often absorbed into Q projections).',
-    'Check understanding by computing which cache layout fits a memory budget and explaining what quality and latency tradeoffs each design makes.'
+    'MLA solves the problem of KV cache becoming too wide during long-context autoregressive decoding.',
+    'GQA saves memory by sharing K/V heads; MLA saves memory by factoring the K/V pathway through a cached latent vector.',
+    'The core equations are c_KV = W_DKV h_t and q dot (W_up c_KV) = (W_up^T q) dot c_KV when projection absorption applies.',
+    'Move query heads, KV heads, latent dimension, RoPE mode, and absorption to compare MHA, MQA, GQA, MLA, and TransMLA.',
+    'Mistake to avoid: MLA is not ordinary cache quantization; it changes what is cached and still pays projection and RoPE-handling costs.',
+    'Check understanding by converting repeated GQA heads into a low-rank TransMLA-style latent cache and naming the tradeoff.'
+  ),
+  'native-sparse-attention': cardSet(
+    'Native Sparse Attention reduces how much context each query reads during long-context attention.',
+    'Think of NSA as reading a map, shining a flashlight on important blocks, and keeping recent notes open.',
+    'The core merge is z = gate_c z_c + gate_s z_s + gate_w z_w for compression, selection, and sliding-window outputs.',
+    'Move sequence length, block sizes, selected blocks, local window, GQA group size, and gate mode to compare dense attention with NSA.',
+    'Mistake to avoid: sparse attention is not automatically fast; scattered token reads can lose the hardware benefit.',
+    'Check understanding by explaining why native training, blockwise selection, and shared GQA-group KV loads matter together.'
+  ),
+  'grpo-reasoning': cardSet(
+    'GRPO trains reasoning behavior by sampling a group of candidate answers for the same prompt and comparing their rewards.',
+    'Think of one prompt as a small classroom competition: better-than-average answers get reinforced and worse-than-average answers get suppressed.',
+    'The core statistic is A_i = (r_i - mean(r)) / std(r), so the group replaces the learned critic baseline used in PPO.',
+    'Move group size, reward type, KL strength, clip range, difficulty, and temperature to see when the group has useful contrast.',
+    'Mistake to avoid: all-correct or all-wrong groups can provide weak or misleading relative learning signals.',
+    'Check understanding by explaining why R1-Zero can discover self-checking behavior while R1 adds cold-start data for readability.'
   ),
   'reasoning-rlvr-grpo': cardSet(
     'Reasoning post-training teaches a model to produce, check, and improve multi-step solution traces rather than only imitate next-token text.',

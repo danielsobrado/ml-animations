@@ -143,10 +143,22 @@ export const MINDMAP_CURATIONS = {
     'Sparse active compute does not remove serving complexity; routing, balancing, and communication are now central.',
   ],
   'multi-head-latent-attention': [
-    'What exactly do we cache for each old token?',
-    'Compare MHA, GQA, and MLA memory footprint and flow capacity over various context lengths.',
-    'Why can memory bandwidth saturate during decoding even when active compute is low?',
-    'KV cache compression is a Pareto tradeoff; storing less cache reduces memory traffic but demands query-time projection work.',
+    'Cache compressed memories',
+    'Compare MHA, MQA, GQA, MLA, and TransMLA by what each old token leaves behind.',
+    'Why does RoPE need a small separate positional cache in MLA?',
+    'MLA is not quantization; it stores fewer architectural values and pays projection work to recover head behavior.',
+  ],
+  'native-sparse-attention': [
+    'Read less of the past',
+    'Tune block sizes, selected blocks, local window, and GQA sharing to compare dense attention with NSA.',
+    'Which KV blocks would be reloaded if each query head selected independently?',
+    'NSA is not post-hoc pruning; it is trained as a blockwise sparse reading strategy.',
+  ],
+  'grpo-reasoning': [
+    'Which sibling answer wins the update?',
+    'Sample 2, 4, 8, or 16 candidate traces, score them with exact, format, judge, or mixed rewards, and normalize advantages.',
+    'Why do all-correct or all-wrong groups produce weak or risky training pressure?',
+    'The group replaces the critic baseline; it does not guarantee the reward measures true reasoning.',
   ],
   'reasoning-rlvr-grpo': [
     'How does a model learn which reasoning traces deserve more probability?',

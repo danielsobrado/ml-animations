@@ -81,6 +81,8 @@ export const HUB_LEARNING_PATHS = [
       'frontier-llm-architecture-overview',
       'frontier-moe-systems',
       'multi-head-latent-attention',
+      'native-sparse-attention',
+      'grpo-reasoning',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
       'long-context-frontier-models',

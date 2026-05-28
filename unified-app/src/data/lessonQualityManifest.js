@@ -23,8 +23,20 @@ export const MANUAL_LESSON_QUALITY = {
   'multi-head-latent-attention': {
     tier: 'A',
     status: 'stable',
-    reason: 'Comprehensive attention compression interactive module exploring KV cache bottlenecks, MQA/GQA sharing, low-rank MLA projection, log-scale comparisons, decode bandwidth, Pareto quality frontiers, and a continuous batching sandbox.',
-    nextAction: 'Incorporate real DeepSeek-V3 RoPE decoupled projection dimensions and multi-node interconnect simulations.',
+    reason: 'Paper-style MLA / TransMLA module with MHA/MQA/GQA/MLA cache calculators, latent bottleneck diagrams, projection absorption, decoupled RoPE, TransMLA conversion, source trail, and mini-mla exercises.',
+    nextAction: 'Add model-specific DeepSeek-V2/V3 dimension presets and measured kernel bandwidth data.',
+  },
+  'native-sparse-attention': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Paper-style NSA module with split sparse attention masks, compression/selection/sliding branch diagrams, deterministic block-score simulation, GQA/shared-load hardware view, reported-results caveats, source trail, and mini-native-sparse-attention exercises.',
+    nextAction: 'Add measured kernel presets across A100/H100 and smaller GQA group layouts.',
+  },
+  'grpo-reasoning': {
+    tier: 'A',
+    status: 'stable',
+    reason: 'Paper-style DeepSeek-R1 / GRPO module with group sampling controls, reward-type comparison, group-relative advantage visualization, PPO-vs-GRPO flow, R1-Zero/R1/distillation timelines, source trail, and mini-grpo exercises.',
+    nextAction: 'Add a custom prompt authoring mode with deterministic toy verifier traces.',
   },
   'reasoning-rlvr-grpo': {
     tier: 'A',

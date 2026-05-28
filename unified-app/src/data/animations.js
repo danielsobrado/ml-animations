@@ -113,6 +113,24 @@ export const categories = [
         icon: BookOpen,
         description: 'A paper lesson pack on speculative decoding, attention drift, normalization, and Rustlings-style exercises',
       },
+      {
+        id: 'multi-head-latent-attention',
+        name: 'MLA / TransMLA: Compress the Cache, Reconstruct the Heads',
+        icon: BookOpen,
+        description: 'A paper lesson on latent KV-cache compression, decoupled RoPE, TransMLA conversion, and Rust exercises',
+      },
+      {
+        id: 'native-sparse-attention',
+        name: 'Native Sparse Attention: Read the Map, Then Zoom In',
+        icon: BookOpen,
+        description: 'A paper lesson on compressed global context, selected fine-grained blocks, sliding local windows, GPU-friendly block sparsity, and Rust exercises',
+      },
+      {
+        id: 'grpo-reasoning',
+        name: 'GRPO: Learning to Reason from Groups of Answers',
+        icon: BookOpen,
+        description: 'A paper lesson on DeepSeek-R1-style GRPO, group-relative advantages, cold-start RL, distillation, and Rust exercises',
+      },
     ],
   },
   {
@@ -135,9 +153,9 @@ export const categories = [
       },
       {
         id: 'multi-head-latent-attention',
-        name: 'Multi-head Latent Attention',
+        name: 'MLA / TransMLA: Latent KV Cache',
         icon: Cpu,
-        description: 'KV cache memory layout, MQA/GQA sharing, and low-rank latent representation compression (MLA)',
+        description: 'Compress the KV cache into a learned latent bottleneck, then reconstruct expressive per-head behavior',
       },
       {
         id: 'reasoning-rlvr-grpo',
@@ -349,6 +367,7 @@ export const categories = [
       { id: 'actor-critic', name: 'Actor-Critic', icon: Users, description: 'Pair a policy actor with a value critic for lower-variance updates' },
       { id: 'ppo-clipped-policy-gradient', name: 'PPO: Clipped Policy Gradient', icon: ShieldCheck, description: 'Stabilize policy-gradient updates with probability ratios, clipping, KL checks, and minibatch diagnostics' },
       { id: 'reward-shaping', name: 'Reward Shaping', icon: Target, description: 'Densify sparse rewards without changing the intended task' },
+      { id: 'grpo-reasoning', name: 'GRPO: Learning to Reason from Groups of Answers', icon: Brain, description: 'DeepSeek-R1-style group-relative policy optimization for reasoning traces' },
       { id: 'markov-chains', name: 'Markov Chains', icon: Workflow, description: 'State transition models' },
     ],
   },
@@ -537,9 +556,12 @@ export const curriculumTracks = [
       'sampling-strategies',
       'rope',
       'residual-stream',
-      'grouped-query-attention',
       'kv-cache',
+      'grouped-query-attention',
       'flash-attention',
+      'multi-head-latent-attention',
+      'native-sparse-attention',
+      'grpo-reasoning',
       'eagle-3-1-speculative-decoding',
       'spec-sparse-attention',
       'turboquant',
@@ -549,7 +571,6 @@ export const curriculumTracks = [
       'moe',
       'frontier-llm-architecture-overview',
       'frontier-moe-systems',
-      'multi-head-latent-attention',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
       'long-context-frontier-models',
@@ -591,6 +612,8 @@ export const curriculumTracks = [
       'frontier-llm-architecture-overview',
       'frontier-moe-systems',
       'multi-head-latent-attention',
+      'native-sparse-attention',
+      'grpo-reasoning',
       'reasoning-rlvr-grpo',
       'test-time-compute-thinking-budgets',
       'long-context-frontier-models',
@@ -618,6 +641,7 @@ export const curriculumTracks = [
       'actor-critic',
       'ppo-clipped-policy-gradient',
       'reward-shaping',
+      'grpo-reasoning',
       'pagerank',
       'bloom-filter',
     ],
@@ -1252,7 +1276,7 @@ const CURRICULUM_OVERRIDES = {
   },
   'multi-head-latent-attention': {
     difficulty: 'advanced',
-    estimatedMinutes: 45,
+    estimatedMinutes: 50,
     prerequisites: [
       'self-attention',
       'kv-cache',
@@ -1263,12 +1287,57 @@ const CURRICULUM_OVERRIDES = {
       'frontier-llm-architecture-overview',
     ],
     learningObjectives: [
-      'Explain why KV cache memory footprint dominates decode serving efficiency in long-context models',
-      'Contrast the key/value sharing topologies of Multi-Query Attention (MQA) and Grouped-Query Attention (GQA)',
-      'Analyze the compression and up-projection dynamics of Multi-head Latent Attention (MLA) in DeepSeek architectures',
-      'Calculate decode bandwidth constraints, cache reduction ratios, and extra projection FLOPs',
+      'Compare MHA, MQA, GQA, MLA, and TransMLA by what each design stores in the KV cache',
+      'Calculate per-token cache width for full K/V heads, grouped heads, and latent KV states',
+      'Explain MLA down-projection, up-projection, projection absorption, and the memory/compute tradeoff',
+      'Describe why RoPE blocks naive absorption and how decoupled RoPE preserves a compact content cache',
+      'Trace TransMLA conversion from repeated GQA heads to parameter-side replication and low-rank factorization',
     ],
-    commonMisconception: 'Attention compression is not a free reduction in memory footprint; caching compressed latent states trades memory bandwidth for extra query-time projection compute.',
+    commonMisconception: 'MLA is not KV-cache quantization; it changes the attention architecture so the cached state is smaller by construction, trading bandwidth for projection work.',
+  },
+  'native-sparse-attention': {
+    difficulty: 'advanced',
+    estimatedMinutes: 50,
+    prerequisites: [
+      'self-attention',
+      'attention-masks',
+      'kv-cache',
+      'grouped-query-attention',
+      'flash-attention',
+      'multi-head-latent-attention',
+      'transformer-token-generation',
+      'long-context-frontier-models',
+    ],
+    learningObjectives: [
+      'Explain why full attention becomes expensive for long-context prefill and memory-bound decoding',
+      'Trace NSA compression, selection, and sliding-window branches through a single query read',
+      'Use compressed block scores to choose fine-grained selected blocks in a deterministic toy setup',
+      'Compare random sparse token reads with blockwise sparse KV loads that align with GPU execution',
+      'Explain why native sparse training and GQA-group shared selection matter for quality and serving efficiency',
+    ],
+    commonMisconception: 'NSA is not just deleting attention scores at inference time; it is a trainable blockwise sparse reading strategy designed around global summaries, selected details, local context, and hardware reuse.',
+  },
+  'grpo-reasoning': {
+    difficulty: 'advanced',
+    estimatedMinutes: 55,
+    prerequisites: [
+      'rl-foundations',
+      'policy-gradients',
+      'actor-critic',
+      'ppo-clipped-policy-gradient',
+      'reward-shaping',
+      'fine-tuning',
+      'llm-training-objectives',
+      'sampling-strategies',
+    ],
+    learningObjectives: [
+      'Explain how GRPO samples a group of answers for one prompt and uses group reward statistics as the baseline',
+      'Compute group-relative advantages and connect positive or negative advantage to reinforce or suppress updates',
+      'Contrast SFT, rejection sampling, PPO, and GRPO as post-training loops',
+      'Trace the DeepSeek-R1-Zero, DeepSeek-R1, and distilled-model training pipelines',
+      'Diagnose weak learning signals when every sampled answer is correct or every sampled answer is wrong',
+    ],
+    commonMisconception: 'GRPO does not hand-label every reasoning step; it creates policy pressure by scoring sampled outcomes and making better sibling traces more likely than worse ones.',
   },
   'reasoning-rlvr-grpo': {
     difficulty: 'advanced',
@@ -1872,15 +1941,25 @@ function makeCurriculumMetadata(item, category) {
   };
 }
 
-// Flatten all items for easy lookup
+const CANONICAL_CATEGORY_BY_ANIMATION_ID = {
+  'multi-head-latent-attention': 'frontier-llms',
+  'grpo-reasoning': 'reinforcement-learning',
+};
+
+// Flatten all canonical items for search, labs, and curriculum lookups.
 export const allAnimations = categories.flatMap(category =>
-  category.items.map(item => ({
-    ...item,
-    categoryId: category.id,
-    categoryName: category.name,
-    categoryColor: category.color,
-    ...makeCurriculumMetadata(item, category),
-  }))
+  category.items
+    .filter(item => (
+      !CANONICAL_CATEGORY_BY_ANIMATION_ID[item.id] ||
+      CANONICAL_CATEGORY_BY_ANIMATION_ID[item.id] === category.id
+    ))
+    .map(item => ({
+      ...item,
+      categoryId: category.id,
+      categoryName: category.name,
+      categoryColor: category.color,
+      ...makeCurriculumMetadata(item, category),
+    }))
 );
 
 // Get animation by id

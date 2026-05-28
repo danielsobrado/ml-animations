@@ -1,10 +1,15 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const baseChoices = [correct, ...distractors];
+  const numberMatch = id.match(/-(\d+)-/);
+  const offset = numberMatch ? (Number(numberMatch[1]) - 1) % baseChoices.length : 0;
+  const choices = [...baseChoices.slice(offset), ...baseChoices.slice(0, offset)];
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex: choices.indexOf(correct),
     explanation,
   };
 }

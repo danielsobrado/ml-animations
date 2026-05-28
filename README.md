@@ -16,7 +16,7 @@ The project started as a collection of standalone animations. It is now centered
 - Model reliability lessons for debugging, interpretability, monitoring, fairness, and uncertainty estimation.
 - Experimentation and causal ML lessons for A/B testing foundations and power analysis, with planned modules for sequential testing, CUPED, confounding, DAGs, treatment effects, and propensity scores.
 - Transformer lessons for attention, masks, architecture families, training objectives, token generation, sampling, KV cache, Flash Attention, and fine-tuning.
-- Frontier LLM lessons for MoE at scale, MLA, RLVR/GRPO, test-time compute, long-context systems, omni multimodal models, diffusion language models, efficient serving, frontier evaluation/safety, tool-using reasoners, and agentic coding systems.
+- Frontier LLM lessons for MoE at scale, MLA, Native Sparse Attention, RLVR/GRPO, test-time compute, long-context systems, omni multimodal models, diffusion language models, efficient serving, frontier evaluation/safety, tool-using reasoners, and agentic coding systems.
 - RAG lessons for chunking, vector indexing, reranking, grounding, retrieval evaluation, and failure modes.
 - Neural-network lessons for backpropagation, initialization, optimizers, dropout, batch normalization, and training-loop dynamics.
 - Diffusion lessons from beginner denoising intuition through sampling, classifier-free guidance, U-Net vs DiT, SD3, DiT, VAE, CLIP, T5, and flow matching.
@@ -82,11 +82,11 @@ The foundations track covers linear algebra, probability, statistics, optimizati
 
 ### Natural Language Processing and Transformers
 
-The NLP and transformer track starts with bag-of-words, tokenization, and embeddings, then moves into attention, self-attention, masks, positional encoding, RoPE, transformer architectures, LLM training objectives, token generation, sampling, KV cache, Flash Attention, and fine-tuning.
+The NLP and transformer track starts with bag-of-words, tokenization, and embeddings, then moves into attention, self-attention, masks, positional encoding, RoPE, transformer architectures, LLM training objectives, token generation, sampling, KV cache, Flash Attention, Native Sparse Attention, and fine-tuning.
 
 ### Frontier LLMs and Agentic Systems
 
-The frontier path covers modern architecture and systems topics: dense vs MoE models, MLA and attention compression, reasoning models, RLVR/GRPO, test-time compute, tool-using reasoning, agentic coding, long-context systems, omni multimodal models, diffusion language models, efficient LLM serving, and frontier evaluation/safety.
+The frontier path covers modern architecture and systems topics: dense vs MoE models, MLA, Native Sparse Attention, attention compression, reasoning models, RLVR/GRPO, test-time compute, tool-using reasoning, agentic coding, long-context systems, omni multimodal models, diffusion language models, efficient LLM serving, and frontier evaluation/safety.
 
 ### RAG
 

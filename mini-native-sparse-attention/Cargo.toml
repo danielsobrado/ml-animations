@@ -1,0 +1,46 @@
+[package]
+name = "mini-native-sparse-attention"
+version = "0.1.0"
+edition = "2021"
+description = "Rustlings-style exercises for Native Sparse Attention"
+authors = ["Daniel Sobrado"]
+
+[[bin]]
+name = "01_blockify"
+path = "exercises/01_blockify.rs"
+
+[[bin]]
+name = "02_sliding_window"
+path = "exercises/02_sliding_window.rs"
+
+[[bin]]
+name = "03_compress_blocks"
+path = "exercises/03_compress_blocks.rs"
+
+[[bin]]
+name = "04_block_scores"
+path = "exercises/04_block_scores.rs"
+
+[[bin]]
+name = "05_topk_blocks"
+path = "exercises/05_topk_blocks.rs"
+
+[[bin]]
+name = "06_selected_tokens"
+path = "exercises/06_selected_tokens.rs"
+
+[[bin]]
+name = "07_gated_merge"
+path = "exercises/07_gated_merge.rs"
+
+[[bin]]
+name = "08_gqa_shared_selection"
+path = "exercises/08_gqa_shared_selection.rs"
+
+[[bin]]
+name = "09_memory_access"
+path = "exercises/09_memory_access.rs"
+
+[[bin]]
+name = "10_nsa_budget"
+path = "exercises/10_nsa_budget.rs"
