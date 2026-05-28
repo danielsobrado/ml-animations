@@ -32,6 +32,7 @@ import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAsses
 import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
+import { TREE_ENSEMBLES_QUIZ } from './treeEnsemblesAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
@@ -1653,52 +1654,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'tree-ensembles': {
-    quiz: [
-      {
-        id: 'forest-variance',
-        prompt: 'Why does a random forest average many trees?',
-        choices: [
-          'To reduce variance from any one unstable tree',
-          'To make every tree deeper than before',
-          'To remove the need for validation data',
-        ],
-        answerIndex: 0,
-        explanation: 'Bagging and feature randomness make trees differ, and averaging their votes reduces variance.',
-      },
-      {
-        id: 'boosting-sequence',
-        prompt: 'What does gradient boosting add at each round?',
-        choices: [
-          'A weak tree that corrects remaining errors',
-          'A duplicate of the first tree',
-          'A random train/test split',
-        ],
-        answerIndex: 0,
-        explanation: 'Boosting is sequential: each new weak learner targets the residual signal left by the current ensemble.',
-      },
-      {
-        id: 'predict-forest-averaging',
-        prompt: 'What should happen when a random forest averages many decorrelated trees?',
-        choices: [
-          'Variance from individual tree quirks usually drops',
-          'Every tree becomes identical',
-          'The ensemble stops using feature splits',
-        ],
-        answerIndex: 0,
-        explanation: 'Averaging unstable but diverse trees smooths out idiosyncratic splits.',
-      },
-      {
-        id: 'boosting-overfit-failure',
-        prompt: 'What failure can happen if boosting keeps adding rounds after validation stops improving?',
-        choices: [
-          'It can chase residual noise and overfit',
-          'It becomes a bagged forest automatically',
-          'It removes all weak learners from the model',
-        ],
-        answerIndex: 0,
-        explanation: 'Boosting is powerful and sequential; too many rounds or too much depth can fit noise unless validation controls it.',
-      },
-    ],
+    quiz: TREE_ENSEMBLES_QUIZ,
     labs: [
       {
         id: 'depth-vs-ensemble',
