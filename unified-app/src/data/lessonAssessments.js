@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
@@ -1308,20 +1309,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'ab-testing-foundations': causalAssessment('ab-testing-foundations', {
-    name: 'A/B testing foundations',
-    purpose: 'To estimate whether a randomized treatment caused an outcome difference',
-    purposeExplanation: 'Random assignment makes treatment and control comparable before the product change acts.',
-    failureExplanation: 'Skipping random assignment turns the comparison into an observational association.',
-    decisionUse: 'Combine statistical signal, practical size, and guardrails before shipping',
-    decisionExplanation: 'A launch decision needs design validity, effect size, and safety checks.',
-    assumption: 'Treatment and control are assigned independently of potential outcomes',
-    assumptionExplanation: 'Randomization is the core assumption that supports causal interpretation.',
-    diagnostic: 'Balance, allocation, primary metric, and guardrail readouts',
-    diagnosticExplanation: 'These checks separate a valid experiment from a misleading comparison.',
-    labTitle: 'Audit an A/B decision',
-    successCriteria: 'You can explain assignment, metric, guardrail, and decision threshold separately.',
-  }, 'Comparing users who self-selected into treatment and control', 'Build a scenario where a treatment improves the primary metric but fails a guardrail. Explain the decision.'),
+  'ab-testing-foundations': {
+    quiz: AB_TESTING_FOUNDATIONS_QUIZ,
+    labs: [
+      {
+        id: 'ab-decision-audit',
+        title: 'Audit an A/B decision',
+        prompt: 'Build a scenario where a treatment improves the primary metric but fails a guardrail. Explain the launch decision.',
+        successCriteria: 'You can explain assignment, metric, guardrail, and decision threshold separately.',
+      },
+    ],
+  },
   'power-sample-size': causalAssessment('power-sample-size', {
     name: 'power and sample size planning',
     purpose: 'To decide whether the experiment can detect the smallest useful effect',
