@@ -1,6 +1,7 @@
 import { allAnimations } from './animations.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
+import { PCA_QUIZ } from './pcaAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
@@ -463,52 +464,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   pca: {
-    quiz: [
-      {
-        id: 'center-before-variance',
-        prompt: 'Why does PCA center the data first?',
-        choices: [
-          'So variance directions describe spread around the mean',
-          'So labels can be subtracted from predictions',
-          'So every feature becomes a class probability',
-        ],
-        answerIndex: 0,
-        explanation: 'PCA analyzes covariance around the mean; without centering, the origin can distort the directions.',
-      },
-      {
-        id: 'largest-eigenvalue',
-        prompt: 'Which principal component comes first?',
-        choices: [
-          'The covariance eigenvector with the largest eigenvalue',
-          'The feature with the smallest raw units',
-          'The direction chosen by the target label',
-        ],
-        answerIndex: 0,
-        explanation: 'The largest eigenvalue marks the direction that explains the most variance in the input data.',
-      },
-      {
-        id: 'predict-rotation',
-        prompt: 'If the point cloud stretches mostly along an upward diagonal, where should PC1 point?',
-        choices: [
-          'Along that diagonal stretch',
-          'Straight at the class boundary',
-          'Always along the x-axis',
-        ],
-        answerIndex: 0,
-        explanation: 'PC1 follows the highest input variance direction, independent of any class label.',
-      },
-      {
-        id: 'variance-not-labels',
-        prompt: 'What failure mode appears when the highest-variance direction is unrelated to the label?',
-        choices: [
-          'A low-dimensional PCA view can preserve spread while hiding the class signal',
-          'PCA automatically switches to supervised learning',
-          'The first component becomes invalid because labels were omitted',
-        ],
-        answerIndex: 0,
-        explanation: 'PCA is unsupervised, so it can keep variance that is visually dominant but weak for the prediction task.',
-      },
-    ],
+    quiz: PCA_QUIZ,
     labs: [
       {
         id: 'projection-error',
