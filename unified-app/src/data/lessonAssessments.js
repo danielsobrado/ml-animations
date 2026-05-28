@@ -1,6 +1,7 @@
 import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
+import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
@@ -1617,52 +1618,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'bias-variance-tradeoff': {
-    quiz: [
-      {
-        id: 'high-bias-signal',
-        prompt: 'What usually signals high bias?',
-        choices: [
-          'Training and validation error are both high',
-          'Training error is near zero while validation error rises sharply',
-          'The test set was used exactly once at the end',
-        ],
-        answerIndex: 0,
-        explanation: 'High bias means the model is too simple for the real pattern, so it performs poorly even on training data.',
-      },
-      {
-        id: 'high-variance-fix',
-        prompt: 'Which action often helps a high-variance model?',
-        choices: [
-          'Collect more data or regularize the model',
-          'Make the model more flexible immediately',
-          'Stop using validation data',
-        ],
-        answerIndex: 0,
-        explanation: 'High variance comes from sample sensitivity, so more data, simpler models, regularization, or averaging can help.',
-      },
-      {
-        id: 'predict-underfit',
-        prompt: 'If both training and validation error stay high, what should you suspect first?',
-        choices: [
-          'High bias or underfitting',
-          'Pure high variance only',
-          'A final test-set estimate',
-        ],
-        answerIndex: 0,
-        explanation: 'When the model cannot fit the training data well, the dominant problem is usually bias or insufficient signal/features.',
-      },
-      {
-        id: 'predict-overfit',
-        prompt: 'If training error is very low but validation error is high, what should you suspect?',
-        choices: [
-          'High variance or overfitting',
-          'A model that is too simple to fit the training set',
-          'A metric that no longer uses labels',
-        ],
-        answerIndex: 0,
-        explanation: 'A large train-validation gap points to sample-specific fitting that does not generalize.',
-      },
-    ],
+    quiz: BIAS_VARIANCE_TRADEOFF_QUIZ,
     labs: [
       {
         id: 'complexity-sweep',
