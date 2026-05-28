@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 
@@ -187,52 +188,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'linear-regression': {
-    quiz: [
-      {
-        id: 'line-error',
-        prompt: 'What does linear regression adjust during training?',
-        choices: [
-          'The slope and intercept that minimize prediction error',
-          'The raw labels in the dataset',
-          'The train/test split after every prediction',
-        ],
-        answerIndex: 0,
-        explanation: 'Training changes model parameters, not the observed labels or evaluation split.',
-      },
-      {
-        id: 'residual-meaning',
-        prompt: 'What is a residual?',
-        choices: [
-          'The difference between an observed value and the prediction',
-          'The model weight after regularization',
-          'The average of all feature values',
-        ],
-        answerIndex: 0,
-        explanation: 'Residuals show how far predictions are from the observed targets.',
-      },
-      {
-        id: 'outlier-effect',
-        prompt: 'What failure mode can a large outlier create for ordinary least squares?',
-        choices: [
-          'It can pull the fitted line toward itself and increase errors elsewhere',
-          'It is always ignored automatically',
-          'It turns the model into a classifier',
-        ],
-        answerIndex: 0,
-        explanation: 'Squared error gives large residuals heavy influence, so an outlier can dominate the fitted line.',
-      },
-      {
-        id: 'predict-slope-change',
-        prompt: 'If high-x points are mostly above the current line, what slope change usually reduces their residuals?',
-        choices: [
-          'Increase the slope',
-          'Set the slope to zero',
-          'Decrease the intercept only and keep slope fixed forever',
-        ],
-        answerIndex: 0,
-        explanation: 'Increasing slope raises predictions more on the right side of the plot, which can shrink positive high-x residuals.',
-      },
-    ],
+    quiz: LINEAR_REGRESSION_QUIZ,
     labs: [
       {
         id: 'move-line',
