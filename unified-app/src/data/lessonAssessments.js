@@ -2,6 +2,7 @@ import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
+import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
@@ -1346,20 +1347,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'cuped-variance-reduction': causalAssessment('cuped-variance-reduction', {
-    name: 'CUPED variance reduction',
-    purpose: 'To reduce experiment noise using pre-treatment covariates',
-    purposeExplanation: 'Pre-period behavior can explain outcome variation unrelated to treatment.',
-    failureExplanation: 'Post-treatment covariates may be affected by treatment and bias the estimate.',
-    decisionUse: 'Use the narrower interval to make the same causal decision with more precision',
-    decisionExplanation: 'CUPED improves precision without changing the estimand when used correctly.',
-    assumption: 'The covariate is measured before treatment assignment or exposure',
-    assumptionExplanation: 'Pre-treatment timing keeps the adjustment from blocking treatment effects.',
-    diagnostic: 'Pre/post correlation and adjusted standard error',
-    diagnosticExplanation: 'Higher correlation means more variance reduction.',
-    labTitle: 'Find useful pre-period signal',
-    successCriteria: 'You can connect correlation, standard error, and interval width.',
-  }, 'Adjusting for variables that treatment could have changed', 'Increase pre/post correlation and explain how CUPED narrows the confidence interval.'),
+  'cuped-variance-reduction': {
+    quiz: CUPED_VARIANCE_REDUCTION_QUIZ,
+    labs: [
+      {
+        id: 'pre-period-signal-audit',
+        title: 'Find useful pre-period signal',
+        prompt: 'Increase pre/post correlation and explain how CUPED narrows the confidence interval.',
+        successCriteria: 'You can connect correlation, standard error, and interval width.',
+      },
+    ],
+  },
   'confounding-simpsons-paradox': causalAssessment('confounding-simpsons-paradox', {
     name: 'confounding and Simpson reversals',
     purpose: 'To detect when aggregate comparisons mix treatment effects with group composition',
