@@ -1,4 +1,5 @@
 import { allAnimations } from './animations.js';
+import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
@@ -475,41 +476,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'fundamental-subspaces': {
-    quiz: [
-      {
-        id: 'domain-subspaces',
-        prompt: 'Which two fundamental subspaces live in the input domain R^n?',
-        choices: [
-          'Row(A) and Null(A)',
-          'Col(A) and Null(A^T)',
-          'Row(A) and Col(A)',
-        ],
-        answerIndex: 0,
-        explanation: 'The row space and null space are both subspaces of the domain R^n.',
-      },
-      {
-        id: 'consistency-rule',
-        prompt: 'When is Ax = b consistent?',
-        choices: [
-          'When b lies in Col(A)',
-          'When x lies in Null(A^T)',
-          'When every row of A is zero',
-        ],
-        answerIndex: 0,
-        explanation: 'The column space is exactly the set of reachable outputs Ax.',
-      },
-      {
-        id: 'rank-nullity',
-        prompt: 'For an m by n matrix with rank r, what is dim Null(A)?',
-        choices: [
-          'n - r',
-          'm - r',
-          'r - n',
-        ],
-        answerIndex: 0,
-        explanation: 'Rank-nullity accounts for the domain: rank(A) + dim Null(A) = n.',
-      },
-    ],
+    quiz: FUNDAMENTAL_SUBSPACES_QUIZ,
     labs: [
       {
         id: 'classify-four-spaces',
