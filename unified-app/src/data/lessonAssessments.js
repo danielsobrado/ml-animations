@@ -8,6 +8,7 @@ import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.j
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
+import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
@@ -1466,20 +1467,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'data-engineering-for-ml-track': causalAssessment('data-engineering-for-ml-track', {
-    name: 'data engineering for ML',
-    purpose: 'To produce features and labels that are reproducible, time-correct, and production-safe',
-    purposeExplanation: 'ML data systems define what the model is allowed to know and when.',
-    failureExplanation: 'Label windows, target encodings, or aggregates can leak future information.',
-    decisionUse: 'Use point-in-time joins, label-window rules, data contracts, and train/serve skew checks',
-    decisionExplanation: 'These controls make model training match production inference.',
-    assumption: 'Feature values are timestamped and available before prediction',
-    assumptionExplanation: 'Availability time is the core boundary for valid ML features.',
-    diagnostic: 'Feature freshness, null/range contracts, leakage checks, and train/serve parity',
-    diagnosticExplanation: 'These catch pipeline regressions before they become model failures.',
-    labTitle: 'Audit point-in-time correctness',
-    successCriteria: 'You can identify prediction time, feature time, label window, and serving parity.',
-  }, 'Computing features with facts that are only known after prediction time', 'Create a label-window or target-encoding leakage scenario and define the fix.'),
+  'data-engineering-for-ml-track': {
+    quiz: DATA_ENGINEERING_FOR_ML_QUIZ,
+    labs: [
+      {
+        id: 'data-engineering-for-ml-track-scenario-lab',
+        title: 'Audit point-in-time correctness',
+        prompt: 'Create a label-window or target-encoding leakage scenario and define the fix.',
+        successCriteria: 'You can identify prediction time, feature time, label window, and serving parity.',
+      },
+    ],
+  },
   'spearman-correlation': {
     quiz: SPEARMAN_CORRELATION_QUIZ,
     labs: [
