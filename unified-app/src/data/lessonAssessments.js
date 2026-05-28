@@ -24,6 +24,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
+import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
@@ -1629,63 +1630,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   regularization: {
-    quiz: [
-      {
-        id: 'penalty-purpose',
-        prompt: 'Why add a regularization penalty?',
-        choices: [
-          'To discourage unnecessarily large or complex parameters',
-          'To make the training set larger',
-          'To remove the need for validation data',
-        ],
-        answerIndex: 0,
-        explanation: 'The penalty asks the model to earn complexity with enough predictive value.',
-      },
-      {
-        id: 'too-strong',
-        prompt: 'What can happen when regularization is too strong?',
-        choices: [
-          'The model underfits by becoming too simple',
-          'The test set becomes invalid',
-          'The loss function stops using labels',
-        ],
-        answerIndex: 0,
-        explanation: 'Excess penalty can shrink useful signal along with noisy parameters.',
-      },
-      {
-        id: 'l1-vs-l2',
-        prompt: 'What is a typical difference between L1 and L2 regularization?',
-        choices: [
-          'L1 can set some weights to zero, while L2 usually shrinks weights smoothly',
-          'L2 removes the need for a loss function',
-          'L1 only works for neural networks',
-        ],
-        answerIndex: 0,
-        explanation: 'L1 uses an absolute-value penalty that can create sparse solutions; L2 penalizes squared magnitude and tends to shrink continuously.',
-      },
-      {
-        id: 'lambda-validation',
-        prompt: 'How should lambda usually be chosen?',
-        choices: [
-          'Tune it on validation data while keeping the test set untouched',
-          'Pick the largest possible value every time',
-          'Choose it from the final test score after many retries',
-        ],
-        answerIndex: 0,
-        explanation: 'Lambda is a model-selection choice, so it belongs in the validation loop, not repeated test-set tuning.',
-      },
-      {
-        id: 'predict-lambda-too-large',
-        prompt: 'If lambda becomes extremely large, what should you predict for useful weights?',
-        choices: [
-          'They shrink heavily, risking underfit predictions',
-          'They grow without limit',
-          'They stop affecting the loss',
-        ],
-        answerIndex: 0,
-        explanation: 'A strong penalty can dominate the data fit and suppress useful signal.',
-      },
-    ],
+    quiz: REGULARIZATION_QUIZ,
     labs: [
       {
         id: 'lambda-sweep',
