@@ -21,6 +21,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
+import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
 import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
@@ -1581,52 +1582,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'roc-pr-curves': {
-    quiz: [
-      {
-        id: 'roc-axis',
-        prompt: 'What does the ROC curve put on its axes?',
-        choices: [
-          'True positive rate versus false positive rate',
-          'Precision versus training loss',
-          'Accuracy versus model size',
-        ],
-        answerIndex: 0,
-        explanation: 'ROC curves sweep thresholds and compare recall/TPR against the false positive rate.',
-      },
-      {
-        id: 'pr-rare-positive',
-        prompt: 'Why are precision-recall curves often more revealing for rare positives?',
-        choices: [
-          'They focus on predicted-positive quality and positive-class coverage',
-          'They ignore false positives completely',
-          'They choose the threshold automatically',
-        ],
-        answerIndex: 0,
-        explanation: 'PR curves show how many predicted positives are real and how many real positives are recovered.',
-      },
-      {
-        id: 'predict-threshold-sweep',
-        prompt: 'As the threshold is lowered, what usually happens to recall?',
-        choices: [
-          'Recall usually increases because more positives are flagged',
-          'Recall must fall because there are more predicted positives',
-          'Recall becomes independent of the classifier scores',
-        ],
-        answerIndex: 0,
-        explanation: 'Lowering the cutoff accepts more examples as positive, which usually recovers more true positives too.',
-      },
-      {
-        id: 'roc-pr-selection',
-        prompt: 'Which curve is often more diagnostic when positives are very rare and false alarms matter?',
-        choices: [
-          'Precision-recall curve',
-          'Training-loss curve only',
-          'A parameter-count curve',
-        ],
-        answerIndex: 0,
-        explanation: 'PR curves expose the quality and coverage of positive predictions under class imbalance.',
-      },
-    ],
+    quiz: ROC_PR_CURVES_QUIZ,
     labs: [
       {
         id: 'threshold-costs',
