@@ -11,6 +11,7 @@ import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js'
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
+import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
@@ -1489,63 +1490,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'maximum-likelihood-estimation': {
-    quiz: [
-      {
-        id: 'likelihood-meaning',
-        prompt: 'What does likelihood measure?',
-        choices: [
-          'How probable the observed data would be under a candidate parameter',
-          'How probable the parameter is before seeing data',
-          'How many features a model uses',
-        ],
-        answerIndex: 0,
-        explanation: 'Likelihood treats the data as observed and compares how well different parameter values explain it.',
-      },
-      {
-        id: 'bernoulli-peak',
-        prompt: 'For Bernoulli successes and failures, where does the likelihood peak?',
-        choices: [
-          'Near the observed success rate',
-          'Always at 50%',
-          'Always at the smallest candidate value',
-        ],
-        answerIndex: 0,
-        explanation: 'The best Bernoulli probability is the observed fraction of successes.',
-      },
-      {
-        id: 'nll-link',
-        prompt: 'Why do training loops often minimize negative log-likelihood?',
-        choices: [
-          'Minimizing negative log-likelihood is equivalent to maximizing log-likelihood',
-          'Negative log-likelihood ignores the observed data',
-          'It makes every parameter equally likely',
-        ],
-        answerIndex: 0,
-        explanation: 'The negative sign turns a maximization problem into the minimization form used by most optimizers.',
-      },
-      {
-        id: 'likelihood-not-prior',
-        prompt: 'What is a common mistake when interpreting likelihood?',
-        choices: [
-          'Treating it as the prior probability that a parameter is true',
-          'Comparing candidate parameters using observed data',
-          'Using log-likelihood for numerical stability',
-        ],
-        answerIndex: 0,
-        explanation: 'Likelihood scores how well a parameter explains observed data; it is not a probability distribution over parameters by itself.',
-      },
-      {
-        id: 'predict-likelihood-peak',
-        prompt: 'If 80 of 100 Bernoulli trials are successes, which candidate probability should have the highest likelihood?',
-        choices: [
-          'About 0.8',
-          'Exactly 0.5 because it is most neutral',
-          'About 0.2 because failures are rarer',
-        ],
-        answerIndex: 0,
-        explanation: 'The Bernoulli MLE matches the observed success rate, so the likelihood peaks near 0.8.',
-      },
-    ],
+    quiz: MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ,
     labs: [
       {
         id: 'candidate-parameter-sweep',
