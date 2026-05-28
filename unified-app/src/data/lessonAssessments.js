@@ -21,6 +21,7 @@ import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAsses
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
+import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
@@ -1382,20 +1383,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'treatment-effects': causalAssessment('treatment-effects', {
-    name: 'treatment-effect heterogeneity',
-    purpose: 'To distinguish average effects from segment-specific effects',
-    purposeExplanation: 'ATE summarizes the whole population, while CATE describes effects for a group.',
-    failureExplanation: 'A positive average can hide harm in a subgroup.',
-    decisionUse: 'Use CATE or uplift when rollout should differ across segments',
-    decisionExplanation: 'Heterogeneous effects can justify targeting rather than global launch.',
-    assumption: 'Segments are defined before hunting for favorable results',
-    assumptionExplanation: 'Predefined segments reduce overfitting to noisy subgroup patterns.',
-    diagnostic: 'ATE, segment CATEs, and effect spread',
-    diagnosticExplanation: 'These show whether the average is hiding important differences.',
-    labTitle: 'Compare rollout policies',
-    successCriteria: 'You can explain when targeted treatment beats treating everyone.',
-  }, 'Assuming a positive ATE means every user benefits', 'Create a scenario with positive ATE and one harmed segment. Explain the rollout implication.'),
+  'treatment-effects': {
+    quiz: TREATMENT_EFFECTS_QUIZ,
+    labs: [
+      {
+        id: 'rollout-policy-comparison',
+        title: 'Compare rollout policies',
+        prompt: 'Create a scenario with positive ATE and one harmed segment. Explain the rollout implication.',
+        successCriteria: 'You can explain when targeted treatment beats treating everyone.',
+      },
+    ],
+  },
   'propensity-scores': causalAssessment('propensity-scores', {
     name: 'propensity score adjustment',
     purpose: 'To balance observed covariates in observational treated/control comparisons',
