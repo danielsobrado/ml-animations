@@ -26,6 +26,7 @@ import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js'
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
+import { OPTIMIZERS_QUIZ } from './optimizersAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
@@ -1680,85 +1681,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   optimizers: {
-    quiz: [
-      {
-        id: 'momentum-purpose',
-        prompt: 'What does momentum add to plain SGD?',
-        choices: [
-          'A velocity term that accumulates repeated gradient directions',
-          'A second validation set after every step',
-          'A guarantee that every update reaches the global minimum',
-        ],
-        answerIndex: 0,
-        explanation: 'Momentum keeps a running velocity, so consistent directions build speed while alternating directions get damped.',
-      },
-      {
-        id: 'batch-noise',
-        prompt: 'What usually happens when mini-batch size increases?',
-        choices: [
-          'Gradient estimates become smoother but each step uses more examples',
-          'The learning rate becomes irrelevant',
-          'Adam stops using squared-gradient estimates',
-        ],
-        answerIndex: 0,
-        explanation: 'Larger batches average more examples, so the gradient is less noisy, but each update costs more computation.',
-      },
-      {
-        id: 'predict-momentum-path',
-        prompt: 'On a long shallow valley with gradients pointing mostly the same way, what should momentum do?',
-        choices: [
-          'Build velocity along the consistent direction',
-          'Reset every update to zero',
-          'Ignore the gradient sign completely',
-        ],
-        answerIndex: 0,
-        explanation: 'Momentum accumulates repeated directions, which can reduce zigzagging and speed travel through valleys.',
-      },
-      {
-        id: 'adam-sgd-failure',
-        prompt: 'What is a reasonable failure mode when comparing Adam and SGD?',
-        choices: [
-          'Adam can move quickly early but still needs learning-rate validation and may not be the best final generalizer',
-          'Adam guarantees the global minimum for every neural network',
-          'SGD cannot update weights without Adam statistics',
-        ],
-        answerIndex: 0,
-        explanation: 'Adaptive optimizers change step scaling, but validation behavior still decides whether the setting works.',
-      },
-      {
-        id: 'landscape-curvature',
-        prompt: 'In the 3D optimizer landscape, what does a steep narrow direction explain?',
-        choices: [
-          'Small parameter changes can produce large loss changes, so raw steps can zigzag or overshoot',
-          'The optimizer has found a validation-set guarantee',
-          'The batch size no longer affects gradient noise',
-        ],
-        answerIndex: 0,
-        explanation: 'Curvature controls how sensitive the loss is to motion in each parameter direction, which is why optimizer paths differ on the same surface.',
-      },
-      {
-        id: 'first-step-sign',
-        prompt: 'If the noisy gradient points positive in y, which way does a plain gradient-descent update move y?',
-        choices: [
-          'Downward in y because the update subtracts learning rate times gradient',
-          'Upward in y because the gradient is positive',
-          'Nowhere because gradients only affect loss display height',
-        ],
-        answerIndex: 0,
-        explanation: 'Parameter updates move opposite the gradient, so the sign of theta_next - theta is the negative of the gradient sign for SGD.',
-      },
-      {
-        id: 'adam-scaling-landscape',
-        prompt: 'Why can Adam take a different 3D path from momentum on the same gradient sequence?',
-        choices: [
-          'Adam divides the first-moment direction by a running estimate of squared-gradient scale',
-          'Adam changes the loss surface before every step',
-          'Adam ignores gradient signs after the first update',
-        ],
-        answerIndex: 0,
-        explanation: 'Adam uses both first and second gradient moments, so uneven curvature can produce per-parameter step scaling that differs from velocity alone.',
-      },
-    ],
+    quiz: OPTIMIZERS_QUIZ,
     labs: [
       {
         id: 'compare-update-rules',
