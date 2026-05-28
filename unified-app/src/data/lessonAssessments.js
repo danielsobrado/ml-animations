@@ -19,6 +19,7 @@ import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
+import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
@@ -1477,41 +1478,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     successCriteria: 'You can identify prediction time, feature time, label window, and serving parity.',
   }, 'Computing features with facts that are only known after prediction time', 'Create a label-window or target-encoding leakage scenario and define the fix.'),
   'spearman-correlation': {
-    quiz: [
-      {
-        id: 'rank-purpose',
-        prompt: 'What does Spearman correlation compare before computing association?',
-        choices: [
-          'The ranks of the values',
-          'Only the raw units of the values',
-          'The class labels after thresholding',
-        ],
-        answerIndex: 0,
-        explanation: 'Spearman converts values into rank order, then measures whether the two rankings move together.',
-      },
-      {
-        id: 'monotonic-not-linear',
-        prompt: 'When can Spearman be high even if Pearson is not perfect?',
-        choices: [
-          'When the relationship is monotonic but not a straight line',
-          'When the variables are completely unordered',
-          'When every value is replaced by random noise',
-        ],
-        answerIndex: 0,
-        explanation: 'Spearman rewards consistent ordering, so curved monotonic relationships can still score highly.',
-      },
-      {
-        id: 'outlier-robustness',
-        prompt: 'Why is Spearman often less sensitive to an extreme value than Pearson?',
-        choices: [
-          'The extreme value usually changes rank by only a limited amount',
-          'It deletes all outliers before scoring',
-          'It ignores whether the ordering changes',
-        ],
-        answerIndex: 0,
-        explanation: 'Ranks compress large numeric gaps, so one huge value matters mainly through its position in the order.',
-      },
-    ],
+    quiz: SPEARMAN_CORRELATION_QUIZ,
     labs: [
       {
         id: 'rank-before-score',
