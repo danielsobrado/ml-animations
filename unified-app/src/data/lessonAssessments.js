@@ -25,6 +25,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
+import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
@@ -1430,20 +1431,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
       },
     ],
   },
-  'recommender-systems-ranking-track': causalAssessment('recommender-systems-ranking-track', {
-    name: 'recommender ranking',
-    purpose: 'To order items for a user using interaction signal, ranking objectives, and exploration',
-    purposeExplanation: 'The system must decide exposure, not just predict a label.',
-    failureExplanation: 'Ignoring cold start and feedback loops can make the ranking stale or unfairly narrow.',
-    decisionUse: 'Evaluate ranked lists with MAP, MRR, nDCG, coverage, and exploration diagnostics',
-    decisionExplanation: 'Ranking metrics measure order-sensitive quality.',
-    assumption: 'Observed feedback is shaped by previous exposure and is not a neutral sample',
-    assumptionExplanation: 'Recommendation data is logged under earlier ranking policies.',
-    diagnostic: 'Cold-start pressure, catalog coverage, ranking metrics, and exploration budget',
-    diagnosticExplanation: 'These reveal whether the system can both rank and learn.',
-    labTitle: 'Design a ranking readout',
-    successCriteria: 'You can separate prediction, ordering, exposure, and exploration concerns.',
-  }, 'Optimizing click prediction while ignoring ranking position and exposure bias', 'Build a cold-start scenario and choose a hybrid or exploration strategy.'),
+  'recommender-systems-ranking-track': {
+    quiz: RECOMMENDER_SYSTEMS_RANKING_QUIZ,
+    labs: [
+      {
+        id: 'recommender-systems-ranking-track-scenario-lab',
+        title: 'Design a ranking readout',
+        prompt: 'Build a cold-start scenario and choose a hybrid or exploration strategy.',
+        successCriteria: 'You can separate prediction, ordering, exposure, and exploration concerns.',
+      },
+    ],
+  },
   'ml-security-robustness-track': causalAssessment('ml-security-robustness-track', {
     name: 'ML security and robustness',
     purpose: 'To protect ML systems from adversarial inputs, poisoning, privacy leakage, and unsafe tool use',
