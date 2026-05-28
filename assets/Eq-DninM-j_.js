@@ -1,1 +1,0 @@
-import{k as s,j as o}from"./react-vendor-Cdu38Wyn.js";import{k as a}from"./math-rendering-CgH30vMk.js";function c({tex:t,block:e=!1,className:n}){const r=s.useRef(null);return s.useEffect(()=>{if(r.current)try{a.render(t,r.current,{throwOnError:!1,displayMode:e,output:"html"})}catch{}},[t,e]),o.jsx("span",{ref:r,className:n})}export{c as E};
