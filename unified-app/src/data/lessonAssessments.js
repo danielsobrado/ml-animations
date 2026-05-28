@@ -1,6 +1,7 @@
 import { allAnimations } from './animations.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
+import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
@@ -487,41 +488,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'matrix-decompositions': {
-    quiz: [
-      {
-        id: 'stable-least-squares',
-        prompt: 'Which decomposition is the usual stable choice for least squares with a tall matrix?',
-        choices: [
-          'QR',
-          'NMF',
-          'Cholesky without checking assumptions',
-        ],
-        answerIndex: 0,
-        explanation: 'QR builds an orthonormal basis and avoids the conditioning problems of normal equations.',
-      },
-      {
-        id: 'general-low-rank',
-        prompt: 'Which decomposition gives the most general rank-k approximation view for any real matrix?',
-        choices: [
-          'Truncated SVD',
-          'LU',
-          'Eigen decomposition for every rectangular matrix',
-        ],
-        answerIndex: 0,
-        explanation: 'SVD works for rectangular matrices and its truncated form gives a best rank-k approximation under common norms.',
-      },
-      {
-        id: 'assumption-check',
-        prompt: 'Why is Cholesky not a universal replacement for LU or QR?',
-        choices: [
-          'It requires a symmetric positive definite matrix',
-          'It only works on text data',
-          'It cannot be used to solve systems',
-        ],
-        answerIndex: 0,
-        explanation: 'Cholesky is fast and stable when the SPD assumption holds; it fails outside that setting.',
-      },
-    ],
+    quiz: MATRIX_DECOMPOSITIONS_QUIZ,
     labs: [
       {
         id: 'choose-by-goal',
