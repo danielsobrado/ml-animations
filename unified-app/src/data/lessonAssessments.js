@@ -6,6 +6,7 @@ import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
 import { CONV2D_QUIZ } from './conv2dAssessment.js';
+import { CONV_RELU_QUIZ } from './convReluAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
@@ -2323,41 +2324,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'conv-relu': {
-    quiz: [
-      {
-        id: 'preactivation-order',
-        prompt: 'In a Conv + ReLU block, what happens before ReLU is applied?',
-        choices: [
-          'The input window is convolved with the kernel and bias is added',
-          'Negative values are removed before the filter sees the input',
-          'The output is pooled before any feature response is computed',
-        ],
-        answerIndex: 0,
-        explanation: 'ReLU acts on the signed pre-activation produced by convolution plus bias.',
-      },
-      {
-        id: 'negative-response',
-        prompt: 'What does ReLU do to a negative convolution response?',
-        choices: [
-          'It turns that response into zero for the next layer',
-          'It flips the sign so the response becomes positive',
-          'It stores the negative value in the pooling layer',
-        ],
-        answerIndex: 0,
-        explanation: 'ReLU is max(0, z), so negative pre-activations do not pass forward.',
-      },
-      {
-        id: 'dead-filter-risk',
-        prompt: 'Why can a very negative bias be risky in a Conv + ReLU filter?',
-        choices: [
-          'It can push most pre-activations below zero, reducing signal and gradient flow',
-          'It makes the kernel larger than the input image',
-          'It changes valid convolution into matrix transposition',
-        ],
-        answerIndex: 0,
-        explanation: 'If most z values are below zero, ReLU outputs zeros and the filter may contribute little useful signal.',
-      },
-    ],
+    quiz: CONV_RELU_QUIZ,
     labs: [
       {
         id: 'bias-sparsity-sweep',
