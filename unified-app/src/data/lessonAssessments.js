@@ -16,6 +16,7 @@ import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessmen
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
 import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
+import { DIFFUSION_BASICS_QUIZ } from './diffusionBasicsAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
@@ -2461,30 +2462,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'diffusion-basics': {
-    quiz: [
-      {
-        id: 'predict-noise',
-        prompt: 'In a basic noise-prediction diffusion lesson, what does the model learn to predict?',
-        choices: [
-          'The noise added to the clean sample at a timestep',
-          'Only the final image caption',
-          'A train/test split for the dataset',
-        ],
-        answerIndex: 0,
-        explanation: 'The common beginner formulation trains the model to estimate the noise so it can be removed.',
-      },
-      {
-        id: 'many-steps',
-        prompt: 'Why is diffusion usually described as an iterative denoising process?',
-        choices: [
-          'Generation repeatedly removes noise across timesteps',
-          'The model only runs once at t = 0',
-          'Noise is added only after the image is complete',
-        ],
-        answerIndex: 0,
-        explanation: 'A diffusion sampler walks from noisy latents toward cleaner latents over multiple denoising steps.',
-      },
-    ],
+    quiz: DIFFUSION_BASICS_QUIZ,
     labs: [
       {
         id: 'noise-prediction-error',
