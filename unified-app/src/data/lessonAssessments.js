@@ -52,6 +52,7 @@ import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
+import { RAG_RERANKING_GROUNDING_QUIZ } from './ragRerankingGroundingAssessment.js';
 import { RAG_RETRIEVAL_EVALUATION_QUIZ } from './ragRetrievalEvaluationAssessment.js';
 import { RAG_VECTOR_INDEXING_QUIZ } from './ragVectorIndexingAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
@@ -2009,30 +2010,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rag-reranking-grounding': {
-    quiz: [
-      {
-        id: 'rerank-function',
-        prompt: 'Which statement best describes reranking?',
-        choices: [
-          'It changes the ordering of already-retrieved candidates before generation',
-          'It generates completely new chunks that were never retrieved',
-          'It replaces the split of train/validation/test',
-        ],
-        answerIndex: 0,
-        explanation: 'A reranker re-scores candidates from the retrieval set; it cannot retrieve evidence that was never there.',
-      },
-      {
-        id: 'grounding-rule',
-        prompt: 'Why can a strict grounding rule drop a claim even when the claim appears in top-k?',
-        choices: [
-          'Because strict grounding may reject stale, conflicting, or low-trust evidence',
-          'Because the reranker is too shallow',
-          'Because cosine similarity is always wrong',
-        ],
-        answerIndex: 0,
-        explanation: 'Grounding checks evidence quality, recency, and consistency before accepting citations.',
-      },
-    ],
+    quiz: RAG_RERANKING_GROUNDING_QUIZ,
     labs: [
       {
         id: 'grounding-audit',
