@@ -54,6 +54,7 @@ import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
 import { ROPE_QUIZ } from './ropeAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
+import { RESIDUAL_STREAM_QUIZ } from './residualStreamAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
 import { SELF_ATTENTION_QUIZ } from './selfAttentionAssessment.js';
@@ -1834,41 +1835,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'residual-stream': {
-    quiz: [
-      {
-        id: 'update-rule',
-        prompt: 'What does a transformer block usually do to the residual stream?',
-        choices: [
-          'Adds attention and MLP outputs into the running representation',
-          'Deletes the previous representation at every layer',
-          'Stores only the final vocabulary probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'Residual connections add component outputs to the stream so information can accumulate across layers.',
-      },
-      {
-        id: 'not-memory-bank',
-        prompt: 'Which description best matches the residual stream?',
-        choices: [
-          'The current token representation flowing through the model',
-          'A database of all training examples',
-          'A separate cache that replaces attention',
-        ],
-        answerIndex: 0,
-        explanation: 'The stream is the evolving hidden representation, not a separate retrieval memory or KV cache.',
-      },
-      {
-        id: 'why-normalize',
-        prompt: 'Why do normalization and scaling matter around residual writes?',
-        choices: [
-          'Large writes can dominate or destabilize the running representation',
-          'They make token order unnecessary',
-          'They remove the need for embeddings',
-        ],
-        answerIndex: 0,
-        explanation: 'As many components add into one stream, scale control helps preserve usable information across layers.',
-      },
-    ],
+    quiz: RESIDUAL_STREAM_QUIZ,
     labs: [
       {
         id: 'trace-component-write',
