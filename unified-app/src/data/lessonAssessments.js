@@ -5,6 +5,7 @@ import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
+import { COMPUTATION_GRAPH_BACKPROP_QUIZ } from './computationGraphBackpropAssessment.js';
 import { CONV2D_QUIZ } from './conv2dAssessment.js';
 import { CONV_RELU_QUIZ } from './convReluAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
@@ -1762,52 +1763,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'computation-graph-backprop': {
-    quiz: [
-      {
-        id: 'reverse-accumulation',
-        prompt: 'What does backpropagation accumulate as it walks backward?',
-        choices: [
-          'Upstream gradients multiplied by local derivatives',
-          'New input examples',
-          'Only the final loss value',
-        ],
-        answerIndex: 0,
-        explanation: 'Backprop is the chain rule applied in reverse graph order.',
-      },
-      {
-        id: 'relu-block',
-        prompt: 'In this lesson, what happens to gradients when z is below zero?',
-        choices: [
-          'ReLU gives a local derivative of zero and blocks them',
-          'They double automatically',
-          'They bypass the weight update',
-        ],
-        answerIndex: 0,
-        explanation: 'The MSE/ReLU example makes the activation gate visible in the backward pass.',
-      },
-      {
-        id: 'predict-chain-rule',
-        prompt: 'If the upstream gradient is 3 and the local derivative is 0.5, what gradient flows to the input?',
-        choices: [
-          '1.5',
-          '3.5',
-          '0.5',
-        ],
-        answerIndex: 0,
-        explanation: 'Backprop multiplies upstream gradients by local derivatives along the path.',
-      },
-      {
-        id: 'missing-local-derivative',
-        prompt: 'What failure mode appears if you ignore a local derivative in backprop?',
-        choices: [
-          'The credit assignment can have the wrong scale or sign',
-          'The forward pass becomes unnecessary',
-          'The loss is guaranteed to be zero',
-        ],
-        answerIndex: 0,
-        explanation: 'Each local derivative is part of the chain rule; dropping one corrupts the gradient passed backward.',
-      },
-    ],
+    quiz: COMPUTATION_GRAPH_BACKPROP_QUIZ,
     labs: [
       {
         id: 'predict-update',
