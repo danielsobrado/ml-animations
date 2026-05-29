@@ -26,6 +26,7 @@ import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionA
 import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
+import { KV_CACHE_QUIZ } from './kvCacheAssessment.js';
 import { LAYER_NORMALIZATION_QUIZ } from './layerNormalizationAssessment.js';
 import { LEAKY_RELU_QUIZ } from './leakyReluAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
@@ -1834,41 +1835,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'kv-cache': {
-    quiz: [
-      {
-        id: 'what-is-cached',
-        prompt: 'During autoregressive decoding, what does the KV cache store from previous tokens?',
-        choices: [
-          'Key and value vectors',
-          'Only final vocabulary probabilities',
-          'Only tokenized text strings',
-        ],
-        answerIndex: 0,
-        explanation: 'The cache stores previous key and value projections so the new query can attend over them without recomputing them.',
-      },
-      {
-        id: 'new-step-work',
-        prompt: 'With a KV cache, what still has to happen for the current generated token?',
-        choices: [
-          'Compute the current query and attend over cached keys and values',
-          'Skip attention completely',
-          'Delete all previous values before softmax',
-        ],
-        answerIndex: 0,
-        explanation: 'Caching avoids old K/V recomputation, but the current query still reads visible cached positions through attention.',
-      },
-      {
-        id: 'cache-memory-growth',
-        prompt: 'Why can KV cache become a memory bottleneck for long contexts?',
-        choices: [
-          'It grows with visible tokens, layers, heads, and head dimension',
-          'It stores a full copy of the training set',
-          'It makes every token use a separate tokenizer',
-        ],
-        answerIndex: 0,
-        explanation: 'Each visible token contributes cached key and value vectors across model layers and attention heads.',
-      },
-    ],
+    quiz: KV_CACHE_QUIZ,
     labs: [
       {
         id: 'decode-step-savings',
