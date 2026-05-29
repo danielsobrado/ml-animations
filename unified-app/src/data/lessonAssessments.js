@@ -22,6 +22,7 @@ import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessin
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
+import { GROUPED_QUERY_ATTENTION_QUIZ } from './groupedQueryAttentionAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
@@ -1846,41 +1847,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'grouped-query-attention': {
-    quiz: [
-      {
-        id: 'what-is-shared',
-        prompt: 'What does grouped-query attention share across multiple query heads?',
-        choices: [
-          'Key and value heads',
-          'The final generated tokens',
-          'The tokenizer vocabulary',
-        ],
-        answerIndex: 0,
-        explanation: 'GQA keeps the query heads but lets several of them reuse the same key and value heads.',
-      },
-      {
-        id: 'mqa-vs-mha',
-        prompt: 'How is multi-query attention different from full multi-head attention?',
-        choices: [
-          'MQA uses one shared KV head while MHA keeps a KV head per query head',
-          'MQA removes queries entirely',
-          'MQA only works for encoder-only models',
-        ],
-        answerIndex: 0,
-        explanation: 'MQA is the extreme sharing case: many query heads read from one key/value head.',
-      },
-      {
-        id: 'cache-scaling',
-        prompt: 'Why does reducing KV heads shrink long-context inference memory?',
-        choices: [
-          'The KV cache stores keys and values for each token and KV head',
-          'The model stores fewer input tokens',
-          'The softmax no longer needs probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'For each visible token, the cache stores key and value vectors across the KV heads.',
-      },
-    ],
+    quiz: GROUPED_QUERY_ATTENTION_QUIZ,
     labs: [
       {
         id: 'compare-mha-mqa-gqa',
