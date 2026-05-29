@@ -45,6 +45,7 @@ import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OPTIMIZERS_QUIZ } from './optimizersAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
+import { POSITIONAL_ENCODING_QUIZ } from './positionalEncodingAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
@@ -1810,41 +1811,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'positional-encoding': {
-    quiz: [
-      {
-        id: 'why-needed',
-        prompt: 'Why do transformers need a position signal in addition to token embeddings?',
-        choices: [
-          'Self-attention does not inherently know token order',
-          'Tokenization removes all word identities',
-          'Softmax cannot produce probabilities without positions',
-        ],
-        answerIndex: 0,
-        explanation: 'Attention compares token vectors, but order has to be supplied through positional information or a related mechanism.',
-      },
-      {
-        id: 'sinusoidal-pattern',
-        prompt: 'What is the core idea of sinusoidal positional encoding?',
-        choices: [
-          'Use sine and cosine waves at multiple frequencies to give each position a repeatable vector',
-          'Assign every token the same constant vector',
-          'Sort tokens alphabetically before attention',
-        ],
-        answerIndex: 0,
-        explanation: 'Sinusoidal encodings combine many frequencies so positions have distinct but structured signatures.',
-      },
-      {
-        id: 'learned-position-limit',
-        prompt: 'What is a common limitation of learned absolute position embeddings?',
-        choices: [
-          'They need learned rows for positions the model will use',
-          'They cannot be added to token embeddings',
-          'They make attention approximate instead of exact',
-        ],
-        answerIndex: 0,
-        explanation: 'Learned absolute embeddings are parameters tied to position indices, so extrapolating beyond trained positions is not automatic.',
-      },
-    ],
+    quiz: POSITIONAL_ENCODING_QUIZ,
     labs: [
       {
         id: 'order-sensitive-sentence',
