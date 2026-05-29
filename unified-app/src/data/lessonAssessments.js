@@ -81,6 +81,7 @@ import { TRANSFORMER_ARCHITECTURE_FAMILIES_QUIZ } from './transformerArchitectur
 import { TRANSFORMER_QUIZ } from './transformerAssessment.js';
 import { TRANSFORMER_TOKEN_GENERATION_QUIZ } from './transformerTokenGenerationAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
+import { UNET_VS_DIT_QUIZ } from './unetVsDitAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
@@ -2497,41 +2498,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'unet-vs-dit': {
-    quiz: [
-      {
-        id: 'unet-bias',
-        prompt: 'What image-processing bias does a diffusion U-Net provide naturally?',
-        choices: [
-          'Local convolutional structure with downsample-upsample skip connections',
-          'A next-token language-modeling objective',
-          'A retrieval index over text chunks',
-        ],
-        answerIndex: 0,
-        explanation: 'U-Nets are strong for images because convolutions and skip connections preserve local structure across scales.',
-      },
-      {
-        id: 'dit-patches',
-        prompt: 'Why do DiT-style models split latents into patches?',
-        choices: [
-          'So the image latent can be processed as a transformer token sequence',
-          'So the model can avoid attention entirely',
-          'So the sampler no longer needs denoising steps',
-        ],
-        answerIndex: 0,
-        explanation: 'A DiT treats image or latent patches like tokens, which lets transformer attention mix global information.',
-      },
-      {
-        id: 'universal-winner-misconception',
-        prompt: 'What architecture-comparison misconception should you avoid?',
-        choices: [
-          'Assuming U-Net or DiT is universally better in every data, scale, and compute regime',
-          'Comparing local inductive bias with global attention',
-          'Tracking token count as patch size changes',
-        ],
-        answerIndex: 0,
-        explanation: 'The useful comparison is tradeoffs: local image bias, scale, global mixing, and compute cost.',
-      },
-    ],
+    quiz: UNET_VS_DIT_QUIZ,
     labs: [
       {
         id: 'patch-cost',
