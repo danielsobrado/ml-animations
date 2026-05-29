@@ -51,6 +51,7 @@ import { POSITIONAL_ENCODING_QUIZ } from './positionalEncodingAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
+import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
@@ -1973,30 +1974,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rag-chunking-context': {
-    quiz: [
-      {
-        id: 'overlap-tradeoff',
-        prompt: 'What is the main tradeoff of adding chunk overlap?',
-        choices: [
-          'It can preserve boundary facts but also creates duplicate context and index entries',
-          'It removes the need for embeddings',
-          'It guarantees every generated answer is correct',
-        ],
-        answerIndex: 0,
-        explanation: 'Overlap helps when an answer crosses chunk boundaries, but repeated text can consume retrieval slots and context budget.',
-      },
-      {
-        id: 'context-packing-budget',
-        prompt: 'Why can a high top-k still fail to help a RAG answer?',
-        choices: [
-          'Retrieved chunks may not fit inside the remaining context budget',
-          'Top-k changes the model weights during generation',
-          'The tokenizer stops splitting text into tokens',
-        ],
-        answerIndex: 0,
-        explanation: 'Retrieval and context packing are separate steps; chunks returned by retrieval can be dropped when the context budget is full.',
-      },
-    ],
+    quiz: RAG_CHUNKING_CONTEXT_QUIZ,
     labs: [
       {
         id: 'tune-chunk-budget',
