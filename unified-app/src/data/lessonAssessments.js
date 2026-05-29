@@ -28,6 +28,7 @@ import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
+import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
@@ -2335,41 +2336,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'max-pooling': {
-    quiz: [
-      {
-        id: 'pooling-operation',
-        prompt: 'What does max pooling keep from each local window?',
-        choices: [
-          'The largest activation value in that window',
-          'A learned weighted sum of every value',
-          'The average label for the image',
-        ],
-        answerIndex: 0,
-        explanation: 'Max pooling is a fixed downsampling operation that forwards the strongest activation in each window.',
-      },
-      {
-        id: 'stride-effect',
-        prompt: 'What happens when pooling stride increases?',
-        choices: [
-          'The pooling windows visit fewer positions and the output usually gets smaller',
-          'The input feature map gets larger',
-          'The max operation becomes trainable',
-        ],
-        answerIndex: 0,
-        explanation: 'Stride controls how far the window moves between outputs. Larger strides skip more input positions.',
-      },
-      {
-        id: 'information-loss',
-        prompt: 'What information does max pooling discard?',
-        choices: [
-          'Non-maximum values and exact within-window location detail',
-          'All high activations',
-          'The channel dimension before convolution',
-        ],
-        answerIndex: 0,
-        explanation: 'Only the maximum value is passed forward, so smaller responses and precise local arrangement are compressed away.',
-      },
-    ],
+    quiz: MAX_POOLING_QUIZ,
     labs: [
       {
         id: 'trace-window-argmax',
