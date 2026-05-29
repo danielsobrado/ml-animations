@@ -49,6 +49,7 @@ import { RELU_QUIZ } from './reluAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
+import { SELF_ATTENTION_QUIZ } from './selfAttentionAssessment.js';
 import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
@@ -1822,52 +1823,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'self-attention': {
-    quiz: [
-      {
-        id: 'scaled-scores',
-        prompt: 'Why are dot-product attention scores scaled by sqrt(d_k)?',
-        choices: [
-          'To keep large vector dimensions from making softmax too sharp',
-          'To convert values into labels',
-          'To remove the need for positional information',
-        ],
-        answerIndex: 0,
-        explanation: 'Scaling keeps score magnitudes in a range where softmax can still distribute attention.',
-      },
-      {
-        id: 'token-specific',
-        prompt: 'In self-attention, what is recomputed for each token position?',
-        choices: [
-          'A context vector made from weighted values',
-          'The dataset split',
-          'The vocabulary itself',
-        ],
-        answerIndex: 0,
-        explanation: 'Every position uses its own query to mix information from the sequence.',
-      },
-      {
-        id: 'value-mixing',
-        prompt: 'After softmax produces attention weights, what do those weights combine?',
-        choices: [
-          'Value vectors',
-          'Raw token strings',
-          'Optimizer momentum values',
-        ],
-        answerIndex: 0,
-        explanation: 'Attention weights route information by forming a weighted sum of value vectors.',
-      },
-      {
-        id: 'mask-before-softmax',
-        prompt: 'Where should a causal mask be applied in scaled dot-product attention?',
-        choices: [
-          'To the scores before softmax',
-          'Only after the value vectors are mixed',
-          'Only to the final vocabulary logits',
-        ],
-        answerIndex: 0,
-        explanation: 'Masked future positions receive very negative scores before softmax so their attention weight becomes effectively zero.',
-      },
-    ],
+    quiz: SELF_ATTENTION_QUIZ,
     labs: [
       {
         id: 'attention-row',
