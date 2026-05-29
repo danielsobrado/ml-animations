@@ -34,6 +34,7 @@ import { LAYER_NORMALIZATION_QUIZ } from './layerNormalizationAssessment.js';
 import { LEAKY_RELU_QUIZ } from './leakyReluAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
+import { LLM_TRAINING_OBJECTIVES_QUIZ } from './llmTrainingObjectivesAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
@@ -1925,30 +1926,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'llm-training-objectives': {
-    quiz: [
-      {
-        id: 'next-token-target',
-        prompt: 'What does next-token prediction train a decoder-only model to do?',
-        choices: [
-          'Predict the next token from the previous prefix',
-          'Read future tokens bidirectionally during generation',
-          'Compare two completed answers without token probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'Autoregressive pretraining predicts each next token from the prefix, which matches left-to-right generation.',
-      },
-      {
-        id: 'preference-signal',
-        prompt: 'What does preference optimization usually compare?',
-        choices: [
-          'A chosen response against a rejected response for the same prompt',
-          'A validation fold against a test fold',
-          'A masked token against every source token',
-        ],
-        answerIndex: 0,
-        explanation: 'Preference training uses comparative feedback to make chosen responses more likely than rejected alternatives.',
-      },
-    ],
+    quiz: LLM_TRAINING_OBJECTIVES_QUIZ,
     labs: [
       {
         id: 'match-objective-stage',
