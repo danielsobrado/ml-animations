@@ -1,5 +1,6 @@
 import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
+import { ATTENTION_MECHANISM_QUIZ } from './attentionMechanismAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
@@ -1810,30 +1811,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'attention-mechanism': {
-    quiz: [
-      {
-        id: 'attention-role',
-        prompt: 'What does attention compute?',
-        choices: [
-          'A weighted mixture of value vectors based on query-key scores',
-          'A fixed average of every token',
-          'A single train/test split',
-        ],
-        answerIndex: 0,
-        explanation: 'Queries score keys, softmax turns scores into weights, and those weights mix values.',
-      },
-      {
-        id: 'score-meaning',
-        prompt: 'What does a larger query-key score usually mean?',
-        choices: [
-          'That value receives more weight after softmax',
-          'That token is deleted from context',
-          'That the loss is already minimized',
-        ],
-        answerIndex: 0,
-        explanation: 'Higher compatible scores become larger attention weights relative to competing keys.',
-      },
-    ],
+    quiz: ATTENTION_MECHANISM_QUIZ,
     labs: [
       {
         id: 'shift-query',
