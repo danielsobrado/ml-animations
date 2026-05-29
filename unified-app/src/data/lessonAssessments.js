@@ -39,6 +39,7 @@ import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
+import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OPTIMIZERS_QUIZ } from './optimizersAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
@@ -720,80 +721,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'native-sparse-attention': {
-    quiz: [
-      {
-        id: 'nsa-three-branches',
-        level: 'Foundation',
-        prompt: 'What are the three branches in Native Sparse Attention?',
-        choices: [
-          'Compression, selection, and sliding window',
-          'Tokenizer, embedding, and logits',
-          'Encoder, decoder, and classifier head',
-        ],
-        answerIndex: 0,
-        explanation: 'NSA combines compressed global summaries, selected fine-grained blocks, and a recent local window.',
-      },
-      {
-        id: 'nsa-compression-purpose',
-        level: 'Foundation',
-        prompt: 'What does the compression branch provide?',
-        choices: [
-          'A cheap global map of the whole past',
-          'A replacement for all value vectors',
-          'A guarantee that every token is equally important',
-        ],
-        answerIndex: 0,
-        explanation: 'The compression branch summarizes blocks so the query can scan broad context before detailed selection.',
-      },
-      {
-        id: 'nsa-selection-purpose',
-        level: 'Mechanism',
-        prompt: 'Why does NSA use compressed scores to pick selected blocks?',
-        choices: [
-          'The compressed scan gives block-level importance hints for where fine attention should zoom in',
-          'Compressed scores remove the need for any local context',
-          'The selected blocks must be random to avoid overfitting',
-        ],
-        answerIndex: 0,
-        explanation: 'The selection branch uses the map to choose important original blocks, then attends to fine tokens inside them.',
-      },
-      {
-        id: 'nsa-blockwise-hardware',
-        level: 'Mechanism',
-        prompt: 'Why are blockwise sparse patterns more hardware-friendly than arbitrary individual token picks?',
-        choices: [
-          'They allow contiguous KV loads and better reuse in GPU kernels',
-          'They make the attention matrix dense again',
-          'They remove the need for softmax normalization',
-        ],
-        answerIndex: 0,
-        explanation: 'GPUs are much better at contiguous block access and tiled compute than scattered single-token reads.',
-      },
-      {
-        id: 'nsa-native-training',
-        level: 'Application',
-        prompt: 'What is the "native" part of Native Sparse Attention?',
-        choices: [
-          'The model is trained with the sparse attention mechanism from the beginning',
-          'A dense checkpoint is pruned only after training',
-          'The tokenizer is changed to produce fewer words',
-        ],
-        answerIndex: 0,
-        explanation: 'Native training lets every layer learn under the sparse reading constraint instead of receiving sparsity as a post-hoc approximation.',
-      },
-      {
-        id: 'nsa-gqa-shared-selection',
-        level: 'Tricky',
-        prompt: 'Why should heads in a GQA group share selected KV blocks during decoding?',
-        choices: [
-          'Shared selection avoids loading different KV subsets for each query head in the group',
-          'Shared selection makes every query head identical',
-          'GQA removes the KV cache entirely',
-        ],
-        answerIndex: 0,
-        explanation: 'When KV cache is shared across heads, selecting the same sparse blocks preserves reuse and lowers memory traffic.',
-      },
-    ],
+    quiz: NATIVE_SPARSE_ATTENTION_QUIZ,
     labs: [
       {
         id: 'mini-nsa-block-window',
