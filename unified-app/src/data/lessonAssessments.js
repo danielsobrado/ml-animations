@@ -51,6 +51,7 @@ import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
 import { TREE_ENSEMBLES_QUIZ } from './treeEnsemblesAssessment.js';
 import { TIME_SERIES_FORECASTING_QUIZ } from './timeSeriesForecastingAssessment.js';
+import { TOKENIZATION_QUIZ } from './tokenizationAssessment.js';
 import { TRAINING_LOOP_DYNAMICS_QUIZ } from './trainingLoopDynamicsAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
@@ -1774,30 +1775,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   tokenization: {
-    quiz: [
-      {
-        id: 'subword-purpose',
-        prompt: 'Why do many modern tokenizers use subwords?',
-        choices: [
-          'They balance vocabulary size with the ability to represent rare words',
-          'They guarantee every word is one token',
-          'They remove the need for embeddings',
-        ],
-        answerIndex: 0,
-        explanation: 'Subwords let the model compose rare or new words from familiar pieces.',
-      },
-      {
-        id: 'boundary-risk',
-        prompt: 'What can token boundaries change?',
-        choices: [
-          'The sequence length and the units the model sees',
-          'The model architecture category',
-          'The labels in supervised data',
-        ],
-        answerIndex: 0,
-        explanation: 'Different splits change both context length and the text fragments fed downstream.',
-      },
-    ],
+    quiz: TOKENIZATION_QUIZ,
     labs: [
       {
         id: 'compare-splits',
