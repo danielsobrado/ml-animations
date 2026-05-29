@@ -52,6 +52,7 @@ import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
+import { RAG_FAILURE_MODES_QUIZ } from './ragFailureModesAssessment.js';
 import { RAG_RERANKING_GROUNDING_QUIZ } from './ragRerankingGroundingAssessment.js';
 import { RAG_RETRIEVAL_EVALUATION_QUIZ } from './ragRetrievalEvaluationAssessment.js';
 import { RAG_VECTOR_INDEXING_QUIZ } from './ragVectorIndexingAssessment.js';
@@ -2021,30 +2022,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rag-failure-modes': {
-    quiz: [
-      {
-        id: 'dominant-failure',
-        prompt: 'Which failure should you diagnose first when top-k is full of unrelated chunks?',
-        choices: [
-          'Irrelevant retrieval evidence entered the candidate set',
-          'The candidate scoring function is too selective',
-          'The answer head has too few parameters',
-        ],
-        answerIndex: 0,
-        explanation: 'When candidate quality is noisy, first improve retrieval and candidate generation, not decoding or reranker settings.',
-      },
-      {
-        id: 'grounding-before-answer',
-        prompt: 'What is the biggest risk if strictness is very high but top-k still includes no usable evidence?',
-        choices: [
-          'Grounded claims fail even if the model sounds fluent',
-          'The model learns a better token distribution',
-          'Recall metrics automatically improve',
-        ],
-        answerIndex: 0,
-        explanation: 'Fluency is not equivalent to groundedness; without usable evidence, output quality is not evidence-based.',
-      },
-    ],
+    quiz: RAG_FAILURE_MODES_QUIZ,
     labs: [
       {
         id: 'failure-tune',
