@@ -21,6 +21,7 @@ import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
 import { LAYER_NORMALIZATION_QUIZ } from './layerNormalizationAssessment.js';
+import { LEAKY_RELU_QUIZ } from './leakyReluAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
@@ -1747,41 +1748,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'leaky-relu': {
-    quiz: [
-      {
-        id: 'negative-output',
-        prompt: 'For z below zero, what does Leaky ReLU output?',
-        choices: [
-          'A small negative value alpha times z',
-          'Exactly zero for every negative z',
-          'A probability between 0 and 1',
-        ],
-        answerIndex: 0,
-        explanation: 'Leaky ReLU keeps a small negative-side slope, so negative inputs become alpha z rather than zero.',
-      },
-      {
-        id: 'gradient-path',
-        prompt: 'Why can Leaky ReLU reduce dead-unit behavior compared with ReLU?',
-        choices: [
-          'Its local derivative is alpha rather than zero on the negative side',
-          'It removes the need for backpropagation',
-          'It makes every pre-activation positive',
-        ],
-        answerIndex: 0,
-        explanation: 'Backprop multiplies by the local derivative. A small nonzero derivative preserves a small learning signal.',
-      },
-      {
-        id: 'alpha-tradeoff',
-        prompt: 'What is the main tradeoff when alpha is increased?',
-        choices: [
-          'More negative-side gradient passes through, but negative activations are less strongly gated',
-          'The model stops using positive activations',
-          'The activation becomes a softmax',
-        ],
-        answerIndex: 0,
-        explanation: 'Larger alpha makes the negative branch less clipped, affecting both forward values and backward gradients.',
-      },
-    ],
+    quiz: LEAKY_RELU_QUIZ,
     labs: [
       {
         id: 'compare-dead-zone',
