@@ -19,6 +19,7 @@ import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
+import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
@@ -1858,41 +1859,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'flash-attention': {
-    quiz: [
-      {
-        id: 'what-is-avoided',
-        prompt: 'What large intermediate does Flash Attention avoid materializing in high-bandwidth memory?',
-        choices: [
-          'The full attention score/probability matrix',
-          'The input token ids',
-          'The learned model weights',
-        ],
-        answerIndex: 0,
-        explanation: 'Flash Attention streams score tiles and keeps online softmax state instead of writing the full N by N attention matrix.',
-      },
-      {
-        id: 'exact-or-approximate',
-        prompt: 'Does Flash Attention approximate scaled dot-product attention?',
-        choices: [
-          'No, it computes the same attention result with a more memory-efficient schedule',
-          'Yes, it drops random attention scores',
-          'Yes, it replaces softmax with nearest-neighbor search',
-        ],
-        answerIndex: 0,
-        explanation: 'Flash Attention changes the execution schedule and memory traffic, not the mathematical result.',
-      },
-      {
-        id: 'online-softmax-state',
-        prompt: 'Why does Flash Attention need online softmax statistics while streaming tiles?',
-        choices: [
-          'To combine tile contributions with the correct row-wise normalization',
-          'To permanently sort all tokens by vocabulary id',
-          'To remove the value vectors from attention',
-        ],
-        answerIndex: 0,
-        explanation: 'The row max and denominator let each streamed tile be merged into the same normalized softmax output.',
-      },
-    ],
+    quiz: FLASH_ATTENTION_QUIZ,
     labs: [
       {
         id: 'tile-memory-tradeoff',
