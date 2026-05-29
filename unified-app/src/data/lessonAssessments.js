@@ -57,6 +57,7 @@ import { ROPE_QUIZ } from './ropeAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { RESIDUAL_STREAM_QUIZ } from './residualStreamAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
+import { SAMPLING_STRATEGIES_QUIZ } from './samplingStrategiesAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
 import { SELF_ATTENTION_QUIZ } from './selfAttentionAssessment.js';
 import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
@@ -1949,41 +1950,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'sampling-strategies': {
-    quiz: [
-      {
-        id: 'temperature-effect',
-        prompt: 'What does a higher temperature usually do before sampling?',
-        choices: [
-          'Flattens the next-token distribution so weaker candidates receive more probability',
-          'Changes the model weights to remember new facts',
-          'Forces the model to always choose the top token',
-        ],
-        answerIndex: 0,
-        explanation: 'Temperature rescales logits before softmax; higher values make the distribution less sharp.',
-      },
-      {
-        id: 'top-p-meaning',
-        prompt: 'How does top-p sampling choose its candidate set?',
-        choices: [
-          'It keeps the smallest ranked set whose cumulative probability reaches p',
-          'It always keeps exactly p tokens',
-          'It searches multiple full sequences and picks the best final score',
-        ],
-        answerIndex: 0,
-        explanation: 'Top-p is nucleus sampling: the number of kept tokens changes with the probability mass in the current context.',
-      },
-      {
-        id: 'top-p-token-count',
-        prompt: 'What is the top-p sampling misconception?',
-        choices: [
-          'Assuming p means a fixed number or fixed percentage of vocabulary tokens',
-          'Sorting candidates by probability before accumulating mass',
-          'Including enough ranked tokens to reach the probability threshold',
-        ],
-        answerIndex: 0,
-        explanation: 'Top-p keeps a variable-size nucleus based on cumulative probability mass, not a fixed token count.',
-      },
-    ],
+    quiz: SAMPLING_STRATEGIES_QUIZ,
     labs: [
       {
         id: 'decode-for-task',
