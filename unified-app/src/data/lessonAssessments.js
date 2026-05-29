@@ -5,6 +5,7 @@ import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
+import { CONV2D_QUIZ } from './conv2dAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
@@ -2412,41 +2413,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   conv2d: {
-    quiz: [
-      {
-        id: 'one-output-cell',
-        prompt: 'What creates one Conv2D output cell?',
-        choices: [
-          'A dot product between the kernel and one local input window',
-          'An average of every pixel in the whole image',
-          'A separate learned kernel for every output location',
-        ],
-        answerIndex: 0,
-        explanation: 'The same kernel is reused across positions; each output cell comes from the aligned local patch.',
-      },
-      {
-        id: 'stride-effect',
-        prompt: 'What usually happens when stride increases while input, padding, and kernel size stay fixed?',
-        choices: [
-          'The output grid gets smaller because the kernel visits fewer positions',
-          'The output grid always gets larger',
-          'The kernel weights become non-learnable',
-        ],
-        answerIndex: 0,
-        explanation: 'Stride controls the step size between windows, so larger stride skips positions.',
-      },
-      {
-        id: 'padding-purpose',
-        prompt: 'Why add zero padding before a convolution?',
-        choices: [
-          'To let the kernel cover border pixels and often preserve more spatial size',
-          'To remove the need for learned weights',
-          'To make ReLU happen before convolution',
-        ],
-        answerIndex: 0,
-        explanation: 'Padding extends the grid with zeros so border-centered windows can be computed.',
-      },
-    ],
+    quiz: CONV2D_QUIZ,
     labs: [
       {
         id: 'trace-output-size',
