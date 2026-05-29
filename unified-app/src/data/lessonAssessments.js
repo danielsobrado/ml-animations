@@ -20,6 +20,7 @@ import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
+import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
 import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
@@ -1961,30 +1962,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'fine-tuning': {
-    quiz: [
-      {
-        id: 'lora-trains-what',
-        prompt: 'What does LoRA train during fine-tuning?',
-        choices: [
-          'Small low-rank adapter matrices while the base weights stay frozen',
-          'Only the tokenizer vocabulary',
-          'A retrieval index with no gradient updates',
-        ],
-        answerIndex: 0,
-        explanation: 'LoRA keeps the pretrained weights fixed and learns low-rank update matrices that approximate the needed weight change.',
-      },
-      {
-        id: 'preference-data-shape',
-        prompt: 'What data shape is most natural for DPO-style preference tuning?',
-        choices: [
-          'A prompt with a chosen answer and a rejected answer',
-          'Unlabeled rows for k-means clustering',
-          'A single test-set metric with no examples',
-        ],
-        answerIndex: 0,
-        explanation: 'Preference tuning compares candidate answers for the same prompt and increases the relative likelihood of the chosen one.',
-      },
-    ],
+    quiz: FINE_TUNING_QUIZ,
     labs: [
       {
         id: 'choose-finetune-method',
