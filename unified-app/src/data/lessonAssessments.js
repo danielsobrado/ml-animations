@@ -20,6 +20,7 @@ import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionA
 import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
 import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
+import { LAYER_NORMALIZATION_QUIZ } from './layerNormalizationAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
@@ -2544,41 +2545,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'layer-normalization': {
-    quiz: [
-      {
-        id: 'within-token',
-        prompt: 'What statistics does LayerNorm use in a transformer token representation?',
-        choices: [
-          'Mean and variance across features within the same token',
-          'Mean and variance across the entire training dataset',
-          'Only the maximum value across the batch',
-        ],
-        answerIndex: 0,
-        explanation: 'LayerNorm normalizes each example or token across its feature dimension, independent of other batch items.',
-      },
-      {
-        id: 'gamma-beta',
-        prompt: 'Why does LayerNorm include learned gamma and beta parameters?',
-        choices: [
-          'To let the model rescale and shift normalized features after stabilization',
-          'To compute attention masks',
-          'To choose the next token directly',
-        ],
-        answerIndex: 0,
-        explanation: 'After standardizing features, learned scale and shift restore useful representational flexibility.',
-      },
-      {
-        id: 'batchnorm-difference',
-        prompt: 'Why is LayerNorm convenient for autoregressive decoding?',
-        choices: [
-          'It does not need batch-level statistics from other examples',
-          'It removes residual connections entirely',
-          'It only works when the batch is large',
-        ],
-        answerIndex: 0,
-        explanation: 'LayerNorm uses per-token features, so inference with batch size one remains well-defined.',
-      },
-    ],
+    quiz: LAYER_NORMALIZATION_QUIZ,
     labs: [
       {
         id: 'normalize-shifted-token',
