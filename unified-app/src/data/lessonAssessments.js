@@ -6,6 +6,7 @@ import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
+import { CLASSIFIER_FREE_GUIDANCE_QUIZ } from './classifierFreeGuidanceAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
 import { COMPUTATION_GRAPH_BACKPROP_QUIZ } from './computationGraphBackpropAssessment.js';
 import { CONV2D_QUIZ } from './conv2dAssessment.js';
@@ -2485,41 +2486,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'classifier-free-guidance': {
-    quiz: [
-      {
-        id: 'cfg-combination',
-        prompt: 'What two predictions does classifier-free guidance combine?',
-        choices: [
-          'A prompt-conditioned prediction and an unconditional prediction',
-          'A train-set prediction and a test-set prediction',
-          'A classifier label and a retrieval score',
-        ],
-        answerIndex: 0,
-        explanation: 'CFG amplifies the direction from unconditional denoising toward prompt-conditioned denoising.',
-      },
-      {
-        id: 'scale-tradeoff',
-        prompt: 'What is the main tradeoff when increasing guidance scale too far?',
-        choices: [
-          'Prompt adherence can improve, but diversity and visual quality can suffer',
-          'The model stops using text conditioning entirely',
-          'The sampler must switch from images to tabular data',
-        ],
-        answerIndex: 0,
-        explanation: 'High scale can force prompt features harder, but it can also overshoot and create artifacts.',
-      },
-      {
-        id: 'max-guidance-misconception',
-        prompt: 'What is the classifier-free guidance misconception?',
-        choices: [
-          'Assuming the largest guidance scale is always best',
-          'Combining conditional and unconditional predictions',
-          'Tuning scale as a prompt-adherence/diversity tradeoff',
-        ],
-        answerIndex: 0,
-        explanation: 'Very high guidance can reduce diversity and increase artifacts even when prompt match appears stronger.',
-      },
-    ],
+    quiz: CLASSIFIER_FREE_GUIDANCE_QUIZ,
     labs: [
       {
         id: 'guidance-scale-sweep',
