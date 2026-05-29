@@ -52,6 +52,7 @@ import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
+import { ROPE_QUIZ } from './ropeAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
@@ -1822,41 +1823,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   rope: {
-    quiz: [
-      {
-        id: 'what-rotates',
-        prompt: 'In RoPE, which vectors are rotated before attention scoring?',
-        choices: [
-          'Query and key vectors',
-          'Only value vectors',
-          'Only final vocabulary logits',
-        ],
-        answerIndex: 0,
-        explanation: 'RoPE rotates query and key dimension pairs so their dot product carries relative-position information.',
-      },
-      {
-        id: 'relative-distance',
-        prompt: 'Why does RoPE help attention reason about relative position?',
-        choices: [
-          'The dot product between rotated Q and K depends on the position difference m - n',
-          'It deletes token embeddings and uses only positions',
-          'It makes every position have the same angle',
-        ],
-        answerIndex: 0,
-        explanation: 'Rotating Q by position m and K by position n makes the score encode their relative offset.',
-      },
-      {
-        id: 'value-vector-misconception',
-        prompt: 'Which statement is true about RoPE in standard attention?',
-        choices: [
-          'RoPE changes attention scores but does not replace the causal mask',
-          'RoPE is the same thing as top-p sampling',
-          'RoPE removes the need for keys and queries',
-        ],
-        answerIndex: 0,
-        explanation: 'RoPE modifies Q/K geometry. Masking and attention computation are still separate parts of the transformer.',
-      },
-    ],
+    quiz: ROPE_QUIZ,
     labs: [
       {
         id: 'relative-shift-check',
