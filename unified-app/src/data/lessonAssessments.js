@@ -28,6 +28,7 @@ import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
+import { GRPO_REASONING_QUIZ } from './grpoReasoningAssessment.js';
 import { GROUPED_QUERY_ATTENTION_QUIZ } from './groupedQueryAttentionAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
 import { INITIALIZATION_QUIZ } from './initializationAssessment.js';
@@ -2680,118 +2681,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'grpo-reasoning': {
-    quiz: [
-      {
-        id: 'grpo-samples-group',
-        prompt: 'What does GRPO sample for each prompt?',
-        choices: [
-          'A group of candidate completions from the current or old policy.',
-          'One hand-written gold solution from a human annotator.',
-          'One critic value for every transformer layer.',
-        ],
-        answerIndex: 0,
-        explanation: 'GRPO creates a group of candidate answers for the same prompt, scores them, and compares each answer against its siblings.',
-      },
-      {
-        id: 'grpo-group-baseline',
-        prompt: 'What replaces the learned PPO critic baseline in GRPO?',
-        choices: [
-          'The average reward of the sampled answers for the same prompt.',
-          'The largest token logit in the final answer.',
-          'The length of the shortest response in the batch.',
-        ],
-        answerIndex: 0,
-        explanation: 'The group reward statistics become the baseline, avoiding a separate value-function model.',
-      },
-      {
-        id: 'grpo-positive-advantage',
-        prompt: 'What should happen to a completion with above-average reward inside its group?',
-        choices: [
-          'Its solution trace should become more likely under the policy update.',
-          'It should be deleted because RL only trains on wrong answers.',
-          'It should be assigned to the reference model instead of the policy model.',
-        ],
-        answerIndex: 0,
-        explanation: 'Above-average reward gives positive advantage, so the update reinforces the sampled trace.',
-      },
-      {
-        id: 'grpo-negative-advantage',
-        prompt: 'What should happen to a completion with below-average reward inside its group?',
-        choices: [
-          'Its trace should be suppressed by the policy update.',
-          'Its reward should be copied to all other samples.',
-          'It should become the new group baseline.',
-        ],
-        answerIndex: 0,
-        explanation: 'Below-average reward gives negative advantage, lowering the probability of that sampled behavior.',
-      },
-      {
-        id: 'grpo-no-contrast',
-        prompt: 'Why are all-correct or all-wrong GRPO groups weak training examples?',
-        choices: [
-          'There is little contrast, so relative advantage gives little or risky direction.',
-          'They always make the KL term exactly zero.',
-          'They prevent the model from sampling any future answers.',
-        ],
-        answerIndex: 0,
-        explanation: 'GRPO learns from within-group differences. If all rewards match, the normalized advantage is near zero; if all are wrong with tiny differences, the least bad wrong answer may be reinforced.',
-      },
-      {
-        id: 'grpo-kl-purpose',
-        prompt: 'Why does GRPO use PPO-style clipping and a KL guardrail?',
-        choices: [
-          'To keep the policy update bounded and close to a reference model while optimizing reward.',
-          'To force every answer to have exactly the same token length.',
-          'To remove the need for reward functions.',
-        ],
-        answerIndex: 0,
-        explanation: 'Clipping limits large probability-ratio moves, and KL discourages the policy from drifting too far toward reward-hacking behavior.',
-      },
-      {
-        id: 'r1-zero-purpose',
-        prompt: 'What did DeepSeek-R1-Zero test?',
-        choices: [
-          'Whether reasoning behaviors could emerge from large-scale RL applied directly to a base model.',
-          'Whether sparse attention can remove all KV-cache memory.',
-          'Whether a critic model can replace a language model.',
-        ],
-        answerIndex: 0,
-        explanation: 'R1-Zero is the pure-RL experiment: apply GRPO-style RL without an SFT cold-start stage and observe emergent reasoning behaviors.',
-      },
-      {
-        id: 'r1-cold-start',
-        prompt: 'Why did DeepSeek-R1 add cold-start data after the R1-Zero experiment?',
-        choices: [
-          'To improve readability, formatting, and user-facing behavior before further RL.',
-          'To make the model smaller than every distilled student.',
-          'To remove rule-based rewards from math and code tasks.',
-        ],
-        answerIndex: 0,
-        explanation: 'R1-Zero showed strong reasoning but had readability and language-mixing issues. Cold-start data helped shape usable response format.',
-      },
-      {
-        id: 'grpo-reward-design',
-        prompt: 'Which reward type is especially reliable for math and code reasoning tasks?',
-        choices: [
-          'Rule-based correctness checks such as exact answers or compiler tests.',
-          'A reward for using as many tags as possible.',
-          'A reward based only on response length.',
-        ],
-        answerIndex: 0,
-        explanation: 'Math and code often have checkable outcomes, making exact answer checkers and test execution useful reward sources.',
-      },
-      {
-        id: 'grpo-distillation',
-        prompt: 'What is the role of distillation after training a large reasoning model?',
-        choices: [
-          'Use the large model to generate reasoning data that smaller models can imitate.',
-          'Run GRPO without any rewards.',
-          'Convert all policy-gradient updates into KV-cache compression.',
-        ],
-        answerIndex: 0,
-        explanation: 'DeepSeek-R1 generated data for smaller Qwen and Llama based dense models, transferring useful reasoning patterns through supervised fine-tuning.',
-      },
-    ],
+    quiz: GRPO_REASONING_QUIZ,
     labs: [
       {
         id: 'mini-grpo-advantages',
