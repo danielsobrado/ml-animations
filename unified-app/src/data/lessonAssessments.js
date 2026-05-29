@@ -15,6 +15,7 @@ import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.j
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
+import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
@@ -1786,30 +1787,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   embeddings: {
-    quiz: [
-      {
-        id: 'embedding-purpose',
-        prompt: 'What is an embedding?',
-        choices: [
-          'A dense vector that represents an item in a learned space',
-          'A one-hot label that never changes',
-          'A loss value for a classifier',
-        ],
-        answerIndex: 0,
-        explanation: 'Embeddings turn discrete items into vectors that can be compared and transformed.',
-      },
-      {
-        id: 'distance-meaning',
-        prompt: 'What does distance or direction in embedding space usually suggest?',
-        choices: [
-          'A learned relationship, not a guaranteed human concept',
-          'A fixed dictionary order',
-          'The exact probability of the next token',
-        ],
-        answerIndex: 0,
-        explanation: 'Embedding geometry is learned from data and objectives, so it needs interpretation.',
-      },
-    ],
+    quiz: EMBEDDINGS_QUIZ,
     labs: [
       {
         id: 'nearest-neighbor',
