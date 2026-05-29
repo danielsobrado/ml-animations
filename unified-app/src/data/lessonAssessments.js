@@ -64,6 +64,7 @@ import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAss
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
 import { RL_EXPLORATION_QUIZ } from './rlExplorationAssessment.js';
+import { RL_FOUNDATIONS_QUIZ } from './rlFoundationsAssessment.js';
 import { ROPE_QUIZ } from './ropeAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { RESIDUAL_STREAM_QUIZ } from './residualStreamAssessment.js';
@@ -2141,41 +2142,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rl-foundations': {
-    quiz: [
-      {
-        id: 'loop-parts',
-        prompt: 'What is the basic reinforcement-learning loop?',
-        choices: [
-          'The agent observes state, takes action, receives reward and next state',
-          'The model splits data into train, validation, and test once',
-          'The tokenizer maps words to fixed dictionary definitions',
-        ],
-        answerIndex: 0,
-        explanation: 'RL is organized around repeated interaction: state, action, reward, next state, and another decision.',
-      },
-      {
-        id: 'reward-hacking',
-        prompt: 'What is reward hacking?',
-        choices: [
-          'Optimizing the numeric reward in a way that misses the designer intent',
-          'Reducing gamma so future rewards count less',
-          'Using a random exploratory action',
-        ],
-        answerIndex: 0,
-        explanation: 'An agent follows the reward signal it is given, so a flawed reward can teach unintended behavior.',
-      },
-      {
-        id: 'discount-factor',
-        prompt: 'What does a larger discount factor gamma usually do?',
-        choices: [
-          'It makes distant future rewards matter more',
-          'It makes all future rewards disappear',
-          'It turns rewards into actions',
-        ],
-        answerIndex: 0,
-        explanation: 'Gamma controls how much delayed reward contributes to return; higher gamma values make long-term payoff more important.',
-      },
-    ],
+    quiz: RL_FOUNDATIONS_QUIZ,
     labs: [
       {
         id: 'design-reward',
