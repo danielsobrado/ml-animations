@@ -66,6 +66,7 @@ import { TIME_SERIES_FORECASTING_QUIZ } from './timeSeriesForecastingAssessment.
 import { TOKENIZATION_QUIZ } from './tokenizationAssessment.js';
 import { TRAINING_LOOP_DYNAMICS_QUIZ } from './trainingLoopDynamicsAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
+import { TRANSFORMER_ARCHITECTURE_FAMILIES_QUIZ } from './transformerArchitectureFamiliesAssessment.js';
 import { TRANSFORMER_QUIZ } from './transformerAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
@@ -1913,30 +1914,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'transformer-architecture-families': {
-    quiz: [
-      {
-        id: 'bert-family',
-        prompt: 'Which transformer family best describes BERT-style models?',
-        choices: [
-          'Encoder-only with bidirectional attention',
-          'Decoder-only with causal attention',
-          'Encoder-decoder with cross-attention only',
-        ],
-        answerIndex: 0,
-        explanation: 'BERT-style models encode an input with bidirectional self-attention to produce contextual representations.',
-      },
-      {
-        id: 'gpt-generation',
-        prompt: 'Why are GPT-style models naturally used for left-to-right generation?',
-        choices: [
-          'Causal self-attention and next-token prediction match autoregressive decoding',
-          'Bidirectional masks let every future token be visible during generation',
-          'They do not use token probabilities',
-        ],
-        answerIndex: 0,
-        explanation: 'Decoder-only models learn to predict the next token from the prefix, then append each sampled token.',
-      },
-    ],
+    quiz: TRANSFORMER_ARCHITECTURE_FAMILIES_QUIZ,
     labs: [
       {
         id: 'choose-family',
