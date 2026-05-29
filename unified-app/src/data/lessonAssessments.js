@@ -17,6 +17,7 @@ import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessmen
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
 import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
+import { DAPO_REASONING_RL_QUIZ } from './dapoReasoningRlAssessment.js';
 import { DIFFUSION_BASICS_QUIZ } from './diffusionBasicsAssessment.js';
 import { DIFFUSION_SAMPLING_QUIZ } from './diffusionSamplingAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
@@ -2704,118 +2705,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'dapo-reasoning-rl': {
-    quiz: [
-      {
-        id: 'dapo-builds-on-grpo',
-        prompt: 'What training setup does DAPO build on?',
-        choices: [
-          'GRPO-style reasoning RL that samples multiple answers for the same prompt and compares them within the group.',
-          'A pure supervised fine-tuning loop with one gold answer per prompt.',
-          'A retrieval-only system that never updates the language model policy.',
-        ],
-        answerIndex: 0,
-        explanation: 'DAPO keeps the group-relative idea but adds practical training fixes for large-scale long-CoT RL.',
-      },
-      {
-        id: 'dapo-four-techniques',
-        prompt: 'Which list contains the four DAPO techniques emphasized in the lesson?',
-        choices: [
-          'Beam search, KV-cache quantization, LoRA rank search, and speculative decoding.',
-          'Clip-Higher, Dynamic Sampling, Token-Level Policy Gradient Loss, and Overlong Reward Shaping.',
-          'RAG chunking, reranking, calibration, and abstention thresholds.',
-        ],
-        answerIndex: 1,
-        explanation: 'The DAPO recipe combines batch filtering, asymmetric clipping, token-level loss aggregation, and length reward shaping.',
-      },
-      {
-        id: 'dapo-dynamic-sampling',
-        prompt: 'Why does Dynamic Sampling drop all-correct and all-wrong groups?',
-        choices: [
-          'Those groups are too short to fit in the context window.',
-          'Those groups always violate the KL penalty.',
-          'Those groups have little or no within-group reward contrast, so the group-relative update carries weak signal.',
-        ],
-        answerIndex: 2,
-        explanation: 'Group-relative learning needs siblings that disagree. Mixed groups produce positive and negative advantages.',
-      },
-      {
-        id: 'dapo-clip-higher',
-        prompt: 'What does Clip-Higher change relative to symmetric PPO-style clipping?',
-        choices: [
-          'It raises the upper ratio bound while keeping the lower bound controlled.',
-          'It removes clipping from every negative-advantage token.',
-          'It clips reward values instead of policy ratios.',
-        ],
-        answerIndex: 0,
-        explanation: 'Clip-Higher decouples the lower and upper clip epsilons so successful traces have more room to grow.',
-      },
-      {
-        id: 'dapo-entropy-collapse',
-        prompt: 'What failure mode is Clip-Higher meant to help mitigate?',
-        choices: [
-          'Tokenizer vocabulary overflow during BPE merges.',
-          'Entropy collapse, where exploration and trace diversity shrink too much during long-CoT RL.',
-          'A missing final answer regex in supervised data.',
-        ],
-        answerIndex: 1,
-        explanation: 'If positive updates are blocked too aggressively, diverse successful reasoning behaviors can disappear.',
-      },
-      {
-        id: 'dapo-token-level-loss',
-        prompt: 'Why is token-level policy-gradient loss useful for long reasoning traces?',
-        choices: [
-          'It makes every token receive a different human label.',
-          'It prevents the model from generating final answers.',
-          'A long completion is many token decisions, so token-level aggregation gives denser credit than one sequence-sized block.',
-        ],
-        answerIndex: 2,
-        explanation: 'Long-CoT RL benefits from policy-gradient terms across all valid response tokens.',
-      },
-      {
-        id: 'dapo-overlong-shaping',
-        prompt: 'What problem does Overlong Reward Shaping address?',
-        choices: [
-          'A hard reward cliff around the max response length can be noisy for slightly overlong but otherwise useful traces.',
-          'Correct answers always need to be shorter than one token.',
-          'Sampling groups cannot contain any long answers.',
-        ],
-        answerIndex: 0,
-        explanation: 'A smoother length penalty gives the model a more informative concision signal near the boundary.',
-      },
-      {
-        id: 'dapo-frontier-prompts',
-        prompt: 'Which prompt difficulty usually gives the strongest group-relative signal?',
-        choices: [
-          'Trivial prompts where every sample is correct.',
-          'Frontier prompts where some samples succeed and some fail.',
-          'Impossible prompts where every sample is wrong.',
-        ],
-        answerIndex: 1,
-        explanation: 'The best groups are near the current model frontier because they produce mixed outcomes.',
-      },
-      {
-        id: 'dapo-recipe-not-formula',
-        prompt: 'Why is DAPO best understood as a recipe rather than a single equation?',
-        choices: [
-          'It contains no mathematical objective at all.',
-          'It only applies at inference time after training is complete.',
-          'Sampling, reward shaping, clipping, and loss aggregation all interact to determine training behavior.',
-        ],
-        answerIndex: 2,
-        explanation: 'DAPO depends on how batches are constructed, how rewards are shaped, how ratios are clipped, and how token losses are aggregated.',
-      },
-      {
-        id: 'dapo-health-dashboard',
-        prompt: 'Which dashboard signals are useful for diagnosing DAPO-style training?',
-        choices: [
-          'Effective groups, entropy, clip fraction, overlong rate, and token-gradient count.',
-          'Only the number of model parameters.',
-          'Only the static prompt template length.',
-        ],
-        answerIndex: 0,
-        explanation: 'Practical RL training needs live diagnostics for signal quality, exploration, clipping pressure, length behavior, and gradient density.',
-      },
-    ],
+    quiz: DAPO_REASONING_RL_QUIZ,
     labs: [
       {
         id: 'mini-dapo-group-signal',
