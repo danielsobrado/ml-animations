@@ -66,6 +66,7 @@ import { TIME_SERIES_FORECASTING_QUIZ } from './timeSeriesForecastingAssessment.
 import { TOKENIZATION_QUIZ } from './tokenizationAssessment.js';
 import { TRAINING_LOOP_DYNAMICS_QUIZ } from './trainingLoopDynamicsAssessment.js';
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
+import { TRANSFORMER_QUIZ } from './transformerAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
@@ -1901,30 +1902,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   transformer: {
-    quiz: [
-      {
-        id: 'block-stack',
-        prompt: 'What does a transformer block combine?',
-        choices: [
-          'Attention, feed-forward layers, residual paths, and normalization',
-          'Only a tokenizer and a confusion matrix',
-          'Only convolution and pooling',
-        ],
-        answerIndex: 0,
-        explanation: 'A transformer block repeatedly mixes token information, transforms it, and stabilizes the stream.',
-      },
-      {
-        id: 'residual-purpose',
-        prompt: 'Why are residual connections important in transformers?',
-        choices: [
-          'They preserve an information path across many transformations',
-          'They replace the need for weights',
-          'They force every token to attend only to itself',
-        ],
-        answerIndex: 0,
-        explanation: 'Residual paths let layers add updates without destroying the existing representation.',
-      },
-    ],
+    quiz: TRANSFORMER_QUIZ,
     labs: [
       {
         id: 'trace-token',
