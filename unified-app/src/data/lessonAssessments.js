@@ -17,6 +17,7 @@ import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxA
 import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { DIFFUSION_BASICS_QUIZ } from './diffusionBasicsAssessment.js';
+import { DIFFUSION_SAMPLING_QUIZ } from './diffusionSamplingAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
@@ -2473,41 +2474,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'diffusion-sampling': {
-    quiz: [
-      {
-        id: 'ddpm-vs-ddim',
-        prompt: 'What is the key difference between DDPM and DDIM sampling in this beginner comparison?',
-        choices: [
-          'DDPM keeps stochastic reverse noise, while DDIM can follow a deterministic path',
-          'DDIM trains a classifier, while DDPM trains a tokenizer',
-          'DDPM only works for text and DDIM only works for images',
-        ],
-        answerIndex: 0,
-        explanation: 'Both use the denoising model, but DDIM can remove the extra sampling randomness that DDPM retains.',
-      },
-      {
-        id: 'step-tradeoff',
-        prompt: 'What is the main risk when reducing the number of reverse sampling steps?',
-        choices: [
-          'Each step must do more denoising work, so prediction errors matter more',
-          'The forward noising process becomes impossible to define',
-          'The model stops using latents and switches to supervised labels',
-        ],
-        answerIndex: 0,
-        explanation: 'Fewer steps can be faster, but each update covers more distance and can amplify denoising mistakes.',
-      },
-      {
-        id: 'deterministic-quality-guarantee',
-        prompt: 'What sampling misconception should you avoid?',
-        choices: [
-          'Assuming deterministic or fewer-step sampling is always higher quality',
-          'Comparing stochasticity and step count',
-          'Noting that prediction quality affects the final sample',
-        ],
-        answerIndex: 0,
-        explanation: 'Sampler settings are tradeoffs; speed, diversity, and quality depend on model quality and task.',
-      },
-    ],
+    quiz: DIFFUSION_SAMPLING_QUIZ,
     labs: [
       {
         id: 'compare-samplers',
