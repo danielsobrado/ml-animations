@@ -52,6 +52,7 @@ import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
+import { RAG_RETRIEVAL_EVALUATION_QUIZ } from './ragRetrievalEvaluationAssessment.js';
 import { RAG_VECTOR_INDEXING_QUIZ } from './ragVectorIndexingAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
@@ -1997,41 +1998,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rag-retrieval-evaluation': {
-    quiz: [
-      {
-        id: 'missing-evidence',
-        prompt: 'What happens if the relevant chunk never appears in the top-k retrieval set?',
-        choices: [
-          'The generator has no grounded evidence to cite',
-          'The reranker can always recreate the missing chunk',
-          'nDCG automatically becomes perfect',
-        ],
-        answerIndex: 0,
-        explanation: 'Reranking can reorder candidates, but it cannot use evidence that first-pass retrieval failed to return.',
-      },
-      {
-        id: 'metric-purpose',
-        prompt: 'Which metric checks whether relevant evidence was recovered somewhere in the top-k set?',
-        choices: [
-          'Recall@k',
-          'Learning rate',
-          'Cross-entropy',
-        ],
-        answerIndex: 0,
-        explanation: 'Recall@k measures how much known relevant evidence appears within the retrieved candidate set.',
-      },
-      {
-        id: 'reranker-missing-evidence',
-        prompt: 'What retrieval-evaluation misconception should you avoid?',
-        choices: [
-          'Assuming a reranker can fix evidence that first-pass retrieval never returned',
-          'Checking Recall@k before generation',
-          'Looking at top-result rank with MRR',
-        ],
-        answerIndex: 0,
-        explanation: 'Reranking can only reorder the candidate set it receives; missing evidence remains missing.',
-      },
-    ],
+    quiz: RAG_RETRIEVAL_EVALUATION_QUIZ,
     labs: [
       {
         id: 'chunking-rerank-audit',
