@@ -11,6 +11,7 @@ import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.j
 import { COMPUTATION_GRAPH_BACKPROP_QUIZ } from './computationGraphBackpropAssessment.js';
 import { CONV2D_QUIZ } from './conv2dAssessment.js';
 import { CONV_RELU_QUIZ } from './convReluAssessment.js';
+import { COCONUT_LATENT_REASONING_QUIZ } from './coconutLatentReasoningAssessment.js';
 import { COSINE_SIMILARITY_QUIZ } from './cosineSimilarityAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
@@ -2728,118 +2729,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'coconut-latent-reasoning': {
-    quiz: [
-      {
-        id: 'coconut-intermediate-state',
-        prompt: 'What does Coconut feed back during latent mode?',
-        choices: [
-          'The previous position last hidden state.',
-          'Only the final answer token.',
-          'A fixed pause token embedding.',
-        ],
-        answerIndex: 0,
-        explanation: 'Coconut bypasses token decoding in latent mode and uses the last hidden state as the next input embedding.',
-      },
-      {
-        id: 'coconut-mode-markers',
-        prompt: 'What do <bot> and <eot> mark in Coconut-style inference?',
-        choices: [
-          'The start and stop of answer grading.',
-          'The boundary of the latent reasoning region.',
-          'A switch from GPU to CPU execution.',
-        ],
-        answerIndex: 1,
-        explanation: 'Special tokens delimit where continuous thoughts are inserted before text generation resumes.',
-      },
-      {
-        id: 'coconut-lm-head',
-        prompt: 'What is skipped when the model is in latent mode?',
-        choices: [
-          'The transformer stack.',
-          'All future answer tokens.',
-          'Decoding the hidden state through the LM head into a word token.',
-        ],
-        answerIndex: 2,
-        explanation: 'The transformer still runs, but the hidden state is fed back directly instead of first becoming a token.',
-      },
-      {
-        id: 'coconut-pause-token',
-        prompt: 'Why is a continuous thought different from a pause token?',
-        choices: [
-          'A continuous thought is context-dependent, while a pause token uses a learned token embedding.',
-          'Pause tokens can only appear in encoder-only models.',
-          'Continuous thoughts are visible natural language words.',
-        ],
-        answerIndex: 0,
-        explanation: 'Pause tokens add extra positions with token embeddings; Coconut uses the current hidden state as the next input.',
-      },
-      {
-        id: 'coconut-curriculum',
-        prompt: 'Why does Coconut train with a curriculum that replaces early CoT steps?',
-        choices: [
-          'To remove all language modeling loss.',
-          'To gradually teach latent states to support future reasoning and answers.',
-          'To prevent the model from seeing chain-of-thought data.',
-        ],
-        answerIndex: 1,
-        explanation: 'The curriculum starts from text reasoning data and progressively moves early reasoning steps into latent space.',
-      },
-      {
-        id: 'coconut-loss-mask',
-        prompt: 'Where is the Coconut training loss applied in the curriculum view?',
-        choices: [
-          'Only to question tokens.',
-          'To latent thought positions directly as if they were words.',
-          'To the remaining text targets after the latent thoughts.',
-        ],
-        answerIndex: 2,
-        explanation: 'Question and latent positions are masked; the latent states are optimized by their usefulness for future text prediction.',
-      },
-      {
-        id: 'coconut-delayed-commitment',
-        prompt: 'What does delayed commitment mean in the Coconut lesson?',
-        choices: [
-          'Keeping several branches softly active before committing to one answer path.',
-          'Waiting to load the model weights until after decoding.',
-          'Always choosing the shortest visible answer.',
-        ],
-        answerIndex: 0,
-        explanation: 'The lesson visualizes latent states as broad branch distributions that sharpen as uncertainty drops.',
-      },
-      {
-        id: 'coconut-visible-vs-compute',
-        prompt: 'How should we account for latent thoughts at inference time?',
-        choices: [
-          'They cost no computation because they are not visible text.',
-          'They reduce visible text tokens, but each latent thought still requires a forward computation step.',
-          'They are counted as training examples, not inference steps.',
-        ],
-        answerIndex: 1,
-        explanation: 'Latent thoughts may reduce generated text, but they are still positions processed by the model.',
-      },
-      {
-        id: 'coconut-faithfulness-risk',
-        prompt: 'What is the main faithfulness caveat for latent thoughts?',
-        choices: [
-          'They always decode to exactly one human-readable token.',
-          'They make reward hacking impossible.',
-          'They may be opaque or shortcut-like rather than faithful reasoning states.',
-        ],
-        answerIndex: 2,
-        explanation: 'A latent vector can help prediction without being an interpretable or causally faithful reasoning step.',
-      },
-      {
-        id: 'coconut-faithfulness-test',
-        prompt: 'Which test best checks whether a latent thought is reasoning-critical?',
-        choices: [
-          'Perturb or remove it and see whether branch distributions or answers change.',
-          'Count how many characters are in the final answer.',
-          'Ignore probes because vectors can never be studied.',
-        ],
-        answerIndex: 0,
-        explanation: 'Causal interventions such as perturbations and ablations are stronger evidence than just decoding a nearest-token probe.',
-      },
-    ],
+    quiz: COCONUT_LATENT_REASONING_QUIZ,
     labs: [
       {
         id: 'trace-latent-feedback',
