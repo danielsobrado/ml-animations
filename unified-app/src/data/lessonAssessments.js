@@ -52,6 +52,7 @@ import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
+import { RAG_VECTOR_INDEXING_QUIZ } from './ragVectorIndexingAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
@@ -1985,41 +1986,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rag-vector-indexing': {
-    quiz: [
-      {
-        id: 'ann-tradeoff',
-        prompt: 'What is the core tradeoff in approximate nearest neighbor vector search?',
-        choices: [
-          'Lower latency in exchange for possible recall loss',
-          'No need to create embeddings',
-          'Guaranteed perfect reranking',
-        ],
-        answerIndex: 0,
-        explanation: 'ANN methods avoid comparing every vector, which reduces latency but can miss some nearest neighbors.',
-      },
-      {
-        id: 'search-breadth',
-        prompt: 'What usually happens when search breadth increases in an ANN index?',
-        choices: [
-          'Recall tends to improve and latency tends to increase',
-          'The model weights are fine-tuned',
-          'Chunk overlap becomes zero',
-        ],
-        answerIndex: 0,
-        explanation: 'Broader search probes more candidates or graph paths, so it can find more relevant vectors at higher cost.',
-      },
-      {
-        id: 'ann-perfect-recall',
-        prompt: 'What is the ANN search misconception this lesson warns about?',
-        choices: [
-          'Treating approximate search as guaranteed to recover every exact nearest neighbor',
-          'Using exact search as a high-recall baseline for a small corpus',
-          'Comparing recall and latency together',
-        ],
-        answerIndex: 0,
-        explanation: 'Approximate indexes trade search work for speed, so recall must be measured and tuned.',
-      },
-    ],
+    quiz: RAG_VECTOR_INDEXING_QUIZ,
     labs: [
       {
         id: 'choose-index',
