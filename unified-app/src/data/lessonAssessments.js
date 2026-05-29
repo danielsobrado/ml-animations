@@ -53,6 +53,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { POSITIONAL_ENCODING_QUIZ } from './positionalEncodingAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
+import { Q_LEARNING_QUIZ } from './qLearningAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
 import { RAG_FAILURE_MODES_QUIZ } from './ragFailureModesAssessment.js';
@@ -2184,41 +2185,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'q-learning': {
-    quiz: [
-      {
-        id: 'what-q-means',
-        prompt: 'What does Q(s, a) estimate in Q-learning?',
-        choices: [
-          'Expected discounted return after taking action a in state s and then acting well',
-          'The probability that state s appears in the dataset',
-          'Only the immediate reward before any future value',
-        ],
-        answerIndex: 0,
-        explanation: 'A Q-value is an action-value estimate: immediate reward plus discounted future return from the next state.',
-      },
-      {
-        id: 'td-target',
-        prompt: 'In the update target r + gamma max_a Q(s_prime, a), what does the max over next actions represent?',
-        choices: [
-          'The best estimated future value from the next state',
-          'The action that was definitely sampled in the previous state',
-          'A supervised label assigned by a trainer',
-        ],
-        answerIndex: 0,
-        explanation: 'Q-learning is off-policy: it backs up toward the greedy next action value even if exploration sampled something else.',
-      },
-      {
-        id: 'learning-rate-role',
-        prompt: 'What does the learning rate alpha control in the Q-learning update?',
-        choices: [
-          'How far the old Q-value moves toward the new target',
-          'How many actions the environment has',
-          'Whether rewards are terminal or nonterminal',
-        ],
-        answerIndex: 0,
-        explanation: 'Alpha scales the temporal-difference error, so larger values overwrite old estimates faster.',
-      },
-    ],
+    quiz: Q_LEARNING_QUIZ,
     labs: [
       {
         id: 'trace-one-update',
