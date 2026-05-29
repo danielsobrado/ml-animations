@@ -63,6 +63,7 @@ import { RAG_VECTOR_INDEXING_QUIZ } from './ragVectorIndexingAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
+import { RL_EXPLORATION_QUIZ } from './rlExplorationAssessment.js';
 import { ROPE_QUIZ } from './ropeAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { RESIDUAL_STREAM_QUIZ } from './residualStreamAssessment.js';
@@ -2196,41 +2197,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'rl-exploration': {
-    quiz: [
-      {
-        id: 'epsilon-meaning',
-        prompt: 'In epsilon-greedy exploration, what does epsilon control?',
-        choices: [
-          'The probability of choosing a random exploratory action',
-          'The reward discount applied after terminal states',
-          'The number of states in the environment',
-        ],
-        answerIndex: 0,
-        explanation: 'Epsilon is the exploration rate: higher epsilon means more random actions instead of greedy exploitation.',
-      },
-      {
-        id: 'explore-exploit-tradeoff',
-        prompt: 'Why can pure exploitation fail early in training?',
-        choices: [
-          'The agent may commit to a bad action before it has tried enough alternatives',
-          'The agent automatically knows every reward in advance',
-          'The discount factor becomes exactly zero',
-        ],
-        answerIndex: 0,
-        explanation: 'Without exploration, early noisy estimates can trap the policy in a locally attractive but poor behavior.',
-      },
-      {
-        id: 'cliff-risk',
-        prompt: 'Why can a risky shortest path be worse under high exploration noise?',
-        choices: [
-          'Random exploratory moves can push the agent into costly failure states',
-          'Exploration deletes all rewards from the environment',
-          'The Q-table no longer stores action values',
-        ],
-        answerIndex: 0,
-        explanation: 'When random moves are frequent, a path close to a cliff has a high chance of catastrophic deviation.',
-      },
-    ],
+    quiz: RL_EXPLORATION_QUIZ,
     labs: [
       {
         id: 'tune-epsilon',
