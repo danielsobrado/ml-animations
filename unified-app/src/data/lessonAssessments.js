@@ -37,6 +37,7 @@ import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
+import { RELU_QUIZ } from './reluAssessment.js';
 import { ROC_PR_CURVES_QUIZ } from './rocPrCurvesAssessment.js';
 import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceIntervalsAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
@@ -1735,52 +1736,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   relu: {
-    quiz: [
-      {
-        id: 'relu-output',
-        prompt: 'What does ReLU output for a negative input?',
-        choices: [
-          '0',
-          'The same negative number',
-          'A probability',
-        ],
-        answerIndex: 0,
-        explanation: 'ReLU passes positive values through and clips negative values to zero.',
-      },
-      {
-        id: 'dead-zone',
-        prompt: 'Why can inactive ReLUs stop learning for an example?',
-        choices: [
-          'Their local derivative is zero in the negative region',
-          'Their weights are not part of the graph',
-          'They convert labels into logits',
-        ],
-        answerIndex: 0,
-        explanation: 'When the pre-activation is negative, ReLU blocks the local gradient.',
-      },
-      {
-        id: 'predict-cross-zero',
-        prompt: 'What happens to a ReLU unit when its pre-activation crosses from -0.2 to +0.2?',
-        choices: [
-          'Its output becomes positive and its local slope changes from 0 to 1',
-          'Its output stays zero forever',
-          'It becomes a probability distribution',
-        ],
-        answerIndex: 0,
-        explanation: 'ReLU has a kink at zero: negative inputs are clipped, positive inputs pass through.',
-      },
-      {
-        id: 'dead-unit-diagnosis',
-        prompt: 'What is a dead ReLU diagnosis?',
-        choices: [
-          'A unit is negative for nearly all examples and receives almost no gradient',
-          'A unit has a large positive activation for every example',
-          'A unit uses a softmax over classes',
-        ],
-        answerIndex: 0,
-        explanation: 'If a ReLU stays in the negative region, its zero derivative can block learning.',
-      },
-    ],
+    quiz: RELU_QUIZ,
     labs: [
       {
         id: 'cross-zero',
