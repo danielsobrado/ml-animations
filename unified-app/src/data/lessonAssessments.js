@@ -69,6 +69,7 @@ import { TRAINING_LOOP_DYNAMICS_QUIZ } from './trainingLoopDynamicsAssessment.js
 import { TRAIN_VALIDATION_TEST_SPLIT_QUIZ } from './trainValidationTestSplitAssessment.js';
 import { TRANSFORMER_ARCHITECTURE_FAMILIES_QUIZ } from './transformerArchitectureFamiliesAssessment.js';
 import { TRANSFORMER_QUIZ } from './transformerAssessment.js';
+import { TRANSFORMER_TOKEN_GENERATION_QUIZ } from './transformerTokenGenerationAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
@@ -1937,41 +1938,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'transformer-token-generation': {
-    quiz: [
-      {
-        id: 'one-token-at-a-time',
-        prompt: 'What does an autoregressive transformer generate at each decoding step?',
-        choices: [
-          'One next token chosen from a probability distribution',
-          'The entire answer as one fixed vector',
-          'A new tokenizer vocabulary',
-        ],
-        answerIndex: 0,
-        explanation: 'The selected token is appended to the context, then the model repeats the same next-token process.',
-      },
-      {
-        id: 'temperature-filtering',
-        prompt: 'What do temperature, top-k, and top-p control?',
-        choices: [
-          'Which next-token candidates remain likely or eligible before selection',
-          'Whether the model has encoder layers',
-          'How many training examples the model sees',
-        ],
-        answerIndex: 0,
-        explanation: 'Temperature reshapes probabilities, while top-k and top-p filter the candidate set before sampling or greedy choice.',
-      },
-      {
-        id: 'kv-cache-misconception',
-        prompt: 'What is a KV-cache misconception?',
-        choices: [
-          'Thinking it changes the next-token probabilities instead of reusing prior key/value rows',
-          'Using it to avoid recomputing attention over prior context',
-          'Appending the selected token before the next decoding step',
-        ],
-        answerIndex: 0,
-        explanation: 'The cache is a compute optimization for previous tokens; it should not change the model distribution for the same context.',
-      },
-    ],
+    quiz: TRANSFORMER_TOKEN_GENERATION_QUIZ,
     labs: [
       {
         id: 'sampling-contrast',
