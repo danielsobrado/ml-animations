@@ -1,5 +1,6 @@
 import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
+import { ATTENTION_MASKS_QUIZ } from './attentionMasksAssessment.js';
 import { ATTENTION_MECHANISM_QUIZ } from './attentionMechanismAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
@@ -1798,30 +1799,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'attention-masks': {
-    quiz: [
-      {
-        id: 'causal-purpose',
-        prompt: 'Why does a decoder use a causal attention mask?',
-        choices: [
-          'To prevent a position from reading future tokens during next-token prediction',
-          'To make every token attend only to padding',
-          'To replace softmax with a sigmoid',
-        ],
-        answerIndex: 0,
-        explanation: 'A causal mask keeps training and generation honest by hiding tokens that come after the current position.',
-      },
-      {
-        id: 'padding-purpose',
-        prompt: 'What should a padding mask do?',
-        choices: [
-          'Remove [PAD] positions from attention scores before softmax',
-          'Increase the probability of every padding token',
-          'Change the tokenizer vocabulary size',
-        ],
-        answerIndex: 0,
-        explanation: 'Padding is sequence-shaping filler, not content, so its scores are replaced by a very negative value before softmax.',
-      },
-    ],
+    quiz: ATTENTION_MASKS_QUIZ,
     labs: [
       {
         id: 'trace-visible-keys',
