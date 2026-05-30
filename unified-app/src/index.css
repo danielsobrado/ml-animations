@@ -1031,12 +1031,16 @@ body {
 .ua-animation-page {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1180px;
   margin: 0 auto;
   padding: clamp(28px, 4vw, 56px) clamp(24px, 5vw, 72px);
 }
 
+.ua-home {
+  max-width: 1180px;
+}
+
 .ua-animation-page {
+  max-width: min(96vw, 1680px);
   padding-top: clamp(22px, 3vw, 42px);
 }
 
@@ -5824,7 +5828,6 @@ html.ua-concept-map-expanded .ua-concept-map--expanded:not(.ua-concept-map--cura
 
 /* Code Labs Widening overrides */
 .ua-labs-page-container {
-  max-width: 96vw;
   width: 100%;
 }
 

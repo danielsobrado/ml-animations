@@ -5,8 +5,7 @@ export default function ConditionalPanel() {
     const [selectedCard, setSelectedCard] = useState(null);
     const [filterFaceCards, setFilterFaceCards] = useState(false);
 
-    // Card deck
-    const suits = ['♠', '♥', '♦', '♣'];
+    const suits = ['\u2660', '\u2665', '\u2666', '\u2663'];
     const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     const faceCards = ['J', 'Q', 'K'];
     const kings = ['K'];
@@ -18,11 +17,11 @@ export default function ConditionalPanel() {
     const visibleCards = filterFaceCards ? allCards.filter(c => c.isFace) : allCards;
     const kingCount = visibleCards.filter(c => c.isKing).length;
     const totalCount = visibleCards.length;
-
     const probability = totalCount > 0 ? (kingCount / totalCount) : 0;
+    const deckColumns = filterFaceCards ? 'repeat(3, minmax(3rem, 4.25rem))' : 'repeat(13, minmax(2.35rem, 3.6rem))';
 
     const getCardColor = (suit) => {
-        return suit === '♥' || suit === '♦' ? 'text-red-500' : 'text-slate-900';
+        return suit === '\u2665' || suit === '\u2666' ? 'text-red-600' : 'text-slate-900';
     };
 
     return (
@@ -33,14 +32,13 @@ export default function ConditionalPanel() {
                     <strong>P(A|B)</strong> = "Probability of A, <em>given</em> B has occurred"
                 </p>
                 <div className="bg-slate-800 p-4 rounded-lg font-mono text-sm">
-                    <p className="text-emerald-300">P(A|B) = P(A ∩ B) / P(B)</p>
+                    <p className="text-emerald-300">P(A|B) = P(A &cap; B) / P(B)</p>
                     <p className="text-slate-400 mt-2 text-xs">
                         Conditioning on B "shrinks" the sample space to only outcomes where B is true.
                     </p>
                 </div>
             </div>
 
-            {/* Example */}
             <div className="bg-slate-800 p-6 rounded-xl border border-emerald-500/50 w-full max-w-4xl mb-8">
                 <h3 className="font-bold text-white mb-4 text-center text-xl">
                     Example: Drawing from a Deck
@@ -51,13 +49,14 @@ export default function ConditionalPanel() {
                     {!filterFaceCards && <span>?</span>}
                 </p>
 
-                {/* Toggle */}
                 <div className="flex items-center justify-center gap-4 mb-6">
                     <span className="text-slate-400">Show all cards</span>
                     <button
+                        type="button"
                         onClick={() => setFilterFaceCards(!filterFaceCards)}
                         className={`relative w-20 h-10 rounded-full transition-colors ${filterFaceCards ? 'bg-cyan-500' : 'bg-slate-600'
                             }`}
+                        aria-pressed={filterFaceCards}
                     >
                         <motion.div
                             className="absolute top-1 left-1 w-8 h-8 bg-white rounded-full shadow-lg"
@@ -68,27 +67,45 @@ export default function ConditionalPanel() {
                     <span className="text-cyan-400 font-bold">Filter: Face Cards only</span>
                 </div>
 
-                {/* Cards Grid */}
-                <div className="grid grid-cols-13 gap-1 mb-6 max-h-[300px] overflow-y-auto">
-                    {visibleCards.map((card, idx) => (
-                        <motion.div
-                            key={idx}
-                            layout
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            className={`aspect-[2/3] bg-white rounded border-2 flex items-center justify-center text-2xl font-bold cursor-pointer transition-all ${card.isKing ? 'border-yellow-400 shadow-lg shadow-yellow-400/50' : 'border-slate-300'
-                                }`}
-                            onClick={() => setSelectedCard(card)}
-                        >
-                            <span className={getCardColor(card.suit)}>
-                                {card.rank}{card.suit}
-                            </span>
-                        </motion.div>
-                    ))}
+                <div className="mb-6 rounded-lg border border-slate-700 bg-slate-950/40 p-4">
+                    <div
+                        className="grid justify-center gap-2 overflow-x-auto pb-1"
+                        style={{ gridTemplateColumns: deckColumns }}
+                    >
+                        {visibleCards.map((card, idx) => {
+                            const isSelected = selectedCard?.rank === card.rank && selectedCard?.suit === card.suit;
+
+                            return (
+                                <motion.button
+                                    key={`${card.rank}-${card.suit}`}
+                                    type="button"
+                                    layout
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 8 }}
+                                    transition={{ delay: idx * 0.01 }}
+                                    className={`aspect-[2/3] min-h-[4.25rem] rounded-md border-2 bg-white px-1 py-1 text-left shadow-sm transition-all ${card.isKing ? 'border-yellow-500 ring-2 ring-yellow-300/40' : 'border-slate-300'
+                                        } ${isSelected ? 'scale-105 ring-2 ring-cyan-400' : 'hover:-translate-y-1 hover:shadow-md'}`}
+                                    onClick={() => setSelectedCard(card)}
+                                    aria-label={`${card.rank} ${card.suit}`}
+                                >
+                                    <span className={`block text-base font-bold leading-none ${getCardColor(card.suit)}`}>
+                                        {card.rank}
+                                    </span>
+                                    <span className={`mt-1 flex h-full items-center justify-center text-2xl font-bold ${getCardColor(card.suit)}`}>
+                                        {card.suit}
+                                    </span>
+                                </motion.button>
+                            );
+                        })}
+                    </div>
+                    <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400">
+                        <span><strong className="text-yellow-400">Gold outline</strong> = event A: King</span>
+                        <span><strong className="text-cyan-400">{filterFaceCards ? 'Current grid' : 'Toggle on'}</strong> = condition B: Face Card</span>
+                        {selectedCard && <span>Selected: <strong>{selectedCard.rank}{selectedCard.suit}</strong></span>}
+                    </div>
                 </div>
 
-                {/* Calculation */}
                 <div className="bg-slate-900 p-6 rounded-lg border border-slate-700">
                     <div className="grid md:grid-cols-3 gap-4 text-center">
                         <div>
@@ -121,9 +138,9 @@ export default function ConditionalPanel() {
                     {filterFaceCards && (
                         <div className="mt-6 p-4 bg-emerald-900/30 rounded-lg border border-emerald-700">
                             <p className="text-emerald-300 text-sm text-center">
-                                ✅ Conditioning on "Face Card" reduced the sample space from 52 → 12 cards.
+                                Conditioning on "Face Card" reduced the sample space from 52 to 12 cards.
                                 <br />
-                                The probability of King increased from 7.7% → 25%!
+                                The probability of King increased from 7.7% to 33.3%.
                             </p>
                         </div>
                     )}
