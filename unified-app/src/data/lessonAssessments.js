@@ -66,6 +66,7 @@ import { RAG_VECTOR_INDEXING_QUIZ } from './ragVectorIndexingAssessment.js';
 import { RECOMMENDER_SYSTEMS_RANKING_QUIZ } from './recommenderSystemsRankingAssessment.js';
 import { REGULARIZATION_QUIZ } from './regularizationAssessment.js';
 import { RELU_QUIZ } from './reluAssessment.js';
+import { REASONING_RLVR_GRPO_QUIZ } from './reasoningRlvrGrpoAssessment.js';
 import { RL_EXPLORATION_QUIZ } from './rlExplorationAssessment.js';
 import { RL_FOUNDATIONS_QUIZ } from './rlFoundationsAssessment.js';
 import { ROPE_QUIZ } from './ropeAssessment.js';
@@ -2752,140 +2753,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'reasoning-rlvr-grpo': {
-    quiz: [
-      {
-        id: 'reasoning-vs-rlvr-grpo',
-        prompt: 'How does Group Relative Policy Optimization (GRPO) reduce GPU memory compared to standard Proximal Policy Optimization (PPO)?',
-        choices: [
-          'By removing the critic network entirely and estimating baselines from the average reward of a group of outputs.',
-          'By running attention weights in 4-bit precision instead of 16-bit.',
-          'By generating all tokens sequentially in a single batch thread.',
-        ],
-        answerIndex: 0,
-        explanation: 'GRPO eliminates the critic network (which is typically as large as the actor) by using the average reward of a group of samples for the same prompt as the baseline.',
-      },
-      {
-        id: 'grpo-advantage-baseline',
-        prompt: 'In the GRPO advantage formula $A_i = \\frac{r_i - \\mu}{\\sigma + \\epsilon}$, what represents the dynamic baseline?',
-        choices: [
-          'The standard deviation of the policy outputs.',
-          'The mean reward of all candidate solutions in the current group.',
-          'The clipping parameter used to prevent policy collapse.',
-        ],
-        answerIndex: 1,
-        explanation: 'The mean reward of the group acts as a dynamic baseline. Outputs that perform better than the group average get a positive advantage, while those below average get a negative advantage.',
-      },
-      {
-        id: 'prm-vs-orm',
-        prompt: 'What is the primary operational advantage of Process Reward Models (PRMs) over Outcome Reward Models (ORMs)?',
-        choices: [
-          'PRMs can be computed deterministically using standard regex patterns.',
-          'PRMs require no training data since they use compiler verification.',
-          'PRMs mitigate alignment bugs by assigning credit to individual reasoning steps, reducing reward hacking.',
-        ],
-        answerIndex: 2,
-        explanation: 'PRMs evaluate intermediate steps of reasoning, making it harder for a model to receive a high reward for a wrong trace that happens to output the correct final answer.',
-      },
-      {
-        id: 'verifiable-rewards',
-        prompt: 'Why are verifiable rewards (like compilers or math parsers) preferred over neural reward models for scaling reasoning?',
-        choices: [
-          'They are deterministic, free from reward hacking (no judge exploitation), and cheap to compute.',
-          'They always generalize to creative writing and open-ended chatbot queries.',
-          'They automatically double the context window of the model during training.',
-        ],
-        answerIndex: 0,
-        explanation: 'Verifiable rewards are rule-based checks that cannot be hacked or exploited by style tricks, unlike neural reward models which are vulnerable to adversarial formatting.',
-      },
-      {
-        id: 'cold-start-role',
-        prompt: 'What is the function of cold-start SFT data in the DeepSeek-R1 training pipeline?',
-        choices: [
-          'To compress the KV cache dimension using low-rank projection matrices.',
-          'To seed the model with basic formatting (like using thinking tags) and prevent early RL divergence.',
-          'To optimize the expert routing weights and balance active compute load.',
-        ],
-        answerIndex: 1,
-        explanation: 'Cold-start SFT data provides a template of structured thinking traces so the model does not diverge or produce unreadable streams during early reinforcement learning.',
-      },
-      {
-        id: 'format-reward-hacking',
-        prompt: 'What occurs if the format reward weight is set too high relative to correctness rewards during RL?',
-        choices: [
-          'The model generalizes better to unseen domains.',
-          'The model outputs only Chinese and English code blocks.',
-          'The model learns to generate empty or repetitive thinking tags to exploit the format scorer without solving the task.',
-        ],
-        answerIndex: 2,
-        explanation: 'When formatting rewards dominate, the model exploits the parser by producing long, useless thinking sequences without actually thinking, a classic case of reward hacking.',
-      },
-      {
-        id: 'all-negative-group-issue',
-        prompt: 'What is the training risk when all generated solutions in a GRPO group fail to solve the task (all-negative group)?',
-        choices: [
-          'Normalization will still assign positive advantages to the "least incorrect" solutions, reinforcing flawed reasoning.',
-          'The standard deviation falls to zero, causing the optimizer to divide by zero and crash the training run.',
-          'The actor policy is automatically reset to the reference SFT model.',
-        ],
-        answerIndex: 0,
-        explanation: 'Since GRPO normalizes advantages relative to the group, the "least bad" incorrect solution will receive a positive advantage and its incorrect steps will be reinforced.',
-      },
-      {
-        id: 'length-penalty-tradeoff',
-        prompt: 'What trade-off is introduced by adding a token length penalty to the RL reward function?',
-        choices: [
-          'It reduces model size but increases GPU communication latency.',
-          'It controls overthinking and generation costs but can truncate the long reasoning paths needed for hard problems.',
-          'It increases accuracy on creative tasks but lowers performance on programming tasks.',
-        ],
-        answerIndex: 1,
-        explanation: 'A length penalty keeps traces concise and lowers serving latency, but if it is too strong, it prevents the model from doing the depth of thinking required to solve complex tasks.',
-      },
-      {
-        id: 'overthinking-emergence',
-        prompt: 'Why does "overthinking" (excessively long or circular traces) emerge in models trained with pure RL without length constraints?',
-        choices: [
-          'The tokenizer is biased toward long subword merges.',
-          'The learning rate is too high, causing gradient updates to step past local minima.',
-          'The model learns that longer reasoning paths correlate with a higher probability of stumbling upon a correct answer.',
-        ],
-        answerIndex: 2,
-        explanation: 'Without penalties for verbosity, the policy exploits test-time compute by writing out extensive backtracking and verification loops, which increases its odds of finding the correct answer.',
-      },
-      {
-        id: 'rejection-sampling-ft',
-        prompt: 'How does rejection sampling fine-tuning (RFT) differ from standard reinforcement learning?',
-        choices: [
-          'RFT is offline: it generates multiple outputs, filters the correct ones, and trains on them using standard cross-entropy.',
-          'RFT uses an online critic network to update policy parameters on every token generation.',
-          'RFT uses dynamic learning rates based on the KL divergence penalty.',
-        ],
-        answerIndex: 0,
-        explanation: 'RFT generates multiple completions off-policy, selects the correct ones, and applies supervised learning. RL updates the policy online based on immediate rewards or advantages.',
-      },
-      {
-        id: 'distillation-tradeoffs',
-        prompt: 'When distilling reasoning traces from a large teacher (like R1) into a small student, what is a key limitation?',
-        choices: [
-          'The student parameter count must be identical to the teacher parameter count.',
-          'The student learns the formatting style and tricks but may lack the raw capacity to generalize to harder, unseen reasoning tasks.',
-          'The SFT loss function must use reinforcement learning advantages instead of token predictions.',
-        ],
-        answerIndex: 1,
-        explanation: 'Distillation is highly effective for transfer of formatting style and basic logic, but smaller models often suffer from a "generalization gap" when confronted with hard math beyond their capacity.',
-      },
-      {
-        id: 'kl-divergence-penalty',
-        prompt: 'What is the purpose of adding a KL divergence penalty between the active RL policy and the reference SFT model?',
-        choices: [
-          'To calculate the accuracy difference between training and test sets.',
-          'To encourage the model to explore new languages and formatting tags.',
-          'To prevent the policy from shifting too far from the base model, avoiding language collapse or trace corruption.',
-        ],
-        answerIndex: 2,
-        explanation: 'The KL penalty acts as a regularization constraint, preventing the active policy from drifting too far from the reference model, which keeps the reasoning trace structured and natural.',
-      },
-    ],
+    quiz: REASONING_RLVR_GRPO_QUIZ,
     labs: [
       {
         id: 'grpo-group-advantage-lab',
