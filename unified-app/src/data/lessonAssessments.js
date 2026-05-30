@@ -79,6 +79,7 @@ import { SELF_ATTENTION_QUIZ } from './selfAttentionAssessment.js';
 import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
+import { TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ } from './testTimeComputeThinkingBudgetsAssessment.js';
 import { TREE_ENSEMBLES_QUIZ } from './treeEnsemblesAssessment.js';
 import { TIME_SERIES_FORECASTING_QUIZ } from './timeSeriesForecastingAssessment.js';
 import { TOKENIZATION_QUIZ } from './tokenizationAssessment.js';
@@ -2805,118 +2806,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'test-time-compute-thinking-budgets': {
-    quiz: [
-      {
-        id: 'ttc-vs-training',
-        prompt: 'What is the key operational difference between training-time and inference-time compute scaling?',
-        choices: [
-          'Training-time scaling permanently improves the model via retraining; inference-time scaling spends more compute per query at generation time.',
-          'Inference-time scaling permanently changes model weights; training-time scaling only affects sampling temperature.',
-          'Training-time and inference-time scaling are identical in cost structure.',
-        ],
-        answerIndex: 0,
-        explanation: 'Training-time scaling changes model parameters and requires retraining from scratch. Inference-time (test-time) scaling spends additional compute at query time through strategies like more samples or longer reasoning traces.',
-      },
-      {
-        id: 'bon-oracle-bound',
-        prompt: 'In Best-of-N sampling, what is the oracle bound and why is it rarely achieved in practice?',
-        choices: [
-          'The oracle bound is the accuracy achievable when the best sample is always identified; it requires a perfect verifier, which is typically unavailable.',
-          'The oracle bound is the accuracy of the smallest sample N=1, used as a baseline.',
-          'The oracle bound equals training accuracy and is always achieved when N exceeds the number of model parameters.',
-        ],
-        answerIndex: 0,
-        explanation: 'The oracle bound is the theoretical maximum accuracy when the true best answer is always selected from N samples. In practice, verifiers (reward models) are imperfect, so the actual gain falls below the oracle bound.',
-      },
-      {
-        id: 'bon-cost-scaling',
-        prompt: 'How does the cost of Best-of-N sampling scale with the number of samples N?',
-        choices: [
-          'Cost scales linearly as O(N × L) where L is the average completion length.',
-          'Cost scales logarithmically because GPU batch parallelism compresses overhead.',
-          'Cost is constant because all N samples share the same forward pass.',
-        ],
-        answerIndex: 0,
-        explanation: 'Each of the N samples requires an independent forward pass generating approximately L tokens, so total cost is O(N × L). Parallelism can reduce wall-clock time but not total compute.',
-      },
-      {
-        id: 'beam-search-prm',
-        prompt: 'Why does tree search (beam search) require a Process Reward Model (PRM) rather than an Outcome Reward Model (ORM)?',
-        choices: [
-          'Beam search needs to score partial reasoning paths at intermediate nodes, which ORMs cannot do since they only evaluate final answers.',
-          'PRMs are cheaper to train than ORMs and reduce memory requirements for the search tree.',
-          'ORMs require beam search to function correctly since they cannot process token-by-token outputs.',
-        ],
-        answerIndex: 0,
-        explanation: 'Beam search prunes branches at intermediate steps. A PRM can score each reasoning step independently, enabling early pruning of bad paths. An ORM only scores complete answers, which makes it useless for mid-search evaluation.',
-      },
-      {
-        id: 'budget-forcing-tradeoff',
-        prompt: 'What happens when a fixed thinking-token budget is set too low for a complex reasoning task?',
-        choices: [
-          'The reasoning chain is truncated before completion, causing a drop in accuracy on hard problems.',
-          'The model automatically extends the context window to fit the reasoning trace.',
-          'Low budgets always improve accuracy by forcing the model to be more concise.',
-        ],
-        answerIndex: 0,
-        explanation: 'A hard budget cap truncates the reasoning trace mid-chain. For complex multi-step problems that require long thinking, this leads to incomplete reasoning and degraded accuracy.',
-      },
-      {
-        id: 'adaptive-budget-benefit',
-        prompt: 'What is the primary benefit of adaptive thinking budgets over fixed caps?',
-        choices: [
-          'Adaptive budgets allocate short thinking traces to easy queries and long ones to hard queries, reducing total serving cost without sacrificing accuracy.',
-          'Adaptive budgets always use the maximum available context window for every query.',
-          'Adaptive budgets eliminate the need for any verifier or reward model.',
-        ],
-        answerIndex: 0,
-        explanation: 'A fixed cap either wastes tokens on simple queries or truncates complex ones. Adaptive budgets use a difficulty signal to right-size thinking compute per query, improving cost-efficiency.',
-      },
-      {
-        id: 'react-tool-use',
-        prompt: 'In the ReAct (Reason + Act) pattern, how does tool use change the compute profile of a reasoning task?',
-        choices: [
-          'The model externalizes sub-tasks to deterministic tools, saving reasoning tokens at the cost of additional tool-call latency.',
-          'ReAct always increases total token count by adding Observation tokens that duplicate model knowledge.',
-          'Tool calls replace the model entirely; the model generates no tokens in ReAct pipelines.',
-        ],
-        answerIndex: 0,
-        explanation: 'ReAct lets the model delegate fact retrieval, calculation, and code execution to external tools. This can save thousands of reasoning tokens, trading internal compute for real-world API latency.',
-      },
-      {
-        id: 'overthinking-plateau',
-        prompt: 'What is the "overthinking plateau" in test-time compute scaling?',
-        choices: [
-          'The point beyond which additional thinking tokens produce no accuracy improvement, while latency and cost continue to rise.',
-          'The token count at which a model begins producing incorrect answers due to context-window overflow.',
-          'The training checkpoint where RL rewards are maximized at the expense of long-context performance.',
-        ],
-        answerIndex: 0,
-        explanation: 'Beyond a problem-specific token threshold, the model has fully explored its reasoning capacity and additional tokens are wasted on repetitive checks. Accuracy plateaus while serving cost grows linearly.',
-      },
-      {
-        id: 'verifier-gap',
-        prompt: 'What is the "verifier-reasoning gap" failure mode in test-time compute systems?',
-        choices: [
-          'The model learns to produce traces that satisfy the verifier format without correctly solving the underlying problem.',
-          'The verifier runs out of context window space before evaluating the final answer.',
-          'A gap in training data where the verifier was not trained on the same distribution as the model.',
-        ],
-        answerIndex: 0,
-        explanation: 'When models are optimized for verifier scores, they can learn to produce convincing-looking traces that exploit verifier blind spots. This is analogous to reward hacking but at inference time.',
-      },
-      {
-        id: 'model-controlled-budget',
-        prompt: 'How does a model learn to self-regulate its thinking budget in a model-controlled policy?',
-        choices: [
-          'Through RL training with length penalties that penalize unnecessary token generation and reward efficient correct answers.',
-          'By reading a pre-specified JSON budget file injected into the system prompt.',
-          'Model-controlled budgets are not possible; all budgets must be set externally by the serving infrastructure.',
-        ],
-        answerIndex: 0,
-        explanation: 'Length penalties in the RL reward signal teach the model that verbose outputs cost reward. The model learns to self-regulate, producing shorter traces when possible and longer traces when needed for correctness.',
-      },
-    ],
+    quiz: TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ,
     labs: [
       {
         id: 'bon-verifier-sweep',
