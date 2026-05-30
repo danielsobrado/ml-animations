@@ -42,6 +42,7 @@ import { LEAKY_RELU_QUIZ } from './leakyReluAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LLM_TRAINING_OBJECTIVES_QUIZ } from './llmTrainingObjectivesAssessment.js';
+import { LONG_CONTEXT_FRONTIER_MODELS_QUIZ } from './longContextFrontierModelsAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
@@ -2835,74 +2836,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'long-context-frontier-models': {
-    quiz: [
-      {
-        id: 'claimed-vs-effective-context',
-        prompt: 'What is the difference between claimed context and effective context?',
-        choices: [
-          'Claimed context is the maximum input length; effective context is what the model can reliably use for a task.',
-          'Claimed context only describes output tokens, while effective context only describes the system prompt.',
-          'They are identical for any model that advertises a million-token window.',
-        ],
-        answerIndex: 0,
-        explanation: 'A model may accept a long prompt but still fail to retrieve, link, or cite buried evidence for a specific task.',
-      },
-      {
-        id: 'pretraining-vs-extrapolation',
-        prompt: 'Why is long-context pretraining different from extrapolating a shorter-context model?',
-        choices: [
-          'Extrapolation removes KV cache cost, while pretraining only changes tokenization.',
-          'Pretraining exposes the model to long sequences; extrapolation stretches position behavior beyond what training directly covered.',
-          'Both approaches guarantee perfect reasoning over all positions.',
-        ],
-        answerIndex: 1,
-        explanation: 'Inference-time extension can help addressing, but training on long sequences is different from asking a model to generalize far outside its learned regime.',
-      },
-      {
-        id: 'lost-in-the-middle',
-        prompt: 'What does lost-in-the-middle describe?',
-        choices: [
-          'The model cannot use information placed at the start of the prompt.',
-          'Retrieval always fails when documents are sorted chronologically.',
-          'Models may miss relevant evidence placed in the middle of a long context.',
-        ],
-        answerIndex: 2,
-        explanation: 'Long-context models often use beginning and ending evidence more reliably than equally relevant evidence buried in the middle.',
-      },
-      {
-        id: 'needle-limitations',
-        prompt: 'Why are simple needle-in-haystack tests limited?',
-        choices: [
-          'They often test literal retrieval of one fact rather than semantic, multi-needle, conflicting, or multi-hop reasoning.',
-          'They only measure GPU memory allocation.',
-          'They cannot be run on contexts longer than 8K tokens.',
-        ],
-        answerIndex: 0,
-        explanation: 'Real long-context work usually requires disambiguation, synthesis, citations, and linking evidence, not just finding one exact phrase.',
-      },
-      {
-        id: 'rag-risk',
-        prompt: 'What is the main risk of using RAG instead of full context?',
-        choices: [
-          'RAG always prevents citations.',
-          'Retrieval may miss required evidence or include stale and irrelevant chunks.',
-          'RAG always costs more than passing every document directly.',
-        ],
-        answerIndex: 1,
-        explanation: 'RAG controls context size and distractors, but answer quality depends on recall and ranking of the retrieved evidence.',
-      },
-      {
-        id: 'kv-cache-growth',
-        prompt: 'What happens to KV cache requirements as context length grows?',
-        choices: [
-          'They become independent of the number of layers.',
-          'They shrink because long documents share token embeddings.',
-          'They grow with stored tokens, layers, KV heads, head dimensions, and bytes per value.',
-        ],
-        answerIndex: 2,
-        explanation: 'Long context has serving cost because cached keys and values must be stored and read during decoding.',
-      },
-    ],
+    quiz: LONG_CONTEXT_FRONTIER_MODELS_QUIZ,
     labs: [
       {
         id: 'strategy-selection',
