@@ -51,6 +51,7 @@ import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js'
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
+import { OMNI_MULTIMODAL_ARCHITECTURES_QUIZ } from './omniMultimodalArchitecturesAssessment.js';
 import { OPTIMIZERS_QUIZ } from './optimizersAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
@@ -2859,74 +2860,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'omni-multimodal-architectures': {
-    quiz: [
-      {
-        id: 'vision-encoder-role',
-        prompt: 'What does a vision encoder do in a multimodal LLM?',
-        choices: [
-          'It converts image pixels into feature vectors or tokens the model can use.',
-          'It converts text into speech before reasoning starts.',
-          'It deletes image information before the LLM sees it.',
-        ],
-        answerIndex: 0,
-        explanation: 'The vision encoder turns raw pixels into visual features or patch tokens that can be projected into the model hidden space.',
-      },
-      {
-        id: 'projector-bridge',
-        prompt: 'What is the projector or bridge for?',
-        choices: [
-          'It stores the final answer in an external cache.',
-          'It maps vision or audio features into the hidden space expected by the language model.',
-          'It replaces all attention layers with a classifier.',
-        ],
-        answerIndex: 1,
-        explanation: 'A projector aligns modality encoder outputs with the dimensions and representation space used by the shared model.',
-      },
-      {
-        id: 'early-fusion',
-        prompt: 'What is early fusion?',
-        choices: [
-          'Processing every modality separately until after the answer is generated.',
-          'Removing all image and audio tokens from context.',
-          'Combining modality tokens into a shared model stream early.',
-        ],
-        answerIndex: 2,
-        explanation: 'Early fusion lets text, image, audio, or video tokens interact inside a shared backbone from the beginning or near the beginning.',
-      },
-      {
-        id: 'video-temporal-risk',
-        prompt: 'Why is video harder than a single image?',
-        choices: [
-          'Video adds temporal ordering, event timing, and many more visual tokens.',
-          'Video has no visual content to encode.',
-          'Video removes the need for spatial reasoning.',
-        ],
-        answerIndex: 0,
-        explanation: 'Video requires sampling frames, preserving time, aligning events, and managing far more tokens than a single image.',
-      },
-      {
-        id: 'thinker-talker',
-        prompt: 'What is a Thinker-Talker architecture?',
-        choices: [
-          'A design with no audio output path.',
-          'A design where one component reasons over multimodal inputs and another generates speech or audio tokens.',
-          'A design where the model only classifies images.',
-        ],
-        answerIndex: 1,
-        explanation: 'The Thinker handles multimodal understanding and reasoning, while the Talker generates speech or audio tokens from that state.',
-      },
-      {
-        id: 'temporal-drift',
-        prompt: 'What is temporal drift?',
-        choices: [
-          'Choosing the wrong text tokenizer.',
-          'Running out of output tokens.',
-          'Aligning an event to the wrong time or frame in audio or video.',
-        ],
-        answerIndex: 2,
-        explanation: 'Temporal drift occurs when the model connects a spoken or visual event to the wrong point in time.',
-      },
-    ],
+    quiz: OMNI_MULTIMODAL_ARCHITECTURES_QUIZ,
     labs: [
       {
         id: 'multimodal-token-stream',
