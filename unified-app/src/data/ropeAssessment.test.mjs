@@ -26,6 +26,11 @@ test('rope has a complete curated 100-question assessment', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'relative-shift-check',
+    'trace-frequency-schedule',
+    'debug-implementation-alignment',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('rope assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('rope misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('rope');
+  const trapIds = [
+    'rope-076-false-values',
+    'rope-077-false-mask',
+    'rope-078-false-delete-embeddings',
+    'rope-079-false-same-angle',
+    'rope-080-false-distance-only',
+    'rope-081-false-softmax',
+    'rope-082-false-cache',
+    'rope-083-false-base',
+    'rope-084-false-long-context',
+    'rope-085-false-shapes',
+    'rope-086-false-sign',
+    'rope-087-false-partial',
+    'rope-088-false-padding',
+    'rope-089-false-orthogonal',
+    'rope-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
