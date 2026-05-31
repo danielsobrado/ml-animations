@@ -37,6 +37,15 @@ test('maximum likelihood estimation has a complete curated 100-question assessme
   }
 });
 
+test('maximum likelihood estimation assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('maximum-likelihood-estimation');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('maximum likelihood estimation assessment progresses from recall to interview readiness', () => {
   const { quiz } = getLessonAssessment('maximum-likelihood-estimation');
   const expectedBands = [
