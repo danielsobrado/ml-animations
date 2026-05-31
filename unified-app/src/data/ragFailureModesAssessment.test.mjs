@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('rag failure modes has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('rag-failure-modes');
+test('rag failure modes has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('rag-failure-modes');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ragfail-'), `question ${index + 1} should use the ragfail id prefix`);
+    assert.match(question.id, /^ragfail-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(8, 11)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('rag failure modes assessment avoids duplicate prompts and correct answers', () => {
@@ -72,14 +83,14 @@ test('rag failure modes assessment covers learning points in the right order', (
   const milestones = [
     ['purpose', ['fluent answer can still be unreliable']],
     ['claim-level review', ['individual claim against the retrieved evidence']],
-    ['failure buckets', ['missing, stale, conflicting, and irrelevant evidence']],
+    ['failure buckets', ['missing stale conflicting and irrelevant evidence']],
     ['diagnostic before decoding', ['check whether valid evidence exists']],
     ['mechanism summary', ['test each claim against retrieved evidence']],
     ['stale application', ['last year policy']],
-    ['production standard', ['valid, current, non-conflicting support']],
+    ['production standard', ['valid current non conflicting support']],
     ['tricky false claims', ['smooth answer proves the evidence path is healthy']],
-    ['interview debugging', ['query rewrite, candidate retrieval, reranker order, and grounding decisions']],
-    ['interview readiness', ['claim-level evidence classification, targeted controls, and regression monitoring']],
+    ['interview debugging', ['query rewrite candidate retrieval reranker order and grounding decisions']],
+    ['interview readiness', ['claim level evidence classification targeted controls and regression monitoring']],
   ];
 
   let previousIndex = -1;

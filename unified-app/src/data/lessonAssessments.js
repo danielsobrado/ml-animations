@@ -2845,6 +2845,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Use reranker mode, top-k, and strictness to reduce stale or conflicting behavior for at least two claims.',
         successCriteria: 'You can report the top-k/strictness region with fewer stale/conflicting tags and a higher grounded count.',
       },
+      {
+        id: 'classify-failure-table',
+        title: 'Classify a failure table',
+        prompt: 'For each generated claim, fill a table with the retrieved evidence, freshness, conflict status, source eligibility, failure tag, and next control to tune.',
+        successCriteria: 'You can distinguish missing, stale, conflicting, irrelevant, unauthorized, and unsupported evidence without changing decoding first.',
+      },
+      {
+        id: 'build-regression-case',
+        title: 'Build a regression case',
+        prompt: 'Take one bad grounded answer, preserve the query and retrieved candidates, tag the failure, patch the matching retrieval or grounding control, then define the expected future diagnosis.',
+        successCriteria: 'You can connect the incident to a reproducible evidence-path check that prevents the same failure from returning.',
+      },
     ],
   },
   'multimodal-llm': {

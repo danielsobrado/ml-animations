@@ -1,8 +1,8 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
-  const rotation = stableHash(`rag-failure-modes:${id}`) % 3;
-  const answerIndex = (desiredFinalIndex + rotation) % 3;
+  const questionNumber = Number(id.match(/^ragfail-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`rag-failure-modes:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
   const choices = [...distractors];
   choices.splice(answerIndex, 0, correct);
   return { id, level, choices, answerIndex, prompt, explanation };
@@ -120,5 +120,5 @@ const RAG_FAILURE_MODES_SPECS = [
 ];
 
 export const RAG_FAILURE_MODES_QUIZ = RAG_FAILURE_MODES_SPECS.map(
-  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation)
+  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation),
 );
