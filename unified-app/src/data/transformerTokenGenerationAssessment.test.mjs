@@ -37,6 +37,15 @@ test('transformer token generation has a complete curated 100-question assessmen
   }
 });
 
+test('transformer token generation assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('transformer-token-generation');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('transformer token generation assessment progresses from loop basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('transformer-token-generation');
   const expectedBands = [
