@@ -2719,6 +2719,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Pick one scenario with limited GPU memory, one with demonstrations, and one with preference pairs, then choose LoRA, SFT, or DPO/RLHF.',
         successCriteria: 'Your choice matches the available data signal and the memory or behavior constraint.',
       },
+      {
+        id: 'inspect-trainable-scope',
+        title: 'Inspect trainable scope',
+        prompt: 'Compare full fine-tuning, LoRA, and QLoRA by marking which base weights, adapters, optimizer states, precision choices, and gradients are active.',
+        successCriteria: 'You can explain how trainable parameter scope, adapter rank, quantization, and optimizer state change memory and drift risk.',
+      },
+      {
+        id: 'debug-tuning-failure',
+        title: 'Debug tuning failure',
+        prompt: 'Given failures like prompt copying, overfitting, capability regression, stale private facts, over-refusal, or poisoned examples, choose whether the issue is data format, loss masking, method mismatch, retrieval boundary, or evaluation coverage.',
+        successCriteria: 'You can connect each failure to the tuning signal and name the validation or data-governance check that would catch it.',
+      },
     ],
   },
   rag: {
