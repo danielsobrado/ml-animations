@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('sampling strategies has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('sampling-strategies');
+  const { quiz, labs } = getLessonAssessment('sampling-strategies');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('samp-'), `question ${index + 1} should use the samp id prefix`);
+    assert.match(question.id, /^samp-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use a strict samp id`);
+    assert.equal(Number(question.id.slice(5, 8)), index + 1, `question ${index + 1} id should be sequential`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -71,15 +75,15 @@ test('sampling strategies assessment covers learning points in the right order',
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['choosing one useful continuation from a probability distribution']],
-    ['greedy', ['choose the highest-probability next token']],
-    ['beam', ['several high-scoring partial sequences']],
-    ['temperature', ['sharp or flat the next-token probability distribution']],
-    ['top-p misconception', ['top-p, or nucleus sampling']],
-    ['mechanism pipeline', ['rescale logits, filter candidates, renormalize']],
+    ['greedy', ['choose the highest probability next token']],
+    ['beam', ['several high scoring partial sequences']],
+    ['temperature', ['sharp or flat the next token probability distribution']],
+    ['top-p misconception', ['top p or nucleus sampling']],
+    ['mechanism pipeline', ['rescale logits filter candidates renormalize']],
     ['task settings', ['factual qa product']],
     ['production default', ['measured task tradeoffs']],
-    ['tricky false claims', ['sampling-strategy claim is false']],
-    ['interview readiness', ['production-ready sampling-strategy takeaway']],
+    ['tricky false claims', ['sampling strategy claim is false']],
+    ['interview readiness', ['production ready sampling strategy takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,13 @@ test('sampling strategies assessment does not leak exact answers within a visibl
 
 test('sampling strategies assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('sampling-strategies');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `global answer positions are imbalanced: ${globalCounts.join(', ')}`,
+  );
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);

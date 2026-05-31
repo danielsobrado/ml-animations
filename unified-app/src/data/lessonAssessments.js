@@ -2696,6 +2696,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Pick settings for factual QA, brainstorming, and translation, then explain which one should be more deterministic or diverse.',
         successCriteria: 'You can justify each setting using candidate count, probability mass, and sequence-score tradeoffs.',
       },
+      {
+        id: 'inspect-candidate-set',
+        title: 'Inspect candidate sets',
+        prompt: 'Move temperature, top-k, top-p, and beam width, then record which tokens or paths remain eligible and why the candidate count changed.',
+        successCriteria: 'You can distinguish logit scaling, rank filtering, cumulative-mass filtering, beam pruning, and renormalization.',
+      },
+      {
+        id: 'compare-production-defaults',
+        title: 'Compare production defaults',
+        prompt: 'Design separate decoding defaults for factual QA, brainstorming, translation, JSON output, and safety refusals, then name the quality, cost, and consistency checks for each.',
+        successCriteria: 'You can match decoding controls to task risk, desired diversity, reproducibility, safety, and measured output quality.',
+      },
     ],
   },
   'fine-tuning': {
