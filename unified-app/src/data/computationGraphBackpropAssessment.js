@@ -1,6 +1,8 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const answerIndex = (number - 1) % 3;
+  const questionNumber = Number(id.match(/^cgb-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`computation-graph-backprop:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
   const choices = [...distractors];
   choices.splice(answerIndex, 0, correct);
 
@@ -12,6 +14,14 @@ function q(id, level, prompt, correct, distractors, explanation) {
     prompt,
     explanation,
   };
+}
+
+function stableHash(value) {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 31 + value.charCodeAt(index)) >>> 0;
+  }
+  return hash;
 }
 
 const COMPUTATION_GRAPH_BACKPROP_SPECS = [
@@ -43,7 +53,7 @@ const COMPUTATION_GRAPH_BACKPROP_SPECS = [
   ['cgb-025-multiply-input', 'Mechanism', 'For wx = w*x, what is d(wx)/dx?', 'w', ['x', 'w+x'], 'The input gradient through multiplication is scaled by the weight.'],
   ['cgb-026-relu-positive', 'Mechanism', 'When z is positive, what is ReLU local derivative?', 'slope one', ['zero slope', 'z squared'], 'Positive pre-activations are on the active branch.'],
   ['cgb-027-relu-negative', 'Mechanism', 'When z is negative, what is ReLU local derivative?', '0', ['1', 'the target value'], 'The blocked branch contributes no gradient through ReLU.'],
-  ['cgb-028-mse-derivative', 'Mechanism', 'For L = 0.5(a-y)^2, what is dL/da?', 'a - y', ['a + y', '0.5y'], 'The half cancels the square derivative.'],
+  ['cgb-028-mse-derivative', 'Mechanism', 'For L = 0.5(a-y)^2, what is dL/da?', 'a minus y', ['a plus y', '0.5 times y'], 'The half cancels the square derivative.'],
   ['cgb-029-chain-to-z', 'Mechanism', 'How do you compute dL/dz through ReLU?', 'Multiply dL/da by da/dz', ['Add dL/da to the learning rate', 'Use only the target label'], 'This is the direct chain-rule step through the activation.'],
   ['cgb-030-chain-to-w', 'Mechanism', 'How do you compute dL/dw for z = w*x + b?', 'Multiply dL/dz by x', ['Divide dL/dz by the target', 'Use the loss value only'], 'The local derivative dz/dw equals x.'],
   ['cgb-031-chain-to-b', 'Mechanism', 'How do you compute dL/db for z = w*x + b?', 'Pass dL/dz through because dz/db is one', ['Multiply by the old bias', 'Set it equal to the prediction'], 'The bias shifts z directly, so its local derivative is one.'],
@@ -69,14 +79,14 @@ const COMPUTATION_GRAPH_BACKPROP_SPECS = [
 
   ['cgb-051-compute-forward', 'Application', 'If x=2, w=3, and b=-1, what is z for z=w*x+b?', '5', ['6', '-1'], 'Compute 3*2-1 to get 5 before the ReLU operation sees z.'],
   ['cgb-052-compute-relu-positive', 'Application', 'If z=5, what are a=ReLU(z) and da/dz?', 'a=5 and da/dz=1', ['a=0 and da/dz=0', 'a=5 and da/dz=0'], 'Positive z passes through ReLU with slope one.'],
-  ['cgb-053-compute-relu-negative', 'Application', 'If z=-2, what are a=ReLU(z) and da/dz?', 'a=0 and da/dz=0', ['a=-2 and da/dz=1', 'a=2 and da/dz=-1'], 'Negative z is clipped and blocks the local gradient.'],
-  ['cgb-054-compute-mse', 'Application', 'If a=1.5 and y=2, what is dL/da for L=0.5(a-y)^2?', '-0.5', ['0.5', '2'], 'The derivative is a-y, so 1.5-2=-0.5.'],
-  ['cgb-055-compute-z-grad', 'Application', 'If dL/da=-0.5 and da/dz=1, what is dL/dz?', 'negative 0.5', ['zero', 'positive 1.5'], 'Multiply the upstream gradient by the ReLU local derivative.'],
-  ['cgb-056-compute-w-grad', 'Application', 'If dL/dz=-0.5 and x=2, what is dL/dw?', '-1', ['1', '-0.25'], 'The local derivative dz/dw is x, so -0.5*2=-1.'],
+  ['cgb-053-compute-relu-negative', 'Application', 'If z=-2, what are a=ReLU(z) and da/dz?', 'a is zero and the local derivative is zero', ['a is negative two and the local derivative is one', 'a is positive two and the local derivative is negative one'], 'Negative z is clipped and blocks the local gradient.'],
+  ['cgb-054-compute-mse', 'Application', 'If a=1.5 and y=2, what is dL/da for L=0.5(a-y)^2?', 'negative 0.5', ['positive 0.5', '2'], 'The derivative is a-y, so 1.5-2=-0.5.'],
+  ['cgb-055-compute-z-grad', 'Application', 'If dL/da=-0.5 and da/dz=1, what is dL/dz?', 'dL/dz is negative 0.5', ['dL/dz is zero', 'dL/dz is positive 1.5'], 'Multiply the upstream gradient by the ReLU local derivative.'],
+  ['cgb-056-compute-w-grad', 'Application', 'If dL/dz=-0.5 and x=2, what is dL/dw?', 'negative one', ['positive one', 'negative 0.25'], 'The local derivative dz/dw is x, so -0.5*2=-1.'],
   ['cgb-057-compute-b-grad', 'Application', 'If dL/dz=-0.5, what is dL/db?', 'same value, -0.5', ['positive 0.5', 'two'], 'Bias shifts z directly, so dL/db equals dL/dz.'],
   ['cgb-058-compute-update', 'Application', 'If w=3, learning rate=0.1, and dL/dw=-1, what is the next w?', '3.1', ['2.9', '0.3'], 'Gradient descent computes w - lr*grad, so 3 - 0.1*(-1)=3.1.'],
   ['cgb-059-blocked-weight', 'Application', 'If z is negative in the ReLU example, what happens to dL/dw?', 'It becomes zero through the ReLU gate', ['It doubles through the gate', 'It equals the target label'], 'The zero ReLU derivative kills the chain to w for that example.'],
-  ['cgb-060-two-branches', 'Application', 'A value h feeds two paths with gradients 2 and -0.5. What is total dL/dh?', 'dL/dh = 1.5', ['dL/dh = 2.5', 'dL/dh = -1.5'], 'Path contributions add: 2 + (-0.5) = 1.5.'],
+  ['cgb-060-two-branches', 'Application', 'A value h feeds two paths with gradients 2 and -0.5. What is total dL/dh?', 'dL/dh is positive 1.5', ['dL/dh is positive 2.5', 'dL/dh is negative 1.5'], 'Path contributions add: 2 + (-0.5) = 1.5.'],
   ['cgb-061-debug-no-update', 'Application', 'A weight does not change after optimizer step. What should you inspect?', 'Whether its gradient is zero, missing, or not connected to the loss', ['Only the route title', 'Only the label spelling'], 'No update can come from zero gradients or a broken graph path.'],
   ['cgb-062-debug-wrong-sign', 'Application', 'Loss rises after a tiny step in a hand-coded model. What should you check first?', 'Gradient sign and update direction', ['Whether more labels exist', 'Whether the UI tab is active'], 'A sign error can move parameters uphill.'],
   ['cgb-063-debug-relu-silent', 'Application', 'All ReLU pre-activations are negative. What gradient symptom should you expect?', 'Blocked gradients through those ReLU gates', ['Larger gradients through every gate', 'Automatic probability calibration'], 'Negative ReLU branches have zero local derivative.'],

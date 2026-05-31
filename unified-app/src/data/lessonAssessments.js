@@ -2108,6 +2108,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: COMPUTATION_GRAPH_BACKPROP_QUIZ,
     labs: [
       {
+        id: 'trace-forward-backward-chain',
+        title: 'Trace forward and backward',
+        prompt: 'Use the forward and backward tabs for one setting, then record wx, z, a, loss, dL/da, da/dz, dL/dw, and dL/db.',
+        successCriteria: 'You can connect each backward value to the forward value and local derivative that produced it.',
+      },
+      {
+        id: 'debug-relu-blocked-gradient',
+        title: 'Debug a blocked ReLU',
+        prompt: 'Move x, w, or b until z is negative, then explain why dL/dw and dL/db stop changing on that example.',
+        successCriteria: 'You can identify the ReLU local derivative as the factor that blocks the parameter-gradient path.',
+      },
+      {
         id: 'predict-update',
         title: 'Predict the update',
         prompt: 'Before switching to the update tab, predict whether the next loss will fall.',
