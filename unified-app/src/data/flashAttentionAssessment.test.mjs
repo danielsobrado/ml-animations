@@ -26,6 +26,11 @@ test('flash attention has a complete curated 100-question assessment', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'compare-full-vs-tile-memory',
+    'trace-online-softmax-state',
+    'tune-tile-and-dtype',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('flash attention assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('flash attention misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('flash-attention');
+  const trapIds = [
+    'flash-076-false-approx',
+    'flash-077-false-sparse',
+    'flash-078-false-softmax',
+    'flash-079-false-memory',
+    'flash-080-false-flops',
+    'flash-081-false-mask',
+    'flash-082-false-cache',
+    'flash-083-false-context',
+    'flash-084-false-low-rank',
+    'flash-085-false-window',
+    'flash-086-false-numerics',
+    'flash-087-false-backward',
+    'flash-088-false-tile',
+    'flash-089-false-output',
+    'flash-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
