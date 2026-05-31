@@ -2136,6 +2136,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Tokenize the same phrase with two modes and identify the longest changed fragment.',
         successCriteria: 'You can explain why one split creates more or fewer tokens.',
       },
+      {
+        id: 'trace-bpe-merge',
+        title: 'Trace a BPE merge',
+        prompt: 'Use the BPE tab on a repeated phrase and record the first two merges, their pair counts, and the vocabulary entries they create.',
+        successCriteria: 'You can connect each merge to frequent adjacent pieces rather than random inference-time choices.',
+      },
+      {
+        id: 'debug-production-tokenizer',
+        title: 'Debug tokenizer drift',
+        prompt: 'Enter a phrase with casing, punctuation, or a rare word, then list the token strings, ids or counts, and one production risk if the tokenizer changes.',
+        successCriteria: 'You can explain why exact tokenizer version, vocabulary, normalization, and special-token config must stay pinned.',
+      },
     ],
   },
   embeddings: {
