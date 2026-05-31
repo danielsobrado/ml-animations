@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^tvt-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`train-validation-test-split:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const TRAIN_VALIDATION_TEST_SPLIT_QUIZ = Object.freeze([
@@ -24,7 +35,7 @@ export const TRAIN_VALIDATION_TEST_SPLIT_QUIZ = Object.freeze([
   q('tvt-012-time-split', 'Foundation', 'When is a time-based split needed?', 'When future performance should be evaluated on later data', ['When labels are balanced', 'When all rows are exchangeable'], 'Forecasting and temporal data should respect chronology.'),
   q('tvt-013-preprocess-fit', 'Foundation', 'When should learned preprocessing be fitted?', 'After splitting, on the training data only', ['Before splitting on the full dataset', 'After seeing the test score'], 'Full-data preprocessing leaks validation and test statistics.'),
   q('tvt-014-apply-preprocess', 'Foundation', 'After fitting preprocessing on train, what happens to validation and test?', 'Apply the same learned transform without refitting', ['Fit a new transform on each split', 'Drop both splits from evaluation'], 'Evaluation should use the training-fitted pipeline.'),
-  q('tvt-015-hyperparams', 'Foundation', 'Which split should guide hyperparameter choices?', 'A held-out validation split', ['The test split', 'Production-only rows with unknown labels'], 'Hyperparameters are development choices.'),
+  q('tvt-015-hyperparams', 'Foundation', 'Which split should guide hyperparameter choices?', 'The validation split reserved for development choices', ['The test split', 'Production-only rows with unknown labels'], 'Hyperparameters are development choices.'),
   q('tvt-016-threshold', 'Foundation', 'Which split should guide decision threshold selection?', 'The validation split', ['The test split', 'The final leaderboard after deployment'], 'Threshold tuning is model selection.'),
   q('tvt-017-test-peeking', 'Foundation', 'What is test-set peeking?', 'Looking at test performance and changing the model based on it', ['Training without validation', 'Using fewer rows for training'], 'Peeking turns test into another validation set.'),
   q('tvt-018-leakage', 'Foundation', 'What is data leakage in this lesson?', 'Evaluation information crossing into training or model selection', ['Any low validation score', 'Using a random seed'], 'Leakage makes reported performance too optimistic.'),
@@ -38,8 +49,8 @@ export const TRAIN_VALIDATION_TEST_SPLIT_QUIZ = Object.freeze([
   q('tvt-025-scaler-leakage', 'Mechanism', 'How can a scaler leak information?', 'Its mean or variance is fitted using validation or test rows', ['It changes feature units using train only', 'It is applied to validation after fitting on train'], 'Evaluation statistics should not shape preprocessing.'),
   q('tvt-026-imputation-leakage', 'Mechanism', 'How can imputation leak information?', 'Missing-value fill values are learned from all rows before splitting', ['Missing values are filled from training only', 'Imputation is recorded in the pipeline'], 'Even simple medians can leak distribution information.'),
   q('tvt-027-feature-selection', 'Mechanism', 'How can feature selection leak?', 'Selecting features using validation or test labels before final evaluation', ['Selecting features inside the training pipeline', 'Dropping a constant column using train only'], 'Label-informed feature choice is model selection.'),
-  q('tvt-028-early-stopping', 'Mechanism', 'Which split should early stopping monitor?', 'The development holdout split', ['The test split', 'Rows used to fit each batch only'], 'Early stopping is a tuning decision.'),
-  q('tvt-029-model-family', 'Mechanism', 'Which split should compare model families?', 'A held-out validation split', ['The test split during every experiment', 'No held-out data'], 'Choosing between models is development feedback.'),
+  q('tvt-028-early-stopping', 'Mechanism', 'Which split should early stopping monitor?', 'A validation holdout reserved for stopping decisions', ['The test split', 'Rows used to fit each batch only'], 'Early stopping is a tuning decision.'),
+  q('tvt-029-model-family', 'Mechanism', 'Which split should compare model families?', 'Validation data held out from parameter fitting', ['The test split during every experiment', 'No held-out data'], 'Choosing between models is development feedback.'),
   q('tvt-030-final-refit', 'Mechanism', 'After choosing a model, when might train and validation be combined?', 'After selection, before one final test evaluation if the protocol allows it', ['Before tuning validation choices', 'After repeatedly inspecting test'], 'Some workflows refit on train+validation once choices are frozen.'),
   q('tvt-031-nested-cv', 'Mechanism', 'What problem does nested cross-validation address?', 'Separating model selection from performance estimation when data is limited', ['Removing the need for any test boundary', 'Making validation labels unavailable'], 'Outer folds estimate performance; inner folds tune.'),
   q('tvt-032-multiple-comparisons', 'Mechanism', 'Why does trying many models on one validation set matter?', 'The best validation score may be partly luck', ['Validation cannot compare models', 'Training data becomes test data'], 'Model selection overfits validation noise too.'),
@@ -55,7 +66,7 @@ export const TRAIN_VALIDATION_TEST_SPLIT_QUIZ = Object.freeze([
   q('tvt-042-random-seed', 'Mechanism', 'Why record the split random seed?', 'To reproduce which rows were assigned to each split', ['To guarantee generalization', 'To hide leakage'], 'Reproducibility matters for debugging and audit.'),
   q('tvt-043-split-manifest', 'Mechanism', 'What is a split manifest?', 'A stored mapping of row or entity ids to train, validation, and test', ['A list of model weights only', 'A visualization of loss curves'], 'Manifests prevent accidental reshuffling across experiments.'),
   q('tvt-044-leaderboard', 'Mechanism', 'Why can public leaderboards overfit?', 'Repeated submissions adapt to the leaderboard feedback', ['Leaderboards never use test labels', 'More submissions always improve honesty'], 'Leaderboard feedback is a form of test signal.'),
-  q('tvt-045-abstain-policy', 'Mechanism', 'Which split should tune an abstain or fallback policy?', 'The development holdout split', ['The test split every time the fallback changes', 'The final report only'], 'Fallback thresholds are development decisions.'),
+  q('tvt-045-abstain-policy', 'Mechanism', 'Which split should tune an abstain or fallback policy?', 'The validation or calibration-style development split', ['The test split every time the fallback changes', 'The final report only'], 'Fallback thresholds are development decisions.'),
   q('tvt-046-data-cleaning', 'Mechanism', 'When can data cleaning become leakage?', 'When cleaning decisions use evaluation labels or future information', ['When duplicate ids are removed before splitting by entity', 'When train-only statistics are stored'], 'Cleaning rules can encode information too.'),
   q('tvt-047-augmentation', 'Mechanism', 'How can augmentation leak across splits?', 'Augmented versions of one original example appear in different splits', ['Augmentation happens only inside training', 'Validation images are never evaluated'], 'Split originals first, then augment training examples.'),
   q('tvt-048-near-duplicates', 'Mechanism', 'Why detect near-duplicates before final evaluation?', 'Similar copies across splits can inflate scores', ['Duplicates make models unable to train', 'Test rows must be unique labels only'], 'Evaluation should not reward memorizing copies.'),

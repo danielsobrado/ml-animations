@@ -1386,10 +1386,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: TRAIN_VALIDATION_TEST_SPLIT_QUIZ,
     labs: [
       {
-        id: 'spot-leakage',
+        id: 'map-split-roles',
+        title: 'Map split roles',
+        prompt: 'Use the split controls to name what training, validation, and test data are allowed to influence in a model workflow.',
+        successCriteria: 'You can state that training fits parameters, validation guides development choices, and test gives the final untouched estimate.',
+      },
+      {
+        id: 'spot-leakage-path',
         title: 'Spot a leakage path',
         prompt: 'Move the split controls and explain one way preprocessing before splitting could leak information.',
         successCriteria: 'Your example names what statistic or label information crosses the split boundary.',
+      },
+      {
+        id: 'choose-safe-split-unit',
+        title: 'Choose the split unit',
+        prompt: 'Compare random, grouped, and time-aware split choices for repeated users, patients, sessions, or forecasting rows.',
+        successCriteria: 'You can name the entity or chronology that must stay separated to keep evaluation honest.',
       },
     ],
   },

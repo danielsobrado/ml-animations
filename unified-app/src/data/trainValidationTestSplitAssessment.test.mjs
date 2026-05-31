@@ -11,10 +11,12 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const LEVELS = new Set(Object.keys(LEVEL_ORDER));
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -23,20 +25,34 @@ function correctAnswer(question) {
 }
 
 test('train validation test split has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('train-validation-test-split');
+  const { quiz, labs } = getLessonAssessment('train-validation-test-split');
   const ids = new Set(quiz.map((question) => question.id));
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
-  for (const question of quiz) {
-    assert.ok(question.prompt && /\S/.test(question.prompt), `${question.id} should have a prompt`);
+  for (const [index, question] of quiz.entries()) {
+    assert.match(question.id, /^tvt-\d{3}-[a-z0-9-]+$/, `${question.id} should use the curated id format`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `${question.id} should stay in numeric order`);
+    assert.ok(LEVELS.has(question.level), `${question.id} should use a known level`);
+    assert.ok(question.prompt && question.prompt.length > 20, `${question.id} should have a substantial prompt`);
     assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat a choice`);
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
-    assert.ok(question.explanation && /\S/.test(question.explanation), `${question.id} should explain the answer`);
+    assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
   }
+});
+
+test('train validation test split assessment avoids duplicate prompts and exact correct answers', () => {
+  const { quiz } = getLessonAssessment('train-validation-test-split');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length, 'prompts should be unique');
+  assert.equal(new Set(answers).size, answers.length, 'exact correct answers should be unique');
 });
 
 test('train validation test split assessment progresses from recall to interview readiness', () => {
@@ -65,18 +81,33 @@ test('train validation test split assessment progresses from recall to interview
 
 test('train validation test split assessment covers learning points in the right order', () => {
   const { quiz } = getLessonAssessment('train-validation-test-split');
-  const sections = [
-    quiz.slice(0, 20).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(20, 50).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(50, 75).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(75).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
+  const milestones = [
+    [/main purpose of splitting data/, 0, 8],
+    [/what is the training set for/, 0, 8],
+    [/what is the validation set for/, 0, 10],
+    [/what is the test set for/, 0, 10],
+    [/stratified split/, 5, 18],
+    [/grouped split/, 8, 20],
+    [/time based split/, 8, 20],
+    [/learned preprocessing/, 10, 22],
+    [/duplicate users break a random row split/, 20, 35],
+    [/target leakage/, 20, 38],
+    [/nested cross validation/, 25, 42],
+    [/before opening the test set/, 45, 55],
+    [/standardscaler before train test split/, 50, 60],
+    [/test score is low/, 55, 65],
+    [/trap/, 75, 90],
+    [/summarize train validation test splitting/, 90, 100],
   ];
 
-  assert.match(sections[0], /training|validation|test|stratified|grouped|time|preprocessing/);
-  assert.match(sections[1], /leakage|duplicate|future|scaler|feature selection|random seed|freeze/);
-  assert.match(sections[1], /unit|distribution shift|leaderboard|augmentation|release protocol/);
-  assert.match(sections[2], /scenario|threshold|users|time|rare|calibration|monitoring/);
-  assert.match(sections[3], /trap|interview|misconception|test|leakage|protocol/);
+  for (const [pattern, minIndex, maxIndex] of milestones) {
+    const matchIndex = quiz.findIndex((question) => pattern.test(normalized(`${question.prompt} ${question.explanation}`)));
+    assert.notEqual(matchIndex, -1, `missing learning point ${pattern}`);
+    assert.ok(
+      matchIndex >= minIndex && matchIndex < maxIndex,
+      `${pattern} appears at question ${matchIndex + 1}, outside expected range ${minIndex + 1}-${maxIndex}`,
+    );
+  }
 });
 
 test('train validation test split assessment avoids unsafe misconception keying', () => {
@@ -87,12 +118,15 @@ test('train validation test split assessment avoids unsafe misconception keying'
     /validation and test are the same thing/,
     /preprocessing before split is always harmless/,
     /passed test set as permanent proof/,
+    /training on future/,
+    /repeated submissions adapt/,
+    /reporting the best test score/,
   ];
 
   for (const [index, question] of quiz.entries()) {
     const prompt = normalized(question.prompt);
     const answer = normalized(correctAnswer(question));
-    const explicitTrapPrompt = /trap|misconception|what is wrong|risky|interview|respond|define/.test(prompt);
+    const explicitTrapPrompt = /trap|misconception|what is wrong|risky|interview|respond|define|why can|why is/.test(prompt);
     const falseClaimKeyed = falseClaimPatterns.some((pattern) => pattern.test(answer));
 
     assert.ok(
@@ -116,7 +150,7 @@ test('train validation test split assessment does not leak exact answers within 
       const prompt = normalized(question.prompt);
 
       for (const [answerIndex, answer] of answers.entries()) {
-        if (questionIndex === answerIndex || answer.length < 8) continue;
+        if (questionIndex === answerIndex) continue;
 
         assert.ok(
           !prompt.includes(answer),
@@ -135,14 +169,13 @@ test('train validation test split assessment distributes correct-answer position
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
     const page = quiz.slice(pageStart, pageStart + pageSize);
-    const maxSameSlot = Math.max(
-      ...[0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length),
-    );
+    const counts = [0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length);
+    const maxSameSlot = Math.max(...counts);
+    const minSameSlot = Math.min(...counts);
 
     assert.ok(
-      maxSameSlot <= Math.ceil(page.length * 0.6),
-      `page starting at question ${pageStart + 1} should not overuse one correct option slot`,
+      maxSameSlot - minSameSlot <= 1,
+      `page starting at question ${pageStart + 1} should balance correct option slots, got ${counts.join('/')}`,
     );
   }
 });
-
