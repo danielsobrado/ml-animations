@@ -37,6 +37,15 @@ test('attention masks has a complete curated 100-question assessment', () => {
   }
 });
 
+test('attention masks assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('attention-masks');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('attention masks assessment progresses from visibility basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('attention-masks');
   const expectedBands = [
