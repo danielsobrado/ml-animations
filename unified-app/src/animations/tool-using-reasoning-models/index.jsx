@@ -66,7 +66,7 @@ function BookOpenIcon(props) {
   );
 }
 
-// ─── Shared UI Helpers ──────────────────────────────────────────────────────
+// Shared UI helpers
 
 function Pill({ children, color = 'stone' }) {
   const map = {
@@ -156,7 +156,7 @@ function MetricBar({ label, value, max = 100, format = (v) => `${v}%`, color = '
   );
 }
 
-// ─── TAB 1: Tool Reasoning Map ──────────────────────────────────────────────
+// Tool reasoning map tab
 
 function TabReasoningMap() {
   const [taskType, setTaskType] = useState('mixed-research');
@@ -416,7 +416,7 @@ function TabReasoningMap() {
   );
 }
 
-// ─── TAB 2: Think-Act-Observe Loop ──────────────────────────────────────────
+// Think-act-observe loop tab
 
 function TabThinkActObserve() {
   const [taskKey, setTaskKey] = useState('current-facts');
@@ -656,7 +656,7 @@ function TabThinkActObserve() {
   );
 }
 
-// ─── TAB 3: Search as a Learned Action ─────────────────────────────────────
+// Search as a learned action tab
 
 function TabLearnedSearch() {
   const [querySkill, setQuerySkill] = useState('learned');
@@ -911,7 +911,7 @@ function TabLearnedSearch() {
   );
 }
 
-// ─── TAB 4: Python as Verifier ─────────────────────────────────────────────
+// Python as verifier tab
 
 function TabPythonVerifier() {
   const [task, setTask] = useState('data-analysis');
@@ -1121,7 +1121,7 @@ function TabPythonVerifier() {
   );
 }
 
-// ─── TAB 5: File Analysis & Grounding ──────────────────────────────────────
+// File analysis and grounding tab
 
 function TabFileAnalysis() {
   const [fileType, setFileType] = useState('spreadsheet');
@@ -1346,7 +1346,7 @@ function TabFileAnalysis() {
   );
 }
 
-// ─── TAB 6: Browser & Computer Use ──────────────────────────────────────────
+// Browser and computer use tab
 
 function TabComputerUse() {
   const [environment, setEnvironment] = useState('browser');
@@ -1653,7 +1653,7 @@ function TabComputerUse() {
   );
 }
 
-// ─── TAB 7: Function Calling vs Agent Planning ─────────────────────────────
+// Function calling versus agent planning tab
 
 function TabFunctionVsAgent() {
   const [taskComplexity, setTaskComplexity] = useState('multi-step');
@@ -1810,7 +1810,7 @@ function TabFunctionVsAgent() {
   );
 }
 
-// ─── TAB 8: Tool Result Masking During RL ──────────────────────────────────
+// Tool result masking during RL tab
 
 function TabResultMasking() {
   const [maskToolResults, setMaskToolResults] = useState(true);
@@ -1990,7 +1990,7 @@ function TabResultMasking() {
   );
 }
 
-// ─── TAB 9: Failure Modes ──────────────────────────────────────────────────
+// Failure modes tab
 
 function TabFailureModes() {
   const [selectedFailure, setSelectedFailure] = useState('tool-overuse');
@@ -2235,7 +2235,7 @@ function TabFailureModes() {
   );
 }
 
-// ─── TAB 10: Evaluation Panel ──────────────────────────────────────────────
+// Evaluation panel tab
 
 function TabEvaluation() {
   const [evaluationMode, setEvaluationMode] = useState('tool-aware');
@@ -2370,7 +2370,7 @@ function TabEvaluation() {
   );
 }
 
-// ─── TAB 11: Paper / Product Decoder ────────────────────────────────────────
+// Paper and product decoder tab
 
 const DECODER_ITEMS = [
   {
@@ -2474,7 +2474,7 @@ function TabDecoder() {
   );
 }
 
-// ─── ROOT COMPONENT ─────────────────────────────────────────────────────────
+// Root component
 
 export default function ToolUsingReasoningModels() {
   const [activeTab, setActiveTab] = useState('reasoning-map');
@@ -2518,7 +2518,7 @@ export default function ToolUsingReasoningModels() {
           <div className="flex items-center gap-4 bg-[var(--ds-paper)] p-3 border border-[var(--ds-rule)] rounded">
             <div className="text-center border-r border-[var(--ds-rule)] pr-4">
               <span className="block text-[10px] font-bold text-[var(--ds-faint)] uppercase">Concept Loop</span>
-              <span className="text-lg font-bold text-[var(--ds-accent)] font-mono">Think → Act → Observe</span>
+              <span className="text-lg font-bold text-[var(--ds-accent)] font-mono">Think to Act to Observe</span>
             </div>
             <div className="text-center pl-2">
               <span className="block text-[10px] font-bold text-[var(--ds-faint)] uppercase">Key Metric</span>

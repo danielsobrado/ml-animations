@@ -8,11 +8,13 @@ function normalize(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
+function correctAnswer(item) {
+  return item.choices[item.answerIndex];
+}
+
 test('tool-using reasoning models assessment has 100 production-ready questions', () => {
   assert.equal(TOOL_USING_REASONING_MODELS_QUIZ.length, 100);
   const ids = new Set();
-  const prompts = new Set();
-  const correctAnswers = new Set();
 
   for (const [index, item] of TOOL_USING_REASONING_MODELS_QUIZ.entries()) {
     assert.match(item.id, /^tool-\d{3}$/);
@@ -25,14 +27,15 @@ test('tool-using reasoning models assessment has 100 production-ready questions'
     assert.ok(item.prompt.length > 20, `${item.id} prompt too short`);
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
-
-    const normalizedPrompt = normalize(item.prompt);
-    const normalizedCorrect = normalize(item.choices[item.answerIndex]);
-    assert.equal(prompts.has(normalizedPrompt), false, `${item.id} repeats a prompt`);
-    assert.equal(correctAnswers.has(normalizedCorrect), false, `${item.id} repeats a correct answer`);
-    prompts.add(normalizedPrompt);
-    correctAnswers.add(normalizedCorrect);
   }
+});
+
+test('tool-using reasoning models assessment avoids duplicate prompts and correct answers', () => {
+  const prompts = TOOL_USING_REASONING_MODELS_QUIZ.map((item) => normalize(item.prompt));
+  const correctAnswers = TOOL_USING_REASONING_MODELS_QUIZ.map((item) => normalize(correctAnswer(item)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(correctAnswers).size, correctAnswers.length);
 });
 
 test('tool-using reasoning models assessment progresses through the lesson objectives', () => {
@@ -53,7 +56,7 @@ test('tool-using reasoning models assessment progresses through the lesson objec
     ['search policy', ['multi-turn query', 'specific follow-up queries']],
     ['tool-result masking', ['tool-result masking', 'model-generation loss']],
     ['permission gates', ['side-effecting tools', 'stricter controls']],
-    ['scenario practice', ['today’s stock price', 'time-sensitive']],
+    ['scenario practice', ['today s stock price', 'time-sensitive']],
     ['production takeaway', ['production-ready takeaway', 'least privilege']],
   ];
 
