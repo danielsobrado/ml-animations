@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('transformer has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('transformer');
+  const { quiz, labs } = getLessonAssessment('transformer');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('transformer-'), `question ${index + 1} should use the transformer id prefix`);
+    assert.match(question.id, /^transformer-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered transformer id format`);
+    assert.equal(Number(question.id.slice(12, 15)), index + 1, `question ${index + 1} should have a sequential id`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -70,16 +74,16 @@ test('transformer assessment covers learning points in the right order', () => {
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['stacking attention, feed-forward transforms, residual paths, and normalization']],
+    ['purpose', ['stacking attention feed forward transforms residual paths and normalization']],
     ['not only attention', ['not only attention']],
     ['token mixing', ['move information across token positions']],
-    ['per-token transform', ['feed-forward network']],
-    ['mechanism flow', ['q, k, and v projections']],
-    ['norm variants', ['pre-norm transformer block']],
-    ['application mask bug', ['causal mask and input-target shifting']],
-    ['production tests', ['shape, mask, residual-add']],
+    ['per token transform', ['feed forward network']],
+    ['mechanism flow', ['q k and v projections']],
+    ['norm variants', ['pre norm transformer block']],
+    ['application mask bug', ['causal mask and input target shifting']],
+    ['production tests', ['shape mask residual add']],
     ['tricky false claims', ['transformer claim is false']],
-    ['interview readiness', ['production-ready transformer takeaway']],
+    ['interview readiness', ['production ready transformer takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,8 @@ test('transformer assessment does not leak exact answers within a visible page',
 
 test('transformer assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('transformer');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -147,4 +153,6 @@ test('transformer assessment distributes correct-answer positions across every p
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(Math.max(...globalCounts) - Math.min(...globalCounts) <= 1, `global answer positions should stay balanced: ${globalCounts.join(', ')}`);
 });

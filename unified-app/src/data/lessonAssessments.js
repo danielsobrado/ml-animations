@@ -2538,6 +2538,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Follow one token through attention, feed-forward, residual, and normalization stages.',
         successCriteria: 'You can say what each stage changes and what it preserves.',
       },
+      {
+        id: 'compare-mixing-and-mlp',
+        title: 'Compare mixing and MLP stages',
+        prompt: 'Use the data-flow view to identify which stage mixes information across token positions and which stage transforms each token position independently.',
+        successCriteria: 'You can distinguish attention mixing from the feed-forward per-token transform and explain where residual and normalization stages fit.',
+      },
+      {
+        id: 'debug-mask-and-shape-contracts',
+        title: 'Debug mask and shape contracts',
+        prompt: 'Compare encoder, decoder, and encoder-decoder variants, then list the attention mask, residual width, head count, norm order, and output-head checks needed before loading a checkpoint.',
+        successCriteria: 'You can connect visibility patterns and tensor contracts to correct transformer architecture behavior.',
+      },
     ],
   },
   'transformer-architecture-families': {
