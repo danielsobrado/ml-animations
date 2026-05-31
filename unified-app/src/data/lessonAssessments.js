@@ -20,6 +20,7 @@ import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.j
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { DAPO_REASONING_RL_QUIZ } from './dapoReasoningRlAssessment.js';
 import { DIFFUSION_BASICS_QUIZ } from './diffusionBasicsAssessment.js';
+import { DIFFUSION_LANGUAGE_MODELS_QUIZ } from './diffusionLanguageModelsAssessment.js';
 import { DIFFUSION_SAMPLING_QUIZ } from './diffusionSamplingAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
@@ -2889,74 +2890,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'diffusion-language-models': {
-    quiz: [
-      {
-        id: 'ar-vs-diffusion',
-        prompt: 'What is the main difference between autoregressive and masked diffusion language generation?',
-        choices: [
-          'AR generates left-to-right one token at a time; masked diffusion iteratively refines masked positions.',
-          'AR cannot generate text at all.',
-          'Masked diffusion only works on images and cannot use tokens.',
-        ],
-        answerIndex: 0,
-        explanation: 'Autoregressive models commit to the next token sequentially, while masked diffusion models repeatedly predict and revise many token positions.',
-      },
-      {
-        id: 'forward-process',
-        prompt: 'What does the forward process do in a masked diffusion language model?',
-        choices: [
-          'It generates final text left-to-right.',
-          'It corrupts or masks clean tokens according to a timestep.',
-          'It deletes the vocabulary before training.',
-        ],
-        answerIndex: 1,
-        explanation: 'The forward process turns clean token sequences into corrupted or masked states so the reverse model can learn to reconstruct them.',
-      },
-      {
-        id: 'reverse-process',
-        prompt: 'What does the reverse process learn?',
-        choices: [
-          'To store KV cache only.',
-          'To classify images without text.',
-          'To reconstruct clean tokens from corrupted or masked token states.',
-        ],
-        answerIndex: 2,
-        explanation: 'The reverse model predicts original tokens at masked or corrupted positions, often conditioned on timestep and visible context.',
-      },
-      {
-        id: 'parallel-decoding',
-        prompt: 'Why can diffusion language models support parallel decoding?',
-        choices: [
-          'They can predict multiple masked positions in the same denoising step.',
-          'They always generate exactly one token per pass.',
-          'They never use Transformer-style computation.',
-        ],
-        answerIndex: 0,
-        explanation: 'A diffusion denoising pass can update many token positions at once, so the number of sequential passes can be smaller than the output length.',
-      },
-      {
-        id: 'block-diffusion',
-        prompt: 'What is block diffusion?',
-        choices: [
-          'A method that only generates images.',
-          'A hybrid method that denoises tokens inside blocks while generating sequence blocks over time.',
-          'A standard left-to-right decoder with no changes.',
-        ],
-        answerIndex: 1,
-        explanation: 'Block diffusion advances through sequence chunks while applying diffusion-style parallel refinement within each chunk.',
-      },
-      {
-        id: 'llada2-importance',
-        prompt: 'Why does LLaDA2.0 matter as a frontier anchor?',
-        choices: [
-          'It proves autoregressive models are obsolete in every setting.',
-          'It is only a tokenizer paper.',
-          'It scales diffusion LMs and describes converting AR models with block-level training plus SFT/DPO alignment.',
-        ],
-        answerIndex: 2,
-        explanation: 'LLaDA2.0 is important because it frames diffusion LMs as scalable frontier models that can inherit AR knowledge and still use alignment stages.',
-      },
-    ],
+    quiz: DIFFUSION_LANGUAGE_MODELS_QUIZ,
     labs: [
       {
         id: 'ar-diffusion-timeline',
