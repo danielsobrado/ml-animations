@@ -25,7 +25,11 @@ test('bias variance tradeoff has a complete curated 100-question assessment', ()
   const { quiz, labs } = getLessonAssessment('bias-variance-tradeoff');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'complexity-sweep',
+    'error-source-decomposition',
+    'remedy-selection-drill',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -132,6 +136,36 @@ test('bias variance assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('bias variance assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('bias-variance-tradeoff');
+  const misconceptionPatterns = [
+    /just another name for overfitting/i,
+    /fits training data perfectly/i,
+    /always too simple/i,
+    /always eliminate irreducible noise/i,
+    /always lowers validation error/i,
+    /always lowers total error/i,
+    /always fixes high bias/i,
+    /automatically removes all bias/i,
+    /directly observes every future deployment case/i,
+    /small gap always means the model is good/i,
+    /best under every metric/i,
+    /guarantees every subgroup is balanced/i,
+    /enough for production diagnosis/i,
+    /same remedy fixes every/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
