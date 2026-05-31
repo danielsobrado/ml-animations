@@ -79,6 +79,23 @@ test('determinant volume assessment progresses through lesson learning points', 
 
 test('determinant volume keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('determinant-volume');
+  const trapIds = [
+    'detv-076-false-magnitude-only',
+    'detv-077-wrong-non-square',
+    'detv-078-dangerous-length-only',
+    'detv-079-false-zero-invertible',
+    'detv-080-wrong-sign-collapse',
+    'detv-081-dangerous-near-zero',
+    'detv-082-false-formula-plus',
+    'detv-083-wrong-sign-absolute',
+    'detv-084-false-shear',
+    'detv-085-wrong-composition',
+    'detv-086-false-basis-change',
+    'detv-087-dangerous-global-nonlinear',
+    'detv-088-false-det-size',
+    'detv-089-wrong-collapse-direction',
+    'detv-090-dangerous-title-only',
+  ];
   const misconceptionTerms = [
     /magnitude alone tells orientation/i,
     /Every rectangular matrix has the same ordinary determinant/i,
@@ -97,6 +114,8 @@ test('determinant volume keeps misconception traps after setup', () => {
     /lesson title without checking/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|unsafe/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
