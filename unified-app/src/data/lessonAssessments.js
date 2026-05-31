@@ -6,6 +6,7 @@ import { ATTENTION_MECHANISM_QUIZ } from './attentionMechanismAssessment.js';
 import { BAG_OF_WORDS_QUIZ } from './bagOfWordsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
+import { BLOOM_FILTER_QUIZ } from './bloomFilterAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
 import { CLASSIFIER_FREE_GUIDANCE_QUIZ } from './classifierFreeGuidanceAssessment.js';
@@ -2663,41 +2664,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'bloom-filter': {
-    quiz: [
-      {
-        id: 'false-positive',
-        prompt: 'What kind of mistake can a Bloom filter make?',
-        choices: [
-          'It can say probably present for an item that was never inserted',
-          'It can say definitely absent for an item that was inserted',
-          'It can return the stored item value instead of a membership answer',
-        ],
-        answerIndex: 0,
-        explanation: 'A Bloom filter has false positives because different items can set the same bits, but it should not have false negatives if inserts and queries use the same hashes.',
-      },
-      {
-        id: 'definitely-not',
-        prompt: 'Why does a zero bit prove an item is definitely absent?',
-        choices: [
-          'Every inserted item would have set all of its hash positions to 1',
-          'Zero bits store the original inserted keys',
-          'The filter checks a backing database before answering',
-        ],
-        answerIndex: 0,
-        explanation: 'If any queried hash position is 0, that item could not have been inserted because insertion sets every queried position.',
-      },
-      {
-        id: 'parameter-tradeoff',
-        prompt: 'What usually lowers the false-positive probability for a fixed number of inserted items?',
-        choices: [
-          'More bits with a near-optimal number of hash functions',
-          'Fewer bits and as many hash functions as possible',
-          'Removing hash functions so only one bit is checked',
-        ],
-        answerIndex: 0,
-        explanation: 'The false-positive rate falls when the bit array is less saturated and k is tuned near (m/n) ln 2.',
-      },
-    ],
+    quiz: BLOOM_FILTER_QUIZ,
     labs: [
       {
         id: 'force-collision',
