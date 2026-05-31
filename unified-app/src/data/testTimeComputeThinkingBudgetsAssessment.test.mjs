@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ } from './testTimeComputeThinkingBudgetsAssessment.js';
+import { getLessonAssessment } from './lessonAssessments.js';
 
 const LEVELS = new Set(['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview']);
 
@@ -8,23 +8,36 @@ function normalize(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
-test('test-time compute thinking budgets assessment has 100 production-ready questions', () => {
-  assert.equal(TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.length, 100);
+test('test-time compute thinking budgets assessment has 100 production-ready questions with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('test-time-compute-thinking-budgets');
+
+  assert.equal(labs.length, 4);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'bon-verifier-sweep',
+    'budget-forcing-inflection',
+    'react-token-savings',
+    'adaptive-routing',
+  ]);
+
+  assert.equal(quiz.length, 100);
   const ids = new Set();
   const prompts = new Set();
   const correctAnswers = new Set();
+  const globalCounts = [0, 0, 0];
 
-  for (const [index, item] of TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.entries()) {
+  for (const [index, item] of quiz.entries()) {
     assert.match(item.id, /^ttc-\d{3}$/);
     assert.equal(ids.has(item.id), false, `duplicate id ${item.id}`);
     ids.add(item.id);
     assert.equal(item.id, `ttc-${String(index + 1).padStart(3, '0')}`);
     assert.equal(LEVELS.has(item.level), true, `${item.id} has unexpected level ${item.level}`);
     assert.equal(item.choices.length, 3, `${item.id} should have three choices`);
+    assert.equal(Number.isInteger(item.answerIndex), true, `${item.id} answerIndex should be an integer`);
     assert.ok(item.answerIndex >= 0 && item.answerIndex < 3, `${item.id} answerIndex out of range`);
     assert.ok(item.prompt.length > 20, `${item.id} prompt too short`);
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
+    globalCounts[item.answerIndex] += 1;
 
     const normalizedPrompt = normalize(item.prompt);
     const normalizedCorrect = normalize(item.choices[item.answerIndex]);
@@ -33,9 +46,15 @@ test('test-time compute thinking budgets assessment has 100 production-ready que
     prompts.add(normalizedPrompt);
     correctAnswers.add(normalizedCorrect);
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('test-time compute assessment progresses from scaling basics to production audit', () => {
+  const { quiz } = getLessonAssessment('test-time-compute-thinking-budgets');
   const ranges = [
     ['Foundation', 0, 20],
     ['Mechanism', 20, 50],
@@ -45,7 +64,7 @@ test('test-time compute assessment progresses from scaling basics to production 
   ];
 
   for (const [level, start, end] of ranges) {
-    assert.equal(TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
+    assert.equal(quiz.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
   }
 
   const milestones = [
@@ -59,7 +78,7 @@ test('test-time compute assessment progresses from scaling basics to production 
 
   let previous = -1;
   for (const [name, terms] of milestones) {
-    const index = TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.findIndex((item) => (
+    const index = quiz.findIndex((item) => (
       terms.every((term) => normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`).includes(normalize(term)))
     ));
     assert.notEqual(index, -1, `missing milestone: ${name}`);
@@ -69,6 +88,7 @@ test('test-time compute assessment progresses from scaling basics to production 
 });
 
 test('test-time compute assessment marks unsafe misconceptions as traps after setup', () => {
+  const { quiz } = getLessonAssessment('test-time-compute-thinking-budgets');
   const misconceptionTerms = [
     /More thinking tokens always help/i,
     /Best-of-N is free/i,
@@ -88,7 +108,7 @@ test('test-time compute assessment marks unsafe misconceptions as traps after se
   ];
   const trapPrompt = /false|wrong|unsafe|trap|reject|dangerous/i;
 
-  for (const [index, item] of TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.entries()) {
+  for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
     const containsMisconception = misconceptionTerms.some((pattern) => pattern.test(text));
     if (!containsMisconception) continue;
@@ -99,10 +119,17 @@ test('test-time compute assessment marks unsafe misconceptions as traps after se
 });
 
 test('test-time compute assessment avoids visible-page answer leakage', () => {
+  const { quiz } = getLessonAssessment('test-time-compute-thinking-budgets');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.length; pageStart += pageSize) {
-    const page = TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const correctAnswers = page.map((item) => normalize(item.choices[item.answerIndex]));
+
+    assert.equal(
+      new Set(correctAnswers).size,
+      correctAnswers.length,
+      `page starting at question ${pageStart + 1} should not repeat exact answers`,
+    );
 
     for (const [offset, item] of page.entries()) {
       const surroundingPrompts = page
@@ -115,9 +142,10 @@ test('test-time compute assessment avoids visible-page answer leakage', () => {
 });
 
 test('test-time compute assessment distributes correct answer positions per page', () => {
+  const { quiz } = getLessonAssessment('test-time-compute-thinking-budgets');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.length; pageStart += pageSize) {
-    const page = TEST_TIME_COMPUTE_THINKING_BUDGETS_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const counts = [0, 0, 0];
     for (const item of page) counts[item.answerIndex] += 1;
     assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `imbalanced page at ${pageStart + 1}: ${counts.join(',')}`);
