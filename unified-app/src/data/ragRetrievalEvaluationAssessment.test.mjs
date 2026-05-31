@@ -37,6 +37,15 @@ test('rag retrieval evaluation has a complete curated 100-question assessment', 
   }
 });
 
+test('rag retrieval evaluation assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('rag-retrieval-evaluation');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('rag retrieval evaluation assessment progresses from retrieval basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('rag-retrieval-evaluation');
   const expectedBands = [
