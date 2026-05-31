@@ -16,6 +16,7 @@ import { CONV2D_QUIZ } from './conv2dAssessment.js';
 import { CONV_RELU_QUIZ } from './convReluAssessment.js';
 import { COCONUT_LATENT_REASONING_QUIZ } from './coconutLatentReasoningAssessment.js';
 import { COSINE_SIMILARITY_QUIZ } from './cosineSimilarityAssessment.js';
+import { CROSS_ENTROPY_QUIZ } from './crossEntropyAssessment.js';
 import { CROSS_VALIDATION_QUIZ } from './crossValidationAssessment.js';
 import { CUPED_VARIANCE_REDUCTION_QUIZ } from './cupedVarianceReductionAssessment.js';
 import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxAssessment.js';
@@ -1511,6 +1512,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Match losses to assumptions',
         prompt: 'Compare regression error and true-class probability, then name the likelihood assumption behind each loss.',
         successCriteria: 'You can connect squared error to Gaussian noise and cross-entropy to categorical likelihood.',
+      },
+    ],
+  },
+  'cross-entropy': {
+    quiz: CROSS_ENTROPY_QUIZ,
+    labs: [
+      {
+        id: 'match-true-class-probability',
+        title: 'Move the true-class probability',
+        prompt: 'Adjust the predicted probability for the true class, then explain why the loss shrinks as that probability rises and grows sharply near zero.',
+        successCriteria: 'You can connect the one-hot target to the selected predicted probability and the negative log penalty.',
       },
     ],
   },
