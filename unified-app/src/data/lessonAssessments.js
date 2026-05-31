@@ -2056,6 +2056,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move the input across zero and watch both output and slope change.',
         successCriteria: 'You can name the active region and the blocked region.',
       },
+      {
+        id: 'trace-dot-bias-gate',
+        title: 'Trace dot, bias, gate',
+        prompt: 'Use the practice lab to compute W dot X, add bias, and predict the ReLU output before submitting the final step.',
+        successCriteria: 'You can separate the linear pre-activation from the ReLU gate and explain why negative z becomes zero.',
+      },
+      {
+        id: 'diagnose-dead-gate-risk',
+        title: 'Diagnose dead-gate risk',
+        prompt: 'Use examples with negative z, then explain how bias shifts, initialization scale, or large updates could keep a unit inactive.',
+        successCriteria: 'You can connect a zero local slope to missing incoming-weight gradient without claiming every zero activation is bad.',
+      },
     ],
   },
   'leaky-relu': {
