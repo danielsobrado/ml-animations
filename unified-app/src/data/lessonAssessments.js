@@ -2265,6 +2265,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Create one vanishing case and one exploding case by changing depth and local multiplier, then stabilize one of them.',
         successCriteria: 'You can identify whether the problem comes from depth, local derivative scale, residual paths, or clipping.',
       },
+      {
+        id: 'trace-chain-ledger',
+        title: 'Trace the chain ledger',
+        prompt: 'Set the local multiplier below one, increase depth, and use the layer ledger to explain where the early-layer signal collapses.',
+        successCriteria: 'You can connect repeated local derivatives to exponential shrinkage without jumping straight to remedies.',
+      },
+      {
+        id: 'clip-vs-residual-audit',
+        title: 'Audit clipping and residual fixes',
+        prompt: 'Compare clipping, residual strength, and multiplier scale on the same chain, then explain which fix caps explosions and which gives gradients a bypass route.',
+        successCriteria: 'You can state why clipping is not a cure for vanished gradients and why residual paths still need scale control.',
+      },
     ],
   },
   'layer-normalization': {
