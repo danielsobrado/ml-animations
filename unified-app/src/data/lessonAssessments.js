@@ -10,6 +10,7 @@ import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js
 import { BLOOM_FILTER_QUIZ } from './bloomFilterAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
 import { CAUSAL_GRAPHS_DAGS_QUIZ } from './causalGraphsDagsAssessment.js';
+import { CHANGE_OF_BASIS_QUIZ } from './changeOfBasisAssessment.js';
 import { CLASSIFIER_FREE_GUIDANCE_QUIZ } from './classifierFreeGuidanceAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
 import { COMPUTATION_GRAPH_BACKPROP_QUIZ } from './computationGraphBackpropAssessment.js';
@@ -935,6 +936,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Audit zero singular values',
         prompt: 'Use the Practice Lab check and singular-direction bars to decide what happens when a singular value is zero.',
         successCriteria: 'You can state why zero singular values stay zero instead of becoming reciprocals.',
+      },
+    ],
+  },
+  'change-of-basis': {
+    quiz: CHANGE_OF_BASIS_QUIZ,
+    labs: [
+      {
+        id: 'compare-coordinate-recipes',
+        title: 'Compare coordinate recipes',
+        prompt: 'Switch between standard, tilted, and scaled bases, then record each basis vector pair, coordinate list, and displayed standard vector.',
+        successCriteria: 'You can explain which numbers are basis coordinates and which numbers describe the standard vector.',
+      },
+      {
+        id: 'trace-basis-matrix-map',
+        title: 'Trace the basis matrix map',
+        prompt: 'Pick one preset and compute x = B [x]_B by hand from the basis columns and coordinate entries.',
+        successCriteria: 'Your weighted-sum calculation matches the standard vector displayed by the animation.',
+      },
+      {
+        id: 'audit-operator-coordinates',
+        title: 'Audit operator coordinates',
+        prompt: 'Use A_B = B^-1 A B to explain the order of conversions when a linear map is written in B-coordinates.',
+        successCriteria: 'You can state why the rightmost B acts first, A acts in standard coordinates, and B^-1 returns to B-coordinates.',
       },
     ],
   },
