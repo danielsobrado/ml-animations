@@ -26,6 +26,11 @@ test('llm training objectives has a complete curated 100-question assessment', (
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'match-objective-stage',
+    'inspect-loss-scope',
+    'debug-objective-mismatch',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('llm training objectives assessment avoids unsafe misconception keying', ()
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('llm training objectives misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('llm-training-objectives');
+  const trapIds = [
+    'ltobj-076-false-one-objective',
+    'ltobj-077-false-alignment-facts',
+    'ltobj-078-false-future',
+    'ltobj-079-false-sft',
+    'ltobj-080-false-preference',
+    'ltobj-081-false-padding',
+    'ltobj-082-false-kl',
+    'ltobj-083-false-reward',
+    'ltobj-084-false-eval',
+    'ltobj-085-false-dpo',
+    'ltobj-086-false-instructions',
+    'ltobj-087-false-data-quality',
+    'ltobj-088-false-safety',
+    'ltobj-089-false-contamination',
+    'ltobj-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
