@@ -141,6 +141,23 @@ test('regularization assessment avoids unsafe misconception keying', () => {
 
 test('regularization assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('regularization');
+  const expectedTrapIds = [
+    'reg-076-trap-always-helps',
+    'reg-077-trap-no-validation',
+    'reg-078-trap-largest',
+    'reg-079-trap-l1',
+    'reg-080-trap-l2',
+    'reg-081-trap-scaling',
+    'reg-082-trap-test-tuning',
+    'reg-083-trap-dropout',
+    'reg-084-trap-augmentation',
+    'reg-085-trap-early-stopping',
+    'reg-086-trap-prior',
+    'reg-087-trap-interpretability',
+    'reg-088-trap-gap',
+    'reg-089-trap-one-method',
+    'reg-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /always improves test performance/i,
     /chosen safely without validation/i,
@@ -158,6 +175,8 @@ test('regularization assessment keeps misconception traps after setup', () => {
     /one regularizer is best for every model/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
