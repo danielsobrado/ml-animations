@@ -1493,6 +1493,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Create a high-throughput but high-latency scenario and explain the tradeoff.',
         successCriteria: 'You can explain which bottleneck is addressed by batching, quantization, or paged attention.',
       },
+      {
+        id: 'prefill-decode-profile',
+        title: 'Profile prefill and decode',
+        prompt: 'Compare a long-prompt short-answer workload with a short-prompt long-answer workload using TTFT, TPOT, KV cache, and memory headroom.',
+        successCriteria: 'You can identify whether prefill, decode bandwidth, cache capacity, or queueing is the limiting factor.',
+      },
+      {
+        id: 'compression-release-gate',
+        title: 'Gate a compression release',
+        prompt: 'Choose quantization, pruning, distillation, or speculation for one measured bottleneck and define latency, cost, memory, quality, monitoring, and rollback checks.',
+        successCriteria: 'You can reject an optimization that improves one benchmark while breaking SLOs or task quality.',
+      },
     ],
   },
   'data-engineering-for-ml-track': {

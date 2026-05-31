@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,23 @@ function correctAnswer(question) {
 }
 
 test('efficient inference compression has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('efficient-inference-compression-track');
+  const { quiz, labs } = getLessonAssessment('efficient-inference-compression-track');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('effinf-'), `question ${index + 1} should use the effinf id prefix`);
+    assert.match(question.id, /^effinf-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use a stable ordered effinf id`);
+    assert.equal(Number(question.id.slice(7, 10)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(
+      new Set(question.choices.map((choice) => normalized(choice))).size,
+      question.choices.length,
+      `question ${index + 1} choices should be distinct`,
+    );
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -77,19 +85,19 @@ test('efficient inference compression assessment covers learning points in the r
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const orderedMilestones = [
-    ['purpose', ['throughput, latency, memory, cost, and quality budgets']],
+    ['purpose', ['throughput latency memory cost and quality budgets']],
     ['throughput', ['work the system completes per unit time']],
     ['time-to-first-token', ['first output token']],
     ['KV cache', ['past key and value states']],
     ['quantization', ['fewer bits']],
     ['distillation', ['smaller student']],
     ['speculative decoding', ['draft future tokens cheaply']],
-    ['bottleneck diagnosis', ['compute, memory bandwidth, cache capacity, queueing']],
+    ['bottleneck diagnosis', ['compute memory bandwidth cache capacity queueing']],
     ['decode bandwidth', ['reads cached key and value states']],
-    ['KV cache formula', ['batch size, sequence length, layers, kv heads']],
+    ['KV cache formula', ['batch size sequence length layers kv heads']],
     ['continuous batching', ['admits and removes requests across decode steps']],
     ['speculation tradeoff', ['draft acceptance rate', 'draft cost']],
-    ['application workflow', ['target bottleneck', 'latency, memory, cost, quality']],
+    ['application workflow', ['target bottleneck', 'latency memory cost quality']],
     ['tricky false claims', ['claim is false']],
     ['interview readiness', ['profile prefill and decode']],
   ];
@@ -158,6 +166,13 @@ test('efficient inference compression assessment does not leak exact answers wit
 
 test('efficient inference compression assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('efficient-inference-compression-track');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be globally balanced: ${totals.join(', ')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
