@@ -122,6 +122,23 @@ test('matrix multiplication assessment avoids prior generated-question defects',
 
 test('matrix multiplication assessment marks misconceptions as traps after setup', () => {
   const { quiz } = getLessonAssessment('matrix-multiplication');
+  const trapIds = [
+    'mm-076-square-trap',
+    'mm-077-validity-vs-equality',
+    'mm-078-compatible-not-same-shape',
+    'mm-079-elementwise-same-shape-trap',
+    'mm-080-transpose-trap',
+    'mm-081-association-cost',
+    'mm-082-non-square-transform',
+    'mm-083-invertibility-trap',
+    'mm-084-broadcasting-trap',
+    'mm-085-batch-axis-trap',
+    'mm-086-silent-transpose',
+    'mm-087-diagonal-trap',
+    'mm-088-zero-product-trap',
+    'mm-089-true-fact-wrong-scope',
+    'mm-090-tricky-check',
+  ];
   const misconceptionTerms = [
     /Square matrices always commute with each other/i,
     /That the two products are equal/i,
@@ -139,6 +156,8 @@ test('matrix multiplication assessment marks misconceptions as traps after setup
     /true rule but applies it to incompatible shapes/i,
   ];
   const trapPrompt = /avoid|tricky|unsafe|mistake|verify|risky|surprising|wrong|not an elementwise|goes beyond|confusing|why might/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
