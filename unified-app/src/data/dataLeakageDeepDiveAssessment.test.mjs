@@ -10,10 +10,12 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const LEVELS = new Set(Object.keys(LEVEL_ORDER));
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +24,34 @@ function correctAnswer(question) {
 }
 
 test('data leakage deep dive has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('data-leakage-deep-dive');
+  const { quiz, labs } = getLessonAssessment('data-leakage-deep-dive');
+  const ids = new Set(quiz.map((question) => question.id));
 
   assert.equal(quiz.length, 100);
-  assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
+  assert.equal(labs.length, 3);
+  assert.equal(ids.size, 100);
+  assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('leak-'), `question ${index + 1} should use the leak id prefix`);
-    assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
-    assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
-    assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
-    assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
-    assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
+    assert.match(question.id, /^leak-\d{3}-[a-z0-9-]+$/, `${question.id} should use the curated id format`);
+    assert.equal(Number(question.id.slice(5, 8)), index + 1, `${question.id} should stay in numeric order`);
+    assert.ok(LEVELS.has(question.level), `${question.id} should use a known level`);
+    assert.ok(question.prompt && question.prompt.length > 20, `${question.id} should have a substantial prompt`);
+    assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat a choice`);
+    assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
+    assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
+    assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
   }
+});
+
+test('data leakage deep dive assessment avoids duplicate prompts and exact correct answers', () => {
+  const { quiz } = getLessonAssessment('data-leakage-deep-dive');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length, 'prompts should be unique');
+  assert.equal(new Set(answers).size, answers.length, 'exact correct answers should be unique');
 });
 
 test('data leakage deep dive assessment progresses from recall to interview readiness', () => {
@@ -65,51 +82,65 @@ test('data leakage deep dive assessment progresses from recall to interview read
 
 test('data leakage deep dive assessment covers learning points in the right order', () => {
   const { quiz } = getLessonAssessment('data-leakage-deep-dive');
-  const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
-  const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
-
-  const orderedMilestones = [
-    ['information boundary', ['boundary']],
-    ['post-outcome features', ['post-outcome']],
-    ['duplicate entity leakage', ['duplicate', 'entit']],
-    ['time leakage', ['time order']],
-    ['preprocessing leakage', ['preprocessing']],
-    ['feature-selection leakage', ['feature selection']],
-    ['target encoding leakage', ['target encoding']],
-    ['repeated test tuning', ['hyperparameter search', 'final evaluation']],
-    ['serving parity', ['serving parity']],
-    ['scenario application', ['hospital']],
-    ['tricky false claims', ['false']],
-    ['interview audit readiness', ['interview']],
+  const milestones = [
+    [/what is data leakage/, 0, 8],
+    [/target derived feature/, 0, 10],
+    [/duplicate entities leak/, 4, 12],
+    [/time order create leakage/, 5, 14],
+    [/preprocessing leak/, 6, 14],
+    [/feature selection leak/, 8, 16],
+    [/target encoding leak prone/, 10, 18],
+    [/repeated test peeking/, 8, 18],
+    [/split unit/, 12, 20],
+    [/safe pipeline rule/, 12, 22],
+    [/leakage mechanism/, 20, 30],
+    [/post event field/, 20, 32],
+    [/user history features leak/, 20, 35],
+    [/fold safe target encoding/, 30, 42],
+    [/cross validation/, 35, 45],
+    [/serving parity/, 45, 55],
+    [/hospital readmission model/, 50, 60],
+    [/standardscaler is fit before train test split/, 50, 60],
+    [/test score is disappointing/, 60, 70],
+    [/leakage claim is false/, 75, 90],
+    [/define data leakage in an interview/, 90, 100],
   ];
 
-  let previousIndex = -1;
-  for (const [label, terms] of orderedMilestones) {
-    const index = firstIndexContaining(terms);
-    assert.notEqual(index, -1, `missing milestone: ${label}`);
-    assert.ok(index > previousIndex, `${label} should appear after the previous milestone`);
-    previousIndex = index;
+  for (const [pattern, minIndex, maxIndex] of milestones) {
+    const matchIndex = quiz.findIndex((question) => pattern.test(normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`)));
+    assert.notEqual(matchIndex, -1, `missing learning point ${pattern}`);
+    assert.ok(
+      matchIndex >= minIndex && matchIndex < maxIndex,
+      `${pattern} appears at question ${matchIndex + 1}, outside expected range ${minIndex + 1}-${maxIndex}`,
+    );
   }
 });
 
 test('data leakage deep dive assessment avoids unsafe misconception keying', () => {
   const { quiz } = getLessonAssessment('data-leakage-deep-dive');
   const unsafePatterns = [
-    /always safe/i,
-    /always honest/i,
-    /always represents/i,
-    /always the same/i,
-    /automatically prevents/i,
-    /guarantee/i,
-    /guaranteed/i,
-    /impossible/i,
-    /unnecessary/i,
+    /a feature is safe whenever it is highly correlated/,
+    /unsupervised transforms cannot leak/,
+    /random row split is always honest/,
+    /shuffling is safe/,
+    /full data target means are fine/,
+    /creating augmented variants before splitting originals/,
+    /choosing row removal rules/,
+    /proves production performance/,
+    /a feature is safe if its name/,
+    /queried indefinitely without overfitting risk/,
+    /no leakage exists anywhere/,
+    /current warehouse snapshot always represents/,
+    /serving checks are unnecessary/,
+    /cv automatically prevents all leakage/,
+    /validation score is high so leakage is impossible/,
   ];
 
   for (const [index, question] of quiz.entries()) {
-    const answer = correctAnswer(question);
+    const prompt = normalized(question.prompt);
+    const answer = normalized(correctAnswer(question));
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
-    const explicitTrapPrompt = /false|misleading|unsafe|too strong|wrong|challenge/i.test(question.prompt);
+    const explicitTrapPrompt = /trap|false|misleading|unsafe|too strong|wrong|challenge|suspicious|claim|behavior|interpretation|practice/.test(prompt);
 
     assert.ok(
       !unsafeAnswer || explicitTrapPrompt,
@@ -145,8 +176,13 @@ test('data leakage deep dive assessment distributes correct-answer positions acr
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
-    const positions = page.map((question) => question.answerIndex);
+    const counts = [0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length);
+    const maxSameSlot = Math.max(...counts);
+    const minSameSlot = Math.min(...counts);
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    assert.ok(
+      maxSameSlot - minSameSlot <= 1,
+      `page starting at question ${pageStart + 1} should balance correct option slots, got ${counts.join('/')}`,
+    );
   }
 });

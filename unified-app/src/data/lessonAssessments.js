@@ -1432,10 +1432,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: DATA_LEAKAGE_DEEP_DIVE_QUIZ,
     labs: [
       {
+        id: 'trace-information-boundary',
+        title: 'Trace an information boundary',
+        prompt: 'Select a leakage mode and name the information source, the boundary it crosses, and the decision it changes.',
+        successCriteria: 'You can explain why the leaked signal would not be available under the real prediction protocol.',
+      },
+      {
         id: 'leakage-mode-audit',
         title: 'Audit one leakage mode',
         prompt: 'Select each leakage mode and state the boundary being crossed and the safer split or pipeline rule.',
         successCriteria: 'You can name the leaked information and the concrete prevention rule for at least three modes.',
+      },
+      {
+        id: 'choose-boundary-safe-fix',
+        title: 'Choose a boundary-safe fix',
+        prompt: 'For a target, duplicate, time, preprocessing, or test-peeking leak, choose the split, cutoff, or pipeline rule that blocks it.',
+        successCriteria: 'You can pair each leakage path with a concrete prevention rule instead of only saying the score is suspicious.',
       },
     ],
   },
