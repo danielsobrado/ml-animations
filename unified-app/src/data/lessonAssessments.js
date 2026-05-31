@@ -2366,6 +2366,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move query and key positions together by the same amount. Explain what changes and what stays tied to the relative distance.',
         successCriteria: 'You can explain why absolute rotation angles change while the relative-position relationship is preserved.',
       },
+      {
+        id: 'trace-frequency-schedule',
+        title: 'Trace frequency schedule',
+        prompt: 'Change the dimension pair, model dimension, and RoPE base, then explain how theta, absolute angles, and relative angles move across fast and slow pairs.',
+        successCriteria: 'You can connect base, per-pair frequency, and relative angle to the displayed score behavior.',
+      },
+      {
+        id: 'debug-implementation-alignment',
+        title: 'Debug implementation alignment',
+        prompt: 'Use one tiny Q/K pair to predict the rotated score, then list what would break if values were rotated, masks were removed, or cached positions used the wrong offset.',
+        successCriteria: 'You can separate Q/K rotation, value mixing, mask legality, and KV-cache position alignment.',
+      },
     ],
   },
   'residual-stream': {

@@ -1,6 +1,6 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
+  const questionNumber = Number(id.match(/^rope-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
   const rotation = stableHash(`rope:${id}`) % 3;
   const answerIndex = (desiredFinalIndex + rotation) % 3;
   const choices = [...distractors];
@@ -118,7 +118,7 @@ const ROPE_SPECS = [
   ['rope-091-interview-definition', 'Interview', 'How should you define RoPE in one sentence?', 'A rotary positional method that applies position-dependent rotations to Q and K before attention scoring', ['A tokenizer compression algorithm', 'A sampling strategy for final logits'], 'A strong definition names the tensors, timing, and purpose.'],
   ['rope-092-interview-relative', 'Interview', 'How should you explain the relative-position benefit?', 'Separate Q and K rotations combine so their dot product depends on the offset between positions', ['The model ignores token content', 'The value vector directly stores distance'], 'The interview answer should connect rotations to the score formula.'],
   ['rope-093-interview-formula', 'Interview', 'What formula should you be ready to cite?', 'q_m^T k_n can be written as rotated Q and K with a relative rotation term', ['cross entropy equals the RoPE base', 'softmax removes all position information'], 'The exact convention can vary, but the relative rotation relationship is the key.'],
-  ['rope-094-interview-values', 'Interview', 'What misconception should you proactively rule out?', 'RoPE does not rotate values or replace masks', ['RoPE never touches query vectors', 'RoPE is only a frontend animation'], 'This is the lesson’s named mistake to avoid.'],
+  ['rope-094-interview-values', 'Interview', 'What misconception should you proactively rule out?', 'RoPE does not rotate values or replace masks', ['RoPE never touches query vectors', 'RoPE is only a frontend animation'], "This is the lesson's named mistake to avoid."],
   ['rope-095-interview-base', 'Interview', 'How should you discuss the RoPE base?', 'It sets the frequency schedule, so base or scaling changes alter positional geometry', ['It is only the vocabulary size', 'It never affects model behavior'], 'Base choice shapes how positions map to angles.'],
   ['rope-096-interview-cache', 'Interview', 'What should you mention about KV cache with RoPE?', 'Cached keys and new queries must use position ids and offsets that agree', ['Caches make RoPE unnecessary', 'Values are the only cached tensors that matter'], 'Production decoding depends on correct cache-position alignment.'],
   ['rope-097-interview-long-context', 'Interview', 'How should you answer a long-context RoPE question?', 'RoPE can support relative structure, but scaling and longer lengths must be validated', ['RoPE proves infinite context quality', 'Long prompts should disable masks'], 'Good answers separate mathematical support from empirical reliability.'],

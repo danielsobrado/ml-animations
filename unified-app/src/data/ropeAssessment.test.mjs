@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,32 @@ function correctAnswer(question) {
 }
 
 test('rope has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('rope');
+  const { quiz, labs } = getLessonAssessment('rope');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('rope-'), `question ${index + 1} should use the rope id prefix`);
+    assert.match(question.id, /^rope-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered rope id format`);
+    assert.equal(Number(question.id.slice(5, 8)), index + 1, `question ${index + 1} should have a sequential id`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+});
+
+test('rope assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('rope');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
 });
 
 test('rope assessment progresses from rotary basics to interview readiness', () => {
@@ -61,16 +74,16 @@ test('rope assessment covers learning points in the right order', () => {
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['relative-position information through rotations']],
+    ['purpose', ['relative position information through rotations']],
     ['qk rotation', ['query and key vectors']],
     ['not values or masks', ['thinking rope rotates values or replaces masks']],
-    ['formula', ['q_m^t k_n']],
+    ['formula', ['q m t k n']],
     ['dimension pairs', ['2d rotations']],
     ['cache alignment', ['cached keys', 'original token slots']],
     ['application cache bug', ['cached rotary positions no longer match']],
     ['production tests', ['reference score tests']],
-    ['tricky false claims', ['rope value-vector claim is false']],
-    ['interview readiness', ['production-ready rope takeaway']],
+    ['tricky false claims', ['rope value vector claim is false']],
+    ['interview readiness', ['production ready rope takeaway']],
   ];
 
   let previousIndex = -1;
@@ -130,6 +143,8 @@ test('rope assessment does not leak exact answers within a visible page', () => 
 
 test('rope assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('rope');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -138,4 +153,6 @@ test('rope assessment distributes correct-answer positions across every page', (
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(Math.max(...globalCounts) - Math.min(...globalCounts) <= 1, `global answer positions should stay balanced: ${globalCounts.join(', ')}`);
 });
