@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { TOOL_USING_REASONING_MODELS_QUIZ } from './toolUsingReasoningModelsAssessment.js';
+import { getLessonAssessment } from './lessonAssessments.js';
 
 const LEVELS = new Set(['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview']);
 
@@ -12,33 +12,56 @@ function correctAnswer(item) {
   return item.choices[item.answerIndex];
 }
 
-test('tool-using reasoning models assessment has 100 production-ready questions', () => {
-  assert.equal(TOOL_USING_REASONING_MODELS_QUIZ.length, 100);
-  const ids = new Set();
+test('tool-using reasoning models assessment has 100 production-ready questions with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('tool-using-reasoning-models');
 
-  for (const [index, item] of TOOL_USING_REASONING_MODELS_QUIZ.entries()) {
+  assert.equal(labs.length, 7);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'choose-the-right-tool',
+    'query-refinement',
+    'python-verifier',
+    'file-grounding-audit',
+    'function-vs-plan',
+    'tool-result-masking',
+    'failure-injection',
+  ]);
+
+  assert.equal(quiz.length, 100);
+  const ids = new Set();
+  const globalCounts = [0, 0, 0];
+
+  for (const [index, item] of quiz.entries()) {
     assert.match(item.id, /^tool-\d{3}$/);
     assert.equal(ids.has(item.id), false, `duplicate id ${item.id}`);
     ids.add(item.id);
     assert.equal(item.id, `tool-${String(index + 1).padStart(3, '0')}`);
     assert.equal(LEVELS.has(item.level), true, `${item.id} has unexpected level ${item.level}`);
     assert.equal(item.choices.length, 3, `${item.id} should have three choices`);
+    assert.equal(Number.isInteger(item.answerIndex), true, `${item.id} answerIndex should be an integer`);
     assert.ok(item.answerIndex >= 0 && item.answerIndex < 3, `${item.id} answerIndex out of range`);
     assert.ok(item.prompt.length > 20, `${item.id} prompt too short`);
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
+    globalCounts[item.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('tool-using reasoning models assessment avoids duplicate prompts and correct answers', () => {
-  const prompts = TOOL_USING_REASONING_MODELS_QUIZ.map((item) => normalize(item.prompt));
-  const correctAnswers = TOOL_USING_REASONING_MODELS_QUIZ.map((item) => normalize(correctAnswer(item)));
+  const { quiz } = getLessonAssessment('tool-using-reasoning-models');
+  const prompts = quiz.map((item) => normalize(item.prompt));
+  const correctAnswers = quiz.map((item) => normalize(correctAnswer(item)));
 
   assert.equal(new Set(prompts).size, prompts.length);
   assert.equal(new Set(correctAnswers).size, correctAnswers.length);
 });
 
 test('tool-using reasoning models assessment progresses through the lesson objectives', () => {
+  const { quiz } = getLessonAssessment('tool-using-reasoning-models');
   const ranges = [
     ['Foundation', 0, 20],
     ['Mechanism', 20, 50],
@@ -48,7 +71,7 @@ test('tool-using reasoning models assessment progresses through the lesson objec
   ];
 
   for (const [level, start, end] of ranges) {
-    assert.equal(TOOL_USING_REASONING_MODELS_QUIZ.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
+    assert.equal(quiz.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
   }
 
   const milestones = [
@@ -62,7 +85,7 @@ test('tool-using reasoning models assessment progresses through the lesson objec
 
   let previous = -1;
   for (const [name, terms] of milestones) {
-    const index = TOOL_USING_REASONING_MODELS_QUIZ.findIndex((item) => (
+    const index = quiz.findIndex((item) => (
       terms.every((term) => normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`).includes(normalize(term)))
     ));
     assert.notEqual(index, -1, `missing milestone: ${name}`);
@@ -72,6 +95,7 @@ test('tool-using reasoning models assessment progresses through the lesson objec
 });
 
 test('tool-using reasoning models assessment marks unsafe misconceptions as traps after setup', () => {
+  const { quiz } = getLessonAssessment('tool-using-reasoning-models');
   const misconceptionTerms = [
     /automatically makes final answers correct and safe/i,
     /first search result should be treated as current truth/i,
@@ -91,7 +115,7 @@ test('tool-using reasoning models assessment marks unsafe misconceptions as trap
   ];
   const trapPrompt = /false|wrong|unsafe|trap|reject|dangerous/i;
 
-  for (const [index, item] of TOOL_USING_REASONING_MODELS_QUIZ.entries()) {
+  for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
     const containsMisconception = misconceptionTerms.some((pattern) => pattern.test(text));
     if (!containsMisconception) continue;
@@ -102,10 +126,17 @@ test('tool-using reasoning models assessment marks unsafe misconceptions as trap
 });
 
 test('tool-using reasoning models assessment avoids visible-page answer leakage', () => {
+  const { quiz } = getLessonAssessment('tool-using-reasoning-models');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < TOOL_USING_REASONING_MODELS_QUIZ.length; pageStart += pageSize) {
-    const page = TOOL_USING_REASONING_MODELS_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const correctAnswers = page.map((item) => normalize(item.choices[item.answerIndex]));
+
+    assert.equal(
+      new Set(correctAnswers).size,
+      correctAnswers.length,
+      `page starting at question ${pageStart + 1} should not repeat exact answers`,
+    );
 
     for (const [offset, item] of page.entries()) {
       const surroundingPrompts = page
@@ -118,9 +149,10 @@ test('tool-using reasoning models assessment avoids visible-page answer leakage'
 });
 
 test('tool-using reasoning models assessment distributes correct answer positions per page', () => {
+  const { quiz } = getLessonAssessment('tool-using-reasoning-models');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < TOOL_USING_REASONING_MODELS_QUIZ.length; pageStart += pageSize) {
-    const page = TOOL_USING_REASONING_MODELS_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const counts = [0, 0, 0];
     for (const item of page) counts[item.answerIndex] += 1;
     assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `imbalanced page at ${pageStart + 1}: ${counts.join(',')}`);
