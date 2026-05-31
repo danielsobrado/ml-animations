@@ -79,6 +79,23 @@ test('condition number assessment progresses through lesson learning points', ()
 
 test('condition number keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('condition-number');
+  const trapIds = [
+    'cond-076-false-high-good',
+    'cond-077-wrong-ratio',
+    'cond-078-false-zero-finite',
+    'cond-079-dangerous-det-only',
+    'cond-080-false-normal-equations',
+    'cond-081-wrong-residual-certainty',
+    'cond-082-false-one-vector',
+    'cond-083-wrong-scaling',
+    'cond-084-false-formula-stability',
+    'cond-085-dangerous-norm-mix',
+    'cond-086-false-universal-threshold',
+    'cond-087-wrong-free-regularization',
+    'cond-088-false-near-singular-unsolvable',
+    'cond-089-dangerous-rounded-display',
+    'cond-090-wrong-largest-only',
+  ];
   const misconceptionTerms = [
     /higher kappa always means a better-conditioned/i,
     /sigma_min \/ sigma_max/i,
@@ -97,6 +114,8 @@ test('condition number keeps misconception traps after setup', () => {
     /Only sigma_max matters/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|unsafe/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
