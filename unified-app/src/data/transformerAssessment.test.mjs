@@ -26,6 +26,11 @@ test('transformer has a complete curated 100-question assessment', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-token',
+    'compare-mixing-and-mlp',
+    'debug-mask-and-shape-contracts',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('transformer assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('transformer misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('transformer');
+  const trapIds = [
+    'transformer-076-false-only-attention',
+    'transformer-077-false-mlp',
+    'transformer-078-false-residual',
+    'transformer-079-false-norm',
+    'transformer-080-false-order',
+    'transformer-081-false-mask',
+    'transformer-082-false-padding',
+    'transformer-083-false-heads',
+    'transformer-084-false-mlp-mixing',
+    'transformer-085-false-output',
+    'transformer-086-false-config',
+    'transformer-087-false-cost',
+    'transformer-088-false-interpretation',
+    'transformer-089-false-objective',
+    'transformer-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
