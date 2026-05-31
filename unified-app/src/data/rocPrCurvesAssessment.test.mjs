@@ -25,7 +25,11 @@ test('roc pr curves has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('roc-pr-curves');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'threshold-costs',
+    'roc-pr-denominator-audit',
+    'rare-positive-report',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -144,6 +148,37 @@ test('roc pr curves assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('roc pr curves assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('roc-pr-curves');
+  const misconceptionPatterns = [
+    /automatically gives the best deployment threshold/i,
+    /plots precision against recall/i,
+    /plot true negative rate against false positive rate/i,
+    /always tells the full alert-quality story/i,
+    /always means few false positives/i,
+    /independent of prevalence/i,
+    /proves the scores are calibrated probabilities/i,
+    /always changes ROC AUC/i,
+    /changes the true labels/i,
+    /best for every threshold region automatically/i,
+    /safe to pick the best threshold/i,
+    /need only one fixed set of hard labels/i,
+    /ignores false positives/i,
+    /AUC alone is enough/i,
+    /does not depend on which class is positive/i,
+  ];
+  const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
