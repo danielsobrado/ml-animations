@@ -37,6 +37,15 @@ test('sampling strategies has a complete curated 100-question assessment', () =>
   }
 });
 
+test('sampling strategies assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('sampling-strategies');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('sampling strategies assessment progresses from decoding basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('sampling-strategies');
   const expectedBands = [
