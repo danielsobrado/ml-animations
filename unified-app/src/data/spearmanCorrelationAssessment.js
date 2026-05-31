@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^sp-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`spearman-correlation:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const SPEARMAN_CORRELATION_QUIZ = Object.freeze([
@@ -26,7 +37,7 @@ export const SPEARMAN_CORRELATION_QUIZ = Object.freeze([
   q('sp-014-square', 'Foundation', 'Why square each rank difference?', 'To make mismatches positive and penalize larger rank gaps', ['To restore the original units', 'To remove the need for ranks'], 'Squaring turns directionless mismatch size into a contribution to the formula.'),
   q('sp-015-sum', 'Foundation', 'What does sum d squared summarize?', 'Total rank disagreement across all rows', ['The total raw Y value', 'The number of duplicate ids'], 'More rank disagreement lowers Spearman correlation.'),
   q('sp-016-perfect-one', 'Foundation', 'When is Spearman correlation exactly 1 in the simple setting?', 'When the two rank orders match perfectly', ['When raw values are equal in units', 'When every value is an outlier'], 'Perfectly matching ranks produce maximum positive rank association.'),
-  q('sp-017-perfect-negative', 'Foundation', 'When is Spearman correlation exactly -1 in the simple setting?', 'When one rank order is exactly reversed from the other', ['When both variables have only positive values', 'When no sorting is possible'], 'A perfect reverse order is maximum negative rank association.'),
+  q('sp-017-perfect-negative', 'Foundation', 'When is Spearman correlation exactly negative one in the simple setting?', 'When one rank order is exactly reversed from the other', ['When both variables have only positive values', 'When no sorting is possible'], 'A perfect reverse order is maximum negative rank association.'),
   q('sp-018-ties', 'Foundation', 'What are ties in Spearman correlation?', 'Equal values that share rank positions', ['Rows with missing ids only', 'Values that are far apart'], 'Ties require careful rank handling, often using average ranks.'),
   q('sp-019-not-causal', 'Foundation', 'What should Spearman correlation not be treated as?', 'Proof that one variable causes the other', ['A measure of rank association', 'A number between negative and positive association'], 'Correlation, including rank correlation, does not establish causation.'),
   q('sp-020-first-check', 'Foundation', 'What should you inspect before trusting Spearman?', 'Ranks, monotonic pattern, ties, outliers, and sample size', ['Only the largest raw value', 'Only whether the chart is colorful'], 'The lesson workflow is visual and diagnostic before interpretive.'),

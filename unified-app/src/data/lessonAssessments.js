@@ -1479,6 +1479,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Use the calculation tab to rank X and Y, then predict the sign and size of rho before revealing the formula.',
         successCriteria: 'You can explain whether rho changed because the order changed or because raw values moved farther apart.',
       },
+      {
+        id: 'outlier-rank-audit',
+        title: 'Audit outlier robustness',
+        prompt: 'Use the robustness tab to move an outlier, then explain when Spearman stays stable and when rank order changes make it drop.',
+        successCriteria: 'You can separate magnitude-only outlier effects from rank-changing outlier effects.',
+      },
+      {
+        id: 'spearman-report-check',
+        title: 'Check a Spearman report',
+        prompt: 'Write a short report with variables, unit of analysis, monotonicity check, tie handling, scatterplot readout, uncertainty, and non-causal caveat.',
+        successCriteria: 'You can interpret rho without implying linearity, raw effect size, or causation.',
+      },
     ],
   },
   'maximum-likelihood-estimation': {
