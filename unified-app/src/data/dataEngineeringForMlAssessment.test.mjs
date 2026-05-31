@@ -37,6 +37,15 @@ test('data engineering for ML has a complete curated 100-question assessment', (
   }
 });
 
+test('data engineering for ML assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('data-engineering-for-ml-track');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('data engineering for ML assessment progresses from data boundaries to interview readiness', () => {
   const { quiz } = getLessonAssessment('data-engineering-for-ml-track');
   const expectedBands = [
