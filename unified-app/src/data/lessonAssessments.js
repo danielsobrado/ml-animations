@@ -36,6 +36,7 @@ import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessin
 import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
 import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
 import { FRONTIER_EVALUATION_SAFETY_QUIZ } from './frontierEvaluationSafetyAssessment.js';
+import { FRONTIER_LLM_ARCHITECTURE_OVERVIEW_QUIZ } from './frontierLlmArchitectureOverviewAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GLOVE_QUIZ } from './gloveAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
@@ -2049,6 +2050,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Route a token batch',
         prompt: 'Choose an expert count and top-k value, generate a batch, then explain which experts were selected and whether the load pattern looks balanced.',
         successCriteria: 'You can connect router scores, top-k dispatch, active expert count, and load bars to the MoE tradeoff.',
+      },
+    ],
+  },
+  'frontier-llm-architecture-overview': {
+    quiz: FRONTIER_LLM_ARCHITECTURE_OVERVIEW_QUIZ,
+    labs: [
+      {
+        id: 'classify-frontier-paper-signals',
+        title: 'Classify frontier paper signals',
+        prompt: 'Pick three paper signal cards, then map each one to the changed bottleneck, active components, and new failure mode to audit.',
+        successCriteria: 'You can distinguish architecture changes from decoding controls and name the tradeoff for each selected family.',
       },
     ],
   },
