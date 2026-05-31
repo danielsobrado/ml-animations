@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('rag reranking grounding has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('rag-reranking-grounding');
+test('rag reranking grounding has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('rag-reranking-grounding');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ragrank-'), `question ${index + 1} should use the ragrank id prefix`);
+    assert.match(question.id, /^ragrank-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(8, 11)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3);
+    assert.ok(Number.isInteger(question.answerIndex));
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('rag reranking grounding assessment avoids duplicate prompts and correct answers', () => {
@@ -71,15 +82,15 @@ test('rag reranking grounding assessment covers learning points in the right ord
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['choosing which retrieved chunks surface first']],
-    ['reranking role', ['ordering of already-retrieved candidates']],
+    ['reranking role', ['ordering of already retrieved candidates']],
     ['grounding role', ['trusted as supported citations']],
-    ['high-rank trap', ['high-ranked chunk is not automatically a valid citation source']],
-    ['mechanism summary', ['retrieve candidates, rerank them, then apply a grounding validity gate']],
+    ['high-rank trap', ['high ranked chunk is not automatically a valid citation source']],
+    ['mechanism summary', ['retrieve candidates rerank them then apply a grounding validity gate']],
     ['application stale', ['last year policy']],
-    ['production review', ['valid, current, non-conflicting support']],
+    ['production review', ['valid current non conflicting support']],
     ['tricky false claims', ['reranking claim is false']],
-    ['interview debugging', ['retrieval, reranker order, packed evidence, source freshness']],
-    ['interview readiness', ['production-ready reranking and grounding takeaway']],
+    ['interview debugging', ['retrieval reranker order packed evidence source freshness']],
+    ['interview readiness', ['production ready reranking and grounding takeaway']],
   ];
 
   let previousIndex = -1;

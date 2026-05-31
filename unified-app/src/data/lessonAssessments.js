@@ -2822,6 +2822,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Use strictness and top-k to make a stale conflict visible, then make every claim grounded with usable evidence.',
         successCriteria: 'You can explain why strictness blocked one claim and why adjusting top-k changed grounded coverage.',
       },
+      {
+        id: 'isolate-reranker-effect',
+        title: 'Isolate reranker effect',
+        prompt: 'Compare first-pass order, reranked order, MRR or nDCG, and top-k support before changing grounding strictness.',
+        successCriteria: 'You can say whether the reranker improved candidate ordering without crediting it for missing evidence or citation validity.',
+      },
+      {
+        id: 'audit-citation-validity',
+        title: 'Audit citation validity',
+        prompt: 'For each answer claim, mark the supporting span as valid, stale, conflicting, low-trust, unauthorized, or absent, then choose whether to cite, abstain, or request better evidence.',
+        successCriteria: 'You can separate rank from support and explain why each accepted citation passes freshness, conflict, trust, and access checks.',
+      },
     ],
   },
   'rag-failure-modes': {
