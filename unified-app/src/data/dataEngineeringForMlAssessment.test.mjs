@@ -25,7 +25,10 @@ test('data engineering for ML has a complete curated 100-question assessment', (
   const { quiz, labs } = getLessonAssessment('data-engineering-for-ml-track');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['data-engineering-for-ml-track-scenario-lab', 'feature-availability-contract', 'train-serve-parity-audit'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -134,6 +137,35 @@ test('data engineering for ML assessment avoids unsafe misconception keying', ()
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('data engineering for ML assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('data-engineering-for-ml-track');
+  const misconceptionPatterns = [
+    /safe if its event time is before prediction, even when it arrived later/i,
+    /latest warehouse value is always point-in-time correct/i,
+    /labels can be defined using information available only before prediction/i,
+    /target encodings on the full dataset before splitting is always safe/i,
+    /feature definitions may differ as long as offline accuracy is high/i,
+    /contracts are documentation only and should not block/i,
+    /null-rate spike can be ignored/i,
+    /backfills can recompute historical features using all data currently available/i,
+    /stale features are harmless when the schema is unchanged/i,
+    /saved model artifact is enough to reproduce/i,
+    /user ids are always harmless/i,
+    /random row splits are always honest/i,
+    /data quality monitoring is unnecessary/i,
+    /any private field can be used as a feature/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
