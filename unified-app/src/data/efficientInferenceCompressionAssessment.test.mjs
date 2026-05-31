@@ -25,7 +25,10 @@ test('efficient inference compression has a complete curated 100-question assess
   const { quiz, labs } = getLessonAssessment('efficient-inference-compression-track');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['efficient-inference-compression-track-scenario-lab', 'prefill-decode-profile', 'compression-release-gate'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -139,6 +142,35 @@ test('efficient inference compression assessment avoids unsafe misconception key
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('efficient inference compression assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('efficient-inference-compression-track');
+  const misconceptionPatterns = [
+    /raw tokens per second always optimizes user experience/i,
+    /lower precision is always quality-neutral/i,
+    /kv cache memory is constant/i,
+    /larger batches always reduce ttft/i,
+    /any sparse pattern automatically creates proportional/i,
+    /distilled student always preserves teacher behavior/i,
+    /draft tokens can be accepted without target verification/i,
+    /paged attention eliminates every memory and latency bottleneck/i,
+    /average latency alone proves p99/i,
+    /cpu or disk offload is always faster/i,
+    /late, failed, or low-quality responses count the same/i,
+    /smallest model artifact is automatically the best/i,
+    /extending context length has no serving cost/i,
+    /no monitoring is needed for serving optimizations/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
