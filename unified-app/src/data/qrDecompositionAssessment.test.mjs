@@ -27,9 +27,14 @@ function correctAnswer(question) {
 test('qr decomposition has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('qr-decomposition');
   const ids = new Set(quiz.map((question) => question.id));
+  const globalCounts = [0, 0, 0];
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-projection-removal',
+    'verify-qr-structure',
+    'connect-qr-least-squares',
+  ]);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
@@ -43,7 +48,13 @@ test('qr decomposition has a complete curated 100-question assessment', () => {
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
     assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
+    globalCounts[question.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('qr decomposition assessment avoids duplicate prompts and exact correct answers', () => {
@@ -132,6 +143,37 @@ test('qr decomposition assessment avoids unsafe misconception keying', () => {
       !falseClaimKeyed || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('qr decomposition assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('qr-decomposition');
+  const misconceptionPatterns = [
+    /Q is just A with scaled columns/i,
+    /QR least squares always has zero residual/i,
+    /classical Gram-Schmidt risky/i,
+    /normal equations not equivalent to QR/i,
+    /R is always safely invertible/i,
+    /snapshot-testing QR factors/i,
+    /full Q when only reduced Q is needed/i,
+    /ignoring pivoting in rank-revealing work/i,
+    /Q entries as feature importance/i,
+    /tall full-rank formula to every matrix shape/i,
+    /orthogonality fixes every numerical problem/i,
+    /computing R inverse explicitly/i,
+    /ignore P in pivoted QR/i,
+    /fixed zero threshold for R diagonals/i,
+    /memorizing only A = QR/i,
+  ];
+  const trapPrompt = /trap|wrong|risky|avoid|what can go wrong|not equivalent|not imply|not automatically/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
