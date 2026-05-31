@@ -34,6 +34,7 @@ import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EAGLE_3_1_SPECULATIVE_DECODING_QUIZ } from './eagle31SpeculativeDecodingAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EFFICIENT_LLM_SERVING_QUIZ } from './efficientLlmServingAssessment.js';
+import { EIGENVALUE_QUIZ } from './eigenvalueAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
 import { FASTTEXT_QUIZ } from './fasttextAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
@@ -1055,6 +1056,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Verify low-rank code',
         prompt: 'Relate rankOneEntry, rankOneMatrix, and frobeniusErrorSquared to the formula A_k = sum sigma_i u_i v_i^T.',
         successCriteria: 'You can build scaled rank-1 terms and measure squared reconstruction error.',
+      },
+    ],
+  },
+  eigenvalue: {
+    quiz: EIGENVALUE_QUIZ,
+    labs: [
+      {
+        id: 'trace-eigenvalue-equation',
+        title: 'Trace the eigenvalue equation',
+        prompt: 'Walk through the tutorial from v to Av to Av = lambda v, explaining why eigenvectors keep direction while ordinary vectors rotate.',
+        successCriteria: 'You can distinguish most transformed vectors from eigenvectors and state the role of lambda.',
+      },
+      {
+        id: 'explore-eigenvector-alignment',
+        title: 'Explore eigenvector alignment',
+        prompt: 'Use the geometric and interactive tabs to compare the unit circle, transformed ellipse, v, Av, and the two eigenvector directions.',
+        successCriteria: 'You can explain why the ellipse axes and the drag alignment reveal the eigenvectors and eigenvalues.',
+      },
+      {
+        id: 'verify-eigenvalue-code',
+        title: 'Verify eigenvalue code',
+        prompt: 'Relate the Rayleigh numerator, Rayleigh quotient, and power iteration code labs to directional scaling and dominant eigenvector search.',
+        successCriteria: 'You can compute directional scale and explain why power iteration applies A then normalizes.',
       },
     ],
   },
