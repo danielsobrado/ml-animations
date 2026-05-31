@@ -1409,10 +1409,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: CROSS_VALIDATION_QUIZ,
     labs: [
       {
+        id: 'trace-fold-rotation',
+        title: 'Trace fold rotation',
+        prompt: 'Change the fold count and explain how each fold takes one validation turn while the remaining folds train.',
+        successCriteria: 'You can connect the mean and spread of fold scores to repeated held-out evaluations.',
+      },
+      {
         id: 'choose-fold-design',
         title: 'Choose a leakage-safe fold design',
         prompt: 'Use the fold controls to compare random and grouped splitting, then explain which one is safer for repeated users or related samples.',
         successCriteria: 'You can name the leakage route and justify the fold design that blocks it.',
+      },
+      {
+        id: 'audit-fold-pipeline',
+        title: 'Audit fold-local fitting',
+        prompt: 'Turn on the leakage control and describe why preprocessing, feature selection, or encoders must be fitted inside each fold.',
+        successCriteria: 'You can name which learned state would leak if it were fit globally before cross-validation.',
       },
     ],
   },

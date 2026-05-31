@@ -10,10 +10,12 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const LEVELS = new Set(Object.keys(LEVEL_ORDER));
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +24,34 @@ function correctAnswer(question) {
 }
 
 test('cross-validation has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('cross-validation');
+  const { quiz, labs } = getLessonAssessment('cross-validation');
+  const ids = new Set(quiz.map((question) => question.id));
 
   assert.equal(quiz.length, 100);
-  assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
+  assert.equal(labs.length, 3);
+  assert.equal(ids.size, 100);
+  assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('cv-'), `question ${index + 1} should use the cv id prefix`);
-    assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
-    assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
-    assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
-    assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
-    assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
+    assert.match(question.id, /^cv-\d{3}-[a-z0-9-]+$/, `${question.id} should use the curated id format`);
+    assert.equal(Number(question.id.slice(3, 6)), index + 1, `${question.id} should stay in numeric order`);
+    assert.ok(LEVELS.has(question.level), `${question.id} should use a known level`);
+    assert.ok(question.prompt && question.prompt.length > 20, `${question.id} should have a substantial prompt`);
+    assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat a choice`);
+    assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
+    assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
+    assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
   }
+});
+
+test('cross-validation assessment avoids duplicate prompts and exact correct answers', () => {
+  const { quiz } = getLessonAssessment('cross-validation');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length, 'prompts should be unique');
+  assert.equal(new Set(answers).size, answers.length, 'exact correct answers should be unique');
 });
 
 test('cross-validation assessment progresses from recall to interview readiness', () => {
@@ -65,46 +82,57 @@ test('cross-validation assessment progresses from recall to interview readiness'
 
 test('cross-validation assessment covers learning points in the right order', () => {
   const { quiz } = getLessonAssessment('cross-validation');
-  const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
-  const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
-
-  const orderedMilestones = [
-    ['purpose and rotation', ['rotat']],
-    ['fold score mean and spread', ['spread', 'fold']],
-    ['pipeline leakage boundary', ['preprocessing', 'fold']],
-    ['stratified folds', ['stratified']],
-    ['grouped folds', ['group']],
-    ['time-aware folds', ['chronology']],
-    ['nested cross-validation', ['nested']],
-    ['out-of-fold predictions', ['out-of-fold']],
-    ['scenario application', ['gridsearchcv']],
-    ['tricky protocol traps', ['false']],
-    ['interview protocol defense', ['interview']],
+  const milestones = [
+    [/main purpose of cross validation/, 0, 8],
+    [/what does k mean in k fold cross validation/, 0, 8],
+    [/held out fold/, 0, 10],
+    [/average scores across folds/, 0, 10],
+    [/learned preprocessing/, 5, 14],
+    [/stratified folds/, 5, 16],
+    [/grouped folds/, 8, 18],
+    [/ordinary shuffled cv risky for forecasting/, 8, 18],
+    [/not a replacement for a final test boundary/, 5, 14],
+    [/nested cv address/, 20, 35],
+    [/clone the pipeline for each fold/, 25, 36],
+    [/fitting a scaler before cv leak/, 28, 38],
+    [/target encoding/, 30, 42],
+    [/rolling origin cv/, 35, 45],
+    [/out of fold predictions/, 40, 52],
+    [/standardscaler before gridsearchcv/, 50, 60],
+    [/nested cross validation with inner tuning/, 55, 65],
+    [/claim about preprocessing before cv is false/, 75, 90],
+    [/define cross validation in a technical interview/, 90, 100],
   ];
 
-  let previousIndex = -1;
-  for (const [label, terms] of orderedMilestones) {
-    const index = firstIndexContaining(terms);
-    assert.notEqual(index, -1, `missing milestone: ${label}`);
-    assert.ok(index > previousIndex, `${label} should appear after the previous milestone`);
-    previousIndex = index;
+  for (const [pattern, minIndex, maxIndex] of milestones) {
+    const matchIndex = quiz.findIndex((question) => pattern.test(normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`)));
+    assert.notEqual(matchIndex, -1, `missing learning point ${pattern}`);
+    assert.ok(
+      matchIndex >= minIndex && matchIndex < maxIndex,
+      `${pattern} appears at question ${matchIndex + 1}, outside expected range ${minIndex + 1}-${maxIndex}`,
+    );
   }
 });
 
 test('cross-validation assessment avoids unsafe misconception keying', () => {
   const { quiz } = getLessonAssessment('cross-validation');
   const unsafePatterns = [
-    /always safe/i,
-    /guarantee/i,
-    /guaranteed/i,
-    /always the most reliable/i,
-    /removes any need/i,
+    /train on the test set safely/,
+    /guarantee that hyperparameter search is unbiased/,
+    /cross validation removes any need/,
+    /always the most reliable cv choice/,
+    /selecting the best fold score/,
+    /letting the outer held out fold influence/,
+    /a prediction from a model trained on the same row it predicts/,
+    /choosing the metric after inspecting/,
+    /changing hyperparameters after seeing the final test result/,
   ];
 
   for (const [index, question] of quiz.entries()) {
-    const answer = correctAnswer(question);
+    const prompt = normalized(question.prompt);
+    const answer = normalized(correctAnswer(question));
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
-    const explicitTrapPrompt = /false|misleading|overclaims|too absolute|wrong|invalid|unsafe|challenge/i.test(question.prompt);
+    const explicitTrapPrompt = /trap|false|misleading|overclaims|too absolute|wrong|invalid|unsafe|challenge|mistake|leaks/.test(prompt);
 
     assert.ok(
       !unsafeAnswer || explicitTrapPrompt,
@@ -140,8 +168,13 @@ test('cross-validation assessment distributes correct-answer positions across ev
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
-    const positions = page.map((question) => question.answerIndex);
+    const counts = [0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length);
+    const maxSameSlot = Math.max(...counts);
+    const minSameSlot = Math.min(...counts);
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    assert.ok(
+      maxSameSlot - minSameSlot <= 1,
+      `page starting at question ${pageStart + 1} should balance correct option slots, got ${counts.join('/')}`,
+    );
   }
 });
