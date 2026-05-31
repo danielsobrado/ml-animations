@@ -1789,6 +1789,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Increase the penalty and watch which weights shrink fastest.',
         successCriteria: 'You can describe the tradeoff between data loss, penalty, and total loss.',
       },
+      {
+        id: 'penalty-family-comparison',
+        title: 'Compare penalty families',
+        prompt: 'Switch among none, L1, L2, and elastic net while tracking which signal and noise weights shrink or disappear.',
+        successCriteria: 'You can explain why L1 sparsifies, L2 smooths, and elastic net combines both pressures.',
+      },
+      {
+        id: 'validation-sweep-report',
+        title: 'Report the sweep',
+        prompt: 'Use the lambda sweep to choose a balanced setting, then explain why the final test should stay untouched until selection is frozen.',
+        successCriteria: 'You can identify under-regularized, balanced, and over-regularized regions from validation behavior.',
+      },
     ],
   },
   'knn-naive-bayes-svm': {
