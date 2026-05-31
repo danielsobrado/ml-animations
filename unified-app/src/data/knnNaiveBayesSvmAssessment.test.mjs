@@ -37,6 +37,15 @@ test('knn naive bayes svm has a complete curated 100-question assessment', () =>
   }
 });
 
+test('knn naive bayes svm assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('knn-naive-bayes-svm');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('knn naive bayes svm assessment progresses from model ideas to interview readiness', () => {
   const { quiz } = getLessonAssessment('knn-naive-bayes-svm');
   const expectedBands = [
