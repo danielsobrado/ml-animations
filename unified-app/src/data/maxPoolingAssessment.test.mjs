@@ -25,7 +25,10 @@ test('max pooling has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('max-pooling');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-window-argmax', 'audit-stride-coverage', 'compare-max-average-gap'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -125,6 +128,36 @@ test('max pooling assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('max pooling assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('max-pooling');
+  const misconceptionPatterns = [
+    /learns a weighted filter/i,
+    /averages all activations/i,
+    /stride has no effect/i,
+    /collapses all channels/i,
+    /non-winning value receives the same gradient/i,
+    /all-negative windows into zero/i,
+    /guarantees full translation invariance/i,
+    /preserves exact positions of all values/i,
+    /automatically a calibrated probability/i,
+    /padding can never change/i,
+    /cannot share any input/i,
+    /always increases downstream/i,
+    /order never matters/i,
+    /only the final accuracy/i,
+    /never loses useful information/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
