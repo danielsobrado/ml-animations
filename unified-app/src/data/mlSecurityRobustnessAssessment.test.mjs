@@ -37,6 +37,15 @@ test('ML security robustness has a complete curated 100-question assessment', ()
   }
 });
 
+test('ML security robustness assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('ml-security-robustness-track');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('ML security robustness assessment progresses from system basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('ml-security-robustness-track');
   const expectedBands = [
