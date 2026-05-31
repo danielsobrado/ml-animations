@@ -1835,6 +1835,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Change tree depth, forest tree count, and boosting rounds, then identify which control most risks memorizing quirks.',
         successCriteria: 'You can explain the difference between deeper single trees, forest averaging, and boosting rounds.',
       },
+      {
+        id: 'forest-vote-diagnosis',
+        title: 'Diagnose forest votes',
+        prompt: 'Inspect how additional varied trees change a selected point vote and decide when more trees mostly add latency rather than evidence.',
+        successCriteria: 'You can describe why decorrelated trees reduce variance and why plateaued gains should be weighed against serving cost.',
+      },
+      {
+        id: 'boosting-correction-plan',
+        title: 'Plan boosting controls',
+        prompt: 'Trace boosting correction rounds, learning rate, and validation behavior to decide whether to stop, shrink, or constrain the model.',
+        successCriteria: 'You can connect sequential corrections to overfit risk without using final-test feedback for tuning.',
+      },
     ],
   },
   'gradient-descent': {

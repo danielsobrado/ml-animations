@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('tree ensembles has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('tree-ensembles');
+  const { quiz, labs } = getLessonAssessment('tree-ensembles');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('treeens-'), `question ${index + 1} should use the treeens id prefix`);
+    assert.match(question.id, /^treeens-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered treeens id`);
+    assert.equal(Number(question.id.slice(8, 11)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, question.choices.length, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -78,7 +82,7 @@ test('tree ensembles assessment covers learning points in the right order', () =
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const orderedMilestones = [
     ['purpose', ['bagging', 'random forests', 'gradient boosting']],
-    ['single tree behavior', ['feature-threshold splits']],
+    ['single tree behavior', ['feature threshold splits']],
     ['single tree risk', ['high variance']],
     ['bagging', ['bootstrap samples', 'averaging']],
     ['random forest randomness', ['random subset of features']],
@@ -88,7 +92,7 @@ test('tree ensembles assessment covers learning points in the right order', () =
     ['mechanism summary', ['depth', 'tree count', 'feature randomness', 'learning rate', 'rounds']],
     ['application tuning', ['early stopping or the validated round count']],
     ['tricky false claims', ['false forest claim']],
-    ['interview readiness', ['leakage-safe splits', 'tune complexity on validation']],
+    ['interview readiness', ['leakage safe splits', 'tune complexity on validation']],
   ];
 
   let previousIndex = -1;
@@ -155,6 +159,13 @@ test('tree ensembles assessment does not leak exact answers within a visible pag
 
 test('tree ensembles assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('tree-ensembles');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be balanced: ${totals.join(', ')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
