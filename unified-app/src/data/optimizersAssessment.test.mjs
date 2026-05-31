@@ -144,6 +144,23 @@ test('optimizers assessment avoids unsafe misconception keying', () => {
 
 test('optimizers assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('optimizers');
+  const expectedTrapIds = [
+    'opt-076-trap-adam-best',
+    'opt-077-trap-learning-rate',
+    'opt-078-trap-momentum',
+    'opt-079-trap-batch',
+    'opt-080-trap-training-loss',
+    'opt-081-trap-test',
+    'opt-082-trap-clipping',
+    'opt-083-trap-warmup',
+    'opt-084-trap-state',
+    'opt-085-trap-zero-grad',
+    'opt-086-trap-sgd',
+    'opt-087-trap-adaptive',
+    'opt-088-trap-schedule',
+    'opt-089-trap-one-run',
+    'opt-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /adam is automatically best/i,
     /adaptive optimizers remove the need/i,
@@ -161,6 +178,8 @@ test('optimizers assessment keeps misconception traps after setup', () => {
     /one lucky seed and one metric/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|too weak|unhelpful/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);

@@ -1997,7 +1997,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
       {
         id: 'schedule-stability-audit',
         title: 'Audit optimizer stability',
-        prompt: 'Compare learning-rate, momentum, batch-size, and warmup settings on the same loss surface, then diagnose crawling, zigzagging, overshooting, or noisy convergence.',
+        prompt: 'Compare learning-rate, momentum, batch-size, and step-count settings on the same loss surface, then diagnose crawling, zigzagging, overshooting, or noisy convergence.',
         successCriteria: 'You can choose a first tuning response without claiming Adam or momentum automatically fixes every training run.',
       },
     ],
