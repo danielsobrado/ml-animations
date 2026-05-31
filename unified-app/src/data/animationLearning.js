@@ -112,6 +112,7 @@ const EQUATION_OVERRIDES = {
   'classifier-free-guidance': '\\hat{\\epsilon}=\\epsilon_{uncond}+s(\\epsilon_{cond}-\\epsilon_{uncond})',
   'unet-vs-dit': 'N=(H/P)(W/P),\\quad Attention\\;cost\\propto N^2',
   'gradient-descent': '\\theta_{t+1}=\\theta_t-\\eta\\nabla\\mathcal{L}(\\theta_t)',
+  optimization: '\\theta_{t+1}=\\theta_t-\\eta\\,u_t,\\quad u_t=f(g_t,m_t,v_t,\\lambda)',
   optimizers: '\\theta_{t+1}=\\theta_t-\\eta\\,\\operatorname{Update}(g_t,m_t,v_t)',
   initialization: '\\sigma_{xavier}=\\sqrt{\\frac{2}{fan_{in}+fan_{out}}}\\quad \\sigma_{he}=\\sqrt{\\frac{2}{fan_{in}}}',
   'training-loop-dynamics': '\\theta_{t+1}=\\theta_t-\\eta\\hat{g}_{B_t},\\quad monitor:\\mathcal{L}_{train},\\mathcal{L}_{val}',
@@ -489,6 +490,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Manipulate the learning rate and compare crawling, converging, and overshooting traces.',
     'Mistake to avoid: the gradient is local, so one step does not guarantee the global minimum.',
     'Check understanding by predicting the next step direction from the slope sign.',
+  ),
+  optimization: cardSet(
+    'Optimization landscapes solve the problem of seeing why the same gradient signal can produce very different training paths.',
+    'Contours, valleys, starts, and targets show how curvature turns a simple update into zigzagging, crawling, or smooth progress.',
+    'The math chooses an update direction from gradients, momentum, adaptive moments, and regularization before taking a learning-rate-scaled step.',
+    'Manipulate learning rate and weight decay while comparing SGD, RMSProp, Adam, and AdamW on the same toy objective.',
+    'Mistake to avoid: one fast toy path does not prove that an optimizer is universally best.',
+    'Check understanding by explaining why AdamW decouples weight decay from adaptive gradient scaling.',
   ),
   'neural-network': cardSet(
     'A neural network solves the problem of composing many learned transformations into a flexible predictor.',

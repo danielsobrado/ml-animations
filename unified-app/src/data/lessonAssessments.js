@@ -76,6 +76,7 @@ import { MULTIMODAL_LLM_QUIZ } from './multimodalLlmAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OMNI_MULTIMODAL_ARCHITECTURES_QUIZ } from './omniMultimodalArchitecturesAssessment.js';
+import { OPTIMIZATION_QUIZ } from './optimizationAssessment.js';
 import { OPTIMIZERS_QUIZ } from './optimizersAssessment.js';
 import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
@@ -1929,6 +1930,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Diagnose a loss curve',
         prompt: 'Sketch or inspect curves for divergence, slow crawling, noisy descent, plateauing, and validation loss rising while training loss falls.',
         successCriteria: 'You can choose a first diagnostic such as learning rate, scaling, batch size, gradient norms, or overfitting risk.',
+      },
+    ],
+  },
+  optimization: {
+    quiz: OPTIMIZATION_QUIZ,
+    labs: [
+      {
+        id: 'compare-valley-paths',
+        title: 'Compare valley paths',
+        prompt: 'Run the SGD and Adam views from the same start, then explain which parts of the path come from curvature, learning rate, and optimizer state.',
+        successCriteria: 'You can describe zigzagging, adaptive scaling, and why one toy path is not a universal optimizer ranking.',
+      },
+      {
+        id: 'tune-adaptive-optimizers',
+        title: 'Tune adaptive paths',
+        prompt: 'Change learning rate on the optimizer variations panel and record when SGD, RMSProp, Adam, or AdamW crawls, follows the valley, or diverges.',
+        successCriteria: 'You can connect each visible path change to step size, gradient history, and the fixed objective.',
+      },
+      {
+        id: 'separate-decay-mechanisms',
+        title: 'Separate decay mechanisms',
+        prompt: 'Vary weight decay and compare Adam with AdamW, noting when shrinkage is coupled to the gradient and when it is applied as a decoupled update.',
+        successCriteria: 'You can explain why Adam plus L2 and AdamW are not automatically identical under adaptive scaling.',
       },
     ],
   },

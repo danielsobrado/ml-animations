@@ -167,7 +167,7 @@ export default function DescentPanel() {
         <div className="p-8 h-full flex flex-col items-center overflow-y-auto">
             <div className="max-w-3xl w-full text-center mb-8">
                 <h2 className="text-3xl font-bold text-emerald-600 mb-4">SGD vs Adam</h2>
-                <p className="text-lg text-slate-700 leading-relaxed">
+                <p className="text-lg text-slate-300 leading-relaxed">
                     <strong>SGD (Red)</strong>: Gets stuck bouncing back and forth in steep valleys (jittery).
                     <br />
                     <strong>Adam (Green)</strong>: Uses <em>Momentum</em> and <em>Adaptive Rates</em> to smooth out the path and accelerate.
@@ -181,7 +181,7 @@ export default function DescentPanel() {
 
                     <div className="mb-6">
                         <div className="flex justify-between items-end mb-2">
-                            <label className="text-sm text-slate-800">Learning Rate</label>
+                            <label className="text-sm text-slate-300">Learning Rate</label>
                             <span className="font-mono font-bold text-emerald-600">{learningRate.toFixed(3)}</span>
                         </div>
                         <input
@@ -196,7 +196,7 @@ export default function DescentPanel() {
                         <button
                             onClick={() => setIsRunning(!isRunning)}
                             className={`flex-1 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 ${isRunning
-                                    ? 'bg-slate-700 text-slate-700'
+                                    ? 'bg-slate-700 text-slate-200'
                                     : 'bg-emerald-600 hover:bg-emerald-500 text-white'
                                 }`}
                         >
@@ -211,7 +211,7 @@ export default function DescentPanel() {
                         </button>
                     </div>
 
-                    <div className="bg-slate-900 p-4 rounded-lg text-sm text-slate-700 space-y-2">
+                    <div className="bg-slate-900 p-4 rounded-lg text-sm text-slate-300 space-y-2">
                         <div className="flex items-center gap-2">
                             <div className="w-3 h-3 rounded-full bg-red-500"></div>
                             <span><strong>SGD:</strong> Simple gradient descent. Struggles with different scales (steep Y, shallow X).</span>
@@ -231,7 +231,7 @@ export default function DescentPanel() {
                         height={400}
                         className="bg-slate-900 rounded-lg border border-slate-600 w-full max-w-[400px]"
                     />
-                    <div className="mt-4 text-center text-slate-800">
+                    <div className="mt-4 text-center text-slate-300">
                         Top-down view of the Loss Landscape (Contour Plot)
                     </div>
                 </div>
