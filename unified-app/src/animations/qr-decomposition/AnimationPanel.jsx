@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CanvasTexture, Color, EdgesGeometry, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Sprite, SpriteMaterial, WebGLRenderer } from 'three';
 import gsap from 'gsap';
+import { QR_EXAMPLE } from './qrExample.js';
 
 // Example: Simple 2x2 matrix for QR decomposition
 // A = [[3, 1], [0, 2]]
 // Q (orthonormal), R (upper triangular)
-const matrixA = [[3, 1], [0, 2]];
-const matrixQ = [[1, 0], [0, 1]]; // Simplified for visualization
-const matrixR = [[3, 1], [0, 2]]; // For this example
+const { matrixA, matrixQ, matrixR, columnCellIndices } = QR_EXAMPLE;
 
 const COLORS = {
     matrixA: 0xed7d31,
@@ -182,16 +181,16 @@ export default function AnimationPanel() {
                 objs.labels[0].visible = true;
                 break;
             case 2: // Gram-Schmidt 1
-                objs.cellsA.slice(0, 2).forEach(cell => {
+                columnCellIndices[0].map((index) => objs.cellsA[index]).forEach(cell => {
                     gsap.to(cell.scale, { x: 1.2, y: 1.2, duration: 0.3 });
                 });
-                setTimeout(() => objs.cellsA.slice(0, 2).forEach(cell => gsap.to(cell.scale, { x: 1, y: 1, duration: 0.3 })), 1000);
+                setTimeout(() => columnCellIndices[0].map((index) => objs.cellsA[index]).forEach(cell => gsap.to(cell.scale, { x: 1, y: 1, duration: 0.3 })), 1000);
                 break;
             case 3: // Gram-Schmidt 2
-                objs.cellsA.slice(2).forEach(cell => {
+                columnCellIndices[1].map((index) => objs.cellsA[index]).forEach(cell => {
                     gsap.to(cell.scale, { x: 1.2, y: 1.2, duration: 0.3 });
                 });
-                setTimeout(() => objs.cellsA.slice(2).forEach(cell => gsap.to(cell.scale, { x: 1, y: 1, duration: 0.3 })), 1000);
+                setTimeout(() => columnCellIndices[1].map((index) => objs.cellsA[index]).forEach(cell => gsap.to(cell.scale, { x: 1, y: 1, duration: 0.3 })), 1000);
                 break;
             case 4: // Show Q
                 objs.labels[1].visible = true;

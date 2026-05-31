@@ -148,6 +148,23 @@ test('qr decomposition assessment avoids unsafe misconception keying', () => {
 
 test('qr decomposition assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('qr-decomposition');
+  const trapIds = [
+    'qr-076-q-is-a-trap-2',
+    'qr-077-zero-residual-trap',
+    'qr-078-classical-gs-trap-2',
+    'qr-079-normal-equation-trap-1',
+    'qr-080-r-invertible-trap',
+    'qr-081-sign-trap',
+    'qr-082-full-q-trap',
+    'qr-083-pivoting-trap',
+    'qr-084-feature-importance-trap',
+    'qr-085-shape-trap',
+    'qr-086-orthogonal-fix-all-trap',
+    'qr-087-explicit-inverse-trap',
+    'qr-088-permutation-trap',
+    'qr-089-rank-threshold-trap',
+    'qr-090-formula-only-trap',
+  ];
   const misconceptionPatterns = [
     /Q is just A with scaled columns/i,
     /QR least squares always has zero residual/i,
@@ -166,6 +183,8 @@ test('qr decomposition assessment keeps misconception traps after setup', () => 
     /memorizing only A = QR/i,
   ];
   const trapPrompt = /trap|wrong|risky|avoid|what can go wrong|not equivalent|not imply|not automatically/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
