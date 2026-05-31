@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,32 @@ function correctAnswer(question) {
 }
 
 test('residual stream has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('residual-stream');
+  const { quiz, labs } = getLessonAssessment('residual-stream');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('resstream-'), `question ${index + 1} should use the resstream id prefix`);
+    assert.match(question.id, /^resstream-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered resstream id format`);
+    assert.equal(Number(question.id.slice(10, 13)), index + 1, `question ${index + 1} should have a sequential id`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+});
+
+test('residual stream assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('residual-stream');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
 });
 
 test('residual stream assessment progresses from additive basics to interview readiness', () => {
@@ -64,13 +77,13 @@ test('residual stream assessment covers learning points in the right order', () 
     ['purpose', ['carries token information through many components']],
     ['additive update', ['adds attention and mlp outputs']],
     ['not memory', ['not a separate memory bank or kv cache']],
-    ['formula', ['x_{l+1}']],
+    ['formula', ['x l 1']],
     ['normalization', ['normalize before a sublayer']],
     ['probing', ['activation patching']],
     ['application scale bug', ['residual write scale']],
     ['production tests', ['tiny tensor case']],
-    ['tricky false claims', ['residual-stream claim is false']],
-    ['interview readiness', ['production-ready residual-stream takeaway']],
+    ['tricky false claims', ['residual stream claim is false']],
+    ['interview readiness', ['production ready residual stream takeaway']],
   ];
 
   let previousIndex = -1;
@@ -130,6 +143,8 @@ test('residual stream assessment does not leak exact answers within a visible pa
 
 test('residual stream assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('residual-stream');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -138,4 +153,6 @@ test('residual stream assessment distributes correct-answer positions across eve
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(Math.max(...globalCounts) - Math.min(...globalCounts) <= 1, `global answer positions should stay balanced: ${globalCounts.join(', ')}`);
 });

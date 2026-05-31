@@ -2389,6 +2389,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Increase one attention or MLP write, then explain how the before/write/after vectors change.',
         successCriteria: 'You can distinguish adding a component write from replacing the whole token representation.',
       },
+      {
+        id: 'compare-scale-control',
+        title: 'Compare scale control',
+        prompt: 'Toggle Normalize after each write while increasing early and late write strengths, then explain how final magnitude and dominant feature change.',
+        successCriteria: 'You can connect residual write scale, normalization, and feature domination in the running stream.',
+      },
+      {
+        id: 'separate-stream-from-cache',
+        title: 'Separate stream from cache',
+        prompt: 'Use the layer contribution ledger to trace one token state, then explain why this running hidden representation is not a KV cache or external memory bank.',
+        successCriteria: 'You can identify the residual stream as the current per-token hidden state that components read from and write into.',
+      },
     ],
   },
   'conv-relu': {
