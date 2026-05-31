@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('classifier-free guidance has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('classifier-free-guidance');
+test('classifier-free guidance has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('classifier-free-guidance');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('cfg-'), `question ${index + 1} should use the cfg id prefix`);
+    assert.match(question.id, /^cfg-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('classifier-free guidance assessment avoids duplicate prompts and correct answers', () => {
@@ -71,15 +82,15 @@ test('classifier-free guidance assessment covers learning points in the right or
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['without a separate classifier']],
-    ['two predictions', ['prompt-conditioned prediction and an unconditional prediction']],
+    ['two predictions', ['prompt conditioned prediction and an unconditional prediction']],
     ['scale tradeoff', ['prompt match can improve while diversity and quality may suffer']],
     ['not max scale', ['maximum guidance always gives the best sample']],
     ['mechanism summary', ['steer each sampling update with a tunable scale']],
     ['low prompt match', ['increase guidance scale gradually']],
-    ['production review', ['prompt match, diversity, artifacts, and branch differences']],
+    ['production review', ['prompt match diversity artifacts and branch differences']],
     ['tricky false claims', ['requires a separate external classifier during sampling']],
-    ['interview debugging', ['sweep scale with fixed seed, inspect both predictions']],
-    ['interview readiness', ['conditional-minus-unconditional denoising direction']],
+    ['interview debugging', ['sweep scale with fixed seed inspect both predictions']],
+    ['interview readiness', ['conditional minus unconditional denoising direction']],
   ];
 
   let previousIndex = -1;

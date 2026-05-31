@@ -3275,6 +3275,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move guidance scale from low to high and compare prompt match, diversity, and artifact risk.',
         successCriteria: 'You can explain why a moderate scale can be better than the maximum scale.',
       },
+      {
+        id: 'branch-difference-inspection',
+        title: 'Inspect branch differences',
+        prompt: 'Set conditional and unconditional predictions close together, then far apart, and predict how the guidance direction changes before moving the scale.',
+        successCriteria: 'You can explain why scale has little steering effect when the two denoiser predictions are nearly identical.',
+      },
+      {
+        id: 'production-scale-calibration',
+        title: 'Calibrate a production preset',
+        prompt: 'Hold the seed, sampler, steps, and model fixed while sweeping scale across prompt slices, then record prompt match, diversity, saturation, artifacts, and latency.',
+        successCriteria: 'You can choose a guidance preset from measured tradeoffs rather than from one lucky high-scale sample.',
+      },
     ],
   },
   'unet-vs-dit': {
