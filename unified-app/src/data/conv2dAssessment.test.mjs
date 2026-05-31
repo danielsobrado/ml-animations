@@ -25,7 +25,10 @@ test('conv2d has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('conv2d');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-output-size', 'trace-selected-cell', 'compare-kernel-responses'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -124,6 +127,35 @@ test('conv2d assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('conv2d assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('conv2d');
+  const misconceptionPatterns = [
+    /separate learned kernel for each output coordinate/i,
+    /averages every pixel in the whole image/i,
+    /increasing stride always increases output spatial size/i,
+    /padding removes the need for learned kernel weights/i,
+    /ignores all but the first channel/i,
+    /more filters increase spatial height/i,
+    /always probabilities between zero and one/i,
+    /known without kernel, stride, padding, or dilation/i,
+    /separate for every spatial coordinate/i,
+    /nchw and nhwc can be swapped without changing interpretation/i,
+    /every deep-learning conv2d implementation flips kernels/i,
+    /dilation has no effect on the effective kernel footprint/i,
+    /labels are the only setting worth checking/i,
+    /no structural assumptions/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
