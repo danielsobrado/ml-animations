@@ -37,6 +37,15 @@ test('max pooling has a complete curated 100-question assessment', () => {
   }
 });
 
+test('max pooling assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('max-pooling');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('max pooling assessment progresses from definitions to interview readiness', () => {
   const { quiz } = getLessonAssessment('max-pooling');
   const expectedBands = [
