@@ -1258,10 +1258,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: POWER_SAMPLE_SIZE_QUIZ,
     labs: [
       {
+        id: 'mde-sample-sensitivity',
+        title: 'Map MDE to sample needs',
+        prompt: 'Set two MDE values for the same baseline and variance, then explain why the smaller target needs disproportionately more sample.',
+        successCriteria: 'You can connect MDE, standard error, and the square-root sample-size relationship.',
+      },
+      {
         id: 'underpowered-design-audit',
         title: 'Diagnose an underpowered test',
         prompt: 'Create an underpowered design and explain why the readout is not decisive.',
         successCriteria: 'You can name the MDE, planned sample, power, and false negative risk.',
+      },
+      {
+        id: 'validity-aware-power-readout',
+        title: 'Audit power assumptions',
+        prompt: 'Choose imbalance, clustering, missingness, noisy guardrails, or an abnormal calendar window and explain how it changes the power readout.',
+        successCriteria: 'You can separate nominal planned N from effective information and design validity.',
       },
     ],
   },
