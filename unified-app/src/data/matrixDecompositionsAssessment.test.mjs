@@ -130,6 +130,23 @@ test('matrix decompositions assessment avoids unsafe misconception keying', () =
 
 test('matrix decompositions assessment marks misconceptions as traps after setup', () => {
   const { quiz } = getLessonAssessment('matrix-decompositions');
+  const trapIds = [
+    'md-076-universal-trap',
+    'md-077-cholesky-trap',
+    'md-078-eigen-rectangular-trap',
+    'md-079-normal-equation-trap',
+    'md-080-nmf-trap',
+    'md-081-low-rank-trap',
+    'md-082-pivot-trap',
+    'md-083-diagonalizable-trap',
+    'md-084-rank-k-trap',
+    'md-085-orthogonal-trap',
+    'md-086-spd-from-ata-trap',
+    'md-087-nmf-unique-trap',
+    'md-088-eigen-symmetric-trap',
+    'md-089-inverse-trap',
+    'md-090-warning-trap',
+  ];
   const misconceptionPatterns = [
     /SVD is always the best/i,
     /just because A is square/i,
@@ -147,6 +164,8 @@ test('matrix decompositions assessment marks misconceptions as traps after setup
     /memorizing only formulas/i,
   ];
   const trapPrompt = /trap|wrong|dangerous|risky|not imply|not automatically|not assume|avoid|misunderstands|what can fail|what can .* hide/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
