@@ -131,6 +131,23 @@ test('fundamental subspaces assessment avoids unsafe misconception keying', () =
 
 test('fundamental subspaces assessment marks misconceptions as traps after setup', () => {
   const { quiz } = getLessonAssessment('fundamental-subspaces');
+  const trapIds = [
+    'fs-076-ambient-trap',
+    'fs-077-row-reduction-trap',
+    'fs-078-left-null-trap',
+    'fs-079-consistency-trap',
+    'fs-080-orthogonality-trap',
+    'fs-081-square-trap',
+    'fs-082-full-rank-trap',
+    'fs-083-zero-vector-trap',
+    'fs-084-nonzero-null-trap',
+    'fs-085-left-condition-trap',
+    'fs-086-dimension-sign-trap',
+    'fs-087-row-space-output-trap',
+    'fs-088-basis-size-trap',
+    'fs-089-least-squares-trap',
+    'fs-090-free-variable-trap',
+  ];
   const misconceptionPatterns = [
     /Row\(A\) equals Col\(A\)/i,
     /using columns of RREF\(A\)/i,
@@ -147,6 +164,8 @@ test('fundamental subspaces assessment marks misconceptions as traps after setup
     /same dimension does not mean/i,
   ];
   const trapPrompt = /trap|risky|confusion|wrong|unsafe|does not imply|not imply|not mean|why must|why can|does not mean|misconception|rectangular|never correct/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
