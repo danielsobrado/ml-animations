@@ -26,6 +26,11 @@ test('sampling strategies has a complete curated 100-question assessment', () =>
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'decode-for-task',
+    'inspect-candidate-set',
+    'compare-production-defaults',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('sampling strategies assessment avoids unsafe misconception keying', () => 
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('sampling strategies misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('sampling-strategies');
+  const trapIds = [
+    'samp-076-false-retrain',
+    'samp-077-false-topp-count',
+    'samp-078-false-topk-mass',
+    'samp-079-false-temperature',
+    'samp-080-false-greedy',
+    'samp-081-false-beam',
+    'samp-082-false-diversity',
+    'samp-083-false-tail',
+    'samp-084-false-beam-cost',
+    'samp-085-false-seed',
+    'samp-086-false-json',
+    'samp-087-false-eval',
+    'samp-088-false-generic',
+    'samp-089-false-order',
+    'samp-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
