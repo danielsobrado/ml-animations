@@ -76,6 +76,7 @@ import { OVERFITTING_QUIZ } from './overfittingAssessment.js';
 import { PCA_QUIZ } from './pcaAssessment.js';
 import { POSITIONAL_ENCODING_QUIZ } from './positionalEncodingAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
+import { PSEUDOINVERSE_QUIZ } from './pseudoinverseAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { Q_LEARNING_QUIZ } from './qLearningAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
@@ -911,6 +912,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Audit fit quality',
         prompt: 'Choose one active case and explain whether the fitted vector is exact, close, or weak by reading residual length and direction.',
         successCriteria: 'You can justify fit quality without confusing b, b_hat, and e.',
+      },
+    ],
+  },
+  pseudoinverse: {
+    quiz: PSEUDOINVERSE_QUIZ,
+    labs: [
+      {
+        id: 'compare-pseudoinverse-rank-modes',
+        title: 'Compare rank modes',
+        prompt: 'Switch between full column rank, full row rank, and rank deficient, then record the active formula and solution promise for each mode.',
+        successCriteria: 'You can match unique least squares, minimum-norm exact solution, and SVD zero-skipping to the right rank condition.',
+      },
+      {
+        id: 'trace-svd-pseudoinverse-flow',
+        title: 'Trace the SVD flow',
+        prompt: 'Follow the diagram from b through U^T b, Sigma+, V, and x+, explaining what each stage changes.',
+        successCriteria: 'You can explain why Sigma+ rescales only supported singular directions before V maps back to input space.',
+      },
+      {
+        id: 'audit-zero-singular-value',
+        title: 'Audit zero singular values',
+        prompt: 'Use the Practice Lab check and singular-direction bars to decide what happens when a singular value is zero.',
+        successCriteria: 'You can state why zero singular values stay zero instead of becoming reciprocals.',
       },
     ],
   },
