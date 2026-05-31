@@ -37,6 +37,15 @@ test('diffusion sampling has a complete curated 100-question assessment', () => 
   }
 });
 
+test('diffusion sampling assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('diffusion-sampling');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('diffusion sampling assessment progresses from sampler basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('diffusion-sampling');
   const expectedBands = [
