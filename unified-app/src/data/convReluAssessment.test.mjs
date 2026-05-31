@@ -134,6 +134,23 @@ test('conv relu assessment avoids unsafe misconception keying', () => {
 
 test('conv relu assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('conv-relu');
+  const expectedTrapIds = [
+    'cr-076-false-order-trap',
+    'cr-077-false-detector-trap',
+    'cr-078-false-negative-trap',
+    'cr-079-false-shape-trap',
+    'cr-080-false-gradient-trap',
+    'cr-081-false-bias-trap',
+    'cr-082-false-sparsity-trap',
+    'cr-083-false-probability-trap',
+    'cr-084-false-polarity-trap',
+    'cr-085-false-preactivation-trap',
+    'cr-086-false-padding-trap',
+    'cr-087-false-stride-trap',
+    'cr-088-false-all-positive-trap',
+    'cr-089-false-debug-trap',
+    'cr-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /removes negative values before the convolution/i,
     /relu creates the learned local pattern detector/i,
@@ -152,6 +169,13 @@ test('conv relu assessment keeps misconception traps after setup', () => {
     /order, sign, and masks cannot cause bugs/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.deepEqual(
+    trapQuestions.map((question) => question.id),
+    expectedTrapIds,
+  );
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
