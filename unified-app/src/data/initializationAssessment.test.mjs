@@ -143,6 +143,23 @@ test('initialization assessment avoids unsafe misconception keying', () => {
 
 test('initialization assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('initialization');
+  const expectedTrapIds = [
+    'init-076-trap-random-safe',
+    'init-077-trap-zero',
+    'init-078-trap-xavier',
+    'init-079-trap-he',
+    'init-080-trap-depth',
+    'init-081-trap-normalization',
+    'init-082-trap-residual',
+    'init-083-trap-seed',
+    'init-084-trap-fan-in',
+    'init-085-trap-bias',
+    'init-086-trap-output',
+    'init-087-trap-saturation',
+    'init-088-trap-one-metric',
+    'init-089-trap-later-fix',
+    'init-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /any random initialization scale is safe/i,
     /all-zero hidden weights are a safe default/i,
@@ -160,6 +177,8 @@ test('initialization assessment keeps misconception traps after setup', () => {
     /bad initialization can always be fixed later/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
