@@ -127,6 +127,23 @@ test('gradient problems assessment avoids unsafe misconception keying', () => {
 
 test('gradient problems assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('gradient-problems');
+  const expectedTrapIds = [
+    'grp-076-trap-clipping-vanish',
+    'grp-077-trap-loss-only',
+    'grp-078-trap-depth',
+    'grp-079-trap-residual',
+    'grp-080-trap-adam',
+    'grp-081-trap-small-gradient',
+    'grp-082-trap-large-gradient',
+    'grp-083-trap-dead-relu',
+    'grp-084-trap-initialization',
+    'grp-085-trap-normalization',
+    'grp-086-trap-threshold',
+    'grp-087-trap-sequence',
+    'grp-088-trap-gradient-zero',
+    'grp-089-trap-one-metric',
+    'grp-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /fixes vanishing gradients by making tiny gradients large/i,
     /loss alone is enough/i,
@@ -144,6 +161,8 @@ test('gradient problems assessment keeps misconception traps after setup', () =>
     /one global gradient norm always reveals/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|reject|overconfident|overbroad|too weak|needs caution/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
