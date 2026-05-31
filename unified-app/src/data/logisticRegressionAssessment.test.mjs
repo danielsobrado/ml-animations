@@ -236,6 +236,23 @@ test('logistic regression assessment avoids unsafe misconception keying', () => 
 
 test('logistic regression assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('logistic-regression');
+  const expectedTrapIds = [
+    'logreg-076-trap-linear',
+    'logreg-077-trap-sigmoid',
+    'logreg-078-trap-threshold',
+    'logreg-079-trap-boundary',
+    'logreg-080-trap-calibration',
+    'logreg-081-trap-probability',
+    'logreg-082-trap-coefficients',
+    'logreg-083-trap-regularization',
+    'logreg-084-trap-scale',
+    'logreg-085-trap-separable',
+    'logreg-086-trap-threshold-05',
+    'logreg-087-trap-loss',
+    'logreg-088-trap-logit',
+    'logreg-089-trap-imbalance',
+    'logreg-090-trap-reporting',
+  ];
   const misconceptionPatterns = [
     /predicts an unbounded continuous value/i,
     /sigmoid maps every input to only 0 or 1/i,
@@ -254,6 +271,8 @@ test('logistic regression assessment keeps misconception traps after setup', () 
     /only the final hard labels are needed/i,
   ];
   const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
