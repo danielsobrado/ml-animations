@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,32 @@ function correctAnswer(question) {
 }
 
 test('cosine similarity has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('cosine-similarity');
+  const { quiz, labs } = getLessonAssessment('cosine-similarity');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('cos-'), `question ${index + 1} should use the cos id prefix`);
+    assert.match(question.id, /^cos-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the cos id format`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `question ${index + 1} id number should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+});
+
+test('cosine similarity assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('cosine-similarity');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
 });
 
 test('cosine similarity assessment progresses from direction basics to interview readiness', () => {
@@ -62,15 +75,15 @@ test('cosine similarity assessment covers learning points in the right order', (
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['compares vector direction']],
-    ['same direction', ['cosine similarity 1']],
-    ['not proof', ['ranking signals, not proof']],
+    ['same direction', ['positive one']],
+    ['not proof', ['ranking signals not proof']],
     ['formula', ['dot product divided by the product']],
     ['normalized dot product', ['cosine equals their dot product']],
-    ['zero vector', ['norm is zero, so cosine is undefined']],
+    ['zero vector', ['norm is zero so cosine is undefined']],
     ['retrieval validation', ['precision and recall around that cutoff']],
-    ['production monitoring', ['score distribution or top-neighbor quality']],
+    ['production monitoring', ['score distribution or top neighbor quality']],
     ['tricky false claims', ['interpretation is false']],
-    ['interview readiness', ['production-ready cosine takeaway']],
+    ['interview readiness', ['production ready cosine takeaway']],
   ];
 
   let previousIndex = -1;
@@ -130,6 +143,7 @@ test('cosine similarity assessment does not leak exact answers within a visible 
 
 test('cosine similarity assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('cosine-similarity');
+  const globalPositionCounts = [0, 1, 2].map((slot) => quiz.filter((question) => question.answerIndex === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -138,4 +152,9 @@ test('cosine similarity assessment distributes correct-answer positions across e
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(
+    Math.max(...globalPositionCounts) - Math.min(...globalPositionCounts) <= 1,
+    `global answer positions should be balanced, got ${globalPositionCounts.join(', ')}`,
+  );
 });

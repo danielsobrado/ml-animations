@@ -2177,6 +2177,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: COSINE_SIMILARITY_QUIZ,
     labs: [
       {
+        id: 'trace-dot-product-normalization',
+        title: 'Trace dot normalization',
+        prompt: 'Use the Dot Product tab to create same-direction, perpendicular, and opposite vectors, then record dot product, norms, angle, and cosine.',
+        successCriteria: 'You can explain how the denominator removes positive length effects while preserving direction.',
+      },
+      {
+        id: 'compare-movie-matches',
+        title: 'Compare movie matches',
+        prompt: 'Adjust the Movie Matcher sliders until User A is closer to User C than User B, then explain which genre dimensions changed the ranking.',
+        successCriteria: 'Your explanation connects aligned preference directions to the cosine score rather than raw profile size.',
+      },
+      {
         id: 'predict-nearest',
         title: 'Predict the nearest vector',
         prompt: 'Before changing the sliders or query, predict which vector or document will rank highest and why.',

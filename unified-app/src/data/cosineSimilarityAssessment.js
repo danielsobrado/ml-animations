@@ -1,6 +1,6 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
+  const questionNumber = Number(id.match(/^cos-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
   const rotation = stableHash(`cosine-similarity:${id}`) % 3;
   const answerIndex = (desiredFinalIndex + rotation) % 3;
   const choices = [...distractors];
@@ -25,9 +25,9 @@ const COSINE_SIMILARITY_SPECS = [
   ['cos-002-vector-inputs', 'Foundation', 'What inputs does cosine similarity compare?', 'Two nonzero numeric vectors in the same dimension', ['Two unrelated text strings with no encoding', 'A vector and a class-name list'], 'The vectors need matching coordinates so dot product and norms are defined.'],
   ['cos-003-direction-idea', 'Foundation', 'What does a high positive cosine usually mean?', 'The vectors point in similar directions', ['The vectors have identical lengths only', 'The model has zero training error'], 'Alignment, not raw size, is the main signal.'],
   ['cos-004-magnitude-contrast', 'Foundation', 'Why is cosine different from a raw dot product?', 'It divides out vector lengths before scoring alignment', ['It ignores all coordinates', 'It always sorts by the longest vector'], 'The denominator removes much of the magnitude contribution.'],
-  ['cos-005-same-direction', 'Foundation', 'What score do parallel nonzero vectors in the same direction have?', 'Cosine similarity 1', ['Cosine similarity 0', 'Cosine similarity -1'], 'Same-direction vectors have the maximum possible alignment.'],
-  ['cos-006-perpendicular', 'Foundation', 'What score do perpendicular nonzero vectors have?', 'Cosine similarity 0', ['Cosine similarity 1', 'Cosine similarity -1'], 'A zero dot product gives zero normalized alignment.'],
-  ['cos-007-opposite', 'Foundation', 'What score do opposite-direction nonzero vectors have?', 'Cosine similarity -1', ['Cosine similarity 0', 'Cosine similarity 1'], 'Vectors pointing exactly opposite have minimum alignment.'],
+  ['cos-005-same-direction', 'Foundation', 'What score do parallel nonzero vectors in the same direction have?', 'Cosine similarity is positive one', ['Cosine similarity is zero', 'Cosine similarity is negative one'], 'Same-direction vectors have the maximum possible alignment.'],
+  ['cos-006-perpendicular', 'Foundation', 'What score do perpendicular nonzero vectors have?', 'Cosine similarity is zero', ['Cosine similarity is positive one', 'Cosine similarity is negative one'], 'A zero dot product gives zero normalized alignment.'],
+  ['cos-007-opposite', 'Foundation', 'What score do opposite-direction nonzero vectors have?', 'Cosine similarity is negative one', ['Cosine similarity is zero', 'Cosine similarity is positive one'], 'Vectors pointing exactly opposite have minimum alignment.'],
   ['cos-008-score-range', 'Foundation', 'What is the usual cosine similarity range for real vectors?', 'From -1 to 1', ['From 0 to infinity', 'Only whole numbers above 1'], 'Cosine is bounded by the angle between real-valued vectors.'],
   ['cos-009-embedding-link', 'Foundation', 'Why is cosine common with embeddings?', 'Embeddings can be ranked by directional closeness', ['Embeddings cannot use numeric metrics', 'Cosine replaces the encoder entirely'], 'Vector search often compares learned representations with a similarity metric.'],
   ['cos-010-retrieval-link', 'Foundation', 'How can cosine support search?', 'Rank stored vectors by alignment to a query vector', ['Return documents by file name only', 'Guarantee that every top result is true'], 'Dense retrieval scores candidate embeddings against the query embedding.'],
