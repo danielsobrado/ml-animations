@@ -140,6 +140,23 @@ test('knn naive bayes svm assessment avoids unsafe misconception keying', () => 
 
 test('knn naive bayes svm assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('knn-naive-bayes-svm');
+  const expectedTrapIds = [
+    'knnnbsvm-076-trap-best',
+    'knnnbsvm-077-trap-knn-scale',
+    'knnnbsvm-078-trap-knn-training',
+    'knnnbsvm-079-trap-k',
+    'knnnbsvm-080-trap-nb-independence',
+    'knnnbsvm-081-trap-nb-zero',
+    'knnnbsvm-082-trap-nb-calibration',
+    'knnnbsvm-083-trap-svm-scale',
+    'knnnbsvm-084-trap-margin',
+    'knnnbsvm-085-trap-c',
+    'knnnbsvm-086-trap-kernel',
+    'knnnbsvm-087-trap-probabilities',
+    'knnnbsvm-088-trap-final-test',
+    'knnnbsvm-089-trap-accuracy',
+    'knnnbsvm-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /always best for every dataset/i,
     /scale never affects kNN/i,
@@ -157,6 +174,8 @@ test('knn naive bayes svm assessment keeps misconception traps after setup', () 
     /accuracy alone always chooses/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
