@@ -25,7 +25,10 @@ test('ML security robustness has a complete curated 100-question assessment', ()
   const { quiz, labs } = getLessonAssessment('ml-security-robustness-track');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['ml-security-robustness-track-scenario-lab', 'rag-tool-threat-model', 'security-regression-plan'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -136,6 +139,35 @@ test('ML security robustness assessment avoids unsafe misconception keying', () 
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('ML security robustness assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('ml-security-robustness-track');
+  const misconceptionPatterns = [
+    /complete security boundary by itself/i,
+    /allowed to override system instructions/i,
+    /action is always authorized/i,
+    /safe to put credentials in prompts/i,
+    /accuracy proves no private data can leak/i,
+    /external training data can be trusted if the model score improves/i,
+    /happy-path tests are enough/i,
+    /removes the need for least privilege/i,
+    /no monitoring is needed/i,
+    /infer authorization from the user request wording/i,
+    /untrusted webpage text may instruct an agent/i,
+    /one average safety score proves every severe failure is impossible/i,
+    /store all raw prompts and secrets forever/i,
+    /automatically follow internal data policies/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|dangerous/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
