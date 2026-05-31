@@ -26,6 +26,11 @@ test('rag failure modes has a complete curated 100-question assessment with focu
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'failure-tune',
+    'classify-failure-table',
+    'build-regression-case',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -127,6 +132,31 @@ test('rag failure modes assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('rag failure modes misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('rag-failure-modes');
+  const trapIds = [
+    'ragfail-076-false-fluency',
+    'ragfail-077-false-reranker',
+    'ragfail-078-false-topk',
+    'ragfail-079-false-citation',
+    'ragfail-080-false-strictness',
+    'ragfail-081-false-stale',
+    'ragfail-082-false-conflict',
+    'ragfail-083-false-irrelevant',
+    'ragfail-084-false-abstain',
+    'ragfail-085-false-policy',
+    'ragfail-086-false-metric',
+    'ragfail-087-false-generator',
+    'ragfail-088-false-chunk',
+    'ragfail-089-false-eval',
+    'ragfail-090-tricky-summary',
+  ];
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
