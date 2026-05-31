@@ -80,6 +80,23 @@ test('pseudoinverse assessment progresses through lesson learning points', () =>
 
 test('pseudoinverse keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('pseudoinverse');
+  const trapIds = [
+    'pinv-076-false-ordinary-inverse',
+    'pinv-077-wrong-zero-reciprocal',
+    'pinv-078-dangerous-infinity',
+    'pinv-079-false-column-outcome',
+    'pinv-080-false-row-outcome',
+    'pinv-081-wrong-rank-deficient',
+    'pinv-082-false-formula-choice',
+    'pinv-083-dangerous-fit',
+    'pinv-084-wrong-svd-order',
+    'pinv-085-false-small-zero',
+    'pinv-086-wrong-lost-info',
+    'pinv-087-false-transpose',
+    'pinv-088-dangerous-one-rule',
+    'pinv-089-false-svd-square',
+    'pinv-090-wrong-title-only',
+  ];
   const misconceptionTerms = [
     /only works for square full-rank matrices/i,
     /replaced by 1\/0/i,
@@ -98,6 +115,8 @@ test('pseudoinverse keeps misconception traps after setup', () => {
     /title alone tells you/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|rejected|unsafe/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
