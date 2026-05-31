@@ -1743,6 +1743,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move complexity until validation error is lowest, then compare it with the lowest training error.',
         successCriteria: 'You can explain why the best validation point is not necessarily the most complex model.',
       },
+      {
+        id: 'generalization-gap-diagnosis',
+        title: 'Diagnose the gap',
+        prompt: 'Use train, validation, and final-test behavior to distinguish overfitting from underfitting, leakage, split mismatch, and distribution shift.',
+        successCriteria: 'You can name the evidence needed before blaming model capacity alone.',
+      },
+      {
+        id: 'remedy-and-report-plan',
+        title: 'Plan remedies and reporting',
+        prompt: 'Choose a remedy such as regularization, early stopping, simpler models, augmentation, more data, or resampling, then document search scope and held-out evidence.',
+        successCriteria: 'You can reduce memorization pressure without tuning repeatedly on the final test set.',
+      },
     ],
   },
   'bias-variance-tradeoff': {
