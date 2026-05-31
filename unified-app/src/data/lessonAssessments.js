@@ -1355,6 +1355,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Increase collider conditioning and explain why the adjustment set gets worse.',
         successCriteria: 'You can classify a variable as confounder, collider, or mediator.',
       },
+      {
+        id: 'backdoor-set-audit',
+        title: 'Audit a backdoor set',
+        prompt: 'Choose variables that close open backdoor paths while leaving mediators and colliders out of the total-effect adjustment.',
+        successCriteria: 'You can justify an adjustment set from graph structure instead of correlation strength.',
+      },
+      {
+        id: 'dag-readout-audit',
+        title: 'Audit a DAG readout',
+        prompt: 'Write a readout with treatment, outcome, graph assumptions, estimand, adjustment set, avoided controls, diagnostics, and sensitivity caveats.',
+        successCriteria: 'You can report DAG-based evidence without implying the graph proves its assumptions.',
+      },
     ],
   },
   'treatment-effects': {
