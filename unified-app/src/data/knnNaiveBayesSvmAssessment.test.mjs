@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('knn naive bayes svm has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('knn-naive-bayes-svm');
+  const { quiz, labs } = getLessonAssessment('knn-naive-bayes-svm');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('knnnbsvm-'), `question ${index + 1} should use the knnnbsvm id prefix`);
+    assert.match(question.id, /^knnnbsvm-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered knnnbsvm id`);
+    assert.equal(Number(question.id.slice(9, 12)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, question.choices.length, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -77,11 +81,11 @@ test('knn naive bayes svm assessment covers learning points in the right order',
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const orderedMilestones = [
-    ['purpose', ['neighbor voting', 'probabilistic likelihoods', 'margin-based classification']],
+    ['purpose', ['neighbor voting', 'probabilistic likelihoods', 'margin based classification']],
     ['kNN idea', ['nearby training examples']],
-    ['Naive Bayes idea', ['class priors', 'per-feature likelihoods']],
+    ['Naive Bayes idea', ['class priors', 'per feature likelihoods']],
     ['SVM idea', ['large margin']],
-    ['kNN scaling', ['largest-unit feature']],
+    ['kNN scaling', ['largest unit feature']],
     ['Naive Bayes independence', ['conditionally independent given the class']],
     ['SVM support vectors', ['determine the svm boundary']],
     ['mechanics comparison', ['locality', 'distributional assumptions', 'margin geometry']],
@@ -155,6 +159,13 @@ test('knn naive bayes svm assessment does not leak exact answers within a visibl
 
 test('knn naive bayes svm assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('knn-naive-bayes-svm');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be balanced: ${totals.join(', ')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);

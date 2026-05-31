@@ -1812,6 +1812,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move the query point near the boundary and switch between kNN, Naive Bayes, and SVM.',
         successCriteria: 'You can explain whether the decision came from local neighbors, likelihood scores, or margin side.',
       },
+      {
+        id: 'preprocessing-and-scale-check',
+        title: 'Check preprocessing',
+        prompt: 'Explain how feature scaling, encoding, missing-value handling, and leakage-safe splits affect a fair comparison among the three models.',
+        successCriteria: 'You can name why distance and margin methods are scale-sensitive while Naive Bayes depends on feature likelihood assumptions.',
+      },
+      {
+        id: 'hyperparameter-selection-report',
+        title: 'Select hyperparameters',
+        prompt: 'Choose k, distance weighting, likelihood smoothing, C, kernel, or gamma from validation behavior while keeping final test data frozen.',
+        successCriteria: 'You can connect each hyperparameter to locality, likelihood evidence, margin flexibility, and honest evaluation.',
+      },
     ],
   },
   'tree-ensembles': {
