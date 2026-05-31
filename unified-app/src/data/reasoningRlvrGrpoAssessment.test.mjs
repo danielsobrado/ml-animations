@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { REASONING_RLVR_GRPO_QUIZ } from './reasoningRlvrGrpoAssessment.js';
+import { getLessonAssessment } from './lessonAssessments.js';
 
 const LEVELS = new Set(['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview']);
 
@@ -8,23 +8,39 @@ function normalize(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
-test('reasoning RLVR GRPO assessment has 100 production-ready questions', () => {
-  assert.equal(REASONING_RLVR_GRPO_QUIZ.length, 100);
+test('reasoning RLVR GRPO assessment has 100 production-ready questions with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('reasoning-rlvr-grpo');
+
+  assert.equal(labs.length, 7);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'grpo-group-advantage-lab',
+    'tune-grpo-rewards',
+    'solve-all-negatives',
+    'process-credit',
+    'detect-reward-hacking',
+    'distill-student',
+    'prevent-kl-drift',
+  ]);
+
+  assert.equal(quiz.length, 100);
   const ids = new Set();
   const prompts = new Set();
   const correctAnswers = new Set();
+  const globalCounts = [0, 0, 0];
 
-  for (const [index, item] of REASONING_RLVR_GRPO_QUIZ.entries()) {
+  for (const [index, item] of quiz.entries()) {
     assert.match(item.id, /^rlvr-grpo-\d{3}$/);
     assert.equal(ids.has(item.id), false, `duplicate id ${item.id}`);
     ids.add(item.id);
     assert.equal(item.id, `rlvr-grpo-${String(index + 1).padStart(3, '0')}`);
     assert.equal(LEVELS.has(item.level), true, `${item.id} has unexpected level ${item.level}`);
     assert.equal(item.choices.length, 3, `${item.id} should have three choices`);
+    assert.equal(Number.isInteger(item.answerIndex), true, `${item.id} answerIndex should be an integer`);
     assert.ok(item.answerIndex >= 0 && item.answerIndex < 3, `${item.id} answerIndex out of range`);
     assert.ok(item.prompt.length > 20, `${item.id} prompt too short`);
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
+    globalCounts[item.answerIndex] += 1;
 
     const normalizedPrompt = normalize(item.prompt);
     const normalizedCorrect = normalize(item.choices[item.answerIndex]);
@@ -33,9 +49,15 @@ test('reasoning RLVR GRPO assessment has 100 production-ready questions', () => 
     prompts.add(normalizedPrompt);
     correctAnswers.add(normalizedCorrect);
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('reasoning RLVR GRPO assessment progresses from pipeline basics to production audit', () => {
+  const { quiz } = getLessonAssessment('reasoning-rlvr-grpo');
   const ranges = [
     ['Foundation', 0, 20],
     ['Mechanism', 20, 50],
@@ -45,7 +67,7 @@ test('reasoning RLVR GRPO assessment progresses from pipeline basics to producti
   ];
 
   for (const [level, start, end] of ranges) {
-    assert.equal(REASONING_RLVR_GRPO_QUIZ.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
+    assert.equal(quiz.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
   }
 
   const milestones = [
@@ -59,7 +81,7 @@ test('reasoning RLVR GRPO assessment progresses from pipeline basics to producti
 
   let previous = -1;
   for (const [name, terms] of milestones) {
-    const index = REASONING_RLVR_GRPO_QUIZ.findIndex((item) => (
+    const index = quiz.findIndex((item) => (
       terms.every((term) => normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`).includes(normalize(term)))
     ));
     assert.notEqual(index, -1, `missing milestone: ${name}`);
@@ -69,6 +91,7 @@ test('reasoning RLVR GRPO assessment progresses from pipeline basics to producti
 });
 
 test('reasoning RLVR GRPO assessment marks unsafe misconceptions as traps after setup', () => {
+  const { quiz } = getLessonAssessment('reasoning-rlvr-grpo');
   const misconceptionTerms = [
     /chain-of-thought examples alone/i,
     /guarantee there is no reward hacking/i,
@@ -88,7 +111,7 @@ test('reasoning RLVR GRPO assessment marks unsafe misconceptions as traps after 
   ];
   const trapPrompt = /false|wrong|unsafe|trap|reject|misconception/i;
 
-  for (const [index, item] of REASONING_RLVR_GRPO_QUIZ.entries()) {
+  for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
     const containsMisconception = misconceptionTerms.some((pattern) => pattern.test(text));
     if (!containsMisconception) continue;
@@ -99,10 +122,17 @@ test('reasoning RLVR GRPO assessment marks unsafe misconceptions as traps after 
 });
 
 test('reasoning RLVR GRPO assessment avoids visible-page answer leakage', () => {
+  const { quiz } = getLessonAssessment('reasoning-rlvr-grpo');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < REASONING_RLVR_GRPO_QUIZ.length; pageStart += pageSize) {
-    const page = REASONING_RLVR_GRPO_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const correctAnswers = page.map((item) => normalize(item.choices[item.answerIndex]));
+
+    assert.equal(
+      new Set(correctAnswers).size,
+      correctAnswers.length,
+      `page starting at question ${pageStart + 1} should not repeat exact answers`,
+    );
 
     for (const [offset, item] of page.entries()) {
       const surroundingPrompts = page
@@ -115,9 +145,10 @@ test('reasoning RLVR GRPO assessment avoids visible-page answer leakage', () => 
 });
 
 test('reasoning RLVR GRPO assessment distributes correct answer positions per page', () => {
+  const { quiz } = getLessonAssessment('reasoning-rlvr-grpo');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < REASONING_RLVR_GRPO_QUIZ.length; pageStart += pageSize) {
-    const page = REASONING_RLVR_GRPO_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const counts = [0, 0, 0];
     for (const item of page) counts[item.answerIndex] += 1;
     assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `imbalanced page at ${pageStart + 1}: ${counts.join(',')}`);
