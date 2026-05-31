@@ -25,7 +25,10 @@ test('cosine similarity has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('cosine-similarity');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-dot-product-normalization', 'compare-movie-matches', 'predict-nearest'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +123,41 @@ test('cosine similarity assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|interpretation/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('cosine similarity assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('cosine-similarity');
+  const misconceptionPatterns = [
+    /equating high cosine with guaranteed relevance/i,
+    /calibrated probability of relevance/i,
+    /always changes cosine/i,
+    /cosine similarity 1 with every vector/i,
+    /always rank candidates identically/i,
+    /universal cosine cutoff/i,
+    /guaranteed factually correct/i,
+    /removes training-data bias automatically/i,
+    /different coordinate counts directly/i,
+    /unrelated to dot product/i,
+    /correct cosine rankings automatically/i,
+    /always final truth/i,
+    /ignores all term overlap/i,
+    /needs no monitoring/i,
+    /without alignment/i,
+    /proves meaning, fairness, and correctness/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|interpretation|mistake/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    if (index < 75) {
+      assert.match(question.prompt, /mistake.*avoid/i, `${question.id} should scaffold any early misconception`);
+      continue;
+    }
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
