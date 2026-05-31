@@ -26,6 +26,11 @@ test('residual stream has a complete curated 100-question assessment', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-component-write',
+    'compare-scale-control',
+    'separate-stream-from-cache',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('residual stream assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('residual stream misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('residual-stream');
+  const trapIds = [
+    'resstream-076-false-memory',
+    'resstream-077-false-replace',
+    'resstream-078-false-final-only',
+    'resstream-079-false-scale',
+    'resstream-080-false-no-interference',
+    'resstream-081-false-shape',
+    'resstream-082-false-attention',
+    'resstream-083-false-mlp',
+    'resstream-084-false-cache',
+    'resstream-085-false-norm',
+    'resstream-086-false-gradients',
+    'resstream-087-false-logits',
+    'resstream-088-false-probing',
+    'resstream-089-false-parallel',
+    'resstream-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
