@@ -26,9 +26,14 @@ function correctAnswer(question) {
 test('cross-validation has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('cross-validation');
   const ids = new Set(quiz.map((question) => question.id));
+  const globalCounts = [0, 0, 0];
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-fold-rotation',
+    'choose-fold-design',
+    'audit-fold-pipeline',
+  ]);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
@@ -42,7 +47,13 @@ test('cross-validation has a complete curated 100-question assessment', () => {
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
     assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
+    globalCounts[question.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('cross-validation assessment avoids duplicate prompts and exact correct answers', () => {
@@ -138,6 +149,37 @@ test('cross-validation assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('cross-validation assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('cross-validation');
+  const misconceptionPatterns = [
+    /preprocessing before CV is false/i,
+    /best fold score as the headline estimate/i,
+    /removes any need for an untouched final evaluation/i,
+    /random KFold the wrong default/i,
+    /nested-CV mistake/i,
+    /repeating CV not fix/i,
+    /leave-one-out is always the most reliable/i,
+    /out-of-fold prediction is invalid/i,
+    /metric practice leaks judgment/i,
+    /group and stratification requirements conflict/i,
+    /shuffled CV look excellent on time series/i,
+    /final-refit action is unsafe/i,
+    /low fold variance is unsafe/i,
+    /cached artifact is dangerous/i,
+    /production risk of a clean CV score/i,
+  ];
+  const trapPrompt = /trap|false|misleading|overclaims|wrong|mistake|not fix|too absolute|invalid|leaks judgment|conflict|unsafe|dangerous|risk|why can/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
