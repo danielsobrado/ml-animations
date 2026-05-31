@@ -127,6 +127,23 @@ test('dropout batchnorm assessment avoids unsafe misconception keying', () => {
 
 test('dropout batchnorm assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('dropout-batchnorm');
+  const expectedTrapIds = [
+    'dbn-076-trap-interchangeable',
+    'dbn-077-trap-inference-dropout',
+    'dbn-078-trap-test-stats',
+    'dbn-079-trap-bn-fixes-all',
+    'dbn-080-trap-dropout-fixes-underfit',
+    'dbn-081-trap-last-layer',
+    'dbn-082-trap-batch-size',
+    'dbn-083-trap-mode',
+    'dbn-084-trap-running-stats',
+    'dbn-085-trap-gamma-beta',
+    'dbn-086-trap-regularization',
+    'dbn-087-trap-randomness',
+    'dbn-088-trap-data-leakage',
+    'dbn-089-trap-confidence',
+    'dbn-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /interchangeable because both improve training/i,
     /keep randomly masking units at serving time/i,
@@ -144,6 +161,8 @@ test('dropout batchnorm assessment keeps misconception traps after setup', () =>
     /guarantees calibrated probabilities/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|reject|overclaim|too absolute|too narrow|mistake|risks/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
