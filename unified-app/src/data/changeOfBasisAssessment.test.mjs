@@ -79,6 +79,23 @@ test('change of basis assessment progresses through lesson learning points', () 
 
 test('change of basis keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('change-of-basis');
+  const trapIds = [
+    'cob-076-false-coordinate-object',
+    'cob-077-wrong-arrow-moves',
+    'cob-078-false-row-storage',
+    'cob-079-wrong-operator-order',
+    'cob-080-dangerous-no-inverse',
+    'cob-081-false-dependent-basis',
+    'cob-082-false-standard-only',
+    'cob-083-wrong-same-tuple',
+    'cob-084-false-all-presets',
+    'cob-085-wrong-map-vector',
+    'cob-086-false-multiply-side',
+    'cob-087-wrong-negative-invalid',
+    'cob-088-false-map-changes-object',
+    'cob-089-dangerous-label-only',
+    'cob-090-wrong-practice-spoiler',
+  ];
   const misconceptionTerms = [
     /coordinate list is the vector object itself/i,
     /arrow must move/i,
@@ -97,6 +114,8 @@ test('change of basis keeps misconception traps after setup', () => {
     /Memorize the reveal text/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|rejected|unsafe|overreads|contradicts/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
