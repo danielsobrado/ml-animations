@@ -1212,10 +1212,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: HYPOTHESIS_TESTING_INTUITION_QUIZ,
     labs: [
       {
+        id: 'trace-signal-noise',
+        title: 'Trace signal versus noise',
+        prompt: 'Move effect size and variability, then explain how the test statistic changes before reading the p-value.',
+        successCriteria: 'You can connect observed effect, standard error, and null-distribution surprise.',
+      },
+      {
         id: 'tiny-effect-large-sample',
         title: 'Find a tiny significant effect',
         prompt: 'Use a small effect with a large sample and explain why the evidence can look strong while the effect remains small.',
         successCriteria: 'You can separate statistical evidence from practical impact.',
+      },
+      {
+        id: 'audit-testing-protocol',
+        title: 'Audit the test protocol',
+        prompt: 'Choose a peeking, multiple-testing, one-sided, or nonrandomized scenario and identify the broken testing assumption.',
+        successCriteria: 'You can name the error path and the predeclared design or reporting fix.',
       },
     ],
   },
