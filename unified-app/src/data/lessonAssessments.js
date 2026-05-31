@@ -77,6 +77,7 @@ import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { Q_LEARNING_QUIZ } from './qLearningAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
+import { RAG_QUIZ } from './ragAssessment.js';
 import { RAG_CHUNKING_CONTEXT_QUIZ } from './ragChunkingContextAssessment.js';
 import { RAG_FAILURE_MODES_QUIZ } from './ragFailureModesAssessment.js';
 import { RAG_RERANKING_GROUNDING_QUIZ } from './ragRerankingGroundingAssessment.js';
@@ -1738,6 +1739,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Choose a fine-tuning method',
         prompt: 'Pick one scenario with limited GPU memory, one with demonstrations, and one with preference pairs, then choose LoRA, SFT, or DPO/RLHF.',
         successCriteria: 'Your choice matches the available data signal and the memory or behavior constraint.',
+      },
+    ],
+  },
+  rag: {
+    quiz: RAG_QUIZ,
+    labs: [
+      {
+        id: 'trace-rag-indexing-pipeline',
+        title: 'Trace the indexing pipeline',
+        prompt: 'Run the RAG Pipeline tab from document collection through indexing, then identify which state belongs to documents, chunks, embeddings, and the vector index.',
+        successCriteria: 'You can explain why chunking and embedding happen before query-time retrieval.',
+      },
+      {
+        id: 'compare-rag-top-k',
+        title: 'Compare top-k retrieval',
+        prompt: 'Use the Vector Search tab for the XR-500 battery query and compare Top 1, Top 3, and Top 5 results.',
+        successCriteria: 'You can name the battery-life chunk, one useful supporting chunk, and one lower-relevance distractor risk.',
+      },
+      {
+        id: 'sandbox-rag-evidence',
+        title: 'Test evidence coverage in the sandbox',
+        prompt: 'In the Practice Lab sandbox, disable a relevant document, run a query, then re-enable it and compare the retrieved context and generated response.',
+        successCriteria: 'You can explain why RAG cannot ground an answer in evidence that is disabled or missing.',
       },
     ],
   },
