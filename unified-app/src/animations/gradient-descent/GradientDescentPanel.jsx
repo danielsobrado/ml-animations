@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BufferGeometry, CircleGeometry, Color, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import gsap from 'gsap';
+import { DEFAULT_LEARNING_RATE, DEFAULT_START_WEIGHT, loss, nextWeight } from './gradientDescentModel.js';
 
 // Loss function: L(w) = w^2
 // Gradient: dL/dw = 2w
@@ -14,24 +15,23 @@ const COLORS = {
     bg: 0xffffff
 };
 
-export default function GradientDescentPanel({ learningRate = 0.1, startWeight = 4, onStepChange }) {
+export default function GradientDescentPanel({ learningRate = DEFAULT_LEARNING_RATE, startWeight = DEFAULT_START_WEIGHT, onStepChange }) {
     const containerRef = useRef(null);
     const rendererRef = useRef(null);
     const sceneRef = useRef(null);
     const objectsRef = useRef({});
     const [isRunning, setIsRunning] = useState(false);
-    const [currentWeight, setCurrentWeight] = useState(startWeight ?? 4);
+    const [currentWeight, setCurrentWeight] = useState(startWeight ?? DEFAULT_START_WEIGHT);
     const [iteration, setIteration] = useState(0);
 
     useEffect(() => {
-        setCurrentWeight(startWeight ?? 4);
+        setCurrentWeight(startWeight ?? DEFAULT_START_WEIGHT);
         setIteration(0);
     }, [startWeight]);
 
     useEffect(() => {
         if (onStepChange && currentWeight != null) {
-            const loss = currentWeight * currentWeight;
-            onStepChange(iteration, currentWeight, loss);
+            onStepChange(iteration, currentWeight, loss(currentWeight));
         }
     }, [iteration, currentWeight, onStepChange]);
 
@@ -61,9 +61,8 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
         const scale = 50; // Scale for display
 
         for (let w = -wRange; w <= wRange; w += 0.1) {
-            const loss = w * w;
             const x = w * scale;
-            const y = -loss * 10 + 100; // Invert y and offset
+            const y = -loss(w) * 10 + 100; // Invert y and offset
             curvePoints.push(new Vector3(x, y, 0));
         }
 
@@ -82,7 +81,7 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
         objectsRef.current = { ball, scene, scale };
 
         // Position ball at start
-        updateBallPosition(startWeight ?? 4);
+        updateBallPosition(startWeight ?? DEFAULT_START_WEIGHT);
 
         let animationId;
         const animate = () => {
@@ -103,9 +102,8 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
     const updateBallPosition = (w) => {
         const { ball, scale } = objectsRef.current;
         if (!ball || w == null) return;
-        const loss = w * w;
         const x = w * scale;
-        const y = -loss * 10 + 100;
+        const y = -loss(w) * 10 + 100;
         ball.position.set(x, y, 0);
     };
 
@@ -113,7 +111,7 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
         if (isRunning) return;
         setIsRunning(true);
 
-        let w = startWeight ?? 4;
+        let w = startWeight ?? DEFAULT_START_WEIGHT;
         setCurrentWeight(w);
         setIteration(0);
         updateBallPosition(w);
@@ -122,16 +120,12 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
         const convergenceThreshold = 0.01;
 
         for (let i = 0; i < maxIterations; i++) {
-            // Calculate gradient
-            const gradient = 2 * w;
-
-            // Update weight
-            const wNew = w - learningRate * gradient;
+            const wNew = nextWeight(w, learningRate);
 
             // Animate ball movement
             const { ball, scale } = objectsRef.current;
             const xNew = wNew * scale;
-            const yNew = -(wNew * wNew) * 10 + 100;
+            const yNew = -loss(wNew) * 10 + 100;
 
             await new Promise(resolve => {
                 gsap.to(ball.position, {
@@ -180,7 +174,7 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
                 <p className="text-sm text-gray-800">
                     Iteration: <span className="font-bold">{iteration}</span> |
                     Weight: <span className="font-bold text-blue-600">{(currentWeight ?? 0).toFixed(3)}</span> |
-                    Loss: <span className="font-bold text-purple-600">{((currentWeight ?? 0) * (currentWeight ?? 0)).toFixed(3)}</span>
+                    Loss: <span className="font-bold text-purple-600">{loss(currentWeight ?? 0).toFixed(3)}</span>
                 </p>
             </div>
 
@@ -190,14 +184,14 @@ export default function GradientDescentPanel({ learningRate = 0.1, startWeight =
                     disabled={isRunning}
                     className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors text-sm"
                 >
-                    {isRunning ? 'Running...' : '▶ Run'}
+                    {isRunning ? 'Running...' : 'Run'}
                 </button>
                 <button
                     onClick={reset}
                     disabled={isRunning}
                     className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors text-sm"
                 >
-                    ↺ Reset
+                    Reset
                 </button>
             </div>
         </div>

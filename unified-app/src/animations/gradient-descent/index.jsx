@@ -24,18 +24,27 @@ function LoadingPanel() {
 
 export default function GradientDescentAnimation() {
     const [activeTab, setActiveTab] = useState('descent');
-    const [learningRate] = useState(0.1);
-    const [startWeight] = useState(4);
+    const [learningRate, setLearningRate] = useState(0.1);
+    const [startWeight, setStartWeight] = useState(4);
     const [stepHistory, setStepHistory] = useState([]);
 
     const handleStepChange = useCallback((iteration, weight, loss) => {
         setStepHistory(prev => {
+            if (iteration === 0) {
+                return [{ iteration, weight, loss }];
+            }
             // Only add if it's a new iteration
             if (prev.length === 0 || prev[prev.length - 1].iteration !== iteration) {
                 return [...prev, { iteration, weight, loss }];
             }
             return prev;
         });
+    }, []);
+
+    const handleParamsChange = useCallback((nextLearningRate, nextStartWeight) => {
+        setLearningRate(nextLearningRate);
+        setStartWeight(nextStartWeight);
+        setStepHistory([]);
     }, []);
 
     const renderPanel = () => {
@@ -53,11 +62,19 @@ export default function GradientDescentAnimation() {
             case 'history':
                 return (
                     <Suspense fallback={<LoadingPanel />}>
-                        <LossHistoryPanel stepHistory={stepHistory} />
+                        <LossHistoryPanel history={stepHistory} />
                     </Suspense>
                 );
             case 'practice':
-                return <Suspense fallback={<LoadingPanel />}><PracticePanel /></Suspense>;
+                return (
+                    <Suspense fallback={<LoadingPanel />}>
+                        <PracticePanel
+                            learningRate={learningRate}
+                            startWeight={startWeight}
+                            onParamsChange={handleParamsChange}
+                        />
+                    </Suspense>
+                );
             default:
                 return (
                     <Suspense fallback={<LoadingPanel />}>

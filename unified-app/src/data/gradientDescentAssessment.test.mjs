@@ -143,6 +143,23 @@ test('gradient descent assessment avoids unsafe misconception keying', () => {
 
 test('gradient descent assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('gradient-descent');
+  const trapIds = [
+    'gd-076-trap-global',
+    'gd-077-trap-gradient-sign',
+    'gd-078-trap-learning-rate',
+    'gd-079-trap-small-lr',
+    'gd-080-trap-zero-gradient',
+    'gd-081-trap-train-loss',
+    'gd-082-trap-test-tuning',
+    'gd-083-trap-validation-gradient',
+    'gd-084-trap-feature-scale',
+    'gd-085-trap-batch',
+    'gd-086-trap-adam',
+    'gd-087-trap-clipping',
+    'gd-088-trap-zero-grad',
+    'gd-089-trap-convex',
+    'gd-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /always reaches the global minimum/i,
     /gradient points downhill, so gradient descent adds it/i,
@@ -160,6 +177,8 @@ test('gradient descent assessment keeps misconception traps after setup', () => 
     /all neural-network losses are convex/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
