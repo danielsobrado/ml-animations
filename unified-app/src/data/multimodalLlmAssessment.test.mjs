@@ -17,6 +17,11 @@ test('multimodal LLM assessment has 100 curated questions', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-multimodal-flow',
+    'compare-fusion-designs',
+    'ground-scenario-answer',
+  ]);
   assert.equal(new Set(quiz.map((item) => item.id)).size, 100);
 
   for (const [index, item] of quiz.entries()) {
@@ -81,6 +86,23 @@ test('multimodal LLM assessment progresses through lesson learning points', () =
 
 test('multimodal LLM keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('multimodal-llm');
+  const trapIds = [
+    'mmlm-076-false-caption-only',
+    'mmlm-077-wrong-alignment-optional',
+    'mmlm-078-dangerous-projection',
+    'mmlm-079-false-late-rich',
+    'mmlm-080-wrong-early-cheapest',
+    'mmlm-081-false-cross-no-encoder',
+    'mmlm-082-wrong-vit-storage',
+    'mmlm-083-false-text-pixels',
+    'mmlm-084-dangerous-seeing',
+    'mmlm-085-false-identical-format',
+    'mmlm-086-wrong-more-modalities',
+    'mmlm-087-false-model-name',
+    'mmlm-088-wrong-fluent-visual',
+    'mmlm-089-misleading-architecture-names',
+    'mmlm-090-false-single-demo',
+  ];
   const misconceptionTerms = [
     /must always convert every image into a caption/i,
     /Alignment is optional/i,
@@ -99,6 +121,8 @@ test('multimodal LLM keeps misconception traps after setup', () => {
     /One successful practice scenario proves/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|rejected|unsafe/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((item) => item.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
