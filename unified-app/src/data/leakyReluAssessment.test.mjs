@@ -25,7 +25,10 @@ test('leaky relu has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('leaky-relu');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['compare-dead-zone', 'trace-alpha-ledger', 'audit-bias-and-upstream'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -125,6 +128,36 @@ test('leaky relu assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('leaky relu assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('leaky-relu');
+  const misconceptionPatterns = [
+    /multiplies positive inputs by alpha/i,
+    /outputs exactly zero for every negative input/i,
+    /turns negative evidence positive/i,
+    /negative branch always blocks all gradient/i,
+    /larger alpha always improves the model/i,
+    /eliminates the need for good initialization/i,
+    /as exactly sparse as relu by default/i,
+    /converts activations into probabilities between zero and one/i,
+    /alpha = 1 gives plain relu/i,
+    /always learns alpha automatically/i,
+    /always the correct final activation/i,
+    /one identical derivative on both sides/i,
+    /diagnostics are unnecessary/i,
+    /every framework uses the same default negative slope/i,
+    /fixes dead relus without any tradeoff/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
