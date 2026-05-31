@@ -2079,6 +2079,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Set z below zero, compare alpha = 0 with alpha above 0, and record how the output and gradient change.',
         successCriteria: 'You can explain why alpha = 0 behaves like ReLU and alpha above 0 preserves a small gradient.',
       },
+      {
+        id: 'trace-alpha-ledger',
+        title: 'Trace the alpha ledger',
+        prompt: 'Pick a negative pre-activation, change alpha, and use the forward/backward ledger to compare output, local slope, and returned gradient.',
+        successCriteria: 'You can predict how alpha changes both the negative output magnitude and the negative-side gradient multiplier.',
+      },
+      {
+        id: 'audit-bias-and-upstream',
+        title: 'Audit bias and upstream gradient',
+        prompt: 'Move the bias shift across the kink and vary upstream gradient, then explain when Leaky ReLU matches ReLU and when it preserves a small signal.',
+        successCriteria: 'You can separate branch choice from upstream scale and avoid claiming negative evidence becomes positive.',
+      },
     ],
   },
   softmax: {

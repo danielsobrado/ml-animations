@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^lrelu-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`leaky-relu:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     prompt,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 const LEAKY_RELU_SPECS = [
@@ -57,12 +68,12 @@ const LEAKY_RELU_SPECS = [
   ['lrelu-044-numerical-scale', 'Mechanism', 'Why can positive activations still grow large under Leaky ReLU?', 'The positive branch is unbounded like ReLU', ['Alpha caps the positive branch at one', 'The kink normalizes the whole vector'], 'Leaky ReLU changes the negative branch, not the positive-side upper range.'],
   ['lrelu-045-alpha-one', 'Mechanism', 'What happens if alpha equals 1?', 'The activation becomes the identity function', ['The activation becomes plain ReLU', 'The negative branch becomes zero'], 'Both branches would have slope one, so there is no kinked gating.'],
   ['lrelu-046-alpha-negative', 'Mechanism', 'Why is a negative alpha usually not the intended Leaky ReLU setting?', 'It would flip signs on the negative branch', ['It would make the positive branch disappear', 'It would create a valid probability vector'], 'Leaky ReLU is normally defined with a small positive negative-side slope.'],
-  ['lrelu-047-active_fraction', 'Mechanism', 'Why is active fraction less complete as a diagnostic for Leaky ReLU than for ReLU?', 'Negative units still pass a small signal instead of being fully silent', ['Positive units no longer matter', 'The function has no backward pass'], 'Counting positive values is useful, but negative-side gradient is not exactly zero.'],
-  ['lrelu-048-gradient_histogram', 'Mechanism', 'What does a gradient histogram show in a Leaky ReLU network?', 'Whether negative-side paths are tiny, healthy, or unstable', ['Whether labels were shuffled alphabetically', 'Whether alpha is a route name'], 'Gradient distributions reveal how much signal actually flows through branches.'],
+  ['lrelu-047-active-fraction', 'Mechanism', 'Why is active fraction less complete as a diagnostic for Leaky ReLU than for ReLU?', 'Negative units still pass a small signal instead of being fully silent', ['Positive units no longer matter', 'The function has no backward pass'], 'Counting positive values is useful, but negative-side gradient is not exactly zero.'],
+  ['lrelu-048-gradient-histogram', 'Mechanism', 'What does a gradient histogram show in a Leaky ReLU network?', 'Whether negative-side paths are tiny, healthy, or unstable', ['Whether labels were shuffled alphabetically', 'Whether alpha is a route name'], 'Gradient distributions reveal how much signal actually flows through branches.'],
   ['lrelu-049-alpha-selection', 'Mechanism', 'How should alpha generally be selected?', 'As a modeling hyperparameter validated with training behavior and metrics', ['By copying the number of classes', 'By setting it larger than every activation'], 'Alpha affects representation and optimization, so it should be chosen deliberately.'],
   ['lrelu-050-mechanism-summary', 'Mechanism', 'What mechanism summary should you remember?', 'Leaky ReLU replaces ReLU zero-gradient negatives with alpha-scaled negatives', ['Leaky ReLU removes the need for derivatives', 'Leaky ReLU normalizes logits into probabilities'], 'Both the forward negative value and backward negative derivative are controlled by alpha.'],
 
-  ['lrelu-051-compute-negative', 'Application', 'For alpha = 0.01 and z = -5, what is the Leaky ReLU output?', '-0.05', ['0', '5.01'], 'Multiply the negative input by alpha: 0.01 times -5 equals -0.05.'],
+  ['lrelu-051-compute-negative', 'Application', 'For alpha = 0.01 and z = -5, what is the Leaky ReLU output?', 'negative 0.05', ['0', 'positive 5.01'], 'Multiply the negative input by alpha: 0.01 times -5 equals -0.05.'],
   ['lrelu-052-compute-positive', 'Application', 'For alpha = 0.01 and z is positive five, what is the Leaky ReLU output?', 'Positive five passes through unchanged', ['It becomes alpha times five', 'It is capped at one'], 'Positive values pass through unchanged.'],
   ['lrelu-053-compute-vector', 'Application', 'For alpha = 0.1 and z = [-2, 0, 3], what is Leaky ReLU(z)?', '[-0.2, 0, 3]', ['[0, 0, 3]', '[2, 0, 0.3]'], 'Apply alpha z on negatives, zero at zero, and identity on positives.'],
   ['lrelu-054-negative-gradient', 'Application', 'If alpha = 0.05, z = -2, and upstream gradient is 10, what gradient reaches z?', '0.5', ['0', '10'], 'The negative local derivative is alpha, so 10 times 0.05 equals 0.5.'],
