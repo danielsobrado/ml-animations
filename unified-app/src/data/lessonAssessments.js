@@ -1455,10 +1455,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: FEATURE_SCALING_PREPROCESSING_QUIZ,
     labs: [
       {
+        id: 'compare-scaler-statistics',
+        title: 'Name the fitted statistics',
+        prompt: 'Compare standard, min-max, and robust scaling, then name the training statistic each one stores.',
+        successCriteria: 'You can connect mean, standard deviation, minimum, maximum, median, and IQR to the matching scaler.',
+      },
+      {
         id: 'outlier-scaler-comparison',
         title: 'Compare scaler sensitivity',
         prompt: 'Toggle the outlier and compare standard, min-max, and robust scaling on the same selected point.',
         successCriteria: 'You can explain which scaler moved most and why robust scaling is less sensitive to one extreme value.',
+      },
+      {
+        id: 'audit-train-only-pipeline',
+        title: 'Audit train-only fitting',
+        prompt: 'Trace a split or cross-validation workflow and mark where each scaler, imputer, or encoder is allowed to fit.',
+        successCriteria: 'You can keep fitted preprocessing inside training folds and apply it to held-out rows without refitting.',
       },
     ],
   },

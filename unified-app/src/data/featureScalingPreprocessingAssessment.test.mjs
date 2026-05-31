@@ -9,11 +9,12 @@ const LEVEL_ORDER = {
   Tricky: 3,
   Interview: 4,
 };
+const LEVELS = Object.keys(LEVEL_ORDER);
 
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,18 +23,42 @@ function correctAnswer(question) {
 }
 
 test('feature scaling preprocessing has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
+  const { quiz, labs } = getLessonAssessment('feature-scaling-preprocessing');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('scale-'), `question ${index + 1} should use the scale id prefix`);
+    const expectedNumber = String(index + 1).padStart(3, '0');
+
+    assert.match(question.id, /^scale-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the scale id format`);
+    assert.equal(question.id.slice(6, 9), expectedNumber, `question ${index + 1} should preserve numeric order`);
+    assert.ok(!question.id.includes('generated-'), `question ${index + 1} should not use a generated id`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} should have unique choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
-    assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
+    assert.ok(LEVELS.includes(question.level), `question ${index + 1} should have a recognized level`);
+  }
+});
+
+test('feature scaling preprocessing assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
+  const prompts = new Map();
+  const correctAnswers = new Map();
+
+  for (const question of quiz) {
+    const prompt = normalized(question.prompt);
+    const answer = normalized(correctAnswer(question));
+
+    assert.ok(!prompts.has(prompt), `${question.id} duplicates prompt from ${prompts.get(prompt)}`);
+    prompts.set(prompt, question.id);
+
+    assert.ok(!correctAnswers.has(answer), `${question.id} duplicates correct answer from ${correctAnswers.get(answer)}`);
+    correctAnswers.set(answer, question.id);
   }
 });
 
@@ -66,51 +91,64 @@ test('feature scaling preprocessing assessment progresses from recall to intervi
 test('feature scaling preprocessing assessment covers learning points in the right order', () => {
   const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
-  const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
 
   const orderedMilestones = [
-    ['scaling purpose', ['purpose']],
-    ['standardization', ['standardization']],
-    ['min-max scaling', ['min-max']],
-    ['robust scaling', ['robust']],
-    ['train-only fitting', ['training split only']],
-    ['held-out transform', ['without refitting']],
-    ['leakage warning', ['leak']],
-    ['distance effects', ['distance']],
-    ['gradient effects', ['gradient']],
-    ['regularization effects', ['l1', 'l2']],
-    ['cross-validation pipeline', ['cv pipeline']],
-    ['scenario application', ['income in dollars']],
-    ['tricky false claims', ['false']],
-    ['interview readiness', ['interview']],
+    [/main purpose of feature scaling/, 0, 8],
+    [/standardization usually compute/, 0, 8],
+    [/min max scaling usually do/, 0, 8],
+    [/robust scaling usually use/, 0, 10],
+    [/scaler be fitted/, 4, 12],
+    [/validation and test be handled/, 4, 12],
+    [/preprocessing before splitting unsafe/, 6, 14],
+    [/distance based models/, 8, 16],
+    [/gradient descent/, 8, 18],
+    [/l1 or l2 penalties/, 10, 20],
+    [/outlier affect min max scaling/, 10, 20],
+    [/median imputer be fitted/, 28, 38],
+    [/cv pipeline/, 32, 42],
+    [/label free preprocessing leak/, 34, 42],
+    [/scaling affect knn or k means/, 36, 45],
+    [/train serving preprocessing parity/, 32, 42],
+    [/knn model uses age in years and income in dollars/, 50, 60],
+    [/standardscaler before cross val score/, 50, 60],
+    [/scaler is fit on all data because it does not use labels/, 62, 70],
+    [/preprocessing claim is false/, 75, 90],
+    [/define feature scaling in an interview/, 90, 100],
   ];
 
-  let previousIndex = -1;
-  for (const [label, terms] of orderedMilestones) {
-    const index = firstIndexContaining(terms);
-    assert.notEqual(index, -1, `missing milestone: ${label}`);
-    assert.ok(index > previousIndex, `${label} should appear after the previous milestone`);
-    previousIndex = index;
+  for (const [pattern, minIndex, maxIndex] of orderedMilestones) {
+    const index = textByQuestion.findIndex((text) => pattern.test(text));
+    assert.notEqual(index, -1, `missing milestone: ${pattern}`);
+    assert.ok(
+      index >= minIndex && index < maxIndex,
+      `${pattern} should appear in questions ${minIndex + 1}-${maxIndex}, found question ${index + 1}`,
+    );
   }
 });
 
 test('feature scaling preprocessing assessment avoids unsafe misconception keying', () => {
   const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
   const unsafePatterns = [
-    /always safe/i,
-    /guarantee/i,
-    /guarantees/i,
-    /cannot leak/i,
-    /harmless bookkeeping/i,
-    /automatically removes/i,
-    /forever/i,
-    /every model family benefits equally/i,
+    /scaling is harmless bookkeeping that can be fit on all rows/i,
+    /if a transform ignores labels it cannot leak anything/i,
+    /every model family benefits equally from standardization/i,
+    /min max scaling guarantees future values stay between 0 and 1/i,
+    /robust scaling automatically removes every outlier problem/i,
+    /fit the scaler once before making folds/i,
+    /compare regularized coefficients from unscaled features as if units matched/i,
+    /choose clipping thresholds after inspecting final test errors/i,
+    /refit the scaler independently in serving for each request/i,
+    /one hot encoding never needs an unknown category policy/i,
+    /all binary indicators must always be standardized/i,
+    /a fitted scaler from training remains representative forever/i,
+    /pick the scaler after repeatedly checking the final test score/i,
+    /guarantee that every model improves/i,
   ];
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
-    const explicitTrapPrompt = /false|misleading|unsafe|too absolute|too strong|challenge/i.test(question.prompt);
+    const explicitTrapPrompt = /trap|false|misleading|unsafe|too absolute|too strong|challenge|claim|practice|statement/i.test(question.prompt);
 
     assert.ok(
       !unsafeAnswer || explicitTrapPrompt,
@@ -143,11 +181,17 @@ test('feature scaling preprocessing assessment does not leak exact answers withi
 
 test('feature scaling preprocessing assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
+  const totals = [0, 0, 0];
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
     const positions = page.map((question) => question.answerIndex);
 
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    for (const position of positions) {
+      totals[position] += 1;
+    }
   }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be balanced, found ${totals.join('/')}`);
 });
