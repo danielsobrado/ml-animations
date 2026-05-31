@@ -2561,6 +2561,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Pick search reranking, chat completion, and translation tasks, then choose the architecture family for each.',
         successCriteria: 'You can justify each choice using attention visibility, objective, and output type.',
       },
+      {
+        id: 'compare-visibility-masks',
+        title: 'Compare visibility masks',
+        prompt: 'Switch between encoder-only, decoder-only, and encoder-decoder, then explain which tokens each query can read and why that matches the objective.',
+        successCriteria: 'You can distinguish bidirectional input visibility, causal prefix visibility, and source-memory cross-attention.',
+      },
+      {
+        id: 'debug-family-mismatch',
+        title: 'Debug family mismatch',
+        prompt: 'Match an encoder classifier, decoder chat model, and encoder-decoder translator to their output contract, then name the leakage or missing-context failure if the wrong family is used.',
+        successCriteria: 'You can connect family choice to available context, output type, objective, masks, and evaluation.',
+      },
     ],
   },
   'llm-training-objectives': {
