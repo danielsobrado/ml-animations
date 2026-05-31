@@ -28,6 +28,7 @@ import { DIFFUSION_BASICS_QUIZ } from './diffusionBasicsAssessment.js';
 import { DIFFUSION_LANGUAGE_MODELS_QUIZ } from './diffusionLanguageModelsAssessment.js';
 import { DIFFUSION_SAMPLING_QUIZ } from './diffusionSamplingAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
+import { EAGLE_3_1_SPECULATIVE_DECODING_QUIZ } from './eagle31SpeculativeDecodingAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EFFICIENT_LLM_SERVING_QUIZ } from './efficientLlmServingAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
@@ -315,7 +316,8 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'eagle-3-1-speculative-decoding': {
-    quiz: [
+    quiz: EAGLE_3_1_SPECULATIVE_DECODING_QUIZ,
+    legacyQuiz: [
       {
         id: 'eagle-autoregressive-bottleneck',
         level: 'Foundation',
