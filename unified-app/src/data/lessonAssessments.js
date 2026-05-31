@@ -80,6 +80,7 @@ import { PCA_QUIZ } from './pcaAssessment.js';
 import { POSITIONAL_ENCODING_QUIZ } from './positionalEncodingAssessment.js';
 import { POWER_SAMPLE_SIZE_QUIZ } from './powerSampleSizeAssessment.js';
 import { PSEUDOINVERSE_QUIZ } from './pseudoinverseAssessment.js';
+import { PROJECTION_MATRICES_QUIZ } from './projectionMatricesAssessment.js';
 import { PROPENSITY_SCORES_QUIZ } from './propensityScoresAssessment.js';
 import { Q_LEARNING_QUIZ } from './qLearningAssessment.js';
 import { QR_DECOMPOSITION_QUIZ } from './qrDecompositionAssessment.js';
@@ -1007,6 +1008,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Audit invertibility collapse',
         prompt: 'Use the Practice Lab to explain why det(A) = 0 collapses the unit square to a line or point and blocks invertibility.',
         successCriteria: 'You can distinguish zero determinant collapse from negative determinant orientation reversal.',
+      },
+    ],
+  },
+  'projection-matrices': {
+    quiz: PROJECTION_MATRICES_QUIZ,
+    labs: [
+      {
+        id: 'trace-projection-geometry',
+        title: 'Trace projection geometry',
+        prompt: 'Switch between x high, x low, and already projected, then explain where x, Px, the residual, and the target subspace appear.',
+        successCriteria: 'You can identify the vector before projection, the projected point, and the leftover component.',
+      },
+      {
+        id: 'test-projection-idempotence',
+        title: 'Test projection idempotence',
+        prompt: 'Use the rule P^2 = P and the Practice Lab reveal to explain why P(Px) equals Px.',
+        successCriteria: 'You can explain why applying P again changes nothing after the first projection lands on the subspace.',
+      },
+      {
+        id: 'connect-projection-code',
+        title: 'Connect projection code',
+        prompt: 'Relate the outer-product, matvec, and project-twice code labs to the animation\'s P, x, Px, and idempotence labels.',
+        successCriteria: 'You can build a projection matrix for a unit direction, apply it to a vector, and verify the second application is unchanged.',
       },
     ],
   },
