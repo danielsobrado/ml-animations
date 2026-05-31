@@ -23,20 +23,32 @@ function correctAnswer(question) {
 }
 
 test('fundamental subspaces has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('fundamental-subspaces');
+  const { quiz, labs } = getLessonAssessment('fundamental-subspaces');
   const ids = new Set(quiz.map((question) => question.id));
+  const globalCounts = [0, 0, 0];
+
+  assert.deepEqual(labs.map((lab) => lab.id), ['classify-four-spaces']);
 
   assert.equal(quiz.length, 100);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
-  for (const question of quiz) {
+  for (const [index, question] of quiz.entries()) {
+    assert.match(question.id, /^fs-\d{3}-[a-z0-9-]+$/);
+    assert.ok(question.id.startsWith(`fs-${String(index + 1).padStart(3, '0')}-`), `${question.id} should match question order`);
     assert.ok(question.prompt && /\S/.test(question.prompt), `${question.id} should have a prompt`);
     assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
     assert.ok(question.explanation && /\S/.test(question.explanation), `${question.id} should explain the answer`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat choices`);
+    globalCounts[question.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('fundamental subspaces assessment progresses from recall to interview readiness', () => {
@@ -84,6 +96,15 @@ test('fundamental subspaces assessment covers the theorem in lesson order', () =
   assert.match(sections[3], /trap|misconception|diagnose|whiteboard/);
 });
 
+test('fundamental subspaces assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('fundamental-subspaces');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const correctAnswers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(correctAnswers).size, correctAnswers.length);
+});
+
 test('fundamental subspaces assessment avoids unsafe misconception keying', () => {
   const { quiz } = getLessonAssessment('fundamental-subspaces');
   const falseClaimPatterns = [
@@ -105,6 +126,35 @@ test('fundamental subspaces assessment avoids unsafe misconception keying', () =
       !falseClaimKeyed || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('fundamental subspaces assessment marks misconceptions as traps after setup', () => {
+  const { quiz } = getLessonAssessment('fundamental-subspaces');
+  const misconceptionPatterns = [
+    /Row\(A\) equals Col\(A\)/i,
+    /using columns of RREF\(A\)/i,
+    /Null\(A\) is input-side; Null\(A\^T\) is output-side/i,
+    /checking whether b is in Row\(A\)/i,
+    /Row\(A\) is orthogonal to Col\(A\)/i,
+    /Both null spaces are always zero/i,
+    /Null\(A\) is empty/i,
+    /A is the zero matrix/i,
+    /y\^T b = 0 hold for every left-null vector/i,
+    /n - r never be negative/i,
+    /reachable outputs form Col\(A\), not Row\(A\)/i,
+    /residual is zero/i,
+    /same dimension does not mean/i,
+  ];
+  const trapPrompt = /trap|risky|confusion|wrong|unsafe|does not imply|not imply|not mean|why must|why can|does not mean|misconception|rectangular|never correct/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
@@ -137,17 +187,10 @@ test('fundamental subspaces assessment distributes correct-answer positions acro
   const { quiz } = getLessonAssessment('fundamental-subspaces');
   const pageSize = 10;
 
-  assert.ok(new Set(quiz.map((question) => question.answerIndex)).size > 1);
-
   for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
     const page = quiz.slice(pageStart, pageStart + pageSize);
-    const maxSameSlot = Math.max(
-      ...[0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length),
-    );
-
-    assert.ok(
-      maxSameSlot <= Math.ceil(page.length * 0.6),
-      `page starting at question ${pageStart + 1} should not overuse one correct option slot`,
-    );
+    const counts = [0, 0, 0];
+    for (const question of page) counts[question.answerIndex] += 1;
+    assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `imbalanced page at ${pageStart + 1}: ${counts.join(',')}`);
   }
 });

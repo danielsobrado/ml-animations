@@ -1,12 +1,33 @@
+function stableHash(text) {
+  let hash = 0;
+  for (let index = 0; index < text.length; index += 1) hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+  return hash.toString(16).padStart(8, '0');
+}
+
+function stableHashNumber(text) {
+  let hash = 0;
+  for (let index = 0; index < text.length; index += 1) hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+  return hash;
+}
+
 function q(id, level, prompt, correct, distractors, explanation) {
-  return {
+  const match = /^fs-(\d{3})/.exec(id);
+  const number = Number(match?.[1] || 1);
+  const registryRotation = stableHashNumber(`fundamental-subspaces:${id}`) % 3;
+  const targetAnswerIndex = (number - 1) % 3;
+  const answerIndex = (targetAnswerIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
+  return Object.freeze({
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices: Object.freeze(choices),
+    answerIndex,
     explanation,
-  };
+    questionHash: stableHash(`${prompt}\n${choices.join('\n')}`),
+  });
 }
 
 export const FUNDAMENTAL_SUBSPACES_QUIZ = Object.freeze([
