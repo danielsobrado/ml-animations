@@ -62,6 +62,7 @@ import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LLM_TRAINING_OBJECTIVES_QUIZ } from './llmTrainingObjectivesAssessment.js';
 import { LONG_CONTEXT_FRONTIER_MODELS_QUIZ } from './longContextFrontierModelsAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
+import { LOW_RANK_APPROXIMATION_QUIZ } from './lowRankApproximationAssessment.js';
 import { LSTM_QUIZ } from './lstmAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
@@ -1031,6 +1032,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Connect projection code',
         prompt: 'Relate the outer-product, matvec, and project-twice code labs to the animation\'s P, x, Px, and idempotence labels.',
         successCriteria: 'You can build a projection matrix for a unit direction, apply it to a vector, and verify the second application is unchanged.',
+      },
+    ],
+  },
+  'low-rank-approximation': {
+    quiz: LOW_RANK_APPROXIMATION_QUIZ,
+    labs: [
+      {
+        id: 'compare-rank-k-slider',
+        title: 'Compare rank-k choices',
+        prompt: 'Move k from 1 through 5, then record which singular values are kept, which are dropped, and how retained energy changes.',
+        successCriteria: 'You can explain the compression-error tradeoff as k rises.',
+      },
+      {
+        id: 'trace-rank-k-reconstruction',
+        title: 'Trace a rank-k reconstruction',
+        prompt: 'Use the A, A_k, and A - A_k panels to describe what the reconstruction keeps and what the residual contains.',
+        successCriteria: 'You can connect the matrix panels to kept singular components and omitted structure.',
+      },
+      {
+        id: 'verify-low-rank-code',
+        title: 'Verify low-rank code',
+        prompt: 'Relate rankOneEntry, rankOneMatrix, and frobeniusErrorSquared to the formula A_k = sum sigma_i u_i v_i^T.',
+        successCriteria: 'You can build scaled rank-1 terms and measure squared reconstruction error.',
       },
     ],
   },
