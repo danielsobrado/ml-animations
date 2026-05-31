@@ -149,6 +149,23 @@ test('overfitting assessment avoids unsafe misconception keying', () => {
 
 test('overfitting assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('overfitting');
+  const expectedTrapIds = [
+    'overfit-076-trap-train-loss',
+    'overfit-077-trap-big-model',
+    'overfit-078-trap-gap',
+    'overfit-079-trap-underfit',
+    'overfit-080-trap-validation',
+    'overfit-081-trap-crossval',
+    'overfit-082-trap-regularization',
+    'overfit-083-trap-more-data',
+    'overfit-084-trap-augmentation',
+    'overfit-085-trap-leakage',
+    'overfit-086-trap-final-test',
+    'overfit-087-trap-slices',
+    'overfit-088-trap-complexity',
+    'overfit-089-trap-one-point',
+    'overfit-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /always means a better deployed model/i,
     /largest model is always/i,
@@ -166,6 +183,8 @@ test('overfitting assessment keeps misconception traps after setup', () => {
     /single failure proves the model is overfit/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
