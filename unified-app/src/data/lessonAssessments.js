@@ -86,6 +86,7 @@ import { SAMPLING_CONFIDENCE_INTERVALS_QUIZ } from './samplingConfidenceInterval
 import { SAMPLING_STRATEGIES_QUIZ } from './samplingStrategiesAssessment.js';
 import { SEQUENTIAL_TESTING_PEEKING_QUIZ } from './sequentialTestingPeekingAssessment.js';
 import { SELF_ATTENTION_QUIZ } from './selfAttentionAssessment.js';
+import { SOFTMAX_QUIZ } from './softmaxAssessment.js';
 import { SPEARMAN_CORRELATION_QUIZ } from './spearmanCorrelationAssessment.js';
 import { getScenarioQuestionsForLesson } from './scenarioQuestions.js';
 import { SVD_QUIZ } from './svdAssessment.js';
@@ -1746,6 +1747,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Compare the dead zone',
         prompt: 'Set z below zero, compare alpha = 0 with alpha above 0, and record how the output and gradient change.',
         successCriteria: 'You can explain why alpha = 0 behaves like ReLU and alpha above 0 preserves a small gradient.',
+      },
+    ],
+  },
+  softmax: {
+    quiz: SOFTMAX_QUIZ,
+    labs: [
+      {
+        id: 'temperature-logit-lab',
+        title: 'Trace the shared denominator',
+        prompt: 'Move one logit and temperature, then record how the top probability, entropy, margin, and the other class probabilities change.',
+        successCriteria: 'You can explain why softmax probabilities move together through the shared denominator.',
       },
     ],
   },
