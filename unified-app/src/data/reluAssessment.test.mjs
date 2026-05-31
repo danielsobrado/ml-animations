@@ -130,6 +130,23 @@ test('relu assessment avoids unsafe misconception keying', () => {
 
 test('relu assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('relu');
+  const expectedTrapIds = [
+    'relu-076-false-probability-trap',
+    'relu-077-false-negative-trap',
+    'relu-078-false-gradient-trap',
+    'relu-079-false-dead-trap',
+    'relu-080-false-magic-trap',
+    'relu-081-false-bounded-trap',
+    'relu-082-false-smooth-trap',
+    'relu-083-false-final-layer-trap',
+    'relu-084-false-zero-trap',
+    'relu-085-false-batch-trap',
+    'relu-086-false-bias-trap',
+    'relu-087-false-init-trap',
+    'relu-088-false-inplace-trap',
+    'relu-089-false-sparsity-trap',
+    'relu-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /turns any hidden value into a calibrated probability/i,
     /preserves negative inputs unchanged/i,
@@ -148,6 +165,8 @@ test('relu assessment keeps misconception traps after setup', () => {
     /cannot be the source of training bugs/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
