@@ -148,6 +148,23 @@ test('svd assessment avoids unsafe misconception keying', () => {
 
 test('svd assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('svd');
+  const trapIds = [
+    'svd-076-eigen-trap',
+    'svd-077-small-values-trap',
+    'svd-078-k-trap',
+    'svd-079-sign-trap',
+    'svd-080-feature-importance-trap',
+    'svd-081-mean-trap',
+    'svd-082-compression-trap',
+    'svd-083-uniqueness-trap',
+    'svd-084-rectangular-trap',
+    'svd-085-cost-trap',
+    'svd-086-scale-trap',
+    'svd-087-ata-trap',
+    'svd-088-exact-truncation-trap',
+    'svd-089-positive-components-trap',
+    'svd-090-formula-only-trap',
+  ];
   const misconceptionPatterns = [
     /singular vectors are just eigenvectors of A/i,
     /blindly inverting every singular value/i,
@@ -166,6 +183,8 @@ test('svd assessment keeps misconception traps after setup', () => {
     /memorizing only A = U Sigma V\^T/i,
   ];
   const trapPrompt = /trap|wrong|dangerous|mislead|risky|what can .* hide|non-uniqueness/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;

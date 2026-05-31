@@ -1,33 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CanvasTexture, Color, EdgesGeometry, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Sprite, SpriteMaterial, WebGLRenderer } from 'three';
 import gsap from 'gsap';
+import { SVD_EXAMPLE } from './svdExample.js';
 
 // Example: A (3x2) = U (3x3) × Σ (3x2) × V^T (2x2)
-// Simple example matrix that can be easily decomposed
-const matrixA = [
-    [3, 0],
-    [4, 5],
-    [0, 0]
-];
+// Values are precomputed for display; real applications should use a numerical SVD.
+const { matrixA, matrixU, matrixSigma, matrixVT } = SVD_EXAMPLE;
 
-// Pre-computed SVD (in practice, use numeric library)
 // A = U Σ V^T
-const matrixU = [
-    [-0.31, -0.86, -0.41],
-    [-0.95, 0.33, 0.00],
-    [0.00, -0.38, 0.91]
-];
-
-const matrixSigma = [
-    [6.32, 0],
-    [0, 2.24],
-    [0, 0]
-];
-
-const matrixVT = [
-    [-0.63, -0.77],
-    [0.77, -0.63]
-];
 
 const COLORS = {
     matrixA: 0xed7d31,    // Orange
@@ -46,7 +26,7 @@ const STEPS = [
     { id: 'show-sigma', title: 'Matrix Σ', desc: 'Σ (3×2): Diagonal matrix of singular values (σ₁ ≥ σ₂ ≥ 0)' },
     { id: 'show-vt', title: 'Matrix V^T', desc: 'V^T (2×2): Right singular vectors transposed' },
     { id: 'highlight-u', title: 'U Properties', desc: 'U^T U = I (orthonormal: columns are unit vectors, perpendicular)' },
-    { id: 'highlight-sigma', title: 'Singular Values', desc: 'σ₁ = 6.32, σ₂ = 2.24 (ordered: σ₁ ≥ σ₂)' },
+    { id: 'highlight-sigma', title: 'Singular Values', desc: 'σ₁ = 6.71, σ₂ = 2.24 (ordered: σ₁ ≥ σ₂)' },
     { id: 'highlight-vt', title: 'V^T Properties', desc: 'V V^T = I (orthonormal vectors)' },
     { id: 'reconstruct', title: 'Reconstruction', desc: 'Multiply U × Σ × V^T to get back A' },
 ];
