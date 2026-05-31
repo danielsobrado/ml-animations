@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('attention mechanism has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('attention-mechanism');
+  const { quiz, labs } = getLessonAssessment('attention-mechanism');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('attn-'), `question ${index + 1} should use the attn id prefix`);
+    assert.match(question.id, /^attn-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the attn id format`);
+    assert.equal(Number(question.id.slice(5, 8)), index + 1, `question ${index + 1} id number should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -74,12 +78,12 @@ test('attention mechanism assessment covers learning points in the right order',
     ['query role', ['what information is being sought']],
     ['value mixing', ['weighted sum of value vectors']],
     ['not importance', ['permanent global importance']],
-    ['formula', ['softmax(qk^t / sqrt(d_k))v']],
+    ['formula', ['softmax qk t sqrt d k v']],
     ['softmax axis', ['across keys for each query row']],
     ['mask timing', ['lowering their scores']],
-    ['long-context cost', ['query-key comparisons grows rapidly']],
+    ['long-context cost', ['query key comparisons grows rapidly']],
     ['tricky false claims', ['query claim is false']],
-    ['interview readiness', ['production-ready attention takeaway']],
+    ['interview readiness', ['production ready attention takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,7 @@ test('attention mechanism assessment does not leak exact answers within a visibl
 
 test('attention mechanism assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('attention-mechanism');
+  const globalPositionCounts = [0, 1, 2].map((slot) => quiz.filter((question) => question.answerIndex === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -147,4 +152,9 @@ test('attention mechanism assessment distributes correct-answer positions across
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(
+    Math.max(...globalPositionCounts) - Math.min(...globalPositionCounts) <= 1,
+    `global answer positions should be balanced, got ${globalPositionCounts.join(', ')}`,
+  );
 });

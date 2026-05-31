@@ -2200,6 +2200,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: ATTENTION_MECHANISM_QUIZ,
     labs: [
       {
+        id: 'trace-library-lookup',
+        title: 'Trace the library lookup',
+        prompt: 'Run the Library Search scenario and identify the query, keys, values, highest weights, and final weighted-combination idea.',
+        successCriteria: 'You can explain why the most relevant books receive higher weights without treating the heatmap as permanent importance.',
+      },
+      {
+        id: 'compare-scenarios',
+        title: 'Compare scenario routing',
+        prompt: 'Switch between Library Search, Translation, and Conversation, then describe how the query changes which items receive attention.',
+        successCriteria: 'Your explanation connects each query to contextual key matching and avoids calling attention a hard one-item lookup.',
+      },
+      {
         id: 'shift-query',
         title: 'Shift the query',
         prompt: 'Change a query and predict which value will receive more weight.',
