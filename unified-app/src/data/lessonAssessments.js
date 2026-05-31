@@ -2010,6 +2010,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Toggle training mode and change dropout rate, then explain why the visible output no longer masks units at inference.',
         successCriteria: 'You can separate BatchNorm scaling effects from dropout masking effects.',
       },
+      {
+        id: 'batchnorm-affine-trace',
+        title: 'Trace BatchNorm affine output',
+        prompt: 'Change batch mean, batch standard deviation, gamma, and beta, then explain how centering, scaling, and shifting produce the displayed value.',
+        successCriteria: 'You can compute the normalized value before discussing dropout masks or mode behavior.',
+      },
+      {
+        id: 'state-and-small-batch-audit',
+        title: 'Audit state and batch assumptions',
+        prompt: 'Compare training and inference mode with a tiny batch scenario, then identify when running statistics, checkpoints, or frozen BatchNorm state matter.',
+        successCriteria: 'You can reject claims that BatchNorm ignores batch size or that weights alone are always enough to restore behavior.',
+      },
     ],
   },
   'training-loop-dynamics': {
