@@ -1401,6 +1401,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Lower overlap or raise hidden bias and explain why the estimate becomes fragile.',
         successCriteria: 'You can identify overlap, balance, and unmeasured-confounding limits.',
       },
+      {
+        id: 'matching-weighting-diagnostic',
+        title: 'Diagnose matching and weighting',
+        prompt: 'Compare a matched design and an IPW design, then explain how overlap, balance, and extreme weights change credibility.',
+        successCriteria: 'You can judge propensity designs by diagnostics instead of treatment-model accuracy alone.',
+      },
+      {
+        id: 'propensity-report-audit',
+        title: 'Audit a propensity report',
+        prompt: 'Write a report with estimand, pre-treatment covariates, score model, support restrictions, balance checks, weight diagnostics, and hidden-bias caveats.',
+        successCriteria: 'You can present an observational estimate without implying propensity scores prove causality.',
+      },
     ],
   },
   'time-series-forecasting-track': {
