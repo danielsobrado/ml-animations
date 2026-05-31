@@ -27,9 +27,14 @@ function correctAnswer(question) {
 test('svd has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('svd');
   const ids = new Set(quiz.map((question) => question.id));
+  const globalCounts = [0, 0, 0];
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-svd-factor-flow',
+    'verify-singular-values',
+    'connect-svd-uses',
+  ]);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
@@ -43,7 +48,13 @@ test('svd has a complete curated 100-question assessment', () => {
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
     assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
+    globalCounts[question.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('svd assessment avoids duplicate prompts and exact correct answers', () => {
@@ -132,6 +143,37 @@ test('svd assessment avoids unsafe misconception keying', () => {
       !falseClaimKeyed || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('svd assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('svd');
+  const misconceptionPatterns = [
+    /singular vectors are just eigenvectors of A/i,
+    /blindly inverting every singular value/i,
+    /choosing k only because it looks small/i,
+    /comparisons between SVD runs/i,
+    /direct feature importance/i,
+    /uncentered PCA via SVD mislead/i,
+    /low-rank compression hide/i,
+    /singular values are tied/i,
+    /forcing rectangular A into ordinary eigendecomposition/i,
+    /SVD is always the best production method/i,
+    /raw SVD on mixed-unit features/i,
+    /eigendecomposing A\^T A risky/i,
+    /truncated SVD to reconstruct every entry exactly/i,
+    /expecting SVD components to be nonnegative parts/i,
+    /memorizing only A = U Sigma V\^T/i,
+  ];
+  const trapPrompt = /trap|wrong|dangerous|mislead|risky|what can .* hide|non-uniqueness/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
