@@ -147,6 +147,23 @@ test('k-means assessment avoids unsafe misconception keying', () => {
 
 test('k-means assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('k-means');
+  const expectedTrapIds = [
+    'km-076-inertia-trap',
+    'km-077-class-trap',
+    'km-078-scale-trap',
+    'km-079-seed-trap',
+    'km-080-shape-trap',
+    'km-081-outlier-trap',
+    'km-082-id-trap',
+    'km-083-empty-trap',
+    'km-084-elbow-trap',
+    'km-085-silhouette-trap',
+    'km-086-high-d-trap',
+    'km-087-leakage-trap',
+    'km-088-categorical-trap',
+    'km-089-production-trap',
+    'km-090-formula-trap',
+  ];
   const misconceptionPatterns = [
     /lower inertia as always better/i,
     /clusters equal classes/i,
@@ -165,6 +182,8 @@ test('k-means assessment keeps misconception traps after setup', () => {
     /memorizing only the k-means objective/i,
   ];
   const trapPrompt = /trap|wrong|risky|dangerous|limitation|leakage|not a theorem|not automatically meaningful/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
