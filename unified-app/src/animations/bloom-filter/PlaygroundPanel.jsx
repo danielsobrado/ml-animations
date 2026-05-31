@@ -123,7 +123,7 @@ export default function PlaygroundPanel() {
                                     ? 'bg-indigo-100 text-indigo-900'
                                     : (lastAction.result ? 'bg-green-100 text-green-900' : 'bg-red-100 text-red-900')
                                 }`}>
-                                {lastAction.type === 'add' && `Added "${lastAction.word}" → Flipped bits ${lastAction.indices.join(', ')}`}
+                                {lastAction.type === 'add' && `Added "${lastAction.word}" -> Flipped bits ${lastAction.indices.join(', ')}`}
                                 {lastAction.type === 'check' && (
                                     lastAction.result
                                         ? `"${lastAction.word}" is PROBABLY in the set (All bits are 1)`

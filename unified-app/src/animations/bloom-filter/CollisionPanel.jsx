@@ -39,7 +39,7 @@ export default function CollisionPanel() {
         const actuallyAdded = addedWords.some(w => w.word === checkWord);
 
         if (allSet && !actuallyAdded) {
-            setMessage({ type: 'collision', text: `⚠️ FALSE POSITIVE! "${checkWord}" looks added (bits ${indices.join(', ')} are 1), but it's just a collision from other words!` });
+            setMessage({ type: 'collision', text: `FALSE POSITIVE: "${checkWord}" looks added (bits ${indices.join(', ')} are 1), but it is just a collision from other words.` });
         } else if (allSet && actuallyAdded) {
             setMessage({ type: 'info', text: `"${checkWord}" is in the set.` });
         } else {

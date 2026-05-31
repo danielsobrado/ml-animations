@@ -6,7 +6,7 @@ export default function TuningPanel() {
     const [n, setN] = useState(10);  // Expected items
     const [k, setK] = useState(3);   // Hash functions
 
-    // Calculate False Positive Probability: P ≈ (1 - e^(-kn/m))^k
+    // Calculate False Positive Probability: P approx (1 - e^(-kn/m))^k
     const calculateP = (mVal, nVal, kVal) => {
         const exponent = -1 * kVal * nVal / mVal;
         const base = 1 - Math.exp(exponent);
@@ -92,7 +92,7 @@ export default function TuningPanel() {
                         <p className="text-sm font-bold uppercase opacity-70 mb-1">Current Probability</p>
                         <p className="text-4xl font-mono font-bold">{(currentP * 100).toFixed(4)}%</p>
                         <p className="text-sm mt-2">
-                            {currentP < 0.01 ? "✅ Excellent! Very rare collisions." : (currentP < 0.1 ? "⚠️ Acceptable for some use cases." : "🚨 Too high! Increase size (m) or adjust (k).")}
+                            {currentP < 0.01 ? "Excellent: very rare collisions." : (currentP < 0.1 ? "Acceptable for some use cases." : "Too high: increase size (m) or adjust (k).")}
                         </p>
                     </div>
                 </div>
