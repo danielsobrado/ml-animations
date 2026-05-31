@@ -1,8 +1,8 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
-  const rotation = stableHash(`unet-vs-dit:${id}`) % 3;
-  const answerIndex = (desiredFinalIndex + rotation) % 3;
+  const questionNumber = Number(id.match(/^unetdit-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`unet-vs-dit:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
   const choices = [...distractors];
   choices.splice(answerIndex, 0, correct);
   return { id, level, choices, answerIndex, prompt, explanation };
@@ -81,7 +81,7 @@ const UNET_VS_DIT_SPECS = [
   ['unetdit-064-control-comparison', 'Application', 'How should you compare U-Net and DiT fairly?', 'Keep objective, sampler, data, resolution, and metrics aligned', ['Use different data and declare the newer one better', 'Only compare screenshots from one seed'], 'A fair comparison isolates architecture from unrelated experimental differences.'],
   ['unetdit-065-lab-resolution', 'Application', 'In the lab, what should increasing resolution do for DiT cost at fixed patch size?', 'Increase token count and attention-pair pressure', ['Decrease token count automatically', 'Make attention unnecessary'], 'More spatial patches mean a longer sequence and more pairwise interactions.'],
   ['unetdit-066-lab-patch', 'Application', 'In the lab, why can smaller patches be a mixed result?', 'They may improve detail while increasing memory and attention cost', ['They always reduce memory', 'They make positional encodings irrelevant'], 'The learner should predict both visual and systems effects.'],
-  ['unetdit-067-lab-backbone', 'Application', 'In the lab, what should changing backbone choice reveal?', 'Local bias, global mixing, and memory pressure change together', ['Only the lesson title changes', 'The denoising task disappears'], 'Backbone choice changes the architecture’s representation and computation.'],
+  ['unetdit-067-lab-backbone', 'Application', 'In the lab, what should changing backbone choice reveal?', 'Local bias, global mixing, and memory pressure change together', ['Only the lesson title changes', 'The denoising task disappears'], "Backbone choice changes the architecture's representation and computation."],
   ['unetdit-068-failure-unet', 'Application', 'What is a likely U-Net failure mode at very global composition tasks?', 'Local bias may not coordinate distant regions as directly as attention', ['It cannot preserve local features', 'It cannot run on images'], 'Convolutions can model global context with depth and downsampling, but attention gives a more direct route.'],
   ['unetdit-069-failure-dit', 'Application', 'What is a likely DiT failure mode under tight compute?', 'Token attention cost can force coarse patches, shallow depth, or lower resolution', ['It always has zero memory use', 'It cannot represent global context'], 'DiT flexibility comes with sequence-length and transformer-compute pressure.'],
   ['unetdit-070-hybrid-choice', 'Application', 'Why might a production system choose a hybrid architecture?', 'To combine local detail handling with global attention-style mixing', ['To avoid any denoising prediction', 'To make all comparisons meaningless'], 'Hybrid designs can address weaknesses of either pure architecture.'],
@@ -120,5 +120,5 @@ const UNET_VS_DIT_SPECS = [
 ];
 
 export const UNET_VS_DIT_QUIZ = UNET_VS_DIT_SPECS.map(
-  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation)
+  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation),
 );

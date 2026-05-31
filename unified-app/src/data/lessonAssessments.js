@@ -3298,6 +3298,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Change resolution and patch size and watch token count and attention-pair cost move.',
         successCriteria: 'You can explain why smaller patches improve detail but increase transformer attention cost.',
       },
+      {
+        id: 'backbone-constraint-comparison',
+        title: 'Compare backbone constraints',
+        prompt: 'Switch between U-Net and DiT while holding resolution, depth, and patch size steady, then record local bias, global mixing, and memory pressure.',
+        successCriteria: 'You can explain how representation and mixing change when the backbone changes, without claiming either architecture is universally better.',
+      },
+      {
+        id: 'detail-memory-sweep',
+        title: 'Sweep detail against memory',
+        prompt: 'Increase resolution and decrease patch size in stages, then explain how detail potential, token count, attention pairs, and latency move together.',
+        successCriteria: 'You can justify a patch and resolution setting from measured quality-cost tradeoffs rather than from the smallest patch alone.',
+      },
     ],
   },
   'model-debugging': {
