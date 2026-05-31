@@ -1286,6 +1286,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Set many interim looks and compare naive false positive risk with the planned alpha budget.',
         successCriteria: 'You can explain why any-look risk exceeds a single fixed-horizon alpha.',
       },
+      {
+        id: 'boundary-decision-check',
+        title: 'Apply an interim boundary',
+        prompt: 'Pick an interim p-value that beats 0.05 but misses the sequential boundary, then explain the correct continue-or-stop decision.',
+        successCriteria: 'You can distinguish fixed-horizon thresholds from planned sequential stopping rules.',
+      },
+      {
+        id: 'sequential-readout-audit',
+        title: 'Audit a sequential readout',
+        prompt: 'Write a readout for an early stop that includes look number, boundary, alpha spending, uncertainty, guardrails, and reporting caveats.',
+        successCriteria: 'You can report the monitoring procedure without treating the smallest p-value as the whole result.',
+      },
     ],
   },
   'cuped-variance-reduction': {
