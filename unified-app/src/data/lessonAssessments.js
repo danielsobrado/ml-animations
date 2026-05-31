@@ -1378,6 +1378,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Create a scenario with positive ATE and one harmed segment. Explain the rollout implication.',
         successCriteria: 'You can explain when targeted treatment beats treating everyone.',
       },
+      {
+        id: 'segment-effect-audit',
+        title: 'Audit segment effects',
+        prompt: 'Compute how high-response share, high CATE, and low CATE combine into ATE, then identify which segment drives the rollout risk.',
+        successCriteria: 'You can connect segment shares, CATE spread, and average effect without treating the average as universal.',
+      },
+      {
+        id: 'uplift-policy-readout',
+        title: 'Write an uplift policy readout',
+        prompt: 'Draft a readout with estimand, planned segments, uncertainty, costs, guardrails, and treat-all/treat-none comparison.',
+        successCriteria: 'You can turn heterogeneous treatment effects into an auditable targeting recommendation.',
+      },
     ],
   },
   'propensity-scores': {
