@@ -132,6 +132,23 @@ test('conv2d assessment avoids unsafe misconception keying', () => {
 
 test('conv2d assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('conv2d');
+  const expectedTrapIds = [
+    'c2d-076-false-location-trap',
+    'c2d-077-false-global-trap',
+    'c2d-078-false-stride-trap',
+    'c2d-079-false-padding-trap',
+    'c2d-080-false-channel-trap',
+    'c2d-081-false-filter-trap',
+    'c2d-082-false-probability-trap',
+    'c2d-083-false-shape-trap',
+    'c2d-084-false-border-trap',
+    'c2d-085-false-bias-trap',
+    'c2d-086-false-layout-trap',
+    'c2d-087-false-flip-trap',
+    'c2d-088-false-dilation-trap',
+    'c2d-089-false-debug-trap',
+    'c2d-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /separate learned kernel for each output coordinate/i,
     /averages every pixel in the whole image/i,
@@ -149,6 +166,8 @@ test('conv2d assessment keeps misconception traps after setup', () => {
     /no structural assumptions/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
