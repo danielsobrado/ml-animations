@@ -27,7 +27,11 @@ test('classification metrics has a complete curated 100-question assessment', ()
   const { quiz, labs } = getLessonAssessment('classification-metrics');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'threshold-counts',
+    'metric-denominator-audit',
+    'cost-and-slice-report',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -227,6 +231,37 @@ test('classification metrics assessment avoids unsafe misconception keying', () 
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('classification metrics assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('classification-metrics');
+  const misconceptionPatterns = [
+    /high accuracy always proves/i,
+    /precision measures how many actual positives were recovered/i,
+    /recall measures how many predicted positives were correct/i,
+    /f1 includes true negatives directly/i,
+    /changing threshold cannot change precision or recall/i,
+    /class imbalance never affects metric interpretation/i,
+    /false positives and false negatives always have equal cost/i,
+    /precision and recall use the same denominator/i,
+    /specificity is the same as recall for the positive class/i,
+    /false positive rate is computed over predicted positives/i,
+    /precision is automatically perfect/i,
+    /aggregate metrics always reveal subgroup failures/i,
+    /safe to tune thresholds repeatedly on the final test set/i,
+    /precision and recall mean the same thing/i,
+    /only one rounded metric is enough/i,
+  ];
+  const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
