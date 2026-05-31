@@ -1424,6 +1424,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Create a forecast setup with future leakage and explain how rolling splits fix it.',
         successCriteria: 'You can identify the horizon, lag features, split design, and leakage boundary.',
       },
+      {
+        id: 'forecast-feature-contract',
+        title: 'Write a feature contract',
+        prompt: 'Define prediction time, horizon, shifted lag features, rolling statistics, calendar inputs, and exogenous variables for one forecast.',
+        successCriteria: 'You can reject any feature whose value would not be available at the cutoff.',
+      },
+      {
+        id: 'forecast-monitoring-plan',
+        title: 'Plan forecast monitoring',
+        prompt: 'Use rolling-backtest behavior to choose horizon metrics, a naive baseline, interval coverage checks, drift checks, and data-freshness alerts.',
+        successCriteria: 'You can connect validation evidence to production monitoring without tuning on the final test period.',
+      },
     ],
   },
   'recommender-systems-ranking-track': {
