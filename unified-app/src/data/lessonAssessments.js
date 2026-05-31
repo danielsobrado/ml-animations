@@ -1447,6 +1447,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Build a cold-start scenario and choose a hybrid or exploration strategy.',
         successCriteria: 'You can separate prediction, ordering, exposure, and exploration concerns.',
       },
+      {
+        id: 'ranking-metric-audit',
+        title: 'Audit ranking metrics',
+        prompt: 'Compare precision@k, recall@k, MRR, nDCG, coverage, diversity, novelty, and slice metrics for one recommender launch.',
+        successCriteria: 'You can explain why ordered-list quality and product guardrails require more than click accuracy.',
+      },
+      {
+        id: 'feedback-loop-guardrails',
+        title: 'Plan feedback guardrails',
+        prompt: 'Trace how exposure bias, position bias, cold start, exploration budget, and online-test guardrails change future training data.',
+        successCriteria: 'You can identify when offline gains need online validation before changing what users and creators see.',
+      },
     ],
   },
   'ml-security-robustness-track': {
