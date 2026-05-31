@@ -49,7 +49,7 @@ const TABS = [
   { id: 'budget-strategies', label: 'Budget Policies', icon: Settings },
 ];
 
-// ─── Small helpers ──────────────────────────────────────────────────────────
+// Small helpers
 
 function Pill({ children, color = 'stone' }) {
   const map = {
@@ -103,7 +103,7 @@ function SliderField({ label, min, max, step, value, onChange, formatFn, hint })
   );
 }
 
-// ─── Tab: Scaling Regimes ─────────────────────────────────────────────────
+// Tab: Scaling Regimes
 
 function TabScalingRegimes() {
   const [selected, setSelected] = useState('inference-time');
@@ -116,7 +116,7 @@ function TabScalingRegimes() {
         <p className="text-xs text-[var(--ds-faint)] leading-relaxed">
           Modern reasoning systems scale along two orthogonal axes. Training-time scaling buys a permanently smarter model; 
           inference-time (test-time) scaling rents additional compute per query. Together they form a Pareto frontier 
-          — you can trade dollars at training time for dollars at inference time.
+          so you can trade dollars at training time for dollars at inference time.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -179,7 +179,7 @@ function TabScalingRegimes() {
             {SCALING_LAWS_DATA.testTimePoints.map((pt) => (
               <div key={pt.tokens} className="bg-[var(--ds-panel)] border border-[var(--ds-rule)] rounded p-2 text-center">
                 <span className="block text-[10px] font-mono font-bold text-[var(--ds-ink)]">{pt.tokens} tok</span>
-                <span className="block text-[10px] text-[var(--ds-faint)]">→ {pt.accuracy}% acc</span>
+                <span className="block text-[10px] text-[var(--ds-faint)]">to {pt.accuracy}% acc</span>
               </div>
             ))}
           </div>
@@ -192,7 +192,7 @@ function TabScalingRegimes() {
   );
 }
 
-// ─── Tab: Strategy Map ────────────────────────────────────────────────────
+// Tab: Strategy Map
 
 function TabStrategyMap() {
   const [selected, setSelected] = useState('best-of-n');
@@ -264,7 +264,7 @@ function TabStrategyMap() {
   );
 }
 
-// ─── Tab: Best-of-N ──────────────────────────────────────────────────────
+// Tab: Best-of-N
 
 function TabBestOfN() {
   const [n, setN] = useState(8);
@@ -368,7 +368,7 @@ function TabBestOfN() {
                 ))}
               </div>
               <p className="text-[10px] text-[var(--ds-faint)]">
-                Accuracy gains from sampling N=1→32 are large; beyond 32 returns diminish steeply.
+                Accuracy gains from sampling N=1 to 32 are large; beyond 32 returns diminish steeply.
               </p>
             </div>
           </div>
@@ -378,7 +378,7 @@ function TabBestOfN() {
           <div className="flex items-center gap-3 p-3 rounded border border-amber-300 bg-amber-50 text-amber-900 text-xs">
             <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600" />
             <span>
-              <strong>Cost warning:</strong> N={n} means {n}× the token cost of single-sample generation. Gains above N=32 are often marginal without a better verifier.
+              <strong>Cost warning:</strong> N={n} means {n}x the token cost of single-sample generation. Gains above N=32 are often marginal without a better verifier.
             </span>
           </div>
         )}
@@ -387,7 +387,7 @@ function TabBestOfN() {
   );
 }
 
-// ─── Tab: Tree / Beam Search ──────────────────────────────────────────────
+// Tab: Tree / Beam Search
 
 function TabBeamSearch() {
   const [currentDepth, setCurrentDepth] = useState(1);
@@ -412,7 +412,7 @@ function TabBeamSearch() {
             disabled={currentDepth === 0}
             className="ds-btn bg-[var(--ds-paper)] border border-[var(--ds-rule)] text-xs font-bold py-1.5 px-3 rounded transition-all disabled:opacity-40"
           >
-            ← Collapse
+            Collapse
           </button>
           <span className="text-xs font-mono text-[var(--ds-faint)]">Depth: {currentDepth} / {BEAM_SEARCH_STEPS.length - 1}</span>
           <button
@@ -421,7 +421,7 @@ function TabBeamSearch() {
             disabled={currentDepth >= BEAM_SEARCH_STEPS.length - 1}
             className="ds-btn bg-[var(--ds-accent)] text-[var(--ds-paper)] text-xs font-bold py-1.5 px-3 rounded transition-all disabled:opacity-40"
           >
-            Expand →
+            Expand
           </button>
         </div>
 
@@ -448,7 +448,7 @@ function TabBeamSearch() {
                             node.pruned ? 'text-red-700' : node.score >= 0.9 ? 'text-green-700' : 'text-amber-700'
                           }`}
                         >
-                          {node.pruned ? '✗ PRUNED' : node.score.toFixed(2)}
+                          {node.pruned ? 'PRUNED' : node.score.toFixed(2)}
                         </span>
                       </div>
                     )}
@@ -461,7 +461,7 @@ function TabBeamSearch() {
 
         <div className="text-xs text-[var(--ds-faint)] bg-[var(--ds-paper)] border border-[var(--ds-rule)] rounded p-3 leading-relaxed">
           <strong>Key insight:</strong> Beam search is more compute-efficient than Best-of-N because it allocates 
-          search effort to promising paths only. But it requires a PRM that can score partial reasoning chains — 
+          search effort to promising paths only. But it requires a PRM that can score partial reasoning chains;
           not just final answers.
         </div>
       </InfoCard>
@@ -469,7 +469,7 @@ function TabBeamSearch() {
   );
 }
 
-// ─── Tab: Thinking Budgets ────────────────────────────────────────────────
+// Tab: Thinking Budgets
 
 function TabThinkingBudget() {
   const [selectedId, setSelectedId] = useState('moderate');
@@ -559,7 +559,7 @@ function TabThinkingBudget() {
   );
 }
 
-// ─── Tab: Budget Forcing ──────────────────────────────────────────────────
+// Tab: Budget Forcing
 
 function TabBudgetForcing() {
   const [budget, setBudget] = useState(512);
@@ -663,7 +663,7 @@ function TabBudgetForcing() {
   );
 }
 
-// ─── Tab: Tool-Augmented ─────────────────────────────────────────────────
+// Tab: Tool-Augmented
 
 function TabToolAugmented() {
   const [visibleSteps, setVisibleSteps] = useState(1);
@@ -685,7 +685,7 @@ function TabToolAugmented() {
           Tool results are injected as observations. This extends effective compute beyond the model's parameter-bound knowledge.
         </p>
         <p className="text-xs font-mono bg-stone-900 text-stone-200 p-2 rounded mb-4">
-          ReAct Loop: Thought → Action(tool) → Observation → Thought → ... → Final Answer
+          ReAct Loop: Thought to Action(tool) to Observation to Thought to Final Answer
         </p>
 
         <div className="flex items-center gap-3 mb-2">
@@ -695,7 +695,7 @@ function TabToolAugmented() {
             disabled={visibleSteps <= 1}
             className="ds-btn bg-[var(--ds-paper)] border border-[var(--ds-rule)] text-xs font-bold py-1.5 px-3 rounded disabled:opacity-40"
           >
-            ← Back
+            Back
           </button>
           <span className="text-xs font-mono text-[var(--ds-faint)]">Step {visibleSteps} / {allSteps.length}</span>
           <button
@@ -704,7 +704,7 @@ function TabToolAugmented() {
             disabled={visibleSteps >= allSteps.length}
             className="ds-btn bg-[var(--ds-accent)] text-[var(--ds-paper)] text-xs font-bold py-1.5 px-3 rounded disabled:opacity-40"
           >
-            Next Step →
+            Next Step
           </button>
         </div>
 
@@ -732,7 +732,7 @@ function TabToolAugmented() {
         {visibleSteps >= allSteps.length && (
           <div className="text-xs text-[var(--ds-faint)] bg-[var(--ds-paper)] border border-[var(--ds-rule)] rounded p-3 leading-relaxed">
             <strong>Key insight:</strong> Tool calls consumed 3 real-world API round-trips but saved ~1 500 reasoning tokens.
-            The model did not need to memorize population numbers — it delegated fact-retrieval to a search tool.
+            The model did not need to memorize population numbers; it delegated fact retrieval to a search tool.
           </div>
         )}
       </InfoCard>
@@ -740,7 +740,7 @@ function TabToolAugmented() {
   );
 }
 
-// ─── Tab: Failure Modes ───────────────────────────────────────────────────
+// Tab: Failure Modes
 
 function TabFailureModes() {
   const [activeId, setActiveId] = useState('overthinking');
@@ -809,7 +809,7 @@ function TabFailureModes() {
                   onClick={() => setFixApplied((prev) => ({ ...prev, [failure.id]: !prev[failure.id] }))}
                   className="ds-btn text-[10px] font-bold uppercase py-1 px-2 rounded border border-[var(--ds-rule)] bg-[var(--ds-panel)] hover:bg-[var(--ds-paper-2)]"
                 >
-                  {fixApplied[failure.id] ? '↺ Unfixed' : '✓ Mark Fixed'}
+                  {fixApplied[failure.id] ? 'Unfixed' : 'Mark Fixed'}
                 </button>
               </div>
             </div>
@@ -820,7 +820,7 @@ function TabFailureModes() {
   );
 }
 
-// ─── Tab: Cost vs Accuracy ────────────────────────────────────────────────
+// Tab: Cost vs Accuracy
 
 function TabMetrics() {
   const [sortBy, setSortBy] = useState('accuracy');
@@ -854,7 +854,7 @@ function TabMetrics() {
                   : 'border-[var(--ds-rule)] bg-[var(--ds-paper)] text-[var(--ds-faint)]'
               }`}
             >
-              {s === 'accuracy' ? 'Accuracy ↓' : 'Token Cost ↑'}
+              {s === 'accuracy' ? 'Accuracy desc' : 'Token Cost asc'}
             </button>
           ))}
         </div>
@@ -909,7 +909,7 @@ function TabMetrics() {
   );
 }
 
-// ─── Tab: Budget Policies ─────────────────────────────────────────────────
+// Tab: Budget Policies
 
 function TabBudgetStrategies() {
   const [selected, setSelected] = useState('adaptive');
@@ -938,7 +938,7 @@ function TabBudgetStrategies() {
               }`}
             >
               <span className="font-bold block text-[var(--ds-ink)]">{s.label}</span>
-              <span className="text-[10px] text-[var(--ds-faint)] mt-1 block">{s.description.slice(0, 55)}…</span>
+              <span className="text-[10px] text-[var(--ds-faint)] mt-1 block">{s.description.slice(0, 55)}...</span>
             </button>
           ))}
         </div>
@@ -953,7 +953,7 @@ function TabBudgetStrategies() {
                   <span className="text-[10px] font-bold uppercase text-green-700 block mb-1">Pros</span>
                   {strat.pros.map((p, i) => (
                     <div key={i} className="flex items-start gap-1.5 text-xs text-[var(--ds-ink)] mb-1">
-                      <span className="text-green-600 mt-0.5">✓</span>
+                      <span className="text-green-600 mt-0.5">+</span>
                       {p}
                     </div>
                   ))}
@@ -962,7 +962,7 @@ function TabBudgetStrategies() {
                   <span className="text-[10px] font-bold uppercase text-red-700 block mb-1">Cons</span>
                   {strat.cons.map((c, i) => (
                     <div key={i} className="flex items-start gap-1.5 text-xs text-[var(--ds-ink)] mb-1">
-                      <span className="text-red-600 mt-0.5">✗</span>
+                      <span className="text-red-600 mt-0.5">-</span>
                       {c}
                     </div>
                   ))}
@@ -980,7 +980,7 @@ function TabBudgetStrategies() {
   );
 }
 
-// ─── Root Component ───────────────────────────────────────────────────────
+// Root Component
 
 export default function TestTimeComputeThinkingBudgets() {
   const [activeTab, setActiveTab] = useState('scaling-regimes');
@@ -1027,7 +1027,7 @@ export default function TestTimeComputeThinkingBudgets() {
             </div>
             <div className="text-center pl-2">
               <span className="block text-[10px] font-bold text-[var(--ds-faint)] uppercase">Key Trade-off</span>
-              <span className="text-lg font-bold text-[var(--ds-ink)]">Latency ↔ Accuracy</span>
+              <span className="text-lg font-bold text-[var(--ds-ink)]">Latency vs Accuracy</span>
             </div>
           </div>
         </div>
