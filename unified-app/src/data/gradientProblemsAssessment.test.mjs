@@ -25,7 +25,10 @@ test('gradient problems has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('gradient-problems');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['diagnose-gradient-flow', 'trace-chain-ledger', 'clip-vs-residual-audit'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -119,6 +122,35 @@ test('gradient problems assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim|reject|overconfident|overbroad|too weak|needs caution/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('gradient problems assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('gradient-problems');
+  const misconceptionPatterns = [
+    /fixes vanishing gradients by making tiny gradients large/i,
+    /loss alone is enough/i,
+    /depth cannot affect gradient scale/i,
+    /guarantee no vanishing or exploding/i,
+    /monitoring unnecessary/i,
+    /always means the model is finished/i,
+    /always useful because it means strong learning/i,
+    /always recover automatically/i,
+    /cannot affect gradients after the first batch/i,
+    /remove the need for any gradient diagnostics/i,
+    /any threshold works/i,
+    /cannot have vanishing gradients/i,
+    /every zero gradient proves a bug/i,
+    /one global gradient norm always reveals/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|reject|overconfident|overbroad|too weak|needs caution/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
