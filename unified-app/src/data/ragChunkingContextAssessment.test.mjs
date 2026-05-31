@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('rag chunking context has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('rag-chunking-context');
+test('rag chunking context has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('rag-chunking-context');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ragchunk-'), `question ${index + 1} should use the ragchunk id prefix`);
+    assert.match(question.id, /^ragchunk-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(9, 12)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3);
+    assert.ok(Number.isInteger(question.answerIndex));
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('rag chunking context assessment avoids duplicate prompts and correct answers', () => {
@@ -73,13 +84,13 @@ test('rag chunking context assessment covers learning points in the right order'
     ['purpose', ['turning long documents into evidence the model can actually use']],
     ['retrieval units', ['retrieval units cut from longer source documents']],
     ['overlap basics', ['repeated boundary text']],
-    ['top k and budget', ['survive retrieval ranking, top-k, and token budget constraints']],
-    ['mechanism summary', ['split, retrieve, rank, and pack evidence under a context budget']],
+    ['top k and budget', ['survive retrieval ranking top k and token budget constraints']],
+    ['mechanism summary', ['split retrieve rank and pack evidence under a context budget']],
     ['boundary application', ['refund policy spans two paragraphs']],
-    ['production review', ['retrieval recall, packed evidence coverage, duplicate tokens, latency, and answer quality']],
+    ['production review', ['retrieval recall packed evidence coverage duplicate tokens latency and answer quality']],
     ['tricky false claims', ['chunking claim is false']],
-    ['interview debug', ['chunked, retrieved, ranked high enough, packed, and visible']],
-    ['interview readiness', ['production-ready takeaway']],
+    ['interview debug', ['chunked retrieved ranked high enough packed and visible']],
+    ['interview readiness', ['production ready takeaway']],
   ];
 
   let previousIndex = -1;

@@ -2765,6 +2765,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Adjust chunk size, overlap, top-k, and context budget until both relevant refund facts fit without too much duplicate text.',
         successCriteria: 'You can explain which control recovered the boundary fact and which control limited packed evidence.',
       },
+      {
+        id: 'trace-retrieved-vs-packed',
+        title: 'Trace retrieved versus packed evidence',
+        prompt: 'For a query with one missing fact, compare the indexed chunks, top-k candidates, ranked order, packed prompt, and reserved answer space.',
+        successCriteria: 'You can name the exact stage where evidence disappeared and choose whether the fix is chunking, retrieval breadth, reranking, deduplication, or packing budget.',
+      },
+      {
+        id: 'measure-context-tradeoffs',
+        title: 'Measure context tradeoffs',
+        prompt: 'Run the same evidence-backed queries across two chunk sizes, two overlap settings, and two top-k values, then record recall, packed coverage, duplicate token share, latency, and answer quality.',
+        successCriteria: 'You can justify a setting with measured tradeoffs instead of assuming larger chunks, more overlap, or higher top-k is automatically better.',
+      },
     ],
   },
   'rag-vector-indexing': {

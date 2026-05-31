@@ -134,7 +134,7 @@ export default function RagChunkingContextAnimation() {
           <div className="mt-4 grid gap-3">
             {chunks.map((chunk) => (
               <div key={chunk.id} className="rounded-lg border border-cyan-200 bg-cyan-50 p-3">
-                <p className="text-xs font-black uppercase tracking-wide text-cyan-700">Chunk {chunk.index} · {chunk.tokenCount} tokens</p>
+                <p className="text-xs font-black uppercase tracking-wide text-cyan-700">Chunk {chunk.index} - {chunk.tokenCount} tokens</p>
                 <p className="mt-2 text-sm leading-6 text-cyan-950">{chunk.sentences.map((sentence) => sentence.text).join(' ')}</p>
               </div>
             ))}
@@ -149,7 +149,7 @@ export default function RagChunkingContextAnimation() {
           <div className="mt-4 space-y-3">
             {packed.map((chunk) => (
               <div key={chunk.id} className={`rounded-lg border p-3 ${chunk.packed ? 'border-emerald-300 bg-emerald-50' : 'border-slate-200 bg-slate-50 text-slate-500'}`}>
-                <p className="text-xs font-black uppercase tracking-wide">Score {chunk.score} · {chunk.tokenCount} tokens · {chunk.packed ? 'packed' : 'dropped'}</p>
+                <p className="text-xs font-black uppercase tracking-wide">Score {chunk.score} - {chunk.tokenCount} tokens - {chunk.packed ? 'packed' : 'dropped'}</p>
                 <p className="mt-2 text-sm leading-6">{chunk.sentences.map((sentence) => sentence.text).join(' ')}</p>
               </div>
             ))}
