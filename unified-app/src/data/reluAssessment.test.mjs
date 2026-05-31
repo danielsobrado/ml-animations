@@ -130,6 +130,7 @@ test('relu assessment avoids unsafe misconception keying', () => {
 
 test('relu assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('relu');
+  const trapQuestions = quiz.slice(75, 90);
   const expectedTrapIds = [
     'relu-076-false-probability-trap',
     'relu-077-false-negative-trap',
@@ -166,7 +167,8 @@ test('relu assessment keeps misconception traps after setup', () => {
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
 
-  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
+  assert.deepEqual(trapQuestions.map((question) => question.id), expectedTrapIds);
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -189,7 +191,11 @@ test('relu assessment does not leak exact answers within a visible page', () => 
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
+        assert.ok(
+          !visibleText.includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
+        );
       }
     }
   }
