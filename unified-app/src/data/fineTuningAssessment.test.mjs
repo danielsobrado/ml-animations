@@ -26,6 +26,11 @@ test('fine tuning has a complete curated 100-question assessment with focused la
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'choose-finetune-method',
+    'inspect-trainable-scope',
+    'debug-tuning-failure',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -127,6 +132,33 @@ test('fine tuning assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('fine tuning misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('fine-tuning');
+  const trapIds = [
+    'ftune-076-false-single',
+    'ftune-077-false-retrieval',
+    'ftune-078-false-lora',
+    'ftune-079-false-qlora',
+    'ftune-080-false-sft',
+    'ftune-081-false-dpo',
+    'ftune-082-false-rank',
+    'ftune-083-false-quant',
+    'ftune-084-false-data',
+    'ftune-085-false-memory',
+    'ftune-086-false-facts',
+    'ftune-087-false-eval',
+    'ftune-088-false-safety',
+    'ftune-089-false-overfit',
+    'ftune-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
