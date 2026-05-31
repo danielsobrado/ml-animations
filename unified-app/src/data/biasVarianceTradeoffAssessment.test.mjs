@@ -141,6 +141,23 @@ test('bias variance assessment avoids unsafe misconception keying', () => {
 
 test('bias variance assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('bias-variance-tradeoff');
+  const expectedTrapIds = [
+    'bv-076-trap-overfit',
+    'bv-077-trap-bias',
+    'bv-078-trap-variance',
+    'bv-079-trap-noise',
+    'bv-080-trap-complexity',
+    'bv-081-trap-regularization',
+    'bv-082-trap-data',
+    'bv-083-trap-ensemble',
+    'bv-084-trap-crossval',
+    'bv-085-trap-gap',
+    'bv-086-trap-metric',
+    'bv-087-trap-slices',
+    'bv-088-trap-formula',
+    'bv-089-trap-action',
+    'bv-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /just another name for overfitting/i,
     /fits training data perfectly/i,
@@ -158,6 +175,8 @@ test('bias variance assessment keeps misconception traps after setup', () => {
     /same remedy fixes every/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
