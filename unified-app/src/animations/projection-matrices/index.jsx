@@ -4,7 +4,7 @@ import { CheckCircle2, FlaskConical, Target } from 'lucide-react';
 const vectors = [
   { id: 'x1', name: 'x high', point: [280, 76] },
   { id: 'x2', name: 'x low', point: [310, 220] },
-  { id: 'x3', name: 'already projected', point: [250, 170] },
+  { id: 'x3', name: 'already projected', point: [255.5, 185] },
 ];
 
 function project([x, y]) {

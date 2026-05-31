@@ -79,6 +79,23 @@ test('projection matrices assessment progresses through lesson learning points',
 
 test('projection matrices keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('projection-matrices');
+  const trapIds = [
+    'pmat-076-false-p2',
+    'pmat-077-wrong-second-pass',
+    'pmat-078-dangerous-all-square',
+    'pmat-079-false-residual',
+    'pmat-080-wrong-orthogonal-from-idempotent',
+    'pmat-081-false-nonunit',
+    'pmat-082-wrong-diagonal',
+    'pmat-083-dangerous-residual-zero',
+    'pmat-084-false-metric-free',
+    'pmat-085-wrong-colspace-formula',
+    'pmat-086-false-px-original',
+    'pmat-087-dangerous-target-ignore',
+    'pmat-088-false-outer-add',
+    'pmat-089-wrong-apply',
+    'pmat-090-dangerous-title-only',
+  ];
   const misconceptionTerms = [
     /applying P twice returns the original x/i,
     /move Px farther/i,
@@ -97,6 +114,8 @@ test('projection matrices keeps misconception traps after setup', () => {
     /title without checking/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|unsafe|rejected/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
