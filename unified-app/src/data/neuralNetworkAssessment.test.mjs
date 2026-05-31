@@ -144,6 +144,23 @@ test('neural network assessment avoids unsafe misconception keying', () => {
 
 test('neural network assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('neural-network');
+  const expectedTrapIds = [
+    'nn-076-trap-depth',
+    'nn-077-trap-activation',
+    'nn-078-trap-capacity',
+    'nn-079-trap-train-loss',
+    'nn-080-trap-validation',
+    'nn-081-trap-test',
+    'nn-082-trap-confidence',
+    'nn-083-trap-neuron-meaning',
+    'nn-084-trap-backprop',
+    'nn-085-trap-memory-v2',
+    'nn-086-trap-initialization',
+    'nn-087-trap-global',
+    'nn-088-trap-metric',
+    'nn-089-trap-black-box',
+    'nn-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /adding more layers always improves/i,
     /nonlinear activations are optional/i,
@@ -161,6 +178,8 @@ test('neural network assessment keeps misconception traps after setup', () => {
     /cannot be tested or debugged/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
