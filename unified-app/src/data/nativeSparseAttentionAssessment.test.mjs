@@ -26,6 +26,11 @@ test('native sparse attention has a complete curated 100-question assessment', (
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'mini-nsa-block-window',
+    'mini-nsa-score-select',
+    'mini-nsa-gates-hardware',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('native sparse attention assessment avoids unsafe misconception keying', ()
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('native sparse attention misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('native-sparse-attention');
+  const trapIds = [
+    'nsa-076-false-random',
+    'nsa-077-false-branches',
+    'nsa-078-false-compression',
+    'nsa-079-false-selection',
+    'nsa-080-false-window',
+    'nsa-081-false-speed',
+    'nsa-082-false-native',
+    'nsa-083-false-gqa',
+    'nsa-084-false-mask',
+    'nsa-085-false-softmax',
+    'nsa-086-false-cache',
+    'nsa-087-false-rag',
+    'nsa-088-false-budget',
+    'nsa-089-false-context',
+    'nsa-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
