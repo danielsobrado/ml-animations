@@ -108,14 +108,14 @@ test('computation graph backprop assessment avoids unsafe misconception keying',
     /positive gradient direction/i,
     /always proves the model is optimal/i,
     /guarantees the next loss decreases/i,
-    /preserves all earlier gradients/i,
-    /always erase old gradients/i,
+    /updates the target y/i,
+    /changes the forward loss before any update/i,
     /parameters do not/i,
     /random gradient at the loss/i,
     /d\(wx\)\/dw equals w/i,
     /dz\/db equals b/i,
     /only the final loss/i,
-    /cannot be wrong/i,
+    /can never learn on any example/i,
   ];
 
   for (const [index, question] of quiz.entries()) {
@@ -136,8 +136,8 @@ test('computation graph backprop assessment keeps misconception traps after setu
     'cgb-080-false-update-trap',
     'cgb-081-false-zero-trap',
     'cgb-082-false-lr-trap',
-    'cgb-083-false-detach-trap',
-    'cgb-084-false-accum-trap',
+    'cgb-083-false-target-trap',
+    'cgb-084-false-slider-trap',
     'cgb-085-false-param-trap',
     'cgb-086-false-loss-trap',
     'cgb-087-false-multiply-trap',
@@ -153,18 +153,20 @@ test('computation graph backprop assessment keeps misconception traps after setu
     /positive gradient direction/i,
     /always proves the model is optimal/i,
     /guarantees the next loss decreases/i,
-    /preserves all earlier gradients/i,
-    /always erase old gradients/i,
+    /updates the target y/i,
+    /changes the forward loss before any update/i,
     /parameters do not/i,
     /random gradient at the loss/i,
     /d\(wx\)\/dw equals w/i,
     /dz\/db equals b/i,
     /only the final loss/i,
-    /cannot be wrong/i,
+    /can never learn on any example/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+  const trapQuestions = quiz.slice(75, 90);
 
   assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -176,6 +178,28 @@ test('computation graph backprop assessment keeps misconception traps after setu
     }
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('computation graph backprop assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('computation-graph-backprop');
+  const lessonScopeLeaks = [
+    /vector jacobian/i,
+    /full jacobian/i,
+    /\bleaf\b/i,
+    /\.grad/i,
+    /zero_grad/i,
+    /detach/i,
+    /requires_grad/i,
+    /autodiff/i,
+    /finite difference/i,
+    /custom backward/i,
+    /retain.*graph/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks framework or future debugging scope`);
   }
 });
 
@@ -191,7 +215,8 @@ test('computation graph backprop assessment does not leak exact answers within a
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
