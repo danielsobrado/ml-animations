@@ -2278,6 +2278,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Switch stride and padding, then compute the output-size formula before checking the displayed grid.',
         successCriteria: 'You can explain why padding increases available windows while stride skips windows.',
       },
+      {
+        id: 'trace-selected-cell',
+        title: 'Trace a selected cell',
+        prompt: 'Choose one output cell, write its highlighted 3 by 3 input window, multiply by the current kernel, and sum the nine products.',
+        successCriteria: 'You can explain how one local dot product creates exactly one output value.',
+      },
+      {
+        id: 'compare-kernel-responses',
+        title: 'Compare kernel responses',
+        prompt: 'Keep the same selected window, switch between edge and sharpen kernels, and predict how signed weights change the response.',
+        successCriteria: 'You can separate the reused spatial window from the learned filter weights that score different local patterns.',
+      },
     ],
   },
   'gradient-problems': {

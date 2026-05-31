@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,28 @@ function correctAnswer(question) {
 }
 
 test('conv2d has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('conv2d');
+  const { quiz, labs } = getLessonAssessment('conv2d');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('c2d-'), `question ${index + 1} should use the c2d id prefix`);
+    assert.match(question.id, /^c2d-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered c2d id format`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `question ${index + 1} should keep ordered ids`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const positionCounts = [0, 1, 2].map((answerIndex) => (
+    quiz.filter((question) => question.answerIndex === answerIndex).length
+  ));
+  assert.ok(Math.max(...positionCounts) - Math.min(...positionCounts) <= 1, `answer positions should be balanced: ${positionCounts.join(', ')}`);
 });
 
 test('conv2d assessment avoids duplicate prompts and correct answers', () => {
@@ -76,12 +85,12 @@ test('conv2d assessment covers learning points in the right order', () => {
     ['stride', ['how far the kernel moves']],
     ['padding', ['extra border values']],
     ['channels', ['separate value planes']],
-    ['output shape formula', ['floor((input + 2 * padding - kernel) / stride) + 1']],
-    ['multi-channel sum', ['sum the aligned products across height, width, and input channels']],
+    ['output shape formula', ['floor input 2 padding kernel stride 1']],
+    ['multi-channel sum', ['sum the aligned products across height width and input channels']],
     ['parameter count', ['f times c times k times k']],
     ['application shape debug', ['padding was omitted']],
     ['tricky false claims', ['claim is false']],
-    ['interview readiness', ['production-ready conv2d takeaway']],
+    ['interview readiness', ['production ready conv2d takeaway']],
   ];
 
   let previousIndex = -1;
