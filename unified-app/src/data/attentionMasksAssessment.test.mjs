@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('attention masks has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('attention-masks');
+  const { quiz, labs } = getLessonAssessment('attention-masks');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('amask-'), `question ${index + 1} should use the amask id prefix`);
+    assert.match(question.id, /^amask-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the amask id format`);
+    assert.equal(Number(question.id.slice(6, 9)), index + 1, `question ${index + 1} id number should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -71,15 +75,15 @@ test('attention masks assessment covers learning points in the right order', () 
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['legally visible before softmax']],
-    ['not mlm', ['masked-language-model input corruption']],
+    ['not mlm', ['masked language model input corruption']],
     ['causal', ['position reading future tokens']],
     ['padding', ['padding positions that are not real content']],
     ['formula', ['mask m is added to scores']],
-    ['combined masks', ['time visibility and real-token validity']],
-    ['application leakage', ['causal mask or input-target shift']],
-    ['debug grids', ['visible-key cases']],
-    ['tricky false claims', ['attention-mask claim is false']],
-    ['interview readiness', ['production-ready attention-mask takeaway']],
+    ['combined masks', ['time visibility and real token validity']],
+    ['application leakage', ['causal mask or input target shift']],
+    ['debug grids', ['visible key cases']],
+    ['tricky false claims', ['attention mask claim is false']],
+    ['interview readiness', ['production ready attention mask takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,7 @@ test('attention masks assessment does not leak exact answers within a visible pa
 
 test('attention masks assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('attention-masks');
+  const globalPositionCounts = [0, 1, 2].map((slot) => quiz.filter((question) => question.answerIndex === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -147,4 +152,9 @@ test('attention masks assessment distributes correct-answer positions across eve
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(
+    Math.max(...globalPositionCounts) - Math.min(...globalPositionCounts) <= 1,
+    `global answer positions should be balanced, got ${globalPositionCounts.join(', ')}`,
+  );
 });

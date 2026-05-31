@@ -2320,6 +2320,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Pick one query row, switch between mask types, and list which keys remain visible before softmax.',
         successCriteria: 'You can justify each visible or blocked key using causal order, padding, or cross-attention memory.',
       },
+      {
+        id: 'combine-causal-and-padding',
+        title: 'Combine causal and padding masks',
+        prompt: 'Turn on padding masking while using causal visibility, then explain why a key must be both in the legal prefix and a real token.',
+        successCriteria: 'You can describe combined masks as enforcing time visibility and valid-token status before softmax.',
+      },
+      {
+        id: 'debug-mask-conventions',
+        title: 'Debug mask conventions',
+        prompt: 'Use the selected-row grid to predict weights, then identify what would break if an API inverted keep/block polarity or broadcast the mask on the wrong axis.',
+        successCriteria: 'You can name the expected visible keys, detect leakage or all-masked rows, and separate attention masks from [MASK] input tokens.',
+      },
     ],
   },
   'positional-encoding': {
