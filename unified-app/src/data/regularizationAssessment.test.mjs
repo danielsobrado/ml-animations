@@ -25,7 +25,10 @@ test('regularization has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('regularization');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['lambda-sweep', 'penalty-family-comparison', 'validation-sweep-report'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -133,6 +136,35 @@ test('regularization assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('regularization assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('regularization');
+  const misconceptionPatterns = [
+    /always improves test performance/i,
+    /chosen safely without validation/i,
+    /largest lambda is always best/i,
+    /always keeps every feature/i,
+    /hard feature selection by zeroing many coefficients/i,
+    /scaling never matters/i,
+    /retry lambda choices based on final test scores/i,
+    /normally applied only at final evaluation time/i,
+    /any random input change is a safe regularizer/i,
+    /removes the need for validation behavior/i,
+    /likelihood no longer matters/i,
+    /automatically causally interpretable/i,
+    /smaller gap always means the model is better/i,
+    /one regularizer is best for every model/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
