@@ -51,7 +51,11 @@ export default function LowRankApproximationAnimation() {
                 <div className="mb-3 text-sm font-semibold text-gray-300">Residual A - A_k</div>
                 <div className="grid grid-cols-5 gap-1">
                   {Array.from({ length: 25 }, (_, i) => (
-                    <div key={i} className="aspect-square rounded-sm bg-rose-300" style={{ opacity: Math.max(0.08, (6 - rank) / 8 - ((i % 3) * 0.04)) }} />
+                    <div
+                      key={i}
+                      className="aspect-square rounded-sm bg-rose-300"
+                      style={{ opacity: rank === singularValues.length ? 0 : Math.max(0.08, (6 - rank) / 8 - ((i % 3) * 0.04)) }}
+                    />
                   ))}
                 </div>
               </div>

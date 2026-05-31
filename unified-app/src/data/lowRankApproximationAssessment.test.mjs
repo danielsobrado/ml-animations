@@ -80,6 +80,23 @@ test('low-rank approximation assessment progresses through lesson learning point
 
 test('low-rank approximation keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('low-rank-approximation');
+  const trapIds = [
+    'lra-076-false-lossless',
+    'lra-077-wrong-smallest-first',
+    'lra-078-dangerous-no-validation',
+    'lra-079-false-noise',
+    'lra-080-wrong-error-budget',
+    'lra-081-false-eckart',
+    'lra-082-wrong-rank',
+    'lra-083-false-sigma',
+    'lra-084-wrong-outer-product',
+    'lra-085-false-frobenius',
+    'lra-086-dangerous-energy-only',
+    'lra-087-wrong-more-k',
+    'lra-088-false-residual-zero',
+    'lra-089-dangerous-title-only',
+    'lra-090-false-best-any-norm',
+  ];
   const misconceptionTerms = [
     /Any k gives a lossless reconstruction/i,
     /Keep the smallest singular values first/i,
@@ -98,6 +115,8 @@ test('low-rank approximation keeps misconception traps after setup', () => {
     /every possible metric and task loss/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|unsafe|rejected/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
