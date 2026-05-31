@@ -37,6 +37,15 @@ test('optimizers has a complete curated 100-question assessment', () => {
   }
 });
 
+test('optimizers assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('optimizers');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('optimizers assessment progresses from update basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('optimizers');
   const expectedBands = [
