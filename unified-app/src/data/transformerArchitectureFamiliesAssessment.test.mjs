@@ -37,6 +37,15 @@ test('transformer architecture families has a complete curated 100-question asse
   }
 });
 
+test('transformer architecture families assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('transformer-architecture-families');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('transformer architecture families assessment progresses from basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('transformer-architecture-families');
   const expectedBands = [
