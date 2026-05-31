@@ -2223,6 +2223,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: SELF_ATTENTION_QUIZ,
     labs: [
       {
+        id: 'trace-scaled-row',
+        title: 'Trace a scaled row',
+        prompt: 'Pick one query token, read its scaled scores, softmax weights, strongest key, and output vector before changing any controls.',
+        successCriteria: 'You can connect QK scores, sqrt(d_k) scaling, row softmax, and the weighted value mixture for one token.',
+      },
+      {
+        id: 'compare-mask-temperature',
+        title: 'Compare mask and temperature',
+        prompt: 'Toggle the causal mask and lower the temperature, then explain what changes in the row bars and full attention matrix.',
+        successCriteria: 'Your explanation distinguishes blocked future keys from sharper softmax competition among visible keys.',
+      },
+      {
         id: 'attention-row',
         title: 'Read one attention row',
         prompt: 'Pick a token and explain which other tokens it attends to most.',

@@ -1,6 +1,6 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
+  const questionNumber = Number(id.match(/^selfattn-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
   const rotation = stableHash(`self-attention:${id}`) % 3;
   const answerIndex = (desiredFinalIndex + rotation) % 3;
   const choices = [...distractors];
