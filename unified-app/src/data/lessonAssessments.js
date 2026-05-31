@@ -24,6 +24,7 @@ import { DIFFUSION_LANGUAGE_MODELS_QUIZ } from './diffusionLanguageModelsAssessm
 import { DIFFUSION_SAMPLING_QUIZ } from './diffusionSamplingAssessment.js';
 import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
+import { EFFICIENT_LLM_SERVING_QUIZ } from './efficientLlmServingAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
@@ -2919,74 +2920,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'efficient-llm-serving': {
-    quiz: [
-      {
-        id: 'prefill-definition',
-        prompt: 'What is prefill?',
-        choices: [
-          'Processing the input prompt and building the initial KV cache.',
-          'Generating one output token at a time after the prompt is processed.',
-          'Compressing model weights only.',
-        ],
-        answerIndex: 0,
-        explanation: 'Prefill processes prompt tokens in parallel and stores key/value activations that decode will reuse.',
-      },
-      {
-        id: 'decode-definition',
-        prompt: 'What is decode?',
-        choices: [
-          'Loading the tokenizer vocabulary.',
-          'Autoregressively generating output tokens using the KV cache.',
-          'Training a model from scratch.',
-        ],
-        answerIndex: 1,
-        explanation: 'Decode is the streaming generation phase where each request repeatedly produces the next token.',
-      },
-      {
-        id: 'pagedattention-problem',
-        prompt: 'What problem does PagedAttention solve?',
-        choices: [
-          'Model pretraining data quality.',
-          'Tokenizer vocabulary mismatch.',
-          'Dynamic KV cache allocation and fragmentation.',
-        ],
-        answerIndex: 2,
-        explanation: 'PagedAttention stores KV cache in fixed-size blocks so dynamic sequences waste less memory and can be scheduled more flexibly.',
-      },
-      {
-        id: 'continuous-batching',
-        prompt: 'Why is continuous batching useful?',
-        choices: [
-          'It keeps GPU capacity filled as requests enter and leave at different decode steps.',
-          'It forces every request to have the same prompt and output length.',
-          'It removes the need for KV cache.',
-        ],
-        answerIndex: 0,
-        explanation: 'Continuous batching admits new requests as old ones finish, reducing idle slots caused by variable output lengths.',
-      },
-      {
-        id: 'speculative-decoding',
-        prompt: 'What is speculative decoding?',
-        choices: [
-          'A server guessing user prompts before they arrive.',
-          'A draft model proposes tokens and the target model verifies them.',
-          'A quantization method for model weights.',
-        ],
-        answerIndex: 1,
-        explanation: 'Speculative decoding uses cheap proposals and target-model verification to advance by multiple accepted tokens per expensive pass.',
-      },
-      {
-        id: 'goodput',
-        prompt: 'What does goodput optimize?',
-        choices: [
-          'Raw tokens per second regardless of user wait time.',
-          'Only prompt length.',
-          'Completed work that satisfies latency objectives.',
-        ],
-        answerIndex: 2,
-        explanation: 'Goodput counts useful completions under latency or SLO constraints, so it better reflects production user experience.',
-      },
-    ],
+    quiz: EFFICIENT_LLM_SERVING_QUIZ,
     labs: [
       {
         id: 'prefill-decode-diagnosis',
