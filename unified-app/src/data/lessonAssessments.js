@@ -1970,6 +1970,12 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Use the prediction check for the selected optimizer, then rotate the 3D surface and explain why the first step and final endpoint match the computed path.',
         successCriteria: 'You can connect the first-step sign, surface curvature, endpoint height, and final loss statistic.',
       },
+      {
+        id: 'schedule-stability-audit',
+        title: 'Audit optimizer stability',
+        prompt: 'Compare learning-rate, momentum, batch-size, and warmup settings on the same loss surface, then diagnose crawling, zigzagging, overshooting, or noisy convergence.',
+        successCriteria: 'You can choose a first tuning response without claiming Adam or momentum automatically fixes every training run.',
+      },
     ],
   },
   initialization: {

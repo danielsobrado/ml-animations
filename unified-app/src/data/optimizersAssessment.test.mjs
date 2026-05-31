@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('optimizers has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('optimizers');
+  const { quiz, labs } = getLessonAssessment('optimizers');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('opt-'), `question ${index + 1} should use the opt id prefix`);
+    assert.match(question.id, /^opt-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered opt id`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -78,18 +82,18 @@ test('optimizers assessment covers learning points in the right order', () => {
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const orderedMilestones = [
     ['purpose', ['parameter updates']],
-    ['sgd', ['current mini-batch gradient']],
-    ['learning rate', ['step-size knob']],
+    ['sgd', ['current mini batch gradient']],
+    ['learning rate', ['step size knob']],
     ['mini-batch noise', ['different gradient directions']],
     ['momentum', ['velocity term']],
-    ['adam', ['per-parameter step scaling']],
+    ['adam', ['per parameter step scaling']],
     ['curvature', ['zigzag or overshoot']],
     ['validation', ['generalization']],
-    ['sgd mechanism', ['opposite the mini-batch gradient']],
+    ['sgd mechanism', ['opposite the mini batch gradient']],
     ['momentum mechanism', ['decaying velocity']],
-    ['adam mechanism', ['squared-gradient history']],
+    ['adam mechanism', ['squared gradient history']],
     ['optimizer state', ['running statistics']],
-    ['diagnostics', ['gradient norms, update norms']],
+    ['diagnostics', ['gradient norms update norms']],
     ['production readiness', ['clean evaluation boundaries']],
     ['tricky false claims', ['claim is unsafe']],
     ['interview readiness', ['learning rate sensitivity']],
@@ -159,6 +163,13 @@ test('optimizers assessment does not leak exact answers within a visible page', 
 
 test('optimizers assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('optimizers');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be globally balanced, saw ${totals.join('/')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
