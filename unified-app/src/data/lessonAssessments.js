@@ -2021,6 +2021,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Increase learning rate, shrink batch size, and raise validation difficulty, then identify noisy, overshooting, or overfitting behavior.',
         successCriteria: 'You can explain why train loss, validation loss, and update stability must be read together.',
       },
+      {
+        id: 'batch-learning-rate-tradeoff',
+        title: 'Compare batch and step tradeoffs',
+        prompt: 'Hold validation difficulty fixed, then compare small and large batches across two learning rates to separate noisy descent from unstable overshooting.',
+        successCriteria: 'You can explain why smoother batches, step size, and wall-clock cost must be judged together.',
+      },
+      {
+        id: 'checkpoint-split-review',
+        title: 'Review checkpoint and split hygiene',
+        prompt: 'Use the loss curves to choose a validation checkpoint, then explain why repeated test-set checks would spoil the final evaluation.',
+        successCriteria: 'You can keep training, validation, and test evidence separate while diagnosing overfitting.',
+      },
     ],
   },
   relu: {

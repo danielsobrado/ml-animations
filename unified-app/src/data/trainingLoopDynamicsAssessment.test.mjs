@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('training loop dynamics has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('training-loop-dynamics');
+  const { quiz, labs } = getLessonAssessment('training-loop-dynamics');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('tld-'), `question ${index + 1} should use the tld id prefix`);
+    assert.match(question.id, /^tld-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered tld id`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -73,14 +77,14 @@ test('training loop dynamics assessment covers learning points in the right orde
     ['purpose', ['repeated batches']],
     ['forward', ['predictions and loss']],
     ['backward', ['gradients of the loss']],
-    ['validation', ['held-out data']],
+    ['validation', ['held out data']],
     ['learning rate', ['training dynamics']],
     ['batch noise', ['noisier from step']],
     ['overfitting', ['validation loss worsens']],
-    ['loop order', ['forward, loss, backward']],
+    ['loop order', ['forward loss backward']],
     ['train-validation gap', ['generalization may be worsening']],
     ['checkpoint', ['best validation checkpoint']],
-    ['gradient norm', ['vanishing, exploding']],
+    ['gradient norm', ['vanishing exploding']],
     ['production readiness', ['stable updates']],
     ['tricky false claims', ['claim is unsafe']],
     ['interview readiness', ['trace the loop order']],
@@ -142,6 +146,13 @@ test('training loop dynamics assessment does not leak exact answers within a vis
 
 test('training loop dynamics assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('training-loop-dynamics');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be globally balanced, saw ${totals.join('/')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
