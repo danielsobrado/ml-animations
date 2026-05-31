@@ -177,8 +177,10 @@ test('gradient descent assessment keeps misconception traps after setup', () => 
     /all neural-network losses are convex/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+  const trapQuestions = quiz.slice(75, 90);
 
-  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+  assert.deepEqual(trapQuestions.map((question) => question.id), trapIds);
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -200,11 +202,12 @@ test('gradient descent assessment does not leak exact answers within a visible p
     assert.equal(new Set(answers).size, answers.length, `page starting at question ${pageStart + 1} should not repeat exact answers`);
 
     for (const [answerIndex, answer] of answers.entries()) {
-      for (const [promptIndex, question] of page.entries()) {
-        if (answerIndex === promptIndex) continue;
+      for (const [questionIndex, question] of page.entries()) {
+        if (answerIndex === questionIndex) continue;
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !visibleText.includes(answer),
+          `question ${pageStart + questionIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
     }
