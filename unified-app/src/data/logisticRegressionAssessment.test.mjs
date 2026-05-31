@@ -27,7 +27,11 @@ test('logistic regression has a complete curated 100-question assessment', () =>
   const { quiz, labs } = getLessonAssessment('logistic-regression');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'threshold-flips',
+    'logit-coefficient-audit',
+    'threshold-calibration-report',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -227,6 +231,37 @@ test('logistic regression assessment avoids unsafe misconception keying', () => 
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('logistic regression assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('logistic-regression');
+  const misconceptionPatterns = [
+    /predicts an unbounded continuous value/i,
+    /sigmoid maps every input to only 0 or 1/i,
+    /changing the threshold retrains/i,
+    /always learns a nonlinear boundary/i,
+    /sigmoid output is automatically calibrated/i,
+    /0\.61 score guarantees/i,
+    /predictive coefficients automatically prove causal effects/i,
+    /regularization removes the need for validation/i,
+    /feature scaling never matters/i,
+    /perfect separability always gives small stable/i,
+    /best threshold is always exactly 0\.5/i,
+    /binary cross-entropy ignores the observed label/i,
+    /logit is already a valid probability/i,
+    /class imbalance never affects threshold/i,
+    /only the final hard labels are needed/i,
+  ];
+  const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
