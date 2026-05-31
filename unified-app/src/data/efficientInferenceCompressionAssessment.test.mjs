@@ -37,6 +37,15 @@ test('efficient inference compression has a complete curated 100-question assess
   }
 });
 
+test('efficient inference compression assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('efficient-inference-compression-track');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('efficient inference compression assessment progresses from serving basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('efficient-inference-compression-track');
   const expectedBands = [
