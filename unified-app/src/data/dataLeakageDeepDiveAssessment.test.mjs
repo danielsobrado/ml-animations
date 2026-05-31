@@ -26,9 +26,14 @@ function correctAnswer(question) {
 test('data leakage deep dive has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('data-leakage-deep-dive');
   const ids = new Set(quiz.map((question) => question.id));
+  const globalCounts = [0, 0, 0];
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-information-boundary',
+    'leakage-mode-audit',
+    'choose-boundary-safe-fix',
+  ]);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
@@ -42,7 +47,13 @@ test('data leakage deep dive has a complete curated 100-question assessment', ()
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
     assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
+    globalCounts[question.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('data leakage deep dive assessment avoids duplicate prompts and exact correct answers', () => {
@@ -146,6 +157,37 @@ test('data leakage deep dive assessment avoids unsafe misconception keying', () 
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('data leakage deep dive assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('data-leakage-deep-dive');
+  const misconceptionPatterns = [
+    /feature is safe whenever it is highly correlated/i,
+    /unsupervised transforms cannot leak/i,
+    /random row split is always honest/i,
+    /shuffling is safe when future rows share/i,
+    /changing features after each final test result/i,
+    /full-data target means are fine/i,
+    /creating augmented variants before splitting originals/i,
+    /lifetime spend computed using events after/i,
+    /row-removal rules after inspecting final test/i,
+    /extremely strong simple baseline/i,
+    /name does not mention the target/i,
+    /queried indefinitely without overfitting risk/i,
+    /no leakage exists anywhere/i,
+    /current warehouse snapshot always represents/i,
+    /serving checks are unnecessary/i,
+  ];
+  const trapPrompt = /trap|false|unsafe|misleading|suspicious|too strong|claim|behavior|interpretation|practice|conclusion/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
