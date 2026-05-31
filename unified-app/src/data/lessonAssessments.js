@@ -1697,6 +1697,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move the threshold and pick a cutoff for a case where false negatives are more expensive than false positives.',
         successCriteria: 'You can justify the threshold using recall, precision, and the mistake costs.',
       },
+      {
+        id: 'roc-pr-denominator-audit',
+        title: 'Audit curve denominators',
+        prompt: 'For a chosen threshold, compute TPR, FPR, precision, and recall from confusion counts, then place the same point on ROC and PR axes.',
+        successCriteria: 'You can name each denominator and explain why ROC and PR emphasize different error populations.',
+      },
+      {
+        id: 'rare-positive-report',
+        title: 'Report rare-positive tradeoffs',
+        prompt: 'Given rare-event scores, compare ROC AUC with PR behavior, choose an operating region, convert rates to counts, and state prevalence and final-test caveats.',
+        successCriteria: 'You can avoid treating global AUC as a threshold, a calibration proof, or a complete alert-quality story.',
+      },
     ],
   },
   calibration: {

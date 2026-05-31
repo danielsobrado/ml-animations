@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^rocpr-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`roc-pr-curves:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const ROC_PR_CURVES_QUIZ = Object.freeze([
@@ -63,7 +74,7 @@ export const ROC_PR_CURVES_QUIZ = Object.freeze([
   q('rocpr-050-protocol', 'Mechanism', 'What belongs in a ROC/PR evaluation protocol?', 'Score definition, split, curve type, AUC, operating constraints, and threshold selection rule', ['Pick the best test threshold after launch', 'Hide prevalence'], 'A protocol prevents curve cherry-picking.'),
 
   q('rocpr-051-scenario-roc-axis', 'Application', 'A chart labels y-axis TPR and x-axis FPR. What curve is it?', 'ROC curve', ['Precision-recall curve', 'Calibration curve'], 'ROC plots recall or TPR against false positive rate.'),
-  q('rocpr-052-scenario-pr-axis', 'Application', 'A chart labels y-axis precision and x-axis recall. What curve is it?', 'Precision-recall curve', ['ROC curve', 'Residual plot'], 'PR curves show precision at different recall levels.'),
+  q('rocpr-052-scenario-pr-axis', 'Application', 'A chart labels y-axis precision and x-axis recall. What curve is it?', 'The PR curve, because its axes are precision and recall', ['ROC curve', 'Residual plot'], 'PR curves show precision at different recall levels.'),
   q('rocpr-053-scenario-lower-threshold', 'Application', 'You lower the alert threshold. What happens to movement on most PR curves?', 'Recall increases while precision may fall', ['Recall must fall and precision must rise', 'Both axes become accuracy'], 'More flagged examples usually recover more positives but may add false alarms.'),
   q('rocpr-054-scenario-high-precision', 'Application', 'A fraud review team has capacity for only a few alerts. Which curve region matters most?', 'High-precision region at manageable recall', ['Only the all-positive endpoint', 'Only the training-loss minimum'], 'Limited review capacity makes alert quality critical.'),
   q('rocpr-055-scenario-screening', 'Application', 'A disease screen needs to catch nearly all positives. Which operating concern is central?', 'High recall with acceptable false-alarm burden', ['Lowest model size only', 'Highest threshold regardless of misses'], 'Screening often emphasizes positive recovery.'),
