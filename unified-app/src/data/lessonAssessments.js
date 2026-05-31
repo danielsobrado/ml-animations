@@ -1470,6 +1470,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Choose a prompt-injection or poisoning scenario and define a defense plus an eval.',
         successCriteria: 'You can name an attack, impacted asset, control, and evaluation.',
       },
+      {
+        id: 'rag-tool-threat-model',
+        title: 'Threat-model RAG tools',
+        prompt: 'Map assets, attackers, trust boundaries, retrieved content, tool permissions, approval gates, and audit logs for a RAG assistant.',
+        successCriteria: 'You can separate untrusted content from instructions and match high-impact tools to controls.',
+      },
+      {
+        id: 'security-regression-plan',
+        title: 'Plan regression checks',
+        prompt: 'Build a small release checklist with adversarial evals, privacy leak tests, poisoning checks, false-positive review, monitoring, and rollback criteria.',
+        successCriteria: 'You can explain why average helpfulness or a single prompt rule is not enough for release readiness.',
+      },
     ],
   },
   'efficient-inference-compression-track': {
