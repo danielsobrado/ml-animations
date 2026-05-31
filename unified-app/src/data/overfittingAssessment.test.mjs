@@ -25,7 +25,11 @@ test('overfitting has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('overfitting');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'find-sweet-spot',
+    'generalization-gap-diagnosis',
+    'remedy-and-report-plan',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -140,6 +144,36 @@ test('overfitting assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('overfitting assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('overfitting');
+  const misconceptionPatterns = [
+    /always means a better deployed model/i,
+    /largest model is always/i,
+    /any gap between train and validation proves/i,
+    /classic overfitting is the only possible explanation/i,
+    /reused endlessly with no selection bias/i,
+    /guarantees no overfitting to model selection/i,
+    /more regularization is always better/i,
+    /more rows always fix overfitting/i,
+    /any random transformation improves generalization/i,
+    /always prove the model has generalized perfectly/i,
+    /safe to tune repeatedly on the final test set/i,
+    /good average validation guarantees every segment is safe/i,
+    /only matter for neural networks/i,
+    /single failure proves the model is overfit/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
