@@ -25,7 +25,10 @@ test('neural network has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('neural-network');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-forward-backward', 'map-layer-shapes', 'review-generalization-evidence'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -136,6 +139,35 @@ test('neural network assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('neural network assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('neural-network');
+  const misconceptionPatterns = [
+    /adding more layers always improves/i,
+    /nonlinear activations are optional/i,
+    /more neurons guarantee better generalization/i,
+    /zero training loss proves/i,
+    /validation examples should update weights/i,
+    /redesigning the network after each test-set result/i,
+    /0\.99 is always a calibrated probability/i,
+    /every hidden neuron always corresponds/i,
+    /backpropagation is magic unrelated/i,
+    /stores each training example exactly/i,
+    /starting weights never affect training/i,
+    /always finds the global best solution/i,
+    /accuracy alone is always enough/i,
+    /cannot be tested or debugged/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
