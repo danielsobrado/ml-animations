@@ -25,7 +25,10 @@ test('layer normalization has a complete curated 100-question assessment', () =>
   const { quiz, labs } = getLessonAssessment('layer-normalization');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['normalize-shifted-token', 'compare-batchnorm-axis', 'audit-pre-post-placement'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -126,6 +129,35 @@ test('layer normalization assessment avoids unsafe misconception keying', () => 
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim|reject|absolute/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('layer normalization assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('layer-normalization');
+  const misconceptionPatterns = [
+    /needs batch running statistics just like batchnorm/i,
+    /normalize across all tokens in the sequence by default/i,
+    /make normalization unnecessary/i,
+    /switch to running statistics during evaluation/i,
+    /must use the same layernorm placement/i,
+    /removes the need for sensible initialization/i,
+    /makes learning-rate tuning unnecessary/i,
+    /exactly the same formula/i,
+    /just dropout because both improve training/i,
+    /proven best/i,
+    /any normalized_shape works/i,
+    /cannot affect other normalized features/i,
+    /fails by definition when batch size is one/i,
+    /no state worth checking/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|reject|absolute/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
