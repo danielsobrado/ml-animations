@@ -2343,6 +2343,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Switch between "dog bites man" and "man bites dog", then disable the position signal. Explain what information the model loses.',
         successCriteria: 'You can explain why the same tokens need different positional context to represent different meanings.',
       },
+      {
+        id: 'trace-sinusoidal-channels',
+        title: 'Trace sinusoidal channels',
+        prompt: 'Select sinusoidal encoding, change model dimension and probe position, then describe how sine and cosine channels create repeatable multi-scale position fingerprints.',
+        successCriteria: 'You can connect even/odd channels, frequency scale, and probe similarity to the displayed position vectors.',
+      },
+      {
+        id: 'debug-position-alignment',
+        title: 'Debug position alignment',
+        prompt: 'Compare learned, sinusoidal, and no-position modes, then explain what can go wrong with padding side, packed examples, generation position ids, or KV-cache reuse.',
+        successCriteria: 'You can separate token identity, position ids, masks, and cached states and explain why they must stay aligned.',
+      },
     ],
   },
   rope: {

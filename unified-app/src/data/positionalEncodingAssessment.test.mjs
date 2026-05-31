@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('positional encoding has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('positional-encoding');
+  const { quiz, labs } = getLessonAssessment('positional-encoding');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('posenc-'), `question ${index + 1} should use the posenc id prefix`);
+    assert.match(question.id, /^posenc-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered posenc id format`);
+    assert.equal(Number(question.id.slice(7, 10)), index + 1, `question ${index + 1} should have a sequential id`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -70,16 +74,16 @@ test('positional encoding assessment covers learning points in the right order',
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['self-attention lacks built-in token order']],
-    ['order-sensitive sentence', ['dog bites man']],
+    ['purpose', ['self attention lacks built in token order']],
+    ['order sensitive sentence', ['dog bites man']],
     ['sinusoidal', ['sine and cosine waves']],
     ['not replacing meaning', ['do positional encodings replace token meaning']],
-    ['formula', ['pe(pos, 2i)']],
+    ['formula', ['pe pos 2i']],
     ['learned table', ['learned position embedding table']],
     ['extrapolation caveat', ['learned absolute table']],
     ['application bug', ['kv cache', 'positions need careful alignment']],
-    ['tricky false claims', ['self-attention order claim is false']],
-    ['interview readiness', ['production-ready positional-encoding takeaway']],
+    ['tricky false claims', ['self attention order claim is false']],
+    ['interview readiness', ['production ready positional encoding takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,8 @@ test('positional encoding assessment does not leak exact answers within a visibl
 
 test('positional encoding assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('positional-encoding');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -147,4 +153,6 @@ test('positional encoding assessment distributes correct-answer positions across
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(Math.max(...globalCounts) - Math.min(...globalCounts) <= 1, `global answer positions should stay balanced: ${globalCounts.join(', ')}`);
 });
