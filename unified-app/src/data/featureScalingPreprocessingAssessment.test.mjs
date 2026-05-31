@@ -163,6 +163,23 @@ test('feature scaling preprocessing assessment avoids unsafe misconception keyin
 
 test('feature scaling preprocessing assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
+  const expectedTrapIds = [
+    'scale-076-trap-harmless',
+    'scale-077-trap-label-free',
+    'scale-078-trap-all-models',
+    'scale-079-trap-minmax',
+    'scale-080-trap-robust',
+    'scale-081-trap-cv',
+    'scale-082-trap-coefficients',
+    'scale-083-trap-outlier',
+    'scale-084-trap-serving',
+    'scale-085-trap-one-hot',
+    'scale-086-trap-binary',
+    'scale-087-trap-target',
+    'scale-088-trap-drift',
+    'scale-089-trap-schema',
+    'scale-090-trap-best-score',
+  ];
   const misconceptionPatterns = [
     /scaling is harmless bookkeeping/i,
     /if a transform ignores labels/i,
@@ -179,6 +196,8 @@ test('feature scaling preprocessing assessment keeps misconception traps after s
     /pick the scaler after repeatedly checking the final test score/i,
   ];
   const trapPrompt = /trap|false|misleading|unsafe|too absolute|too strong|claim|practice|statement/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
