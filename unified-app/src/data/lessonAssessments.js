@@ -40,6 +40,7 @@ import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js'
 import { GLOVE_QUIZ } from './gloveAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
+import { GPT2_COMPREHENSIVE_QUIZ } from './gpt2ComprehensiveAssessment.js';
 import { GRPO_REASONING_QUIZ } from './grpoReasoningAssessment.js';
 import { GROUPED_QUERY_ATTENTION_QUIZ } from './groupedQueryAttentionAssessment.js';
 import { HYPOTHESIS_TESTING_INTUITION_QUIZ } from './hypothesisTestingIntuitionAssessment.js';
@@ -2025,6 +2026,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Choose the BERT task head',
         prompt: 'Given sentiment classification, named entity recognition, extractive QA, and sentence-pair similarity, pick the BERT input format and task head for each.',
         successCriteria: 'You justify each choice using [CLS], token-level outputs, span boundaries, or paired [SEP] inputs.',
+      },
+    ],
+  },
+  'gpt2-comprehensive': {
+    quiz: GPT2_COMPREHENSIVE_QUIZ,
+    labs: [
+      {
+        id: 'trace-gpt2-token',
+        title: 'Trace one GPT-2 token prediction',
+        prompt: 'Start from a short prompt, tokenize it with BPE, add positions, apply a causal attention mask, and choose a next-token decoding strategy.',
+        successCriteria: 'You can explain how tokenization, positions, masked blocks, logits, KV caching, and sampling affect the next token.',
       },
     ],
   },
