@@ -2214,7 +2214,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
       {
         id: 'shift-query',
         title: 'Shift the query',
-        prompt: 'Change a query and predict which value will receive more weight.',
+        prompt: 'Switch to a different scenario query and predict which value will receive more weight.',
         successCriteria: 'Your prediction follows the largest query-key score.',
       },
     ],

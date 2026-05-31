@@ -25,7 +25,10 @@ test('attention mechanism has a complete curated 100-question assessment', () =>
   const { quiz, labs } = getLessonAssessment('attention-mechanism');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-library-lookup', 'compare-scenarios', 'shift-query'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +123,41 @@ test('attention mechanism assessment avoids unsafe misconception keying', () => 
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|interpretation/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('attention mechanism assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('attention-mechanism');
+  const misconceptionPatterns = [
+    /treating attention weights as permanent global importance/i,
+    /already the final mixed output/i,
+    /summed directly into the attention output/i,
+    /decide their own attention weights/i,
+    /normalize across query rows/i,
+    /only after values are fully mixed/i,
+    /permanent global token importance/i,
+    /free at million-token scale/i,
+    /removes the need for softmax/i,
+    /must all come from one sequence/i,
+    /uses no q\/k\/v projections/i,
+    /raw score matrix itself/i,
+    /selected the best key/i,
+    /knows sequence order without any position signal/i,
+    /only attention and nothing else/i,
+    /complete causal explanations/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|interpretation|misconception/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    if (index < 75) {
+      assert.match(question.prompt, /misconception.*avoid/i, `${question.id} should scaffold any early misconception`);
+      continue;
+    }
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
