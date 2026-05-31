@@ -1309,6 +1309,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Increase pre/post correlation and explain how CUPED narrows the confidence interval.',
         successCriteria: 'You can connect correlation, standard error, and interval width.',
       },
+      {
+        id: 'covariate-validity-debug',
+        title: 'Debug covariate validity',
+        prompt: 'Compare a pre-treatment covariate with a treatment-affected covariate and explain which adjustment is valid for the causal target.',
+        successCriteria: 'You can reject post-treatment adjustment even when it predicts the outcome.',
+      },
+      {
+        id: 'cuped-readout-audit',
+        title: 'Audit a CUPED readout',
+        prompt: 'Write a readout that includes raw and adjusted effects, interval width, variance reduction, covariate timing, missingness, and decision caveats.',
+        successCriteria: 'You can report precision gains without hiding assumptions or practical significance.',
+      },
     ],
   },
   'confounding-simpsons-paradox': {
