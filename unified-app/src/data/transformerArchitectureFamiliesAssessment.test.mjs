@@ -26,6 +26,11 @@ test('transformer architecture families has a complete curated 100-question asse
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'choose-family',
+    'compare-visibility-masks',
+    'debug-family-mismatch',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('transformer architecture families assessment avoids unsafe misconception k
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('transformer architecture families misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('transformer-architecture-families');
+  const trapIds = [
+    'tfam-076-false-same',
+    'tfam-077-false-encoder-generation',
+    'tfam-078-false-decoder-future',
+    'tfam-079-false-encdec-mask',
+    'tfam-080-false-cross',
+    'tfam-081-false-objective',
+    'tfam-082-false-masks',
+    'tfam-083-false-bert',
+    'tfam-084-false-gpt',
+    'tfam-085-false-t5',
+    'tfam-086-false-classifier',
+    'tfam-087-false-chat',
+    'tfam-088-false-translation',
+    'tfam-089-false-selector',
+    'tfam-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (claim|belief|misconception) is (false|wrong|unsafe)\?/);
   }
 });
 
