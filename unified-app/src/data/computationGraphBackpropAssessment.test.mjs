@@ -128,6 +128,23 @@ test('computation graph backprop assessment avoids unsafe misconception keying',
 
 test('computation graph backprop assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('computation-graph-backprop');
+  const expectedTrapIds = [
+    'cgb-076-false-magic-trap',
+    'cgb-077-false-forward-trap',
+    'cgb-078-false-relu-trap',
+    'cgb-079-false-add-trap',
+    'cgb-080-false-update-trap',
+    'cgb-081-false-zero-trap',
+    'cgb-082-false-lr-trap',
+    'cgb-083-false-detach-trap',
+    'cgb-084-false-accum-trap',
+    'cgb-085-false-param-trap',
+    'cgb-086-false-loss-trap',
+    'cgb-087-false-multiply-trap',
+    'cgb-088-false-bias-trap',
+    'cgb-089-false-debug-trap',
+    'cgb-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /magic unrelated/i,
     /without forward values/i,
@@ -146,6 +163,8 @@ test('computation graph backprop assessment keeps misconception traps after setu
     /cannot be wrong/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
