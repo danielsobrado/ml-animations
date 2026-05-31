@@ -1,8 +1,8 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
-  const rotation = stableHash(`diffusion-basics:${id}`) % 3;
-  const answerIndex = (desiredFinalIndex + rotation) % 3;
+  const questionNumber = Number(id.match(/^diffbas-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`diffusion-basics:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
   const choices = [...distractors];
   choices.splice(answerIndex, 0, correct);
   return { id, level, choices, answerIndex, prompt, explanation };
@@ -120,5 +120,5 @@ const DIFFUSION_BASICS_SPECS = [
 ];
 
 export const DIFFUSION_BASICS_QUIZ = DIFFUSION_BASICS_SPECS.map(
-  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation)
+  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation),
 );

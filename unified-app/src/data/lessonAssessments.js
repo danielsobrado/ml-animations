@@ -3229,6 +3229,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move timestep and prediction error to see how noisy sample and denoised estimate diverge from the clean signal.',
         successCriteria: 'You can explain why a better noise estimate produces a cleaner recovered sample.',
       },
+      {
+        id: 'schedule-signal-audit',
+        title: 'Audit the noise schedule',
+        prompt: 'Record the signal weight, noise weight, noisy sample, predicted noise, and recovered estimate at low, middle, and high timesteps.',
+        successCriteria: 'You can explain why the same prediction error has different visual effects as the signal-to-noise balance changes.',
+      },
+      {
+        id: 'denoising-debug-note',
+        title: 'Write a denoising debug note',
+        prompt: 'Given a noisy or blurry final sample, trace whether the likely cause is under-removal, over-removal, data scaling, too few steps, or a schedule mismatch.',
+        successCriteria: 'You can connect the artifact to a concrete failure in the forward/noise-prediction/reverse-update loop.',
+      },
     ],
   },
   'diffusion-sampling': {

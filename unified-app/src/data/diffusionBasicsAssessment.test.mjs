@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('diffusion basics has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('diffusion-basics');
+test('diffusion basics has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('diffusion-basics');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('diffbas-'), `question ${index + 1} should use the diffbas id prefix`);
+    assert.match(question.id, /^diffbas-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(8, 11)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('diffusion basics assessment avoids duplicate prompts and correct answers', () => {
@@ -74,12 +85,12 @@ test('diffusion basics assessment covers learning points in the right order', ()
     ['forward process', ['clean data is gradually mixed with controlled noise']],
     ['noise prediction', ['noise added to the clean sample at a timestep']],
     ['not one step', ['not asked to invent the whole image in one step']],
-    ['mechanism summary', ['known noise process to train a timestep-aware denoiser']],
+    ['mechanism summary', ['known noise process to train a timestep aware denoiser']],
     ['lab high timestep', ['timestep moves higher']],
-    ['production review', ['timestep and noise-prediction error change the recovered sample']],
+    ['production review', ['timestep and noise prediction error change the recovered sample']],
     ['tricky false claims', ['invents the whole image in one denoising call']],
-    ['interview debugging', ['noise-prediction error, timestep schedule, step count, and data scaling']],
-    ['interview readiness', ['known noising process trains a timestep-aware denoiser']],
+    ['interview debugging', ['noise prediction error timestep schedule step count and data scaling']],
+    ['interview readiness', ['known noising process trains a timestep aware denoiser']],
   ];
 
   let previousIndex = -1;
