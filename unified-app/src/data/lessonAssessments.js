@@ -1108,10 +1108,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: SVD_QUIZ,
     labs: [
       {
-        id: 'rank-k-reconstruction',
-        title: 'Trace a rank-k reconstruction',
-        prompt: 'Use the SVD animation to identify U, Sigma, and V^T, then explain what is lost when only the largest singular value is kept.',
-        successCriteria: 'You can connect singular value size to retained structure and reconstruction error.',
+        id: 'trace-svd-factor-flow',
+        title: 'Trace the factor flow',
+        prompt: 'Use the animation to identify A, U, Sigma, and V^T, including their shapes and the reconstruction order U Sigma V^T.',
+        successCriteria: 'You can explain which factor supplies output directions, stretches, input directions, and how they multiply back to A.',
+      },
+      {
+        id: 'verify-singular-values',
+        title: 'Verify singular values',
+        prompt: 'Use the animation and Practice Lab to explain why singular values are nonnegative, ordered, and easy to read for the diagonal practice matrices.',
+        successCriteria: 'You can connect Sigma in the animation to the practice steps sigma1 >= sigma2 >= 0.',
+      },
+      {
+        id: 'connect-svd-uses',
+        title: 'Connect SVD uses',
+        prompt: 'Relate PCA, pseudoinverse, conditioning, and truncated SVD scenarios to the same U, Sigma, and V^T factor roles.',
+        successCriteria: 'You can choose the relevant SVD output or singular-value behavior for compression, stability, rank, and PCA.',
       },
     ],
   },

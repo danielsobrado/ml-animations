@@ -11,10 +11,12 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const LEVELS = new Set(Object.keys(LEVEL_ORDER));
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -23,20 +25,34 @@ function correctAnswer(question) {
 }
 
 test('svd has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('svd');
+  const { quiz, labs } = getLessonAssessment('svd');
   const ids = new Set(quiz.map((question) => question.id));
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
-  for (const question of quiz) {
-    assert.ok(question.prompt && /\S/.test(question.prompt), `${question.id} should have a prompt`);
+  for (const [index, question] of quiz.entries()) {
+    assert.match(question.id, /^svd-\d{3}-[a-z0-9-]+$/, `${question.id} should use the curated id format`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `${question.id} should stay in numeric order`);
+    assert.ok(LEVELS.has(question.level), `${question.id} should use a known level`);
+    assert.ok(question.prompt && question.prompt.length > 20, `${question.id} should have a substantial prompt`);
     assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat a choice`);
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
-    assert.ok(question.explanation && /\S/.test(question.explanation), `${question.id} should explain the answer`);
+    assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
   }
+});
+
+test('svd assessment avoids duplicate prompts and exact correct answers', () => {
+  const { quiz } = getLessonAssessment('svd');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length, 'prompts should be unique');
+  assert.equal(new Set(answers).size, answers.length, 'exact correct answers should be unique');
 });
 
 test('svd assessment progresses from recall to interview readiness', () => {
@@ -65,19 +81,31 @@ test('svd assessment progresses from recall to interview readiness', () => {
 
 test('svd assessment covers learning points in the right order', () => {
   const { quiz } = getLessonAssessment('svd');
-  const sections = [
-    quiz.slice(0, 20).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(20, 50).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(50, 75).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(75).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
+  const milestones = [
+    [/main purpose of svd/, 0, 10],
+    [/a u sigma v t/, 0, 12],
+    [/what does u contain/, 0, 12],
+    [/what does sigma contain/, 0, 15],
+    [/broadly useful/, 0, 20],
+    [/reconstructs a/, 5, 25],
+    [/which equation defines a singular triplet/, 20, 35],
+    [/a t a/, 20, 40],
+    [/eckart young/, 25, 45],
+    [/low rank image approximation/, 50, 60],
+    [/pca directions/, 50, 65],
+    [/rank deficient/, 50, 70],
+    [/trap/, 75, 90],
+    [/summarize svd in an interview/, 90, 100],
   ];
 
-  assert.match(sections[0], /u sigma v\^t|singular values|rectangular|rank|truncated/);
-  assert.match(sections[0], /pca|pseudoinverse|conditioning|eigen/);
-  assert.match(sections[1], /a v_i|a\^t a|a a\^t|null space|column space|eckart-young/);
-  assert.match(sections[1], /tolerance|condition number|reconstruction|orthogonality|cost/);
-  assert.match(sections[2], /scenario|compression|rank|pca|production|monitoring/);
-  assert.match(sections[3], /trap|interview|misconception|tolerance|stability/);
+  for (const [pattern, minIndex, maxIndex] of milestones) {
+    const matchIndex = quiz.findIndex((question) => pattern.test(normalized(`${question.prompt} ${question.explanation}`)));
+    assert.notEqual(matchIndex, -1, `missing learning point ${pattern}`);
+    assert.ok(
+      matchIndex >= minIndex && matchIndex < maxIndex,
+      `${pattern} appears at question ${matchIndex + 1}, outside expected range ${minIndex + 1}-${maxIndex}`,
+    );
+  }
 });
 
 test('svd assessment avoids unsafe misconception keying', () => {
@@ -85,6 +113,9 @@ test('svd assessment avoids unsafe misconception keying', () => {
   const falseClaimPatterns = [
     /singular vectors are just eigenvectors of a/,
     /blindly inverting every singular value/,
+    /singular values can be negative/,
+    /rectangular matrices have no singular values/,
+    /a t a is always safer/,
     /always the best production method/,
     /truncated svd to reconstruct every entry exactly/,
     /always gives human-interpretable topics/,
@@ -94,7 +125,7 @@ test('svd assessment avoids unsafe misconception keying', () => {
   for (const [index, question] of quiz.entries()) {
     const prompt = normalized(question.prompt);
     const answer = normalized(correctAnswer(question));
-    const explicitTrapPrompt = /trap|misconception|what is wrong|dangerous|risky|interview|contrast/.test(prompt);
+    const explicitTrapPrompt = /trap|misconception|what is wrong|dangerous|risky|interview|contrast|why is this unsafe/.test(prompt);
     const falseClaimKeyed = falseClaimPatterns.some((pattern) => pattern.test(answer));
 
     assert.ok(
@@ -118,7 +149,7 @@ test('svd assessment does not leak exact answers within a visible page', () => {
       const prompt = normalized(question.prompt);
 
       for (const [answerIndex, answer] of answers.entries()) {
-        if (questionIndex === answerIndex || answer.length < 8) continue;
+        if (questionIndex === answerIndex) continue;
 
         assert.ok(
           !prompt.includes(answer),
@@ -137,14 +168,13 @@ test('svd assessment distributes correct-answer positions across every page', ()
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
     const page = quiz.slice(pageStart, pageStart + pageSize);
-    const maxSameSlot = Math.max(
-      ...[0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length),
-    );
+    const counts = [0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length);
+    const maxSameSlot = Math.max(...counts);
+    const minSameSlot = Math.min(...counts);
 
     assert.ok(
-      maxSameSlot <= Math.ceil(page.length * 0.6),
-      `page starting at question ${pageStart + 1} should not overuse one correct option slot`,
+      maxSameSlot - minSameSlot <= 1,
+      `page starting at question ${pageStart + 1} should balance correct option slots, got ${counts.join('/')}`,
     );
   }
 });
-

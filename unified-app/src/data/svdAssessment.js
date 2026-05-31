@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^svd-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`svd:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const SVD_QUIZ = Object.freeze([
@@ -22,7 +33,7 @@ export const SVD_QUIZ = Object.freeze([
   q('svd-010-zero-singular', 'Foundation', 'What does a zero singular value mean?', 'One input direction is collapsed to zero', ['The whole matrix must be empty', 'The largest direction is strongest'], 'A zero stretch identifies a null direction.'),
   q('svd-011-truncated', 'Foundation', 'What does truncated SVD keep?', 'The top k singular values and their matching singular vectors', ['Only the smallest singular value', 'Every zero entry in A'], 'Top components preserve the strongest low-rank structure.'),
   q('svd-012-compression', 'Foundation', 'Why can truncated SVD compress data?', 'It approximates A with fewer dominant directions', ['It stores every entry twice', 'It replaces features with labels'], 'Keeping k components can reduce storage while retaining major structure.'),
-  q('svd-013-reconstruction', 'Foundation', 'How do exact SVD factors relate to A?', 'Multiplying U Sigma V^T reconstructs A up to numerical error', ['Adding U and V reconstructs labels', 'Only Sigma is needed for the full matrix'], 'The factors are a product representation of the original matrix.'),
+  q('svd-013-reconstruction', 'Foundation', 'How do exact SVD factors relate to A?', 'Multiplying U Sigma V^T reconstructs A up to numerical error', ['Adding U and V reconstructs labels', 'Only Sigma is needed for the full matrix'], 'The product representation reconstructs A within numerical tolerance.'),
   q('svd-014-left-right-pair', 'Foundation', 'What connects each right singular vector to a left singular vector?', 'A maps v_i to sigma_i times u_i', ['A maps every v_i to the same label', 'A maps u_i to a row name'], 'Each singular triplet describes one input direction, stretch, and output direction.'),
   q('svd-015-pca-link', 'Foundation', 'How does SVD connect to PCA?', 'PCA often uses SVD of centered data to find variance directions', ['PCA is SVD of unparsed labels only', 'PCA requires negative singular values'], 'Right singular vectors of centered data align with principal directions.'),
   q('svd-016-pseudoinverse-link', 'Foundation', 'Why is SVD useful for pseudoinverse?', 'It can invert nonzero singular values and handle zero ones with a tolerance', ['It makes every zero singular value safe to divide by', 'It removes the need for matrix shape'], 'SVD makes inverse-like behavior explicit direction by direction.'),
@@ -37,7 +48,7 @@ export const SVD_QUIZ = Object.freeze([
   q('svd-024-aat-link', 'Mechanism', 'How does A A^T connect to SVD?', 'Its eigenvectors are left singular vectors and eigenvalues are squared singular values', ['It always equals V Sigma V^T', 'It is unrelated to U'], 'The output-side covariance-like product reveals U.'),
   q('svd-025-nonnegative-values', 'Mechanism', 'Why are singular values nonnegative?', 'They are lengths or square roots of nonnegative eigenvalues', ['They are chosen from class probabilities', 'They are signed eigenvalues of any A'], 'A stretch magnitude cannot be negative.'),
   q('svd-026-orthonormal-bases', 'Mechanism', 'What orthonormality properties do U and V have?', 'Their columns satisfy U^T U = I and V^T V = I in reduced form', ['U^T V is always the identity', 'Both factors equal A'], 'SVD uses clean bases on each side of the map.'),
-  q('svd-027-economy-shapes', 'Mechanism', 'Why use economy SVD?', 'It stores only singular directions needed for the rank or column count', ['It changes the matrix intentionally', 'It forces every matrix to be square'], 'Economy form saves memory while preserving the useful product.'),
+  q('svd-027-economy-shapes', 'Mechanism', 'Why use economy SVD instead of full SVD?', 'It stores only singular directions needed for the rank or column count', ['It changes the matrix intentionally', 'It forces every matrix to be square'], 'Economy form saves memory while preserving the useful product.'),
   q('svd-028-full-shapes', 'Mechanism', 'What do full SVD extra columns represent?', 'Orthonormal completions beyond the active singular directions', ['Extra copies of labels', 'Negative singular values'], 'Full U and V complete bases for their ambient spaces.'),
   q('svd-029-null-space', 'Mechanism', 'How does SVD reveal the null space?', 'Right singular vectors with zero singular values span Null(A)', ['Left singular vectors with largest values span labels', 'Sigma rows with labels define Null(A)'], 'Zero stretches identify input directions killed by A.'),
   q('svd-030-column-space', 'Mechanism', 'How does SVD reveal the column space?', 'Left singular vectors with nonzero singular values span Col(A)', ['All right singular vectors span Col(A)', 'Only zero singular values span Col(A)'], 'Output directions reached by A are the nonzero left singular directions.'),
@@ -64,7 +75,7 @@ export const SVD_QUIZ = Object.freeze([
 
   q('svd-051-scenario-compression', 'Application', 'You need a low-rank image approximation with minimal squared reconstruction error. What fits?', 'Truncated SVD', ['Unpivoted LU solve', 'Raw class labels'], 'Top singular components are the standard low-rank compression tool.'),
   q('svd-052-scenario-rank', 'Application', 'You need a stable numerical rank estimate. What should you inspect?', 'Singular values with a documented tolerance', ['Only the row count', 'Only the largest label'], 'Small singular values reveal near-dependence.'),
-  q('svd-053-scenario-rectangular', 'Application', 'You have a rectangular matrix and want a spectral view. Which tool is appropriate?', 'SVD', ['Ordinary eigendecomposition of A', 'Cholesky of A'], 'SVD handles rectangular input-output maps directly.'),
+  q('svd-053-scenario-rectangular', 'Application', 'You have a rectangular matrix and want a spectral view. Which tool is appropriate?', 'Use singular value decomposition for the rectangular spectral view', ['Ordinary eigendecomposition of A', 'Cholesky of A'], 'SVD handles rectangular input-output maps directly.'),
   q('svd-054-scenario-pca', 'Application', 'You want PCA directions from centered data. What SVD output is most relevant?', 'Right singular vectors paired with large singular values', ['Random rows of U only', 'Negative diagonal entries'], 'Principal axes in feature space come from V for centered data matrices.'),
   q('svd-055-scenario-pseudoinverse', 'Application', 'A least-squares problem is rank deficient. Which SVD-based approach helps?', 'Use a pseudoinverse with a singular-value cutoff', ['Invert every zero singular value', 'Use normal equations without checks'], 'SVD supports stable inverse-like solves under rank deficiency.'),
   q('svd-056-scenario-noisy-solve', 'Application', 'Small singular values are dominated by measurement noise. What is a safer solve choice?', 'Truncate or regularize those directions', ['Divide by them more aggressively', 'Treat them as largest components'], 'Tiny noisy directions amplify error when inverted.'),
@@ -89,7 +100,7 @@ export const SVD_QUIZ = Object.freeze([
   q('svd-075-scenario-monitoring', 'Application', 'What should you monitor when using truncated SVD over time?', 'Singular-value drift, reconstruction error, and downstream metric changes', ['Only whether signs match a snapshot', 'Only the number of rows'], 'Changing data distribution can change the useful component structure.'),
 
   q('svd-076-eigen-trap', 'Tricky', 'What is wrong with saying singular vectors are just eigenvectors of A?', 'That only holds in special cases, not for general rectangular or nonsymmetric A', ['SVD has no connection to geometry', 'Eigenvectors always require negative values'], 'SVD uses eigenstructure of A^T A and A A^T, not ordinary eigenvectors of every A.'),
-  q('svd-077-small-values-trap', 'Tricky', 'What is dangerous about blindly inverting every singular value?', 'Tiny values can amplify noise catastrophically', ['Large values disappear from the product', 'All singular values are labels'], 'Pseudoinverse needs a cutoff.'),
+  q('svd-077-small-values-trap', 'Tricky', 'What is dangerous about blindly inverting every singular value?', 'Tiny values can amplify noise catastrophically', ['Large values disappear from the product', 'All singular values are labels'], 'A pseudoinverse needs a cutoff so tiny numerical stretches do not dominate the solve.'),
   q('svd-078-k-trap', 'Tricky', 'What is wrong with choosing k only because it looks small?', 'k should be tied to error, energy, cost, and downstream validation', ['k is never used in SVD', 'k must equal the number of rows'], 'Component count controls an approximation tradeoff.'),
   q('svd-079-sign-trap', 'Tricky', 'What trap affects comparisons between SVD runs?', 'Valid singular vectors can flip signs', ['Singular values can be negative in valid SVD', 'Reconstruction no longer matters'], 'Compare invariant products or sign-adjusted vectors.'),
   q('svd-080-feature-importance-trap', 'Tricky', 'What is wrong with reading singular vector entries as direct feature importance?', 'They are basis coordinates affected by scaling, signs, and rotations', ['They are always class probabilities', 'They never affect reconstruction'], 'Interpretation needs preprocessing and domain context.'),
