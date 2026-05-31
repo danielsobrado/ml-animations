@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('diffusion sampling has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('diffusion-sampling');
+test('diffusion sampling has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('diffusion-sampling');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('diffsamp-'), `question ${index + 1} should use the diffsamp id prefix`);
+    assert.match(question.id, /^diffsamp-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(9, 12)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('diffusion sampling assessment avoids duplicate prompts and correct answers', () => {
@@ -76,10 +87,10 @@ test('diffusion sampling assessment covers learning points in the right order', 
     ['not new model', ['sampler choices using a trained denoiser']],
     ['mechanism summary', ['discrete or continuous paths from noise to data']],
     ['few-step tradeoff', ['each denoising jump harder']],
-    ['production review', ['sampler type, step count, and denoiser quality affect']],
+    ['production review', ['sampler type step count and denoiser quality affect']],
     ['tricky false claims', ['unrelated image models rather than sampling procedures']],
-    ['interview debugging', ['step schedules, solver accuracy, denoiser error']],
-    ['interview readiness', ['trade speed, reproducibility, diversity, and quality']],
+    ['interview debugging', ['step schedules solver accuracy denoiser error']],
+    ['interview readiness', ['trade speed reproducibility diversity and quality']],
   ];
 
   let previousIndex = -1;

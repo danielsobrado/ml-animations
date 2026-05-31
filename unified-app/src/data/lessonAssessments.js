@@ -3252,6 +3252,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Switch between DDPM, DDIM, and flow/ODE while changing step count and prediction quality.',
         successCriteria: 'You can describe how stochasticity, step count, and prediction quality change the path from noise to sample.',
       },
+      {
+        id: 'step-count-ablation',
+        title: 'Run a step-count ablation',
+        prompt: 'Hold the denoiser quality and seed fixed, then compare low, medium, and high step counts for clarity, artifact rate, latency, and late-detail recovery.',
+        successCriteria: 'You can explain when fewer steps are faster but more fragile, and when more steps are worth the added denoiser calls.',
+      },
+      {
+        id: 'seed-stochasticity-report',
+        title: 'Report seed and stochasticity',
+        prompt: 'Compare deterministic and stochastic settings across multiple seeds, then separate reproducibility, diversity, best-case quality, and failure variance.',
+        successCriteria: 'You can avoid judging a sampler from one lucky seed and can identify whether randomness improved variety, quality, or neither.',
+      },
     ],
   },
   'classifier-free-guidance': {

@@ -1,8 +1,8 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
-  const rotation = stableHash(`diffusion-sampling:${id}`) % 3;
-  const answerIndex = (desiredFinalIndex + rotation) % 3;
+  const questionNumber = Number(id.match(/^diffsamp-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`diffusion-sampling:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
   const choices = [...distractors];
   choices.splice(answerIndex, 0, correct);
   return { id, level, choices, answerIndex, prompt, explanation };
@@ -31,7 +31,7 @@ const DIFFUSION_SAMPLING_SPECS = [
   ['diffsamp-016-diversity', 'Foundation', 'Which sampler property most directly affects diversity from the same prompt?', 'How much randomness remains in the reverse process', ['How many navigation tabs appear in the app', 'How many train labels are alphabetized'], 'Stochastic reverse noise can create varied trajectories, while deterministic paths are more reproducible.'],
   ['diffsamp-017-flow-basic', 'Foundation', 'What is the basic flow or ODE view of sampling?', 'Generation follows a continuous path from noise toward data', ['Generation retrieves the nearest document and cites it', 'Generation trains a classifier at every pixel'], 'Flow and ODE language reframes sampling as following a trajectory through continuous time or noise levels.'],
   ['diffsamp-018-lab-controls', 'Foundation', 'Which controls belong to this sampling lab?', 'Sampler type, step count, and prediction quality', ['Top-k, reranker mode, and grounding strictness', 'Batch normalization, dropout, and class balance'], 'The lab asks learners to connect sampler choice and step count to speed, randomness, and clarity.'],
-  ['diffsamp-019-not-new-model', 'Foundation', 'What misconception should you avoid about samplers?', 'DDPM, DDIM, and flow-style paths are sampler choices using a trained denoiser', ['They are unrelated image models with no shared denoising task', 'They remove the need for diffusion basics'], 'The lesson’s main framing is that samplers are procedures for using the denoiser, not entirely new model families.'],
+  ['diffsamp-019-not-new-model', 'Foundation', 'What misconception should you avoid about samplers?', 'DDPM, DDIM, and flow-style paths are sampler choices using a trained denoiser', ['They are unrelated image models with no shared denoising task', 'They remove the need for diffusion basics'], "The lesson's main framing is that samplers are procedures for using the denoiser, not entirely new model families."],
   ['diffsamp-020-summary', 'Foundation', 'What is the foundation-level takeaway for diffusion sampling?', 'Start from noise, apply denoising updates, and trade speed, randomness, and quality', ['Start from citations, rerank evidence, and ground claims', 'Start from labels, split rows, and prune a tree'], 'Sampling is the bridge from a trained denoising model to an actual generated sample.'],
 
   ['diffsamp-021-equation', 'Mechanism', 'What does an update from x_t to x_{t-1} describe?', 'One reverse denoising move along the sampling trajectory', ['One optimizer step on the training dataset', 'One retrieval hop in a citation graph'], 'The discrete sampler update is the mechanism that turns the denoiser output into a cleaner state.'],
@@ -120,5 +120,5 @@ const DIFFUSION_SAMPLING_SPECS = [
 ];
 
 export const DIFFUSION_SAMPLING_QUIZ = DIFFUSION_SAMPLING_SPECS.map(
-  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation)
+  ([id, level, prompt, correct, distractors, explanation]) => q(id, level, prompt, correct, distractors, explanation),
 );
