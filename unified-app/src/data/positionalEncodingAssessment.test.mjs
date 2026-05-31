@@ -26,6 +26,11 @@ test('positional encoding has a complete curated 100-question assessment', () =>
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'order-sensitive-sentence',
+    'trace-sinusoidal-channels',
+    'debug-position-alignment',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('positional encoding assessment avoids unsafe misconception keying', () => 
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('positional encoding misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('positional-encoding');
+  const trapIds = [
+    'posenc-076-false-self-attention',
+    'posenc-077-false-replace-token',
+    'posenc-078-false-sinusoidal-random',
+    'posenc-079-false-learned-extrapolate',
+    'posenc-080-false-same-vector',
+    'posenc-081-false-mask-replaces',
+    'posenc-082-false-position-alone',
+    'posenc-083-false-destroy-identity',
+    'posenc-084-false-constant',
+    'posenc-085-false-alphabetical',
+    'posenc-086-false-padding',
+    'posenc-087-false-cache',
+    'posenc-088-false-off-by-one',
+    'posenc-089-false-long-context',
+    'posenc-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
