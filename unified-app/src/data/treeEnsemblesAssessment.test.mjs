@@ -25,7 +25,10 @@ test('tree ensembles has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('tree-ensembles');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['depth-vs-ensemble', 'forest-vote-diagnosis', 'boosting-correction-plan'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -132,6 +135,35 @@ test('tree ensembles assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('tree ensembles assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('tree-ensembles');
+  const misconceptionPatterns = [
+    /always eliminates overfitting completely/i,
+    /always improve deployment performance with no cost/i,
+    /all preprocessing concerns disappear/i,
+    /guaranteed replacement for every final evaluation/i,
+    /cannot overfit because each tree is weak/i,
+    /automatically removes the need to tune rounds/i,
+    /always better because they fit training data/i,
+    /proves a causal effect/i,
+    /immune to leaked future information/i,
+    /automatically calibrated/i,
+    /repeatedly retrying the final test/i,
+    /always extrapolate smoothly/i,
+    /production-ready for every dataset/i,
+    /as transparent as a single small tree/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|dangerous|incorrect/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
