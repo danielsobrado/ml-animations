@@ -26,6 +26,11 @@ test('rag retrieval evaluation has a complete curated 100-question assessment wi
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'chunking-rerank-audit',
+    'metric-tradeoff-table',
+    'slice-regression-check',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -127,6 +132,31 @@ test('rag retrieval evaluation assessment avoids unsafe misconception keying', (
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('rag retrieval evaluation misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('rag-retrieval-evaluation');
+  const trapIds = [
+    'rageval-076-false-fluency',
+    'rageval-077-false-reranker',
+    'rageval-078-false-recall',
+    'rageval-079-false-mrr',
+    'rageval-080-false-ndcg',
+    'rageval-081-false-topk',
+    'rageval-082-false-overlap',
+    'rageval-083-false-labels',
+    'rageval-084-false-single',
+    'rageval-085-false-packed',
+    'rageval-086-false-stale',
+    'rageval-087-false-conflict',
+    'rageval-088-false-aggregate',
+    'rageval-089-false-threshold',
+    'rageval-090-trap-summary',
+  ];
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
