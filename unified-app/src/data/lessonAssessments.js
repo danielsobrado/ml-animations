@@ -3,6 +3,7 @@ import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js
 import { AGENTIC_CODING_SYSTEMS_QUIZ } from './agenticCodingSystemsAssessment.js';
 import { ATTENTION_MASKS_QUIZ } from './attentionMasksAssessment.js';
 import { ATTENTION_MECHANISM_QUIZ } from './attentionMechanismAssessment.js';
+import { BAG_OF_WORDS_QUIZ } from './bagOfWordsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
 import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
@@ -275,6 +276,9 @@ function causalAssessment(topic, coreIdea, failureMode, labPrompt) {
 }
 
 const SEEDED_LESSON_ASSESSMENTS = {
+  'bag-of-words': {
+    quiz: BAG_OF_WORDS_QUIZ,
+  },
   'matrix-multiplication': {
     quiz: MATRIX_MULTIPLICATION_QUIZ,
     labs: [
