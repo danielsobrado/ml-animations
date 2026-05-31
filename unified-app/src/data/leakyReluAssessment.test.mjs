@@ -37,6 +37,15 @@ test('leaky relu has a complete curated 100-question assessment', () => {
   }
 });
 
+test('leaky relu assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('leaky-relu');
+  const prompts = quiz.map((question) => normalized(question.prompt).replace(/[^a-z0-9]+/g, ' ').trim());
+  const correctAnswers = quiz.map((question) => normalized(correctAnswer(question)).replace(/[^a-z0-9]+/g, ' ').trim());
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(correctAnswers).size, correctAnswers.length);
+});
+
 test('leaky relu assessment progresses from definitions to interview readiness', () => {
   const { quiz } = getLessonAssessment('leaky-relu');
   const expectedBands = [
