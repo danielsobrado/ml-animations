@@ -149,6 +149,23 @@ test('train validation test split assessment avoids unsafe misconception keying'
 
 test('train validation test split assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('train-validation-test-split');
+  const trapIds = [
+    'tvt-076-test-tuning-trap',
+    'tvt-077-pre-split-trap',
+    'tvt-078-random-trap',
+    'tvt-079-stratified-trap',
+    'tvt-080-validation-trap',
+    'tvt-081-leaderboard-trap',
+    'tvt-082-time-shuffle-trap',
+    'tvt-083-duplicate-trap',
+    'tvt-084-feature-availability-trap',
+    'tvt-085-best-score-trap',
+    'tvt-086-small-test-trap',
+    'tvt-087-refit-trap',
+    'tvt-088-metric-switch-trap',
+    'tvt-089-production-trap',
+    'tvt-090-formula-trap',
+  ];
   const misconceptionPatterns = [
     /tuning based on test performance/i,
     /fitting preprocessing before splitting/i,
@@ -167,6 +184,8 @@ test('train validation test split assessment keeps misconception traps after set
     /memorizing only D = train union validation union test/i,
   ];
   const trapPrompt = /trap|wrong|risky|what can happen|why can|why is|what does .* not solve|when is .* dangerous/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;

@@ -1,24 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { AlertTriangle, BarChart3, RotateCcw, ShieldCheck, Shuffle, SlidersHorizontal } from 'lucide-react';
 import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
-
-const ROWS = [
-  { id: '01', time: 1, segment: 'A', y: 0, x: 12 },
-  { id: '02', time: 2, segment: 'B', y: 0, x: 18 },
-  { id: '03', time: 3, segment: 'A', y: 0, x: 20 },
-  { id: '04', time: 4, segment: 'C', y: 1, x: 42 },
-  { id: '05', time: 5, segment: 'B', y: 0, x: 24 },
-  { id: '06', time: 6, segment: 'A', y: 1, x: 45 },
-  { id: '07', time: 7, segment: 'C', y: 1, x: 52 },
-  { id: '08', time: 8, segment: 'B', y: 0, x: 28 },
-  { id: '09', time: 9, segment: 'A', y: 1, x: 56 },
-  { id: '10', time: 10, segment: 'C', y: 1, x: 61 },
-  { id: '11', time: 11, segment: 'B', y: 0, x: 33 },
-  { id: '12', time: 12, segment: 'A', y: 1, x: 66 },
-  { id: '13', time: 13, segment: 'C', y: 1, x: 72 },
-  { id: '14', time: 14, segment: 'B', y: 0, x: 35 },
-  { id: '15', time: 15, segment: 'A', y: 1, x: 77 },
-];
+import { assignByMode, driftGap, positiveRate } from './trainValidationTestSplitModel.js';
 
 const MODES = {
   random: {
@@ -34,68 +17,6 @@ const MODES = {
     detail: 'Keeps future rows out of training when deployment predicts future events.',
   },
 };
-
-function splitCounts(total, validationPercent, testPercent) {
-  const test = Math.max(1, Math.round(total * testPercent));
-  const validation = Math.max(1, Math.round(total * validationPercent));
-  const train = Math.max(1, total - validation - test);
-  return { train, validation, test };
-}
-
-function assignByMode(mode, validationPercent, testPercent) {
-  const counts = splitCounts(ROWS.length, validationPercent, testPercent);
-  const buckets = { train: [], validation: [], test: [] };
-
-  if (mode === 'time') {
-    const sorted = [...ROWS].sort((a, b) => a.time - b.time);
-    buckets.train = sorted.slice(0, counts.train);
-    buckets.validation = sorted.slice(counts.train, counts.train + counts.validation);
-    buckets.test = sorted.slice(counts.train + counts.validation);
-    return buckets;
-  }
-
-  if (mode === 'stratified') {
-    const byLabel = [0, 1].flatMap((label) => ROWS.filter((row) => row.y === label));
-    byLabel.forEach((row, index) => {
-      const cycle = index % 10;
-      if (cycle < testPercent * 10) buckets.test.push(row);
-      else if (cycle < (testPercent + validationPercent) * 10) buckets.validation.push(row);
-      else buckets.train.push(row);
-    });
-    return rebalanceBuckets(buckets, counts);
-  }
-
-  ROWS.forEach((row, index) => {
-    const bucket = (index * 7 + 3) % 10;
-    if (bucket < testPercent * 10) buckets.test.push(row);
-    else if (bucket < (testPercent + validationPercent) * 10) buckets.validation.push(row);
-    else buckets.train.push(row);
-  });
-  return rebalanceBuckets(buckets, counts);
-}
-
-function rebalanceBuckets(buckets, counts) {
-  const all = [...buckets.train, ...buckets.validation, ...buckets.test];
-  return {
-    train: all.slice(0, counts.train),
-    validation: all.slice(counts.train, counts.train + counts.validation),
-    test: all.slice(counts.train + counts.validation),
-  };
-}
-
-function positiveRate(rows) {
-  if (!rows.length) return 0;
-  return rows.filter((row) => row.y === 1).length / rows.length;
-}
-
-function meanX(rows) {
-  if (!rows.length) return 0;
-  return rows.reduce((sum, row) => sum + row.x, 0) / rows.length;
-}
-
-function driftGap(trainRows, targetRows) {
-  return Math.abs(meanX(targetRows) - meanX(trainRows));
-}
 
 function Stat({ label, value, detail }) {
   return (
