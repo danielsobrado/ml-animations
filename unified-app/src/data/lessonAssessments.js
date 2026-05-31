@@ -26,6 +26,7 @@ import { CONFOUNDING_SIMPSONS_PARADOX_QUIZ } from './confoundingSimpsonsParadoxA
 import { DATA_ENGINEERING_FOR_ML_QUIZ } from './dataEngineeringForMlAssessment.js';
 import { DATA_LEAKAGE_DEEP_DIVE_QUIZ } from './dataLeakageDeepDiveAssessment.js';
 import { DAPO_REASONING_RL_QUIZ } from './dapoReasoningRlAssessment.js';
+import { DETERMINANT_VOLUME_QUIZ } from './determinantVolumeAssessment.js';
 import { DIFFUSION_BASICS_QUIZ } from './diffusionBasicsAssessment.js';
 import { DIFFUSION_LANGUAGE_MODELS_QUIZ } from './diffusionLanguageModelsAssessment.js';
 import { DIFFUSION_SAMPLING_QUIZ } from './diffusionSamplingAssessment.js';
@@ -983,6 +984,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Audit stability response',
         prompt: 'Given a large kappa or sigma_min near zero, choose a response such as scaling, QR/SVD, regularization, or pseudoinverse handling.',
         successCriteria: 'You can avoid residual-only and normal-equations shortcuts when the system is ill conditioned.',
+      },
+    ],
+  },
+  'determinant-volume': {
+    quiz: DETERMINANT_VOLUME_QUIZ,
+    labs: [
+      {
+        id: 'compare-determinant-presets',
+        title: 'Compare determinant presets',
+        prompt: 'Switch through positive scale, orientation flip, and collapse, then record the two column vectors, det(A), |det A|, and sign label.',
+        successCriteria: 'You can connect each preset to area scale, orientation, or collapse.',
+      },
+      {
+        id: 'compute-signed-area',
+        title: 'Compute signed area',
+        prompt: 'Pick one preset and compute det(a,b) = a_x*b_y - a_y*b_x from the displayed column vectors.',
+        successCriteria: 'Your arithmetic matches the determinant and sign shown by the animation.',
+      },
+      {
+        id: 'audit-invertibility-collapse',
+        title: 'Audit invertibility collapse',
+        prompt: 'Use the Practice Lab to explain why det(A) = 0 collapses the unit square to a line or point and blocks invertibility.',
+        successCriteria: 'You can distinguish zero determinant collapse from negative determinant orientation reversal.',
       },
     ],
   },
