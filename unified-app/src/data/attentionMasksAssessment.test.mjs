@@ -26,6 +26,11 @@ test('attention masks has a complete curated 100-question assessment', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'trace-visible-keys',
+    'combine-causal-and-padding',
+    'debug-mask-conventions',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('attention masks assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('attention masks misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('attention-masks');
+  const trapIds = [
+    'amask-076-false-mlm',
+    'amask-077-false-after-softmax',
+    'amask-078-false-causal',
+    'amask-079-false-padding',
+    'amask-080-false-bidir',
+    'amask-081-false-cross',
+    'amask-082-false-softmax',
+    'amask-083-false-cache',
+    'amask-084-false-loss-mask',
+    'amask-085-false-axis',
+    'amask-086-false-all-masked',
+    'amask-087-false-sparse',
+    'amask-088-false-api',
+    'amask-089-false-security',
+    'amask-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
   }
 });
 
