@@ -236,6 +236,23 @@ test('classification metrics assessment avoids unsafe misconception keying', () 
 
 test('classification metrics assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('classification-metrics');
+  const expectedTrapIds = [
+    'clfmet-076-trap-accuracy',
+    'clfmet-077-trap-precision',
+    'clfmet-078-trap-recall',
+    'clfmet-079-trap-f1',
+    'clfmet-080-trap-threshold',
+    'clfmet-081-trap-imbalance',
+    'clfmet-082-trap-costs',
+    'clfmet-083-trap-denominator',
+    'clfmet-084-trap-specificity',
+    'clfmet-085-trap-fpr',
+    'clfmet-086-trap-zero-pred',
+    'clfmet-087-trap-slices',
+    'clfmet-088-trap-test',
+    'clfmet-089-trap-positive-class',
+    'clfmet-090-trap-reporting',
+  ];
   const misconceptionPatterns = [
     /high accuracy always proves/i,
     /precision measures how many actual positives were recovered/i,
@@ -254,6 +271,8 @@ test('classification metrics assessment keeps misconception traps after setup', 
     /only one rounded metric is enough/i,
   ];
   const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
