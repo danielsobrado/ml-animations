@@ -26,6 +26,11 @@ test('transformer token generation has a complete curated 100-question assessmen
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'sampling-contrast',
+    'trace-token-step',
+    'verify-serving-behavior',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +125,33 @@ test('transformer token generation assessment avoids unsafe misconception keying
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('transformer token generation misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('transformer-token-generation');
+  const trapIds = [
+    'ttg-076-false-whole-answer',
+    'ttg-077-false-cache-prob',
+    'ttg-078-false-future',
+    'ttg-079-false-temperature',
+    'ttg-080-false-topk',
+    'ttg-081-false-topp',
+    'ttg-082-false-greedy',
+    'ttg-083-false-sampling',
+    'ttg-084-false-append',
+    'ttg-085-false-softmax',
+    'ttg-086-false-stop',
+    'ttg-087-false-seed',
+    'ttg-088-false-streaming',
+    'ttg-089-false-controls',
+    'ttg-090-tricky-summary',
+  ];
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
