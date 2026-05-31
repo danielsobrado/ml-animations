@@ -28,6 +28,7 @@ import { DROPOUT_BATCHNORM_QUIZ } from './dropoutBatchnormAssessment.js';
 import { EFFICIENT_INFERENCE_COMPRESSION_QUIZ } from './efficientInferenceCompressionAssessment.js';
 import { EFFICIENT_LLM_SERVING_QUIZ } from './efficientLlmServingAssessment.js';
 import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
+import { FASTTEXT_QUIZ } from './fasttextAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
 import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
@@ -283,6 +284,9 @@ const SEEDED_LESSON_ASSESSMENTS = {
   },
   glove: {
     quiz: GLOVE_QUIZ,
+  },
+  fasttext: {
+    quiz: FASTTEXT_QUIZ,
   },
   word2vec: {
     quiz: WORD2VEC_QUIZ,
