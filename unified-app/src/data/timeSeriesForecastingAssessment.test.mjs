@@ -25,7 +25,10 @@ test('time series forecasting has a complete curated 100-question assessment', (
   const { quiz, labs } = getLessonAssessment('time-series-forecasting-track');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['time-series-forecasting-track-scenario-lab', 'forecast-feature-contract', 'forecast-monitoring-plan'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -136,6 +139,35 @@ test('time series forecasting assessment avoids unsafe misconception keying', ()
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('time series forecasting assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('time-series-forecasting-track');
+  const misconceptionPatterns = [
+    /random row split is always honest/i,
+    /after the prediction timestamp if accuracy improves/i,
+    /including the target period.*harmless/i,
+    /automatically proven for every longer horizon/i,
+    /mape is always safe/i,
+    /complex forecast is useful even if it cannot beat/i,
+    /any observed future covariate can be used/i,
+    /one lucky cutoff proves/i,
+    /automatically gives reliable prediction intervals/i,
+    /never needs drift or freshness monitoring/i,
+    /repeatedly checking the final test/i,
+    /calendar features always leak/i,
+    /always safe for every deployed series/i,
+    /aggregates computed after the prediction time are safe/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|optimistic|dangerous/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
