@@ -23,20 +23,32 @@ function correctAnswer(question) {
 }
 
 test('linear regression has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('linear-regression');
+  const { quiz, labs } = getLessonAssessment('linear-regression');
   const ids = new Set(quiz.map((question) => question.id));
+  const globalCounts = [0, 0, 0];
+
+  assert.deepEqual(labs.map((lab) => lab.id), ['move-line']);
 
   assert.equal(quiz.length, 100);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
-  for (const question of quiz) {
+  for (const [index, question] of quiz.entries()) {
+    assert.match(question.id, /^lr-\d{3}-[a-z0-9-]+$/);
+    assert.ok(question.id.startsWith(`lr-${String(index + 1).padStart(3, '0')}-`), `${question.id} should match question order`);
     assert.ok(question.prompt && /\S/.test(question.prompt), `${question.id} should have a prompt`);
     assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
     assert.ok(question.explanation && /\S/.test(question.explanation), `${question.id} should explain the answer`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat choices`);
+    globalCounts[question.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('linear regression assessment progresses from recall to interview readiness', () => {
@@ -61,6 +73,36 @@ test('linear regression assessment progresses from recall to interview readiness
       `question ${index + 1} should not regress from ${quiz[index - 1].level} to ${quiz[index].level}`,
     );
   }
+
+  const milestones = [
+    ['prediction form', ['y_hat = m x + b']],
+    ['residuals and MSE', ['mean squared error average']],
+    ['parameter updates', ['gradient descent']],
+    ['matrix form', ['design matrix X']],
+    ['diagnostics', ['curved pattern in residuals']],
+    ['production evaluation', ['test set separate']],
+    ['leakage and causality traps', ['feature is proven to cause']],
+    ['interview readiness', ['formula, fitting objective, diagnostics, evaluation, and caveats']],
+  ];
+
+  let previous = -1;
+  for (const [name, terms] of milestones) {
+    const milestoneIndex = quiz.findIndex((question) => (
+      terms.every((term) => normalized(`${question.prompt} ${question.choices.join(' ')} ${question.explanation}`).includes(normalized(term)))
+    ));
+    assert.notEqual(milestoneIndex, -1, `missing milestone: ${name}`);
+    assert.ok(milestoneIndex > previous, `${name} appears out of order`);
+    previous = milestoneIndex;
+  }
+});
+
+test('linear regression assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('linear-regression');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const correctAnswers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(correctAnswers).size, correctAnswers.length);
 });
 
 test('linear regression assessment avoids prior generated-question defects', () => {
@@ -103,6 +145,36 @@ test('linear regression assessment keys false claims only for explicit trap prom
   }
 });
 
+test('linear regression assessment marks misconceptions as traps after setup', () => {
+  const { quiz } = getLessonAssessment('linear-regression');
+  const misconceptionPatterns = [
+    /feature is proven to cause/i,
+    /model will generalize/i,
+    /low r-squared proves/i,
+    /outside the training range/i,
+    /delete every inconvenient point/i,
+    /bigger raw coefficients/i,
+    /tiny p-value/i,
+    /patterned residuals/i,
+    /very low test error suspicious/i,
+    /Overinterpreting individual coefficient signs as stable facts/i,
+    /average error hide/i,
+    /only by training error/i,
+    /Using x squared as a feature means the model is no longer linear in coefficients/i,
+    /intercept be hard to interpret/i,
+  ];
+  const trapPrompt = /unsafe|not conclude|not automatically|not guarantee|assumption mistake|risky|trap|suspicious|misunderstands|hard to interpret|hide|only by/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
 test('linear regression assessment does not leak exact answers within a visible page', () => {
   const { quiz } = getLessonAssessment('linear-regression');
   const pageSize = 10;
@@ -125,5 +197,17 @@ test('linear regression assessment does not leak exact answers within a visible 
         );
       }
     }
+  }
+});
+
+test('linear regression assessment distributes correct answer positions per page', () => {
+  const { quiz } = getLessonAssessment('linear-regression');
+  const pageSize = 10;
+
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
+    const counts = [0, 0, 0];
+    for (const question of page) counts[question.answerIndex] += 1;
+    assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `imbalanced page at ${pageStart + 1}: ${counts.join(',')}`);
   }
 });
