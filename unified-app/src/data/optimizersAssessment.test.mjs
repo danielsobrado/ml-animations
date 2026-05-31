@@ -120,13 +120,13 @@ test('optimizers assessment avoids unsafe misconception keying', () => {
     /larger batches are always better/i,
     /lowest training loss is always best/i,
     /choose optimizer settings from repeated test-set/i,
-    /gradient clipping fixes every/i,
-    /warmup guarantees stable training/i,
-    /optimizer state never matters/i,
-    /forgetting to clear gradients is always harmless/i,
+    /jagged mini-batch path always means/i,
+    /first step can be predicted without/i,
+    /beta1 has no effect/i,
+    /small-batch noise is always bad/i,
     /sgd cannot train models/i,
     /every parameter update is automatically optimal/i,
-    /schedule can rescue any bad/i,
+    /more selected steps always improve/i,
     /one lucky seed and one metric/i,
   ];
 
@@ -144,6 +144,7 @@ test('optimizers assessment avoids unsafe misconception keying', () => {
 
 test('optimizers assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('optimizers');
+  const trapQuestions = quiz.slice(75, 90);
   const expectedTrapIds = [
     'opt-076-trap-adam-best',
     'opt-077-trap-learning-rate',
@@ -151,13 +152,13 @@ test('optimizers assessment keeps misconception traps after setup', () => {
     'opt-079-trap-batch',
     'opt-080-trap-training-loss',
     'opt-081-trap-test',
-    'opt-082-trap-clipping',
-    'opt-083-trap-warmup',
-    'opt-084-trap-state',
-    'opt-085-trap-zero-grad',
+    'opt-082-trap-jagged',
+    'opt-083-trap-first-step',
+    'opt-084-trap-beta1',
+    'opt-085-trap-batch-noise',
     'opt-086-trap-sgd',
     'opt-087-trap-adaptive',
-    'opt-088-trap-schedule',
+    'opt-088-trap-steps',
     'opt-089-trap-one-run',
     'opt-090-tricky-summary',
   ];
@@ -168,18 +169,19 @@ test('optimizers assessment keeps misconception traps after setup', () => {
     /larger batches are always better/i,
     /lowest training loss is always best/i,
     /choose optimizer settings from repeated test-set/i,
-    /gradient clipping fixes every/i,
-    /warmup guarantees stable training/i,
-    /optimizer state never matters/i,
-    /forgetting to clear gradients is always harmless/i,
+    /jagged mini-batch path always means/i,
+    /first step can be predicted without/i,
+    /beta1 has no effect/i,
+    /small-batch noise is always bad/i,
     /sgd cannot train models/i,
     /every parameter update is automatically optimal/i,
-    /schedule can rescue any bad/i,
+    /more selected steps always improve/i,
     /one lucky seed and one metric/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|too weak|unhelpful/i;
 
-  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
+  assert.deepEqual(trapQuestions.map((question) => question.id), expectedTrapIds);
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -203,9 +205,10 @@ test('optimizers assessment does not leak exact answers within a visible page', 
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex) continue;
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !visibleText.includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
     }
