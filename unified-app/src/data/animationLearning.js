@@ -529,7 +529,7 @@ export const LEARNING_CARD_OVERRIDES = {
     'The math applies an optimizer step from a batch gradient, then monitors both training and validation losses.',
     'Manipulate batch size, learning rate, steps, curvature, and validation difficulty to diagnose healthy or unstable training.',
     'Mistake to avoid: a lower training loss is not enough if validation loss rises or updates are overshooting.',
-    'Check understanding by predicting whether a smaller batch or larger learning rate will make the loss path noisier.',
+    'Check understanding by predicting whether a smaller batch makes the path noisier or a larger learning rate makes it unstable.',
   ),
   'dropout-batchnorm': cardSet(
     'Dropout and BatchNorm solve different training problems: over-reliance on units and unstable activation scale.',

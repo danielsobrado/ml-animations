@@ -131,6 +131,23 @@ test('training loop dynamics assessment avoids unsafe misconception keying', () 
 
 test('training loop dynamics assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('training-loop-dynamics');
+  const expectedTrapIds = [
+    'tld-076-trap-train-loss',
+    'tld-077-trap-validation-gradient',
+    'tld-078-trap-test',
+    'tld-079-trap-batch',
+    'tld-080-trap-noise',
+    'tld-081-trap-lr',
+    'tld-082-trap-early-stop',
+    'tld-083-trap-checkpoint',
+    'tld-084-trap-mode',
+    'tld-085-trap-metric',
+    'tld-086-trap-seed',
+    'tld-087-trap-monitoring',
+    'tld-088-trap-clipping',
+    'tld-089-trap-cost',
+    'tld-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /lower training loss always means better deployed/i,
     /validation batches should normally update/i,
@@ -148,6 +165,8 @@ test('training loop dynamics assessment keeps misconception traps after setup', 
     /compute cost does not matter/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
