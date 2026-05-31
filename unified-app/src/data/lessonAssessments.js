@@ -5,6 +5,7 @@ import { ATTENTION_MASKS_QUIZ } from './attentionMasksAssessment.js';
 import { ATTENTION_MECHANISM_QUIZ } from './attentionMechanismAssessment.js';
 import { BAG_OF_WORDS_QUIZ } from './bagOfWordsAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
+import { BERT_QUIZ } from './bertAssessment.js';
 import { BIAS_VARIANCE_TRADEOFF_QUIZ } from './biasVarianceTradeoffAssessment.js';
 import { BLOOM_FILTER_QUIZ } from './bloomFilterAssessment.js';
 import { CALIBRATION_QUIZ } from './calibrationAssessment.js';
@@ -2013,6 +2014,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Match objective to behavior',
         prompt: 'Select each objective and decide whether it mainly teaches continuation, representation, instruction following, or preference-shaped response behavior.',
         successCriteria: 'You can justify each match using the target in the loss.',
+      },
+    ],
+  },
+  bert: {
+    quiz: BERT_QUIZ,
+    labs: [
+      {
+        id: 'choose-bert-head',
+        title: 'Choose the BERT task head',
+        prompt: 'Given sentiment classification, named entity recognition, extractive QA, and sentence-pair similarity, pick the BERT input format and task head for each.',
+        successCriteria: 'You justify each choice using [CLS], token-level outputs, span boundaries, or paired [SEP] inputs.',
       },
     ],
   },
