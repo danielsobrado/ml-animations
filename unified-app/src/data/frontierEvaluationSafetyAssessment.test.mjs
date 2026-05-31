@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { FRONTIER_EVALUATION_SAFETY_QUIZ } from './frontierEvaluationSafetyAssessment.js';
+import { getLessonAssessment } from './lessonAssessments.js';
 
 const LEVELS = new Set(['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview']);
 
@@ -12,33 +12,53 @@ function correctAnswer(item) {
   return item.choices[item.answerIndex];
 }
 
-test('frontier evaluation safety assessment has 100 production-ready questions', () => {
-  assert.equal(FRONTIER_EVALUATION_SAFETY_QUIZ.length, 100);
-  const ids = new Set();
+test('frontier evaluation safety assessment has 100 production-ready questions with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('frontier-evaluation-safety');
 
-  for (const [index, item] of FRONTIER_EVALUATION_SAFETY_QUIZ.entries()) {
+  assert.equal(labs.length, 4);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'capability-product-layer',
+    'prompt-injection-defense',
+    'reward-hacking-simulator',
+    'deployment-gate-lab',
+  ]);
+
+  assert.equal(quiz.length, 100);
+  const ids = new Set();
+  const globalCounts = [0, 0, 0];
+
+  for (const [index, item] of quiz.entries()) {
     assert.match(item.id, /^frontier-\d{3}$/);
     assert.equal(ids.has(item.id), false, `duplicate id ${item.id}`);
     ids.add(item.id);
     assert.equal(item.id, `frontier-${String(index + 1).padStart(3, '0')}`);
     assert.equal(LEVELS.has(item.level), true, `${item.id} has unexpected level ${item.level}`);
     assert.equal(item.choices.length, 3, `${item.id} should have three choices`);
+    assert.equal(Number.isInteger(item.answerIndex), true, `${item.id} answerIndex should be an integer`);
     assert.ok(item.answerIndex >= 0 && item.answerIndex < 3, `${item.id} answerIndex out of range`);
     assert.ok(item.prompt.length > 20, `${item.id} prompt too short`);
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
+    globalCounts[item.answerIndex] += 1;
   }
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('frontier evaluation safety assessment avoids duplicate prompts and correct answers', () => {
-  const prompts = FRONTIER_EVALUATION_SAFETY_QUIZ.map((item) => normalize(item.prompt));
-  const correctAnswers = FRONTIER_EVALUATION_SAFETY_QUIZ.map((item) => normalize(correctAnswer(item)));
+  const { quiz } = getLessonAssessment('frontier-evaluation-safety');
+  const prompts = quiz.map((item) => normalize(item.prompt));
+  const correctAnswers = quiz.map((item) => normalize(correctAnswer(item)));
 
   assert.equal(new Set(prompts).size, prompts.length);
   assert.equal(new Set(correctAnswers).size, correctAnswers.length);
 });
 
 test('frontier evaluation safety assessment progresses through layered safety evidence', () => {
+  const { quiz } = getLessonAssessment('frontier-evaluation-safety');
   const ranges = [
     ['Foundation', 0, 20],
     ['Mechanism', 20, 50],
@@ -48,7 +68,7 @@ test('frontier evaluation safety assessment progresses through layered safety ev
   ];
 
   for (const [level, start, end] of ranges) {
-    assert.equal(FRONTIER_EVALUATION_SAFETY_QUIZ.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
+    assert.equal(quiz.slice(start, end).every((item) => item.level === level), true, `${level} range mismatch`);
   }
 
   const milestones = [
@@ -62,7 +82,7 @@ test('frontier evaluation safety assessment progresses through layered safety ev
 
   let previous = -1;
   for (const [name, terms] of milestones) {
-    const index = FRONTIER_EVALUATION_SAFETY_QUIZ.findIndex((item) => (
+    const index = quiz.findIndex((item) => (
       terms.every((term) => normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`).includes(normalize(term)))
     ));
     assert.notEqual(index, -1, `missing milestone: ${name}`);
@@ -72,6 +92,7 @@ test('frontier evaluation safety assessment progresses through layered safety ev
 });
 
 test('frontier evaluation safety assessment marks unsafe misconceptions as traps after setup', () => {
+  const { quiz } = getLessonAssessment('frontier-evaluation-safety');
   const misconceptionTerms = [
     /benchmark score is by itself a deployment decision/i,
     /automatically test product workflows/i,
@@ -91,7 +112,7 @@ test('frontier evaluation safety assessment marks unsafe misconceptions as traps
   ];
   const trapPrompt = /false|wrong|unsafe|trap|reject|dangerous/i;
 
-  for (const [index, item] of FRONTIER_EVALUATION_SAFETY_QUIZ.entries()) {
+  for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
     const containsMisconception = misconceptionTerms.some((pattern) => pattern.test(text));
     if (!containsMisconception) continue;
@@ -102,10 +123,17 @@ test('frontier evaluation safety assessment marks unsafe misconceptions as traps
 });
 
 test('frontier evaluation safety assessment avoids visible-page answer leakage', () => {
+  const { quiz } = getLessonAssessment('frontier-evaluation-safety');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < FRONTIER_EVALUATION_SAFETY_QUIZ.length; pageStart += pageSize) {
-    const page = FRONTIER_EVALUATION_SAFETY_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const correctAnswers = page.map((item) => normalize(item.choices[item.answerIndex]));
+
+    assert.equal(
+      new Set(correctAnswers).size,
+      correctAnswers.length,
+      `page starting at question ${pageStart + 1} should not repeat exact answers`,
+    );
 
     for (const [offset, item] of page.entries()) {
       const surroundingPrompts = page
@@ -118,9 +146,10 @@ test('frontier evaluation safety assessment avoids visible-page answer leakage',
 });
 
 test('frontier evaluation safety assessment distributes correct answer positions per page', () => {
+  const { quiz } = getLessonAssessment('frontier-evaluation-safety');
   const pageSize = 10;
-  for (let pageStart = 0; pageStart < FRONTIER_EVALUATION_SAFETY_QUIZ.length; pageStart += pageSize) {
-    const page = FRONTIER_EVALUATION_SAFETY_QUIZ.slice(pageStart, pageStart + pageSize);
+  for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
+    const page = quiz.slice(pageStart, pageStart + pageSize);
     const counts = [0, 0, 0];
     for (const item of page) counts[item.answerIndex] += 1;
     assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `imbalanced page at ${pageStart + 1}: ${counts.join(',')}`);
