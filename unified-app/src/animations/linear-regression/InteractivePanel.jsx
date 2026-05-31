@@ -1,31 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { calculateOLS } from './linearRegressionModel.js';
 
 export default function InteractivePanel() {
     const [points, setPoints] = useState([]);
     const svgRef = useRef(null);
 
-    // Calculate OLS
-    const calculateOLS = () => {
-        if (points.length < 2) return null;
-
-        const n = points.length;
-        let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-
-        points.forEach(p => {
-            sumX += p.x;
-            sumY += p.y;
-            sumXY += p.x * p.y;
-            sumXX += p.x * p.x;
-        });
-
-        const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-        const intercept = (sumY - slope * sumX) / n;
-
-        return { slope, intercept };
-    };
-
-    const model = calculateOLS();
+    const model = calculateOLS(points);
 
     const handleMouseDown = (e) => {
         if (!svgRef.current) return;

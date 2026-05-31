@@ -1,32 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AmbientLight, Color, DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, MeshStandardMaterial, PerspectiveCamera, PlaneGeometry, Scene, SphereGeometry, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { LINEAR_REGRESSION_DEMO_DATA, calculateMSE } from './linearRegressionModel.js';
 
 export default function CostPanel() {
     const containerRef = useRef(null);
     const [slope, setSlope] = useState(1);
     const [intercept, setIntercept] = useState(0);
 
-    // Fixed dataset for cost calculation
-    const data = [
-        { x: 1, y: 2 },
-        { x: 2, y: 3 },
-        { x: 3, y: 5 },
-        { x: 4, y: 4 },
-        { x: 5, y: 6 }
-    ];
-
-    // Calculate MSE for a given m, b
-    const calculateMSE = (m, b) => {
-        let error = 0;
-        data.forEach(p => {
-            const pred = m * p.x + b;
-            error += Math.pow(p.y - pred, 2);
-        });
-        return error / data.length;
-    };
-
-    const currentMSE = calculateMSE(slope, intercept);
+    const currentMSE = calculateMSE(LINEAR_REGRESSION_DEMO_DATA, { slope, intercept });
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -68,7 +50,7 @@ export default function CostPanel() {
             const m = x / 1.5 + 1; // Map to roughly -1 to 3
             const b = y / 1.5 + 1; // Map to roughly -1 to 3
 
-            const z = calculateMSE(m, b) / 5; // Scale down height
+            const z = calculateMSE(LINEAR_REGRESSION_DEMO_DATA, { slope: m, intercept: b }) / 5; // Scale down height
             positions.setZ(i, z);
         }
         geometry.computeVertexNormals();
@@ -104,7 +86,7 @@ export default function CostPanel() {
             // Inverse mapping of the geometry transformation above
             const x = (slope - 1) * 1.5;
             const z = (intercept - 1) * 1.5; // Y in plane geometry became Z after rotation
-            const y = calculateMSE(slope, intercept) / 5;
+            const y = calculateMSE(LINEAR_REGRESSION_DEMO_DATA, { slope, intercept }) / 5;
 
             marker.position.set(x, y, -z); // Note: Z axis flip in js coordinate system relative to plane logic often needs checking
 

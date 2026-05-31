@@ -203,8 +203,8 @@ export const LINEAR_REGRESSION_QUIZ = Object.freeze([
     'lr-022-compute-residual',
     'Mechanism',
     'If y = 10 and y_hat = 7, what is the residual y - y_hat?',
-    '3',
-    ['-3', '17'],
+    'A residual of 3',
+    ['A residual of -3', 'A residual of 17'],
     'The residual is observed minus predicted: 10 - 7 = 3.',
   ),
   q(

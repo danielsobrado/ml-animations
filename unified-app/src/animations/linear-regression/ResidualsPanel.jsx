@@ -1,30 +1,14 @@
 import React, { useState } from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
+import { LINEAR_REGRESSION_DEMO_DATA, calculateResiduals } from './linearRegressionModel.js';
 
 export default function ResidualsPanel() {
     const [slope, setSlope] = useState(1);
     const [intercept, setIntercept] = useState(0);
     const [showSquares, setShowSquares] = useState(true);
 
-    // Fixed dataset
-    const data = [
-        { x: 1, y: 2 },
-        { x: 2, y: 3 },
-        { x: 3, y: 5 },
-        { x: 4, y: 4 },
-        { x: 5, y: 6 }
-    ];
-
-    // Calculate residuals and total error (MSE)
-    let totalSquaredError = 0;
-    const residuals = data.map(point => {
-        const predictedY = slope * point.x + intercept;
-        const error = point.y - predictedY;
-        totalSquaredError += error * error;
-        return { ...point, predictedY, error };
-    });
-
-    const mse = totalSquaredError / data.length;
+    const data = LINEAR_REGRESSION_DEMO_DATA;
+    const { residuals, mse } = calculateResiduals(data, { slope, intercept });
 
     return (
         <div className="p-8 h-full flex flex-col items-center">

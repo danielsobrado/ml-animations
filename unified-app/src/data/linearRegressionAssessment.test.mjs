@@ -147,6 +147,23 @@ test('linear regression assessment keys false claims only for explicit trap prom
 
 test('linear regression assessment marks misconceptions as traps after setup', () => {
   const { quiz } = getLessonAssessment('linear-regression');
+  const trapIds = [
+    'lr-076-causation-trap',
+    'lr-077-r2-trap',
+    'lr-078-low-r2-trap',
+    'lr-079-extrapolation-trap',
+    'lr-080-outlier-trap',
+    'lr-081-scale-trap',
+    'lr-082-pvalue-trap',
+    'lr-083-assumption-trap',
+    'lr-084-leakage-trap',
+    'lr-085-collinearity-trap',
+    'lr-086-average-error-trap',
+    'lr-087-train-error-trap',
+    'lr-088-linear-form-trap',
+    'lr-089-intercept-trap',
+    'lr-090-tricky-success',
+  ];
   const misconceptionPatterns = [
     /feature is proven to cause/i,
     /model will generalize/i,
@@ -164,6 +181,8 @@ test('linear regression assessment marks misconceptions as traps after setup', (
     /intercept be hard to interpret/i,
   ];
   const trapPrompt = /unsafe|not conclude|not automatically|not guarantee|assumption mistake|risky|trap|suspicious|misunderstands|hard to interpret|hide|only by/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
