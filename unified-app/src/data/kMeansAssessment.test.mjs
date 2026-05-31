@@ -11,10 +11,12 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const LEVELS = new Set(Object.keys(LEVEL_ORDER));
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -23,20 +25,34 @@ function correctAnswer(question) {
 }
 
 test('k-means has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('k-means');
+  const { quiz, labs } = getLessonAssessment('k-means');
   const ids = new Set(quiz.map((question) => question.id));
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(ids.size, 100);
   assert.ok(quiz.every((question) => !question.id.startsWith('generated-')));
 
-  for (const question of quiz) {
-    assert.ok(question.prompt && /\S/.test(question.prompt), `${question.id} should have a prompt`);
+  for (const [index, question] of quiz.entries()) {
+    assert.match(question.id, /^km-\d{3}-[a-z0-9-]+$/, `${question.id} should use the curated id format`);
+    assert.equal(Number(question.id.slice(3, 6)), index + 1, `${question.id} should stay in numeric order`);
+    assert.ok(LEVELS.has(question.level), `${question.id} should use a known level`);
+    assert.ok(question.prompt && question.prompt.length > 20, `${question.id} should have a substantial prompt`);
     assert.equal(question.choices.length, 3, `${question.id} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `${question.id} should not repeat a choice`);
     assert.ok(Number.isInteger(question.answerIndex), `${question.id} should have an integer answer index`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `${question.id} has invalid answer index`);
-    assert.ok(question.explanation && /\S/.test(question.explanation), `${question.id} should explain the answer`);
+    assert.ok(question.explanation && question.explanation.length > 30, `${question.id} should explain the answer`);
   }
+});
+
+test('k-means assessment avoids duplicate prompts and exact correct answers', () => {
+  const { quiz } = getLessonAssessment('k-means');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length, 'prompts should be unique');
+  assert.equal(new Set(answers).size, answers.length, 'exact correct answers should be unique');
 });
 
 test('k-means assessment progresses from recall to interview readiness', () => {
@@ -65,19 +81,31 @@ test('k-means assessment progresses from recall to interview readiness', () => {
 
 test('k-means assessment covers learning points in the right order', () => {
   const { quiz } = getLessonAssessment('k-means');
-  const sections = [
-    quiz.slice(0, 20).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(20, 50).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(50, 75).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
-    quiz.slice(75).map((question) => normalized(`${question.prompt} ${question.explanation}`)).join(' '),
+  const milestones = [
+    [/problem does k means solve/, 0, 8],
+    [/what does k mean/, 0, 8],
+    [/assignment step/, 0, 10],
+    [/centroid updated/, 0, 12],
+    [/objective does k means try to reduce/, 0, 15],
+    [/feature scaling matter/, 10, 22],
+    [/sum i x i c ai 2/, 20, 30],
+    [/centroid update the mean/, 20, 32],
+    [/k means starts/, 25, 40],
+    [/elbow heuristic/, 30, 45],
+    [/inertia keeps dropping as k rises/, 50, 62],
+    [/two random seeds produce different segmentations/, 50, 66],
+    [/trap/, 75, 90],
+    [/summarize k means in an interview/, 90, 100],
   ];
 
-  assert.match(sections[0], /centroid|assignment|mean|inertia|unsupervised|initialization/);
-  assert.match(sections[0], /scaling|spherical|outliers|lower inertia/);
-  assert.match(sections[1], /objective|empty cluster|k-means\+\+|elbow|silhouette|voronoi|mini-batch/);
-  assert.match(sections[1], /random state|hard|gaussian mixture|stability/);
-  assert.match(sections[2], /scenario|scaling|restarts|production|monitor|evaluation/);
-  assert.match(sections[3], /trap|interview|misconception|local|validation/);
+  for (const [pattern, minIndex, maxIndex] of milestones) {
+    const matchIndex = quiz.findIndex((question) => pattern.test(normalized(`${question.prompt} ${question.explanation}`)));
+    assert.notEqual(matchIndex, -1, `missing learning point ${pattern}`);
+    assert.ok(
+      matchIndex >= minIndex && matchIndex < maxIndex,
+      `${pattern} appears at question ${matchIndex + 1}, outside expected range ${minIndex + 1}-${maxIndex}`,
+    );
+  }
 });
 
 test('k-means assessment avoids unsafe misconception keying', () => {
@@ -86,6 +114,9 @@ test('k-means assessment avoids unsafe misconception keying', () => {
     /lower inertia as always better/,
     /clusters equal classes/,
     /trusting one random initialization/,
+    /scaling has no effect/,
+    /k means outputs calibrated probabilities/,
+    /outliers are always removed automatically/,
     /always discovers ground truth/,
     /cluster ids are ordered scores/,
   ];
@@ -93,7 +124,7 @@ test('k-means assessment avoids unsafe misconception keying', () => {
   for (const [index, question] of quiz.entries()) {
     const prompt = normalized(question.prompt);
     const answer = normalized(correctAnswer(question));
-    const explicitTrapPrompt = /trap|misconception|what is wrong|risky|interview|contrast/.test(prompt);
+    const explicitTrapPrompt = /trap|misconception|what is wrong|risky|interview|contrast|why is this unsafe/.test(prompt);
     const falseClaimKeyed = falseClaimPatterns.some((pattern) => pattern.test(answer));
 
     assert.ok(
@@ -117,7 +148,7 @@ test('k-means assessment does not leak exact answers within a visible page', () 
       const prompt = normalized(question.prompt);
 
       for (const [answerIndex, answer] of answers.entries()) {
-        if (questionIndex === answerIndex || answer.length < 8) continue;
+        if (questionIndex === answerIndex) continue;
 
         assert.ok(
           !prompt.includes(answer),
@@ -136,14 +167,13 @@ test('k-means assessment distributes correct-answer positions across every page'
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += pageSize) {
     const page = quiz.slice(pageStart, pageStart + pageSize);
-    const maxSameSlot = Math.max(
-      ...[0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length),
-    );
+    const counts = [0, 1, 2].map((slot) => page.filter((question) => question.answerIndex === slot).length);
+    const maxSameSlot = Math.max(...counts);
+    const minSameSlot = Math.min(...counts);
 
     assert.ok(
-      maxSameSlot <= Math.ceil(page.length * 0.6),
-      `page starting at question ${pageStart + 1} should not overuse one correct option slot`,
+      maxSameSlot - minSameSlot <= 1,
+      `page starting at question ${pageStart + 1} should balance correct option slots, got ${counts.join('/')}`,
     );
   }
 });
-

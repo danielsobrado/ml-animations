@@ -1148,6 +1148,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Change k and the number of iterations, then describe when lower inertia starts splitting a natural group.',
         successCriteria: 'You can explain why inertia alone cannot choose the best k.',
       },
+      {
+        id: 'trace-assign-update-loop',
+        title: 'Trace assign and update',
+        prompt: 'Use the plotted points to follow one assignment/update cycle: nearest centroid assignment, mean update, and new inertia.',
+        successCriteria: 'You can identify which centroid a point belongs to and why the centroid moves toward assigned points.',
+      },
+      {
+        id: 'stress-test-cluster-assumptions',
+        title: 'Stress-test assumptions',
+        prompt: 'Use the lesson warnings to name one scaling issue, one initialization issue, and one cluster-shape issue before trusting a segmentation.',
+        successCriteria: 'You can separate a lower objective value from validated, useful clusters.',
+      },
     ],
   },
   'bayes-rule-ml': {

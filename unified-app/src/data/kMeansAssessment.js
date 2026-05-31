@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^km-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`k-means:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const KMEANS_QUIZ = Object.freeze([
@@ -96,7 +107,7 @@ export const KMEANS_QUIZ = Object.freeze([
   q('km-081-outlier-trap', 'Tricky', 'What is the outlier trap in k-means?', 'A few extreme points can distort centroids', ['Outliers are always removed automatically', 'Outliers make k known'], 'Means are not robust summaries.'),
   q('km-082-id-trap', 'Tricky', 'What is wrong with interpreting cluster id 2 as greater than cluster id 1?', 'Cluster ids are arbitrary labels', ['Ids are calibrated rankings', 'Higher ids always have higher inertia'], 'Permuting cluster ids leaves the solution equivalent.'),
   q('km-083-empty-trap', 'Tricky', 'What is dangerous about ignoring empty clusters?', 'Centroid updates become undefined or silently broken', ['Empty clusters prove global optimality', 'They make all clusters supervised'], 'The implementation needs an explicit recovery policy.'),
-  q('km-084-elbow-trap', 'Tricky', 'Why is the elbow method not a theorem?', 'The elbow can be subjective or absent', ['It always finds the exact global optimum', 'It uses target labels'], 'Elbow plots are heuristics.'),
+  q('km-084-elbow-trap', 'Tricky', 'Why is the elbow method not a theorem?', 'The elbow can be subjective or absent', ['It always finds the exact global optimum', 'It uses target labels'], 'Elbow plots are heuristics, so the visual bend still needs validation and domain judgment.'),
   q('km-085-silhouette-trap', 'Tricky', 'What is a limitation of silhouette?', 'It still reflects the chosen distance and shape assumptions', ['It requires target labels by definition', 'It cannot compare separation'], 'Internal metrics can favor the wrong geometry.'),
   q('km-086-high-d-trap', 'Tricky', 'What trap appears in high-dimensional clustering?', 'Distances may become noisy or less discriminative', ['Centroids cannot have many dimensions', 'Every high-dimensional cluster is perfect'], 'Feature selection, normalization, or reduction may be needed.'),
   q('km-087-leakage-trap', 'Tricky', 'What leakage risk exists in preprocessing for clustering?', 'Fitting transformations on data that should be held out or future data', ['Using centroids after fitting', 'Assigning nearest centroid'], 'Pipelines still need clean data boundaries.'),
@@ -105,7 +116,7 @@ export const KMEANS_QUIZ = Object.freeze([
   q('km-090-formula-trap', 'Tricky', 'What is the trap in memorizing only the k-means objective?', 'It omits scaling, k selection, initialization, and validation decisions', ['The objective is never useful', 'Centroids cannot be averaged'], 'The practical workflow around the objective matters.'),
 
   q('km-091-interview-summary', 'Interview', 'How would you summarize k-means in an interview?', 'An unsupervised algorithm alternating nearest-centroid assignment and mean updates', ['A supervised classifier trained on labels', 'A probability model with soft assignments by default'], 'A strong answer names the two alternating steps.'),
-  q('km-092-interview-objective', 'Interview', 'How would you state the k-means objective?', 'Minimize within-cluster squared distances to assigned centroids', ['Maximize target-label accuracy', 'Minimize cross-entropy on class labels'], 'The objective is inertia.'),
+  q('km-092-interview-objective', 'Interview', 'How would you state the k-means objective?', 'Minimize within-cluster squared distances to assigned centroids', ['Maximize target-label accuracy', 'Minimize cross-entropy on class labels'], 'The objective is inertia, the total squared distance from points to their assigned centroids.'),
   q('km-093-interview-convergence', 'Interview', 'How would you explain convergence?', 'The objective decreases to a stable local solution, not guaranteed global optimum', ['It always finds the global optimum', 'It stops only when labels are perfect'], 'Local convergence is the key caveat.'),
   q('km-094-interview-k', 'Interview', 'How would you choose k?', 'Combine elbow or silhouette signals with stability, domain needs, and downstream validation', ['Pick the largest k because inertia drops', 'Use the number of feature columns blindly'], 'Choosing k is a model-selection decision.'),
   q('km-095-interview-scaling', 'Interview', 'Why mention scaling in a k-means answer?', 'Distance geometry depends on feature units', ['Scaling has no effect on Euclidean distance', 'Scaling makes the method supervised'], 'K-means can be dominated by large-scale columns.'),
@@ -115,4 +126,3 @@ export const KMEANS_QUIZ = Object.freeze([
   q('km-099-interview-compare', 'Interview', 'How would you contrast k-means with Gaussian mixtures?', 'K-means has hard spherical-style assignments; GMMs can model soft elliptical clusters', ['GMMs remove the need for features', 'K-means outputs calibrated probabilities'], 'The comparison exposes k-means assumptions.'),
   q('km-100-final-misconception', 'Interview', 'What misconception should the k-means lesson leave behind?', 'K-means finds distance-based segments, not guaranteed true categories', ['K-means always discovers ground truth', 'Cluster ids are ordered scores'], 'Clusters are hypotheses to validate, not automatic truth.'),
 ]);
-
