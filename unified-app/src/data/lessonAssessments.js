@@ -2246,10 +2246,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: KV_CACHE_QUIZ,
     labs: [
       {
+        id: 'trace-cache-table',
+        title: 'Trace the cache table',
+        prompt: 'Move the decode step and identify which K,V entries are cached, which token is current, and which visible positions are read.',
+        successCriteria: 'You can explain that cached K/V are reused while the current query still attends over visible history.',
+      },
+      {
         id: 'decode-step-savings',
         title: 'Compare decode-step work',
         prompt: 'Increase the decode step with caching on and off, then explain which computation grows and which stays flat.',
         successCriteria: 'You can separate avoided K/V projection work from attention reads over the visible cache.',
+      },
+      {
+        id: 'bound-window-memory',
+        title: 'Bound window memory',
+        prompt: 'Reduce the sliding window, then change heads and head dimension to compare cache reads, projection savings, and memory pressure.',
+        successCriteria: 'Your explanation separates projection reuse from the cache-memory tradeoff caused by visible tokens, heads, and head dimension.',
       },
     ],
   },
