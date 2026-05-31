@@ -2269,10 +2269,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: GROUPED_QUERY_ATTENTION_QUIZ,
     labs: [
       {
+        id: 'map-query-to-kv-groups',
+        title: 'Map query to KV groups',
+        prompt: 'Choose 16 query heads with 4 KV heads, then list which query heads share each KV head and compute the sharing ratio.',
+        successCriteria: 'You can map several query heads to each shared K/V head without reducing the query-head count.',
+      },
+      {
         id: 'compare-mha-mqa-gqa',
         title: 'Compare sharing regimes',
         prompt: 'Set KV heads equal to query heads, then to one, then to an intermediate value. Explain the memory and specialization tradeoff.',
         successCriteria: 'You can identify MHA, MQA, and GQA and explain why GQA is the middle ground.',
+      },
+      {
+        id: 'estimate-cache-bandwidth',
+        title: 'Estimate cache bandwidth',
+        prompt: 'Hold query heads fixed, then change KV heads, context tokens, and head dimension to predict cache elements and read-bandwidth changes.',
+        successCriteria: 'Your explanation ties cache savings to fewer stored/read K/V heads while noting context length and quality still matter.',
       },
     ],
   },

@@ -1,6 +1,6 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const desiredFinalIndex = (number - 1) % 3;
+  const questionNumber = Number(id.match(/^gqa-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
   const rotation = stableHash(`grouped-query-attention:${id}`) % 3;
   const answerIndex = (desiredFinalIndex + rotation) % 3;
   const choices = [...distractors];
@@ -46,7 +46,7 @@ const GROUPED_QUERY_ATTENTION_SPECS = [
   ['gqa-022-group-size-formula', 'Mechanism', 'When H_q is divisible by H_kv, how do you compute query heads per KV group?', 'H_q divided by H_kv', ['H_kv multiplied by vocabulary size', 'Context length minus batch size'], 'The sharing group size is the ratio between query and K/V head counts.'],
   ['gqa-023-head-index-map', 'Mechanism', 'With zero-based head indexes, how can query head h map to a KV head when groups are even?', 'floor(h divided by group size)', ['softmax(h) over the vocabulary', 'h plus the sequence length'], 'Integer grouping assigns consecutive query heads to the same K/V head.'],
   ['gqa-024-example-8-2', 'Mechanism', 'For 8 query heads and 2 KV heads, which query heads can share KV head 0?', 'Query heads 0 through 3', ['Query head 7 only', 'All future token positions'], 'A group size of four maps the first four query heads to the first K/V head.'],
-  ['gqa-025-example-32-8', 'Mechanism', 'For 32 query heads and 8 KV heads, what is the group size?', 'Four query heads per KV head', ['Eight KV heads per token id', 'Thirty-two values per softmax row'], 'The ratio 32 over 8 gives four query heads sharing each K/V head.'],
+  ['gqa-025-example-32-8', 'Mechanism', 'For 32 query heads and 8 KV heads, what is the group size?', 'A 4-to-1 query-to-KV sharing ratio', ['Eight KV heads per token id', 'Thirty-two values per softmax row'], 'The ratio 32 over 8 gives four query heads sharing each K/V head.'],
   ['gqa-026-mha-case', 'Mechanism', 'What configuration is the MHA endpoint?', 'H_q equals H_kv', ['H_kv equals zero', 'H_q equals vocabulary size'], 'When every query head has its own K/V head, there is no GQA sharing.'],
   ['gqa-027-mqa-case', 'Mechanism', 'What configuration is the MQA endpoint?', 'H_kv equals one while multiple query heads remain', ['H_q equals zero', 'Every token has its own layer'], 'One shared K/V head is the strongest sharing case.'],
   ['gqa-028-gqa-case', 'Mechanism', 'What configuration is a typical GQA case?', 'H_q is greater than H_kv and H_kv is greater than one', ['H_kv is greater than H_q by design', 'No values are projected'], 'Intermediate K/V head counts define grouped-query attention.'],

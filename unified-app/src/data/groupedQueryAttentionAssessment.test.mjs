@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,32 @@ function correctAnswer(question) {
 }
 
 test('grouped-query attention has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('grouped-query-attention');
+  const { quiz, labs } = getLessonAssessment('grouped-query-attention');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('gqa-'), `question ${index + 1} should use the gqa id prefix`);
+    assert.match(question.id, /^gqa-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the gqa id format`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `question ${index + 1} id number should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+});
+
+test('grouped-query attention assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('grouped-query-attention');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
 });
 
 test('grouped-query attention assessment progresses from sharing basics to interview readiness', () => {
@@ -61,16 +74,16 @@ test('grouped-query attention assessment covers learning points in the right ord
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['reduces kv-cache memory']],
+    ['purpose', ['reduces kv cache memory']],
     ['shared content', ['key and value heads']],
     ['mha endpoint', ['each query head has its own kv head']],
     ['mqa endpoint', ['many query heads share one kv head']],
     ['group size', ['query heads divided by kv heads']],
-    ['head mapping', ['floor(h divided by group size)']],
+    ['head mapping', ['floor h divided by group size']],
     ['quality tradeoff', ['too few kv heads', 'hurt quality']],
     ['implementation risk', ['assumes mha shapes']],
     ['tricky false claims', ['gqa claim is false']],
-    ['interview readiness', ['production-ready gqa takeaway']],
+    ['interview readiness', ['production ready gqa takeaway']],
   ];
 
   let previousIndex = -1;
@@ -130,6 +143,7 @@ test('grouped-query attention assessment does not leak exact answers within a vi
 
 test('grouped-query attention assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('grouped-query-attention');
+  const globalPositionCounts = [0, 1, 2].map((slot) => quiz.filter((question) => question.answerIndex === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -138,4 +152,9 @@ test('grouped-query attention assessment distributes correct-answer positions ac
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(
+    Math.max(...globalPositionCounts) - Math.min(...globalPositionCounts) <= 1,
+    `global answer positions should be balanced, got ${globalPositionCounts.join(', ')}`,
+  );
 });
