@@ -189,7 +189,10 @@ test('roc pr curves assessment keeps misconception traps after setup', () => {
   ];
   const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
 
-  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.deepEqual(trapQuestions.map((question) => question.id), expectedTrapIds);
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
