@@ -25,7 +25,10 @@ test('conv relu has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('conv-relu');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['bias-sparsity-sweep', 'trace-selected-z-to-a', 'compare-kernel-polarity'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -126,6 +129,36 @@ test('conv relu assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('conv relu assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('conv-relu');
+  const misconceptionPatterns = [
+    /removes negative values before the convolution/i,
+    /relu creates the learned local pattern detector/i,
+    /flips negative convolution responses/i,
+    /changes the spatial size/i,
+    /clipped negative locations pass the same gradient/i,
+    /bias cannot affect which relu gates open/i,
+    /any zero after relu proves the filter is useless/i,
+    /outputs calibrated probabilities/i,
+    /preserves both positive and negative evidence signs/i,
+    /reconstruct all negative pre-activation values/i,
+    /no possible effect on relu activations/i,
+    /stride changes which relu threshold is used/i,
+    /making every response positive is always ideal/i,
+    /only post-relu maps are needed/i,
+    /order, sign, and masks cannot cause bugs/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
