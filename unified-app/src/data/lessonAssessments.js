@@ -2288,6 +2288,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Choose the shifted token, inspect mean and standard deviation, then explain what gamma and beta restore after normalization.',
         successCriteria: 'You can distinguish the raw token shift from the normalized feature pattern and the learned affine output.',
       },
+      {
+        id: 'compare-batchnorm-axis',
+        title: 'Compare BatchNorm axes',
+        prompt: 'Use the BatchNorm comparison at batch size one and a larger batch, then explain why LayerNorm keeps using feature statistics inside each token.',
+        successCriteria: 'You can state which axis each normalization uses and why LayerNorm does not need running batch statistics.',
+      },
+      {
+        id: 'audit-pre-post-placement',
+        title: 'Audit norm placement',
+        prompt: 'Switch between pre-norm and post-norm, vary branch strength, and explain how placement changes the residual update seen by the next block.',
+        successCriteria: 'You can connect placement and branch scale to residual stability without claiming one formula is always best.',
+      },
     ],
   },
   lstm: {

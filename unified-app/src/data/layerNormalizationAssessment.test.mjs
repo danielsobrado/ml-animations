@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,28 @@ function correctAnswer(question) {
 }
 
 test('layer normalization has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('layer-normalization');
+  const { quiz, labs } = getLessonAssessment('layer-normalization');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ln-'), `question ${index + 1} should use the ln id prefix`);
+    assert.match(question.id, /^ln-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered ln id format`);
+    assert.equal(Number(question.id.slice(3, 6)), index + 1, `question ${index + 1} should keep ordered ids`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const positionCounts = [0, 1, 2].map((answerIndex) => (
+    quiz.filter((question) => question.answerIndex === answerIndex).length
+  ));
+  assert.ok(Math.max(...positionCounts) - Math.min(...positionCounts) <= 1, `answer positions should be balanced: ${positionCounts.join(', ')}`);
 });
 
 test('layer normalization assessment avoids duplicate prompts and correct answers', () => {
@@ -72,16 +81,16 @@ test('layer normalization assessment covers learning points in the right order',
   const milestones = [
     ['purpose', ['feature scale drift']],
     ['axis', ['feature dimension']],
-    ['gamma', ['what is gamma', 'per-feature scale']],
-    ['batch contrast', ['layernorm uses per-example features']],
+    ['gamma', ['what is gamma', 'per feature scale']],
+    ['batch contrast', ['layernorm uses per example features']],
     ['pre norm', ['applying layernorm before']],
     ['formula', ['compute mean and variance']],
     ['residual stream', ['residual additions']],
     ['rmsnorm', ['without subtracting the mean']],
     ['application axis', ['wrong axis for transformer tokens']],
-    ['production checks', ['hidden-state shapes']],
+    ['production checks', ['hidden state shapes']],
     ['unsafe trap', ['claim is unsafe']],
-    ['interview readiness', ['trace the per-token formula']],
+    ['interview readiness', ['trace the per token formula']],
   ];
 
   let previousIndex = -1;
