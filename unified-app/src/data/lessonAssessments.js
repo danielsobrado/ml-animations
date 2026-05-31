@@ -2154,10 +2154,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: EMBEDDINGS_QUIZ,
     labs: [
       {
+        id: 'trace-vector-arithmetic',
+        title: 'Trace vector arithmetic',
+        prompt: 'Use the Word Algebra tab to step through King - Man + Woman, then explain why the result is an analogy signal rather than a proof of meaning.',
+        successCriteria: 'You can connect vector offsets to learned patterns while naming the limits of analogy arithmetic.',
+      },
+      {
+        id: 'compare-cosine-angle',
+        title: 'Compare cosine angles',
+        prompt: 'Set the Similarity Lab angle near 0, 90, and 180 degrees, then record the cosine value and interpretation for each case.',
+        successCriteria: 'You can explain how direction controls cosine similarity and why metric choice affects comparisons.',
+      },
+      {
         id: 'nearest-neighbor',
         title: 'Inspect a neighbor',
-        prompt: 'Move or choose a vector and compare its nearest neighbors.',
-        successCriteria: 'You can separate semantic similarity from incidental training-data correlation.',
+        prompt: 'Rotate the 3D semantic space and compare words inside one cluster with words across clusters.',
+        successCriteria: 'You can separate useful neighborhood structure from incidental training-data correlation.',
       },
     ],
   },
