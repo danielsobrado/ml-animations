@@ -26,7 +26,11 @@ test('feature scaling preprocessing has a complete curated 100-question assessme
   const { quiz, labs } = getLessonAssessment('feature-scaling-preprocessing');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'compare-scaler-statistics',
+    'outlier-scaler-comparison',
+    'audit-train-only-pipeline',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -154,6 +158,35 @@ test('feature scaling preprocessing assessment avoids unsafe misconception keyin
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('feature scaling preprocessing assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('feature-scaling-preprocessing');
+  const misconceptionPatterns = [
+    /scaling is harmless bookkeeping/i,
+    /if a transform ignores labels/i,
+    /every model family benefits equally/i,
+    /min max scaling guarantees future values stay between 0 and 1/i,
+    /robust scaling automatically removes every outlier problem/i,
+    /fit the scaler once before making folds/i,
+    /compare regularized coefficients from unscaled features as if units matched/i,
+    /choose clipping thresholds after inspecting final test errors/i,
+    /refit the scaler independently in serving/i,
+    /one hot encoding never needs an unknown category policy/i,
+    /all binary indicators must always be standardized/i,
+    /fitted scaler from training remains representative forever/i,
+    /pick the scaler after repeatedly checking the final test score/i,
+  ];
+  const trapPrompt = /trap|false|misleading|unsafe|too absolute|too strong|claim|practice|statement/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(text));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
