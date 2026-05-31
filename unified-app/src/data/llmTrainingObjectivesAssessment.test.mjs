@@ -37,6 +37,15 @@ test('llm training objectives has a complete curated 100-question assessment', (
   }
 });
 
+test('llm training objectives assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('llm-training-objectives');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('llm training objectives assessment progresses from basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('llm-training-objectives');
   const expectedBands = [
