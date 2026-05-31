@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowRight, Database, RotateCcw, SlidersHorizontal, StepForward } from 'lucide-react';
 import { computeSoftmax } from '../../data/softmaxModel';
+import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
 
 const BASE_CONTEXT = ['The', 'model', 'writes'];
 const VOCABULARY = [
@@ -278,6 +279,8 @@ export default function TransformerTokenGeneration() {
           ))}
         </div>
       </section>
+
+      <AssessmentPanel lessonId="transformer-token-generation" title="Token Generation Loop check" />
     </div>
   );
 }

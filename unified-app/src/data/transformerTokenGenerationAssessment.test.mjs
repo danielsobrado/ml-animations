@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('transformer token generation has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('transformer-token-generation');
+  const { quiz, labs } = getLessonAssessment('transformer-token-generation');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ttg-'), `question ${index + 1} should use the ttg id prefix`);
+    assert.match(question.id, /^ttg-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use a strict ttg id`);
+    assert.equal(Number(question.id.slice(4, 7)), index + 1, `question ${index + 1} id should be sequential`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -70,16 +74,16 @@ test('transformer token generation assessment covers learning points in the righ
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['turning a trained transformer into text one next-token decision at a time']],
-    ['loop', ['read context, score next tokens, choose one, append it, and repeat']],
+    ['purpose', ['turning a trained transformer into text one next token decision at a time']],
+    ['loop', ['read context score next tokens choose one append it and repeat']],
     ['logits', ['raw vocabulary scores before probability normalization']],
-    ['controls', ['top-k limits the candidate set']],
+    ['controls', ['top k limits the candidate set']],
     ['cache basics', ['reuse prior key and value rows']],
-    ['mechanism loop', ['prefill context, compute next-token logits']],
+    ['mechanism loop', ['prefill context compute next token logits']],
     ['application cache bug', ['enabling kv cache changes outputs']],
     ['application production', ['tune decoding by task']],
     ['tricky false claims', ['generation claim is false']],
-    ['interview readiness', ['production-ready token-generation takeaway']],
+    ['interview readiness', ['production ready token generation takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,13 @@ test('transformer token generation assessment does not leak exact answers within
 
 test('transformer token generation assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('transformer-token-generation');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `global answer positions are imbalanced: ${globalCounts.join(', ')}`,
+  );
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);

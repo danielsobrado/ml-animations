@@ -2673,6 +2673,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Generate a few steps with low temperature and greedy mode, then compare it with higher temperature and sampling.',
         successCriteria: 'You can explain which setting is more deterministic and which setting keeps more alternatives alive.',
       },
+      {
+        id: 'trace-token-step',
+        title: 'Trace one token step',
+        prompt: 'Pick one generated token and trace the visible context, last-position logits, softmax probabilities, top-k or top-p filter, selected token, append step, and next cache row.',
+        successCriteria: 'You can explain how a single selected token changes the next context and candidate distribution.',
+      },
+      {
+        id: 'verify-serving-behavior',
+        title: 'Verify serving behavior',
+        prompt: 'Compare cached and uncached decoding with the same prompt, seed, and settings, then test EOS, stop sequence, max-token, and streaming behavior.',
+        successCriteria: 'You can verify cache invariance, stopping rules, reproducibility, output length, and per-token latency.',
+      },
     ],
   },
   'sampling-strategies': {
