@@ -2267,6 +2267,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Select an output cell, write the highlighted input values, and identify which coordinate supplied the max.',
         successCriteria: 'You can compute the pooled output cell and explain which input details were discarded.',
       },
+      {
+        id: 'audit-stride-coverage',
+        title: 'Audit stride coverage',
+        prompt: 'Change stride from overlapping to non-overlapping windows, then list which input positions stop being visited.',
+        successCriteria: 'You can connect stride to output shape, window coverage, and missed local evidence.',
+      },
+      {
+        id: 'compare-max-average-gap',
+        title: 'Compare max and average',
+        prompt: 'Use the max-minus-average card on a selected window and explain what the gap says about discarded non-maximum evidence.',
+        successCriteria: 'You can explain why max pooling preserves peaks but does not preserve the full local distribution.',
+      },
     ],
   },
   conv2d: {

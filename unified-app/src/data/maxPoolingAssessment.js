@@ -1,6 +1,8 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const number = Number(id.match(/\d+/)?.[0] || 1);
-  const answerIndex = (number - 1) % 3;
+  const questionNumber = Number(id.match(/^mp-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`max-pooling:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
   const choices = [...distractors];
   choices.splice(answerIndex, 0, correct);
 
@@ -12,6 +14,10 @@ function q(id, level, prompt, correct, distractors, explanation) {
     prompt,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 const MAX_POOLING_SPECS = [

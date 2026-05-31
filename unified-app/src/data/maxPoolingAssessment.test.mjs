@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,28 @@ function correctAnswer(question) {
 }
 
 test('max pooling has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('max-pooling');
+  const { quiz, labs } = getLessonAssessment('max-pooling');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('mp-'), `question ${index + 1} should use the mp id prefix`);
+    assert.match(question.id, /^mp-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the ordered mp id format`);
+    assert.equal(Number(question.id.slice(3, 6)), index + 1, `question ${index + 1} should keep ordered ids`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const positionCounts = [0, 1, 2].map((answerIndex) => (
+    quiz.filter((question) => question.answerIndex === answerIndex).length
+  ));
+  assert.ok(Math.max(...positionCounts) - Math.min(...positionCounts) <= 1, `answer positions should be balanced: ${positionCounts.join(', ')}`);
 });
 
 test('max pooling assessment avoids duplicate prompts and correct answers', () => {
@@ -73,13 +82,13 @@ test('max pooling assessment covers learning points in the right order', () => {
     ['purpose', ['downsamples while keeping']],
     ['local window', ['small local region']],
     ['max rule', ['largest activation']],
-    ['information loss', ['non-maximum values']],
+    ['information loss', ['non maximum values']],
     ['argmax', ['coordinate of the value']],
-    ['shape formula', ['floor((h + 2p - k) / s) + 1']],
+    ['shape formula', ['floor h 2p k s 1']],
     ['gradient route', ['input position that won']],
-    ['application tracing', ['window starts, winners']],
+    ['application tracing', ['window starts winners']],
     ['tricky false claims', ['claim is false']],
-    ['interview readiness', ['production-ready max-pooling takeaway']],
+    ['interview readiness', ['production ready max pooling takeaway']],
   ];
 
   let previousIndex = -1;
