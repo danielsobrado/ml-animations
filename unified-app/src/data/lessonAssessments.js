@@ -14,6 +14,7 @@ import { CHANGE_OF_BASIS_QUIZ } from './changeOfBasisAssessment.js';
 import { CLASSIFIER_FREE_GUIDANCE_QUIZ } from './classifierFreeGuidanceAssessment.js';
 import { CLASSIFICATION_METRICS_QUIZ } from './classificationMetricsAssessment.js';
 import { COMPUTATION_GRAPH_BACKPROP_QUIZ } from './computationGraphBackpropAssessment.js';
+import { CONDITION_NUMBER_QUIZ } from './conditionNumberAssessment.js';
 import { CONV2D_QUIZ } from './conv2dAssessment.js';
 import { CONV_RELU_QUIZ } from './convReluAssessment.js';
 import { COCONUT_LATENT_REASONING_QUIZ } from './coconutLatentReasoningAssessment.js';
@@ -959,6 +960,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Audit operator coordinates',
         prompt: 'Use A_B = B^-1 A B to explain the order of conversions when a linear map is written in B-coordinates.',
         successCriteria: 'You can state why the rightmost B acts first, A acts in standard coordinates, and B^-1 returns to B-coordinates.',
+      },
+    ],
+  },
+  'condition-number': {
+    quiz: CONDITION_NUMBER_QUIZ,
+    labs: [
+      {
+        id: 'compare-condition-presets',
+        title: 'Compare condition presets',
+        prompt: 'Switch between well-conditioned, sensitive, and near-singular presets, then record the major axis, minor axis, and displayed kappa value.',
+        successCriteria: 'You can explain how major divided by minor produces the displayed stretch-spread ratio.',
+      },
+      {
+        id: 'trace-error-amplification',
+        title: 'Trace error amplification',
+        prompt: 'Use the unit-circle-to-ellipse view to identify which direction is most fragile and why small perturbations can grow after inversion.',
+        successCriteria: 'You can connect the smallest singular direction to inverse sensitivity and fragile solution error.',
+      },
+      {
+        id: 'audit-stability-response',
+        title: 'Audit stability response',
+        prompt: 'Given a large kappa or sigma_min near zero, choose a response such as scaling, QR/SVD, regularization, or pseudoinverse handling.',
+        successCriteria: 'You can avoid residual-only and normal-equations shortcuts when the system is ill conditioned.',
       },
     ],
   },
