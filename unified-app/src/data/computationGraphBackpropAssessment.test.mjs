@@ -37,6 +37,15 @@ test('computation graph backprop has a complete curated 100-question assessment'
   }
 });
 
+test('computation graph backprop assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('computation-graph-backprop');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('computation graph backprop assessment progresses from graph basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('computation-graph-backprop');
   const expectedBands = [
