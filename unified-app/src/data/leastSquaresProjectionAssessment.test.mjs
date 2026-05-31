@@ -81,6 +81,23 @@ test('least squares projection assessment progresses through lesson learning poi
 
 test('least squares projection keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('least-squares-projection');
+  const trapIds = [
+    'lsp-076-false-residual-inside',
+    'lsp-077-wrong-maximize',
+    'lsp-078-false-normal-ax0',
+    'lsp-079-wrong-atyb',
+    'lsp-080-false-zero-always',
+    'lsp-081-wrong-small-exact',
+    'lsp-082-false-large-no-projection',
+    'lsp-083-dangerous-normal-exact',
+    'lsp-084-wrong-bhat-residual',
+    'lsp-085-false-e-parallel',
+    'lsp-086-wrong-col-all-space',
+    'lsp-087-false-transpose-purpose',
+    'lsp-088-dangerous-ignore-residual',
+    'lsp-089-false-farthest',
+    'lsp-090-wrong-title-only',
+  ];
   const misconceptionTerms = [
     /residual is always inside Col\(A\)/i,
     /maximizes \|\|Ax - b\|\|/i,
@@ -99,6 +116,8 @@ test('least squares projection keeps misconception traps after setup', () => {
     /title alone tells you/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|rejected|unsafe/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;
