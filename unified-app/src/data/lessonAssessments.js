@@ -66,6 +66,7 @@ import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js'
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { MIXTURE_OF_EXPERTS_QUIZ } from './mixtureOfExpertsAssessment.js';
 import { MULTI_HEAD_LATENT_ATTENTION_QUIZ } from './multiHeadLatentAttentionAssessment.js';
+import { MULTIMODAL_LLM_QUIZ } from './multimodalLlmAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OMNI_MULTIMODAL_ARCHITECTURES_QUIZ } from './omniMultimodalArchitecturesAssessment.js';
@@ -1817,6 +1818,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Tune one failure',
         prompt: 'Use reranker mode, top-k, and strictness to reduce stale or conflicting behavior for at least two claims.',
         successCriteria: 'You can report the top-k/strictness region with fewer stale/conflicting tags and a higher grounded count.',
+      },
+    ],
+  },
+  'multimodal-llm': {
+    quiz: MULTIMODAL_LLM_QUIZ,
+    labs: [
+      {
+        id: 'trace-multimodal-flow',
+        title: 'Trace multimodal data flow',
+        prompt: 'Use the Data Flow tab to step from image plus text input through vision encoding, text tokenization, projection, token combination, attention, and generation.',
+        successCriteria: 'You can name what representation exists at each step and why projection happens before fusion.',
+      },
+      {
+        id: 'compare-fusion-designs',
+        title: 'Compare fusion designs',
+        prompt: 'Switch between early fusion, late fusion, and cross-attention in the Architecture tab, then pick the best design for rich interaction, modular training, and flexible attention.',
+        successCriteria: 'You can justify each choice using interaction timing, complexity, and scaling tradeoffs.',
+      },
+      {
+        id: 'ground-scenario-answer',
+        title: 'Ground a scenario answer',
+        prompt: 'In the Practice Lab scenarios, choose one image-question pair and identify which visual evidence should support the generated response.',
+        successCriteria: 'You can distinguish a visually grounded answer from a fluent but unsupported answer.',
       },
     ],
   },
