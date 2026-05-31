@@ -25,7 +25,11 @@ test('calibration has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('calibration');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'reliability-gap',
+    'binning-and-ece-audit',
+    'held-out-calibration-plan',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -139,6 +143,36 @@ test('calibration assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('calibration assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('calibration');
+  const misconceptionPatterns = [
+    /guarantees calibrated probabilities/i,
+    /proves the numerical probabilities are reliable/i,
+    /automatically calibrated/i,
+    /fitting the calibrator on the final test labels/i,
+    /more bins always give a more trustworthy calibration estimate/i,
+    /independent of binning choices/i,
+    /cannot overfit when calibration data are small/i,
+    /fixes every class-specific calibration problem automatically/i,
+    /always changes the ranking order/i,
+    /useful for ranking individuals/i,
+    /guarantees every subgroup is calibrated/i,
+    /guaranteed forever/i,
+    /calibration alone chooses the best threshold/i,
+    /guarantees this individual outcome/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
