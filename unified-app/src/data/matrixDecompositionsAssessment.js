@@ -1,12 +1,33 @@
+function stableHash(text) {
+  let hash = 0;
+  for (let index = 0; index < text.length; index += 1) hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+  return hash.toString(16).padStart(8, '0');
+}
+
+function stableHashNumber(text) {
+  let hash = 0;
+  for (let index = 0; index < text.length; index += 1) hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+  return hash;
+}
+
 function q(id, level, prompt, correct, distractors, explanation) {
-  return {
+  const match = /^md-(\d{3})/.exec(id);
+  const number = Number(match?.[1] || 1);
+  const registryRotation = stableHashNumber(`matrix-decompositions:${id}`) % 3;
+  const targetAnswerIndex = (number - 1) % 3;
+  const answerIndex = (targetAnswerIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
+  return Object.freeze({
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices: Object.freeze(choices),
+    answerIndex,
     explanation,
-  };
+    questionHash: stableHash(`${prompt}\n${choices.join('\n')}`),
+  });
 }
 
 export const MATRIX_DECOMPOSITIONS_QUIZ = Object.freeze([
@@ -72,10 +93,10 @@ export const MATRIX_DECOMPOSITIONS_QUIZ = Object.freeze([
   q('md-058-scenario-rank-deficient-ls', 'Application', 'A least-squares matrix may be rank deficient. Which choice is safer?', 'SVD or pivoted QR', ['Plain inverse of A^T A', 'Unpivoted Cholesky without checks'], 'Rank deficiency needs a method that detects dependent directions.'),
   q('md-059-scenario-covariance', 'Application', 'A covariance matrix is confirmed SPD and repeatedly solved against vectors. Which method fits?', 'Cholesky factorization', ['NMF with random topics', 'Eigen decomposition for every rectangular matrix'], 'Covariance matrices often satisfy Cholesky assumptions after appropriate regularization.'),
   q('md-060-scenario-determinant', 'Application', 'You need determinant and solves for a square matrix with pivoting. Which factorization helps?', 'LU', ['Truncated SVD only', 'NMF'], 'LU supports determinants and direct solves.'),
-  q('md-061-scenario-compression', 'Application', 'You need image-like compression while minimizing squared reconstruction error. Which tool fits?', 'Truncated SVD', ['Plain LU solve', 'Cholesky of labels'], 'Low-rank SVD keeps dominant singular components.'),
-  q('md-062-scenario-topic-model', 'Application', 'You want document topics as additive nonnegative word patterns. Which method fits?', 'NMF', ['QR', 'LU with pivoting'], 'NMF is common when nonnegative parts aid interpretation.'),
-  q('md-063-scenario-orthonormal-basis', 'Application', 'You need an orthonormal basis for the columns of A. Which factorization should you inspect?', 'QR', ['NMF', 'Cholesky only'], 'QR explicitly constructs orthonormal column-space directions.'),
-  q('md-064-scenario-general-rectangular', 'Application', 'You have a general rectangular matrix and need rank and stable inverse-like behavior. Which method is strongest?', 'SVD', ['Classical eigen decomposition of A', 'Cholesky'], 'SVD handles arbitrary rectangular matrices and exposes singular values.'),
+  q('md-061-scenario-compression', 'Application', 'You need image-like compression while minimizing squared reconstruction error. Which tool fits?', 'Low-rank truncated SVD', ['Plain LU solve', 'Cholesky of labels'], 'Low-rank SVD keeps dominant singular components.'),
+  q('md-062-scenario-topic-model', 'Application', 'You want document topics as additive nonnegative word patterns. Which method fits?', 'NMF with a chosen topic rank', ['QR', 'LU with pivoting'], 'NMF is common when nonnegative parts aid interpretation.'),
+  q('md-063-scenario-orthonormal-basis', 'Application', 'You need an orthonormal basis for the columns of A. Which factorization should you inspect?', 'QR, especially its Q factor', ['NMF', 'Cholesky only'], 'QR explicitly constructs orthonormal column-space directions.'),
+  q('md-064-scenario-general-rectangular', 'Application', 'You have a general rectangular matrix and need rank and stable inverse-like behavior. Which method is strongest?', 'Full SVD with a singular-value tolerance', ['Classical eigen decomposition of A', 'Cholesky'], 'SVD handles arbitrary rectangular matrices and exposes singular values.'),
   q('md-065-scenario-spectral-graph', 'Application', 'You are analyzing a symmetric graph Laplacian. Which decomposition is usually relevant?', 'Symmetric eigendecomposition', ['NMF only', 'LU without any spectral view'], 'Symmetric spectral analysis uses orthonormal eigenvectors and eigenvalues.'),
   q('md-066-scenario-positive-definite-check', 'Application', 'A Cholesky attempt fails during factorization. What should you check first?', 'Whether the matrix is actually positive definite', ['Whether the document-term matrix is nonnegative', 'Whether k is too large for PCA labels'], 'Cholesky failure often signals an assumption violation or numerical indefiniteness.'),
   q('md-067-scenario-normal-equation-risk', 'Application', 'A least-squares workflow forms A^T A explicitly on ill-conditioned features. What is a better direction?', 'Use QR or SVD instead', ['Use NMF because all solves are topic models', 'Use Cholesky without checking SPD'], 'QR and SVD avoid the conditioning penalty of normal equations.'),
