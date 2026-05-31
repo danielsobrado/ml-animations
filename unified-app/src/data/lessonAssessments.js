@@ -2256,6 +2256,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Lower the bias until several feature responses disappear, then identify which pre-activation values were clipped.',
         successCriteria: 'You can explain the difference between the signed convolution map and the sparse ReLU activation map.',
       },
+      {
+        id: 'trace-selected-z-to-a',
+        title: 'Trace z to activation',
+        prompt: 'Select one output cell, inspect its highlighted input window, then explain how conv plus bias becomes z and ReLU turns z into a.',
+        successCriteria: 'You can state whether the selected response survives because its pre-activation is positive or is clipped because it is negative.',
+      },
+      {
+        id: 'compare-kernel-polarity',
+        title: 'Compare filter polarity',
+        prompt: 'Switch between the edge and bright-center kernels at the same bias, then compare which signed response maps survive ReLU.',
+        successCriteria: 'You can separate the convolution filter response from the ReLU gate and avoid crediting ReLU with detecting the pattern.',
+      },
     ],
   },
   'max-pooling': {
