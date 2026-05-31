@@ -133,6 +133,23 @@ test('max pooling assessment avoids unsafe misconception keying', () => {
 
 test('max pooling assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('max-pooling');
+  const expectedTrapIds = [
+    'mp-076-false-learned-trap',
+    'mp-077-false-average-trap',
+    'mp-078-false-shape-trap',
+    'mp-079-false-channel-trap',
+    'mp-080-false-gradient-trap',
+    'mp-081-false-negative-trap',
+    'mp-082-false-invariance-trap',
+    'mp-083-false-detail-trap',
+    'mp-084-false-probability-trap',
+    'mp-085-false-padding-trap',
+    'mp-086-false-overlap-trap',
+    'mp-087-false-compute-trap',
+    'mp-088-false-order-trap',
+    'mp-089-false-debug-trap',
+    'mp-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /learns a weighted filter/i,
     /averages all activations/i,
@@ -151,6 +168,13 @@ test('max pooling assessment keeps misconception traps after setup', () => {
     /never loses useful information/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.deepEqual(
+    trapQuestions.map((question) => question.id),
+    expectedTrapIds,
+  );
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
