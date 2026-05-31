@@ -140,6 +140,23 @@ test('tree ensembles assessment avoids unsafe misconception keying', () => {
 
 test('tree ensembles assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('tree-ensembles');
+  const expectedTrapIds = [
+    'treeens-076-trap-forest-overfit',
+    'treeens-077-trap-more-trees',
+    'treeens-078-trap-feature-scale',
+    'treeens-079-trap-oob',
+    'treeens-080-trap-boosting',
+    'treeens-081-trap-learning-rate',
+    'treeens-082-trap-depth',
+    'treeens-083-trap-importance',
+    'treeens-084-trap-leakage',
+    'treeens-085-trap-calibration',
+    'treeens-086-trap-metric',
+    'treeens-087-trap-extrapolation',
+    'treeens-088-trap-defaults',
+    'treeens-089-trap-interpretability',
+    'treeens-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /always eliminates overfitting completely/i,
     /always improve deployment performance with no cost/i,
@@ -157,6 +174,8 @@ test('tree ensembles assessment keeps misconception traps after setup', () => {
     /as transparent as a single small tree/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|dangerous|incorrect/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
