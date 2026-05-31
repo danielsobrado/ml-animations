@@ -52,6 +52,7 @@ import { KMEANS_QUIZ } from './kMeansAssessment.js';
 import { KNN_NAIVE_BAYES_SVM_QUIZ } from './knnNaiveBayesSvmAssessment.js';
 import { KV_CACHE_QUIZ } from './kvCacheAssessment.js';
 import { LAYER_NORMALIZATION_QUIZ } from './layerNormalizationAssessment.js';
+import { LEAST_SQUARES_PROJECTION_QUIZ } from './leastSquaresProjectionAssessment.js';
 import { LEAKY_RELU_QUIZ } from './leakyReluAssessment.js';
 import { LINEAR_REGRESSION_QUIZ } from './linearRegressionAssessment.js';
 import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
@@ -887,6 +888,29 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Classify the four spaces',
         prompt: 'Choose one rank-nullity case and list each subspace, its ambient space, and its dimension.',
         successCriteria: 'Your dimensions satisfy n = rank + nullity and m = rank + left-nullity.',
+      },
+    ],
+  },
+  'least-squares-projection': {
+    quiz: LEAST_SQUARES_PROJECTION_QUIZ,
+    labs: [
+      {
+        id: 'compare-residual-cases',
+        title: 'Compare residual cases',
+        prompt: 'Switch between Nearly in Col(A), Far from Col(A), and Exactly consistent, then describe how b_hat and e change.',
+        successCriteria: 'You can connect small, large, and zero residuals to distance from Col(A).',
+      },
+      {
+        id: 'derive-normal-equation',
+        title: 'Derive the normal equation',
+        prompt: 'Start from e = b - A x_hat and A^T e = 0, then write the algebraic steps to A^T A x_hat = A^T b.',
+        successCriteria: 'Your derivation explains why residual orthogonality creates the normal equations.',
+      },
+      {
+        id: 'audit-fit-quality',
+        title: 'Audit fit quality',
+        prompt: 'Choose one active case and explain whether the fitted vector is exact, close, or weak by reading residual length and direction.',
+        successCriteria: 'You can justify fit quality without confusing b, b_hat, and e.',
       },
     ],
   },
