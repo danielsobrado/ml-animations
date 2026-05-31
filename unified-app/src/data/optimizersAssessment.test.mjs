@@ -25,7 +25,10 @@ test('optimizers has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('optimizers');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['compare-update-rules', 'predict-then-rotate-landscape', 'schedule-stability-audit'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -136,6 +139,35 @@ test('optimizers assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('optimizers assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('optimizers');
+  const misconceptionPatterns = [
+    /adam is automatically best/i,
+    /adaptive optimizers remove the need/i,
+    /momentum always prevents overshooting/i,
+    /larger batches are always better/i,
+    /lowest training loss is always best/i,
+    /choose optimizer settings from repeated test-set/i,
+    /gradient clipping fixes every/i,
+    /warmup guarantees stable training/i,
+    /optimizer state never matters/i,
+    /forgetting to clear gradients is always harmless/i,
+    /sgd cannot train models/i,
+    /every parameter update is automatically optimal/i,
+    /schedule can rescue any bad/i,
+    /one lucky seed and one metric/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|too weak|unhelpful/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
