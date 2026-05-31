@@ -162,6 +162,23 @@ test('data leakage deep dive assessment avoids unsafe misconception keying', () 
 
 test('data leakage deep dive assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('data-leakage-deep-dive');
+  const trapIds = [
+    'leak-076-trap-correlation',
+    'leak-077-trap-unsupervised',
+    'leak-078-trap-random',
+    'leak-079-trap-time',
+    'leak-080-trap-test',
+    'leak-081-trap-target-encoding',
+    'leak-082-trap-duplicates',
+    'leak-083-trap-aggregates',
+    'leak-084-trap-cleaning',
+    'leak-085-trap-baseline',
+    'leak-086-trap-proxy',
+    'leak-087-trap-leaderboard',
+    'leak-088-trap-ablation',
+    'leak-089-trap-snapshot',
+    'leak-090-trap-monitoring',
+  ];
   const misconceptionPatterns = [
     /feature is safe whenever it is highly correlated/i,
     /unsupervised transforms cannot leak/i,
@@ -180,6 +197,8 @@ test('data leakage deep dive assessment keeps misconception traps after setup', 
     /serving checks are unnecessary/i,
   ];
   const trapPrompt = /trap|false|unsafe|misleading|suspicious|too strong|claim|behavior|interpretation|practice|conclusion/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
