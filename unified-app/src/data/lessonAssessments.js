@@ -1332,6 +1332,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Change segment mix until the aggregate effect disagrees with the within-segment effect.',
         successCriteria: 'You can explain why the aggregate and segment effects point different ways.',
       },
+      {
+        id: 'like-with-like-adjustment',
+        title: 'Compare like with like',
+        prompt: 'Use segment-level rates and common weights to separate treatment effect from group mix.',
+        successCriteria: 'You can explain how standardization changes the readout without hiding the crude result.',
+      },
+      {
+        id: 'confounding-readout-audit',
+        title: 'Audit a confounding readout',
+        prompt: 'Write a readout that includes crude and adjusted effects, segment weights, overlap, balance, timing, and sensitivity caveats.',
+        successCriteria: 'You can make a cautious causal claim only when the adjustment evidence supports it.',
+      },
     ],
   },
   'causal-graphs-dags': {
