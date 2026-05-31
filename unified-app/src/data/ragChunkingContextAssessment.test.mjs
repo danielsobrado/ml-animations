@@ -26,6 +26,11 @@ test('rag chunking context has a complete curated 100-question assessment with f
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'tune-chunk-budget',
+    'trace-retrieved-vs-packed',
+    'measure-context-tradeoffs',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -127,6 +132,31 @@ test('rag chunking context assessment avoids unsafe misconception keying', () =>
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('rag chunking context misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('rag-chunking-context');
+  const trapIds = [
+    'ragchunk-076-false-bigger',
+    'ragchunk-077-false-overlap',
+    'ragchunk-078-false-topk',
+    'ragchunk-079-false-budget',
+    'ragchunk-080-false-small',
+    'ragchunk-081-false-large',
+    'ragchunk-082-false-retrieved',
+    'ragchunk-083-false-dedup',
+    'ragchunk-084-false-long-context',
+    'ragchunk-085-false-metric',
+    'ragchunk-086-false-source',
+    'ragchunk-087-false-auth',
+    'ragchunk-088-false-eval',
+    'ragchunk-089-false-finetune',
+    'ragchunk-090-trap-summary',
+  ];
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
