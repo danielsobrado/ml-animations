@@ -1189,10 +1189,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: SAMPLING_CONFIDENCE_INTERVALS_QUIZ,
     labs: [
       {
+        id: 'coverage-procedure-demo',
+        title: 'Trace long-run coverage',
+        prompt: 'Increase repeated samples and count which intervals capture or miss the fixed population rate.',
+        successCriteria: 'You can explain coverage as a property of the repeated procedure, not a probability for one fixed interval.',
+      },
+      {
         id: 'sample-size-sweep',
         title: 'Sweep sample size',
         prompt: 'Increase sample size from small to large and track how quickly the interval width shrinks.',
         successCriteria: 'You can explain why quadrupling sample size is closer to halving the margin than quartering it.',
+      },
+      {
+        id: 'assumption-audit-interval',
+        title: 'Audit interval assumptions',
+        prompt: 'Use a wide, clustered, or skewed scenario and name the design or method assumption that must be checked.',
+        successCriteria: 'You can separate interval width from bias, dependence, model assumptions, and method choice.',
       },
     ],
   },

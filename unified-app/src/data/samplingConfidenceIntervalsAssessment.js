@@ -1,17 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
-  const baseChoices = [correct, ...distractors];
-  const numberMatch = id.match(/-(\d+)-/);
-  const offset = numberMatch ? (Number(numberMatch[1]) - 1) % baseChoices.length : 0;
-  const choices = [...baseChoices.slice(offset), ...baseChoices.slice(0, offset)];
+  const questionNumber = Number(id.match(/^ci-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`sampling-confidence-intervals:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
 
   return {
     id,
     level,
     prompt,
     choices,
-    answerIndex: choices.indexOf(correct),
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const SAMPLING_CONFIDENCE_INTERVALS_QUIZ = Object.freeze([
