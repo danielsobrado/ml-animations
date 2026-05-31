@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('llm training objectives has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('llm-training-objectives');
+  const { quiz, labs } = getLessonAssessment('llm-training-objectives');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ltobj-'), `question ${index + 1} should use the ltobj id prefix`);
+    assert.match(question.id, /^ltobj-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use a strict ltobj id`);
+    assert.equal(Number(question.id.slice(6, 9)), index + 1, `question ${index + 1} id should be sequential`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -70,16 +74,16 @@ test('llm training objectives assessment covers learning points in the right ord
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['turning raw text, demonstrations, and preferences into different learning signals']],
-    ['stage map', ['pretraining teaches prediction, supervised fine-tuning teaches response format']],
+    ['purpose', ['turning raw text demonstrations and preferences into different learning signals']],
+    ['stage map', ['pretraining teaches prediction supervised fine tuning teaches response format']],
     ['next token', ['predict the next token from preceding context']],
     ['preference signal', ['chosen responses against rejected responses']],
     ['alignment caveat', ['rather than simply adding factual knowledge']],
     ['loss mechanics', ['which tokens or comparisons contribute to the loss']],
-    ['objective design', ['define context, target, loss scope, data quality, and evaluation']],
+    ['objective design', ['define context target loss scope data quality and evaluation']],
     ['application choice', ['match the objective to the missing behavior']],
     ['tricky false claims', ['objective claim is false']],
-    ['interview readiness', ['production-ready llm-objective takeaway']],
+    ['interview readiness', ['production ready llm objective takeaway']],
   ];
 
   let previousIndex = -1;
@@ -139,6 +143,13 @@ test('llm training objectives assessment does not leak exact answers within a vi
 
 test('llm training objectives assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('llm-training-objectives');
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `global answer positions are imbalanced: ${globalCounts.join(', ')}`,
+  );
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);

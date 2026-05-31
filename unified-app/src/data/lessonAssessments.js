@@ -2584,6 +2584,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Select each objective and decide whether it mainly teaches continuation, representation, instruction following, or preference-shaped response behavior.',
         successCriteria: 'You can justify each match using the target in the loss.',
       },
+      {
+        id: 'inspect-loss-scope',
+        title: 'Inspect loss scope',
+        prompt: 'For next-token prediction, masked-token recovery, SFT, and preference optimization, mark the visible context, target, and tokens or comparisons that contribute to loss.',
+        successCriteria: 'You can distinguish context, target, loss mask, padding mask, and preference-pair scope for each objective.',
+      },
+      {
+        id: 'debug-objective-mismatch',
+        title: 'Debug objective mismatch',
+        prompt: 'Given failures like prompt copying, missing domain facts, over-refusal, reward hacking, or benchmark jumps, choose whether the issue is data coverage, loss masking, preference signal, or evaluation contamination.',
+        successCriteria: 'You can connect the observed behavior to the objective signal and name the targeted validation check.',
+      },
     ],
   },
   bert: {
