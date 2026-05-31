@@ -154,6 +154,23 @@ test('cross-validation assessment avoids unsafe misconception keying', () => {
 
 test('cross-validation assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('cross-validation');
+  const trapIds = [
+    'cv-076-trap-preprocess',
+    'cv-077-trap-best-fold',
+    'cv-078-trap-no-test',
+    'cv-079-trap-random',
+    'cv-080-trap-nested',
+    'cv-081-trap-repeat',
+    'cv-082-trap-loocv',
+    'cv-083-trap-oof',
+    'cv-084-trap-metric',
+    'cv-085-trap-group-stratified',
+    'cv-086-trap-time-shuffle',
+    'cv-087-trap-refit',
+    'cv-088-trap-variance',
+    'cv-089-trap-cache',
+    'cv-090-trap-production',
+  ];
   const misconceptionPatterns = [
     /preprocessing before CV is false/i,
     /best fold score as the headline estimate/i,
@@ -172,6 +189,8 @@ test('cross-validation assessment keeps misconception traps after setup', () => 
     /production risk of a clean CV score/i,
   ];
   const trapPrompt = /trap|false|misleading|overclaims|wrong|mistake|not fix|too absolute|invalid|leaks judgment|conflict|unsafe|dangerous|risk|why can/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
