@@ -148,6 +148,23 @@ test('calibration assessment avoids unsafe misconception keying', () => {
 
 test('calibration assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('calibration');
+  const expectedTrapIds = [
+    'cal-076-trap-accuracy-check',
+    'cal-077-trap-auc-a',
+    'cal-078-trap-sigmoid-b',
+    'cal-079-trap-test-set-claim',
+    'cal-080-trap-bins',
+    'cal-081-trap-ece',
+    'cal-082-trap-isotonic',
+    'cal-083-trap-temperature',
+    'cal-084-trap-ranking-change',
+    'cal-085-trap-constant',
+    'cal-086-trap-subgroups',
+    'cal-087-trap-shift',
+    'cal-088-trap-threshold',
+    'cal-089-trap-individual',
+    'cal-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /guarantees calibrated probabilities/i,
     /proves the numerical probabilities are reliable/i,
@@ -165,6 +182,8 @@ test('calibration assessment keeps misconception traps after setup', () => {
     /guarantees this individual outcome/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
