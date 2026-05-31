@@ -902,7 +902,7 @@ export const LEARNING_CARD_OVERRIDES = {
     'RAG failure modes define why an apparently confident answer can still be unreliable.',
     'Each claim should be tested against top-k evidence: grounded support, stale facts, conflict, or absence.',
     'The failure math is claim-level: grounded = usable support exists, else classify whether missing, stale, conflicting, or irrelevant.',
-    'Use the controls to move top-k, reranker, and strictness, then predict each claim’s outcome.',
+    'Use the controls to move top-k, reranker, and strictness, then predict each claim outcome.',
     'Mistake to avoid: fixing decoding settings before retrieval quality often makes fluent answers more confidently wrong.',
     'Check understanding by identifying why a claim is rejected when no valid evidence remains in the grounded set.',
   ),
