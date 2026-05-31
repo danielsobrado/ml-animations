@@ -1,53 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { BarChart3, RotateCcw, SlidersHorizontal } from 'lucide-react';
 import AssessmentPanel from '../../components/animation-shell/AssessmentPanel';
-
-const SCORED_EXAMPLES = [
-  { id: 1, score: 0.96, label: 1 },
-  { id: 2, score: 0.91, label: 1 },
-  { id: 3, score: 0.86, label: 0 },
-  { id: 4, score: 0.78, label: 1 },
-  { id: 5, score: 0.72, label: 0 },
-  { id: 6, score: 0.67, label: 1 },
-  { id: 7, score: 0.61, label: 0 },
-  { id: 8, score: 0.55, label: 1 },
-  { id: 9, score: 0.48, label: 0 },
-  { id: 10, score: 0.43, label: 0 },
-  { id: 11, score: 0.37, label: 1 },
-  { id: 12, score: 0.31, label: 0 },
-  { id: 13, score: 0.25, label: 0 },
-  { id: 14, score: 0.18, label: 1 },
-  { id: 15, score: 0.12, label: 0 },
-  { id: 16, score: 0.06, label: 0 },
-];
-
-const THRESHOLDS = Array.from({ length: 21 }, (_, index) => index / 20);
-
-function confusionAt(threshold) {
-  return SCORED_EXAMPLES.reduce((counts, example) => {
-    const predicted = example.score >= threshold ? 1 : 0;
-    if (predicted === 1 && example.label === 1) counts.tp += 1;
-    if (predicted === 1 && example.label === 0) counts.fp += 1;
-    if (predicted === 0 && example.label === 1) counts.fn += 1;
-    if (predicted === 0 && example.label === 0) counts.tn += 1;
-    return counts;
-  }, { tp: 0, fp: 0, fn: 0, tn: 0 });
-}
-
-function metrics(counts) {
-  const precision = counts.tp + counts.fp === 0 ? 1 : counts.tp / (counts.tp + counts.fp);
-  const recall = counts.tp + counts.fn === 0 ? 0 : counts.tp / (counts.tp + counts.fn);
-  const fpr = counts.fp + counts.tn === 0 ? 0 : counts.fp / (counts.fp + counts.tn);
-  const specificity = counts.tn + counts.fp === 0 ? 0 : counts.tn / (counts.tn + counts.fp);
-  return { precision, recall, fpr, specificity, tpr: recall };
-}
-
-function curvePoints() {
-  return THRESHOLDS.map((threshold) => {
-    const counts = confusionAt(threshold);
-    return { threshold, ...metrics(counts) };
-  }).sort((a, b) => a.fpr - b.fpr || a.recall - b.recall);
-}
+import {
+  SCORED_EXAMPLES,
+  confusionAt,
+  curvePoints,
+  metricPercent,
+  metrics,
+  prPrecisionForPlot,
+} from './rocPrCurvesModel';
 
 function plot(points, xKey, yKey) {
   return points
@@ -99,7 +60,8 @@ export default function RocPrCurvesAnimation() {
   const counts = useMemo(() => confusionAt(threshold), [threshold]);
   const current = metrics(counts);
   const points = useMemo(curvePoints, []);
-  const activePoint = { threshold, ...current };
+  const activePoint = { threshold, ...current, precisionPlot: prPrecisionForPlot(current) };
+  const precisionDetail = current.precision === null ? 'no predicted positives' : `${counts.tp} TP, ${counts.fp} FP`;
 
   const reset = () => setThreshold(0.5);
 
@@ -129,9 +91,9 @@ export default function RocPrCurvesAnimation() {
 
       <div className="grid gap-3 md:grid-cols-4">
         <Stat label="Threshold" value={threshold.toFixed(2)} detail="score cutoff for positive" />
-        <Stat label="Precision" value={`${Math.round(current.precision * 100)}%`} detail={`${counts.tp} TP, ${counts.fp} FP`} />
-        <Stat label="Recall / TPR" value={`${Math.round(current.recall * 100)}%`} detail={`${counts.tp} found, ${counts.fn} missed`} />
-        <Stat label="FPR" value={`${Math.round(current.fpr * 100)}%`} detail={`${counts.fp} false alarms`} />
+        <Stat label="Precision" value={metricPercent(current.precision)} detail={precisionDetail} />
+        <Stat label="Recall / TPR" value={metricPercent(current.recall)} detail={`${counts.tp} found, ${counts.fn} missed`} />
+        <Stat label="FPR" value={metricPercent(current.fpr)} detail={`${counts.fp} false alarms`} />
       </div>
 
       <section className="rounded-lg border border-slate-200 bg-white p-5">
@@ -191,7 +153,7 @@ export default function RocPrCurvesAnimation() {
           yLabel="Precision"
           points={[...points].sort((a, b) => a.recall - b.recall)}
           xKey="recall"
-          yKey="precision"
+          yKey="precisionPlot"
           active={activePoint}
           tone="#dc2626"
         />

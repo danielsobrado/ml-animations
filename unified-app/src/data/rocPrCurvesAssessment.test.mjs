@@ -153,6 +153,23 @@ test('roc pr curves assessment avoids unsafe misconception keying', () => {
 
 test('roc pr curves assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('roc-pr-curves');
+  const expectedTrapIds = [
+    'rocpr-076-trap-auc-threshold',
+    'rocpr-077-trap-roc-axis',
+    'rocpr-078-trap-pr-axis',
+    'rocpr-079-trap-rare',
+    'rocpr-080-trap-fpr',
+    'rocpr-081-trap-pr-baseline',
+    'rocpr-082-trap-calibration',
+    'rocpr-083-trap-monotonic',
+    'rocpr-084-trap-threshold',
+    'rocpr-085-trap-crossing',
+    'rocpr-086-trap-test',
+    'rocpr-087-trap-hard-labels',
+    'rocpr-088-trap-precision',
+    'rocpr-089-trap-report',
+    'rocpr-090-trap-positive-class',
+  ];
   const misconceptionPatterns = [
     /automatically gives the best deployment threshold/i,
     /plots precision against recall/i,
@@ -171,6 +188,8 @@ test('roc pr curves assessment keeps misconception traps after setup', () => {
     /does not depend on which class is positive/i,
   ];
   const trapPrompt = /trap|false|misleading|unsafe|wrong|claim/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
