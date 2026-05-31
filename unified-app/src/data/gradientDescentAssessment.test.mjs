@@ -25,7 +25,10 @@ test('gradient descent has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('gradient-descent');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['tune-step-size', 'trace-one-update', 'diagnose-loss-curve'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -135,6 +138,35 @@ test('gradient descent assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('gradient descent assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('gradient-descent');
+  const misconceptionPatterns = [
+    /always reaches the global minimum/i,
+    /gradient points downhill, so gradient descent adds it/i,
+    /larger learning rate is always better/i,
+    /tiny learning rate always fixes bad training/i,
+    /zero gradient always proves the best possible model/i,
+    /lower training loss always means better deployed/i,
+    /tune learning rate repeatedly on the test set/i,
+    /validation batches should supply gradients/i,
+    /feature scaling cannot affect gradient descent/i,
+    /single noisy mini-batch loss proves/i,
+    /adam automatically removes the need/i,
+    /gradient clipping fixes every cause/i,
+    /harmless to omit zero_grad/i,
+    /all neural-network losses are convex/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
