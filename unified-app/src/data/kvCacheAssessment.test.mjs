@@ -25,7 +25,10 @@ test('kv-cache has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('kv-cache');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-cache-table', 'decode-step-savings', 'bound-window-memory'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +123,40 @@ test('kv-cache assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('kv-cache assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('kv-cache');
+  const misconceptionPatterns = [
+    /skips attention entirely/i,
+    /final logits for every old token/i,
+    /constant no matter how long context gets/i,
+    /after all output tokens are generated/i,
+    /recomputes all old k\/v projections every step/i,
+    /remains valid after changing prefix tokens/i,
+    /infinite old context at no cost/i,
+    /increases kv heads/i,
+    /can never affect output quality/i,
+    /no memory-read bottleneck/i,
+    /always have identical cache lengths/i,
+    /never sensitive/i,
+    /changes model weights/i,
+    /remove kv cache storage/i,
+    /infinite context, zero memory cost/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    if (index < 75) {
+      assert.match(question.prompt, /misconception.*avoid/i, `${question.id} should scaffold any early misconception`);
+      continue;
+    }
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
