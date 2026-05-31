@@ -98,6 +98,7 @@ import { TRANSFORMER_TOKEN_GENERATION_QUIZ } from './transformerTokenGenerationA
 import { TOOL_USING_REASONING_MODELS_QUIZ } from './toolUsingReasoningModelsAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 import { UNET_VS_DIT_QUIZ } from './unetVsDitAssessment.js';
+import { WORD2VEC_QUIZ } from './word2vecAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
   'matrix-multiplication',
@@ -278,6 +279,9 @@ function causalAssessment(topic, coreIdea, failureMode, labPrompt) {
 const SEEDED_LESSON_ASSESSMENTS = {
   'bag-of-words': {
     quiz: BAG_OF_WORDS_QUIZ,
+  },
+  word2vec: {
+    quiz: WORD2VEC_QUIZ,
   },
   'matrix-multiplication': {
     quiz: MATRIX_MULTIPLICATION_QUIZ,
