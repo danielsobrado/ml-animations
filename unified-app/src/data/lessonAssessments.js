@@ -30,6 +30,7 @@ import { EMBEDDINGS_QUIZ } from './embeddingsAssessment.js';
 import { FEATURE_SCALING_PREPROCESSING_QUIZ } from './featureScalingPreprocessingAssessment.js';
 import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
 import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
+import { FRONTIER_EVALUATION_SAFETY_QUIZ } from './frontierEvaluationSafetyAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
@@ -2951,74 +2952,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'frontier-evaluation-safety': {
-    quiz: [
-      {
-        id: 'capability-vs-product',
-        prompt: 'What is the key difference between a capability eval and a product eval?',
-        choices: [
-          'Capability evals ask what the model can do; product evals ask whether the deployed workflow succeeds safely.',
-          'Product evals only measure model weights.',
-          'Capability evals always include tool permissioning.',
-        ],
-        answerIndex: 0,
-        explanation: 'Capability evals measure raw task ability, while product evals include tools, policies, users, side effects, and failure recovery.',
-      },
-      {
-        id: 'swe-bench-style-eval',
-        prompt: 'What does SWE-bench-style evaluation test?',
-        choices: [
-          'Whether a model can classify images only.',
-          'Whether an agent can modify a codebase to resolve a real issue without breaking unrelated tests.',
-          'Whether a model can answer trivia without tools.',
-        ],
-        answerIndex: 1,
-        explanation: 'SWE-bench-style evals score whether a repo patch fixes target failures while preserving existing passing behavior.',
-      },
-      {
-        id: 'prompt-injection-definition',
-        prompt: 'What is prompt injection?',
-        choices: [
-          'The model making a spelling error.',
-          'The system using too much context.',
-          'External or user-provided content attempting to override intended instructions.',
-        ],
-        answerIndex: 2,
-        explanation: 'Prompt injection becomes especially risky when untrusted content can steer an agent that has side-effecting tools.',
-      },
-      {
-        id: 'tool-use-safety',
-        prompt: 'Why is tool-use safety different from normal chat safety?',
-        choices: [
-          'Tool use can create side effects such as sending, deleting, exporting, buying, or deploying.',
-          'Tool use never changes the environment.',
-          'Tool safety only concerns grammar.',
-        ],
-        answerIndex: 0,
-        explanation: 'Side-effecting tools require permission boundaries, action risk classification, audit logs, and sometimes human approval.',
-      },
-      {
-        id: 'reward-hacking',
-        prompt: 'What is reward hacking?',
-        choices: [
-          'Refusing all tasks.',
-          'Optimizing a measured objective while violating the intended objective.',
-          'Using too few tokens.',
-        ],
-        answerIndex: 1,
-        explanation: 'Reward hacking occurs when the proxy score is optimized in a way that breaks the real goal or policy.',
-      },
-      {
-        id: 'deployment-gate',
-        prompt: 'What is a deployment gate?',
-        choices: [
-          'A tokenizer setting.',
-          'A fixed benchmark score.',
-          'A decision point that checks capability, reliability, risk, mitigations, and monitoring before deployment.',
-        ],
-        answerIndex: 2,
-        explanation: 'Deployment gates combine capability, product reliability, safety risk, mitigation confidence, monitoring, and reversibility.',
-      },
-    ],
+    quiz: FRONTIER_EVALUATION_SAFETY_QUIZ,
     labs: [
       {
         id: 'capability-product-layer',
