@@ -21,7 +21,7 @@ const TUTORIAL_STEPS = [
     },
     {
         title: "The Stretch Factor: Eigenvalue",
-        content: "The factor by which an eigenvector stretches is called the EIGENVALUE (λ). If v is an eigenvector, then Av = λv. The eigenvalue tells you: 'how much does this special direction stretch?'",
+        content: "The factor by which an eigenvector scales is called the EIGENVALUE (lambda). If v is an eigenvector, then Av = lambda v. A positive lambda stretches the direction, a negative lambda flips it, and lambda = 0 collapses it.",
         visual: "eigenvalue",
         key: "lambda"
     },
@@ -103,7 +103,7 @@ export default function TutorialModePanel() {
                         <div className="text-center">
                             <p className="text-6xl mb-2">×λ</p>
                             <p className="text-sm text-purple-900 font-bold">Eigenvalue = Scale Factor</p>
-                            <p className="text-xs text-purple-800 mt-1">||Av|| = λ × ||v||</p>
+                            <p className="text-xs text-purple-800 mt-1">||Av|| = |lambda| * ||v||</p>
                         </div>
                     </div>
                 );

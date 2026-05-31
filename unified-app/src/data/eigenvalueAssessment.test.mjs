@@ -79,6 +79,23 @@ test('eigenvalue assessment progresses through lesson learning points', () => {
 
 test('eigenvalue keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('eigenvalue');
+  const trapIds = [
+    'eig-076-false-all-vectors',
+    'eig-077-wrong-zero-vector',
+    'eig-078-dangerous-rectangular',
+    'eig-079-false-diagonalize',
+    'eig-080-wrong-symmetric',
+    'eig-081-false-scale-factor',
+    'eig-082-wrong-rayleigh',
+    'eig-083-dangerous-power',
+    'eig-084-false-sign',
+    'eig-085-wrong-singular',
+    'eig-086-dangerous-complex',
+    'eig-087-false-diagonal-practice',
+    'eig-088-wrong-pca',
+    'eig-089-dangerous-determinant-only',
+    'eig-090-rejected-title-only',
+  ];
   const misconceptionTerms = [
     /Every nonzero vector is an eigenvector/i,
     /zero vector as the main eigenvector/i,
@@ -97,6 +114,8 @@ test('eigenvalue keeps misconception traps after setup', () => {
     /title without checking Av alignment/i,
   ];
   const trapPrompt = /false|misleading|wrong|dangerous|unsafe|rejected/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, item] of quiz.entries()) {
     const text = `${item.prompt} ${item.choices.join(' ')}`;

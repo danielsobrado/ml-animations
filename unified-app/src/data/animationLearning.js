@@ -234,6 +234,14 @@ export const LEARNING_CARD_OVERRIDES = {
     'Mistake to avoid: no single decomposition is always best; shape, assumptions, stability, and goal decide the right tool.',
     'Check understanding by choosing QR for stable least squares and SVD for general low-rank approximation.',
   ),
+  eigenvalue: cardSet(
+    'Eigenvalue analysis solves the problem of finding directions a square matrix only scales, rather than rotates into a new direction.',
+    'Picture dragging a vector until A v lands on the same line; that line is an eigenvector direction.',
+    'The math is A v = lambda v, with nonzero v and lambda recording the scale, flip, or collapse along that direction.',
+    'Use the circle-to-ellipse view and the vector explorer to compare ordinary directions with aligned eigenvector directions.',
+    'Mistake to avoid: a length ratio is not automatically an eigenvalue unless the transformed vector stays aligned with the original direction.',
+    'Check understanding by explaining why rectangular matrices need SVD instead of ordinary eigenvectors of A.',
+  ),
   'qr-decomposition': cardSet(
     'QR decomposition solves the problem of building a stable orthonormal basis for the columns of a matrix.',
     'Q gives clean perpendicular axes; R records how the original columns are assembled from those axes.',
