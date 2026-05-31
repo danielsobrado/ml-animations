@@ -1651,6 +1651,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move the threshold and identify which points change class first.',
         successCriteria: 'You can explain each flip by comparing its probability with the threshold.',
       },
+      {
+        id: 'logit-coefficient-audit',
+        title: 'Audit logits and coefficients',
+        prompt: 'Change weights and bias, then explain how each feature changes the logit, sigmoid score, and linear boundary.',
+        successCriteria: 'You can interpret coefficients as logit or log-odds effects without treating them as automatic causal effects.',
+      },
+      {
+        id: 'threshold-calibration-report',
+        title: 'Report threshold readiness',
+        prompt: 'Write a short deployment note with validation loss, score distribution, calibration check, threshold policy, and expected cost tradeoff.',
+        successCriteria: 'You can separate fitted probabilities from the decision threshold and justify the cutoff with validation evidence.',
+      },
     ],
   },
   'classification-metrics': {
