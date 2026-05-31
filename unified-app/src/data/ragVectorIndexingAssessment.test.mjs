@@ -26,6 +26,11 @@ test('rag vector indexing has a complete curated 100-question assessment with fo
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'choose-index',
+    'plot-recall-latency',
+    'debug-index-miss',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -127,6 +132,31 @@ test('rag vector indexing assessment avoids unsafe misconception keying', () => 
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('rag vector indexing misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('rag-vector-indexing');
+  const trapIds = [
+    'ragindex-076-false-equivalence',
+    'ragindex-077-false-reranker',
+    'ragindex-078-false-breadth',
+    'ragindex-079-false-exact',
+    'ragindex-080-false-ivf',
+    'ragindex-081-false-hnsw',
+    'ragindex-082-false-metric',
+    'ragindex-083-false-filter',
+    'ragindex-084-false-benchmark',
+    'ragindex-085-false-cache',
+    'ragindex-086-false-hybrid',
+    'ragindex-087-false-monitoring',
+    'ragindex-088-false-topk',
+    'ragindex-089-false-scale',
+    'ragindex-090-trap-summary',
+  ];
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
