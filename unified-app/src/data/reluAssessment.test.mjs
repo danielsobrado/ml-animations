@@ -25,7 +25,10 @@ test('relu has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('relu');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['cross-zero', 'trace-dot-bias-gate', 'diagnose-dead-gate-risk'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -122,6 +125,36 @@ test('relu assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('relu assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('relu');
+  const misconceptionPatterns = [
+    /turns any hidden value into a calibrated probability/i,
+    /preserves negative inputs unchanged/i,
+    /negative branch has local derivative one/i,
+    /always harmless because zeros are sparse/i,
+    /guarantees deep networks will avoid all gradient problems/i,
+    /bounded above by one/i,
+    /differentiable with one smooth derivative at zero/i,
+    /always the correct final activation for classification/i,
+    /every zero relu output proves a data pipeline bug/i,
+    /all examples in a batch must share the same relu mask/i,
+    /bias has no effect on whether a relu gate opens/i,
+    /every initialization scale works equally well/i,
+    /in-place relu is always safe/i,
+    /more zero activations are always better/i,
+    /cannot be the source of training bugs/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
