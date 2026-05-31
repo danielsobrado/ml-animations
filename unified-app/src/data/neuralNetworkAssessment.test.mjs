@@ -144,6 +144,7 @@ test('neural network assessment avoids unsafe misconception keying', () => {
 
 test('neural network assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('neural-network');
+  const trapQuestions = quiz.slice(75, 90);
   const expectedTrapIds = [
     'nn-076-trap-depth',
     'nn-077-trap-activation',
@@ -179,7 +180,8 @@ test('neural network assessment keeps misconception traps after setup', () => {
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
 
-  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
+  assert.deepEqual(trapQuestions.map((question) => question.id), expectedTrapIds);
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'));
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -203,9 +205,10 @@ test('neural network assessment does not leak exact answers within a visible pag
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex) continue;
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !visibleText.includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
     }
