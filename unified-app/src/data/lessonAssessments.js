@@ -1766,6 +1766,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Switch between simple, balanced, and flexible models, then change sample size and noise.',
         successCriteria: 'You can explain when the dominant problem is bias versus variance from the train and validation errors.',
       },
+      {
+        id: 'error-source-decomposition',
+        title: 'Decompose error sources',
+        prompt: 'Use bias, variance, irreducible noise, train error, validation error, and gap values to name the most likely limiter.',
+        successCriteria: 'You can separate systematic underfit, sample sensitivity, and unavoidable noise before choosing a remedy.',
+      },
+      {
+        id: 'remedy-selection-drill',
+        title: 'Choose the remedy',
+        prompt: 'Given an error pattern, decide whether to add flexibility, improve features, regularize, average models, collect data, or revisit the metric.',
+        successCriteria: 'You can match the intervention to the diagnosed bias-variance failure mode without tuning on final-test feedback.',
+      },
     ],
   },
   regularization: {

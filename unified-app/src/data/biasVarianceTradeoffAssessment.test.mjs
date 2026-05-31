@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('bias variance tradeoff has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('bias-variance-tradeoff');
+  const { quiz, labs } = getLessonAssessment('bias-variance-tradeoff');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('bv-'), `question ${index + 1} should use the bv id prefix`);
+    assert.match(question.id, /^bv-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered bv id`);
+    assert.equal(Number(question.id.slice(3, 6)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, question.choices.length, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -85,9 +89,9 @@ test('bias variance assessment covers learning points in the right order', () =>
     ['decomposition', ['bias squared', 'variance', 'irreducible noise']],
     ['complexity curve', ['falls at first and can rise after variance dominates']],
     ['regularization mechanism', ['raise bias slightly while lowering variance']],
-    ['application remedy', ['regularize, simplify, average, or collect more representative data']],
+    ['application remedy', ['regularize simplify average or collect more representative data']],
     ['tricky false claims', ['claim is false']],
-    ['interview readiness', ['concept, evidence, action, and verification']],
+    ['interview readiness', ['concept evidence action and verification']],
   ];
 
   let previousIndex = -1;
@@ -155,6 +159,13 @@ test('bias variance assessment does not leak exact answers within a visible page
 
 test('bias variance assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('bias-variance-tradeoff');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be balanced: ${totals.join(', ')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
