@@ -1235,10 +1235,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: AB_TESTING_FOUNDATIONS_QUIZ,
     labs: [
       {
+        id: 'randomization-balance-audit',
+        title: 'Audit randomization balance',
+        prompt: 'Create a treatment/control split, then explain what assignment unit, eligibility, and balance checks must be valid before reading lift.',
+        successCriteria: 'You can separate randomized design validity from the observed metric result.',
+      },
+      {
         id: 'ab-decision-audit',
         title: 'Audit an A/B decision',
         prompt: 'Build a scenario where a treatment improves the primary metric but fails a guardrail. Explain the launch decision.',
         successCriteria: 'You can explain assignment, metric, guardrail, and decision threshold separately.',
+      },
+      {
+        id: 'experiment-validity-debug',
+        title: 'Debug a suspicious result',
+        prompt: 'Choose SRM, peeking, metric shopping, unit mismatch, logging failure, or interference and explain why it threatens the readout.',
+        successCriteria: 'You can name the failure mode, the assumption it breaks, and the next diagnostic check.',
       },
     ],
   },
