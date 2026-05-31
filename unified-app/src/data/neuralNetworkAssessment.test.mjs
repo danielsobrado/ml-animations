@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,15 +22,19 @@ function correctAnswer(question) {
 }
 
 test('neural network has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('neural-network');
+  const { quiz, labs } = getLessonAssessment('neural-network');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('nn-'), `question ${index + 1} should use the nn id prefix`);
+    assert.match(question.id, /^nn-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered nn id`);
+    assert.equal(Number(question.id.slice(3, 6)), index + 1, `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.equal(Number.isInteger(question.answerIndex), true, `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
@@ -79,7 +83,7 @@ test('neural network assessment covers learning points in the right order', () =
   const orderedMilestones = [
     ['purpose', ['flexible mapping']],
     ['weights', ['scales how strongly']],
-    ['bias', ['shifts the pre-activation']],
+    ['bias', ['shifts the pre activation']],
     ['activation', ['introduce nonlinearity']],
     ['hidden layer', ['intermediate representation']],
     ['loss', ['training target']],
@@ -159,6 +163,13 @@ test('neural network assessment does not leak exact answers within a visible pag
 
 test('neural network assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('neural-network');
+  const totals = [0, 0, 0];
+
+  for (const question of quiz) {
+    totals[question.answerIndex] += 1;
+  }
+
+  assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be globally balanced, saw ${totals.join('/')}`);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);

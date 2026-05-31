@@ -1941,6 +1941,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Choose one XOR input, run a forward pass, then step backward and identify where the loss signal first appears.',
         successCriteria: 'You can name the input, target, output, loss, and the first gradient-carrying layer.',
       },
+      {
+        id: 'map-layer-shapes',
+        title: 'Map layer shapes',
+        prompt: 'Pick a small batch and write the input, weight, bias, pre-activation, activation, and output shapes for one dense layer.',
+        successCriteria: 'You can explain why incompatible shapes break the layer before discussing later training tricks.',
+      },
+      {
+        id: 'review-generalization-evidence',
+        title: 'Review generalization evidence',
+        prompt: 'Compare training loss, validation loss, task metrics, calibration concerns, leakage checks, and a few error cases for a simple network.',
+        successCriteria: 'You can separate successful optimization from evidence that the model will behave well on new data.',
+      },
     ],
   },
   optimizers: {
