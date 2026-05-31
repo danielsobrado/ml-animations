@@ -1525,6 +1525,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Compare regression error and true-class probability, then name the likelihood assumption behind each loss.',
         successCriteria: 'You can connect squared error to Gaussian noise and cross-entropy to categorical likelihood.',
       },
+      {
+        id: 'outlier-and-confidence-diagnostic',
+        title: 'Diagnose loss sensitivity',
+        prompt: 'Add a regression outlier or flip an ambiguous class label, then compare squared error, absolute error, cross-entropy, and accuracy-style penalties.',
+        successCriteria: 'You can explain which loss reacts most and why that follows from the target or noise assumption.',
+      },
+      {
+        id: 'loss-selection-report',
+        title: 'Audit a loss choice',
+        prompt: 'Write a loss-selection report with target type, prediction form, likelihood assumption, optimization objective, metric alignment, diagnostics, and tradeoffs.',
+        successCriteria: 'You can justify a loss without claiming training loss alone proves production quality.',
+      },
     ],
   },
   'cross-entropy': {
