@@ -25,7 +25,10 @@ test('initialization has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('initialization');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['signal-scale', 'fan-count-variance-check', 'first-batch-telemetry-audit'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -135,6 +138,35 @@ test('initialization assessment avoids unsafe misconception keying', () => {
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('initialization assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('initialization');
+  const misconceptionPatterns = [
+    /any random initialization scale is safe/i,
+    /all-zero hidden weights are a safe default/i,
+    /xavier is always the best initializer/i,
+    /he initialization guarantees/i,
+    /depth makes initialization less important/i,
+    /normalization layers make initializer choice irrelevant/i,
+    /residual connections mean any huge random weight scale is harmless/i,
+    /single lucky initialization seed proves/i,
+    /fan-in is only a naming convention/i,
+    /huge initial biases are always helpful/i,
+    /overconfident initial logits prove/i,
+    /saturated tanh or sigmoid units always have strong gradients/i,
+    /only from one final validation score on one seed/i,
+    /bad initialization can always be fixed later/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
