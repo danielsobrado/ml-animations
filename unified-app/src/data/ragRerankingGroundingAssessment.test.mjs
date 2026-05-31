@@ -26,6 +26,11 @@ test('rag reranking grounding has a complete curated 100-question assessment wit
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'grounding-audit',
+    'isolate-reranker-effect',
+    'audit-citation-validity',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -106,7 +111,7 @@ test('rag reranking grounding assessment avoids unsafe misconception keying', ()
   const { quiz } = getLessonAssessment('rag-reranking-grounding');
   const unsafePatterns = [
     /recover relevant chunks that first-pass retrieval never returned/i,
-    /automatically a valid citation source/i,
+    /^A high-ranked chunk is automatically a valid citation source$/i,
     /only checks whether any chunk is retrieved/i,
     /always improves every production metric/i,
     /makes weak evidence safe/i,
@@ -127,6 +132,31 @@ test('rag reranking grounding assessment avoids unsafe misconception keying', ()
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('rag reranking grounding misconception traps are placed after concept scaffolding', () => {
+  const { quiz } = getLessonAssessment('rag-reranking-grounding');
+  const trapIds = [
+    'ragrank-076-false-reranker',
+    'ragrank-077-false-rank',
+    'ragrank-078-false-grounding',
+    'ragrank-079-false-strict',
+    'ragrank-080-false-lenient',
+    'ragrank-081-false-stale',
+    'ragrank-082-false-conflict',
+    'ragrank-083-false-support',
+    'ragrank-084-false-citation',
+    'ragrank-085-false-absence',
+    'ragrank-086-false-trust',
+    'ragrank-087-false-auth',
+    'ragrank-088-false-ablation',
+    'ragrank-089-false-monitor',
+    'ragrank-090-trap-summary',
+  ];
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
+  for (const question of quiz.slice(0, 75)) {
+    assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
   }
 });
 
