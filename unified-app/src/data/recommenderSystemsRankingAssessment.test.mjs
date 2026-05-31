@@ -25,7 +25,10 @@ test('recommender systems ranking has a complete curated 100-question assessment
   const { quiz, labs } = getLessonAssessment('recommender-systems-ranking-track');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['recommender-systems-ranking-track-scenario-lab', 'ranking-metric-audit', 'feedback-loop-guardrails'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -136,6 +139,35 @@ test('recommender systems ranking assessment avoids unsafe misconception keying'
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('recommender systems ranking assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('recommender-systems-ranking-track');
+  const misconceptionPatterns = [
+    /only predicts labels and does not affect future data/i,
+    /every unobserved user-item pair is a true negative/i,
+    /every click is an unbiased measure/i,
+    /ranking position never changes/i,
+    /most popular items are always/i,
+    /always guarantees a better online/i,
+    /cold start is solved automatically/i,
+    /exploration is always useless/i,
+    /accuracy on isolated pairs is enough/i,
+    /ndcg ignores/i,
+    /coverage and diversity never matter/i,
+    /interactions that happen after the recommendation timestamp/i,
+    /only one metric and no guardrails/i,
+    /no user or item group can be harmed/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|leakage|incorrect/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
