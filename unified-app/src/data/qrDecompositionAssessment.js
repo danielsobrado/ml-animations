@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^qr-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`qr-decomposition:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const QR_DECOMPOSITION_QUIZ = Object.freeze([
@@ -23,7 +34,7 @@ export const QR_DECOMPOSITION_QUIZ = Object.freeze([
   q('qr-011-least-squares-use', 'Foundation', 'Why is QR useful for least squares?', 'It solves through orthogonal projection and a triangular system', ['It guarantees the residual is always zero', 'It requires the matrix to be square SPD'], 'For tall full-rank A, QR turns Ax approx b into R x = Q^T b.'),
   q('qr-012-normal-equation-risk', 'Foundation', 'What risk does QR avoid compared with normal equations?', 'Forming A^T A can square the condition number', ['Q cannot preserve lengths', 'R must be dense below the diagonal'], 'Orthogonal transformations are numerically safer than explicitly squaring the design matrix.'),
   q('qr-013-full-shape', 'Foundation', 'For full QR of an m by n matrix with m >= n, what shape can Q have?', 'm by m with a matching m by n R', ['n by m with no triangular factor', 'one scalar for every matrix'], 'Full QR keeps a complete orthonormal basis for the whole output space.'),
-  q('qr-014-reduced-shape', 'Foundation', 'For reduced QR of a full-column-rank m by n matrix, what shape is Q?', 'm by n', ['n by n labels only', 'm by m always'], 'Reduced QR keeps only the Q columns needed to span Col(A).'),
+  q('qr-014-reduced-shape', 'Foundation', 'For reduced QR of a full-column-rank m by n matrix, what shape is Q?', 'm rows and n orthonormal columns', ['n by n labels only', 'm by m always'], 'Reduced QR keeps only the Q columns needed to span Col(A).'),
   q('qr-015-r-diagonal', 'Foundation', 'What does a zero or tiny diagonal entry in R warn about?', 'Dependent or nearly dependent columns', ['Guaranteed perfect prediction', 'Nonnegative topic weights'], 'Small pivots in R mark directions that are hard to solve reliably.'),
   q('qr-016-projection-view', 'Foundation', 'What projector comes from a reduced Q with orthonormal columns?', 'Q Q^T projects onto Col(A)', ['R R^T projects onto labels', 'Q R deletes the column space'], 'An orthonormal basis makes projection onto the span easy.'),
   q('qr-017-back-substitution', 'Foundation', 'Why is upper triangular R convenient after projection?', 'R x = c can be solved by back substitution', ['It removes the need for b', 'It makes all columns independent by definition'], 'Triangular systems solve one unknown at a time from the bottom upward.'),
@@ -46,7 +57,7 @@ export const QR_DECOMPOSITION_QUIZ = Object.freeze([
   q('qr-033-full-q-extra', 'Mechanism', 'What do the extra columns in full Q represent?', 'An orthonormal completion outside Col(A)', ['Copies of the original feature columns', 'Rows of R below the diagonal'], 'Full Q spans the entire output space, not just the columns of A.'),
   q('qr-034-rank-deficiency', 'Mechanism', 'What happens to plain QR when A is rank deficient?', 'R can have zero or tiny diagonal entries', ['Q loses every unit length automatically', 'A becomes symmetric positive definite'], 'Dependent columns make triangular back substitution ill-posed.'),
   q('qr-035-pivoted-qr', 'Mechanism', 'What does column-pivoted QR add?', 'A column ordering that exposes rank and improves robustness', ['A nonnegative constraint on Q', 'A guarantee of zero residual'], 'Pivoting moves informative independent columns earlier.'),
-  q('qr-036-permutation-factor', 'Mechanism', 'How is pivoted QR often written?', 'A P = Q R', ['A + P = Q R', 'P = Q^T b only'], 'The permutation P records which columns were chosen first.'),
+  q('qr-036-permutation-factor', 'Mechanism', 'How is pivoted QR often written?', 'A P = Q R', ['A minus P equals Q R', 'P = Q^T b only'], 'The permutation P records which columns were chosen first.'),
   q('qr-037-condition-link', 'Mechanism', 'How does QR compare with normal equations on conditioning?', 'QR avoids replacing kappa(A) with roughly kappa(A)^2', ['QR always makes kappa equal zero', 'QR requires worse conditioning than A^T A'], 'The normal-equation matrix can be much more ill-conditioned than the original A.'),
   q('qr-038-r-sensitivity', 'Mechanism', 'What does an ill-conditioned R imply?', 'Small data changes can cause large coefficient changes', ['The residual must be negative', 'Q is no longer orthonormal by definition'], 'R carries the same difficult column dependence that A had.'),
   q('qr-039-column-scaling', 'Mechanism', 'Why can feature scaling still matter before QR regression?', 'Poorly scaled columns can worsen conditioning and coefficient interpretation', ['Scaling makes Q non-orthogonal every time', 'QR ignores all numeric magnitudes'], 'QR helps stability, but it does not remove all modeling and scaling concerns.'),

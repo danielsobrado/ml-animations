@@ -1102,6 +1102,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Follow the animation through the second Gram-Schmidt step and identify the projection that is removed.',
         successCriteria: 'You can explain how q2 becomes orthogonal to q1 and where R stores the projection coefficient.',
       },
+      {
+        id: 'verify-qr-structure',
+        title: 'Verify QR structure',
+        prompt: 'Use the animation to check A = QR, Q^T Q = I, and R upper triangular for the 2 by 2 example.',
+        successCriteria: 'You can point to the orthonormal Q factor, the upper-triangular R factor, and the product that reconstructs A.',
+      },
+      {
+        id: 'connect-qr-least-squares',
+        title: 'Connect QR to least squares',
+        prompt: 'Use the Practice Lab and assessment scenarios to explain why QR solves tall least-squares problems without forming A^T A.',
+        successCriteria: 'You can describe the path from Q^T b to a triangular R solve and name the stability warning for normal equations.',
+      },
     ],
   },
   svd: {
