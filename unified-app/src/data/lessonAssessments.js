@@ -52,6 +52,7 @@ import { LOGISTIC_REGRESSION_QUIZ } from './logisticRegressionAssessment.js';
 import { LLM_TRAINING_OBJECTIVES_QUIZ } from './llmTrainingObjectivesAssessment.js';
 import { LONG_CONTEXT_FRONTIER_MODELS_QUIZ } from './longContextFrontierModelsAssessment.js';
 import { LOSS_FUNCTIONS_LIKELIHOODS_QUIZ } from './lossFunctionsLikelihoodsAssessment.js';
+import { LSTM_QUIZ } from './lstmAssessment.js';
 import { MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ } from './maximumLikelihoodEstimationAssessment.js';
 import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
@@ -1956,6 +1957,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Normalize a shifted token',
         prompt: 'Choose the shifted token, inspect mean and standard deviation, then explain what gamma and beta restore after normalization.',
         successCriteria: 'You can distinguish the raw token shift from the normalized feature pattern and the learned affine output.',
+      },
+    ],
+  },
+  lstm: {
+    quiz: LSTM_QUIZ,
+    labs: [
+      {
+        id: 'trace-gated-memory',
+        title: 'Trace gated memory',
+        prompt: 'Step through the forget, input, candidate, and output gates, then explain how the cell state and hidden state change across two time steps.',
+        successCriteria: 'You can distinguish stored memory from exposed hidden output and identify which gate caused each change.',
       },
     ],
   },
