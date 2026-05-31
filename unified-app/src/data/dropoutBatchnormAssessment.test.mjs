@@ -25,7 +25,10 @@ test('dropout batchnorm has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('dropout-batchnorm');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['mode-switch', 'batchnorm-affine-trace', 'state-and-small-batch-audit'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -119,6 +122,35 @@ test('dropout batchnorm assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim|reject|overclaim|too absolute/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('dropout batchnorm assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('dropout-batchnorm');
+  const misconceptionPatterns = [
+    /interchangeable because both improve training/i,
+    /keep randomly masking units at serving time/i,
+    /use test-set batch statistics to tune/i,
+    /removes the need for initialization, validation, and regularization/i,
+    /more dropout always fixes/i,
+    /must always appear in every layer/i,
+    /works identically no matter how small/i,
+    /leaving the model in training mode during validation or serving/i,
+    /saving weights is enough/i,
+    /fixed constants that never learn/i,
+    /batchnorm regularization noise means dropout can never be useful/i,
+    /random dropout masks prove validation is broken/i,
+    /fitting normalization behavior using validation or test outcomes/i,
+    /guarantees calibrated probabilities/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|reject|overclaim|too absolute|too narrow|mistake|risks/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
