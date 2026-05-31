@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('rag retrieval evaluation has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('rag-retrieval-evaluation');
+test('rag retrieval evaluation has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('rag-retrieval-evaluation');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('rageval-'), `question ${index + 1} should use the rageval id prefix`);
+    assert.match(question.id, /^rageval-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(8, 11)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('rag retrieval evaluation assessment avoids duplicate prompts and correct answers', () => {
@@ -72,14 +83,14 @@ test('rag retrieval evaluation assessment covers learning points in the right or
   const milestones = [
     ['purpose', ['knowing whether answer evidence actually reached the model']],
     ['chunking role', ['what evidence can be retrieved as candidate chunks']],
-    ['metric intro', ['rank-sensitive relevance']],
+    ['metric intro', ['rank sensitive relevance']],
     ['reranker limit', ['reranker cannot rescue a relevant chunk']],
-    ['mechanism summary', ['recall@k for coverage', 'mrr for first useful rank', 'ndcg for rank-sensitive relevance']],
+    ['mechanism summary', ['recall k for coverage', 'mrr for first useful rank', 'ndcg for rank sensitive relevance']],
     ['application missing evidence', ['refund answer is wrong']],
-    ['production review', ['chunking, top-k, reranking, and metrics']],
+    ['production review', ['chunking top k reranking and metrics']],
     ['tricky false claims', ['generation claim is false']],
-    ['interview debugging', ['retrieved, reranked high, packed, fresh, and cited correctly']],
-    ['interview readiness', ['production-ready retrieval evaluation takeaway']],
+    ['interview debugging', ['retrieved reranked high packed fresh and cited correctly']],
+    ['interview readiness', ['production ready retrieval evaluation takeaway']],
   ];
 
   let previousIndex = -1;

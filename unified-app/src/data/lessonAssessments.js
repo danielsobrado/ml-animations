@@ -2811,6 +2811,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Change chunk size, overlap, top-k, and reranking, then pick the setting with the clearest grounded evidence.',
         successCriteria: 'You can justify the setting with recall@k, MRR, nDCG, and the text of the top result.',
       },
+      {
+        id: 'metric-tradeoff-table',
+        title: 'Build a metric tradeoff table',
+        prompt: 'Compare at least three retrieval settings by recall@k, MRR, nDCG, latency, duplicate chunk rate, and whether the needed evidence is packed.',
+        successCriteria: 'You can explain when a higher first-rank score still loses because coverage, freshness, duplicates, or prompt visibility regressed.',
+      },
+      {
+        id: 'slice-regression-check',
+        title: 'Check a retrieval slice',
+        prompt: 'Pick one query slice, label the relevant chunks, run the current retrieval setting, and classify each miss as absent, low-ranked, stale, conflicting, duplicated, or dropped before generation.',
+        successCriteria: 'You can connect the slice failure to the specific retrieval, reranking, chunking, threshold, or packing control that should change.',
+      },
     ],
   },
   'rag-reranking-grounding': {
