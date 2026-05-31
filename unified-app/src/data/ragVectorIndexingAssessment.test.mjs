@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -21,20 +21,31 @@ function correctAnswer(question) {
   return question.choices[question.answerIndex];
 }
 
-test('rag vector indexing has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('rag-vector-indexing');
+test('rag vector indexing has a complete curated 100-question assessment with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('rag-vector-indexing');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('ragindex-'), `question ${index + 1} should use the ragindex id prefix`);
+    assert.match(question.id, /^ragindex-\d{3}-[a-z0-9-]+$/);
+    assert.equal(Number(question.id.slice(9, 12)), index + 1);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3);
+    assert.ok(Number.isInteger(question.answerIndex));
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+
+  const allPositions = quiz.map((question) => question.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('rag vector indexing assessment avoids duplicate prompts and correct answers', () => {
@@ -73,13 +84,13 @@ test('rag vector indexing assessment covers learning points in the right order',
     ['purpose', ['finding similar chunks quickly when exact comparison across the whole corpus is too slow']],
     ['exact search', ['compare the query vector with every indexed chunk vector']],
     ['ann tradeoff', ['lower latency in exchange for possible recall loss']],
-    ['ivf hnsw', ['exact search, ivf, and hnsw']],
-    ['mechanism summary', ['exact scans all vectors; ivf probes buckets; hnsw explores a neighbor graph']],
-    ['small corpus application', ['2,000 chunks and strict recall needs']],
-    ['production review', ['corpus scale, recall, latency, memory, freshness, and filters']],
+    ['ivf hnsw', ['exact search ivf and hnsw']],
+    ['mechanism summary', ['exact scans all vectors ivf probes buckets hnsw explores a neighbor graph']],
+    ['small corpus application', ['2 000 chunks and strict recall needs']],
+    ['production review', ['corpus scale recall latency memory freshness and filters']],
     ['tricky false claims', ['ann claim is false']],
     ['interview evaluation', ['compare ann against exact baselines']],
-    ['interview readiness', ['production-ready vector indexing takeaway']],
+    ['interview readiness', ['production ready vector indexing takeaway']],
   ];
 
   let previousIndex = -1;

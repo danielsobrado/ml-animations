@@ -2788,6 +2788,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Compare exact, IVF, and HNSW modes for a small corpus, a large corpus, and a high-recall support bot.',
         successCriteria: 'You can justify the choice using latency, recall risk, and corpus scale.',
       },
+      {
+        id: 'plot-recall-latency',
+        title: 'Plot recall and latency',
+        prompt: 'Run exact, IVF, and HNSW settings across low and high search breadth, then compare recall, P95 latency, memory pressure, and candidate misses against an exact baseline.',
+        successCriteria: 'You can identify the operating point where approximate search becomes fast enough without losing required evidence.',
+      },
+      {
+        id: 'debug-index-miss',
+        title: 'Debug an index miss',
+        prompt: 'Given a missing answer chunk, trace embeddings, metric choice, ANN breadth, filters, index freshness, hybrid lexical fallback, reranker input, and packed context.',
+        successCriteria: 'You can distinguish an upstream indexing miss from a downstream reranking or packing failure and name the safest fix.',
+      },
     ],
   },
   'rag-retrieval-evaluation': {
