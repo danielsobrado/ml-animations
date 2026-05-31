@@ -1,12 +1,23 @@
 function q(id, level, prompt, correct, distractors, explanation) {
+  const questionNumber = Number(id.match(/^mle-(\d{3})-/)?.[1] || 1);
+  const desiredFinalIndex = (questionNumber - 1) % 3;
+  const registryRotation = stableHash(`maximum-likelihood-estimation:${id}`) % 3;
+  const answerIndex = (desiredFinalIndex + registryRotation) % 3;
+  const choices = [...distractors];
+  choices.splice(answerIndex, 0, correct);
+
   return {
     id,
     level,
     prompt,
-    choices: [correct, ...distractors],
-    answerIndex: 0,
+    choices,
+    answerIndex,
     explanation,
   };
+}
+
+function stableHash(value) {
+  return [...String(value)].reduce((hash, char) => ((hash * 31) + char.charCodeAt(0)) >>> 0, 0);
 }
 
 export const MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ = Object.freeze([
@@ -72,7 +83,7 @@ export const MAXIMUM_LIKELIHOOD_ESTIMATION_QUIZ = Object.freeze([
   q('mle-058-scenario-gaussian-shifted', 'Application', 'All measurements shift upward around 6.7. What should happen to mu MLE?', 'It shifts upward with the sample mean', ['It stays at the old dataset mean', 'It becomes the Bernoulli success rate'], 'The MLE follows the observed continuous measurements.'),
   q('mle-059-scenario-noisy', 'Application', 'A Gaussian dataset becomes noisier. What should you inspect?', 'Residual spread and whether the fixed-sigma assumption is credible', ['Only the number of successes', 'Only the first row id'], 'Noisy data can make assumed likelihood less appropriate.'),
   q('mle-060-scenario-candidate-mu', 'Application', 'A candidate mean is far from every Gaussian observation. What happens?', 'Large residuals make its log-likelihood worse', ['It always becomes the MLE', 'Residuals are ignored by Gaussian likelihood'], 'Gaussian fit penalizes squared distance from observations.'),
-  q('mle-061-scenario-nll', 'Application', 'The log-likelihood is -12.5. What is the NLL?', '12.5', ['-12.5', '0.0'], 'Negative log-likelihood flips the sign for minimization.'),
+  q('mle-061-scenario-nll', 'Application', 'The log-likelihood is -12.5. What is the NLL?', '12.5', ['Keep the same signed objective', '0.0'], 'Negative log-likelihood flips the sign for minimization.'),
   q('mle-062-scenario-minimize', 'Application', 'Two candidates have NLL 4.0 and 9.0. Which is better?', 'The candidate with NLL 4.0', ['The candidate with NLL 9.0', 'They are tied because NLL is negative'], 'Lower NLL means higher log-likelihood.'),
   q('mle-063-scenario-relative', 'Application', 'A candidate has relative likelihood 0.05. What does that mean?', 'It is much less supported than the MLE under the model', ['It is five times better than the MLE', 'It is the prior probability of the parameter'], 'Relative likelihood compares a candidate with the maximum.'),
   q('mle-064-scenario-zero', 'Application', 'A candidate p=0 predicts impossible failures when failures occurred. What is the issue?', 'It assigns zero probability to observed data', ['It is automatically selected', 'It has the largest log value'], 'Zero likelihood means the candidate cannot explain the observations.'),

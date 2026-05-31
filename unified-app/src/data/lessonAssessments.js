@@ -1502,6 +1502,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move the candidate probability across the observed rate and watch relative likelihood rise and fall.',
         successCriteria: 'You can identify the candidate closest to the maximum likelihood estimate.',
       },
+      {
+        id: 'likelihood-curve-diagnostic',
+        title: 'Diagnose a likelihood curve',
+        prompt: 'Compare a broad and sharp likelihood curve, then explain what sample size, candidate fit, and model assumptions imply about uncertainty.',
+        successCriteria: 'You can interpret likelihood shape without claiming the model family is proven true.',
+      },
+      {
+        id: 'mle-report-audit',
+        title: 'Audit an MLE report',
+        prompt: 'Write a report with data, assumed family, likelihood or NLL, MLE, relative likelihood, diagnostics, validation, and caveats.',
+        successCriteria: 'You can present an MLE fit without confusing likelihood with posterior probability or production validity.',
+      },
     ],
   },
   'loss-functions-likelihoods': {
