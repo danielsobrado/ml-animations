@@ -61,6 +61,7 @@ import { MAX_POOLING_QUIZ } from './maxPoolingAssessment.js';
 import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js';
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
+import { MIXTURE_OF_EXPERTS_QUIZ } from './mixtureOfExpertsAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OMNI_MULTIMODAL_ARCHITECTURES_QUIZ } from './omniMultimodalArchitecturesAssessment.js';
@@ -2037,6 +2038,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Trace one GPT-2 token prediction',
         prompt: 'Start from a short prompt, tokenize it with BPE, add positions, apply a causal attention mask, and choose a next-token decoding strategy.',
         successCriteria: 'You can explain how tokenization, positions, masked blocks, logits, KV caching, and sampling affect the next token.',
+      },
+    ],
+  },
+  moe: {
+    quiz: MIXTURE_OF_EXPERTS_QUIZ,
+    labs: [
+      {
+        id: 'route-token-batch',
+        title: 'Route a token batch',
+        prompt: 'Choose an expert count and top-k value, generate a batch, then explain which experts were selected and whether the load pattern looks balanced.',
+        successCriteria: 'You can connect router scores, top-k dispatch, active expert count, and load bars to the MoE tradeoff.',
       },
     ],
   },
