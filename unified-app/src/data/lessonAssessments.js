@@ -65,6 +65,7 @@ import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js'
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { MIXTURE_OF_EXPERTS_QUIZ } from './mixtureOfExpertsAssessment.js';
+import { MULTI_HEAD_LATENT_ATTENTION_QUIZ } from './multiHeadLatentAttentionAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
 import { NEURAL_NETWORK_QUIZ } from './neuralNetworkAssessment.js';
 import { OMNI_MULTIMODAL_ARCHITECTURES_QUIZ } from './omniMultimodalArchitecturesAssessment.js';
@@ -581,7 +582,8 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'multi-head-latent-attention': {
-    quiz: [
+    quiz: MULTI_HEAD_LATENT_ATTENTION_QUIZ,
+    legacyQuiz: [
       {
         id: 'mla-kv-cache-growth',
         level: 'Foundation',
