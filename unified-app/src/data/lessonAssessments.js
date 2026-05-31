@@ -37,6 +37,7 @@ import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
 import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
 import { FRONTIER_EVALUATION_SAFETY_QUIZ } from './frontierEvaluationSafetyAssessment.js';
 import { FRONTIER_LLM_ARCHITECTURE_OVERVIEW_QUIZ } from './frontierLlmArchitectureOverviewAssessment.js';
+import { FRONTIER_MOE_SYSTEMS_QUIZ } from './frontierMoeSystemsAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
 import { GLOVE_QUIZ } from './gloveAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
@@ -2061,6 +2062,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Classify frontier paper signals',
         prompt: 'Pick three paper signal cards, then map each one to the changed bottleneck, active components, and new failure mode to audit.',
         successCriteria: 'You can distinguish architecture changes from decoding controls and name the tradeoff for each selected family.',
+      },
+    ],
+  },
+  'frontier-moe-systems': {
+    quiz: FRONTIER_MOE_SYSTEMS_QUIZ,
+    labs: [
+      {
+        id: 'audit-frontier-moe-system',
+        title: 'Audit a frontier MoE system',
+        prompt: 'Choose one preset, compute active versus total footprint, inspect routing and load metrics, then diagnose the most likely failure mode and fix path.',
+        successCriteria: 'You can connect top-k, shared experts, capacity factor, all-to-all dispatch, failure metrics, and distillation signals to a concrete MoE audit.',
       },
     ],
   },
