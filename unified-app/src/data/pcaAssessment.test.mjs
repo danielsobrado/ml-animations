@@ -130,6 +130,23 @@ test('pca assessment avoids unsafe misconception keying', () => {
 
 test('pca assessment marks misconceptions as traps after setup', () => {
   const { quiz } = getLessonAssessment('pca');
+  const trapIds = [
+    'pca-076-high-variance-trap',
+    'pca-077-causality-trap',
+    'pca-078-sign-trap',
+    'pca-079-scale-trap',
+    'pca-080-explained-accuracy-trap',
+    'pca-081-all-components',
+    'pca-082-linear-limit',
+    'pca-083-kernel-note',
+    'pca-084-outlier-trap',
+    'pca-085-small-sample-trap',
+    'pca-086-collinearity',
+    'pca-087-equal-eigenvalues',
+    'pca-088-sparse-trap',
+    'pca-089-mean-shift',
+    'pca-090-pc-origin',
+  ];
   const misconceptionPatterns = [
     /High input variance does not guarantee target relevance/i,
     /feature causally drives/i,
@@ -143,6 +160,8 @@ test('pca assessment marks misconceptions as traps after setup', () => {
     /PCA always selects the best original feature/i,
   ];
   const trapPrompt = /trap|not conclude|risky|not promise|what can happen|what kind|why might|what happens|misconception/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const text = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
