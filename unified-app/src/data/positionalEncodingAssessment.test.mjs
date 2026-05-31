@@ -37,6 +37,15 @@ test('positional encoding has a complete curated 100-question assessment', () =>
   }
 });
 
+test('positional encoding assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('positional-encoding');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('positional encoding assessment progresses from order basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('positional-encoding');
   const expectedBands = [
