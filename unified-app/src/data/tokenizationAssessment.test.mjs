@@ -25,7 +25,10 @@ test('tokenization has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('tokenization');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['compare-splits', 'trace-bpe-merge', 'debug-production-tokenizer'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +123,41 @@ test('tokenization assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('tokenization assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('tokenization');
+  const misconceptionPatterns = [
+    /assuming tokens are always the same as words/i,
+    /exactly one human word/i,
+    /requires every rare word/i,
+    /randomly remapped/i,
+    /measured only in words/i,
+    /never affects tokenization/i,
+    /always ignored by tokenizers/i,
+    /removes all sequence-length cost/i,
+    /always be treated as real content/i,
+    /interchangeable with ordinary words/i,
+    /chooses merges randomly/i,
+    /starts a new independent word/i,
+    /clean standalone concept/i,
+    /never change token ids/i,
+    /still influence the model normally/i,
+    /only changes display text/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    if (index < 75) {
+      assert.match(question.prompt, /misconception.*avoid/i, `${question.id} should scaffold any early misconception`);
+      continue;
+    }
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
