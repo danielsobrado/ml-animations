@@ -1674,6 +1674,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Move the threshold and predict which count changes before reading the metric tiles.',
         successCriteria: 'You can connect at least one threshold move to TP, FP, FN, or TN.',
       },
+      {
+        id: 'metric-denominator-audit',
+        title: 'Audit metric denominators',
+        prompt: 'Given confusion counts, compute accuracy, precision, recall, specificity, FPR, FNR, and F1 while naming each denominator.',
+        successCriteria: 'You can explain which group each metric conditions on and catch zero-denominator cases.',
+      },
+      {
+        id: 'cost-and-slice-report',
+        title: 'Report cost-sensitive metrics',
+        prompt: 'Choose metrics for an imbalanced task, then report threshold, positive class, confusion counts, slice metrics, costs, and held-out evaluation caveats.',
+        successCriteria: 'You can justify metric priorities without relying on accuracy alone or tuning on the final test set.',
+      },
     ],
   },
   'roc-pr-curves': {
