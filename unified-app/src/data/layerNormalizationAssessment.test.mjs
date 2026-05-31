@@ -134,6 +134,23 @@ test('layer normalization assessment avoids unsafe misconception keying', () => 
 
 test('layer normalization assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('layer-normalization');
+  const expectedTrapIds = [
+    'ln-076-trap-batchnorm',
+    'ln-077-trap-axis',
+    'ln-078-trap-gamma-beta',
+    'ln-079-trap-eval',
+    'ln-080-trap-universal',
+    'ln-081-trap-init',
+    'ln-082-trap-lr',
+    'ln-083-trap-rmsnorm',
+    'ln-084-trap-regularizer',
+    'ln-085-trap-one-metric',
+    'ln-086-trap-shape',
+    'ln-087-trap-outlier',
+    'ln-088-trap-batch-size',
+    'ln-089-trap-production',
+    'ln-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /needs batch running statistics just like batchnorm/i,
     /normalize across all tokens in the sequence by default/i,
@@ -151,6 +168,8 @@ test('layer normalization assessment keeps misconception traps after setup', () 
     /no state worth checking/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim|reject|absolute/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), expectedTrapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
