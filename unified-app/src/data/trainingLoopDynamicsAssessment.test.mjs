@@ -25,7 +25,10 @@ test('training loop dynamics has a complete curated 100-question assessment', ()
   const { quiz, labs } = getLessonAssessment('training-loop-dynamics');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['loop-diagnosis', 'batch-learning-rate-tradeoff', 'checkpoint-split-review'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -123,6 +126,35 @@ test('training loop dynamics assessment avoids unsafe misconception keying', () 
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim|too narrow/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('training loop dynamics assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('training-loop-dynamics');
+  const misconceptionPatterns = [
+    /lower training loss always means better deployed/i,
+    /validation batches should normally update/i,
+    /tune repeatedly on the test set/i,
+    /larger batch is always better/i,
+    /one bad mini-batch proves/i,
+    /higher learning rate always trains faster/i,
+    /react to one noisy validation point/i,
+    /last epoch is always the best/i,
+    /training and evaluation mode are interchangeable/i,
+    /one aggregate loss is always enough/i,
+    /one lucky run proves/i,
+    /training curves guarantee production behavior forever/i,
+    /gradient clipping fixes every/i,
+    /compute cost does not matter/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim|too narrow|unhelpful/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
