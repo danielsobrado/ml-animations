@@ -1720,6 +1720,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Switch between calibrated, overconfident, and underconfident modes, then identify the bucket with the largest gap.',
         successCriteria: 'You can compare predicted probability with observed positive rate and describe the calibration error.',
       },
+      {
+        id: 'binning-and-ece-audit',
+        title: 'Audit binning and ECE',
+        prompt: 'Given probability buckets, compute observed rates, reliability gaps, ECE contributions, Brier score intuition, and uncertainty caveats for sparse bins.',
+        successCriteria: 'You can explain how binning choices and sample size affect calibration summaries.',
+      },
+      {
+        id: 'held-out-calibration-plan',
+        title: 'Plan held-out calibration',
+        prompt: 'Choose between Platt scaling, isotonic regression, or temperature scaling, then specify train, calibration, final-test, subgroup, and monitoring roles.',
+        successCriteria: 'You can improve probability reliability without leaking final-test labels or overstating what calibration proves.',
+      },
     ],
   },
   overfitting: {

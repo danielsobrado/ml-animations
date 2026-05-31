@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,18 +22,40 @@ function correctAnswer(question) {
 }
 
 test('calibration has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('calibration');
+  const { quiz, labs } = getLessonAssessment('calibration');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('cal-'), `question ${index + 1} should use the cal id prefix`);
+    assert.match(question.id, /^cal-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered cal id`);
+    assert.equal(question.id.slice(4, 7), String(index + 1).padStart(3, '0'), `question ${index + 1} id should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map(normalized)).size, 3, `question ${index + 1} choices should be distinct`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
+  }
+});
+
+test('calibration assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('calibration');
+  const prompts = new Map();
+  const correctAnswers = new Map();
+
+  for (const [index, question] of quiz.entries()) {
+    const questionNumber = index + 1;
+    const prompt = normalized(question.prompt);
+    const answer = normalized(correctAnswer(question));
+
+    assert.ok(!prompts.has(prompt), `questions ${prompts.get(prompt)} and ${questionNumber} repeat the same prompt`);
+    assert.ok(!correctAnswers.has(answer), `questions ${correctAnswers.get(answer)} and ${questionNumber} repeat the same correct answer`);
+
+    prompts.set(prompt, questionNumber);
+    correctAnswers.set(answer, questionNumber);
   }
 });
 
@@ -76,10 +98,10 @@ test('calibration assessment covers learning points in the right order', () => {
     ['Platt scaling', ['sigmoid mapping']],
     ['isotonic regression', ['flexible monotonic mapping']],
     ['final evaluation discipline', ['after model and calibrator choices are frozen']],
-    ['subgroup checks', ['overall reliability can hide cohort-specific']],
+    ['subgroup checks', ['overall reliability can hide cohort specific']],
     ['deployment monitoring', ['fresh labeled outcomes']],
     ['tricky false claims', ['claim is false']],
-    ['interview readiness', ['production-ready calibration workflow']],
+    ['interview readiness', ['production ready calibration workflow']],
   ];
 
   let previousIndex = -1;
@@ -144,11 +166,20 @@ test('calibration assessment does not leak exact answers within a visible page',
 
 test('calibration assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('calibration');
+  const totals = [0, 0, 0];
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
     const positions = page.map((question) => question.answerIndex);
+    positions.forEach((position) => {
+      totals[position] += 1;
+    });
 
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
   }
+
+  assert.ok(
+    Math.max(...totals) - Math.min(...totals) <= 1,
+    `correct answers should be balanced across positions, got ${totals.join(', ')}`,
+  );
 });
