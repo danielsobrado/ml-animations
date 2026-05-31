@@ -1918,6 +1918,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Try a small, medium, and large learning rate and compare the loss trace.',
         successCriteria: 'You can identify which run converges, crawls, or overshoots.',
       },
+      {
+        id: 'trace-one-update',
+        title: 'Trace one update',
+        prompt: 'Pick a starting weight, compute the loss gradient, predict the next parameter after theta minus eta times gradient, then compare it with the animation step.',
+        successCriteria: 'You can explain the sign, step size, and new loss without reading ahead to later optimizer topics.',
+      },
+      {
+        id: 'diagnose-loss-curve',
+        title: 'Diagnose a loss curve',
+        prompt: 'Sketch or inspect curves for divergence, slow crawling, noisy descent, plateauing, and validation loss rising while training loss falls.',
+        successCriteria: 'You can choose a first diagnostic such as learning rate, scaling, batch size, gradient norms, or overfitting risk.',
+      },
     ],
   },
   'neural-network': {
