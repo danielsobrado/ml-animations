@@ -25,7 +25,10 @@ test('knn naive bayes svm has a complete curated 100-question assessment', () =>
   const { quiz, labs } = getLessonAssessment('knn-naive-bayes-svm');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['boundary-comparison', 'preprocessing-and-scale-check', 'hyperparameter-selection-report'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -132,6 +135,35 @@ test('knn naive bayes svm assessment avoids unsafe misconception keying', () => 
       !unsafeAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
+  }
+});
+
+test('knn naive bayes svm assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('knn-naive-bayes-svm');
+  const misconceptionPatterns = [
+    /always best for every dataset/i,
+    /scale never affects kNN/i,
+    /compact parametric boundary/i,
+    /k = 1 is always/i,
+    /always exactly true/i,
+    /zero likelihoods are never/i,
+    /always perfectly calibrated/i,
+    /scale is irrelevant for SVM/i,
+    /every future prediction is correct/i,
+    /larger C always improves/i,
+    /automatically prevents overfitting/i,
+    /automatically calibrated probabilities/i,
+    /repeated final-test retries/i,
+    /accuracy alone always chooses/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
