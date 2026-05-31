@@ -15,6 +15,6 @@ export function nextWeight(weight, learningRate) {
 
 export function learningRateStatus(learningRate) {
   if (learningRate < 0.05) return { text: 'Too slow', color: 'text-yellow-600' };
-  if (learningRate > 0.5) return { text: 'May diverge!', color: 'text-red-600' };
+  if (learningRate > 0.5) return { text: 'Oscillates', color: 'text-red-600' };
   return { text: 'Good', color: 'text-green-600' };
 }
