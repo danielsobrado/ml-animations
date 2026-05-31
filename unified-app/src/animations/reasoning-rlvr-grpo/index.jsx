@@ -872,7 +872,7 @@ export default function ReasoningRlvrGrpo() {
 
                   <div>
                     <label className="block text-[10px] font-bold uppercase text-[var(--ds-faint)] tracking-wider mb-2">
-                      Clipping Epsilon (ε): {grpoClipEpsilon}
+                      Clipping Epsilon (epsilon): {grpoClipEpsilon}
                     </label>
                     <input
                       type="range"
@@ -935,8 +935,8 @@ export default function ReasoningRlvrGrpo() {
                     </div>
                     <div className="text-right shrink-0">
                       <span className="text-[9px] block font-bold text-[var(--ds-faint)] uppercase">Group Stats</span>
-                      <span className="text-xs font-mono font-bold block">μ: {grpoCalculations.mean}</span>
-                      <span className="text-xs font-mono font-bold block text-[var(--ds-accent)]">σ: {grpoCalculations.std}</span>
+                      <span className="text-xs font-mono font-bold block">mu: {grpoCalculations.mean}</span>
+                      <span className="text-xs font-mono font-bold block text-[var(--ds-accent)]">sigma: {grpoCalculations.std}</span>
                     </div>
                   </div>
 
