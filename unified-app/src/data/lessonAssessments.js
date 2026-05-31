@@ -33,6 +33,7 @@ import { FINE_TUNING_QUIZ } from './fineTuningAssessment.js';
 import { FLASH_ATTENTION_QUIZ } from './flashAttentionAssessment.js';
 import { FRONTIER_EVALUATION_SAFETY_QUIZ } from './frontierEvaluationSafetyAssessment.js';
 import { FUNDAMENTAL_SUBSPACES_QUIZ } from './fundamentalSubspacesAssessment.js';
+import { GLOVE_QUIZ } from './gloveAssessment.js';
 import { GRADIENT_DESCENT_QUIZ } from './gradientDescentAssessment.js';
 import { GRADIENT_PROBLEMS_QUIZ } from './gradientProblemsAssessment.js';
 import { GRPO_REASONING_QUIZ } from './grpoReasoningAssessment.js';
@@ -279,6 +280,9 @@ function causalAssessment(topic, coreIdea, failureMode, labPrompt) {
 const SEEDED_LESSON_ASSESSMENTS = {
   'bag-of-words': {
     quiz: BAG_OF_WORDS_QUIZ,
+  },
+  glove: {
+    quiz: GLOVE_QUIZ,
   },
   word2vec: {
     quiz: WORD2VEC_QUIZ,
