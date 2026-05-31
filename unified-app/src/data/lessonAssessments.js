@@ -1166,10 +1166,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: BAYES_RULE_QUIZ,
     labs: [
       {
+        id: 'decompose-positive-signal',
+        title: 'Decompose one alert',
+        prompt: 'Use the population bars to separate true-positive mass, false-positive mass, and total positive evidence.',
+        successCriteria: 'You can explain the posterior as true positives divided by all positive signals.',
+      },
+      {
         id: 'rare-class-posterior',
         title: 'Audit a rare-class signal',
         prompt: 'Set a low base rate, then lower the false positive rate until the posterior becomes useful.',
         successCriteria: 'You can explain why evidence quality matters more when the class is rare.',
+      },
+      {
+        id: 'threshold-cost-check',
+        title: 'Check the action threshold',
+        prompt: 'Move the useful threshold and compare when a posterior should trigger action under different false-alarm costs.',
+        successCriteria: 'You can connect posterior probability to a decision threshold instead of treating 50 percent as universal.',
       },
     ],
   },
