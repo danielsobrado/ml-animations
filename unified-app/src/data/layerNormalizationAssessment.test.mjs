@@ -37,6 +37,15 @@ test('layer normalization has a complete curated 100-question assessment', () =>
   }
 });
 
+test('layer normalization assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('layer-normalization');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
+});
+
 test('layer normalization assessment progresses from formula basics to interview readiness', () => {
   const { quiz } = getLessonAssessment('layer-normalization');
   const expectedBands = [
