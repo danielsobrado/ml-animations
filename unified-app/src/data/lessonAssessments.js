@@ -109,6 +109,7 @@ import { TRANSFORMER_TOKEN_GENERATION_QUIZ } from './transformerTokenGenerationA
 import { TOOL_USING_REASONING_MODELS_QUIZ } from './toolUsingReasoningModelsAssessment.js';
 import { TREATMENT_EFFECTS_QUIZ } from './treatmentEffectsAssessment.js';
 import { UNET_VS_DIT_QUIZ } from './unetVsDitAssessment.js';
+import { VAE_QUIZ } from './vaeAssessment.js';
 import { WORD2VEC_QUIZ } from './word2vecAssessment.js';
 
 export const PRIORITY_ASSESSMENT_LESSON_IDS = [
@@ -2073,6 +2074,17 @@ const SEEDED_LESSON_ASSESSMENTS = {
         title: 'Audit a frontier MoE system',
         prompt: 'Choose one preset, compute active versus total footprint, inspect routing and load metrics, then diagnose the most likely failure mode and fix path.',
         successCriteria: 'You can connect top-k, shared experts, capacity factor, all-to-all dispatch, failure metrics, and distillation signals to a concrete MoE audit.',
+      },
+    ],
+  },
+  vae: {
+    quiz: VAE_QUIZ,
+    labs: [
+      {
+        id: 'trace-vae-latent-sample',
+        title: 'Trace a VAE latent sample',
+        prompt: 'Start with an input vector, produce mu and log-variance, reparameterize a latent sample, decode it, and explain the reconstruction-KL tradeoff.',
+        successCriteria: 'You can connect q(z|x), z = mu + sigma * epsilon, p(x|z), ELBO terms, beta, and generation from N(0,I).',
       },
     ],
   },
