@@ -13,7 +13,7 @@ const LEVEL_ORDER = {
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
 
@@ -22,19 +22,32 @@ function correctAnswer(question) {
 }
 
 test('flash attention has a complete curated 100-question assessment', () => {
-  const { quiz } = getLessonAssessment('flash-attention');
+  const { quiz, labs } = getLessonAssessment('flash-attention');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 3);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
-    assert.ok(question.id.startsWith('flash-'), `question ${index + 1} should use the flash id prefix`);
+    assert.match(question.id, /^flash-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the flash id format`);
+    assert.equal(Number(question.id.slice(6, 9)), index + 1, `question ${index + 1} id number should match its position`);
     assert.ok(question.prompt.length > 20, `question ${index + 1} prompt should be substantive`);
     assert.equal(question.choices.length, 3, `question ${index + 1} should have three choices`);
+    assert.equal(new Set(question.choices.map((choice) => normalized(choice))).size, 3, `question ${index + 1} should have distinct choices`);
+    assert.ok(Number.isInteger(question.answerIndex), `question ${index + 1} answer index should be an integer`);
     assert.ok(question.answerIndex >= 0 && question.answerIndex < question.choices.length, `question ${index + 1} answer index should be valid`);
     assert.ok(question.explanation.length > 30, `question ${index + 1} explanation should teach the point`);
     assert.ok(Object.hasOwn(LEVEL_ORDER, question.level), `question ${index + 1} should have a recognized level`);
   }
+});
+
+test('flash attention assessment avoids duplicate prompts and correct answers', () => {
+  const { quiz } = getLessonAssessment('flash-attention');
+  const prompts = quiz.map((question) => normalized(question.prompt));
+  const answers = quiz.map((question) => normalized(correctAnswer(question)));
+
+  assert.equal(new Set(prompts).size, prompts.length);
+  assert.equal(new Set(answers).size, answers.length);
 });
 
 test('flash attention assessment progresses from exact-attention basics to interview readiness', () => {
@@ -61,16 +74,16 @@ test('flash attention assessment covers learning points in the right order', () 
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['too much score-matrix data']],
+    ['purpose', ['too much score matrix data']],
     ['avoid full matrix', ['full n by n attention']],
     ['exactness', ['same attention result']],
     ['online softmax', ['normalize rows correctly']],
     ['running state', ['running row maximum']],
     ['mask semantics', ['causal mask']],
-    ['debug invariants', ['masking, scaling']],
+    ['debug invariants', ['masking scaling']],
     ['application validation', ['compare outputs and gradients']],
     ['tricky false claims', ['flash attention claim is false']],
-    ['interview readiness', ['production-ready flash attention takeaway']],
+    ['interview readiness', ['production ready flash attention takeaway']],
   ];
 
   let previousIndex = -1;
@@ -130,6 +143,7 @@ test('flash attention assessment does not leak exact answers within a visible pa
 
 test('flash attention assessment distributes correct-answer positions across every page', () => {
   const { quiz } = getLessonAssessment('flash-attention');
+  const globalPositionCounts = [0, 1, 2].map((slot) => quiz.filter((question) => question.answerIndex === slot).length);
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
@@ -138,4 +152,9 @@ test('flash attention assessment distributes correct-answer positions across eve
     assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
     assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
   }
+
+  assert.ok(
+    Math.max(...globalPositionCounts) - Math.min(...globalPositionCounts) <= 1,
+    `global answer positions should be balanced, got ${globalPositionCounts.join(', ')}`,
+  );
 });

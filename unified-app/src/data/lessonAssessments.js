@@ -2292,10 +2292,22 @@ const SEEDED_LESSON_ASSESSMENTS = {
     quiz: FLASH_ATTENTION_QUIZ,
     labs: [
       {
-        id: 'tile-memory-tradeoff',
-        title: 'Trace one streamed tile',
+        id: 'compare-full-vs-tile-memory',
+        title: 'Compare memory footprints',
         prompt: 'Increase sequence length and compare full score-matrix memory with tile working-set memory. Explain why the FLOPs remain attention-like while memory traffic drops.',
         successCriteria: 'You can separate exact attention computation from the memory schedule that avoids materializing N by N scores.',
+      },
+      {
+        id: 'trace-online-softmax-state',
+        title: 'Trace online softmax state',
+        prompt: 'Step through several tiles and identify where the running row maximum, normalization denominator, and output accumulator are updated.',
+        successCriteria: 'You can explain how streamed tiles still produce the same row-wise softmax result as standard attention.',
+      },
+      {
+        id: 'tune-tile-and-dtype',
+        title: 'Tune tile and dtype settings',
+        prompt: 'Change tile size, head dimension, and element type, then describe how each one changes working-set memory, bytes moved, and numerical tolerance expectations.',
+        successCriteria: 'You can connect practical kernel choices to memory fit, IO savings, and parity checks without calling Flash Attention approximate.',
       },
     ],
   },
