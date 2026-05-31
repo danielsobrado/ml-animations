@@ -1516,6 +1516,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Create a label-window or target-encoding leakage scenario and define the fix.',
         successCriteria: 'You can identify prediction time, feature time, label window, and serving parity.',
       },
+      {
+        id: 'feature-availability-contract',
+        title: 'Write a feature contract',
+        prompt: 'Define prediction time, feature time, availability time, label window, point-in-time joins, and freshness checks for one ML pipeline.',
+        successCriteria: 'You can reject a feature or aggregate that would not be available at the prediction cutoff.',
+      },
+      {
+        id: 'train-serve-parity-audit',
+        title: 'Audit train/serve parity',
+        prompt: 'Compare offline and online feature definitions, target encoding fit scope, null-rate/range checks, data owners, monitoring, and rollback steps.',
+        successCriteria: 'You can explain how contracts, parity tests, lineage, and rollback prevent silent production data failures.',
+      },
     ],
   },
   'spearman-correlation': {
