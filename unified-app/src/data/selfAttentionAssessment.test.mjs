@@ -25,7 +25,10 @@ test('self-attention has a complete curated 100-question assessment', () => {
   const { quiz, labs } = getLessonAssessment('self-attention');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(
+    labs.map((lab) => lab.id),
+    ['trace-scaled-row', 'compare-mask-temperature', 'attention-row'],
+  );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
 
   for (const [index, question] of quiz.entries()) {
@@ -120,6 +123,40 @@ test('self-attention assessment avoids unsafe misconception keying', () => {
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('self-attention assessment keeps misconception traps after setup', () => {
+  const { quiz } = getLessonAssessment('self-attention');
+  const misconceptionPatterns = [
+    /three unrelated sequences/i,
+    /fixed lookup table/i,
+    /mixed directly into the output/i,
+    /normalize over query positions/i,
+    /removes the need for softmax/i,
+    /only after values are mixed/i,
+    /automatically knows word order/i,
+    /constant cost as sequence length grows/i,
+    /fully explains the model answer/i,
+    /may only attend to itself/i,
+    /cannot change output/i,
+    /exact same relation/i,
+    /skips attention entirely/i,
+    /removes representation bias automatically/i,
+    /static, cost-free, fully explanatory heatmap/i,
+  ];
+  const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+
+  for (const [index, question] of quiz.entries()) {
+    const answer = correctAnswer(question);
+    const containsMisconception = misconceptionPatterns.some((pattern) => pattern.test(answer));
+    if (!containsMisconception) continue;
+    if (index < 75) {
+      assert.match(question.prompt, /misconception.*avoid/i, `${question.id} should scaffold any early misconception`);
+      continue;
+    }
+    assert.ok(index >= 75, `${question.id} introduces misconception too early`);
+    assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
   }
 });
 
