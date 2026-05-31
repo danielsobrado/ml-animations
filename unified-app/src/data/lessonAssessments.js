@@ -1,5 +1,6 @@
 import { allAnimations } from './animations.js';
 import { AB_TESTING_FOUNDATIONS_QUIZ } from './abTestingFoundationsAssessment.js';
+import { AGENTIC_CODING_SYSTEMS_QUIZ } from './agenticCodingSystemsAssessment.js';
 import { ATTENTION_MASKS_QUIZ } from './attentionMasksAssessment.js';
 import { ATTENTION_MECHANISM_QUIZ } from './attentionMechanismAssessment.js';
 import { BAYES_RULE_QUIZ } from './bayesRuleAssessment.js';
@@ -3093,74 +3094,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'agentic-coding-systems': {
-    quiz: [
-      {
-        id: 'coding-agent-loop',
-        prompt: 'What is the basic SWE-bench-style coding-agent task loop?',
-        choices: [
-          'Given an issue and repo, generate a patch that fixes the issue and passes target plus regression tests.',
-          'Generate a file without reading the repository.',
-          'Rewrite the whole project regardless of the issue scope.',
-        ],
-        answerIndex: 0,
-        explanation: 'The agent must use the repository and issue description to produce a patch that resolves the target bug while preserving existing behavior.',
-      },
-      {
-        id: 'fail-to-pass-purpose',
-        prompt: 'What do FAIL_TO_PASS tests check?',
-        choices: [
-          'Tests that should fail before the patch and pass after the fix.',
-          'Tests that always fail forever.',
-          'Only formatting checks for the PR title.',
-        ],
-        answerIndex: 0,
-        explanation: 'FAIL_TO_PASS tests are the direct evidence that the bug was reproduced and then fixed.',
-      },
-      {
-        id: 'pass-to-pass-purpose',
-        prompt: 'What do PASS_TO_PASS tests check?',
-        choices: [
-          'Existing functionality that should pass both before and after the patch.',
-          'Only the new bug reproduction.',
-          'Whether the model used a specific prompt template.',
-        ],
-        answerIndex: 0,
-        explanation: 'PASS_TO_PASS tests protect unrelated behavior from regressions caused by the patch.',
-      },
-      {
-        id: 'repo-navigation-purpose',
-        prompt: 'Why is repo navigation important before editing?',
-        choices: [
-          'The agent must find files, symbols, tests, and dependencies relevant to the issue.',
-          'The agent should edit random files until a visible test passes.',
-          'Repo navigation only matters after the PR is merged.',
-        ],
-        answerIndex: 0,
-        explanation: 'Good patches start with the right context; wrong-file edits are a common coding-agent failure mode.',
-      },
-      {
-        id: 'sandbox-purpose',
-        prompt: 'What does sandboxed execution protect against?',
-        choices: [
-          'Unsafe commands, uncontrolled side effects, and unreproducible environment changes.',
-          'All possible coding mistakes.',
-          'The need to run tests.',
-        ],
-        answerIndex: 0,
-        explanation: 'Sandboxes limit environmental damage and make command results more reproducible, but they do not prove code correctness by themselves.',
-      },
-      {
-        id: 'scope-drift-definition',
-        prompt: 'What is scope drift?',
-        choices: [
-          'Making changes beyond the intended task boundary.',
-          'Fixing exactly the reported issue.',
-          'Running a relevant targeted test.',
-        ],
-        answerIndex: 0,
-        explanation: 'Scope drift increases review burden and regression risk because unrelated files or behavior changed without justification.',
-      },
-    ],
+    quiz: AGENTIC_CODING_SYSTEMS_QUIZ,
     labs: [
       {
         id: 'swe-bench-loop-trace',
