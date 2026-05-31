@@ -116,7 +116,7 @@ test('leaky relu assessment avoids unsafe misconception keying', () => {
     /as exactly sparse as relu by default/i,
     /converts activations into probabilities between zero and one/i,
     /alpha = 1 gives plain relu/i,
-    /always learns alpha automatically/i,
+    /changing upstream gradient changes the forward Leaky ReLU output/i,
     /always the correct final activation/i,
     /diagnostics are unnecessary/i,
     /every framework uses the same default negative slope/i,
@@ -143,7 +143,7 @@ test('leaky relu assessment keeps misconception traps after setup', () => {
     /as exactly sparse as relu by default/i,
     /converts activations into probabilities between zero and one/i,
     /alpha = 1 gives plain relu/i,
-    /always learns alpha automatically/i,
+    /changing upstream gradient changes the forward Leaky ReLU output/i,
     /always the correct final activation/i,
     /one identical derivative on both sides/i,
     /diagnostics are unnecessary/i,
@@ -151,6 +151,9 @@ test('leaky relu assessment keeps misconception traps after setup', () => {
     /fixes dead relus without any tradeoff/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|claim/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -158,6 +161,22 @@ test('leaky relu assessment keeps misconception traps after setup', () => {
     if (!containsMisconception) continue;
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('leaky relu assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('leaky-relu');
+  const lessonScopeLeaks = [
+    /\bprelu\b/i,
+    /parametric relu/i,
+    /\belu\b/i,
+    /learned negative slope/i,
+    /learns alpha/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = normalized(`${question.prompt} ${question.choices.join(' ')} ${question.explanation}`);
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks a future activation variant`);
   }
 });
 
@@ -173,7 +192,8 @@ test('leaky relu assessment does not leak exact answers within a visible page', 
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
