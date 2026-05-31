@@ -1981,6 +1981,18 @@ const SEEDED_LESSON_ASSESSMENTS = {
         prompt: 'Switch between tiny, Xavier, He, and huge initialization while changing activation and depth.',
         successCriteria: 'You can explain which setup keeps layer variance stable and why another one vanishes or explodes.',
       },
+      {
+        id: 'fan-count-variance-check',
+        title: 'Check fan-count variance',
+        prompt: 'Choose fan-in, fan-out, activation, and depth, then predict whether Xavier or He should keep layerwise signal scale healthier.',
+        successCriteria: 'You can connect the visible standard deviation to fan counts, activation behavior, and variance propagation.',
+      },
+      {
+        id: 'first-batch-telemetry-audit',
+        title: 'Audit first-batch telemetry',
+        prompt: 'Compare initial loss, activation variance, gradient norms, NaNs, and seed-to-seed stability for two initializer choices.',
+        successCriteria: 'You can reject a lucky one-seed result when early signal diagnostics show vanishing, exploding, or saturated behavior.',
+      },
     ],
   },
   'dropout-batchnorm': {
