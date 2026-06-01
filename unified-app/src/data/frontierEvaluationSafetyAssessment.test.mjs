@@ -122,6 +122,58 @@ test('frontier evaluation safety assessment marks unsafe misconceptions as traps
   }
 });
 
+test('frontier evaluation safety assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('frontier-evaluation-safety');
+  const unrelatedScopeLeaks = [
+    /\btokenizer vocabulary\b/i,
+    /\bmodel-weight compression\b/i,
+    /\braw arithmetic exam\b/i,
+    /\bUI color contrast\b/i,
+    /\bspelling quality\b/i,
+    /\bmodel parameters per layer\b/i,
+    /\bbenchmark examples memorized\b/i,
+    /\bhidden layers\b/i,
+    /\bUI panel\b/i,
+    /\btokenizer switch\b/i,
+    /\bhidden training batch\b/i,
+    /\bbrowser cache\b/i,
+    /\bfont size\b/i,
+    /\bclassify images\b/i,
+    /\blongest passage\b/i,
+    /\btokenizer compression\b/i,
+    /\bimage captioning\b/i,
+    /\bfirst token after a prompt\b/i,
+    /\bfinal UI styling\b/i,
+    /\baverage response length\b/i,
+    /\bnumber of UI panels\b/i,
+    /\bfont rendering\b/i,
+    /\brhyme quality\b/i,
+    /\bprompt is short\b/i,
+    /\bmodel-size setting\b/i,
+    /\bspelling mistakes\b/i,
+    /\bexact punctuation\b/i,
+    /\bcapability trivia\b/i,
+    /\blonger model name\b/i,
+    /\bUI screenshot\b/i,
+    /\bhero chart\b/i,
+    /\bmodel nickname\b/i,
+    /\bvocabulary issue\b/i,
+    /\bmodel temperature\b/i,
+    /\bUI tab name\b/i,
+    /\bprompt-writing style guide\b/i,
+    /\btrivia answers\b/i,
+    /\bmodel size\b/i,
+    /\bone demo looks good\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the frontier-eval lesson scope`);
+    }
+  }
+});
+
 test('frontier evaluation safety assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('frontier-evaluation-safety');
   const pageSize = 10;
@@ -136,11 +188,11 @@ test('frontier evaluation safety assessment avoids visible-page answer leakage',
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible item on same page`);
     }
   }
 });
