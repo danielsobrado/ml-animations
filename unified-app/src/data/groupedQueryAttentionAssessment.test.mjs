@@ -10,6 +10,14 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
@@ -30,6 +38,13 @@ test('grouped-query attention has a complete curated 100-question assessment', (
     ['map-query-to-kv-groups', 'compare-mha-mqa-gqa', 'estimate-cache-bandwidth'],
   );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
+  assert.deepEqual(
+    Object.fromEntries(Object.keys(EXPECTED_LEVEL_COUNTS).map((level) => [
+      level,
+      quiz.filter((question) => question.level === level).length,
+    ])),
+    EXPECTED_LEVEL_COUNTS,
+  );
 
   for (const [index, question] of quiz.entries()) {
     assert.match(question.id, /^gqa-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the gqa id format`);
@@ -98,7 +113,7 @@ test('grouped-query attention assessment covers learning points in the right ord
   }
 });
 
-test('grouped-query attention assessment avoids unsafe misconception keying', () => {
+test('grouped-query attention assessment avoids unsafe misconception keying before explicit traps', () => {
   const { quiz } = getLessonAssessment('grouped-query-attention');
   const unsafePatterns = [
     /removes all query heads/i,
@@ -122,12 +137,33 @@ test('grouped-query attention assessment avoids unsafe misconception keying', ()
     const answer = correctAnswer(question);
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
-    assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+    const scaffoldPrompt = /misconception.*avoid/i.test(question.prompt);
+    assert.ok(
+      !unsafeAnswer || scaffoldPrompt || (index >= 75 && explicitTrapPrompt),
+      `question ${index + 1} keys a false claim outside a trap prompt`,
+    );
   }
 });
 
 test('grouped-query attention assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('grouped-query-attention');
+  const trapIds = [
+    'gqa-076-false-no-query',
+    'gqa-077-false-more-kv',
+    'gqa-078-false-mha',
+    'gqa-079-false-cache-free',
+    'gqa-080-false-attention',
+    'gqa-081-false-causal',
+    'gqa-082-false-bandwidth',
+    'gqa-083-false-quality',
+    'gqa-084-false-mqa',
+    'gqa-085-false-cache-valid',
+    'gqa-086-false-dimension',
+    'gqa-087-false-kernel',
+    'gqa-088-false-context',
+    'gqa-089-false-training',
+    'gqa-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /removes all query heads/i,
     /more kv heads than query heads/i,
@@ -146,6 +182,8 @@ test('grouped-query attention assessment keeps misconception traps after setup',
     /free quality, zero memory/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -172,8 +210,75 @@ test('grouped-query attention assessment does not leak exact answers within a vi
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
+        assert.ok(
+          !visibleText.includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
+        );
       }
+    }
+  }
+});
+
+test('grouped-query attention assessment keeps visible wording scoped to GQA mechanics', () => {
+  const { quiz } = getLessonAssessment('grouped-query-attention');
+  const genericLeakagePatterns = [
+    /full vocabulary table/i,
+    /hidden layer per token/i,
+    /vocabulary classes/i,
+    /raw prompt tokens/i,
+    /source maps/i,
+    /route icons/i,
+    /vocabulary size/i,
+    /labels to optimizer states/i,
+    /button radius/i,
+    /page title/i,
+    /validation labels/i,
+    /dark mode/i,
+    /final answer token/i,
+    /generated answers in a dataset/i,
+    /browser viewport/i,
+    /softmax\(h\) over the vocabulary/i,
+    /token id/i,
+    /vocabulary matrix/i,
+    /optimizer momentum/i,
+    /future labels/i,
+    /loss function becomes undefined/i,
+    /generated users/i,
+    /web browser/i,
+    /css/i,
+    /validation set/i,
+    /final text color/i,
+    /answer font size/i,
+    /route metadata/i,
+    /svg icons/i,
+    /class labels/i,
+    /final css class/i,
+    /app navigation items/i,
+    /final validation examples/i,
+    /package lock/i,
+    /route aliases/i,
+    /favicon/i,
+    /labels are alphabetical/i,
+    /page background color/i,
+    /ids sort lexically/i,
+    /tokenizer algorithm/i,
+    /ranking labels/i,
+    /optimizer choice/i,
+    /final answer probability/i,
+    /image dimensions/i,
+    /optimizer spelling/i,
+    /package count/i,
+    /file names/i,
+    /homepage/i,
+    /route id/i,
+    /reload the page title/i,
+  ];
+
+  for (const question of quiz) {
+    const visibleText = [question.prompt, ...question.choices, question.explanation].join(' ');
+    for (const pattern of genericLeakagePatterns) {
+      assert.doesNotMatch(visibleText, pattern, `${question.id} contains generic or off-scope visible wording`);
     }
   }
 });
@@ -184,10 +289,12 @@ test('grouped-query attention assessment distributes correct-answer positions ac
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
-    const maxSameSlot = Math.max(...[0, 1, 2].map((slot) => positions.filter((position) => position === slot).length));
+    const pagePositionCounts = [0, 1, 2].map((slot) => positions.filter((position) => position === slot).length);
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
-    assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
+    assert.ok(
+      Math.max(...pagePositionCounts) - Math.min(...pagePositionCounts) <= 1,
+      `page starting at question ${pageStart + 1} should balance answer positions, saw ${pagePositionCounts.join('/')}`,
+    );
   }
 
   assert.ok(
