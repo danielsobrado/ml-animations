@@ -121,6 +121,34 @@ test('reasoning RLVR GRPO assessment marks unsafe misconceptions as traps after 
   }
 });
 
+test('reasoning RLVR GRPO assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('reasoning-rlvr-grpo');
+  const unrelatedScopeLeaks = [
+    /\btokenizer\b/i,
+    /\bvocabulary\b/i,
+    /\bembedding\b/i,
+    /\bretrieval tables\b/i,
+    /\bkv cache\b/i,
+    /\battention weight\b/i,
+    /\bbrowser\b/i,
+    /\bscreenshot\b/i,
+    /\bicon\b/i,
+    /\bcss\b/i,
+    /\bpage layout\b/i,
+    /\bimage\b/i,
+    /\bfont size\b/i,
+    /\brecurrent network\b/i,
+    /\bnearest-neighbor\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the RLVR/GRPO lesson scope`);
+    }
+  }
+});
+
 test('reasoning RLVR GRPO assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('reasoning-rlvr-grpo');
   const pageSize = 10;
@@ -135,10 +163,10 @@ test('reasoning RLVR GRPO assessment avoids visible-page answer leakage', () => 
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
       assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
     }
   }
