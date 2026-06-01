@@ -121,6 +121,33 @@ test('long-context frontier models assessment marks unsafe misconceptions as tra
   }
 });
 
+test('long-context frontier models assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('long-context-frontier-models');
+  const unrelatedScopeLeaks = [
+    /\btokenizer\b/i,
+    /\btokenization\b/i,
+    /\bimage encoders\b/i,
+    /\bimages\b/i,
+    /\bmodel layers\b/i,
+    /\boutput vocabulary\b/i,
+    /\btraining labels\b/i,
+    /\bcss\b/i,
+    /\bfont size\b/i,
+    /\bvocabulary-size\b/i,
+    /\bui\b/i,
+    /\bactive tab\b/i,
+    /\broute icon\b/i,
+    /\bmodel vocabulary\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the long-context lesson scope`);
+    }
+  }
+});
+
 test('long-context frontier models assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('long-context-frontier-models');
   const pageSize = 10;
@@ -135,10 +162,10 @@ test('long-context frontier models assessment avoids visible-page answer leakage
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
       assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
     }
   }
