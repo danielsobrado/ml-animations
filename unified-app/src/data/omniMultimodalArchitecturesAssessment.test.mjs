@@ -122,6 +122,36 @@ test('omni multimodal architectures assessment marks unsafe misconceptions as tr
   }
 });
 
+test('omni multimodal architectures assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('omni-multimodal-architectures');
+  const unrelatedScopeLeaks = [
+    /\bcss\b/i,
+    /\bfont size\b/i,
+    /\bsql\b/i,
+    /\bbrowser window\b/i,
+    /\bcached in git\b/i,
+    /\bapp ui\b/i,
+    /\bpackage size\b/i,
+    /\bcamelcase\b/i,
+    /\bpoetic\b/i,
+    /\btext capitalization\b/i,
+    /\bsource code\b/i,
+    /\blongest words\b/i,
+    /\bui button\b/i,
+    /\bbayes\b/i,
+    /\bk-means\b/i,
+    /\balphabetically\b/i,
+    /\bfilename\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the omni lesson scope`);
+    }
+  }
+});
+
 test('omni multimodal architectures assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('omni-multimodal-architectures');
   const pageSize = 10;
@@ -136,11 +166,11 @@ test('omni multimodal architectures assessment avoids visible-page answer leakag
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible item on same page`);
     }
   }
 });
