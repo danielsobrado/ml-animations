@@ -88,7 +88,7 @@ test('llm training objectives assessment covers learning points in the right ord
     ['objective design', ['define context target loss scope data quality and evaluation']],
     ['application choice', ['match the objective to the missing behavior']],
     ['tricky false claims', ['objective claim is false']],
-    ['interview readiness', ['production ready llm objective takeaway']],
+    ['interview readiness', ['lesson ready llm objective takeaway']],
   ];
 
   let previousIndex = -1;
@@ -137,13 +137,13 @@ test('llm training objectives misconception traps are placed after concept scaff
     'ltobj-079-false-sft',
     'ltobj-080-false-preference',
     'ltobj-081-false-padding',
-    'ltobj-082-false-kl',
-    'ltobj-083-false-reward',
+    'ltobj-082-false-quality',
+    'ltobj-083-false-preference-signal',
     'ltobj-084-false-eval',
-    'ltobj-085-false-dpo',
+    'ltobj-085-false-pair-signal',
     'ltobj-086-false-instructions',
     'ltobj-087-false-data-quality',
-    'ltobj-088-false-safety',
+    'ltobj-088-false-refusal',
     'ltobj-089-false-contamination',
     'ltobj-090-tricky-summary',
   ];
@@ -152,6 +152,33 @@ test('llm training objectives misconception traps are placed after concept scaff
 
   for (const question of quiz.slice(0, 75)) {
     assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
+  }
+});
+
+test('llm training objectives assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('llm-training-objectives');
+  const lessonScopeLeaks = [
+    /\bKV[- ]?cache\b/i,
+    /\bcache\b/i,
+    /\bdeployment\b/i,
+    /\bproduction\b/i,
+    /\bretrieval\b/i,
+    /\bDPO\b/i,
+    /\bRLHF\b/i,
+    /\breward model\b/i,
+    /\bKL\b/i,
+    /\bcontinued pretraining\b/i,
+    /\bsampling\b/i,
+    /\btemperature\b/i,
+    /\bserving\b/i,
+    /\badversarial\b/i,
+    /\bkernel\b/i,
+    /\bdtype\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible objective scope`);
   }
 });
 
@@ -167,7 +194,8 @@ test('llm training objectives assessment does not leak exact answers within a vi
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
