@@ -12,10 +12,12 @@ function correctAnswer(item) {
   return item.choices[item.answerIndex];
 }
 
-test('mixture of experts assessment has 100 production-ready questions', () => {
-  const { quiz } = getLessonAssessment('moe');
+test('mixture of experts assessment has 100 curated questions with a focused lab', () => {
+  const { quiz, labs } = getLessonAssessment('moe');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 1);
+  assert.deepEqual(labs.map((lab) => lab.id), ['route-token-batch']);
   assert.equal(new Set(quiz.map((item) => item.id)).size, 100);
 
   for (const [index, item] of quiz.entries()) {
@@ -28,6 +30,13 @@ test('mixture of experts assessment has 100 production-ready questions', () => {
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
   }
+
+  const allPositions = quiz.map((item) => item.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('mixture of experts assessment avoids duplicate prompts and correct answers', () => {
@@ -65,7 +74,7 @@ test('mixture of experts assessment follows the lesson learning order', () => {
     ['active versus total', ['active parameters']],
     ['application diagnosis', ['per-expert load distribution']],
     ['misconception traps', ['statement is false']],
-    ['interview synthesis', ['production-ready MoE takeaway']],
+    ['interview synthesis', ['lesson-ready MoE takeaway']],
   ];
 
   let previous = -1;
@@ -110,6 +119,30 @@ test('mixture of experts assessment marks misconceptions as traps after setup', 
   }
 });
 
+test('mixture of experts assessment stays within basic lesson scope', () => {
+  const { quiz } = getLessonAssessment('moe');
+  const lessonScopeLeaks = [
+    /\bfrontier\b/i,
+    /\bdistillation\b/i,
+    /\bshared expert\b/i,
+    /\ball[- ]to[- ]all\b/i,
+    /\btoken dropping\b/i,
+    /\bMLA\b/,
+    /\bGQA\b/,
+    /\bKV cache\b/i,
+    /\bdiffusion\b/i,
+    /\blong context\b/i,
+    /\bdeployment\b/i,
+    /\bproduction\b/i,
+    /\bserving optimization\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = `${item.prompt} ${item.choices.join(' ')} ${item.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks frontier or non-visible MoE scope`);
+  }
+});
+
 test('mixture of experts assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('moe');
   const pageSize = 10;
@@ -119,11 +152,11 @@ test('mixture of experts assessment avoids visible-page answer leakage', () => {
     const answers = page.map((item) => normalize(correctAnswer(item)));
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingQuestions = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(answers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingQuestions.some((visibleText) => visibleText.includes(answers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible question on same page`);
     }
   }
 });
