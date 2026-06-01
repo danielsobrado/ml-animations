@@ -17,6 +17,11 @@ test('multi-head latent attention assessment has 100 curated questions', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'mini-mla-cache-sizing',
+    'mini-mla-absorption-rope',
+    'mini-mla-transmla-factorization',
+  ]);
   assert.equal(new Set(quiz.map((item) => item.id)).size, 100);
 
   for (const [index, item] of quiz.entries()) {
@@ -29,6 +34,13 @@ test('multi-head latent attention assessment has 100 curated questions', () => {
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
   }
+
+  const allPositions = quiz.map((item) => item.answerIndex);
+  const globalCounts = [0, 1, 2].map((slot) => allPositions.filter((position) => position === slot).length);
+  assert.ok(
+    Math.max(...globalCounts) - Math.min(...globalCounts) <= 1,
+    `answer positions should be globally balanced, got ${globalCounts.join(', ')}`,
+  );
 });
 
 test('multi-head latent attention assessment avoids duplicate prompts and correct answers', () => {
@@ -109,6 +121,26 @@ test('multi-head latent attention keeps misconception traps after setup', () => 
   }
 });
 
+test('multi-head latent attention assessment stays within visible MLA lesson scope', () => {
+  const { quiz } = getLessonAssessment('multi-head-latent-attention');
+  const unrelatedScopeLeaks = [
+    /\btokenizer\b/i,
+    /\bvocabulary\b/i,
+    /\boptimizer\b/i,
+    /\bMoE\b/i,
+    /\bdiffusion\b/i,
+    /\bdecision tree\b/i,
+    /\bfeed-forward\b/i,
+    /\brecurrent neural network\b/i,
+    /\btarget-model verification\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = `${item.prompt} ${item.choices.join(' ')} ${item.explanation}`;
+    assert.ok(!unrelatedScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks unrelated architecture scope`);
+  }
+});
+
 test('multi-head latent attention assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('multi-head-latent-attention');
   const pageSize = 10;
@@ -118,11 +150,11 @@ test('multi-head latent attention assessment avoids visible-page answer leakage'
     const answers = page.map((item) => normalize(correctAnswer(item)));
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingQuestions = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(answers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingQuestions.some((visibleText) => visibleText.includes(answers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible question on same page`);
     }
   }
 });
