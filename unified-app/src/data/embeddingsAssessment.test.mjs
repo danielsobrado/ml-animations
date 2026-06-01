@@ -77,14 +77,14 @@ test('embeddings assessment covers learning points in the right order', () => {
   const textByQuestion = quiz.map((question) => normalized(`${question.prompt} ${correctAnswer(question)} ${question.explanation}`));
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
-    ['purpose', ['discrete item as a dense vector']],
-    ['token lookup', ['selects a row from an embedding table']],
+    ['purpose', ['dense numerical vector']],
+    ['two dimensional display', ['easy to draw and inspect']],
     ['not truth', ['guaranteed semantic truth']],
-    ['static', ['one vector for an item']],
-    ['lookup equation', ['row i of embedding matrix']],
-    ['training rows', ['rows used by the current examples']],
-    ['retrieval application', ['query and document embeddings']],
-    ['production versioning', ['encoder tokenizer projection']],
+    ['cosine basics', ['vectors point in almost the same direction']],
+    ['word algebra steps', ['start from the king vector']],
+    ['3d inspection', ['more than one viewpoint']],
+    ['angle application', ['cosine readout should be close to 1']],
+    ['geometry caution', ['full space is perfectly separated']],
     ['tricky false claims', ['claim is false']],
     ['interview readiness', ['production ready embeddings takeaway']],
   ];
@@ -102,20 +102,20 @@ test('embeddings assessment avoids unsafe misconception keying', () => {
   const { quiz } = getLessonAssessment('embeddings');
   const unsafePatterns = [
     /only the final loss value/i,
-    /always one-hot/i,
+    /exactly one nonzero coordinate/i,
+    /only the two plotted coordinates/i,
     /guarantee identical human meaning/i,
-    /always makes embeddings better/i,
-    /identical for a token in every sentence/i,
-    /remapped without changing/i,
-    /same update every batch/i,
-    /rank embeddings identically/i,
-    /destroys all useful signal/i,
-    /proves the full space/i,
-    /fairness-neutral/i,
-    /equally well in every domain/i,
-    /removes the need for a good embedding model/i,
-    /automatically has a well-trained/i,
-    /ground truth, so downstream validation is optional/i,
+    /proves Queen by formal logic/i,
+    /can never carry useful patterns/i,
+    /vectors are perpendicular/i,
+    /maximum cosine score/i,
+    /strongly positive cosine/i,
+    /exactly the same meaning/i,
+    /clear dictionary label/i,
+    /comparison rule is irrelevant/i,
+    /changes the learned vector meanings/i,
+    /color labels alone create/i,
+    /objective truth with no need for inspection/i,
   ];
 
   for (const [index, question] of quiz.entries()) {
@@ -131,22 +131,25 @@ test('embeddings assessment keeps misconception traps after setup', () => {
   const misconceptionPatterns = [
     /treating embedding distance as guaranteed semantic truth/i,
     /only the final loss value/i,
-    /always one-hot/i,
+    /exactly one nonzero coordinate/i,
+    /only the two plotted coordinates/i,
     /guarantee identical human meaning/i,
-    /always makes embeddings better/i,
-    /identical for a token in every sentence/i,
-    /remapped without changing/i,
-    /same update every batch/i,
-    /rank embeddings identically/i,
-    /destroys all useful signal/i,
-    /proves the full space/i,
-    /fairness-neutral/i,
-    /equally well in every domain/i,
-    /removes the need for a good embedding model/i,
-    /automatically has a well-trained/i,
-    /ground truth, so downstream validation is optional/i,
+    /proves Queen by formal logic/i,
+    /can never carry useful patterns/i,
+    /vectors are perpendicular/i,
+    /maximum cosine score/i,
+    /strongly positive cosine/i,
+    /exactly the same meaning/i,
+    /clear dictionary label/i,
+    /comparison rule is irrelevant/i,
+    /changes the learned vector meanings/i,
+    /color labels alone create/i,
+    /objective truth with no need for inspection/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -158,6 +161,36 @@ test('embeddings assessment keeps misconception traps after setup', () => {
     }
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('embeddings assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('embeddings');
+  const lessonScopeLeaks = [
+    /\btokenizers?\b/i,
+    /\btokenization\b/i,
+    /\bRAG\b/i,
+    /\bretrieval\b/i,
+    /\brecommenders?\b/i,
+    /\busers?\b/i,
+    /\bproducts?\b/i,
+    /\bcontextual\b/i,
+    /\btransformers?\b/i,
+    /\battention\b/i,
+    /\blogits?\b/i,
+    /\bclassifiers?\b/i,
+    /\bcontrastive\b/i,
+    /\bmultimodal\b/i,
+    /\bbias\b/i,
+    /\bprivacy\b/i,
+    /\bfine[- ]?tuning\b/i,
+    /\bfrozen\b/i,
+    /\bindex(?:es)?\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or hidden embedding-system scope`);
   }
 });
 
@@ -173,7 +206,8 @@ test('embeddings assessment does not leak exact answers within a visible page', 
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
