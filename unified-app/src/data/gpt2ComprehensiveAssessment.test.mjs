@@ -12,10 +12,12 @@ function correctAnswer(item) {
   return item.choices[item.answerIndex];
 }
 
-test('gpt2 comprehensive assessment has 100 production-ready questions', () => {
-  const { quiz } = getLessonAssessment('gpt2-comprehensive');
+test('gpt2 comprehensive assessment has 100 lesson-ready questions with focused labs', () => {
+  const { quiz, labs } = getLessonAssessment('gpt2-comprehensive');
 
   assert.equal(quiz.length, 100);
+  assert.equal(labs.length, 1);
+  assert.deepEqual(labs.map((lab) => lab.id), ['trace-gpt2-token']);
   assert.equal(new Set(quiz.map((item) => item.id)).size, 100);
 
   for (const [index, item] of quiz.entries()) {
@@ -111,6 +113,27 @@ test('gpt2 comprehensive assessment marks misconceptions as traps after setup', 
   }
 });
 
+test('gpt2 comprehensive assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('gpt2-comprehensive');
+  const lessonScopeLeaks = [
+    /\bMoE\b/i,
+    /\bMLA\b/i,
+    /\bGRPO\b/i,
+    /\bRLHF\b/i,
+    /\bDPO\b/i,
+    /\bagentic\b/i,
+    /\bdiffusion\b/i,
+    /\btool[- ]?call\b/i,
+    /\bRAG\b/i,
+    /\bfrontier\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = `${item.prompt} ${item.choices.join(' ')} ${item.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible GPT-2 scope`);
+  }
+});
+
 test('gpt2 comprehensive assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('gpt2-comprehensive');
   const pageSize = 10;
@@ -120,11 +143,11 @@ test('gpt2 comprehensive assessment avoids visible-page answer leakage', () => {
     const answers = page.map((item) => normalize(correctAnswer(item)));
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingQuestions = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(answers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingQuestions.some((questionText) => questionText.includes(answers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible question on same page`);
     }
   }
 });
