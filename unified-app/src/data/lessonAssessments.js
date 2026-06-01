@@ -71,6 +71,7 @@ import { MATRIX_DECOMPOSITIONS_QUIZ } from './matrixDecompositionsAssessment.js'
 import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js';
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { MIXTURE_OF_EXPERTS_QUIZ } from './mixtureOfExpertsAssessment.js';
+import { MODEL_DEBUGGING_QUIZ } from './modelDebuggingAssessment.js';
 import { MULTI_HEAD_LATENT_ATTENTION_QUIZ } from './multiHeadLatentAttentionAssessment.js';
 import { MULTIMODAL_LLM_QUIZ } from './multimodalLlmAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
@@ -3337,41 +3338,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'model-debugging': {
-    quiz: [
-      {
-        id: 'check-order',
-        prompt: 'What should you verify first when an incident appears only in production?',
-        choices: [
-          'The data and serving stages that changed from validation conditions',
-          'Only the last trained checkpoint',
-          "Only the final confusion matrix on today's batch",
-        ],
-        answerIndex: 0,
-        explanation: 'A disciplined pipeline check is needed to localize whether drift comes from data, serving, or training.',
-      },
-      {
-        id: 'slice-target',
-        prompt: 'If one subgroup has much higher error, the first interpretation is usually:',
-        choices: [
-          'A local failure mode that may be hidden in aggregate metrics',
-          'An unrelated random artifact with no operational impact',
-          'A model architecture mismatch that always requires bigger capacity',
-        ],
-        answerIndex: 0,
-        explanation: 'Slicing often reveals failures that global summaries smooth over.',
-      },
-      {
-        id: 'intervention-safety',
-        prompt: 'Why is a single global threshold tweak risky as a first fix?',
-        choices: [
-          'It can hide a subgroup error and increase inequality across traffic slices',
-          'It is equivalent to changing the data split strategy',
-          'It never affects precision or recall',
-        ],
-        answerIndex: 0,
-        explanation: 'Threshold tuning redistributes errors, so it can fix one slice while worsening others.',
-      },
-    ],
+    quiz: MODEL_DEBUGGING_QUIZ,
     labs: [
       {
         id: 'debug-loop',
