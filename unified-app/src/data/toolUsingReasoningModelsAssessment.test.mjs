@@ -125,6 +125,28 @@ test('tool-using reasoning models assessment marks unsafe misconceptions as trap
   }
 });
 
+test('tool-using reasoning models assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('tool-using-reasoning-models');
+  const unrelatedScopeLeaks = [
+    /\bparameter tensor\b/i,
+    /\btokenizer merges\b/i,
+    /\blongest name\b/i,
+    /\bone page\b/i,
+    /\blowercase\b/i,
+    /\btoo many search terms\b/i,
+    /\benough adjectives\b/i,
+    /\bfunction name is short\b/i,
+    /\bshorter than one sentence\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the tool-use lesson scope`);
+    }
+  }
+});
+
 test('tool-using reasoning models assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('tool-using-reasoning-models');
   const pageSize = 10;
@@ -139,11 +161,11 @@ test('tool-using reasoning models assessment avoids visible-page answer leakage'
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible item on same page`);
     }
   }
 });
