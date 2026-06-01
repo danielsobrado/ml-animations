@@ -162,6 +162,29 @@ test('fine tuning misconception traps are placed after concept scaffolding', () 
   }
 });
 
+test('fine tuning assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('fine-tuning');
+  const lessonScopeLeaks = [
+    /\bspeculative\b/i,
+    /\bdiffusion\b/i,
+    /\bMoE\b/,
+    /\bmulti[- ]?head latent\b/i,
+    /\bMLA\b/,
+    /\bRoPE\b/,
+    /\bKV cache\b/i,
+    /\btool[- ]?call\b/i,
+    /\bagentic\b/i,
+    /\bGRPO\b/,
+    /\bPPO\b/,
+    /\bRLVR\b/,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks unrelated fine-tuning scope`);
+  }
+});
+
 test('fine tuning assessment does not leak exact answers within a visible page', () => {
   const { quiz } = getLessonAssessment('fine-tuning');
 
@@ -174,7 +197,8 @@ test('fine tuning assessment does not leak exact answers within a visible page',
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
