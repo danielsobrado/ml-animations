@@ -83,7 +83,7 @@ test('tokenization assessment covers learning points in the right order', () => 
     ['tokens not words', ['same as words']],
     ['pipeline', ['normalize text']],
     ['bpe', ['frequent adjacent pieces']],
-    ['padding and masks', ['padding attention mask']],
+    ['wordpiece continuation', ['continuation within the word']],
     ['production checks', ['tokenizer version']],
     ['tricky false claims', ['claim is false']],
     ['interview readiness', ['production ready tokenization takeaway']],
@@ -108,8 +108,8 @@ test('tokenization assessment avoids unsafe misconception keying', () => {
     /never affects tokenization/i,
     /always ignored by tokenizers/i,
     /removes all sequence-length cost/i,
-    /always be treated as real content/i,
-    /interchangeable with ordinary words/i,
+    /ordinary text to copy into the final word/i,
+    /successfully found a specific known subword/i,
     /chooses merges randomly/i,
     /starts a new independent word/i,
     /clean standalone concept/i,
@@ -137,8 +137,8 @@ test('tokenization assessment keeps misconception traps after setup', () => {
     /never affects tokenization/i,
     /always ignored by tokenizers/i,
     /removes all sequence-length cost/i,
-    /always be treated as real content/i,
-    /interchangeable with ordinary words/i,
+    /ordinary text to copy into the final word/i,
+    /successfully found a specific known subword/i,
     /chooses merges randomly/i,
     /starts a new independent word/i,
     /clean standalone concept/i,
@@ -147,6 +147,9 @@ test('tokenization assessment keeps misconception traps after setup', () => {
     /only changes display text/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -158,6 +161,26 @@ test('tokenization assessment keeps misconception traps after setup', () => {
     }
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('tokenization assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('tokenization');
+  const lessonScopeLeaks = [
+    /\bpadding\b/i,
+    /\bmasks?\b/i,
+    /\battention\b/i,
+    /\bkv[- ]?cache\b/i,
+    /\blogits?\b/i,
+    /\bsoftmax\b/i,
+    /\bchat\b/i,
+    /\brag\b/i,
+    /\bretrieval\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later model-system scope`);
   }
 });
 
@@ -173,7 +196,8 @@ test('tokenization assessment does not leak exact answers within a visible page'
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
