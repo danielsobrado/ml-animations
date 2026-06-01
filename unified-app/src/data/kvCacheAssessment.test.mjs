@@ -10,6 +10,14 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
@@ -30,6 +38,13 @@ test('kv-cache has a complete curated 100-question assessment', () => {
     ['trace-cache-table', 'decode-step-savings', 'bound-window-memory'],
   );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
+  assert.deepEqual(
+    Object.fromEntries(Object.keys(EXPECTED_LEVEL_COUNTS).map((level) => [
+      level,
+      quiz.filter((question) => question.level === level).length,
+    ])),
+    EXPECTED_LEVEL_COUNTS,
+  );
 
   for (const [index, question] of quiz.entries()) {
     assert.match(question.id, /^kvc-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use the kvc id format`);
@@ -98,7 +113,7 @@ test('kv-cache assessment covers learning points in the right order', () => {
   }
 });
 
-test('kv-cache assessment avoids unsafe misconception keying', () => {
+test('kv-cache assessment avoids unsafe misconception keying before explicit traps', () => {
   const { quiz } = getLessonAssessment('kv-cache');
   const unsafePatterns = [
     /skips attention entirely/i,
@@ -122,12 +137,33 @@ test('kv-cache assessment avoids unsafe misconception keying', () => {
     const answer = correctAnswer(question);
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
-    assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+    const scaffoldPrompt = /misconception.*avoid/i.test(question.prompt);
+    assert.ok(
+      !unsafeAnswer || scaffoldPrompt || (index >= 75 && explicitTrapPrompt),
+      `question ${index + 1} keys a false claim outside a trap prompt`,
+    );
   }
 });
 
 test('kv-cache assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('kv-cache');
+  const trapIds = [
+    'kvc-076-false-skip-trap',
+    'kvc-077-false-logits-trap',
+    'kvc-078-false-memory-trap',
+    'kvc-079-false-prefill-trap',
+    'kvc-080-false-decode-trap',
+    'kvc-081-false-validity-trap',
+    'kvc-082-false-window-trap',
+    'kvc-083-false-gqa-trap',
+    'kvc-084-false-quant-trap',
+    'kvc-085-false-bandwidth-trap',
+    'kvc-086-false-batch-trap',
+    'kvc-087-false-security-trap',
+    'kvc-088-false-paged-trap',
+    'kvc-089-false-flash-trap',
+    'kvc-090-tricky-summary',
+  ];
   const misconceptionPatterns = [
     /skips attention entirely/i,
     /final logits for every old token/i,
@@ -146,6 +182,8 @@ test('kv-cache assessment keeps misconception traps after setup', () => {
     /infinite context, zero memory cost/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+
+  assert.deepEqual(quiz.slice(75, 90).map((question) => question.id), trapIds);
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -172,8 +210,58 @@ test('kv-cache assessment does not leak exact answers within a visible page', ()
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
+        assert.ok(
+          !visibleText.includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
+        );
       }
+    }
+  }
+});
+
+test('kv-cache assessment keeps visible wording scoped to inference caching', () => {
+  const { quiz } = getLessonAssessment('kv-cache');
+  const genericLeakagePatterns = [
+    /raw prompt strings/i,
+    /future answer/i,
+    /full dataset/i,
+    /vocabulary alphabetically/i,
+    /all webpages/i,
+    /optimizer state/i,
+    /route names/i,
+    /class labels/i,
+    /css/i,
+    /final probabilities/i,
+    /class dimension/i,
+    /one label/i,
+    /accuracy/i,
+    /loss value/i,
+    /train and test sets/i,
+    /tokenizer vocabulary/i,
+    /visual labels/i,
+    /training with larger labels/i,
+    /route icons/i,
+    /answer letters/i,
+    /homepage/i,
+    /route aliases/i,
+    /training set size/i,
+    /answer option order/i,
+    /model card title/i,
+    /public labels/i,
+    /number of icons/i,
+    /validation file names/i,
+    /static dictionary/i,
+    /final probability count/i,
+    /css updates/i,
+    /training labels/i,
+    /button layout/i,
+  ];
+
+  for (const question of quiz) {
+    const visibleText = [question.prompt, ...question.choices, question.explanation].join(' ');
+    for (const pattern of genericLeakagePatterns) {
+      assert.doesNotMatch(visibleText, pattern, `${question.id} contains generic or off-scope visible wording`);
     }
   }
 });
@@ -184,10 +272,12 @@ test('kv-cache assessment distributes correct-answer positions across every page
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const positions = quiz.slice(pageStart, pageStart + 10).map((question) => question.answerIndex);
-    const maxSameSlot = Math.max(...[0, 1, 2].map((slot) => positions.filter((position) => position === slot).length));
+    const pagePositionCounts = [0, 1, 2].map((slot) => positions.filter((position) => position === slot).length);
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
-    assert.ok(maxSameSlot <= 6, `page starting at question ${pageStart + 1} should not overuse one answer position`);
+    assert.ok(
+      Math.max(...pagePositionCounts) - Math.min(...pagePositionCounts) <= 1,
+      `page starting at question ${pageStart + 1} should balance answer positions, saw ${pagePositionCounts.join('/')}`,
+    );
   }
 
   assert.ok(
