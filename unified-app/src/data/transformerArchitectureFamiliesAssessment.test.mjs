@@ -88,7 +88,7 @@ test('transformer architecture families assessment covers learning points in the
     ['lab justification', ['attention visibility training objective and expected output type']],
     ['application tasks', ['source sentences into target language sentences']],
     ['tricky false claims', ['architecture family claim is false']],
-    ['interview readiness', ['production ready architecture family takeaway']],
+    ['interview readiness', ['lesson ready architecture family takeaway']],
   ];
 
   let previousIndex = -1;
@@ -155,6 +155,32 @@ test('transformer architecture families misconception traps are placed after con
   }
 });
 
+test('transformer architecture families assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('transformer-architecture-families');
+  const lessonScopeLeaks = [
+    /\bKV[- ]?cache\b/i,
+    /\bcache\b/i,
+    /\bserving\b/i,
+    /\bproduction\b/i,
+    /\bdeployment\b/i,
+    /\bRAG\b/i,
+    /\bretrieved\b/i,
+    /\bretriever\b/i,
+    /\bfine[- ]?tuning\b/i,
+    /\bhybrid\b/i,
+    /\bmodern variants\b/i,
+    /\bcalibration\b/i,
+    /\bmigration\b/i,
+    /\bkernel\b/i,
+    /\bdtype\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible family scope`);
+  }
+});
+
 test('transformer architecture families assessment does not leak exact answers within a visible page', () => {
   const { quiz } = getLessonAssessment('transformer-architecture-families');
 
@@ -167,7 +193,8 @@ test('transformer architecture families assessment does not leak exact answers w
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
