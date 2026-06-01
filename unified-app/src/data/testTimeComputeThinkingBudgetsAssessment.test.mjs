@@ -118,6 +118,36 @@ test('test-time compute assessment marks unsafe misconceptions as traps after se
   }
 });
 
+test('test-time compute assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('test-time-compute-thinking-budgets');
+  const unrelatedScopeLeaks = [
+    /\btokenizer\b/i,
+    /\bvocabulary\b/i,
+    /\bkv tensors\b/i,
+    /\bdisk space\b/i,
+    /\bmodel architecture/i,
+    /\bmodel layers\b/i,
+    /\bhidden layers\b/i,
+    /\bsoftmax\b/i,
+    /\bpage styling\b/i,
+    /\broute metadata\b/i,
+    /\bui tab\b/i,
+    /\bcss\b/i,
+    /\bstatic html\b/i,
+    /\bbrowser\b/i,
+    /\bscreenshot\b/i,
+    /\boption distribution\b/i,
+    /\bmetadata\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the test-time compute lesson scope`);
+    }
+  }
+});
+
 test('test-time compute assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('test-time-compute-thinking-budgets');
   const pageSize = 10;
@@ -132,10 +162,10 @@ test('test-time compute assessment avoids visible-page answer leakage', () => {
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
       assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
     }
   }
