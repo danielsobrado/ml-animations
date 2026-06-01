@@ -122,6 +122,36 @@ test('efficient LLM serving assessment marks unsafe misconceptions as traps afte
   }
 });
 
+test('efficient LLM serving assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('efficient-llm-serving');
+  const unrelatedScopeLeaks = [
+    /\bui labels\b/i,
+    /\bcss\b/i,
+    /\bbrowser\b/i,
+    /\bprompt injection\b/i,
+    /\bdisk files\b/i,
+    /\bui theme\b/i,
+    /\bbrowser tab\b/i,
+    /\boutput css\b/i,
+    /\bprompt font size\b/i,
+    /\bmodel card title\b/i,
+    /\bui color contrast\b/i,
+    /\buppercase\b/i,
+    /\bsystem prompt capitalization\b/i,
+    /\busers disliked the ui\b/i,
+    /\balphabetical order\b/i,
+    /\bfile sizes\b/i,
+    /\btoo few commas\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the serving lesson scope`);
+    }
+  }
+});
+
 test('efficient LLM serving assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('efficient-llm-serving');
   const pageSize = 10;
@@ -136,11 +166,11 @@ test('efficient LLM serving assessment avoids visible-page answer leakage', () =
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible item on same page`);
     }
   }
 });
