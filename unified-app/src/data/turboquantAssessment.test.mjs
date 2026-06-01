@@ -3,6 +3,18 @@ import test from 'node:test';
 import { getLessonAssessment } from './lessonAssessments.js';
 
 const LEVELS = new Set(['Foundation', 'Mechanism', 'Application', 'Tricky', 'Interview']);
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
+const EXPECTED_LAB_IDS = [
+  'mini-turboquant-cache-size',
+  'mini-turboquant-dot-products',
+  'mini-turboquant-tradeoff',
+];
 
 function normalize(value) {
   return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -17,18 +29,27 @@ test('turboquant assessment has 100 curated questions', () => {
 
   assert.equal(quiz.length, 100);
   assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), EXPECTED_LAB_IDS);
   assert.equal(new Set(quiz.map((item) => item.id)).size, 100);
+
+  const levelCounts = Object.fromEntries([...LEVELS].map((level) => [level, 0]));
+  const answerPositionCounts = [0, 0, 0];
 
   for (const [index, item] of quiz.entries()) {
     assert.match(item.id, /^tq-\d{3}-[a-z0-9-]+$/);
     assert.equal(item.id.startsWith(`tq-${String(index + 1).padStart(3, '0')}`), true, `${item.id} is out of order`);
     assert.equal(LEVELS.has(item.level), true, `${item.id} has unexpected level ${item.level}`);
+    levelCounts[item.level] += 1;
+    answerPositionCounts[item.answerIndex] += 1;
     assert.equal(item.choices.length, 3, `${item.id} should have three choices`);
     assert.ok(item.answerIndex >= 0 && item.answerIndex < 3, `${item.id} answerIndex out of range`);
     assert.ok(item.prompt.length > 20, `${item.id} prompt too short`);
     assert.ok(item.explanation.length > 30, `${item.id} explanation too short`);
     assert.equal(new Set(item.choices.map(normalize)).size, 3, `${item.id} has duplicate choices`);
   }
+
+  assert.deepEqual(levelCounts, EXPECTED_LEVEL_COUNTS);
+  assert.ok(Math.max(...answerPositionCounts) - Math.min(...answerPositionCounts) <= 1, `imbalanced answers: ${answerPositionCounts.join(',')}`);
 });
 
 test('turboquant assessment avoids duplicate prompts and correct answers', () => {
@@ -92,7 +113,7 @@ test('turboquant assessment keeps misconception traps after setup', () => {
     /automatically fixes growing per-request KV memory/i,
     /always runs faster/i,
     /same KV-cache geometry/i,
-    /call an internet API/i,
+    /after the response is finished/i,
     /effective bits never change/i,
     /toy numbers are universal benchmark claims/i,
     /skip output-quality tests/i,
@@ -119,11 +140,55 @@ test('turboquant assessment avoids visible-page answer leakage', () => {
     const answers = page.map((item) => normalize(correctAnswer(item)));
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(answers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(answers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears elsewhere on same page`);
+    }
+  }
+});
+
+test('turboquant assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('turboquant');
+  const outOfScopePatterns = [
+    /tokenizer compression/i,
+    /shorter prompts/i,
+    /training datasets/i,
+    /vocabulary size/i,
+    /tokenizer merges/i,
+    /output length/i,
+    /tokenizer-only/i,
+    /target-model verification/i,
+    /speculative decoding/i,
+    /tokenizer vocabulary/i,
+    /padding tokens/i,
+    /web service/i,
+    /only tokenizer/i,
+    /answer choices/i,
+    /merge order/i,
+    /transformer layers/i,
+    /accepted speculative tokens/i,
+    /prompt template/i,
+    /token budget/i,
+    /training labels/i,
+    /validation labels/i,
+    /css bundles/i,
+    /source links/i,
+    /token sampler/i,
+    /prompt font/i,
+    /browser layout/i,
+    /source link/i,
+    /counts source links/i,
+    /internet api/i,
+    /tokenizer pruning/i,
+    /fewer layers/i,
+  ];
+
+  for (const item of quiz) {
+    const visibleText = `${item.prompt} ${item.choices.join(' ')}`;
+    for (const pattern of outOfScopePatterns) {
+      assert.equal(pattern.test(visibleText), false, `${item.id} contains out-of-scope clue ${pattern}`);
     }
   }
 });
