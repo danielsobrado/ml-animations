@@ -10,6 +10,14 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
@@ -30,6 +38,13 @@ test('optimization has a complete curated 100-question assessment', () => {
     ['compare-valley-paths', 'tune-adaptive-optimizers', 'separate-decay-mechanisms'],
   );
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
+  assert.deepEqual(
+    Object.fromEntries(Object.keys(EXPECTED_LEVEL_COUNTS).map((level) => [
+      level,
+      quiz.filter((question) => question.level === level).length,
+    ])),
+    EXPECTED_LEVEL_COUNTS,
+  );
 
   for (const [index, question] of quiz.entries()) {
     assert.match(question.id, /^opt-\d{3}-[a-z0-9-]+$/, `question ${index + 1} should use an ordered opt id`);
@@ -108,7 +123,7 @@ test('optimization assessment covers learning points in the right order', () => 
   }
 });
 
-test('optimization assessment avoids unsafe misconception keying', () => {
+test('optimization assessment avoids unsafe misconception keying before explicit traps', () => {
   const { quiz } = getLessonAssessment('optimization');
   const unsafePatterns = [
     /universally best on every objective/i,
@@ -119,7 +134,7 @@ test('optimization assessment avoids unsafe misconception keying', () => {
     /automatically proves better test accuracy/i,
     /reveals the whole loss surface/i,
     /always fixes every oscillation/i,
-    /using final test labels/i,
+    /using held-out test targets/i,
     /reused across unrelated hyperparameter comparisons/i,
     /always improves validation performance/i,
     /cannot optimize any narrow valley/i,
@@ -133,7 +148,7 @@ test('optimization assessment avoids unsafe misconception keying', () => {
     const explicitTrapPrompt = /false|unsafe|wrong|trap|claim/i.test(question.prompt);
 
     assert.ok(
-      !unsafeAnswer || explicitTrapPrompt,
+      !unsafeAnswer || (index >= 75 && explicitTrapPrompt),
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
   }
@@ -167,7 +182,7 @@ test('optimization assessment keeps misconception traps after setup', () => {
     /automatically proves better test accuracy/i,
     /reveals the whole loss surface/i,
     /always fixes every oscillation/i,
-    /using final test labels/i,
+    /using held-out test targets/i,
     /reused across unrelated hyperparameter comparisons/i,
     /always improves validation performance/i,
     /cannot optimize any narrow valley/i,
@@ -200,11 +215,60 @@ test('optimization assessment does not leak exact answers within a visible page'
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex) continue;
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !visibleText.includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
+    }
+  }
+});
+
+test('optimization assessment keeps visible wording scoped to optimization lessons', () => {
+  const { quiz } = getLessonAssessment('optimization');
+  const genericLeakagePatterns = [
+    /decorative chart background/i,
+    /dataset folder/i,
+    /deployment hostname/i,
+    /color palette/i,
+    /target labels exist/i,
+    /validation set is public/i,
+    /train\/test split/i,
+    /validation labels/i,
+    /final test labels/i,
+    /label names/i,
+    /training set labels/i,
+    /contour lines on the canvas/i,
+    /hidden from the optimizer/i,
+    /contour label/i,
+    /feature names/i,
+    /batch labels/i,
+    /lowest contour by inspection/i,
+    /current label value/i,
+    /final test score/i,
+    /become a label/i,
+    /chart color/i,
+    /canvas pixel colors/i,
+    /button label/i,
+    /icon size/i,
+    /answer options/i,
+    /contours are decorative/i,
+    /chart title/i,
+    /legend uses green/i,
+    /contour line colors/i,
+    /reset button/i,
+    /prettier path color/i,
+    /button colors/i,
+    /decorative plots for reports/i,
+    /plotted color/i,
+    /legend labels/i,
+  ];
+
+  for (const question of quiz) {
+    const visibleText = [question.prompt, ...question.choices, question.explanation].join(' ');
+    for (const pattern of genericLeakagePatterns) {
+      assert.doesNotMatch(visibleText, pattern, `${question.id} contains generic or off-scope visible wording`);
     }
   }
 });
@@ -223,6 +287,14 @@ test('optimization assessment distributes correct-answer positions across every 
     const page = quiz.slice(pageStart, pageStart + 10);
     const positions = page.map((question) => question.answerIndex);
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    const pageTotals = [0, 0, 0];
+    for (const position of positions) {
+      pageTotals[position] += 1;
+    }
+
+    assert.ok(
+      Math.max(...pageTotals) - Math.min(...pageTotals) <= 1,
+      `page starting at question ${pageStart + 1} should balance answer positions, saw ${pageTotals.join('/')}`,
+    );
   }
 });
