@@ -72,6 +72,7 @@ import { MATRIX_MULTIPLICATION_QUIZ } from './matrixMultiplicationAssessment.js'
 import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js';
 import { MIXTURE_OF_EXPERTS_QUIZ } from './mixtureOfExpertsAssessment.js';
 import { MODEL_DEBUGGING_QUIZ } from './modelDebuggingAssessment.js';
+import { MODEL_INTERPRETABILITY_QUIZ } from './modelInterpretabilityAssessment.js';
 import { MULTI_HEAD_LATENT_ATTENTION_QUIZ } from './multiHeadLatentAttentionAssessment.js';
 import { MULTIMODAL_LLM_QUIZ } from './multimodalLlmAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
@@ -3349,41 +3350,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'model-interpretability': {
-    quiz: [
-      {
-        id: 'why-ablation',
-        prompt: 'What does a feature ablation-style attribution primarily measure in this lesson?',
-        choices: [
-          'How much predictions degrade when a feature is replaced by a reference value',
-          'The exact causal effect of changing one feature',
-          'How to remove all uncertainty from the model',
-        ],
-        answerIndex: 0,
-        explanation: 'Ablation-style checks are directional and help rank features; they are not proof of causality.',
-      },
-      {
-        id: 'local-meaning',
-        prompt: 'In a local explanation panel, the largest signed contribution is best interpreted as:',
-        choices: [
-          'The strongest directional driver for this example under the toy model',
-          'A guarantee of causal influence in every domain',
-          'Proof that the model has no bias',
-        ],
-        answerIndex: 0,
-        explanation: 'Large local contribution means strong influence in the surrogate, with model-dependent caveats.',
-      },
-      {
-        id: 'counterfactual',
-        prompt: 'What is the purpose of the counterfactual perturbation in this lesson?',
-        choices: [
-          'To test decision stability under a controlled input change',
-          'To tune weights for all future samples',
-          'To prove the explanation is causal',
-        ],
-        answerIndex: 0,
-        explanation: 'Counterfactual checks test whether small input changes materially flip decisions.',
-      },
-    ],
+    quiz: MODEL_INTERPRETABILITY_QUIZ,
     labs: [
       {
         id: 'compare-modes',
