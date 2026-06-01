@@ -88,7 +88,7 @@ test('transformer assessment covers learning points in the right order', () => {
     ['application mask bug', ['causal mask and input target shifting']],
     ['production tests', ['shape mask residual add']],
     ['tricky false claims', ['transformer claim is false']],
-    ['interview readiness', ['production ready transformer takeaway']],
+    ['interview readiness', ['lesson ready transformer takeaway']],
   ];
 
   let previousIndex = -1;
@@ -155,6 +155,27 @@ test('transformer misconception traps are placed after concept scaffolding', () 
   }
 });
 
+test('transformer assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('transformer');
+  const lessonScopeLeaks = [
+    /\bKV[- ]?cache\b/i,
+    /\bcache data\b/i,
+    /\bcached\b/i,
+    /\bkernel\b/i,
+    /\bmixed precision\b/i,
+    /\bdtype\b/i,
+    /\bserving\b/i,
+    /\bdeployment\b/i,
+    /\bprobe hidden states\b/i,
+    /\bproduction\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible transformer scope`);
+  }
+});
+
 test('transformer assessment does not leak exact answers within a visible page', () => {
   const { quiz } = getLessonAssessment('transformer');
 
@@ -167,7 +188,8 @@ test('transformer assessment does not leak exact answers within a visible page',
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
