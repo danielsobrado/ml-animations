@@ -121,6 +121,37 @@ test('agentic coding systems assessment marks unsafe misconceptions as traps aft
   }
 });
 
+test('agentic coding systems assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('agentic-coding-systems');
+  const unrelatedScopeLeaks = [
+    /\bcompiler optimization\b/i,
+    /\bgenerated PR title\b/i,
+    /\bmodel tokens\b/i,
+    /\bformatting in random files\b/i,
+    /\bmarketing description\b/i,
+    /\bnumber of files in the repo\b/i,
+    /\bfirst noun\b/i,
+    /\bauthor profile\b/i,
+    /\bPR titles\b/i,
+    /\bpackage download speed\b/i,
+    /\bmaximum number of tools\b/i,
+    /\bpackage logo\b/i,
+    /\btoken probability\b/i,
+    /\bfashionable\b/i,
+    /\bPR title is too short\b/i,
+    /\bstatic autocomplete model\b/i,
+    /\bbiggest file\b/i,
+    /\bgenerated tokens\b/i,
+  ];
+
+  for (const [index, item] of quiz.entries()) {
+    const visibleText = normalize(`${item.prompt} ${item.choices.join(' ')} ${item.explanation}`);
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the coding-agent lesson scope`);
+    }
+  }
+});
+
 test('agentic coding systems assessment avoids visible-page answer leakage', () => {
   const { quiz } = getLessonAssessment('agentic-coding-systems');
   const pageSize = 10;
@@ -135,11 +166,11 @@ test('agentic coding systems assessment avoids visible-page answer leakage', () 
     );
 
     for (const [offset, item] of page.entries()) {
-      const surroundingPrompts = page
+      const surroundingVisibleText = page
         .filter((_, otherOffset) => otherOffset !== offset)
-        .map((other) => normalize(other.prompt));
-      const leaked = surroundingPrompts.some((prompt) => prompt.includes(correctAnswers[offset]));
-      assert.equal(leaked, false, `${item.id} answer appears in another prompt on same page`);
+        .map((other) => normalize(`${other.prompt} ${other.choices.join(' ')}`));
+      const leaked = surroundingVisibleText.some((text) => text.includes(correctAnswers[offset]));
+      assert.equal(leaked, false, `${item.id} answer appears in another visible item on same page`);
     }
   }
 });
