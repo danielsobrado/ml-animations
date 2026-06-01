@@ -73,6 +73,7 @@ import { ML_SECURITY_ROBUSTNESS_QUIZ } from './mlSecurityRobustnessAssessment.js
 import { MIXTURE_OF_EXPERTS_QUIZ } from './mixtureOfExpertsAssessment.js';
 import { MODEL_DEBUGGING_QUIZ } from './modelDebuggingAssessment.js';
 import { MODEL_INTERPRETABILITY_QUIZ } from './modelInterpretabilityAssessment.js';
+import { MODEL_MONITORING_QUIZ } from './modelMonitoringAssessment.js';
 import { MULTI_HEAD_LATENT_ATTENTION_QUIZ } from './multiHeadLatentAttentionAssessment.js';
 import { MULTIMODAL_LLM_QUIZ } from './multimodalLlmAssessment.js';
 import { NATIVE_SPARSE_ATTENTION_QUIZ } from './nativeSparseAttentionAssessment.js';
@@ -3361,41 +3362,7 @@ const SEEDED_LESSON_ASSESSMENTS = {
     ],
   },
   'model-monitoring': {
-    quiz: [
-      {
-        id: 'monitor-priority',
-        prompt: 'Which signal in this lesson most directly distinguishes input drift from label drift behavior?',
-        choices: [
-          'Tracking both input drift and precision/recall together',
-          'Precision alone',
-          'Recall alone',
-        ],
-        answerIndex: 0,
-        explanation: 'Input drift and label-quality issues can both hurt scores, so comparing multiple signals avoids false attribution.',
-      },
-      {
-        id: 'alert-meaning',
-        prompt: 'Why can a stricter alert threshold help and hurt at the same time?',
-        choices: [
-          'It reduces late misses but can increase false alerts and intervention noise',
-          'It always improves model quality',
-          'It removes the need to monitor serving metrics',
-        ],
-        answerIndex: 0,
-        explanation: 'Strict alerts catch issues earlier but can fire during normal variance.',
-      },
-      {
-        id: 'playbook-choice',
-        prompt: 'When throughput drops and recall drops together, a first response is usually:',
-        choices: [
-          'Pause rollout, inspect serving contract and upstream sampling, then isolate monitoring signals',
-          'Increase threshold complexity immediately',
-          'Ignore alerts until the trend continues for 3 weeks',
-        ],
-        answerIndex: 0,
-        explanation: 'Parallel degradation in serving and metrics usually needs triage of contract and data before model updates.',
-      },
-    ],
+    quiz: MODEL_MONITORING_QUIZ,
     labs: [
       {
         id: 'configure-playbook',
