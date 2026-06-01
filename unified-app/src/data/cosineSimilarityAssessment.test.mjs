@@ -81,10 +81,10 @@ test('cosine similarity assessment covers learning points in the right order', (
     ['same direction', ['positive one']],
     ['not proof', ['ranking signals not proof']],
     ['formula', ['dot product divided by the product']],
-    ['normalized dot product', ['cosine equals their dot product']],
     ['zero vector', ['norm is zero so cosine is undefined']],
-    ['retrieval validation', ['precision and recall around that cutoff']],
-    ['production monitoring', ['score distribution or top neighbor quality']],
+    ['search features', ['activates features for words present']],
+    ['movie dimensions', ['genre preference coordinates']],
+    ['apple pie application', ['apple pie recipe document']],
     ['tricky false claims', ['interpretation is false']],
     ['interview readiness', ['production ready cosine takeaway']],
   ];
@@ -103,19 +103,19 @@ test('cosine similarity assessment avoids unsafe misconception keying', () => {
   const unsafePatterns = [
     /calibrated probability of relevance/i,
     /always changes cosine/i,
-    /cosine similarity 1 with every vector/i,
-    /always rank candidates identically/i,
-    /universal cosine cutoff/i,
-    /guaranteed factually correct/i,
-    /removes training-data bias automatically/i,
+    /cosine similarity one with every vector/i,
+    /always behave the same under length changes/i,
+    /guaranteed to mean the same thing/i,
     /different coordinate counts directly/i,
-    /unrelated to dot product/i,
-    /correct cosine rankings automatically/i,
-    /always final truth/i,
-    /ignores all term overlap/i,
-    /needs no monitoring/i,
-    /without alignment/i,
-    /proves meaning, fairness, and correctness/i,
+    /denominator can be ignored/i,
+    /have cosine zero/i,
+    /have cosine one/i,
+    /maximum positive cosine/i,
+    /never affects cosine/i,
+    /ignores all genre coordinates/i,
+    /90 percent chance of relevance/i,
+    /cannot change cosine/i,
+    /proves exact meaning with no further inspection/i,
   ];
 
   for (const [index, question] of quiz.entries()) {
@@ -132,21 +132,24 @@ test('cosine similarity assessment keeps misconception traps after setup', () =>
     /equating high cosine with guaranteed relevance/i,
     /calibrated probability of relevance/i,
     /always changes cosine/i,
-    /cosine similarity 1 with every vector/i,
-    /always rank candidates identically/i,
-    /universal cosine cutoff/i,
-    /guaranteed factually correct/i,
-    /removes training-data bias automatically/i,
+    /cosine similarity one with every vector/i,
+    /always behave the same under length changes/i,
+    /guaranteed to mean the same thing/i,
     /different coordinate counts directly/i,
-    /unrelated to dot product/i,
-    /correct cosine rankings automatically/i,
-    /always final truth/i,
-    /ignores all term overlap/i,
-    /needs no monitoring/i,
-    /without alignment/i,
-    /proves meaning, fairness, and correctness/i,
+    /denominator can be ignored/i,
+    /have cosine zero/i,
+    /have cosine one/i,
+    /maximum positive cosine/i,
+    /never affects cosine/i,
+    /ignores all genre coordinates/i,
+    /90 percent chance of relevance/i,
+    /cannot change cosine/i,
+    /proves exact meaning with no further inspection/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|interpretation|mistake/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -158,6 +161,33 @@ test('cosine similarity assessment keeps misconception traps after setup', () =>
     }
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('cosine similarity assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('cosine-similarity');
+  const lessonScopeLeaks = [
+    /\bRAG\b/i,
+    /\bANN\b/i,
+    /\brerank(?:er|ing)?\b/i,
+    /\bthresholds?\b/i,
+    /\bcutoffs?\b/i,
+    /\bmultimodal\b/i,
+    /\bprivacy\b/i,
+    /\bbias\b/i,
+    /\bstale\b/i,
+    /\bindexes?\b/i,
+    /\bNaN\b/i,
+    /\bfloating[- ]point\b/i,
+    /\bcross[- ]encoder\b/i,
+    /\bmonitoring\b/i,
+    /\blogging\b/i,
+    /\balert(?:ing)?\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or hidden cosine-system scope`);
   }
 });
 
@@ -173,7 +203,8 @@ test('cosine similarity assessment does not leak exact answers within a visible 
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
