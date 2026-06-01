@@ -78,15 +78,14 @@ test('self-attention assessment covers learning points in the right order', () =
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['build context from the same sequence']],
-    ['same sequence qkv', ['same sequence representations']],
-    ['not lookup', ['fixed lookup table']],
-    ['projections', ['same token states into three views']],
-    ['score shape', ['n by n']],
-    ['scaling', ['divided by sqrt d k']],
-    ['mask application', ['scores before softmax']],
-    ['long sequence cost', ['fourfold']],
-    ['tricky false claims', ['source claim is false']],
-    ['interview readiness', ['production ready self attention takeaway']],
+    ['query role', ['asks which keys are useful']],
+    ['temperature', ['makes attention sharper']],
+    ['formula trace', ['scores equals q k transpose']],
+    ['default row prediction', ['tired query']],
+    ['mask application', ['future keys to the right are blocked']],
+    ['value caveat', ['output depends on weighted value content']],
+    ['tricky false claims', ['lookup claim is false']],
+    ['interview readiness', ['lesson ready self attention takeaway']],
   ];
 
   let previousIndex = -1;
@@ -101,21 +100,21 @@ test('self-attention assessment covers learning points in the right order', () =
 test('self-attention assessment avoids unsafe misconception keying', () => {
   const { quiz } = getLessonAssessment('self-attention');
   const unsafePatterns = [
-    /three unrelated sequences/i,
-    /fixed lookup table/i,
-    /mixed directly into the output/i,
-    /normalize over query positions/i,
-    /removes the need for softmax/i,
+    /one fixed lookup table/i,
+    /copied directly as the output vector/i,
+    /without query-key scores/i,
+    /before Q and K are scored/i,
     /only after values are mixed/i,
-    /automatically knows word order/i,
-    /constant cost as sequence length grows/i,
-    /fully explains the model answer/i,
-    /may only attend to itself/i,
-    /cannot change output/i,
-    /exact same relation/i,
-    /skips attention entirely/i,
-    /removes representation bias automatically/i,
-    /static, cost-free, fully explanatory heatmap/i,
+    /blocks previous keys and keeps future keys/i,
+    /always makes the row more uniform/i,
+    /removes the need for softmax/i,
+    /fully explains the model output/i,
+    /may only read itself/i,
+    /rewrites every key vector/i,
+    /ignores values once the strongest key is known/i,
+    /independently receive full row weight/i,
+    /attend identically no matter which row is active/i,
+    /static, self-only, and fully explanatory/i,
   ];
 
   for (const [index, question] of quiz.entries()) {
@@ -129,23 +128,26 @@ test('self-attention assessment avoids unsafe misconception keying', () => {
 test('self-attention assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('self-attention');
   const misconceptionPatterns = [
-    /three unrelated sequences/i,
-    /fixed lookup table/i,
-    /mixed directly into the output/i,
-    /normalize over query positions/i,
-    /removes the need for softmax/i,
+    /one fixed lookup table/i,
+    /copied directly as the output vector/i,
+    /without query-key scores/i,
+    /before Q and K are scored/i,
     /only after values are mixed/i,
-    /automatically knows word order/i,
-    /constant cost as sequence length grows/i,
-    /fully explains the model answer/i,
-    /may only attend to itself/i,
-    /cannot change output/i,
-    /exact same relation/i,
-    /skips attention entirely/i,
-    /removes representation bias automatically/i,
-    /static, cost-free, fully explanatory heatmap/i,
+    /blocks previous keys and keeps future keys/i,
+    /always makes the row more uniform/i,
+    /removes the need for softmax/i,
+    /fully explains the model output/i,
+    /may only read itself/i,
+    /rewrites every key vector/i,
+    /ignores values once the strongest key is known/i,
+    /independently receive full row weight/i,
+    /attend identically no matter which row is active/i,
+    /static, self-only, and fully explanatory/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -157,6 +159,32 @@ test('self-attention assessment keeps misconception traps after setup', () => {
     }
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('self-attention assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('self-attention');
+  const lessonScopeLeaks = [
+    /\bmulti[- ]?head\b/i,
+    /\bresidual/i,
+    /\bMLP\b/i,
+    /\bpadding\b/i,
+    /\bbatch(?:ing)?\b/i,
+    /\bgradient/i,
+    /\bRAG\b/i,
+    /\bcross[- ]?attention\b/i,
+    /\bKV cache\b/i,
+    /\bcaching\b/i,
+    /\bbias\b/i,
+    /\bfairness\b/i,
+    /\bprivacy\b/i,
+    /\bmonitoring\b/i,
+    /\bproduction\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible self-attention scope`);
   }
 });
 
@@ -172,7 +200,8 @@ test('self-attention assessment does not leak exact answers within a visible pag
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
