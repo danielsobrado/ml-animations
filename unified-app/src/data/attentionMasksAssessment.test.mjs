@@ -88,7 +88,7 @@ test('attention masks assessment covers learning points in the right order', () 
     ['application leakage', ['causal mask or input target shift']],
     ['debug grids', ['visible key cases']],
     ['tricky false claims', ['attention mask claim is false']],
-    ['interview readiness', ['production ready attention mask takeaway']],
+    ['interview readiness', ['lesson ready attention mask takeaway']],
   ];
 
   let previousIndex = -1;
@@ -110,13 +110,13 @@ test('attention masks assessment avoids unsafe misconception keying', () => {
     /hide all right-context tokens/i,
     /future decoder tokens as encoder memory/i,
     /larger probabilities after softmax/i,
-    /makes attention masks unnecessary/i,
+    /can never change visible keys/i,
     /always control the same thing/i,
     /mask axes never matter/i,
     /always safe without special handling/i,
-    /masks are irrelevant/i,
+    /mode label proves every cell/i,
     /same boolean mask polarity/i,
-    /cannot affect information flow/i,
+    /cannot affect which context a query reads/i,
     /input token corruption, post-softmax cleanup/i,
   ];
 
@@ -138,13 +138,13 @@ test('attention masks misconception traps are placed after concept scaffolding',
     'amask-080-false-bidir',
     'amask-081-false-cross',
     'amask-082-false-softmax',
-    'amask-083-false-cache',
+    'amask-083-false-toggle',
     'amask-084-false-loss-mask',
     'amask-085-false-axis',
     'amask-086-false-all-masked',
-    'amask-087-false-sparse',
+    'amask-087-false-grid',
     'amask-088-false-api',
-    'amask-089-false-security',
+    'amask-089-false-contract',
     'amask-090-tricky-summary',
   ];
 
@@ -152,6 +152,30 @@ test('attention masks misconception traps are placed after concept scaffolding',
 
   for (const question of quiz.slice(0, 75)) {
     assert.doesNotMatch(question.prompt, /^Which .* claim is false\?/);
+  }
+});
+
+test('attention masks assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('attention-masks');
+  const lessonScopeLeaks = [
+    /\bKV[- ]?cache\b/i,
+    /\bcache slots?\b/i,
+    /\bprefix[- ]?LM\b/i,
+    /\bsparse\b/i,
+    /\bblock attention\b/i,
+    /\bfused\b/i,
+    /\bkernel\b/i,
+    /\bprivacy\b/i,
+    /\bsecurity\b/i,
+    /\bproduction\b/i,
+    /\bmonitoring\b/i,
+    /\bFP16\b/i,
+    /\bdtype\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible attention-mask scope`);
   }
 });
 
@@ -167,7 +191,8 @@ test('attention masks assessment does not leak exact answers within a visible pa
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
