@@ -78,13 +78,13 @@ test('attention mechanism assessment covers learning points in the right order',
   const firstIndexContaining = (terms) => textByQuestion.findIndex((text) => terms.every((term) => text.includes(term)));
   const milestones = [
     ['purpose', ['selects useful context']],
-    ['query role', ['what information is being sought']],
-    ['value mixing', ['weighted sum of value vectors']],
-    ['not importance', ['permanent global importance']],
-    ['formula', ['softmax qk t sqrt d k v']],
-    ['softmax axis', ['across keys for each query row']],
-    ['mask timing', ['lowering their scores']],
-    ['long-context cost', ['query key comparisons grows rapidly']],
+    ['query role', ['what you are looking for']],
+    ['value mixing', ['weighted combination of available values']],
+    ['not importance', ['permanent word importance']],
+    ['preview step one', ['compute q dot k similarity scores']],
+    ['library mechanism', ['book titles such as neural networks']],
+    ['conversation mechanism', ['terrible and but']],
+    ['application prediction', ['which item will receive the largest weight']],
     ['tricky false claims', ['query claim is false']],
     ['interview readiness', ['production ready attention takeaway']],
   ];
@@ -102,20 +102,20 @@ test('attention mechanism assessment avoids unsafe misconception keying', () => 
   const { quiz } = getLessonAssessment('attention-mechanism');
   const unsafePatterns = [
     /already the final mixed output/i,
-    /summed directly into the attention output/i,
-    /decide their own attention weights/i,
-    /normalize across query rows/i,
-    /only after values are fully mixed/i,
-    /permanent global token importance/i,
-    /free at million-token scale/i,
-    /removes the need for softmax/i,
-    /must all come from one sequence/i,
-    /uses no q\/k\/v projections/i,
-    /raw score matrix itself/i,
-    /selected the best key/i,
-    /knows sequence order without any position signal/i,
-    /only attention and nothing else/i,
-    /complete causal explanations/i,
+    /content that gets retrieved directly/i,
+    /without query-key scores/i,
+    /only a hard lookup/i,
+    /deletes values/i,
+    /permanent global word importance/i,
+    /always averages every item equally/i,
+    /cooking recipes should be the strongest/i,
+    /mainly attend to cooking recipes/i,
+    /terrible has no relevance/i,
+    /permanent forever/i,
+    /unlimited direct access/i,
+    /cannot be parallelized/i,
+    /never on values/i,
+    /complete explanation by itself/i,
   ];
 
   for (const [index, question] of quiz.entries()) {
@@ -131,22 +131,25 @@ test('attention mechanism assessment keeps misconception traps after setup', () 
   const misconceptionPatterns = [
     /treating attention weights as permanent global importance/i,
     /already the final mixed output/i,
-    /summed directly into the attention output/i,
-    /decide their own attention weights/i,
-    /normalize across query rows/i,
-    /only after values are fully mixed/i,
-    /permanent global token importance/i,
-    /free at million-token scale/i,
-    /removes the need for softmax/i,
-    /must all come from one sequence/i,
-    /uses no q\/k\/v projections/i,
-    /raw score matrix itself/i,
-    /selected the best key/i,
-    /knows sequence order without any position signal/i,
-    /only attention and nothing else/i,
-    /complete causal explanations/i,
+    /content that gets retrieved directly/i,
+    /without query-key scores/i,
+    /only a hard lookup/i,
+    /deletes values/i,
+    /permanent global word importance/i,
+    /always averages every item equally/i,
+    /cooking recipes should be the strongest/i,
+    /mainly attend to cooking recipes/i,
+    /terrible has no relevance/i,
+    /permanent forever/i,
+    /unlimited direct access/i,
+    /cannot be parallelized/i,
+    /never on values/i,
+    /complete explanation by itself/i,
   ];
   const trapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|interpretation|misconception/i;
+  const trapQuestions = quiz.slice(75, 90);
+
+  assert.ok(trapQuestions.every((question) => question.level === 'Tricky'), 'misconception traps should stay in the Tricky band');
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
@@ -158,6 +161,31 @@ test('attention mechanism assessment keeps misconception traps after setup', () 
     }
     assert.ok(index >= 75, `${question.id} introduces misconception too early`);
     assert.match(question.prompt, trapPrompt, `${question.id} should mark misconception as a trap`);
+  }
+});
+
+test('attention mechanism assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('attention-mechanism');
+  const lessonScopeLeaks = [
+    /\bmasks?\b/i,
+    /\bcausal\b/i,
+    /\bcross[- ]?attention\b/i,
+    /\bself[- ]?attention\b/i,
+    /\bmulti[- ]?head\b/i,
+    /\btransformers?\b/i,
+    /\bRAG\b/i,
+    /\bmultimodal\b/i,
+    /\bpadding\b/i,
+    /\bsqrt\b/i,
+    /\bd_k\b/i,
+    /\bQK\^T\b/i,
+    /\bresidual\b/i,
+    /\bMLP\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or placeholder attention scope`);
   }
 });
 
@@ -173,7 +201,8 @@ test('attention mechanism assessment does not leak exact answers within a visibl
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
