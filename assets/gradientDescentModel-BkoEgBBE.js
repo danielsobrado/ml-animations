@@ -1,0 +1,1 @@
+const e=.1,r=4;function s(t){return t*t}function o(t){return 2*t}function u(t,n){return t-n*o(t)}function c(t){return t<.05?{text:"Too slow",color:"text-yellow-600"}:t>.5?{text:"Oscillates",color:"text-red-600"}:{text:"Good",color:"text-green-600"}}export{e as D,r as a,s as b,c as l,u as n};
