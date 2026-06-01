@@ -10,6 +10,14 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
@@ -25,6 +33,13 @@ test('data engineering for ML has a complete curated 100-question assessment', (
   const { quiz, labs } = getLessonAssessment('data-engineering-for-ml-track');
 
   assert.equal(quiz.length, 100);
+  assert.deepEqual(
+    Object.fromEntries(Object.keys(EXPECTED_LEVEL_COUNTS).map((level) => [
+      level,
+      quiz.filter((question) => question.level === level).length,
+    ])),
+    EXPECTED_LEVEL_COUNTS,
+  );
   assert.deepEqual(
     labs.map((lab) => lab.id),
     ['data-engineering-for-ml-track-scenario-lab', 'feature-availability-contract', 'train-serve-parity-audit'],
@@ -180,14 +195,55 @@ test('data engineering for ML assessment does not leak exact answers within a vi
     assert.equal(new Set(answers).size, answers.length, `page starting at question ${pageStart + 1} should not repeat exact answers`);
 
     for (const [answerIndex, answer] of answers.entries()) {
-      for (const [promptIndex, question] of page.entries()) {
-        if (answerIndex === promptIndex) continue;
+      for (const [questionIndex, question] of page.entries()) {
+        if (answerIndex === questionIndex) continue;
+        const visibleQuestionText = normalized([
+          question.prompt,
+          ...question.choices,
+        ].join(' '));
+
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !visibleQuestionText.includes(answer),
+          `question ${pageStart + questionIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
     }
+  }
+});
+
+test('data engineering for ML assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('data-engineering-for-ml-track');
+  const scopedText = normalized(quiz.map((question) => [
+    question.prompt,
+    question.explanation,
+    ...question.choices,
+  ].join(' ')).join(' '));
+  const offScopePatterns = [
+    /dashboard/i,
+    /browser/i,
+    /plot/i,
+    /\bui\b/i,
+    /random colors/i,
+    /color palette/i,
+    /chart/i,
+    /css/i,
+    /font/i,
+    /viewport/i,
+    /button alignment/i,
+    /hidden layers/i,
+    /gpu utilization/i,
+    /model card/i,
+    /architecture matters/i,
+    /notebook/i,
+    /image colors/i,
+    /table name is short/i,
+    /screenshot/i,
+    /activation function/i,
+    /screenshot of the app/i,
+  ];
+
+  for (const pattern of offScopePatterns) {
+    assert.doesNotMatch(scopedText, pattern);
   }
 });
 
@@ -203,8 +259,15 @@ test('data engineering for ML assessment distributes correct-answer positions ac
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
-    const positions = page.map((question) => question.answerIndex);
+    const pageTotals = [0, 0, 0];
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    for (const question of page) {
+      pageTotals[question.answerIndex] += 1;
+    }
+
+    assert.ok(
+      Math.max(...pageTotals) - Math.min(...pageTotals) <= 1,
+      `page starting at question ${pageStart + 1} should balance answer positions: ${pageTotals.join(', ')}`,
+    );
   }
 });
