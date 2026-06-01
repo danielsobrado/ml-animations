@@ -104,7 +104,7 @@ test('native sparse attention assessment avoids unsafe misconception keying', ()
   const { quiz } = getLessonAssessment('native-sparse-attention');
   const unsafePatterns = [
     /random attention-score deletion/i,
-    /tokenizer, embedding, and logits/i,
+    /prompt sorting, output logits, and route cards/i,
     /guarantee every important detail/i,
     /always be random/i,
     /only for far-away tokens/i,
@@ -125,6 +125,26 @@ test('native sparse attention assessment avoids unsafe misconception keying', ()
     const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|unsafe|wrong|trap|reject|claim|belief|misconception/i.test(question.prompt);
     assert.ok(!unsafeAnswer || explicitTrapPrompt, `question ${index + 1} keys a false claim outside a trap prompt`);
+  }
+});
+
+test('native sparse attention assessment stays within visible NSA lesson scope', () => {
+  const { quiz } = getLessonAssessment('native-sparse-attention');
+  const unrelatedScopeLeaks = [
+    /\btokenizer\b/i,
+    /\bvocabulary\b/i,
+    /\boptimizer\b/i,
+    /\bimage\b/i,
+    /\bdetokenization\b/i,
+    /\bclassifier\b/i,
+    /\blabels?\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = normalized([question.prompt, ...question.choices, question.explanation].join(' '));
+    for (const pattern of unrelatedScopeLeaks) {
+      assert.doesNotMatch(visibleText, pattern, `question ${index + 1} drifts outside the NSA lesson scope`);
+    }
   }
 });
 
@@ -165,9 +185,10 @@ test('native sparse attention assessment does not leak exact answers within a vi
     assert.equal(new Set(answers).size, answers.length, `page starting at question ${pageStart + 1} should not repeat exact answers`);
 
     for (const [answerIndex, answer] of answers.entries()) {
-      for (const [promptIndex, question] of page.entries()) {
-        if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+      for (const [questionIndex, question] of page.entries()) {
+        if (answerIndex === questionIndex || answer.length < 8) continue;
+        const visibleText = normalized([question.prompt, ...question.choices].join(' '));
+        assert.ok(!visibleText.includes(answer));
       }
     }
   }
