@@ -11,12 +11,20 @@ const LEVEL_ORDER = {
 };
 
 const LEVELS = Object.keys(LEVEL_ORDER);
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
 
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
+    .trim()
+    .replace(/\s+/g, ' ');
 }
 
 function correctAnswer(question) {
@@ -27,8 +35,19 @@ test('loss functions likelihoods has a complete curated 100-question assessment'
   const { quiz, labs } = getLessonAssessment('loss-functions-likelihoods');
 
   assert.equal(quiz.length, 100);
-  assert.equal(labs.length, 3);
+  assert.deepEqual(labs.map((lab) => lab.id), [
+    'match-loss-to-noise',
+    'outlier-and-confidence-diagnostic',
+    'loss-selection-report',
+  ]);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 100);
+  assert.deepEqual(
+    quiz.reduce((counts, question) => {
+      counts[question.level] = (counts[question.level] || 0) + 1;
+      return counts;
+    }, {}),
+    EXPECTED_LEVEL_COUNTS,
+  );
 
   for (const [index, question] of quiz.entries()) {
     const expectedNumber = String(index + 1).padStart(3, '0');
@@ -198,9 +217,9 @@ test('loss functions likelihoods assessment covers learning points in the right 
   }
 });
 
-test('loss functions likelihoods assessment avoids unsafe misconception keying', () => {
+test('loss functions likelihoods assessment keeps misconception traps after setup', () => {
   const { quiz } = getLessonAssessment('loss-functions-likelihoods');
-  const unsafePatterns = [
+  const misconceptionPatterns = [
     /one universal loss is best for every ml task/i,
     /minimizing nll is unrelated to maximizing likelihood/i,
     /squared error is always best for classification labels/i,
@@ -220,11 +239,15 @@ test('loss functions likelihoods assessment avoids unsafe misconception keying',
 
   for (const [index, question] of quiz.entries()) {
     const answer = correctAnswer(question);
-    const unsafeAnswer = unsafePatterns.some((pattern) => pattern.test(answer));
+    const misconceptionAnswer = misconceptionPatterns.some((pattern) => pattern.test(answer));
     const explicitTrapPrompt = /false|misleading|unsafe|wrong|trap|claim/i.test(question.prompt);
 
     assert.ok(
-      !unsafeAnswer || explicitTrapPrompt,
+      !misconceptionAnswer || index >= 75,
+      `question ${index + 1} keys a misconception before the tricky band`,
+    );
+    assert.ok(
+      !misconceptionAnswer || explicitTrapPrompt,
       `question ${index + 1} keys a false claim outside an explicit trap prompt`,
     );
   }
@@ -244,10 +267,40 @@ test('loss functions likelihoods assessment does not leak exact answers within a
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex) continue;
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !normalized([question.prompt, ...question.choices].join(' ')).includes(answer),
+          `question ${pageStart + promptIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
+    }
+  }
+});
+
+test('loss functions likelihoods assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('loss-functions-likelihoods');
+  const outOfScopePatterns = [
+    /\bui\b/i,
+    /button/i,
+    /rows should be hidden/i,
+    /validation set was deleted/i,
+    /chart theme/i,
+    /feature columns/i,
+    /row id/i,
+    /row number/i,
+    /sorted alphabetically/i,
+    /hidden validation label/i,
+    /image pixels/i,
+    /rounded final loss/i,
+    /file imported/i,
+    /hidden units/i,
+    /chart title color/i,
+    /gpu temperature/i,
+    /chart only/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = [question.prompt, ...question.choices].join(' ');
+    for (const pattern of outOfScopePatterns) {
+      assert.ok(!pattern.test(visibleText), `question ${index + 1} has out-of-scope visible text: ${pattern}`);
     }
   }
 });
@@ -258,11 +311,17 @@ test('loss functions likelihoods assessment distributes correct-answer positions
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
-    const positions = page.map((question) => question.answerIndex);
+    const pageCounts = [0, 0, 0];
 
-    for (const position of positions) totals[position] += 1;
+    for (const question of page) {
+      totals[question.answerIndex] += 1;
+      pageCounts[question.answerIndex] += 1;
+    }
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    assert.ok(
+      Math.max(...pageCounts) - Math.min(...pageCounts) <= 1,
+      `page starting at question ${pageStart + 1} should balance answer positions, got ${pageCounts.join('/')}`,
+    );
   }
 
   assert.ok(Math.max(...totals) - Math.min(...totals) <= 1, `answer positions should be balanced, got ${totals.join('/')}`);
