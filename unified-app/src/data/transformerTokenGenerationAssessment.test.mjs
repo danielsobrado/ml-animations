@@ -86,9 +86,9 @@ test('transformer token generation assessment covers learning points in the righ
     ['cache basics', ['reuse prior key and value rows']],
     ['mechanism loop', ['prefill context compute next token logits']],
     ['application cache bug', ['enabling kv cache changes outputs']],
-    ['application production', ['tune decoding by task']],
+    ['application summary', ['tune decoding by task']],
     ['tricky false claims', ['generation claim is false']],
-    ['interview readiness', ['production ready token generation takeaway']],
+    ['interview readiness', ['lesson ready token generation takeaway']],
   ];
 
   let previousIndex = -1;
@@ -155,6 +155,29 @@ test('transformer token generation misconception traps are placed after concept 
   }
 });
 
+test('transformer token generation assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('transformer-token-generation');
+  const lessonScopeLeaks = [
+    /\bdeployment\b/i,
+    /\bproduction\b/i,
+    /\bretrieval\b/i,
+    /\bJSON\b/i,
+    /\btool[- ]?call\b/i,
+    /\bsafety filter\b/i,
+    /\bpolicy intervene\b/i,
+    /\bmonitoring\b/i,
+    /\bfine[- ]?tune\b/i,
+    /\breward model\b/i,
+    /\bDPO\b/i,
+    /\bRLHF\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible token-generation scope`);
+  }
+});
+
 test('transformer token generation assessment does not leak exact answers within a visible page', () => {
   const { quiz } = getLessonAssessment('transformer-token-generation');
 
@@ -167,7 +190,8 @@ test('transformer token generation assessment does not leak exact answers within
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
