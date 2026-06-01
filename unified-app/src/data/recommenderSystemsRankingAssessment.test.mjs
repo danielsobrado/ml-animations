@@ -10,6 +10,14 @@ const LEVEL_ORDER = {
   Interview: 4,
 };
 
+const EXPECTED_LEVEL_COUNTS = {
+  Foundation: 20,
+  Mechanism: 30,
+  Application: 25,
+  Tricky: 15,
+  Interview: 10,
+};
+
 function normalized(value) {
   return String(value || '')
     .toLowerCase()
@@ -25,6 +33,13 @@ test('recommender systems ranking has a complete curated 100-question assessment
   const { quiz, labs } = getLessonAssessment('recommender-systems-ranking-track');
 
   assert.equal(quiz.length, 100);
+  assert.deepEqual(
+    Object.fromEntries(Object.keys(EXPECTED_LEVEL_COUNTS).map((level) => [
+      level,
+      quiz.filter((question) => question.level === level).length,
+    ])),
+    EXPECTED_LEVEL_COUNTS,
+  );
   assert.deepEqual(
     labs.map((lab) => lab.id),
     ['recommender-systems-ranking-track-scenario-lab', 'ranking-metric-audit', 'feedback-loop-guardrails'],
@@ -182,14 +197,45 @@ test('recommender systems ranking assessment does not leak exact answers within 
     assert.equal(new Set(answers).size, answers.length, `page starting at question ${pageStart + 1} should not repeat exact answers`);
 
     for (const [answerIndex, answer] of answers.entries()) {
-      for (const [promptIndex, question] of page.entries()) {
-        if (answerIndex === promptIndex) continue;
+      for (const [questionIndex, question] of page.entries()) {
+        if (answerIndex === questionIndex) continue;
+        const visibleQuestionText = normalized([
+          question.prompt,
+          ...question.choices,
+        ].join(' '));
+
         assert.ok(
-          !normalized(question.prompt).includes(answer),
-          `question ${pageStart + promptIndex + 1} prompt should not reveal answer from question ${pageStart + answerIndex + 1}`,
+          !visibleQuestionText.includes(answer),
+          `question ${pageStart + questionIndex + 1} visible text should not reveal answer from question ${pageStart + answerIndex + 1}`,
         );
       }
     }
+  }
+});
+
+test('recommender systems ranking assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('recommender-systems-ranking-track');
+  const scopedText = normalized(quiz.map((question) => [
+    question.prompt,
+    question.explanation,
+    ...question.choices,
+  ].join(' ')).join(' '));
+  const offScopePatterns = [
+    /time series forecast/i,
+    /package defaults/i,
+    /item title length/i,
+    /model parameter count/i,
+    /metric spelling/i,
+    /same id/i,
+    /fanciest name/i,
+    /training metric is highest/i,
+    /random noise in feature names/i,
+    /feature names/i,
+    /upload time/i,
+  ];
+
+  for (const pattern of offScopePatterns) {
+    assert.doesNotMatch(scopedText, pattern);
   }
 });
 
@@ -205,8 +251,15 @@ test('recommender systems ranking assessment distributes correct-answer position
 
   for (let pageStart = 0; pageStart < quiz.length; pageStart += 10) {
     const page = quiz.slice(pageStart, pageStart + 10);
-    const positions = page.map((question) => question.answerIndex);
+    const pageTotals = [0, 0, 0];
 
-    assert.ok(new Set(positions).size >= 2, `page starting at question ${pageStart + 1} should vary answer positions`);
+    for (const question of page) {
+      pageTotals[question.answerIndex] += 1;
+    }
+
+    assert.ok(
+      Math.max(...pageTotals) - Math.min(...pageTotals) <= 1,
+      `page starting at question ${pageStart + 1} should balance answer positions: ${pageTotals.join(', ')}`,
+    );
   }
 });
