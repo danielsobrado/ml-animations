@@ -86,9 +86,9 @@ test('sampling strategies assessment covers learning points in the right order',
     ['top-p misconception', ['top p or nucleus sampling']],
     ['mechanism pipeline', ['rescale logits filter candidates renormalize']],
     ['task settings', ['factual qa product']],
-    ['production default', ['measured task tradeoffs']],
+    ['task default', ['measured task tradeoffs']],
     ['tricky false claims', ['sampling strategy claim is false']],
-    ['interview readiness', ['production ready sampling strategy takeaway']],
+    ['interview readiness', ['lesson ready sampling strategy takeaway']],
   ];
 
   let previousIndex = -1;
@@ -111,9 +111,9 @@ test('sampling strategies assessment avoids unsafe misconception keying', () => 
     /samples randomly from the retained candidates/i,
     /automatically better for every task/i,
     /always the best creative choices/i,
-    /no latency or memory cost/i,
+    /no search cost/i,
     /guarantees that generated content is true/i,
-    /guarantees valid json/i,
+    /guarantees valid formatting/i,
     /never need task-specific evaluation/i,
     /can only be fixed by retraining/i,
     /cannot change the candidate set/i,
@@ -140,8 +140,8 @@ test('sampling strategies misconception traps are placed after concept scaffoldi
     'samp-082-false-diversity',
     'samp-083-false-tail',
     'samp-084-false-beam-cost',
-    'samp-085-false-seed',
-    'samp-086-false-json',
+    'samp-085-false-randomness-truth',
+    'samp-086-false-format',
     'samp-087-false-eval',
     'samp-088-false-generic',
     'samp-089-false-order',
@@ -152,6 +152,38 @@ test('sampling strategies misconception traps are placed after concept scaffoldi
 
   for (const question of quiz.slice(0, 75)) {
     assert.doesNotMatch(question.prompt, /^Which .* (false|wrong|unsafe|reject|trap|misconception)/i);
+  }
+});
+
+test('sampling strategies assessment stays within visible lesson scope', () => {
+  const { quiz } = getLessonAssessment('sampling-strategies');
+  const lessonScopeLeaks = [
+    /\bdeployment\b/i,
+    /\bproduction\b/i,
+    /\bretrieval\b/i,
+    /\bJSON\b/i,
+    /\bsafety\b/i,
+    /\bpolicy\b/i,
+    /\bmedical\b/i,
+    /\bclinical\b/i,
+    /\brepetition penalty\b/i,
+    /\bblocklist\b/i,
+    /\bobservability\b/i,
+    /\blatency\b/i,
+    /\bmemory\b/i,
+    /\bseed\b/i,
+    /\bstop sequence\b/i,
+    /\bhallucinat/i,
+    /\brerank/i,
+    /\bfine[- ]?tune\b/i,
+    /\breward model\b/i,
+    /\bDPO\b/i,
+    /\bRLHF\b/i,
+  ];
+
+  for (const [index, question] of quiz.entries()) {
+    const visibleText = `${question.prompt} ${question.choices.join(' ')} ${question.explanation}`;
+    assert.ok(!lessonScopeLeaks.some((pattern) => pattern.test(visibleText)), `question ${index + 1} leaks later or non-visible sampling-strategy scope`);
   }
 });
 
@@ -167,7 +199,8 @@ test('sampling strategies assessment does not leak exact answers within a visibl
     for (const [answerIndex, answer] of answers.entries()) {
       for (const [promptIndex, question] of page.entries()) {
         if (answerIndex === promptIndex || answer.length < 8) continue;
-        assert.ok(!normalized(question.prompt).includes(answer));
+        const visibleQuestionText = normalized(`${question.prompt} ${question.choices.join(' ')}`);
+        assert.ok(!visibleQuestionText.includes(answer));
       }
     }
   }
